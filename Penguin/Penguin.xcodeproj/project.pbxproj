@@ -1,0 +1,536 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		0F7EEF5C1D210F63008D175C /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 0F7EEF5B1D210F63008D175C /* main.m */; };
+		0F7EEF5F1D210F63008D175C /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 0F7EEF5E1D210F63008D175C /* AppDelegate.m */; };
+		0F7EEF621D210F63008D175C /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0F7EEF611D210F63008D175C /* ViewController.m */; };
+		0F7EEF651D210F63008D175C /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0F7EEF631D210F63008D175C /* Main.storyboard */; };
+		0F7EEF671D210F63008D175C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0F7EEF661D210F63008D175C /* Assets.xcassets */; };
+		0F7EEF751D210F63008D175C /* PenguinGuideTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 0F7EEF741D210F63008D175C /* PenguinGuideTests.m */; };
+		0F7EEF801D210F64008D175C /* PenguinGuideUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 0F7EEF7F1D210F64008D175C /* PenguinGuideUITests.m */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		0F7EEF711D210F63008D175C /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 0F7EEF161D210F37008D175C /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 0F7EEF571D210F63008D175C;
+			remoteInfo = PenguinGuide;
+		};
+		0F7EEF7C1D210F64008D175C /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 0F7EEF161D210F37008D175C /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 0F7EEF571D210F63008D175C;
+			remoteInfo = PenguinGuide;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		0F7EEF581D210F63008D175C /* PenguinGuide.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PenguinGuide.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		0F7EEF5B1D210F63008D175C /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		0F7EEF5D1D210F63008D175C /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
+		0F7EEF5E1D210F63008D175C /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		0F7EEF601D210F63008D175C /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
+		0F7EEF611D210F63008D175C /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
+		0F7EEF641D210F63008D175C /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		0F7EEF661D210F63008D175C /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		0F7EEF6B1D210F63008D175C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		0F7EEF701D210F63008D175C /* PenguinGuideTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PenguinGuideTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		0F7EEF741D210F63008D175C /* PenguinGuideTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PenguinGuideTests.m; sourceTree = "<group>"; };
+		0F7EEF761D210F63008D175C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		0F7EEF7B1D210F64008D175C /* PenguinGuideUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PenguinGuideUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		0F7EEF7F1D210F64008D175C /* PenguinGuideUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PenguinGuideUITests.m; sourceTree = "<group>"; };
+		0F7EEF811D210F64008D175C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		0F7EEF551D210F63008D175C /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		0F7EEF6D1D210F63008D175C /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		0F7EEF781D210F64008D175C /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		0F7EEF151D210F37008D175C = {
+			isa = PBXGroup;
+			children = (
+				0F7EEF591D210F63008D175C /* PenguinGuide */,
+				0F7EEF731D210F63008D175C /* PenguinGuideTests */,
+				0F7EEF7E1D210F64008D175C /* PenguinGuideUITests */,
+				0F7EEF1F1D210F37008D175C /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		0F7EEF1F1D210F37008D175C /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				0F7EEF581D210F63008D175C /* PenguinGuide.app */,
+				0F7EEF701D210F63008D175C /* PenguinGuideTests.xctest */,
+				0F7EEF7B1D210F64008D175C /* PenguinGuideUITests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		0F7EEF591D210F63008D175C /* PenguinGuide */ = {
+			isa = PBXGroup;
+			children = (
+				0F7EEF8C1D211085008D175C /* ViewController */,
+				0F7EEF8D1D211085008D175C /* ViewModel */,
+				0F7EEF8B1D211085008D175C /* Model */,
+				0F7EEF5D1D210F63008D175C /* AppDelegate.h */,
+				0F7EEF5E1D210F63008D175C /* AppDelegate.m */,
+				0F7EEF601D210F63008D175C /* ViewController.h */,
+				0F7EEF611D210F63008D175C /* ViewController.m */,
+				0F7EEF631D210F63008D175C /* Main.storyboard */,
+				0F7EEF661D210F63008D175C /* Assets.xcassets */,
+				0F7EEF5A1D210F63008D175C /* Supporting Files */,
+			);
+			path = PenguinGuide;
+			sourceTree = "<group>";
+		};
+		0F7EEF5A1D210F63008D175C /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				0F7EEF6B1D210F63008D175C /* Info.plist */,
+				0F7EEF5B1D210F63008D175C /* main.m */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		0F7EEF731D210F63008D175C /* PenguinGuideTests */ = {
+			isa = PBXGroup;
+			children = (
+				0F7EEF741D210F63008D175C /* PenguinGuideTests.m */,
+				0F7EEF761D210F63008D175C /* Info.plist */,
+			);
+			path = PenguinGuideTests;
+			sourceTree = "<group>";
+		};
+		0F7EEF7E1D210F64008D175C /* PenguinGuideUITests */ = {
+			isa = PBXGroup;
+			children = (
+				0F7EEF7F1D210F64008D175C /* PenguinGuideUITests.m */,
+				0F7EEF811D210F64008D175C /* Info.plist */,
+			);
+			path = PenguinGuideUITests;
+			sourceTree = "<group>";
+		};
+		0F7EEF8B1D211085008D175C /* Model */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		0F7EEF8C1D211085008D175C /* ViewController */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = ViewController;
+			sourceTree = "<group>";
+		};
+		0F7EEF8D1D211085008D175C /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = ViewModel;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		0F7EEF571D210F63008D175C /* PenguinGuide */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 0F7EEF821D210F64008D175C /* Build configuration list for PBXNativeTarget "PenguinGuide" */;
+			buildPhases = (
+				0F7EEF541D210F63008D175C /* Sources */,
+				0F7EEF551D210F63008D175C /* Frameworks */,
+				0F7EEF561D210F63008D175C /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = PenguinGuide;
+			productName = PenguinGuide;
+			productReference = 0F7EEF581D210F63008D175C /* PenguinGuide.app */;
+			productType = "com.apple.product-type.application";
+		};
+		0F7EEF6F1D210F63008D175C /* PenguinGuideTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 0F7EEF851D210F64008D175C /* Build configuration list for PBXNativeTarget "PenguinGuideTests" */;
+			buildPhases = (
+				0F7EEF6C1D210F63008D175C /* Sources */,
+				0F7EEF6D1D210F63008D175C /* Frameworks */,
+				0F7EEF6E1D210F63008D175C /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				0F7EEF721D210F63008D175C /* PBXTargetDependency */,
+			);
+			name = PenguinGuideTests;
+			productName = PenguinGuideTests;
+			productReference = 0F7EEF701D210F63008D175C /* PenguinGuideTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		0F7EEF7A1D210F64008D175C /* PenguinGuideUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 0F7EEF881D210F64008D175C /* Build configuration list for PBXNativeTarget "PenguinGuideUITests" */;
+			buildPhases = (
+				0F7EEF771D210F64008D175C /* Sources */,
+				0F7EEF781D210F64008D175C /* Frameworks */,
+				0F7EEF791D210F64008D175C /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				0F7EEF7D1D210F64008D175C /* PBXTargetDependency */,
+			);
+			name = PenguinGuideUITests;
+			productName = PenguinGuideUITests;
+			productReference = 0F7EEF7B1D210F64008D175C /* PenguinGuideUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		0F7EEF161D210F37008D175C /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0730;
+				ORGANIZATIONNAME = Xinglian;
+				TargetAttributes = {
+					0F7EEF571D210F63008D175C = {
+						CreatedOnToolsVersion = 7.3.1;
+					};
+					0F7EEF6F1D210F63008D175C = {
+						CreatedOnToolsVersion = 7.3.1;
+						TestTargetID = 0F7EEF571D210F63008D175C;
+					};
+					0F7EEF7A1D210F64008D175C = {
+						CreatedOnToolsVersion = 7.3.1;
+						TestTargetID = 0F7EEF571D210F63008D175C;
+					};
+				};
+			};
+			buildConfigurationList = 0F7EEF191D210F37008D175C /* Build configuration list for PBXProject "Penguin" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 0F7EEF151D210F37008D175C;
+			productRefGroup = 0F7EEF1F1D210F37008D175C /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				0F7EEF571D210F63008D175C /* PenguinGuide */,
+				0F7EEF6F1D210F63008D175C /* PenguinGuideTests */,
+				0F7EEF7A1D210F64008D175C /* PenguinGuideUITests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		0F7EEF561D210F63008D175C /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				0F7EEF671D210F63008D175C /* Assets.xcassets in Resources */,
+				0F7EEF651D210F63008D175C /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		0F7EEF6E1D210F63008D175C /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		0F7EEF791D210F64008D175C /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		0F7EEF541D210F63008D175C /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				0F7EEF621D210F63008D175C /* ViewController.m in Sources */,
+				0F7EEF5F1D210F63008D175C /* AppDelegate.m in Sources */,
+				0F7EEF5C1D210F63008D175C /* main.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		0F7EEF6C1D210F63008D175C /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				0F7EEF751D210F63008D175C /* PenguinGuideTests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		0F7EEF771D210F64008D175C /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				0F7EEF801D210F64008D175C /* PenguinGuideUITests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		0F7EEF721D210F63008D175C /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 0F7EEF571D210F63008D175C /* PenguinGuide */;
+			targetProxy = 0F7EEF711D210F63008D175C /* PBXContainerItemProxy */;
+		};
+		0F7EEF7D1D210F64008D175C /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 0F7EEF571D210F63008D175C /* PenguinGuide */;
+			targetProxy = 0F7EEF7C1D210F64008D175C /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		0F7EEF631D210F63008D175C /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				0F7EEF641D210F63008D175C /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		0F7EEF491D210F37008D175C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		0F7EEF4A1D210F37008D175C /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		0F7EEF831D210F64008D175C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				INFOPLIST_FILE = PenguinGuide/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.xinglian.penguinguide;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		0F7EEF841D210F64008D175C /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				INFOPLIST_FILE = PenguinGuide/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.xinglian.penguinguide;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+		0F7EEF861D210F64008D175C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				INFOPLIST_FILE = PenguinGuideTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.xinglian.PenguinGuideTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/PenguinGuide.app/PenguinGuide";
+			};
+			name = Debug;
+		};
+		0F7EEF871D210F64008D175C /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				INFOPLIST_FILE = PenguinGuideTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.xinglian.PenguinGuideTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/PenguinGuide.app/PenguinGuide";
+			};
+			name = Release;
+		};
+		0F7EEF891D210F64008D175C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				INFOPLIST_FILE = PenguinGuideUITests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.xinglian.PenguinGuideUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_TARGET_NAME = PenguinGuide;
+			};
+			name = Debug;
+		};
+		0F7EEF8A1D210F64008D175C /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				INFOPLIST_FILE = PenguinGuideUITests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.xinglian.PenguinGuideUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_TARGET_NAME = PenguinGuide;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		0F7EEF191D210F37008D175C /* Build configuration list for PBXProject "Penguin" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				0F7EEF491D210F37008D175C /* Debug */,
+				0F7EEF4A1D210F37008D175C /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		0F7EEF821D210F64008D175C /* Build configuration list for PBXNativeTarget "PenguinGuide" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				0F7EEF831D210F64008D175C /* Debug */,
+				0F7EEF841D210F64008D175C /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		0F7EEF851D210F64008D175C /* Build configuration list for PBXNativeTarget "PenguinGuideTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				0F7EEF861D210F64008D175C /* Debug */,
+				0F7EEF871D210F64008D175C /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		0F7EEF881D210F64008D175C /* Build configuration list for PBXNativeTarget "PenguinGuideUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				0F7EEF891D210F64008D175C /* Debug */,
+				0F7EEF8A1D210F64008D175C /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 0F7EEF161D210F37008D175C /* Project object */;
+}
