@@ -8,10 +8,11 @@ target 'PenguinGuide' do
     #business framework
     pod 'PGAPIClient', :path => '../BusinessFramework/PGAPIClient', :inhibit_warnings => true
     pod 'PGTheme', :path => '../BusinessFramework/PGTheme', :inhibit_warnings => true
+    pod 'PGShare', :path => '../BusinessFramework/PGShare', :inhibit_warnings => true
+    pod 'PGTabBarController', :path => '../BusinessFramework/PGTabBarController', :inhibit_warnings => true
     
     #base framework
     pod 'PGRestKit', :path => '../BaseFramework/PGRestKit', :inhibit_warnings => true
-    pod 'PGShare', :path => '../BaseFramework/PGShare', :inhibit_warnings => true
 end
 
 target 'PenguinGuideTests' do
