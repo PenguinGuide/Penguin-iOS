@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0DF3313AD03FFD0EE812C3B5 /* libPods-PenguinGuide.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BF885179112DA7487FF34089 /* libPods-PenguinGuide.a */; };
 		0F7EEF5C1D210F63008D175C /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 0F7EEF5B1D210F63008D175C /* main.m */; };
 		0F7EEF5F1D210F63008D175C /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 0F7EEF5E1D210F63008D175C /* AppDelegate.m */; };
 		0F7EEF621D210F63008D175C /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0F7EEF611D210F63008D175C /* ViewController.m */; };
@@ -51,6 +52,9 @@
 		0F7EEF811D210F64008D175C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		0F7EEF911D2118F6008D175C /* Controller.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Controller.xcassets; sourceTree = "<group>"; };
 		0F7EEF931D211914008D175C /* Theme.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Theme.xcassets; sourceTree = "<group>"; };
+		949828526171CC081956A2A0 /* Pods-PenguinGuide.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PenguinGuide.release.xcconfig"; path = "Pods/Target Support Files/Pods-PenguinGuide/Pods-PenguinGuide.release.xcconfig"; sourceTree = "<group>"; };
+		ADB19FE6B001C4E07FD07613 /* Pods-PenguinGuide.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PenguinGuide.debug.xcconfig"; path = "Pods/Target Support Files/Pods-PenguinGuide/Pods-PenguinGuide.debug.xcconfig"; sourceTree = "<group>"; };
+		BF885179112DA7487FF34089 /* libPods-PenguinGuide.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-PenguinGuide.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -58,6 +62,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0DF3313AD03FFD0EE812C3B5 /* libPods-PenguinGuide.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -85,6 +90,8 @@
 				0F7EEF731D210F63008D175C /* PenguinGuideTests */,
 				0F7EEF7E1D210F64008D175C /* PenguinGuideUITests */,
 				0F7EEF1F1D210F37008D175C /* Products */,
+				CE008C4194BE8BC407FE4BFC /* Pods */,
+				CBE777C5A9840912C74D8E68 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -172,6 +179,23 @@
 			path = Resource;
 			sourceTree = "<group>";
 		};
+		CBE777C5A9840912C74D8E68 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				BF885179112DA7487FF34089 /* libPods-PenguinGuide.a */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		CE008C4194BE8BC407FE4BFC /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				ADB19FE6B001C4E07FD07613 /* Pods-PenguinGuide.debug.xcconfig */,
+				949828526171CC081956A2A0 /* Pods-PenguinGuide.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -179,9 +203,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 0F7EEF821D210F64008D175C /* Build configuration list for PBXNativeTarget "PenguinGuide" */;
 			buildPhases = (
+				419E4739498D4263353C8BC0 /* Check Pods Manifest.lock */,
 				0F7EEF541D210F63008D175C /* Sources */,
 				0F7EEF551D210F63008D175C /* Frameworks */,
 				0F7EEF561D210F63008D175C /* Resources */,
+				669B2344D8E28797319FACA6 /* Embed Pods Frameworks */,
+				B391B2E89875FB049FFC3E11 /* Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -296,6 +323,54 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		419E4739498D4263353C8BC0 /* Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		669B2344D8E28797319FACA6 /* Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-PenguinGuide/Pods-PenguinGuide-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		B391B2E89875FB049FFC3E11 /* Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-PenguinGuide/Pods-PenguinGuide-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		0F7EEF541D210F63008D175C /* Sources */ = {
@@ -426,6 +501,7 @@
 		};
 		0F7EEF831D210F64008D175C /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = ADB19FE6B001C4E07FD07613 /* Pods-PenguinGuide.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
@@ -438,6 +514,7 @@
 		};
 		0F7EEF841D210F64008D175C /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 949828526171CC081956A2A0 /* Pods-PenguinGuide.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;

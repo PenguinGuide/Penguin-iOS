@@ -4,7 +4,12 @@
 # use_frameworks!
 
 target 'PenguinGuide' do
-
+    
+    #business framework
+    pod 'PGAPIClient', :path => '../BusinessFramework/PGAPIClient', :inhibit_warnings => true
+    
+    #base framework
+    pod 'PGRestKit', :path => '../BaseFramework/PGRestKit', :inhibit_warnings => true
 end
 
 target 'PenguinGuideTests' do
