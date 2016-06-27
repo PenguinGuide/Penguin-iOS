@@ -10,10 +10,11 @@
 		0F7EEF5C1D210F63008D175C /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 0F7EEF5B1D210F63008D175C /* main.m */; };
 		0F7EEF5F1D210F63008D175C /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 0F7EEF5E1D210F63008D175C /* AppDelegate.m */; };
 		0F7EEF621D210F63008D175C /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0F7EEF611D210F63008D175C /* ViewController.m */; };
-		0F7EEF651D210F63008D175C /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0F7EEF631D210F63008D175C /* Main.storyboard */; };
 		0F7EEF671D210F63008D175C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0F7EEF661D210F63008D175C /* Assets.xcassets */; };
 		0F7EEF751D210F63008D175C /* PenguinGuideTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 0F7EEF741D210F63008D175C /* PenguinGuideTests.m */; };
 		0F7EEF801D210F64008D175C /* PenguinGuideUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 0F7EEF7F1D210F64008D175C /* PenguinGuideUITests.m */; };
+		0F7EEF921D2118F6008D175C /* Controller.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0F7EEF911D2118F6008D175C /* Controller.xcassets */; };
+		0F7EEF941D211914008D175C /* Theme.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0F7EEF931D211914008D175C /* Theme.xcassets */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -40,8 +41,7 @@
 		0F7EEF5E1D210F63008D175C /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		0F7EEF601D210F63008D175C /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
 		0F7EEF611D210F63008D175C /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
-		0F7EEF641D210F63008D175C /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
-		0F7EEF661D210F63008D175C /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		0F7EEF661D210F63008D175C /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Assets.xcassets; path = ../Assets.xcassets; sourceTree = "<group>"; };
 		0F7EEF6B1D210F63008D175C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		0F7EEF701D210F63008D175C /* PenguinGuideTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PenguinGuideTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		0F7EEF741D210F63008D175C /* PenguinGuideTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PenguinGuideTests.m; sourceTree = "<group>"; };
@@ -49,6 +49,8 @@
 		0F7EEF7B1D210F64008D175C /* PenguinGuideUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PenguinGuideUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		0F7EEF7F1D210F64008D175C /* PenguinGuideUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PenguinGuideUITests.m; sourceTree = "<group>"; };
 		0F7EEF811D210F64008D175C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		0F7EEF911D2118F6008D175C /* Controller.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Controller.xcassets; sourceTree = "<group>"; };
+		0F7EEF931D211914008D175C /* Theme.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Theme.xcassets; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -102,12 +104,11 @@
 				0F7EEF8C1D211085008D175C /* ViewController */,
 				0F7EEF8D1D211085008D175C /* ViewModel */,
 				0F7EEF8B1D211085008D175C /* Model */,
+				0F7EEF901D2116D1008D175C /* Resource */,
 				0F7EEF5D1D210F63008D175C /* AppDelegate.h */,
 				0F7EEF5E1D210F63008D175C /* AppDelegate.m */,
 				0F7EEF601D210F63008D175C /* ViewController.h */,
 				0F7EEF611D210F63008D175C /* ViewController.m */,
-				0F7EEF631D210F63008D175C /* Main.storyboard */,
-				0F7EEF661D210F63008D175C /* Assets.xcassets */,
 				0F7EEF5A1D210F63008D175C /* Supporting Files */,
 			);
 			path = PenguinGuide;
@@ -159,6 +160,16 @@
 			children = (
 			);
 			path = ViewModel;
+			sourceTree = "<group>";
+		};
+		0F7EEF901D2116D1008D175C /* Resource */ = {
+			isa = PBXGroup;
+			children = (
+				0F7EEF661D210F63008D175C /* Assets.xcassets */,
+				0F7EEF911D2118F6008D175C /* Controller.xcassets */,
+				0F7EEF931D211914008D175C /* Theme.xcassets */,
+			);
+			path = Resource;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -264,8 +275,9 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0F7EEF941D211914008D175C /* Theme.xcassets in Resources */,
 				0F7EEF671D210F63008D175C /* Assets.xcassets in Resources */,
-				0F7EEF651D210F63008D175C /* Main.storyboard in Resources */,
+				0F7EEF921D2118F6008D175C /* Controller.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -326,17 +338,6 @@
 			targetProxy = 0F7EEF7C1D210F64008D175C /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
-
-/* Begin PBXVariantGroup section */
-		0F7EEF631D210F63008D175C /* Main.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				0F7EEF641D210F63008D175C /* Base */,
-			);
-			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
-/* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
 		0F7EEF491D210F37008D175C /* Debug */ = {
@@ -427,6 +428,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				INFOPLIST_FILE = PenguinGuide/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.xinglian.penguinguide;
@@ -438,6 +440,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				INFOPLIST_FILE = PenguinGuide/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.xinglian.penguinguide;
