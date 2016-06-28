@@ -13,6 +13,7 @@ target 'PenguinGuide' do
     
     #base framework
     pod 'PGRestKit', :path => '../BaseFramework/PGRestKit', :inhibit_warnings => true
+    pod 'PGLog', :path => '../BaseFramework/PGLog', :inhibit_warnings => true
 end
 
 target 'PenguinGuideTests' do
