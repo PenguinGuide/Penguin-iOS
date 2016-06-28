@@ -18,4 +18,11 @@ s.platform     = :ios, "8.0"
 s.public_header_files = "*.h"
 s.source_files = "*.{h,m}"
 
+# ShareSDK
+s.dependency 'ShareSDK3'
+s.dependency 'MOBFoundation'
+s.dependency 'ShareSDK3/ShareSDKPlatforms/WeChat'
+s.dependency 'ShareSDK3/ShareSDKPlatforms/QQ'
+s.dependency 'ShareSDK3/ShareSDKPlatforms/SinaWeibo'
+
 end
