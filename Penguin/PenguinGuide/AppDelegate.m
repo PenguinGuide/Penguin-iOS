@@ -9,6 +9,8 @@
 #import "AppDelegate.h"
 #import "ViewController.h"
 
+#import "PGShareManager.h"
+
 @interface AppDelegate ()
 
 @end
