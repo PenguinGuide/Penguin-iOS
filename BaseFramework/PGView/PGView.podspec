@@ -8,17 +8,14 @@
 
 Pod::Spec.new do |s|
 
-s.name         = "PGRestKit"
+s.name         = "PGView"
 s.version      = "1.0"
-s.summary      = "PenguinGuide network request mapping framework"
+s.summary      = "PenguinGuide UIView category"
 s.license      = ""
 s.author       = { "Kobe Dai" => "kobe.dai@penguinguide.com" }
 s.platform     = :ios, "8.0"
 
-s.public_header_files = "*.h", "Network/*.h", "ModelMapping/*.h", "Support/*.h"
-s.source_files = "*.{h,m}", 'Network/*.{h,m}', "ModelMapping/*.{h,m}", "Support/*.{h,m}"
-
-s.dependency "Mantle", "2.0.7"
-s.dependency "AFNetworking", "3.1.0"
+s.public_header_files = "*.h"
+s.source_files = "*.{h,m}"
 
 end

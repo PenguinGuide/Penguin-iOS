@@ -15,6 +15,9 @@ target 'PenguinGuide' do
     pod 'PGRestKit', :path => '../BaseFramework/PGRestKit', :inhibit_warnings => true
     pod 'PGLog', :path => '../BaseFramework/PGLog', :inhibit_warnings => true
     pod 'PGRouter', :path => '../BaseFramework/PGRouter', :inhibit_warnings => true
+    pod 'PGImageView', :path => '../BaseFramework/PGImageView', :inhibit_warnings => true
+    pod 'PGView', :path => '../BaseFramework/PGView', :inhibit_warnings => true
+    pod 'PGString', :path => '../BaseFramework/PGString', :inhibit_warnings => true
 end
 
 target 'PenguinGuideTests' do
