@@ -8,6 +8,7 @@
 
 #import "ViewController.h"
 #import "PGRouter.h"
+#import "UIView+PGView.h"
 
 @interface ViewController ()
 
@@ -34,6 +35,8 @@
     }];
     
     [[PGRouter sharedInstance] openURL:@"qiechihe://user/notes?noteId=11111&name=Kobe"];
+    
+    self.view.width = 4.f;
 }
 
 - (void)didReceiveMemoryWarning {

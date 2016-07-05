@@ -8,24 +8,14 @@
 
 Pod::Spec.new do |s|
 
-s.name         = "PGRestKit"
+s.name         = "PGImage"
 s.version      = "1.0"
-s.summary      = "PenguinGuide network request mapping framework"
+s.summary      = "PenguinGuide UIImage category"
 s.license      = ""
 s.author       = { "Kobe Dai" => "kobe.dai@penguinguide.com" }
 s.platform     = :ios, "8.0"
 
-s.public_header_files = "*.h", "Network/*.h", "ModelMapping/*.h", "Support/*.h"
-s.source_files = "*.{h,m}", 'Network/*.{h,m}', "ModelMapping/*.{h,m}", "Support/*.{h,m}"
-
-s.subspec 'Support'  do |sp|
-sp.source_files = 'Support/SOCKit.{h,m}'
-sp.requires_arc = false
-end
-
-s.dependency "Mantle", "2.0.7"
-s.dependency "AFNetworking", "3.1.0"
-
-s.requires_arc = true
+s.public_header_files = "*.h"
+s.source_files = "*.{h,m}"
 
 end

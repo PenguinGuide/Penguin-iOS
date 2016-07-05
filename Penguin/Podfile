@@ -18,6 +18,8 @@ target 'PenguinGuide' do
     pod 'PGImageView', :path => '../BaseFramework/PGImageView', :inhibit_warnings => true
     pod 'PGView', :path => '../BaseFramework/PGView', :inhibit_warnings => true
     pod 'PGString', :path => '../BaseFramework/PGString', :inhibit_warnings => true
+    pod 'PGColor', :path => '../BaseFramework/PGColor', :inhibit_warnings => true
+    pod 'PGImage', :path => '../BaseFramework/PGImage', :inhibit_warnings => true
 end
 
 target 'PenguinGuideTests' do

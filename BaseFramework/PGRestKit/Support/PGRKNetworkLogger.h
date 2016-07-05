@@ -10,4 +10,9 @@
 
 @interface PGRKNetworkLogger : NSObject
 
++ (PGRKNetworkLogger *)sharedInstance;
+
+- (void)startLogging;
+- (void)stopLogging;
+
 @end

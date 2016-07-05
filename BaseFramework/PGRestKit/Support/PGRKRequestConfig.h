@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import "PGRKParams.h"
+#import "PGRKModel.h"
 
 @interface PGRKRequestConfig : NSObject
 
@@ -15,5 +16,6 @@
 @property (nonatomic, strong) NSString *keyPath;
 @property (nonatomic, strong) NSDictionary *pattern;
 @property (nonatomic, strong) PGRKParams *params;
+@property (nonatomic, strong) PGRKModel *model;
 
 @end

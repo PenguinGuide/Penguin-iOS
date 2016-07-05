@@ -7,5 +7,8 @@
 //
 
 #import "PGRKHTTPSessionManager.h"
+
 #import "PGRKModel.h"
 #import "PGRKParams.h"
+#import "PGRKNetworkLogger.h"
+#import "PGRKRequestConfig.h"

@@ -12,4 +12,9 @@
 
 - (void)setWithImageURL:(NSString *)imageURL placeholder:(UIImage *)placeholder completion:(void(^)(UIImage *image))completion;
 
+- (void)setBlurEffect;
+- (void)setLightBlurEffectWithAlpha:(CGFloat)alpha;
+- (void)setDarkBlurEffectWithAlpha:(CGFloat)alpha;
+- (void)setExtraLightBlurEffectWithAlpha:(CGFloat)alpha;
+
 @end

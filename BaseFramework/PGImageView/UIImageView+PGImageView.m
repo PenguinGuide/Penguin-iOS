@@ -30,4 +30,39 @@
     }
 }
 
+- (void)setBlurEffect
+{
+    [self setLightBlurEffectWithAlpha:0.5f];
+}
+
+- (void)setLightBlurEffectWithAlpha:(CGFloat)alpha
+{
+    UIBlurEffect *blurEffect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleLight];
+    UIVisualEffectView *effectView = [[UIVisualEffectView alloc] initWithEffect:blurEffect];
+    effectView.frame = self.frame;
+    effectView.alpha = alpha;
+    
+    [self addSubview:effectView];
+}
+
+- (void)setDarkBlurEffectWithAlpha:(CGFloat)alpha
+{
+    UIBlurEffect *blurEffect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleDark];
+    UIVisualEffectView *effectView = [[UIVisualEffectView alloc] initWithEffect:blurEffect];
+    effectView.frame = self.frame;
+    effectView.alpha = alpha;
+    
+    [self addSubview:effectView];
+}
+
+- (void)setExtraLightBlurEffectWithAlpha:(CGFloat)alpha
+{
+    UIBlurEffect *blurEffect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleExtraLight];
+    UIVisualEffectView *effectView = [[UIVisualEffectView alloc] initWithEffect:blurEffect];
+    effectView.frame = self.frame;
+    effectView.alpha = alpha;
+    
+    [self addSubview:effectView];
+}
+
 @end
