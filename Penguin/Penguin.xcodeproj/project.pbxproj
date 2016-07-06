@@ -17,6 +17,13 @@
 		0F7EEF921D2118F6008D175C /* Controller.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0F7EEF911D2118F6008D175C /* Controller.xcassets */; };
 		0F7EEF941D211914008D175C /* Theme.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0F7EEF931D211914008D175C /* Theme.xcassets */; };
 		0FF816261D2BAD3A00C78E3A /* PGBaseViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0FF816251D2BAD3A00C78E3A /* PGBaseViewController.m */; };
+		0FFCB51C1D2C9F6B00D863FA /* PGLoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0FFCB51B1D2C9F6B00D863FA /* PGLoginViewController.m */; };
+		0FFCB5241D2CABDE00D863FA /* PGTourView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0FFCB5231D2CABDE00D863FA /* PGTourView.m */; };
+		0FFCB5331D2CF35400D863FA /* PGSocialView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0FFCB5321D2CF35400D863FA /* PGSocialView.m */; };
+		0FFCB5371D2D009100D863FA /* PGLoginBaseView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0FFCB5361D2D009100D863FA /* PGLoginBaseView.m */; };
+		0FFCB53A1D2D01E200D863FA /* PGLoginView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0FFCB5391D2D01E200D863FA /* PGLoginView.m */; };
+		0FFCB53D1D2D033E00D863FA /* PGRegisterView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0FFCB53C1D2D033E00D863FA /* PGRegisterView.m */; };
+		0FFCB5411D2D050D00D863FA /* PGLoginViewModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 0FFCB5401D2D050D00D863FA /* PGLoginViewModel.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -55,6 +62,22 @@
 		0F7EEF931D211914008D175C /* Theme.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Theme.xcassets; sourceTree = "<group>"; };
 		0FF816241D2BAD3A00C78E3A /* PGBaseViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PGBaseViewController.h; sourceTree = "<group>"; };
 		0FF816251D2BAD3A00C78E3A /* PGBaseViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PGBaseViewController.m; sourceTree = "<group>"; };
+		0FFCB51A1D2C9F6B00D863FA /* PGLoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PGLoginViewController.h; sourceTree = "<group>"; };
+		0FFCB51B1D2C9F6B00D863FA /* PGLoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PGLoginViewController.m; sourceTree = "<group>"; };
+		0FFCB5221D2CABDE00D863FA /* PGTourView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PGTourView.h; sourceTree = "<group>"; };
+		0FFCB5231D2CABDE00D863FA /* PGTourView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PGTourView.m; sourceTree = "<group>"; };
+		0FFCB5251D2CAC7200D863FA /* PenguinGuide-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "PenguinGuide-Prefix.pch"; sourceTree = "<group>"; };
+		0FFCB5261D2CADB700D863FA /* PGMacros.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PGMacros.h; sourceTree = "<group>"; };
+		0FFCB5311D2CF35400D863FA /* PGSocialView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PGSocialView.h; sourceTree = "<group>"; };
+		0FFCB5321D2CF35400D863FA /* PGSocialView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PGSocialView.m; sourceTree = "<group>"; };
+		0FFCB5351D2D009100D863FA /* PGLoginBaseView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PGLoginBaseView.h; sourceTree = "<group>"; };
+		0FFCB5361D2D009100D863FA /* PGLoginBaseView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PGLoginBaseView.m; sourceTree = "<group>"; };
+		0FFCB5381D2D01E200D863FA /* PGLoginView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PGLoginView.h; sourceTree = "<group>"; };
+		0FFCB5391D2D01E200D863FA /* PGLoginView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PGLoginView.m; sourceTree = "<group>"; };
+		0FFCB53B1D2D033E00D863FA /* PGRegisterView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PGRegisterView.h; sourceTree = "<group>"; };
+		0FFCB53C1D2D033E00D863FA /* PGRegisterView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PGRegisterView.m; sourceTree = "<group>"; };
+		0FFCB53F1D2D050D00D863FA /* PGLoginViewModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PGLoginViewModel.h; sourceTree = "<group>"; };
+		0FFCB5401D2D050D00D863FA /* PGLoginViewModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PGLoginViewModel.m; sourceTree = "<group>"; };
 		949828526171CC081956A2A0 /* Pods-PenguinGuide.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PenguinGuide.release.xcconfig"; path = "Pods/Target Support Files/Pods-PenguinGuide/Pods-PenguinGuide.release.xcconfig"; sourceTree = "<group>"; };
 		ADB19FE6B001C4E07FD07613 /* Pods-PenguinGuide.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PenguinGuide.debug.xcconfig"; path = "Pods/Target Support Files/Pods-PenguinGuide/Pods-PenguinGuide.debug.xcconfig"; sourceTree = "<group>"; };
 		BF885179112DA7487FF34089 /* libPods-PenguinGuide.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-PenguinGuide.a"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -114,6 +137,7 @@
 				0F7EEF8C1D211085008D175C /* ViewController */,
 				0F7EEF8D1D211085008D175C /* ViewModel */,
 				0F7EEF8B1D211085008D175C /* Model */,
+				0FFCB51E1D2CA42900D863FA /* Global */,
 				0F7EEF901D2116D1008D175C /* Resource */,
 				0F7EEF5D1D210F63008D175C /* AppDelegate.h */,
 				0F7EEF5E1D210F63008D175C /* AppDelegate.m */,
@@ -129,6 +153,7 @@
 			children = (
 				0F7EEF6B1D210F63008D175C /* Info.plist */,
 				0F7EEF5B1D210F63008D175C /* main.m */,
+				0FFCB5251D2CAC7200D863FA /* PenguinGuide-Prefix.pch */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -170,6 +195,7 @@
 		0F7EEF8D1D211085008D175C /* ViewModel */ = {
 			isa = PBXGroup;
 			children = (
+				0FFCB53E1D2D03D000D863FA /* Login */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -187,6 +213,9 @@
 		0F90942F1D2A6997004513CE /* Login */ = {
 			isa = PBXGroup;
 			children = (
+				0FFCB51D1D2C9F8500D863FA /* View */,
+				0FFCB51A1D2C9F6B00D863FA /* PGLoginViewController.h */,
+				0FFCB51B1D2C9F6B00D863FA /* PGLoginViewController.m */,
 			);
 			path = Login;
 			sourceTree = "<group>";
@@ -198,6 +227,80 @@
 				0FF816251D2BAD3A00C78E3A /* PGBaseViewController.m */,
 			);
 			path = Base;
+			sourceTree = "<group>";
+		};
+		0FFCB51D1D2C9F8500D863FA /* View */ = {
+			isa = PBXGroup;
+			children = (
+				0FFCB5341D2D007F00D863FA /* BaseView */,
+				0FFCB5211D2CAB7100D863FA /* TourView */,
+				0FFCB5201D2CAB7100D863FA /* RegisterView */,
+				0FFCB51F1D2CAB7100D863FA /* LoginView */,
+				0FFCB5301D2CF32900D863FA /* SocialView */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		0FFCB51E1D2CA42900D863FA /* Global */ = {
+			isa = PBXGroup;
+			children = (
+				0FFCB5261D2CADB700D863FA /* PGMacros.h */,
+			);
+			path = Global;
+			sourceTree = "<group>";
+		};
+		0FFCB51F1D2CAB7100D863FA /* LoginView */ = {
+			isa = PBXGroup;
+			children = (
+				0FFCB5381D2D01E200D863FA /* PGLoginView.h */,
+				0FFCB5391D2D01E200D863FA /* PGLoginView.m */,
+			);
+			path = LoginView;
+			sourceTree = "<group>";
+		};
+		0FFCB5201D2CAB7100D863FA /* RegisterView */ = {
+			isa = PBXGroup;
+			children = (
+				0FFCB53B1D2D033E00D863FA /* PGRegisterView.h */,
+				0FFCB53C1D2D033E00D863FA /* PGRegisterView.m */,
+			);
+			path = RegisterView;
+			sourceTree = "<group>";
+		};
+		0FFCB5211D2CAB7100D863FA /* TourView */ = {
+			isa = PBXGroup;
+			children = (
+				0FFCB5221D2CABDE00D863FA /* PGTourView.h */,
+				0FFCB5231D2CABDE00D863FA /* PGTourView.m */,
+			);
+			path = TourView;
+			sourceTree = "<group>";
+		};
+		0FFCB5301D2CF32900D863FA /* SocialView */ = {
+			isa = PBXGroup;
+			children = (
+				0FFCB5311D2CF35400D863FA /* PGSocialView.h */,
+				0FFCB5321D2CF35400D863FA /* PGSocialView.m */,
+			);
+			path = SocialView;
+			sourceTree = "<group>";
+		};
+		0FFCB5341D2D007F00D863FA /* BaseView */ = {
+			isa = PBXGroup;
+			children = (
+				0FFCB5351D2D009100D863FA /* PGLoginBaseView.h */,
+				0FFCB5361D2D009100D863FA /* PGLoginBaseView.m */,
+			);
+			path = BaseView;
+			sourceTree = "<group>";
+		};
+		0FFCB53E1D2D03D000D863FA /* Login */ = {
+			isa = PBXGroup;
+			children = (
+				0FFCB53F1D2D050D00D863FA /* PGLoginViewModel.h */,
+				0FFCB5401D2D050D00D863FA /* PGLoginViewModel.m */,
+			);
+			path = Login;
 			sourceTree = "<group>";
 		};
 		CBE777C5A9840912C74D8E68 /* Frameworks */ = {
@@ -401,8 +504,15 @@
 			files = (
 				0F7EEF621D210F63008D175C /* ViewController.m in Sources */,
 				0F7EEF5F1D210F63008D175C /* AppDelegate.m in Sources */,
+				0FFCB53D1D2D033E00D863FA /* PGRegisterView.m in Sources */,
+				0FFCB5371D2D009100D863FA /* PGLoginBaseView.m in Sources */,
 				0FF816261D2BAD3A00C78E3A /* PGBaseViewController.m in Sources */,
+				0FFCB5241D2CABDE00D863FA /* PGTourView.m in Sources */,
+				0FFCB51C1D2C9F6B00D863FA /* PGLoginViewController.m in Sources */,
 				0F7EEF5C1D210F63008D175C /* main.m in Sources */,
+				0FFCB5411D2D050D00D863FA /* PGLoginViewModel.m in Sources */,
+				0FFCB5331D2CF35400D863FA /* PGSocialView.m in Sources */,
+				0FFCB53A1D2D01E200D863FA /* PGLoginView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -533,6 +643,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				ENABLE_BITCODE = NO;
+				GCC_PREFIX_HEADER = "PenguinGuide/PenguinGuide-Prefix.pch";
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"${PODS_ROOT}/Headers/Public\"",
@@ -554,7 +665,9 @@
 					"\"${PODS_ROOT}/Headers/Public/ShareSDK3\"",
 				);
 				INFOPLIST_FILE = PenguinGuide/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.xinglian.penguinguide;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
@@ -570,6 +683,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				ENABLE_BITCODE = NO;
+				GCC_PREFIX_HEADER = "PenguinGuide/PenguinGuide-Prefix.pch";
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"${PODS_ROOT}/Headers/Public\"",
@@ -591,6 +705,7 @@
 					"\"${PODS_ROOT}/Headers/Public/ShareSDK3\"",
 				);
 				INFOPLIST_FILE = PenguinGuide/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.xinglian.penguinguide;
 				PRODUCT_NAME = "$(TARGET_NAME)";

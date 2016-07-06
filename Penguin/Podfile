@@ -10,6 +10,7 @@ target 'PenguinGuide' do
     pod 'PGTheme', :path => '../BusinessFramework/PGTheme', :inhibit_warnings => true
     pod 'PGShare', :path => '../BusinessFramework/PGShare', :inhibit_warnings => true
     pod 'PGTabBarController', :path => '../BusinessFramework/PGTabBarController', :inhibit_warnings => true
+    pod 'PGPagedScrollView', :path => '../BusinessFramework/PGPagedScrollView', :inhibit_warnings => true
     
     #base framework
     pod 'PGRestKit', :path => '../BaseFramework/PGRestKit', :inhibit_warnings => true
@@ -20,6 +21,9 @@ target 'PenguinGuide' do
     pod 'PGString', :path => '../BaseFramework/PGString', :inhibit_warnings => true
     pod 'PGColor', :path => '../BaseFramework/PGColor', :inhibit_warnings => true
     pod 'PGImage', :path => '../BaseFramework/PGImage', :inhibit_warnings => true
+    
+    #app
+    pod 'KVOController'
 end
 
 target 'PenguinGuideTests' do

@@ -38,6 +38,26 @@ static char PGTapHandlerKey;
     return CGRectGetHeight(self.frame);
 }
 
+- (float)left
+{
+    return self.frame.origin.x;
+}
+
+- (float)right
+{
+    return self.frame.origin.x+self.frame.size.width;
+}
+
+- (float)top
+{
+    return self.frame.origin.y;
+}
+
+- (float)bottom
+{
+    return self.frame.origin.y+self.frame.size.height;
+}
+
 - (void)setX:(float)x
 {
     CGRect frame = self.frame;

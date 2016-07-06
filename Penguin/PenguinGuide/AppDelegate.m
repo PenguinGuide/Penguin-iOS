@@ -7,9 +7,7 @@
 //
 
 #import "AppDelegate.h"
-#import "ViewController.h"
-
-#import "PGShareManager.h"
+#import "PGLoginViewController.h"
 
 @interface AppDelegate ()
 
@@ -21,9 +19,9 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
     
-    ViewController *vc = [ViewController new];
+    PGLoginViewController *loginVC = [PGLoginViewController new];
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
-    self.window.rootViewController = vc;
+    self.window.rootViewController = loginVC;
     [self.window makeKeyAndVisible];
     
     return YES;

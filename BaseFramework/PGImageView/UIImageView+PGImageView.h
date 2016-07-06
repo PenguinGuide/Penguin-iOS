@@ -16,5 +16,6 @@
 - (void)setLightBlurEffectWithAlpha:(CGFloat)alpha;
 - (void)setDarkBlurEffectWithAlpha:(CGFloat)alpha;
 - (void)setExtraLightBlurEffectWithAlpha:(CGFloat)alpha;
+- (void)setBlurEffectWithRadius:(CGFloat)blurRadius tintColor:(UIColor *)tintColor saturationDeltaFactor:(CGFloat)saturationDeltaFactor maskImage:(UIImage *)maskImage;
 
 @end

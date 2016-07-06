@@ -15,6 +15,11 @@
 @property (nonatomic) float width;
 @property (nonatomic) float height;
 
+@property (nonatomic) float left;
+@property (nonatomic) float right;
+@property (nonatomic) float top;
+@property (nonatomic) float bottom;
+
 - (void)setTapAction:(void(^)(void))completion;
 
 @end

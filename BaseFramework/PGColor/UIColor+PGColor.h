@@ -11,5 +11,8 @@
 @interface UIColor (PGColor)
 
 + (UIColor *)colorWithHexString:(NSString *)hexString;
++ (UIColor*)colorWithHex:(NSInteger)hexValue alpha:(CGFloat)alphaValue;
++ (UIColor *)whiteColorWithAlpha:(CGFloat)alpha;
++ (UIColor*)blackColorWithAlpha:(CGFloat)alphaValue;
 
 @end

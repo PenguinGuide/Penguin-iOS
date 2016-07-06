@@ -8,14 +8,17 @@
 
 Pod::Spec.new do |s|
 
-s.name         = "PGTheme"
+s.name         = "PGPagedScrollView"
 s.version      = "1.0"
-s.summary      = "PenguinGuide theme manager"
+s.summary      = "PenguinGuide paged scroll view"
 s.license      = ""
 s.author       = { "Kobe Dai" => "kobe.dai@penguinguide.com" }
 s.platform     = :ios, "8.0"
 
 s.public_header_files = "*.h"
 s.source_files = "*.{h,m}"
+s.resources = "Assets.xcassets"
+
+s.dependency "FXPageControl"
 
 end
