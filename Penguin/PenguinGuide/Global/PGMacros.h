@@ -16,5 +16,7 @@
 #define DEVICE_IS_IPHONE_5 [[UIScreen mainScreen] bounds].size.height == 568.f
 #define DEVICE_IS_IPHONE_4 [[UIScreen mainScreen] bounds].size.height < 568.f
 
+#define SINGLE_LINE_WIDTH [UIScreen mainScreen].scale >= 2.0f ? 0.5f : 1.0f
+
 
 #endif /* PGMacros_h */

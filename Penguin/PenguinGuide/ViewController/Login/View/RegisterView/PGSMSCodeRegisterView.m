@@ -1,29 +1,29 @@
 //
-//  PGRegisterView.m
+//  PGSMSCodeRegisterView.m
 //  Penguin
 //
-//  Created by Jing Dai on 7/6/16.
+//  Created by Jing Dai on 7/7/16.
 //  Copyright © 2016 Xinglian. All rights reserved.
 //
 
-#import "PGRegisterView.h"
+#import "PGSMSCodeRegisterView.h"
 
-@interface PGRegisterView ()
+@interface PGSMSCodeRegisterView ()
 
 @property (nonatomic, strong, readwrite) PGLoginPhoneTextField *phoneTextField;
-@property (nonatomic, strong, readwrite) PGSocialView *socialView;
+@property (nonatomic, strong, readwrite) PGLoginSMSCodeTextField *smsCodeTextField;
 @property (nonatomic, strong, readwrite) UIButton *nextButton;
 
 @end
 
-@implementation PGRegisterView
+@implementation PGSMSCodeRegisterView
 
 - (instancetype)initWithFrame:(CGRect)frame
 {
     self = [super initWithFrame:frame];
     if (self) {
         [self addSubview:self.phoneTextField];
-        [self addSubview:self.socialView];
+        [self addSubview:self.smsCodeTextField];
         [self addSubview:self.nextButton];
     }
     return self;
@@ -32,17 +32,18 @@
 - (PGLoginPhoneTextField *)phoneTextField
 {
     if (!_phoneTextField) {
-        _phoneTextField = [[PGLoginPhoneTextField alloc] initWithFrame:CGRectMake(22, self.logoView.bottom+18, self.frame.size.width-22*2, 46)];
+        _phoneTextField = [[PGLoginPhoneTextField alloc] initWithFrame:CGRectMake(22, self.logoView.bottom+18, self.width-22*2, 46)];
+        _phoneTextField.userInteractionEnabled = NO;
     }
     return _phoneTextField;
 }
 
-- (PGSocialView *)socialView
+- (PGLoginSMSCodeTextField *)smsCodeTextField
 {
-    if (!_socialView) {
-        _socialView = [[PGSocialView alloc] initWithFrame:CGRectMake(0, self.phoneTextField.bottom+38, self.width, 62)];
+    if (!_smsCodeTextField) {
+        _smsCodeTextField = [[PGLoginSMSCodeTextField alloc] initWithFrame:CGRectMake(22, self.phoneTextField.bottom+29, self.width-22*2, 46)];
     }
-    return _socialView;
+    return _smsCodeTextField;
 }
 
 - (UIButton *)nextButton

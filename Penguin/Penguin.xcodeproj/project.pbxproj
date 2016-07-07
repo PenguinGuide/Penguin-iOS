@@ -8,6 +8,13 @@
 
 /* Begin PBXBuildFile section */
 		0DF3313AD03FFD0EE812C3B5 /* libPods-PenguinGuide.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BF885179112DA7487FF34089 /* libPods-PenguinGuide.a */; };
+		0F1790BC1D2DFCC600672B27 /* PGPasswordLoginView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0F1790BB1D2DFCC600672B27 /* PGPasswordLoginView.m */; };
+		0F1790BF1D2DFD0500672B27 /* PGLoginPasswordTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = 0F1790BE1D2DFD0500672B27 /* PGLoginPasswordTextField.m */; };
+		0F1790C21D2E0D6F00672B27 /* PGResetPasswordView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0F1790C11D2E0D6F00672B27 /* PGResetPasswordView.m */; };
+		0F1790C51D2E0E3600672B27 /* PGLoginSMSCodeTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = 0F1790C41D2E0E3600672B27 /* PGLoginSMSCodeTextField.m */; };
+		0F1790C81D2E229E00672B27 /* PGUpdatePasswordView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0F1790C71D2E229E00672B27 /* PGUpdatePasswordView.m */; };
+		0F1790CB1D2E24DE00672B27 /* PGSMSCodeLoginView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0F1790CA1D2E24DE00672B27 /* PGSMSCodeLoginView.m */; };
+		0F3677821D2D6B050023CD3D /* PGLoginPhoneTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = 0F3677811D2D6B050023CD3D /* PGLoginPhoneTextField.m */; };
 		0F7EEF5C1D210F63008D175C /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 0F7EEF5B1D210F63008D175C /* main.m */; };
 		0F7EEF5F1D210F63008D175C /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 0F7EEF5E1D210F63008D175C /* AppDelegate.m */; };
 		0F7EEF621D210F63008D175C /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0F7EEF611D210F63008D175C /* ViewController.m */; };
@@ -24,6 +31,10 @@
 		0FFCB53A1D2D01E200D863FA /* PGLoginView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0FFCB5391D2D01E200D863FA /* PGLoginView.m */; };
 		0FFCB53D1D2D033E00D863FA /* PGRegisterView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0FFCB53C1D2D033E00D863FA /* PGRegisterView.m */; };
 		0FFCB5411D2D050D00D863FA /* PGLoginViewModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 0FFCB5401D2D050D00D863FA /* PGLoginViewModel.m */; };
+		0FFDEB7C1D2E340000C67445 /* PGLoginUserInfoTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = 0FFDEB7B1D2E340000C67445 /* PGLoginUserInfoTextField.m */; };
+		0FFDEB821D2E356300C67445 /* PGRegisterUserInfoView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0FFDEB811D2E356300C67445 /* PGRegisterUserInfoView.m */; };
+		0FFDEB851D2E38A800C67445 /* PGRegisterSucessView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0FFDEB841D2E38A800C67445 /* PGRegisterSucessView.m */; };
+		0FFDEB881D2E458300C67445 /* PGSMSCodeRegisterView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0FFDEB871D2E458300C67445 /* PGSMSCodeRegisterView.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -44,6 +55,20 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		0F1790BA1D2DFCC600672B27 /* PGPasswordLoginView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PGPasswordLoginView.h; sourceTree = "<group>"; };
+		0F1790BB1D2DFCC600672B27 /* PGPasswordLoginView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PGPasswordLoginView.m; sourceTree = "<group>"; };
+		0F1790BD1D2DFD0500672B27 /* PGLoginPasswordTextField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PGLoginPasswordTextField.h; sourceTree = "<group>"; };
+		0F1790BE1D2DFD0500672B27 /* PGLoginPasswordTextField.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PGLoginPasswordTextField.m; sourceTree = "<group>"; };
+		0F1790C01D2E0D6F00672B27 /* PGResetPasswordView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PGResetPasswordView.h; sourceTree = "<group>"; };
+		0F1790C11D2E0D6F00672B27 /* PGResetPasswordView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PGResetPasswordView.m; sourceTree = "<group>"; };
+		0F1790C31D2E0E3600672B27 /* PGLoginSMSCodeTextField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PGLoginSMSCodeTextField.h; sourceTree = "<group>"; };
+		0F1790C41D2E0E3600672B27 /* PGLoginSMSCodeTextField.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PGLoginSMSCodeTextField.m; sourceTree = "<group>"; };
+		0F1790C61D2E229E00672B27 /* PGUpdatePasswordView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PGUpdatePasswordView.h; sourceTree = "<group>"; };
+		0F1790C71D2E229E00672B27 /* PGUpdatePasswordView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PGUpdatePasswordView.m; sourceTree = "<group>"; };
+		0F1790C91D2E24DE00672B27 /* PGSMSCodeLoginView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PGSMSCodeLoginView.h; sourceTree = "<group>"; };
+		0F1790CA1D2E24DE00672B27 /* PGSMSCodeLoginView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PGSMSCodeLoginView.m; sourceTree = "<group>"; };
+		0F3677801D2D6B050023CD3D /* PGLoginPhoneTextField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PGLoginPhoneTextField.h; sourceTree = "<group>"; };
+		0F3677811D2D6B050023CD3D /* PGLoginPhoneTextField.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PGLoginPhoneTextField.m; sourceTree = "<group>"; };
 		0F7EEF581D210F63008D175C /* PenguinGuide.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PenguinGuide.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		0F7EEF5B1D210F63008D175C /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		0F7EEF5D1D210F63008D175C /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -78,6 +103,14 @@
 		0FFCB53C1D2D033E00D863FA /* PGRegisterView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PGRegisterView.m; sourceTree = "<group>"; };
 		0FFCB53F1D2D050D00D863FA /* PGLoginViewModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PGLoginViewModel.h; sourceTree = "<group>"; };
 		0FFCB5401D2D050D00D863FA /* PGLoginViewModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PGLoginViewModel.m; sourceTree = "<group>"; };
+		0FFDEB7A1D2E340000C67445 /* PGLoginUserInfoTextField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PGLoginUserInfoTextField.h; sourceTree = "<group>"; };
+		0FFDEB7B1D2E340000C67445 /* PGLoginUserInfoTextField.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PGLoginUserInfoTextField.m; sourceTree = "<group>"; };
+		0FFDEB801D2E356300C67445 /* PGRegisterUserInfoView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PGRegisterUserInfoView.h; sourceTree = "<group>"; };
+		0FFDEB811D2E356300C67445 /* PGRegisterUserInfoView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PGRegisterUserInfoView.m; sourceTree = "<group>"; };
+		0FFDEB831D2E38A800C67445 /* PGRegisterSucessView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PGRegisterSucessView.h; sourceTree = "<group>"; };
+		0FFDEB841D2E38A800C67445 /* PGRegisterSucessView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PGRegisterSucessView.m; sourceTree = "<group>"; };
+		0FFDEB861D2E458300C67445 /* PGSMSCodeRegisterView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PGSMSCodeRegisterView.h; sourceTree = "<group>"; };
+		0FFDEB871D2E458300C67445 /* PGSMSCodeRegisterView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PGSMSCodeRegisterView.m; sourceTree = "<group>"; };
 		949828526171CC081956A2A0 /* Pods-PenguinGuide.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PenguinGuide.release.xcconfig"; path = "Pods/Target Support Files/Pods-PenguinGuide/Pods-PenguinGuide.release.xcconfig"; sourceTree = "<group>"; };
 		ADB19FE6B001C4E07FD07613 /* Pods-PenguinGuide.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PenguinGuide.debug.xcconfig"; path = "Pods/Target Support Files/Pods-PenguinGuide/Pods-PenguinGuide.debug.xcconfig"; sourceTree = "<group>"; };
 		BF885179112DA7487FF34089 /* libPods-PenguinGuide.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-PenguinGuide.a"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -109,6 +142,21 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		0F36777F1D2D69DD0023CD3D /* TextField */ = {
+			isa = PBXGroup;
+			children = (
+				0F3677801D2D6B050023CD3D /* PGLoginPhoneTextField.h */,
+				0F3677811D2D6B050023CD3D /* PGLoginPhoneTextField.m */,
+				0F1790BD1D2DFD0500672B27 /* PGLoginPasswordTextField.h */,
+				0F1790BE1D2DFD0500672B27 /* PGLoginPasswordTextField.m */,
+				0F1790C31D2E0E3600672B27 /* PGLoginSMSCodeTextField.h */,
+				0F1790C41D2E0E3600672B27 /* PGLoginSMSCodeTextField.m */,
+				0FFDEB7A1D2E340000C67445 /* PGLoginUserInfoTextField.h */,
+				0FFDEB7B1D2E340000C67445 /* PGLoginUserInfoTextField.m */,
+			);
+			path = TextField;
+			sourceTree = "<group>";
+		};
 		0F7EEF151D210F37008D175C = {
 			isa = PBXGroup;
 			children = (
@@ -237,6 +285,7 @@
 				0FFCB5201D2CAB7100D863FA /* RegisterView */,
 				0FFCB51F1D2CAB7100D863FA /* LoginView */,
 				0FFCB5301D2CF32900D863FA /* SocialView */,
+				0F36777F1D2D69DD0023CD3D /* TextField */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -254,6 +303,14 @@
 			children = (
 				0FFCB5381D2D01E200D863FA /* PGLoginView.h */,
 				0FFCB5391D2D01E200D863FA /* PGLoginView.m */,
+				0F1790C91D2E24DE00672B27 /* PGSMSCodeLoginView.h */,
+				0F1790CA1D2E24DE00672B27 /* PGSMSCodeLoginView.m */,
+				0F1790BA1D2DFCC600672B27 /* PGPasswordLoginView.h */,
+				0F1790BB1D2DFCC600672B27 /* PGPasswordLoginView.m */,
+				0F1790C01D2E0D6F00672B27 /* PGResetPasswordView.h */,
+				0F1790C11D2E0D6F00672B27 /* PGResetPasswordView.m */,
+				0F1790C61D2E229E00672B27 /* PGUpdatePasswordView.h */,
+				0F1790C71D2E229E00672B27 /* PGUpdatePasswordView.m */,
 			);
 			path = LoginView;
 			sourceTree = "<group>";
@@ -263,6 +320,12 @@
 			children = (
 				0FFCB53B1D2D033E00D863FA /* PGRegisterView.h */,
 				0FFCB53C1D2D033E00D863FA /* PGRegisterView.m */,
+				0FFDEB861D2E458300C67445 /* PGSMSCodeRegisterView.h */,
+				0FFDEB871D2E458300C67445 /* PGSMSCodeRegisterView.m */,
+				0FFDEB801D2E356300C67445 /* PGRegisterUserInfoView.h */,
+				0FFDEB811D2E356300C67445 /* PGRegisterUserInfoView.m */,
+				0FFDEB831D2E38A800C67445 /* PGRegisterSucessView.h */,
+				0FFDEB841D2E38A800C67445 /* PGRegisterSucessView.m */,
 			);
 			path = RegisterView;
 			sourceTree = "<group>";
@@ -502,13 +565,24 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0F1790C21D2E0D6F00672B27 /* PGResetPasswordView.m in Sources */,
 				0F7EEF621D210F63008D175C /* ViewController.m in Sources */,
+				0F3677821D2D6B050023CD3D /* PGLoginPhoneTextField.m in Sources */,
+				0FFDEB7C1D2E340000C67445 /* PGLoginUserInfoTextField.m in Sources */,
+				0FFDEB851D2E38A800C67445 /* PGRegisterSucessView.m in Sources */,
+				0F1790C81D2E229E00672B27 /* PGUpdatePasswordView.m in Sources */,
+				0F1790CB1D2E24DE00672B27 /* PGSMSCodeLoginView.m in Sources */,
 				0F7EEF5F1D210F63008D175C /* AppDelegate.m in Sources */,
+				0F1790BC1D2DFCC600672B27 /* PGPasswordLoginView.m in Sources */,
 				0FFCB53D1D2D033E00D863FA /* PGRegisterView.m in Sources */,
 				0FFCB5371D2D009100D863FA /* PGLoginBaseView.m in Sources */,
+				0FFDEB881D2E458300C67445 /* PGSMSCodeRegisterView.m in Sources */,
 				0FF816261D2BAD3A00C78E3A /* PGBaseViewController.m in Sources */,
+				0F1790BF1D2DFD0500672B27 /* PGLoginPasswordTextField.m in Sources */,
 				0FFCB5241D2CABDE00D863FA /* PGTourView.m in Sources */,
+				0FFDEB821D2E356300C67445 /* PGRegisterUserInfoView.m in Sources */,
 				0FFCB51C1D2C9F6B00D863FA /* PGLoginViewController.m in Sources */,
+				0F1790C51D2E0E3600672B27 /* PGLoginSMSCodeTextField.m in Sources */,
 				0F7EEF5C1D210F63008D175C /* main.m in Sources */,
 				0FFCB5411D2D050D00D863FA /* PGLoginViewModel.m in Sources */,
 				0FFCB5331D2CF35400D863FA /* PGSocialView.m in Sources */,

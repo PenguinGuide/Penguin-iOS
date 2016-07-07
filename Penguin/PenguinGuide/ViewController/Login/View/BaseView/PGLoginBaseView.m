@@ -11,6 +11,7 @@
 @interface PGLoginBaseView ()
 
 @property (nonatomic, strong, readwrite) UIButton *backButton;
+@property (nonatomic, strong, readwrite) UIImageView *logoView;
 
 @end
 
@@ -23,14 +24,18 @@
         self.clipsToBounds = YES;
         self.layer.cornerRadius = 10.f;
         
-        UIImageView *logoView = [[UIImageView alloc] initWithFrame:CGRectMake(frame.size.width/2-59.f/2, 59, 55, 66)];
-        logoView.image = [UIImage imageNamed:@"pg_login_logo"];
-        [self addSubview:logoView];
-        
         [self addSubview:self.backButton];
+        [self addSubview:self.logoView];
     }
     
     return self;
+}
+
+- (void)backButtonClicked
+{
+    if (self.delegate && [self.delegate respondsToSelector:@selector(backButtonClicked:)]) {
+        [self.delegate backButtonClicked:self];
+    }
 }
 
 - (UIButton *)backButton
@@ -40,8 +45,19 @@
         _backButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
         _backButton.contentVerticalAlignment = UIControlContentVerticalAlignmentTop;
         [_backButton setImage:[UIImage imageNamed:@"pg_login_back"] forState:UIControlStateNormal];
+        [_backButton addTarget:self action:@selector(backButtonClicked) forControlEvents:UIControlEventTouchUpInside];
     }
     return _backButton;
+}
+
+- (UIImageView *)logoView
+{
+    if (!_logoView) {
+        _logoView = [[UIImageView alloc] initWithFrame:CGRectMake(self.frame.size.width/2-59.f/2, 59, 55, 66)];
+        _logoView.image = [UIImage imageNamed:@"pg_login_logo"];
+        [self addSubview:_logoView];
+    }
+    return _logoView;
 }
 
 @end
