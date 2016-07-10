@@ -8,7 +8,6 @@
 
 #import "PGTourView.h"
 #import "PGSocialView.h"
-#import "UIImage+GIF.h"
 
 @interface PGTourView () <PGPagedScrollViewDelegate>
 
@@ -51,9 +50,7 @@
 
 - (NSArray *)imagesForScrollView
 {
-    UIImage *gifImage = [UIImage sd_animatedGIFNamed:@"pg_login_tour_city_guide"];
-    
-    return @[gifImage, gifImage, gifImage, gifImage];
+    return @[@"pg_login_tour_city_guide.gif", @"pg_login_tour_city_guide.gif"];
 }
 
 #pragma mark - <Setters && Getters>
@@ -116,7 +113,7 @@
     if (!_pagedScrollView) {
         float width = self.frame.size.width-20*2;
         float height = 190.f/225.f*width+30+15;
-        _pagedScrollView = [[PGPagedScrollView alloc] initWithFrame:CGRectMake(20, 60, width, height)];
+        _pagedScrollView = [[PGPagedScrollView alloc] initWithFrame:CGRectMake(20, 60, width, height) imageFillMode:PGPagedScrollViewImageFillModeFit];
         _pagedScrollView.delegate = self;
     }
     return _pagedScrollView;

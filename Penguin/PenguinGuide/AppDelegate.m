@@ -7,9 +7,24 @@
 //
 
 #import "AppDelegate.h"
+
+#import <Fabric/Fabric.h>
+#import <Crashlytics/Crashlytics.h>
+
+#import "PGThemeManager.h"
+
+#import "PGBaseNavigationController.h"
+
+#import "PGHomeViewController.h"
+#import "PGExploreViewController.h"
+#import "PGStoreViewController.h"
+#import "PGMeViewController.h"
+
 #import "PGLoginViewController.h"
 
 @interface AppDelegate ()
+
+@property (nonatomic, strong, readwrite) PGTabBarController *tabBarController;
 
 @end
 
@@ -19,9 +34,23 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
     
-    PGLoginViewController *loginVC = [PGLoginViewController new];
+    // Fabric
+    [Fabric with:@[[Crashlytics class]]];
+    
+    [PGThemeManager sharedManager];
+    
+    PGHomeViewController *homeVC = [[PGHomeViewController alloc] init];
+    PGExploreViewController *exploreVC = [[PGExploreViewController alloc] init];
+    PGStoreViewController *storeVC = [[PGStoreViewController alloc] init];
+    PGMeViewController *meVC = [[PGMeViewController alloc] init];
+    
+    self.tabBarController = [[PGTabBarController alloc] init];
+    [self.tabBarController setViewControllers:@[homeVC, exploreVC, storeVC, meVC]];
+    
+    PGBaseNavigationController *navigationController = [[PGBaseNavigationController alloc] initWithRootViewController:self.tabBarController];
+    //PGLoginViewController *loginVC = [[PGLoginViewController alloc] init];
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
-    self.window.rootViewController = loginVC;
+    self.window.rootViewController = navigationController;
     [self.window makeKeyAndVisible];
     
     return YES;

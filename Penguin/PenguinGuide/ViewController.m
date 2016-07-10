@@ -10,7 +10,10 @@
 #import "PGRouter.h"
 #import "UIView+PGView.h"
 
+
 @interface ViewController ()
+
+@property (nonatomic, strong) UICollectionView *demoCollectionView;
 
 @end
 
@@ -20,7 +23,7 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view, typically from a nib.
     
-    self.view.backgroundColor = [UIColor whiteColor];
+    self.view.backgroundColor = [UIColor redColor];
     
     [[PGRouter sharedInstance] registerRoute:@"qiechihe://user/notes" toHandler:^(NSDictionary *params) {
         NSLog(@"route to: qiechihe://user/notes params: %@", params);
@@ -35,8 +38,6 @@
     }];
     
     [[PGRouter sharedInstance] openURL:@"qiechihe://user/notes?noteId=11111&name=Kobe"];
-    
-    self.view.width = 4.f;
 }
 
 - (void)didReceiveMemoryWarning {

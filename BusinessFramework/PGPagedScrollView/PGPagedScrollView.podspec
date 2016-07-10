@@ -20,5 +20,6 @@ s.source_files = "*.{h,m}"
 s.resources = "Assets.xcassets"
 
 s.dependency "FXPageControl"
+s.dependency "FLAnimatedImage"
 
 end

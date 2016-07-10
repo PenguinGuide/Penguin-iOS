@@ -17,4 +17,6 @@
 
 #import "PGMacros.h"
 
+#import "PGBaseCollectionView.h"
+
 #endif /* PenguinGuide_Prefix_pch */

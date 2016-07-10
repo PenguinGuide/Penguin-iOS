@@ -22,8 +22,14 @@ target 'PenguinGuide' do
     pod 'PGColor', :path => '../BaseFramework/PGColor', :inhibit_warnings => true
     pod 'PGImage', :path => '../BaseFramework/PGImage', :inhibit_warnings => true
     
-    #app
-    pod 'KVOController'
+    #vendor
+    pod 'KVOController', :inhibit_warnings => true
+    pod 'SVPullToRefresh', :inhibit_warnings => true
+    pod 'UzysAnimatedGifPullToRefresh', :inhibit_warnings => true
+    
+    #fabric
+    pod 'Fabric'
+    pod 'Crashlytics'
 end
 
 target 'PenguinGuideTests' do

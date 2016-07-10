@@ -68,6 +68,7 @@
 @property (nonatomic, strong) UIScrollView *pagedScrollView;
 @property (nonatomic, strong) FXPageControl *pageControl;
 @property (nonatomic, strong) NSArray *banners;
+@property (nonatomic) PGPagedScrollViewImageFillMode fillMode;
 
 @end
 
@@ -83,20 +84,43 @@
     return self;
 }
 
+- (id)initWithFrame:(CGRect)frame imageFillMode:(PGPagedScrollViewImageFillMode)fillMode
+{
+    if (self = [super initWithFrame:frame]) {
+        self.fillMode = fillMode;
+        
+        [self addSubview:self.pagedScrollView];
+        [self addSubview:self.pageControl];
+    }
+    
+    return self;
+}
+
 - (void)reloadData
 {
     if (self.delegate && [self.delegate respondsToSelector:@selector(imagesForScrollView)]) {
         self.banners = [self.delegate imagesForScrollView];
         if (self.banners.count > 0) {
-            _pagedScrollView.contentSize = CGSizeMake(self.frame.size.width*self.banners.count, self.frame.size.height-15-8);
+            self.pagedScrollView.contentSize = CGSizeMake(self.frame.size.width*self.banners.count, self.pagedScrollView.frame.size.height);
             for (UIView *subview in self.pagedScrollView.subviews) {
                 [subview removeFromSuperview];
             }
             for (int i = 0; i < self.banners.count; i++) {
-                UIImage *image = self.banners[i];
-                UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(i*self.frame.size.width, 0, self.frame.size.width, self.frame.size.height-15-30)];
-                imageView.image = image;
-                [self.pagedScrollView addSubview:imageView];
+                NSString *imageName = self.banners[i];
+                if ([imageName containsString:@".gif"]) {
+                    NSString *fileName = [imageName stringByReplacingOccurrencesOfString:@".gif" withString:@""];
+                    NSString *gifPath = [[NSBundle mainBundle] pathForResource:fileName ofType:@"gif"];
+                    FLAnimatedImage *gifImage = [FLAnimatedImage animatedImageWithGIFData:[NSData dataWithContentsOfFile:gifPath]];
+                    FLAnimatedImageView *gifImageView = [[FLAnimatedImageView alloc] init];
+                    gifImageView.animatedImage = gifImage;
+                    gifImageView.frame = CGRectMake(i*self.frame.size.width, 0, self.frame.size.width, self.frame.size.height-15-30);
+                    [self.pagedScrollView addSubview:gifImageView];
+                } else {
+                    UIImage *image = [UIImage imageNamed:imageName];
+                    UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(i*self.frame.size.width, 0, self.frame.size.width, self.pagedScrollView.frame.size.height)];
+                    imageView.image = image;
+                    [self.pagedScrollView addSubview:imageView];
+                }
             }
             _pageControl.numberOfPages = self.banners.count;
             _pageControl.currentPage = 0;
@@ -129,7 +153,11 @@
 - (UIScrollView *)pagedScrollView
 {
     if (!_pagedScrollView) {
-        _pagedScrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width, self.frame.size.height-15-8)];
+        if (self.fillMode == PGPagedScrollViewImageFillModeFit) {
+            _pagedScrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width, self.frame.size.height-15-8)];
+        } else {
+            _pagedScrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width, self.frame.size.height)];
+        }
         _pagedScrollView.showsVerticalScrollIndicator = NO;
         _pagedScrollView.showsHorizontalScrollIndicator = NO;
         _pagedScrollView.pagingEnabled = YES;
@@ -141,7 +169,8 @@
 - (UIPageControl *)pageControl
 {
     if (!_pageControl) {
-        _pageControl = [[FXPageControl alloc] initWithFrame:CGRectMake(0, self.frame.size.height-15, self.frame.size.width, 15)];
+        _pageControl = [[FXPageControl alloc] initWithFrame:CGRectMake(0, self.frame.size.height-25, self.frame.size.width, 15)];
+        _pageControl.userInteractionEnabled = NO;
         _pageControl.backgroundColor = [UIColor clearColor];
         _pageControl.dotSize = 8.f;
         _pageControl.selectedDotSize = 14.f;

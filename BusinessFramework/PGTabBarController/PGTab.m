@@ -19,13 +19,42 @@
 
 #pragma mark - <Setters && Getters>
 
+- (void)drawRect:(CGRect)rect
+{
+    [self.tabLabel removeFromSuperview];
+    [self.tabImageView removeFromSuperview];
+    
+    if (!self.selected) {
+        self.tabLabel.font = [UIFont systemFontOfSize:10.f weight:UIFontWeightLight];
+        self.tabLabel.text = self.tabTitle;
+        self.tabLabel.textColor = [UIColor blackColor];
+        UIImage *tabImage = [UIImage imageNamed:self.tabImage];
+        self.tabImageView.image = tabImage;
+        self.tabImageView.frame = CGRectMake(CGRectGetWidth(self.frame)/2-tabImage.size.width/2, self.tabLabel.frame.origin.y-8-tabImage.size.height, tabImage.size.width, tabImage.size.height);
+    } else {
+        self.tabLabel.font = [UIFont boldSystemFontOfSize:10.f];
+        self.tabLabel.text = self.tabTitle;
+        self.tabLabel.textColor = [UIColor colorWithRed:239.f/256.f green:103.f/256.f blue:51.f/256.f alpha:1.f];
+        UIImage *tabHighlightImage = [UIImage imageNamed:self.tabHighlightImage];
+        self.tabImageView.image = tabHighlightImage;
+        self.tabImageView.frame = CGRectMake(CGRectGetWidth(self.frame)/2-tabHighlightImage.size.width/2, self.tabLabel.frame.origin.y-8-tabHighlightImage.size.height, tabHighlightImage.size.width, tabHighlightImage.size.height);
+    }
+    
+    [self addSubview:self.tabLabel];
+    [self addSubview:self.tabImageView];
+}
+
 - (UILabel *)tabLabel
 {
     if (!_tabLabel) {
-        _tabLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, CGRectGetHeight(self.frame)-20, CGRectGetWidth(self.frame), 14)];
-        _tabLabel.font = [UIFont systemFontOfSize:14.f];
-        _tabLabel.textColor = [UIColor blackColor];
+        int width = (int)(CGRectGetWidth(self.frame));
+        if (width % 2 != 0) {
+            width = width-1;
+        }
+        _tabLabel = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetWidth(self.frame)/2-width/2.f, CGRectGetHeight(self.frame)-14, width, 10)];
+        _tabLabel.textAlignment = NSTextAlignmentCenter;
     }
+    return _tabLabel;
 }
 
 - (UIImageView *)tabImageView
@@ -35,20 +64,7 @@
         _tabImageView.contentMode = UIViewContentModeScaleAspectFit;
         _tabImageView.clipsToBounds = NO;
     }
-}
-
-- (void)drawRect:(CGRect)rect
-{
-    [self.tabLabel removeFromSuperview];
-    [self.tabImageView removeFromSuperview];
-    
-    [self addSubview:self.tabLabel];
-    [self addSubview:self.tabImageView];
-    
-    if (!self.selected) {
-        self.tabLabel.text = self.tabTitle;
-        self.tabImageView.image = self.tabImage;
-    }
+    return _tabImageView;
 }
 
 @end

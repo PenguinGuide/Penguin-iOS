@@ -12,6 +12,7 @@
 @interface PGTabBar ()
 
 @property (nonatomic, strong, readwrite) NSArray *tabs;
+@property (nonatomic) NSInteger selectedIndex;
 
 @end
 
@@ -20,9 +21,10 @@
 - (id)initWithFrame:(CGRect)frame
 {
     if (self = [super initWithFrame:frame]) {
-        self.backgroundColor = [UIColor whiteColor];
-        self.opaque = YES;
+        self.backgroundColor = [UIColor colorWithWhite:1.0 alpha:0.95];
+//        self.alpha = 0.95f;
         self.userInteractionEnabled = YES;
+        self.selectedIndex = 0;
     }
     
     return self;
@@ -31,12 +33,11 @@
 - (void)setTabs:(NSArray *)tabs
 {
     if (![tabs isEqual:_tabs]) {
-        _tabs = tabs;
-        
-        for (PGTab *tab in tabs) {
+        for (PGTab *tab in _tabs) {
             [tab removeFromSuperview];
         }
         
+        _tabs = tabs;
         [self setNeedsLayout];
     }
 }
@@ -48,15 +49,24 @@
     
     for (int i = 0; i < _tabs.count; i++) {
         PGTab *tab = _tabs[i];
+        if (i == self.selectedIndex) {
+            tab.selected = YES;
+        } else {
+            tab.selected = NO;
+        }
         tab.frame = CGRectMake(i*tabWidth, 0, tabWidth, CGRectGetHeight(self.frame));
-        [tab addTarget:self action:@selector(tabClicked:) forControlEvents:UIControlEventTouchUpInside];
+        [tab addTarget:self action:@selector(tabDidSelected:) forControlEvents:UIControlEventTouchUpInside];
         [self addSubview:tab];
     }
 }
 
-- (void)tabClicked:(id)sender
+- (void)tabDidSelected:(PGTab *)tab
 {
+    self.selectedIndex = [self.tabs indexOfObject:tab];
     
+    if (self.delegate && [self.delegate respondsToSelector:@selector(tabBarDidSelect:)]) {
+        [self.delegate tabBarDidSelect:self.selectedIndex];
+    }
 }
 
 @end

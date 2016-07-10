@@ -29,9 +29,21 @@ static UIFont *fontSize12, *fontSize14, *fontSize16;
         fontSize12 = [UIFont systemFontOfSize:12.f weight:UIFontWeightLight];
         fontSize14 = [UIFont systemFontOfSize:14.f weight:UIFontWeightLight];
         fontSize16 = [UIFont systemFontOfSize:16.f weight:UIFontWeightLight];
+        
+        [self initAppearance];
     }
     
     return self;
+}
+
+- (void)initAppearance
+{
+    //[[UINavigationBar appearance] setBarTintColor:[UIColor colorWithWhite:1.0 alpha:0.4]];
+    [[UINavigationBar appearance] setTintColor:[UIColor blackColor]];
+    [[UIBarButtonItem appearance] setBackButtonBackgroundImage:[[UIImage imageNamed:@"pg_navigation_back_button"] resizableImageWithCapInsets:UIEdgeInsetsMake(0, 12, 0, 0)]
+                                                      forState:UIControlStateNormal
+                                                    barMetrics:UIBarMetricsDefault];
+    [[UIBarButtonItem appearance] setBackButtonTitlePositionAdjustment:UIOffsetMake(NSIntegerMin, NSIntegerMin) forBarMetrics:UIBarMetricsDefault];
 }
 
 - (UIFont *)fontSmall

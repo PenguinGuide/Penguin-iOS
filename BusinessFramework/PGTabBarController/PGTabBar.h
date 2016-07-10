@@ -8,8 +8,15 @@
 
 #import <UIKit/UIKit.h>
 
+@protocol PGTabBarDelegate <NSObject>
+
+- (void)tabBarDidSelect:(NSInteger)index;
+
+@end
+
 @interface PGTabBar : UIView
 
+@property (nonatomic, weak) id<PGTabBarDelegate> delegate;
 @property (nonatomic, strong, readonly) NSArray *tabs;
 
 - (void)setTabs:(NSArray *)tabs;

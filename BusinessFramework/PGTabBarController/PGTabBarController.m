@@ -6,13 +6,13 @@
 //  Copyright © 2016 Xinglian. All rights reserved.
 //
 
-static const float TabBarHeight = 40.f;
+static const float TabBarHeight = 50.f;
 
 #import "PGTabBarController.h"
 #import "PGTabBar.h"
 #import "PGTab.h"
 
-@interface PGTabBarController ()
+@interface PGTabBarController () <PGTabBarDelegate>
 
 @property (nonatomic, strong, readwrite) NSArray *viewControllers;
 
@@ -28,6 +28,8 @@ static const float TabBarHeight = 40.f;
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+    
+    self.view.backgroundColor = [UIColor whiteColor];
 }
 
 - (void)setViewControllers:(NSArray *)viewControllers
@@ -60,8 +62,8 @@ static const float TabBarHeight = 40.f;
         viewController.view.frame = CGRectMake(0, 0, CGRectGetWidth(self.view.bounds), CGRectGetHeight(self.view.bounds)-TabBarHeight);
         [self.view addSubview:viewController.view];
         
-        self.selectedIndex = [self.viewControllers indexOfObject:viewController];
-        self.selectedViewController = viewController;
+        _selectedIndex = [self.viewControllers indexOfObject:viewController];
+        _selectedViewController = viewController;
     }
     
     [self loadTabs];
@@ -76,7 +78,7 @@ static const float TabBarHeight = 40.f;
         NSString *tabBarImage = [vc tabBarImage];
         NSString *tabBarHighlightImage = [vc tabBarHighlightImage];
         
-        PGTab *tab = [PGTab new];
+        PGTab *tab = [[PGTab alloc] init];
         tab.tabTitle = tabBarTitle;
         tab.tabImage = tabBarImage;
         tab.tabHighlightImage = tabBarHighlightImage;
@@ -88,12 +90,23 @@ static const float TabBarHeight = 40.f;
     [self.view addSubview:self.tabBar];
 }
 
+#pragma mark - <PGTabBarDelegate>
+
+- (void)tabBarDidSelect:(NSInteger)index
+{
+    if (index < self.viewControllers.count) {
+        UIViewController *selectedVC = self.viewControllers[index];
+        [self setSelectedViewController:selectedVC];
+    }
+}
+
 #pragma mark - <Setters && Getters>
 
 - (PGTabBar *)tabBar
 {
     if (!_tabBar) {
-        _tabBar = [[PGTabBar alloc] initWithFrame:CGRectMake(0, CGRectGetHeight(self.view.frame), CGRectGetWidth(self.view.frame), TabBarHeight)];
+        _tabBar = [[PGTabBar alloc] initWithFrame:CGRectMake(0, CGRectGetHeight(self.view.frame)-TabBarHeight, CGRectGetWidth(self.view.frame), TabBarHeight)];
+        _tabBar.delegate = self;
     }
     
     return _tabBar;

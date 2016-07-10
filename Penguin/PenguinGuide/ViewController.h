@@ -6,9 +6,9 @@
 //  Copyright © 2016 Xinglian. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
+#import "PGBaseViewController.h"
 
-@interface ViewController : UIViewController
+@interface ViewController : PGBaseViewController
 
 
 @end
