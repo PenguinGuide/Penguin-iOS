@@ -1,0 +1,22 @@
+//
+//  PenguinGuide-Prefix.pch
+//  Penguin
+//
+//  Created by Jing Dai on 7/6/16.
+//  Copyright © 2016 Xinglian. All rights reserved.
+//
+
+#ifndef PenguinGuide_Prefix_pch
+#define PenguinGuide_Prefix_pch
+
+#import "PGThemeManager.h"
+
+#import "UIImage+PGImage.h"
+#import "UIColor+PGColor.h"
+#import "UIView+PGView.h"
+
+#import "PGMacros.h"
+
+#import "PGBaseCollectionView.h"
+
+#endif /* PenguinGuide_Prefix_pch */

@@ -10,11 +10,26 @@ target 'PenguinGuide' do
     pod 'PGTheme', :path => '../BusinessFramework/PGTheme', :inhibit_warnings => true
     pod 'PGShare', :path => '../BusinessFramework/PGShare', :inhibit_warnings => true
     pod 'PGTabBarController', :path => '../BusinessFramework/PGTabBarController', :inhibit_warnings => true
+    pod 'PGPagedScrollView', :path => '../BusinessFramework/PGPagedScrollView', :inhibit_warnings => true
     
     #base framework
     pod 'PGRestKit', :path => '../BaseFramework/PGRestKit', :inhibit_warnings => true
     pod 'PGLog', :path => '../BaseFramework/PGLog', :inhibit_warnings => true
     pod 'PGRouter', :path => '../BaseFramework/PGRouter', :inhibit_warnings => true
+    pod 'PGImageView', :path => '../BaseFramework/PGImageView', :inhibit_warnings => true
+    pod 'PGView', :path => '../BaseFramework/PGView', :inhibit_warnings => true
+    pod 'PGString', :path => '../BaseFramework/PGString', :inhibit_warnings => true
+    pod 'PGColor', :path => '../BaseFramework/PGColor', :inhibit_warnings => true
+    pod 'PGImage', :path => '../BaseFramework/PGImage', :inhibit_warnings => true
+    
+    #vendor
+    pod 'KVOController', :inhibit_warnings => true
+    pod 'SVPullToRefresh', :inhibit_warnings => true
+    pod 'UzysAnimatedGifPullToRefresh', :inhibit_warnings => true
+    
+    #fabric
+    pod 'Fabric'
+    pod 'Crashlytics'
 end
 
 target 'PenguinGuideTests' do

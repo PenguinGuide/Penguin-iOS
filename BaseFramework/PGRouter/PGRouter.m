@@ -71,8 +71,6 @@
         }
         
         pathSubDict[@"_"] = [handler copy];
-        
-        NSLog(@"%@", self.routes);
     }
 }
 

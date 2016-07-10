@@ -6,8 +6,24 @@
 //  Copyright © 2016 Xinglian. All rights reserved.
 //
 
+#define Theme [PGThemeManager sharedManager]
+
 #import <Foundation/Foundation.h>
+#import <UIKit/UIKit.h>
+
+typedef NS_ENUM(NSInteger, PGThemeStyle) {
+    PGThemeStyleDefault,
+    PGThemeStyleSpecial
+};
 
 @interface PGThemeManager : NSObject
+
+@property (nonatomic) PGThemeStyle themeStyle;
+
++ (PGThemeManager *)sharedManager;
+
+- (UIFont *)fontSmall;
+- (UIFont *)fontMedium;
+- (UIFont *)fontLarge;
 
 @end

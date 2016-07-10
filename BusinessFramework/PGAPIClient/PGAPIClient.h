@@ -11,4 +11,15 @@
 
 @interface PGAPIClient : NSObject
 
++ (id)client;
++ (id)clientWithTimeout:(NSTimeInterval)timeout;
++ (id)clientWithOperationCount:(NSInteger)operationCount;
++ (id)clientWithTimeout:(NSTimeInterval)timeout operationCount:(NSInteger)operationCount;
+
+- (void)pg_makeGetRequest:(void(^)(PGRKRequestConfig *config))configBlock
+               completion:(PGRKCompletionBlock)completion
+                  failure:(PGRKFailureBlock)failure;
+
+- (void)cancelAllRequests;
+
 @end

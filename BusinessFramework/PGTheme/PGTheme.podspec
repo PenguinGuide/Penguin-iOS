@@ -18,6 +18,4 @@ s.platform     = :ios, "8.0"
 s.public_header_files = "*.h"
 s.source_files = "*.{h,m}"
 
-s.dependency "PGRestKit"
-
 end
