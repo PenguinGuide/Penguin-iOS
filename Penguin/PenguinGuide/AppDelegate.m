@@ -12,6 +12,7 @@
 #import <Crashlytics/Crashlytics.h>
 
 #import "PGThemeManager.h"
+#import "PGRouterManager.h"
 
 #import "PGBaseNavigationController.h"
 
@@ -19,8 +20,6 @@
 #import "PGExploreViewController.h"
 #import "PGStoreViewController.h"
 #import "PGMeViewController.h"
-
-#import "PGLoginViewController.h"
 
 @interface AppDelegate ()
 
@@ -36,8 +35,16 @@
     
     // Fabric
     [Fabric with:@[[Crashlytics class]]];
-    
+    // Theme
     [PGThemeManager sharedManager];
+    // Router
+    [PGRouterManager registerRouters];
+    // Log
+#ifdef DEBUG
+    [PGLog setup];
+#else
+    [PGLog turnOffLogging];
+#endif
     
     PGHomeViewController *homeVC = [[PGHomeViewController alloc] init];
     PGExploreViewController *exploreVC = [[PGExploreViewController alloc] init];
@@ -48,7 +55,7 @@
     [self.tabBarController setViewControllers:@[homeVC, exploreVC, storeVC, meVC]];
     
     PGBaseNavigationController *navigationController = [[PGBaseNavigationController alloc] initWithRootViewController:self.tabBarController];
-    //PGLoginViewController *loginVC = [[PGLoginViewController alloc] init];
+    PGGlobal.rootNavigationController = navigationController;
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     self.window.rootViewController = navigationController;
     [self.window makeKeyAndVisible];

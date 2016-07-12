@@ -10,4 +10,14 @@
 
 @implementation PGRKRequestConfig
 
+- (instancetype)init
+{
+    self = [super init];
+    if (self) {
+        self.keyPath = @"data";
+        self.isMockAPI = NO;
+    }
+    return self;
+}
+
 @end

@@ -82,7 +82,7 @@ static const NSString *kModelClassKey = @"kModelClassKey";
     NSString *absoluteUrl = [[request URL] absoluteString];
     
     if (keyPath && keyPath.length > 0 && modelClass) {
-        NSDictionary *requestDict = @{kKeyPathKey:keyPath, kResultKeyPathKey:@"success", kModelClassKey:modelClass};
+        NSDictionary *requestDict = @{kKeyPathKey:keyPath, kResultKeyPathKey:@"result", kModelClassKey:modelClass};
         [self.serializersDict setObject:requestDict forKey:absoluteUrl];
     }
 }

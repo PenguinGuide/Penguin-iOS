@@ -21,7 +21,7 @@
 - (id)init
 {
     if (self = [super init]) {
-        
+        self.apiClient = [PGAPIClient client];
     }
     
     return self;
@@ -37,6 +37,21 @@
     // Do any additional setup after loading the view, typically from a nib.
     
     self.view.backgroundColor = [UIColor whiteColor];
+    
+    UIImage *backButtonImage = [[UIImage imageNamed:@"pg_navigation_back_button"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
+    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:backButtonImage
+                                                                             style:UIBarButtonItemStyleDone
+                                                                            target:self
+                                                                            action:@selector(backButtonClicked)];
+    // fix left sliding not working
+    self.navigationController.interactivePopGestureRecognizer.delegate = (id)self;
+}
+
+#pragma mark - <Back Button>
+
+- (void)backButtonClicked
+{
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 #pragma mark - <KVO Methods>

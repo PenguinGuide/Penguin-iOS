@@ -10,13 +10,18 @@
 #define PenguinGuide_Prefix_pch
 
 #import "PGThemeManager.h"
+#import "PGRouterManager.h"
+#import "PGLog.h"
 
 #import "UIImage+PGImage.h"
 #import "UIColor+PGColor.h"
 #import "UIView+PGView.h"
 
 #import "PGMacros.h"
+#import "PGGlobalObject.h"
+#import "PGAPIList.h"
 
+#import "AppDelegate.h"
 #import "PGBaseCollectionView.h"
 
 #endif /* PenguinGuide_Prefix_pch */

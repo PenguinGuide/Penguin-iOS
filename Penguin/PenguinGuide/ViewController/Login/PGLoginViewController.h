@@ -10,4 +10,6 @@
 
 @interface PGLoginViewController : PGBaseViewController
 
+- (id)initWithScreenshot:(UIImage *)screenshot;
+
 @end

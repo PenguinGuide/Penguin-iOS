@@ -17,4 +17,6 @@
 
 - (void)observe:(id)object keyPath:(NSString *)keyPath block:(void(^)(id changedObject))block;
 
+- (void)backButtonClicked;
+
 @end

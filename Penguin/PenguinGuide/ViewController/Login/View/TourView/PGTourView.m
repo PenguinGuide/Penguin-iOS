@@ -15,7 +15,7 @@
 
 @property (nonatomic, strong, readwrite) UIButton *registerButton;
 @property (nonatomic, strong, readwrite) UIButton *loginButton;
-@property (nonatomic, strong) UIButton *closeButton;
+@property (nonatomic, strong, readwrite) UIButton *closeButton;
 
 @property (nonatomic, strong) PGSocialView *socialView;
 
@@ -50,7 +50,7 @@
 
 - (NSArray *)imagesForScrollView
 {
-    return @[@"pg_login_tour_city_guide.gif", @"pg_login_tour_city_guide.gif"];
+    return @[@"pg_login_tour_city_guide.gif", @"pg_login_tour_city_guide.gif", @"pg_login_tour_city_guide.gif", @"pg_login_tour_city_guide.gif"];
 }
 
 #pragma mark - <Setters && Getters>
@@ -113,7 +113,7 @@
     if (!_pagedScrollView) {
         float width = self.frame.size.width-20*2;
         float height = 190.f/225.f*width+30+15;
-        _pagedScrollView = [[PGPagedScrollView alloc] initWithFrame:CGRectMake(20, 60, width, height) imageFillMode:PGPagedScrollViewImageFillModeFit];
+        _pagedScrollView = [[PGPagedScrollView alloc] initWithFrame:CGRectMake(20, 60, width, height) imageFillMode:PGPagedScrollViewImageFillModeFit iconMode:PGPagedScrollViewIconModeDark];
         _pagedScrollView.delegate = self;
     }
     return _pagedScrollView;

@@ -11,6 +11,7 @@ static const int DefaultMaxConcurrentConnections = 5;
 
 #import "PGRKHTTPSessionManager.h"
 #import "SOCKit.h"
+#import "PGRKMockAPIManager.h"
 
 @interface NSString (PGRKValidate)
 
@@ -73,7 +74,91 @@ static const int DefaultMaxConcurrentConnections = 5;
 {
     PGRKRequestConfig *config = [[PGRKRequestConfig alloc] init];
     configBlock(config);
-    
+ 
+#if (defined ADHOC) || (defined DEBUG)
+    __block id<OHHTTPStubsDescriptor> stub = nil;
+    if (config.isMockAPI) {
+        if (config.mockFileName && config.mockFileName.length > 0) {
+            if (config.mockStatusCode != 200 && config.mockStatusCode != 0) {
+                NSString *patternedRoute = config.route;
+                if (config.pattern) {
+                    NSString *finalRoute = SOCStringFromStringWithDictionary(config.route, config.pattern);
+                    if (finalRoute) {
+                        patternedRoute = finalRoute;
+                    }
+                }
+                stub = [PGRKMockAPIManager mockAPI:patternedRoute fileName:config.mockFileName statusCode:config.mockStatusCode];
+            } else if (config.mockResponseTime > 0) {
+                NSString *patternedRoute = config.route;
+                if (config.pattern) {
+                    NSString *finalRoute = SOCStringFromStringWithDictionary(config.route, config.pattern);
+                    if (finalRoute) {
+                        patternedRoute = finalRoute;
+                    }
+                }
+                stub = [PGRKMockAPIManager mockAPI:patternedRoute fileName:config.mockFileName responseTime:config.mockResponseTime];
+            } else if (config.mockNoNetworkConnection) {
+                NSString *patternedRoute = config.route;
+                if (config.pattern) {
+                    NSString *finalRoute = SOCStringFromStringWithDictionary(config.route, config.pattern);
+                    if (finalRoute) {
+                        patternedRoute = finalRoute;
+                    }
+                }
+                stub = [PGRKMockAPIManager mockNoInternetAPI:patternedRoute];
+            } else {
+                NSString *patternedRoute = config.route;
+                if (config.pattern) {
+                    NSString *finalRoute = SOCStringFromStringWithDictionary(config.route, config.pattern);
+                    if (finalRoute) {
+                        patternedRoute = finalRoute;
+                    }
+                }
+                stub = [PGRKMockAPIManager mockAPI:patternedRoute fileName:config.mockFileName];
+            }
+        }
+    }
+    if (config.route.isValid) {
+        NSString *finalRoute = config.route;
+        if (config.pattern) {
+            NSString *route = SOCStringFromStringWithDictionary(config.route, config.pattern);
+            finalRoute = route ? route : config.route;
+        }
+        if (config.model) {
+            NSURLSessionDataTask *task = [self GET:finalRoute
+                                        parameters:config.params
+                                          progress:nil
+                                           success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+                                               [PGRKMockAPIManager clearMockStub:stub];
+                                               if (completion) {
+                                                   completion(responseObject);
+                                               }
+                                           } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+                                               [PGRKMockAPIManager clearMockStub:stub];
+                                               if (failure) {
+                                                   failure(error);
+                                               }
+                                           }];
+            PGRKJSONResponseSerializer *serializer = self.responseSerializer;
+            [serializer registerKeyPath:config.keyPath modelClass:config.model.class toTask:task];
+        } else {
+            [self GET:finalRoute
+           parameters:config.params
+             progress:nil
+              success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+                  [PGRKMockAPIManager clearMockStub:stub];
+                  if (completion) {
+                      completion(responseObject);
+                  }
+              } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+                  [PGRKMockAPIManager clearMockStub:stub];
+                  if (failure) {
+                      failure(error);
+                  }
+              }];
+        }
+    }
+#else
     if (config.route.isValid) {
         NSString *finalRoute = config.route;
         if (config.pattern) {
@@ -110,6 +195,7 @@ static const int DefaultMaxConcurrentConnections = 5;
               }];
         }
     }
+#endif
 }
 
 - (void)makePutRequest:(void (^)(PGRKRequestConfig *config))configBlock

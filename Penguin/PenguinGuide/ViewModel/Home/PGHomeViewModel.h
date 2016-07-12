@@ -6,9 +6,9 @@
 //  Copyright © 2016 Xinglian. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
+#import "PGBaseViewModel.h"
 
-@interface PGHomeViewModel : NSObject
+@interface PGHomeViewModel : PGBaseViewModel
 
 @property (nonatomic, strong, readonly) NSArray *dataArray;
 

@@ -6,8 +6,8 @@
 //  Copyright © 2016 Xinglian. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
+#import "PGBaseViewModel.h"
 
-@interface PGLoginViewModel : NSObject
+@interface PGLoginViewModel : PGBaseViewModel
 
 @end
