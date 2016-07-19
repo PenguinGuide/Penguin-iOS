@@ -14,17 +14,17 @@
 // view controllers
 #import "PGHomeViewController.h"
 #import "PGLoginViewController.h"
+#import "PGArticleViewController.h"
 // view models
 #import "PGHomeViewModel.h"
 // models
 #import "PGCarouselBanner.h"
 #import "PGArticleBanner.h"
 // views
+#import "PGScrollNavigationBar.h"
 #import "PGCarouselBannerCell.h"
 #import "PGArticleBannerCell.h"
 #import "PGHomeArticleHeaderView.h"
-
-#import "ViewController.h"
 
 @interface PGHomeViewController () <UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout>
 
@@ -32,7 +32,7 @@
 
 @property (nonatomic, strong) UIBarButtonItem *searchButton;
 @property (nonatomic, strong) UIBarButtonItem *messageButton;
-@property (nonatomic, strong) PGBaseCollectionView *feedsCollectionView;
+@property (nonatomic, strong, readwrite) PGBaseCollectionView *feedsCollectionView;
 
 @end
 
@@ -42,7 +42,6 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     self.parentViewController.navigationItem.leftBarButtonItem = self.searchButton;
-    self.parentViewController.navigationItem.rightBarButtonItem = self.messageButton;
     self.parentViewController.navigationItem.titleView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"pg_home_logo"]];
     
     [self.view addSubview:self.feedsCollectionView];
@@ -57,6 +56,23 @@
             [weakself.feedsCollectionView reloadData];
         }
     }];
+}
+
+- (void)dealloc
+{
+    [self unobserve];
+}
+
+- (void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    
+    self.navigationController.scrollNavigationBar.scrollView = self.feedsCollectionView;
+}
+
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [self.navigationController.scrollNavigationBar resetToDefaultPositionWithAnimation:NO];
 }
 
 #pragma mark - <UICollectionViewDataSource>
@@ -93,7 +109,7 @@
         
         PGArticleBanner *articleBanner = (PGArticleBanner *)banner;
         PGImageBanner *banner = articleBanner.banners[indexPath.item];
-        [cell setCellWithImage:banner.image];
+        [cell setCellWithImageBanner:banner];
         
         return cell;
     }
@@ -113,6 +129,12 @@
         return headerView;
     }
     return nil;
+}
+
+- (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    PGArticleViewController *articleVC = [[PGArticleViewController alloc] init];
+    [self.navigationController pushViewController:articleVC animated:YES];
 }
 
 #pragma mark - <UICollectionViewDelegateFlowLayout>
@@ -173,12 +195,6 @@
 
 - (void)searchButtonClicked
 {
-    ViewController *vc = [[ViewController alloc] init];
-    [self.navigationController pushViewController:vc animated:YES];
-}
-
-- (void)messageButtonClicked
-{
     [PGRouterManager routeToLoginPage];
 }
 
@@ -195,21 +211,10 @@
     return _searchButton;
 }
 
-- (UIBarButtonItem *)messageButton
-{
-    if (!_messageButton) {
-        _messageButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"pg_home_message_button"]
-                                                          style:UIBarButtonItemStyleDone
-                                                         target:self
-                                                         action:@selector(messageButtonClicked)];
-    }
-    return _messageButton;
-}
-
 - (PGBaseCollectionView *)feedsCollectionView
 {
     if (!_feedsCollectionView) {
-        _feedsCollectionView = [[PGBaseCollectionView alloc] initWithFrame:CGRectMake(0, 0, UISCREEN_WIDTH, UISCREEN_HEIGHT-50) collectionViewLayout:[UICollectionViewFlowLayout new]];
+        _feedsCollectionView = [[PGBaseCollectionView alloc] initWithFrame:self.view.bounds collectionViewLayout:[UICollectionViewFlowLayout new]];
         _feedsCollectionView.dataSource = self;
         _feedsCollectionView.delegate = self;
         _feedsCollectionView.showsHorizontalScrollIndicator = NO;
@@ -221,9 +226,16 @@
         [_feedsCollectionView registerClass:[PGHomeArticleHeaderView class] forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:ArticleHeaderView];
         
         __block PGBaseCollectionView *collectionView = _feedsCollectionView;
+        PGWeakSelf(self);
         [_feedsCollectionView enablePullToRefresh:^{
             dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2.f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
                 [collectionView endTopRefreshing];
+                [weakself.viewModel requestData];
+            });
+        }];
+        [_feedsCollectionView enableInfiniteScrolling:^{
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                [collectionView endBottomRefreshing];
             });
         }];
     }

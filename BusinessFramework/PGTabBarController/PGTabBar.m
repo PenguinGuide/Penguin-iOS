@@ -22,7 +22,6 @@
 {
     if (self = [super initWithFrame:frame]) {
         self.backgroundColor = [UIColor colorWithWhite:1.0 alpha:0.95];
-//        self.alpha = 0.95f;
         self.userInteractionEnabled = YES;
         self.selectedIndex = 0;
     }

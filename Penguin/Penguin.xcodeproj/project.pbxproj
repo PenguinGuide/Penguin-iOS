@@ -13,6 +13,7 @@
 		0F0F44791D34F595007B90F2 /* PGBaseViewModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 0F0F44781D34F595007B90F2 /* PGBaseViewModel.m */; };
 		0F0F447F1D34FCFD007B90F2 /* PGImageBanner.m in Sources */ = {isa = PBXBuildFile; fileRef = 0F0F447E1D34FCFD007B90F2 /* PGImageBanner.m */; };
 		0F0F44821D34FE1E007B90F2 /* PGArticleBanner.m in Sources */ = {isa = PBXBuildFile; fileRef = 0F0F44811D34FE1E007B90F2 /* PGArticleBanner.m */; };
+		0F1392C71D3CD15800EF4CC8 /* PGArticleToHomeTransition.m in Sources */ = {isa = PBXBuildFile; fileRef = 0F1392C61D3CD15800EF4CC8 /* PGArticleToHomeTransition.m */; };
 		0F1790BC1D2DFCC600672B27 /* PGPasswordLoginView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0F1790BB1D2DFCC600672B27 /* PGPasswordLoginView.m */; };
 		0F1790BF1D2DFD0500672B27 /* PGLoginPasswordTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = 0F1790BE1D2DFD0500672B27 /* PGLoginPasswordTextField.m */; };
 		0F1790C21D2E0D6F00672B27 /* PGResetPasswordView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0F1790C11D2E0D6F00672B27 /* PGResetPasswordView.m */; };
@@ -39,8 +40,11 @@
 		0F7EEF801D210F64008D175C /* PenguinGuideUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 0F7EEF7F1D210F64008D175C /* PenguinGuideUITests.m */; };
 		0F7EEF921D2118F6008D175C /* Controller.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0F7EEF911D2118F6008D175C /* Controller.xcassets */; };
 		0F7EEF941D211914008D175C /* Theme.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0F7EEF931D211914008D175C /* Theme.xcassets */; };
+		0FB4FE451D38939900A1EAAA /* PGArticleViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0FB4FE441D38939900A1EAAA /* PGArticleViewController.m */; };
 		0FB8F96F1D339CD0005E6C56 /* PGRouterManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 0FB8F96E1D339CD0005E6C56 /* PGRouterManager.m */; };
 		0FB8F9721D339EBA005E6C56 /* PGGlobalObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 0FB8F9711D339EBA005E6C56 /* PGGlobalObject.m */; };
+		0FD590D31D38B71600731962 /* PGBaseViewController+TransitionAnimation.m in Sources */ = {isa = PBXBuildFile; fileRef = 0FD590D21D38B71600731962 /* PGBaseViewController+TransitionAnimation.m */; };
+		0FD590D61D38BB3100731962 /* PGHomeToArticleTransition.m in Sources */ = {isa = PBXBuildFile; fileRef = 0FD590D51D38BB3100731962 /* PGHomeToArticleTransition.m */; };
 		0FFCB51C1D2C9F6B00D863FA /* PGLoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0FFCB51B1D2C9F6B00D863FA /* PGLoginViewController.m */; };
 		0FFCB5241D2CABDE00D863FA /* PGTourView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0FFCB5231D2CABDE00D863FA /* PGTourView.m */; };
 		0FFCB5331D2CF35400D863FA /* PGSocialView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0FFCB5321D2CF35400D863FA /* PGSocialView.m */; };
@@ -82,6 +86,8 @@
 		0F0F447E1D34FCFD007B90F2 /* PGImageBanner.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PGImageBanner.m; sourceTree = "<group>"; };
 		0F0F44801D34FE1E007B90F2 /* PGArticleBanner.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PGArticleBanner.h; sourceTree = "<group>"; };
 		0F0F44811D34FE1E007B90F2 /* PGArticleBanner.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PGArticleBanner.m; sourceTree = "<group>"; };
+		0F1392C51D3CD15800EF4CC8 /* PGArticleToHomeTransition.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PGArticleToHomeTransition.h; sourceTree = "<group>"; };
+		0F1392C61D3CD15800EF4CC8 /* PGArticleToHomeTransition.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PGArticleToHomeTransition.m; sourceTree = "<group>"; };
 		0F1790BA1D2DFCC600672B27 /* PGPasswordLoginView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PGPasswordLoginView.h; sourceTree = "<group>"; };
 		0F1790BB1D2DFCC600672B27 /* PGPasswordLoginView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PGPasswordLoginView.m; sourceTree = "<group>"; };
 		0F1790BD1D2DFD0500672B27 /* PGLoginPasswordTextField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PGLoginPasswordTextField.h; sourceTree = "<group>"; };
@@ -134,10 +140,16 @@
 		0F7EEF811D210F64008D175C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		0F7EEF911D2118F6008D175C /* Controller.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Controller.xcassets; sourceTree = "<group>"; };
 		0F7EEF931D211914008D175C /* Theme.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Theme.xcassets; sourceTree = "<group>"; };
+		0FB4FE431D38939900A1EAAA /* PGArticleViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PGArticleViewController.h; sourceTree = "<group>"; };
+		0FB4FE441D38939900A1EAAA /* PGArticleViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PGArticleViewController.m; sourceTree = "<group>"; };
 		0FB8F96D1D339CD0005E6C56 /* PGRouterManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PGRouterManager.h; sourceTree = "<group>"; };
 		0FB8F96E1D339CD0005E6C56 /* PGRouterManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PGRouterManager.m; sourceTree = "<group>"; };
 		0FB8F9701D339EBA005E6C56 /* PGGlobalObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PGGlobalObject.h; sourceTree = "<group>"; };
 		0FB8F9711D339EBA005E6C56 /* PGGlobalObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PGGlobalObject.m; sourceTree = "<group>"; };
+		0FD590D11D38B71600731962 /* PGBaseViewController+TransitionAnimation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "PGBaseViewController+TransitionAnimation.h"; sourceTree = "<group>"; };
+		0FD590D21D38B71600731962 /* PGBaseViewController+TransitionAnimation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "PGBaseViewController+TransitionAnimation.m"; sourceTree = "<group>"; };
+		0FD590D41D38BB3100731962 /* PGHomeToArticleTransition.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PGHomeToArticleTransition.h; sourceTree = "<group>"; };
+		0FD590D51D38BB3100731962 /* PGHomeToArticleTransition.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PGHomeToArticleTransition.m; sourceTree = "<group>"; };
 		0FFCB51A1D2C9F6B00D863FA /* PGLoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PGLoginViewController.h; sourceTree = "<group>"; };
 		0FFCB51B1D2C9F6B00D863FA /* PGLoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PGLoginViewController.m; sourceTree = "<group>"; };
 		0FFCB5221D2CABDE00D863FA /* PGTourView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PGTourView.h; sourceTree = "<group>"; };
@@ -434,6 +446,7 @@
 				0F3C7EEB1D2F72CB00284066 /* Explore */,
 				0F3C7EEE1D2F72CB00284066 /* Store */,
 				0F3C7EED1D2F72CB00284066 /* Me */,
+				0FB4FE421D38935A00A1EAAA /* Article */,
 			);
 			path = ViewController;
 			sourceTree = "<group>";
@@ -468,6 +481,15 @@
 			path = Login;
 			sourceTree = "<group>";
 		};
+		0FB4FE421D38935A00A1EAAA /* Article */ = {
+			isa = PBXGroup;
+			children = (
+				0FB4FE431D38939900A1EAAA /* PGArticleViewController.h */,
+				0FB4FE441D38939900A1EAAA /* PGArticleViewController.m */,
+			);
+			path = Article;
+			sourceTree = "<group>";
+		};
 		0FB8F96B1D339CAE005E6C56 /* Manager */ = {
 			isa = PBXGroup;
 			children = (
@@ -485,12 +507,26 @@
 			path = Router;
 			sourceTree = "<group>";
 		};
+		0FD590D01D38B71600731962 /* TransitionAnimation */ = {
+			isa = PBXGroup;
+			children = (
+				0FD590D11D38B71600731962 /* PGBaseViewController+TransitionAnimation.h */,
+				0FD590D21D38B71600731962 /* PGBaseViewController+TransitionAnimation.m */,
+				0FD590D41D38BB3100731962 /* PGHomeToArticleTransition.h */,
+				0FD590D51D38BB3100731962 /* PGHomeToArticleTransition.m */,
+				0F1392C51D3CD15800EF4CC8 /* PGArticleToHomeTransition.h */,
+				0F1392C61D3CD15800EF4CC8 /* PGArticleToHomeTransition.m */,
+			);
+			path = TransitionAnimation;
+			sourceTree = "<group>";
+		};
 		0FF816231D2BAD1E00C78E3A /* Base */ = {
 			isa = PBXGroup;
 			children = (
 				0F2DC2961D32995500277C9E /* BaseCells */,
 				0F2DC2971D32995500277C9E /* BaseController */,
 				0F2DC29C1D32995500277C9E /* BaseView */,
+				0FD590D01D38B71600731962 /* TransitionAnimation */,
 			);
 			path = Base;
 			sourceTree = "<group>";
@@ -818,6 +854,7 @@
 				0F7EEF5F1D210F63008D175C /* AppDelegate.m in Sources */,
 				0F1790BC1D2DFCC600672B27 /* PGPasswordLoginView.m in Sources */,
 				0FFCB53D1D2D033E00D863FA /* PGRegisterView.m in Sources */,
+				0FD590D61D38BB3100731962 /* PGHomeToArticleTransition.m in Sources */,
 				0FFCB5371D2D009100D863FA /* PGLoginBaseView.m in Sources */,
 				0F41AE621D35318000E7AD71 /* PGHomeArticleHeaderView.m in Sources */,
 				0FFDEB881D2E458300C67445 /* PGSMSCodeRegisterView.m in Sources */,
@@ -834,8 +871,11 @@
 				0F1790C51D2E0E3600672B27 /* PGLoginSMSCodeTextField.m in Sources */,
 				0F7EEF5C1D210F63008D175C /* main.m in Sources */,
 				0F2DC2A01D32995500277C9E /* PGBaseViewController.m in Sources */,
+				0F1392C71D3CD15800EF4CC8 /* PGArticleToHomeTransition.m in Sources */,
+				0FB4FE451D38939900A1EAAA /* PGArticleViewController.m in Sources */,
 				0FFCB5411D2D050D00D863FA /* PGLoginViewModel.m in Sources */,
 				0F3C7EF41D2F72FA00284066 /* PGExploreViewController.m in Sources */,
+				0FD590D31D38B71600731962 /* PGBaseViewController+TransitionAnimation.m in Sources */,
 				0FFCB5331D2CF35400D863FA /* PGSocialView.m in Sources */,
 				0F2DC2A41D32997900277C9E /* PGCarouselBannerCell.m in Sources */,
 				0FFCB53A1D2D01E200D863FA /* PGLoginView.m in Sources */,

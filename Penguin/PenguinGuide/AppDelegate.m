@@ -15,6 +15,7 @@
 #import "PGRouterManager.h"
 
 #import "PGBaseNavigationController.h"
+#import "PGScrollNavigationBar.h"
 
 #import "PGHomeViewController.h"
 #import "PGExploreViewController.h"
@@ -54,7 +55,8 @@
     self.tabBarController = [[PGTabBarController alloc] init];
     [self.tabBarController setViewControllers:@[homeVC, exploreVC, storeVC, meVC]];
     
-    PGBaseNavigationController *navigationController = [[PGBaseNavigationController alloc] initWithRootViewController:self.tabBarController];
+    PGBaseNavigationController *navigationController = [[PGBaseNavigationController alloc] initWithNavigationBarClass:[PGScrollNavigationBar class] toolbarClass:nil];
+    [navigationController setViewControllers:@[self.tabBarController]];
     PGGlobal.rootNavigationController = navigationController;
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     self.window.rootViewController = navigationController;

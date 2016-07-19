@@ -7,9 +7,9 @@
 //
 
 #import "PGBaseViewController.h"
-#import "FBKVOController.h"
+#import "PGBaseViewController+TransitionAnimation.h"
 
-@interface PGBaseViewController ()
+@interface PGBaseViewController () <UINavigationControllerDelegate>
 
 @property (nonatomic, strong, readwrite) PGAPIClient *apiClient;
 @property (nonatomic, strong, readwrite) FBKVOController *KVOController;
@@ -35,7 +35,6 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view, typically from a nib.
-    
     self.view.backgroundColor = [UIColor whiteColor];
     
     UIImage *backButtonImage = [[UIImage imageNamed:@"pg_navigation_back_button"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
@@ -45,6 +44,21 @@
                                                                             action:@selector(backButtonClicked)];
     // fix left sliding not working
     self.navigationController.interactivePopGestureRecognizer.delegate = (id)self;
+}
+
+- (void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    
+    // http://benscheirman.com/2011/08/when-viewwillappear-isnt-called/
+    self.navigationController.delegate = self;
+}
+
+- (void)viewDidDisappear:(BOOL)animated
+{
+    [super viewDidDisappear:animated];
+    
+    self.navigationController.delegate = nil;
 }
 
 #pragma mark - <Back Button>
@@ -66,6 +80,11 @@
                                   block(change[NSKeyValueChangeNewKey]);
                               }
                           }];
+}
+
+- (void)unobserve
+{
+    [self.KVOController unobserveAll];
 }
 
 #pragma mark - <Setters && Getters>

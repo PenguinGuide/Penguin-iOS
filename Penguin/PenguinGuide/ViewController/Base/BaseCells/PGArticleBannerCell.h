@@ -7,10 +7,14 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "PGImageBanner.h"
+#import "FLAnimatedImage.h"
 
 @interface PGArticleBannerCell : UICollectionViewCell
 
-- (void)setCellWithImage:(NSString *)image;
+@property (nonatomic, strong, readonly) FLAnimatedImageView *bannerImageView;
+
+- (void)setCellWithImageBanner:(PGImageBanner *)banner;
 
 + (CGSize)cellSize;
 

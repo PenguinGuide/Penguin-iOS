@@ -22,6 +22,7 @@
 #import "PGAPIList.h"
 
 #import "AppDelegate.h"
+#import "PGBaseNavigationController.h"
 #import "PGBaseCollectionView.h"
 
 #endif /* PenguinGuide_Prefix_pch */

@@ -6,11 +6,14 @@
 //  Copyright © 2016 Xinglian. All rights reserved.
 //
 
+#define CollectButtonWidth 90.f
+
 #import "PGArticleBannerCell.h"
 
-@interface PGArticleBannerCell () <UIGestureRecognizerDelegate>
+@interface PGArticleBannerCell () <UIScrollViewDelegate>
 
-@property (nonatomic, strong) UIImageView *bannerImageView;
+@property (nonatomic, strong) UIScrollView *bannerImageScrollView;
+@property (nonatomic, strong, readwrite) FLAnimatedImageView *bannerImageView;
 @property (nonatomic, strong) UIPanGestureRecognizer *panGesture;
 @property (nonatomic, strong) UIImageView *collectImageView;
 @property (nonatomic, strong) UILabel *collectLabel;
@@ -30,17 +33,29 @@
 
 - (void)initialize
 {
-    self.backgroundColor = Theme.colorHighlight;
+    self.backgroundColor = [UIColor colorWithHexString:@"f19572"];
     
     [self.contentView addSubview:self.collectImageView];
     [self.contentView addSubview:self.collectLabel];
-    [self.contentView addSubview:self.bannerImageView];
-    [self addGestureRecognizer:self.panGesture];
+    [self.contentView addSubview:self.bannerImageScrollView];
+    [self.bannerImageScrollView addSubview:self.bannerImageView];
+    
+    // http://stackoverflow.com/questions/14298650/uicollectionviewcell-with-uiscrollview-cancels-didselectitematindexpath
+    [self.contentView addGestureRecognizer:self.bannerImageScrollView.panGestureRecognizer];
 }
 
-- (void)setCellWithImage:(NSString *)image
+- (void)setCellWithImageBanner:(PGImageBanner *)banner
 {
-    self.bannerImageView.image = [UIImage imageNamed:image];
+    if ([banner.type isEqualToString:@"video"]) {
+        NSString *path = [[NSBundle mainBundle] pathForResource:banner.image ofType:@"gif"];
+        FLAnimatedImage *image = [FLAnimatedImage animatedImageWithGIFData:[NSData dataWithContentsOfFile:path]];
+        self.bannerImageView.animatedImage = image;
+    } else {
+        self.bannerImageView.image = [UIImage imageNamed:banner.image];
+    }
+    self.backgroundColor = [UIColor colorWithHexString:@"f19572"];
+    self.collectImageView.image = [UIImage imageNamed:@"pg_home_article_collect"];
+    self.collectLabel.text = @"收藏";
 }
 
 + (CGSize)cellSize
@@ -48,66 +63,41 @@
     return CGSizeMake(UISCREEN_WIDTH, UISCREEN_WIDTH*180/320);
 }
 
-- (void)panGestureRecognized:(UIPanGestureRecognizer *)recognizer
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
-    CGPoint translation = [recognizer translationInView:self];
-    // move left
-    if ([recognizer velocityInView:self].x < 0.f) {
-        PGLogWarning(@"move left: %@", NSStringFromCGPoint(translation));
-        // move right
+    if (scrollView.contentOffset.x <= 0) {
+        scrollView.contentOffset = CGPointZero;
     } else {
-        CGPoint translation = [recognizer translationInView:self];
-        PGLogWarning(@"move right: %@", NSStringFromCGPoint(translation));
-    }
-    if (translation.x > 0) {
-        self.bannerImageView.frame = CGRectMake(0, self.bannerImageView.y, self.bannerImageView.width, self.bannerImageView.height);
-    } else if (translation.x >= -90) {
-        self.bannerImageView.frame = CGRectMake(translation.x, self.bannerImageView.y, self.bannerImageView.width, self.bannerImageView.height);
-    } else {
-        self.bannerImageView.frame = CGRectMake(-90, self.bannerImageView.y, self.bannerImageView.width, self.bannerImageView.height);
-    }
-    
-    if (recognizer.state == UIGestureRecognizerStateEnded || recognizer.state == UIGestureRecognizerStateFailed || recognizer.state == UIGestureRecognizerStateCancelled) {
-        [UIView animateWithDuration:0.4f
-                              delay:0.f
-             usingSpringWithDamping:0.9f
-              initialSpringVelocity:0.9f
-                            options:UIViewAnimationOptionCurveEaseInOut
-                         animations:^{
-                             self.bannerImageView.frame = CGRectMake(0, self.bannerImageView.y, self.bannerImageView.width, self.bannerImageView.height);
-                         } completion:^(BOOL finished) {
-                            
-                         }];
+        if (scrollView.contentOffset.x >= CollectButtonWidth) {
+            self.backgroundColor = Theme.colorHighlight;
+            self.collectImageView.image = [UIImage imageNamed:@"pg_home_article_collected"];
+            self.collectLabel.text = @"已收藏";
+        }
     }
 }
 
-- (BOOL)gestureRecognizerShouldBegin:(UIGestureRecognizer *)gestureRecognizer
+- (UIScrollView *)bannerImageScrollView
 {
-    UIPanGestureRecognizer *recognizer = (UIPanGestureRecognizer *)gestureRecognizer;
-    CGPoint velocity = [recognizer velocityInView:self];
-    if (abs((int)velocity.y) >= abs((int)velocity.x)) {
-        return NO;
-    } else {
-        return YES;
+    if (!_bannerImageScrollView) {
+        _bannerImageScrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, self.width, self.height)];
+        _bannerImageScrollView.delegate = self;
+        _bannerImageScrollView.showsHorizontalScrollIndicator = NO;
+        _bannerImageScrollView.showsVerticalScrollIndicator = NO;
+        _bannerImageScrollView.alwaysBounceHorizontal = YES;
+        _bannerImageScrollView.backgroundColor = [UIColor clearColor];
+        _bannerImageScrollView.contentSize = CGSizeMake(self.width, self.height);
+        _bannerImageScrollView.userInteractionEnabled = NO;
     }
+    return _bannerImageScrollView;
 }
 
-- (UIImageView *)bannerImageView
+- (FLAnimatedImageView *)bannerImageView
 {
     if (!_bannerImageView) {
-        _bannerImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, self.width, self.height)];
+        _bannerImageView = [[FLAnimatedImageView alloc] initWithFrame:CGRectMake(0, 0, self.width, self.height)];
         _bannerImageView.contentMode = UIViewContentModeScaleAspectFill;
     }
     return _bannerImageView;
-}
-
-- (UIPanGestureRecognizer *)panGesture
-{
-    if (!_panGesture) {
-        _panGesture = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(panGestureRecognized:)];
-        _panGesture.delegate = self;
-    }
-    return _panGesture;
 }
 
 - (UIImageView *)collectImageView

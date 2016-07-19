@@ -135,6 +135,7 @@
                 break;
             case MockDownloadSpeed4G:
                 networkSpeed = OHHTTPStubsDownloadSpeed3GPlus;
+                break;
             case MockDownloadSpeedWifi:
                 networkSpeed = OHHTTPStubsDownloadSpeedWifi;
             default:

@@ -30,7 +30,8 @@
                           "link": ""
                           },
                           {
-                          "image": "pg_home_article_banner_3",
+                          "image": "pg_home_article_banner_5",
+                          "type": "video",
                           "link": ""
                           }
                           ]
@@ -40,7 +41,7 @@
              "desc": "July.9",
              "images": [
                           {
-                          "image": "pg_home_article_banner_1",
+                          "image": "pg_home_article_banner_3",
                           "link": ""
                           }
                           ]

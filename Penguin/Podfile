@@ -21,6 +21,7 @@ target 'PenguinGuide' do
     pod 'PGString', :path => '../BaseFramework/PGString', :inhibit_warnings => true
     pod 'PGColor', :path => '../BaseFramework/PGColor', :inhibit_warnings => true
     pod 'PGImage', :path => '../BaseFramework/PGImage', :inhibit_warnings => true
+    pod 'PGScrollNavigationBar', :path => '../BaseFramework/PGScrollNavigationBar', :inhibit_warnings => true
     
     #vendor
     pod 'KVOController', :inhibit_warnings => true

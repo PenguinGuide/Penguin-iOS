@@ -78,7 +78,7 @@ static UIColor *colorHighlight;
 
 - (void)initAppearance
 {
-    //[[UINavigationBar appearance] setBarTintColor:[UIColor colorWithWhite:1.0 alpha:0.4]];
+    [[UINavigationBar appearance] setBackgroundImage:[[UIImage imageNamed:@"pg_navigation_bg_image"] resizableImageWithCapInsets:UIEdgeInsetsZero resizingMode:UIImageRenderingModeAlwaysOriginal] forBarMetrics:UIBarMetricsDefault];
     [[UINavigationBar appearance] setTintColor:[UIColor blackColor]];
 }
 

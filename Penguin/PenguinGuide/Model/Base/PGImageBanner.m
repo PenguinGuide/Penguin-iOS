@@ -14,7 +14,8 @@
 {
     return @{
              @"image" : @"image",
-             @"link" : @"link"
+             @"link" : @"link",
+             @"type": @"type"
              };
 }
 

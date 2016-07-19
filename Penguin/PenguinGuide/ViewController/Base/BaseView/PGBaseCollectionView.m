@@ -29,6 +29,8 @@
             completion();
         }
     } ProgressImages:Theme.loadingImages LoadingImages:Theme.loadingImages ProgressScrollThreshold:60 LoadingImagesFrameRate:35];
+    
+    [self addTopInsetInPortrait:0 TopInsetInLandscape:0];
 }
 
 - (void)enableInfiniteScrolling:(void (^)(void))completion
