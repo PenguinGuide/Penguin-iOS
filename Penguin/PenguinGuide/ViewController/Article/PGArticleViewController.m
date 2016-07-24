@@ -7,7 +7,6 @@
 //
 
 #import "PGArticleViewController.h"
-#import "UINavigationBar+PGNavigationBar.h"
 #import "UIScrollView+PGScrollView.h"
 
 @interface PGArticleViewController () <UIScrollViewDelegate>
