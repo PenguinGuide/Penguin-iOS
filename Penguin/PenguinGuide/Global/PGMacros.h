@@ -21,5 +21,4 @@
 
 #define PGWeakSelf(type) __weak typeof(type) weak##type = type;
 
-
 #endif /* PGMacros_h */

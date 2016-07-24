@@ -30,6 +30,7 @@
     
     UIView *containerView = [transitionContext containerView];
     
+    // http://blog.sina.com.cn/s/blog_8764c3140100xfo7.html
     CGRect rect = [containerView convertRect:articleVC.imageView.frame fromView:articleVC.imageView.superview];
     UIView *screenshot = [articleVC.imageView snapshotViewAfterScreenUpdates:NO];
     screenshot.frame = rect;

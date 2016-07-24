@@ -24,7 +24,7 @@
 	<array>
 		<dict>
 			<key>CFBundleURLName</key>
-			<string>com.xinglian.penguinguide</string>
+			<string>com.xinglian.penguin</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
 				<string>qiechihe</string>
@@ -68,5 +68,7 @@
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
 	</array>
+	<key>UIViewControllerBasedStatusBarAppearance</key>
+	<false/>
 </dict>
 </plist>

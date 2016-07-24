@@ -42,7 +42,7 @@
                                                                              style:UIBarButtonItemStyleDone
                                                                             target:self
                                                                             action:@selector(backButtonClicked)];
-    // fix left sliding not working
+    // fix left sliding not working, http://blog.csdn.net/meegomeego/article/details/25879605
     self.navigationController.interactivePopGestureRecognizer.delegate = (id)self;
 }
 
