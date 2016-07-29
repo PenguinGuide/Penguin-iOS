@@ -19,6 +19,7 @@ s.public_header_files = "*.h"
 s.source_files = "*.{h,m}"
 
 s.dependency "SDWebImage", "~>3.8"
+s.dependency "FLAnimatedImage"
 
 s.requires_arc = true
 

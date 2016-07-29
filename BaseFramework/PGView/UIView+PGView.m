@@ -111,4 +111,16 @@ static char PGTapHandlerKey;
     }
 }
 
+- (UIImage *)screenshot
+{
+    UIGraphicsBeginImageContextWithOptions(self.bounds.size, YES, 0);
+    
+    [self drawViewHierarchyInRect:self.bounds afterScreenUpdates:YES];
+    UIImage *screenshot = UIGraphicsGetImageFromCurrentImageContext();
+    
+    UIGraphicsEndImageContext();
+    
+    return screenshot;
+}
+
 @end

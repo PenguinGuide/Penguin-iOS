@@ -21,5 +21,6 @@
 @property (nonatomic) float bottom;
 
 - (void)setTapAction:(void(^)(void))completion;
+- (UIImage *)screenshot;
 
 @end

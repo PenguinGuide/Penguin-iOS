@@ -14,6 +14,11 @@ typedef NS_ENUM(NSInteger, PGPagedScrollViewImageFillMode) {
     PGPagedScrollViewImageFillModeFill
 };
 
+typedef NS_ENUM(NSInteger, PGPagedScrollViewIconMode) {
+    PGPagedScrollViewIconModeDark,
+    PGPagedScrollViewIconModeLight
+};
+
 @protocol PGPagedScrollViewDelegate <NSObject>
 
 - (NSArray *)imagesForScrollView;
@@ -24,7 +29,7 @@ typedef NS_ENUM(NSInteger, PGPagedScrollViewImageFillMode) {
 
 @property (nonatomic, weak) id<PGPagedScrollViewDelegate> delegate;
 
-- (id)initWithFrame:(CGRect)frame imageFillMode:(PGPagedScrollViewImageFillMode)fillMode;
+- (id)initWithFrame:(CGRect)frame imageFillMode:(PGPagedScrollViewImageFillMode)fillMode iconMode:(PGPagedScrollViewIconMode)iconMode;
 
 - (void)reloadData;
 

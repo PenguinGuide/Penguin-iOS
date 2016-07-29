@@ -25,6 +25,7 @@ end
 
 s.dependency "Mantle", "2.0.7"
 s.dependency "AFNetworking", "3.1.0"
+s.dependency "OHHTTPStubs", "5.1.0"
 
 s.requires_arc = true
 

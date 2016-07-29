@@ -14,5 +14,6 @@
 @property (nonatomic, strong, readonly) PGPagedScrollView *pagedScrollView;
 @property (nonatomic, strong, readonly) UIButton *registerButton;
 @property (nonatomic, strong, readonly) UIButton *loginButton;
+@property (nonatomic, strong, readonly) UIButton *closeButton;
 
 @end

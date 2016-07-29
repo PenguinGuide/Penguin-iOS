@@ -6,6 +6,9 @@
 //  Copyright © 2016 Xinglian. All rights reserved.
 //
 
+#define PG_API_Result_Success 0
+#define PG_API_Result_Failed -1
+
 static const NSString *PGBaseURL = @"www.penguinguide.com";
 static const NSTimeInterval DefaultRequestTimeout = 30.0;
 static const int DefaultMaxConcurrentConnections = 5;
@@ -52,7 +55,7 @@ static const int DefaultMaxConcurrentConnections = 5;
 
 - (void)initSessionManager:(NSTimeInterval)timeout operationCount:(NSInteger)operationCount
 {
-    self.sessionManager = [PGRKHTTPSessionManager sessionManagerWithBaseURL:@"" timeout:timeout operationCount:operationCount];
+    self.sessionManager = [PGRKHTTPSessionManager sessionManagerWithBaseURL:@"http://www.penguinguide.com" timeout:timeout operationCount:operationCount];
     
     // content-type
     [self.sessionManager addAcceptableContentTypes:[NSSet setWithObjects:@"application/json", @"text/json", @"text/javascript", @"text/html", @"text/css", @"text/plain", nil]];
@@ -85,18 +88,54 @@ static const int DefaultMaxConcurrentConnections = 5;
     __block PGRKRequestConfig *clientConfig = [[PGRKRequestConfig alloc] init];
     configBlock(clientConfig);
     
+    __weak typeof(self) weakSelf = self;
     [self.sessionManager makeGetRequest:^(PGRKRequestConfig *config) {
-        config = clientConfig;
+        config.route = clientConfig.route;
+        config.keyPath = clientConfig.keyPath;
+        config.params = clientConfig.params;
+        config.model = clientConfig.model;
+        config.pattern = clientConfig.pattern;
+        config.isMockAPI = clientConfig.isMockAPI;
+        config.mockFileName = clientConfig.mockFileName;
+        config.mockStatusCode = clientConfig.mockStatusCode;
+        config.mockNetworkSpeed = clientConfig.mockNetworkSpeed;
+        config.mockResponseTime = clientConfig.mockResponseTime;
+        config.mockNoNetworkConnection = clientConfig.mockNoNetworkConnection;
     } completion:^(id response) {
-        
+        if ([response isKindOfClass:[NSArray class]]) {
+            if (completion) {
+                completion(response);
+            }
+        } else if ([response isKindOfClass:[clientConfig.model class]]) {
+            if (completion) {
+                completion(@[response]);
+            }
+        } else {
+            [weakSelf handleResponse:response completion:completion failure:failure];
+        }
     } failure:^(NSError *error) {
-        
+        if (failure) {
+            failure(error);
+        }
     }];
 }
 
 - (void)handleResponse:(id)response completion:(PGRKCompletionBlock)completion failure:(PGRKFailureBlock)failure
 {
-    
+    if ([response isKindOfClass:[NSDictionary class]]) {
+        NSDictionary *responseDict = (NSDictionary *)response;
+        if (responseDict[@"result"]) {
+            NSInteger resultCode = [responseDict[@"result"] integerValue];
+            
+            if (resultCode == PG_API_Result_Success) {
+                if (completion) {
+                    completion(responseDict);
+                }
+            } else if (resultCode == PG_API_Result_Failed) {
+                
+            }
+        }
+    }
 }
 
 - (void)cancelAllRequests

@@ -7,9 +7,9 @@
 //
 
 #import "PGBaseViewController.h"
-#import "FBKVOController.h"
+#import "PGBaseViewController+TransitionAnimation.h"
 
-@interface PGBaseViewController ()
+@interface PGBaseViewController () <UINavigationControllerDelegate>
 
 @property (nonatomic, strong, readwrite) PGAPIClient *apiClient;
 @property (nonatomic, strong, readwrite) FBKVOController *KVOController;
@@ -21,7 +21,7 @@
 - (id)init
 {
     if (self = [super init]) {
-        
+        self.apiClient = [PGAPIClient client];
     }
     
     return self;
@@ -35,8 +35,37 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view, typically from a nib.
-    
     self.view.backgroundColor = [UIColor whiteColor];
+    
+    UIImage *backButtonImage = [[UIImage imageNamed:@"pg_navigation_back_button"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
+    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:backButtonImage
+                                                                             style:UIBarButtonItemStyleDone
+                                                                            target:self
+                                                                            action:@selector(backButtonClicked)];
+    // fix left sliding not working, http://blog.csdn.net/meegomeego/article/details/25879605
+    self.navigationController.interactivePopGestureRecognizer.delegate = (id)self;
+}
+
+- (void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    
+    // http://benscheirman.com/2011/08/when-viewwillappear-isnt-called/
+    self.navigationController.delegate = self;
+}
+
+- (void)viewDidDisappear:(BOOL)animated
+{
+    [super viewDidDisappear:animated];
+    
+    self.navigationController.delegate = nil;
+}
+
+#pragma mark - <Back Button>
+
+- (void)backButtonClicked
+{
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 #pragma mark - <KVO Methods>
@@ -51,6 +80,11 @@
                                   block(change[NSKeyValueChangeNewKey]);
                               }
                           }];
+}
+
+- (void)unobserve
+{
+    [self.KVOController unobserveAll];
 }
 
 #pragma mark - <Setters && Getters>

@@ -28,7 +28,9 @@
         if (completion) {
             completion();
         }
-    } ProgressImagesGifName:@"pg_pull_to_refresh.gif" LoadingImagesGifName:@"pg_pull_to_refresh.gif" ProgressScrollThreshold:60 LoadingImageFrameRate:35];
+    } ProgressImages:Theme.loadingImages LoadingImages:Theme.loadingImages ProgressScrollThreshold:60 LoadingImagesFrameRate:35];
+    
+    [self addTopInsetInPortrait:0 TopInsetInLandscape:0];
 }
 
 - (void)enableInfiniteScrolling:(void (^)(void))completion

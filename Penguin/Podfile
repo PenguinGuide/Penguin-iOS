@@ -11,6 +11,7 @@ target 'PenguinGuide' do
     pod 'PGShare', :path => '../BusinessFramework/PGShare', :inhibit_warnings => true
     pod 'PGTabBarController', :path => '../BusinessFramework/PGTabBarController', :inhibit_warnings => true
     pod 'PGPagedScrollView', :path => '../BusinessFramework/PGPagedScrollView', :inhibit_warnings => true
+    pod 'PGStringParser', :path => '../BusinessFramework/PGStringParser', :inhibit_warnings => true
     
     #base framework
     pod 'PGRestKit', :path => '../BaseFramework/PGRestKit', :inhibit_warnings => true
@@ -21,11 +22,14 @@ target 'PenguinGuide' do
     pod 'PGString', :path => '../BaseFramework/PGString', :inhibit_warnings => true
     pod 'PGColor', :path => '../BaseFramework/PGColor', :inhibit_warnings => true
     pod 'PGImage', :path => '../BaseFramework/PGImage', :inhibit_warnings => true
+    pod 'PGScrollNavigationBar', :path => '../BaseFramework/PGScrollNavigationBar', :inhibit_warnings => true
+    pod 'PGScrollView', :path => '../BaseFramework/PGScrollView', :inhibit_warnings => true
     
     #vendor
     pod 'KVOController', :inhibit_warnings => true
     pod 'SVPullToRefresh', :inhibit_warnings => true
     pod 'UzysAnimatedGifPullToRefresh', :inhibit_warnings => true
+    pod 'Masonry', :inhibit_warnings => true
     
     #fabric
     pod 'Fabric'

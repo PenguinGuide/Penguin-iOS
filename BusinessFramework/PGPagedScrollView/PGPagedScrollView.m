@@ -69,6 +69,7 @@
 @property (nonatomic, strong) FXPageControl *pageControl;
 @property (nonatomic, strong) NSArray *banners;
 @property (nonatomic) PGPagedScrollViewImageFillMode fillMode;
+@property (nonatomic) PGPagedScrollViewIconMode iconMode;
 
 @end
 
@@ -84,10 +85,11 @@
     return self;
 }
 
-- (id)initWithFrame:(CGRect)frame imageFillMode:(PGPagedScrollViewImageFillMode)fillMode
+- (id)initWithFrame:(CGRect)frame imageFillMode:(PGPagedScrollViewImageFillMode)fillMode iconMode:(PGPagedScrollViewIconMode)iconMode
 {
     if (self = [super initWithFrame:frame]) {
         self.fillMode = fillMode;
+        self.iconMode = iconMode;
         
         [self addSubview:self.pagedScrollView];
         [self addSubview:self.pageControl];
@@ -118,6 +120,7 @@
                 } else {
                     UIImage *image = [UIImage imageNamed:imageName];
                     UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(i*self.frame.size.width, 0, self.frame.size.width, self.pagedScrollView.frame.size.height)];
+                    imageView.contentMode = UIViewContentModeScaleAspectFill;
                     imageView.image = image;
                     [self.pagedScrollView addSubview:imageView];
                 }
@@ -178,7 +181,11 @@
         _pageControl.numberOfPages = 0;
         _pageControl.currentPage = 0;
         _pageControl.dotColor = [UIColor colorWithHexString:@"dbdbdb"];
-        _pageControl.selectedDotImage = [UIImage imageNamed:@"paged_control_icon"];
+        if (self.iconMode == PGPagedScrollViewIconModeLight) {
+            _pageControl.selectedDotImage = [UIImage imageNamed:@"paged_control_icon_light"];
+        } else {
+            _pageControl.selectedDotImage = [UIImage imageNamed:@"paged_control_icon"];
+        }
     }
     return _pageControl;
 }

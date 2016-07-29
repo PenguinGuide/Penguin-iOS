@@ -17,7 +17,7 @@
     return nil;
 }
 
-+ (PGRKModel *)modelFromDictionary:(NSDictionary *)dict
++ (id)modelFromDictionary:(NSDictionary *)dict
 {
     NSError *error = nil;
     PGRKModel *model = [MTLJSONAdapter modelOfClass:[self class] fromJSONDictionary:dict error:&error];

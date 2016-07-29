@@ -23,6 +23,9 @@
 
 @interface PGLoginViewController () <PGLoginViewDelegate>
 
+@property (nonatomic) BOOL shouldHideStatusBar;
+
+@property (nonatomic, strong) UIImage *screenshot;
 @property (nonatomic, strong) UIImageView *bgImageView;
 
 @property (nonatomic, strong) NSMutableArray *viewsStack;
@@ -44,6 +47,15 @@
 
 @implementation PGLoginViewController
 
+- (id)initWithScreenshot:(UIImage *)screenshot
+{
+    if (self = [super init]) {
+        self.screenshot = screenshot;
+    }
+    
+    return self;
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view, typically from a nib.
@@ -53,12 +65,19 @@
     [self.view addSubview:self.bgImageView];
     [self.view addSubview:self.tourView];
     
+    self.shouldHideStatusBar = YES;
+    
     [self.viewsStack addObject:self.tourView];
+}
+
+- (void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
 }
 
 - (BOOL)prefersStatusBarHidden
 {
-    return YES;
+    return self.shouldHideStatusBar;
 }
 
 #pragma mark - <PGTourView>
@@ -75,6 +94,11 @@
     [self.view addSubview:self.registerView];
     
     [self transitCurrentView:self.tourView toNextView:self.registerView];
+}
+
+- (void)tourViewCloseButtonClicked
+{
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 #pragma mark - <PGLoginView>
@@ -208,8 +232,13 @@
 {
     if (!_bgImageView) {
         _bgImageView = [[UIImageView alloc] initWithFrame:self.view.bounds];
-        UIImage *blurredImage = [[UIImage imageNamed:@"pg_login_bg"] applyBlurEffectWithRadius:5 tintColor:[UIColor whiteColorWithAlpha:0.1f] saturationDeltaFactor:1 maskImage:nil];
-        _bgImageView.image = blurredImage;
+        if (self.screenshot) {
+            UIImage *blurredImage = [self.screenshot applyBlurEffectWithRadius:5 tintColor:[UIColor whiteColorWithAlpha:0.1f] saturationDeltaFactor:1 maskImage:nil];
+            _bgImageView.image = blurredImage;
+        } else {
+            UIImage *blurredImage = [[UIImage imageNamed:@"pg_login_bg"] applyBlurEffectWithRadius:5 tintColor:[UIColor whiteColorWithAlpha:0.1f] saturationDeltaFactor:1 maskImage:nil];
+            _bgImageView.image = blurredImage;
+        }
     }
     
     return _bgImageView;
@@ -224,6 +253,7 @@
         
         [_tourView.loginButton addTarget:self action:@selector(tourViewLoginButtonClicked) forControlEvents:UIControlEventTouchUpInside];
         [_tourView.registerButton addTarget:self action:@selector(tourViewRegisterButtonClicked) forControlEvents:UIControlEventTouchUpInside];
+        [_tourView.closeButton addTarget:self action:@selector(tourViewCloseButtonClicked) forControlEvents:UIControlEventTouchUpInside];
     }
     
     return _tourView;

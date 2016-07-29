@@ -79,6 +79,7 @@ static const float TabBarHeight = 50.f;
         NSString *tabBarHighlightImage = [vc tabBarHighlightImage];
         
         PGTab *tab = [[PGTab alloc] init];
+        [tab setBackgroundColor:[UIColor clearColor]];
         tab.tabTitle = tabBarTitle;
         tab.tabImage = tabBarImage;
         tab.tabHighlightImage = tabBarHighlightImage;
@@ -105,7 +106,7 @@ static const float TabBarHeight = 50.f;
 - (PGTabBar *)tabBar
 {
     if (!_tabBar) {
-        _tabBar = [[PGTabBar alloc] initWithFrame:CGRectMake(0, CGRectGetHeight(self.view.frame)-TabBarHeight, CGRectGetWidth(self.view.frame), TabBarHeight)];
+        _tabBar = [[PGTabBar alloc] initWithFrame:CGRectMake(0, CGRectGetHeight(self.view.frame)-TabBarHeight-64, CGRectGetWidth(self.view.frame), TabBarHeight)];
         _tabBar.delegate = self;
     }
     

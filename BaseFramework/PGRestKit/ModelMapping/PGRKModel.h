@@ -8,7 +8,7 @@
 
 #import <Mantle/Mantle.h>
 
-@interface PGRKModel : MTLModel
+@interface PGRKModel : MTLModel <MTLJSONSerializing>
 
 /**
  *  Response object mapping for this class
@@ -22,7 +22,7 @@
  *
  * @return model object of this class
  */
-+ (PGRKModel *)modelFromDictionary:(NSDictionary *)dict;
++ (id)modelFromDictionary:(NSDictionary *)dict;
 
 /**
  * Manual mapping for this class from array

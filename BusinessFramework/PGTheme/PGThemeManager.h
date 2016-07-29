@@ -25,5 +25,8 @@ typedef NS_ENUM(NSInteger, PGThemeStyle) {
 - (UIFont *)fontSmall;
 - (UIFont *)fontMedium;
 - (UIFont *)fontLarge;
+- (NSArray *)loadingImages;
+
+- (UIColor *)colorHighlight;
 
 @end
