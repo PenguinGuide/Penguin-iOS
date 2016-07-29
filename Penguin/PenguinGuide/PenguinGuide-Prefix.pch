@@ -16,6 +16,7 @@
 #import "UIImage+PGImage.h"
 #import "UIColor+PGColor.h"
 #import "UIView+PGView.h"
+#import "UIIMageView+PGImageView.h"
 
 #import "PGMacros.h"
 #import "PGGlobalObject.h"

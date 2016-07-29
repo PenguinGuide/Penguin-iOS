@@ -6,12 +6,28 @@
 //  Copyright © 2016 Xinglian. All rights reserved.
 //
 
+#define ArticleParagraphTextCell @"ArticleParagraphTextCell"
+#define ArticleParagraphImageCell @"ArticleParagraphImageCell"
+#define ArticleParagraphGIFImageCell @"ArticleParagraphGIFImageCell"
+
 #import "PGArticleViewController.h"
 #import "UIScrollView+PGScrollView.h"
 
-@interface PGArticleViewController () <UIScrollViewDelegate>
+// views
+#import "PGArticleParagraphTextCell.h"
+#import "PGArticleParagraphImageCell.h"
+#import "PGArticleParagraphGIFImageCell.h"
 
-@property (nonatomic, strong) UIScrollView *scrollView;
+// view model
+#import "PGArticleViewModel.h"
+
+#import "PGStringParser.h"
+
+@interface PGArticleViewController () <UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, UIScrollViewDelegate>
+
+@property (nonatomic, strong, readwrite) UICollectionView *articleCollectionView;
+
+@property (nonatomic, strong) PGArticleViewModel *viewModel;
 
 @end
 
@@ -22,15 +38,11 @@
     // Do any additional setup after loading the view
     self.automaticallyAdjustsScrollViewInsets = NO;
     
-    self.scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, UISCREEN_WIDTH, UISCREEN_HEIGHT)];
-    self.scrollView.delegate = self;
-    self.scrollView.contentSize = CGSizeMake(UISCREEN_WIDTH, UISCREEN_HEIGHT+300);
-    self.scrollView.backgroundColor = [UIColor clearColor];
-    [self.view addSubview:self.scrollView];
+    [self.view addSubview:self.articleCollectionView];
     
     self.imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, UISCREEN_WIDTH, UISCREEN_WIDTH*180/320)];
     self.imageView.image = [UIImage imageNamed:@"pg_article_top_banner"];
-    [self.scrollView setHeaderView:self.imageView naviTitle:@"从午间定食到深夜食堂！" rightNaviButton:nil];
+    [self.articleCollectionView setHeaderView:self.imageView naviTitle:@"从午间定食到深夜食堂！" rightNaviButton:nil];
     
     UIButton *backButton = [[UIButton alloc] initWithFrame:CGRectMake(20, 10, 60, 60)];
     [backButton setImage:[UIImage imageNamed:@"pg_navigation_back_button_light"] forState:UIControlStateNormal];
@@ -39,13 +51,13 @@
     [backButton setContentVerticalAlignment:UIControlContentVerticalAlignmentCenter];
     [self.view addSubview:backButton];
     
-    UITextView *textView = [[UITextView alloc] initWithFrame:CGRectMake(0, self.imageView.bottom+15, UISCREEN_WIDTH, 600)];
-    textView.backgroundColor = [UIColor whiteColor];
-    textView.font = Theme.fontMedium;
-    textView.editable = NO;
-    textView.scrollEnabled = NO;
-    textView.text = @"上海诸多“美食一条街”中，老派如云南南路、黄河路，新晋如进贤路、古羊路，但在上海马路文化的忠实拥趸和美食品鉴者口中，两条地处法租界却风格迥异的街道总会被一同提及——武康路和永康路。两条“康”字辈儿的街道，不仅是游人食客的聚集地，同时也是外国友人的心头好，一大批网红店应运而生，就连餐饮业态都有几分神似。这两条马路的美味加在一起，就是一个大写的洋气：精品咖啡、手工面包、网红冰淇淋、精酿啤酒吧、法式小酒馆 上海诸多“美食一条街”中，老派如云南南路、黄河路，新晋如进贤路、古羊路，但在上海马路文化的忠实拥趸和美食品鉴者口中，两条地处法租界却风格迥异的街道总会被一同提及——武康路和永康路。两条“康”字辈儿的街道，不仅是游人食客的聚集地，同时也是外国友人的心头好，一大批网红店应运而生，就连餐饮业态都有几分神似。这两条马路的美味加在一起，就是一个大写的洋气：精品咖啡、手工面包、网红冰淇淋、精酿啤酒吧、法式小酒馆 上海诸多“美食一条街”中，老派如云南南路、黄河路，新晋如进贤路、古羊路，但在上海马路文化的忠实拥趸和美食品鉴者口中，两条地处法租界却风格迥异的街道总会被一同提及——武康路和永康路。两条“康”字辈儿的街道，不仅是游人食客的聚集地，同时也是外国友人的心头好，一大批网红店应运而生，就连餐饮业态都有几分神似。这两条马路的美味加在一起，就是一个大写的洋气：精品咖啡、手工面包、网红冰淇淋、精酿啤酒吧、法式小酒馆 上海诸多“美食一条街”中，老派如云南南路、黄河路，新晋如进贤路、古羊路，但在上海马路文化的忠实拥趸和美食品鉴者口中，两条地处法租界却风格迥异的街道总会被一同提及——武康路和永康路。两条“康”字辈儿的街道，不仅是游人食客的聚集地，同时也是外国友人的心头好，一大批网红店应运而生，就连餐饮业态都有几分神似。这两条马路的美味加在一起，就是一个大写的洋气：精品咖啡、手工面包、网红冰淇淋、精酿啤酒吧、法式小酒馆 上海诸多“美食一条街”中，老派如云南南路、黄河路，新晋如进贤路、古羊路，但在上海马路文化的忠实拥趸和美食品鉴者口中，两条地处法租界却风格迥异的街道总会被一同提及——武康路和永康路。两条“康”字辈儿的街道，不仅是游人食客的聚集地，同时也是外国友人的心头好，一大批网红店应运而生，就连餐饮业态都有几分神似。这两条马路的美味加在一起，就是一个大写的洋气：精品咖啡、手工面包、网红冰淇淋、精酿啤酒吧、法式小酒馆 上海诸多“美食一条街”中，老派如云南南路、黄河路，新晋如进贤路、古羊路，但在上海马路文化的忠实拥趸和美食品鉴者口中，两条地处法租界却风格迥异的街道总会被一同提及——武康路和永康路。两条“康”字辈儿的街道，不仅是游人食客的聚集地，同时也是外国友人的心头好，一大批网红店应运而生，就连餐饮业态都有几分神似。这两条马路的美味加在一起，就是一个大写的洋气：精品咖啡、手工面包、网红冰淇淋、精酿啤酒吧、法式小酒馆";
-    [self.scrollView addSubview:textView];
+    self.viewModel = [[PGArticleViewModel alloc] init];
+    
+    NSString *htmlString = [[NSString alloc] initWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"demo" ofType:@"html"]
+                                                           encoding:NSUTF8StringEncoding
+                                                              error:nil];
+    PGStringParser *htmlParser = [PGStringParser htmlParserWithString:htmlString];
+    self.viewModel.paragraphsArray = [htmlParser articleParsedStorages];
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -74,11 +86,92 @@
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleDefault];
 }
 
+#pragma mark - <UICollectionViewDataSource>
+
+- (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView
+{
+    return 1;
+}
+
+- (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
+{
+    return self.viewModel.paragraphsArray.count;
+}
+
+- (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    id storage = self.viewModel.paragraphsArray[indexPath.item];
+    if ([storage isKindOfClass:[PGParserTextStorage class]]) {
+        PGArticleParagraphTextCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:ArticleParagraphTextCell forIndexPath:indexPath];
+        
+        PGParserTextStorage *textStorage = (PGParserTextStorage *)storage;
+        [cell setCellWithStr:textStorage.text];
+        
+        return cell;
+    } else if ([storage isKindOfClass:[PGParserImageStorage class]]) {
+        PGParserImageStorage *imageStorage = (PGParserImageStorage *)storage;
+        if (imageStorage.isGIF) {
+            PGArticleParagraphGIFImageCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:ArticleParagraphGIFImageCell forIndexPath:indexPath];
+            [cell setCellWithImage:imageStorage.image];
+            
+            return cell;
+        } else {
+            PGArticleParagraphImageCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:ArticleParagraphImageCell forIndexPath:indexPath];
+            [cell setCellWithImage:imageStorage.image];
+            
+            return cell;
+        }
+    }
+    
+    return nil;
+}
+
+#pragma mark - <UICollectionViewDelegate>
+
+- (UIEdgeInsets)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout insetForSectionAtIndex:(NSInteger)section
+{
+    return UIEdgeInsetsMake(UISCREEN_WIDTH*180/320, 0, 0, 0);
+}
+
+- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    id storage = self.viewModel.paragraphsArray[indexPath.item];
+    if ([storage isKindOfClass:[PGParserTextStorage class]]) {
+        PGParserTextStorage *textStorage = (PGParserTextStorage *)storage;
+        CGSize textSize = [textStorage.text boundingRectWithSize:CGSizeMake(UISCREEN_WIDTH-40, 1000) options:NSStringDrawingUsesLineFragmentOrigin context:nil].size;
+        return CGSizeMake(UISCREEN_WIDTH, textSize.height+10);
+    } else if ([storage isKindOfClass:[PGParserImageStorage class]]) {
+        PGParserImageStorage *imageStorage = (PGParserImageStorage *)storage;
+        CGFloat width = UISCREEN_WIDTH-40;
+        CGFloat height = width*imageStorage.height/imageStorage.width;
+        return CGSizeMake(width, height);
+    }
+    return CGSizeZero;
+}
+
 #pragma mark - <UIScrollViewDelegate>
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
     [scrollView scrollViewShouldUpdate];
+}
+
+#pragma mark - <Setters && Getters>
+
+- (UICollectionView *)articleCollectionView
+{
+    if (!_articleCollectionView) {
+        _articleCollectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(0, 0, UISCREEN_WIDTH, UISCREEN_HEIGHT) collectionViewLayout:[UICollectionViewFlowLayout new]];
+        _articleCollectionView.dataSource = self;
+        _articleCollectionView.delegate = self;
+        _articleCollectionView.contentSize = CGSizeMake(UISCREEN_WIDTH, UISCREEN_HEIGHT+300);
+        _articleCollectionView.backgroundColor = [UIColor clearColor];
+        
+        [_articleCollectionView registerClass:[PGArticleParagraphTextCell class] forCellWithReuseIdentifier:ArticleParagraphTextCell];
+        [_articleCollectionView registerClass:[PGArticleParagraphImageCell class] forCellWithReuseIdentifier:ArticleParagraphImageCell];
+        [_articleCollectionView registerClass:[PGArticleParagraphGIFImageCell class] forCellWithReuseIdentifier:ArticleParagraphGIFImageCell];
+    }
+    return _articleCollectionView;
 }
 
 - (void)didReceiveMemoryWarning {

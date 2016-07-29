@@ -11,6 +11,7 @@ target 'PenguinGuide' do
     pod 'PGShare', :path => '../BusinessFramework/PGShare', :inhibit_warnings => true
     pod 'PGTabBarController', :path => '../BusinessFramework/PGTabBarController', :inhibit_warnings => true
     pod 'PGPagedScrollView', :path => '../BusinessFramework/PGPagedScrollView', :inhibit_warnings => true
+    pod 'PGStringParser', :path => '../BusinessFramework/PGStringParser', :inhibit_warnings => true
     
     #base framework
     pod 'PGRestKit', :path => '../BaseFramework/PGRestKit', :inhibit_warnings => true

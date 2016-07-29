@@ -32,6 +32,7 @@
 		0F3C7EFA1D2F731B00284066 /* PGMeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0F3C7EF91D2F731B00284066 /* PGMeViewController.m */; };
 		0F41AE5E1D351DF900E7AD71 /* PGCarouselBanner.m in Sources */ = {isa = PBXBuildFile; fileRef = 0F41AE5D1D351DF900E7AD71 /* PGCarouselBanner.m */; };
 		0F41AE621D35318000E7AD71 /* PGHomeArticleHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0F41AE611D35318000E7AD71 /* PGHomeArticleHeaderView.m */; };
+		0F76A16A1D4A006600C5041C /* PGArticleParagraphGIFImageCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0F76A1691D4A006600C5041C /* PGArticleParagraphGIFImageCell.m */; };
 		0F7EEF5C1D210F63008D175C /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 0F7EEF5B1D210F63008D175C /* main.m */; };
 		0F7EEF5F1D210F63008D175C /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 0F7EEF5E1D210F63008D175C /* AppDelegate.m */; };
 		0F7EEF621D210F63008D175C /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0F7EEF611D210F63008D175C /* ViewController.m */; };
@@ -40,11 +41,16 @@
 		0F7EEF801D210F64008D175C /* PenguinGuideUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 0F7EEF7F1D210F64008D175C /* PenguinGuideUITests.m */; };
 		0F7EEF921D2118F6008D175C /* Controller.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0F7EEF911D2118F6008D175C /* Controller.xcassets */; };
 		0F7EEF941D211914008D175C /* Theme.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0F7EEF931D211914008D175C /* Theme.xcassets */; };
+		0F84FE221D485EAF0054F2D7 /* PGArticleParagraphTextCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0F84FE211D485EAF0054F2D7 /* PGArticleParagraphTextCell.m */; };
+		0F84FE251D485ECE0054F2D7 /* PGArticleParagraphImageCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0F84FE241D485ECE0054F2D7 /* PGArticleParagraphImageCell.m */; };
+		0F84FE291D485F3D0054F2D7 /* PGArticleViewModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 0F84FE281D485F3D0054F2D7 /* PGArticleViewModel.m */; };
+		0F84FE2D1D48604A0054F2D7 /* PGArticle.m in Sources */ = {isa = PBXBuildFile; fileRef = 0F84FE2C1D48604A0054F2D7 /* PGArticle.m */; };
 		0FB4FE451D38939900A1EAAA /* PGArticleViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0FB4FE441D38939900A1EAAA /* PGArticleViewController.m */; };
 		0FB8F96F1D339CD0005E6C56 /* PGRouterManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 0FB8F96E1D339CD0005E6C56 /* PGRouterManager.m */; };
 		0FB8F9721D339EBA005E6C56 /* PGGlobalObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 0FB8F9711D339EBA005E6C56 /* PGGlobalObject.m */; };
 		0FD590D31D38B71600731962 /* PGBaseViewController+TransitionAnimation.m in Sources */ = {isa = PBXBuildFile; fileRef = 0FD590D21D38B71600731962 /* PGBaseViewController+TransitionAnimation.m */; };
 		0FD590D61D38BB3100731962 /* PGHomeToArticleTransition.m in Sources */ = {isa = PBXBuildFile; fileRef = 0FD590D51D38BB3100731962 /* PGHomeToArticleTransition.m */; };
+		0FD9061C1D47AABA00AEBE4B /* demo.html in Resources */ = {isa = PBXBuildFile; fileRef = 0FD9061B1D47AABA00AEBE4B /* demo.html */; };
 		0FFCB51C1D2C9F6B00D863FA /* PGLoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0FFCB51B1D2C9F6B00D863FA /* PGLoginViewController.m */; };
 		0FFCB5241D2CABDE00D863FA /* PGTourView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0FFCB5231D2CABDE00D863FA /* PGTourView.m */; };
 		0FFCB5331D2CF35400D863FA /* PGSocialView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0FFCB5321D2CF35400D863FA /* PGSocialView.m */; };
@@ -124,6 +130,8 @@
 		0F41AE5D1D351DF900E7AD71 /* PGCarouselBanner.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PGCarouselBanner.m; sourceTree = "<group>"; };
 		0F41AE601D35318000E7AD71 /* PGHomeArticleHeaderView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PGHomeArticleHeaderView.h; sourceTree = "<group>"; };
 		0F41AE611D35318000E7AD71 /* PGHomeArticleHeaderView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PGHomeArticleHeaderView.m; sourceTree = "<group>"; };
+		0F76A1681D4A006600C5041C /* PGArticleParagraphGIFImageCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PGArticleParagraphGIFImageCell.h; sourceTree = "<group>"; };
+		0F76A1691D4A006600C5041C /* PGArticleParagraphGIFImageCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PGArticleParagraphGIFImageCell.m; sourceTree = "<group>"; };
 		0F7EEF581D210F63008D175C /* PenguinGuide.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PenguinGuide.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		0F7EEF5B1D210F63008D175C /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		0F7EEF5D1D210F63008D175C /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -140,6 +148,14 @@
 		0F7EEF811D210F64008D175C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		0F7EEF911D2118F6008D175C /* Controller.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Controller.xcassets; sourceTree = "<group>"; };
 		0F7EEF931D211914008D175C /* Theme.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Theme.xcassets; sourceTree = "<group>"; };
+		0F84FE201D485EAF0054F2D7 /* PGArticleParagraphTextCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PGArticleParagraphTextCell.h; sourceTree = "<group>"; };
+		0F84FE211D485EAF0054F2D7 /* PGArticleParagraphTextCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PGArticleParagraphTextCell.m; sourceTree = "<group>"; };
+		0F84FE231D485ECE0054F2D7 /* PGArticleParagraphImageCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PGArticleParagraphImageCell.h; sourceTree = "<group>"; };
+		0F84FE241D485ECE0054F2D7 /* PGArticleParagraphImageCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PGArticleParagraphImageCell.m; sourceTree = "<group>"; };
+		0F84FE271D485F3D0054F2D7 /* PGArticleViewModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PGArticleViewModel.h; sourceTree = "<group>"; };
+		0F84FE281D485F3D0054F2D7 /* PGArticleViewModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PGArticleViewModel.m; sourceTree = "<group>"; };
+		0F84FE2B1D48604A0054F2D7 /* PGArticle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PGArticle.h; sourceTree = "<group>"; };
+		0F84FE2C1D48604A0054F2D7 /* PGArticle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PGArticle.m; sourceTree = "<group>"; };
 		0FB4FE431D38939900A1EAAA /* PGArticleViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PGArticleViewController.h; sourceTree = "<group>"; };
 		0FB4FE441D38939900A1EAAA /* PGArticleViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PGArticleViewController.m; sourceTree = "<group>"; };
 		0FB8F96D1D339CD0005E6C56 /* PGRouterManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PGRouterManager.h; sourceTree = "<group>"; };
@@ -150,6 +166,7 @@
 		0FD590D21D38B71600731962 /* PGBaseViewController+TransitionAnimation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "PGBaseViewController+TransitionAnimation.m"; sourceTree = "<group>"; };
 		0FD590D41D38BB3100731962 /* PGHomeToArticleTransition.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PGHomeToArticleTransition.h; sourceTree = "<group>"; };
 		0FD590D51D38BB3100731962 /* PGHomeToArticleTransition.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PGHomeToArticleTransition.m; sourceTree = "<group>"; };
+		0FD9061B1D47AABA00AEBE4B /* demo.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = demo.html; sourceTree = "<group>"; };
 		0FFCB51A1D2C9F6B00D863FA /* PGLoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PGLoginViewController.h; sourceTree = "<group>"; };
 		0FFCB51B1D2C9F6B00D863FA /* PGLoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PGLoginViewController.m; sourceTree = "<group>"; };
 		0FFCB5221D2CABDE00D863FA /* PGTourView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PGTourView.h; sourceTree = "<group>"; };
@@ -395,6 +412,7 @@
 				0F7EEF5E1D210F63008D175C /* AppDelegate.m */,
 				0F7EEF601D210F63008D175C /* ViewController.h */,
 				0F7EEF611D210F63008D175C /* ViewController.m */,
+				0FD9061B1D47AABA00AEBE4B /* demo.html */,
 				0F7EEF5A1D210F63008D175C /* Supporting Files */,
 			);
 			path = PenguinGuide;
@@ -433,6 +451,7 @@
 			children = (
 				0F0F447C1D34FCD1007B90F2 /* Base */,
 				0F0F447B1D34FC92007B90F2 /* Home */,
+				0F84FE2A1D4860070054F2D7 /* Article */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -457,6 +476,7 @@
 				0F0F44761D34F589007B90F2 /* Base */,
 				0FFCB53E1D2D03D000D863FA /* Login */,
 				0F2DC2911D32958C00277C9E /* Home */,
+				0F84FE261D485F0B0054F2D7 /* Article */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -469,6 +489,37 @@
 				0F7EEF931D211914008D175C /* Theme.xcassets */,
 			);
 			path = Resource;
+			sourceTree = "<group>";
+		};
+		0F84FE1F1D485E900054F2D7 /* Cells */ = {
+			isa = PBXGroup;
+			children = (
+				0F84FE201D485EAF0054F2D7 /* PGArticleParagraphTextCell.h */,
+				0F84FE211D485EAF0054F2D7 /* PGArticleParagraphTextCell.m */,
+				0F84FE231D485ECE0054F2D7 /* PGArticleParagraphImageCell.h */,
+				0F84FE241D485ECE0054F2D7 /* PGArticleParagraphImageCell.m */,
+				0F76A1681D4A006600C5041C /* PGArticleParagraphGIFImageCell.h */,
+				0F76A1691D4A006600C5041C /* PGArticleParagraphGIFImageCell.m */,
+			);
+			path = Cells;
+			sourceTree = "<group>";
+		};
+		0F84FE261D485F0B0054F2D7 /* Article */ = {
+			isa = PBXGroup;
+			children = (
+				0F84FE271D485F3D0054F2D7 /* PGArticleViewModel.h */,
+				0F84FE281D485F3D0054F2D7 /* PGArticleViewModel.m */,
+			);
+			path = Article;
+			sourceTree = "<group>";
+		};
+		0F84FE2A1D4860070054F2D7 /* Article */ = {
+			isa = PBXGroup;
+			children = (
+				0F84FE2B1D48604A0054F2D7 /* PGArticle.h */,
+				0F84FE2C1D48604A0054F2D7 /* PGArticle.m */,
+			);
+			path = Article;
 			sourceTree = "<group>";
 		};
 		0F90942F1D2A6997004513CE /* Login */ = {
@@ -484,6 +535,7 @@
 		0FB4FE421D38935A00A1EAAA /* Article */ = {
 			isa = PBXGroup;
 			children = (
+				0F84FE1F1D485E900054F2D7 /* Cells */,
 				0FB4FE431D38939900A1EAAA /* PGArticleViewController.h */,
 				0FB4FE441D38939900A1EAAA /* PGArticleViewController.m */,
 			);
@@ -653,7 +705,8 @@
 				0F7EEF561D210F63008D175C /* Resources */,
 				669B2344D8E28797319FACA6 /* Embed Pods Frameworks */,
 				B391B2E89875FB049FFC3E11 /* Copy Pods Resources */,
-				0F3C7EEA1D2F6B8200284066 /* ShellScript */,
+				0F3C7EEA1D2F6B8200284066 /* Run Script */,
+				0F15D8F31D45E4DB00671278 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -752,6 +805,7 @@
 				0F0F44721D34D147007B90F2 /* v1_homefeeds.json in Resources */,
 				0F7EEF671D210F63008D175C /* Assets.xcassets in Resources */,
 				0F7EEF921D2118F6008D175C /* Controller.xcassets in Resources */,
+				0FD9061C1D47AABA00AEBE4B /* demo.html in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -772,13 +826,27 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		0F3C7EEA1D2F6B8200284066 /* ShellScript */ = {
+		0F15D8F31D45E4DB00671278 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "KEYWORDS=\"TODO:|FIXME:|\\?\\?\\?:|\\!\\!\\!:\"\nfind \"${SRCROOT}/PenguinGuide\" \\( -name \"*.h\" -or -name \"*.m\" \\) -print0 | xargs -0 egrep --with-filename --line-number --only-matching \"($KEYWORDS).*\\$\" | perl -p -e \"s/($KEYWORDS)/ warning: \\$1/\"";
+		};
+		0F3C7EEA1D2F6B8200284066 /* Run Script */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Run Script";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -840,6 +908,7 @@
 				0FB8F96F1D339CD0005E6C56 /* PGRouterManager.m in Sources */,
 				0F3C7EF11D2F72E700284066 /* PGHomeViewController.m in Sources */,
 				0F2DC29F1D32995500277C9E /* PGBaseNavigationController.m in Sources */,
+				0F84FE2D1D48604A0054F2D7 /* PGArticle.m in Sources */,
 				0F1790C21D2E0D6F00672B27 /* PGResetPasswordView.m in Sources */,
 				0F7EEF621D210F63008D175C /* ViewController.m in Sources */,
 				0F3677821D2D6B050023CD3D /* PGLoginPhoneTextField.m in Sources */,
@@ -852,11 +921,13 @@
 				0F2DC2A11D32995500277C9E /* PGBaseCollectionView.m in Sources */,
 				0F41AE5E1D351DF900E7AD71 /* PGCarouselBanner.m in Sources */,
 				0F7EEF5F1D210F63008D175C /* AppDelegate.m in Sources */,
+				0F84FE291D485F3D0054F2D7 /* PGArticleViewModel.m in Sources */,
 				0F1790BC1D2DFCC600672B27 /* PGPasswordLoginView.m in Sources */,
 				0FFCB53D1D2D033E00D863FA /* PGRegisterView.m in Sources */,
 				0FD590D61D38BB3100731962 /* PGHomeToArticleTransition.m in Sources */,
 				0FFCB5371D2D009100D863FA /* PGLoginBaseView.m in Sources */,
 				0F41AE621D35318000E7AD71 /* PGHomeArticleHeaderView.m in Sources */,
+				0F84FE251D485ECE0054F2D7 /* PGArticleParagraphImageCell.m in Sources */,
 				0FFDEB881D2E458300C67445 /* PGSMSCodeRegisterView.m in Sources */,
 				0F0F447F1D34FCFD007B90F2 /* PGImageBanner.m in Sources */,
 				0F1790BF1D2DFD0500672B27 /* PGLoginPasswordTextField.m in Sources */,
@@ -864,6 +935,7 @@
 				0F0F44821D34FE1E007B90F2 /* PGArticleBanner.m in Sources */,
 				0FFCB5241D2CABDE00D863FA /* PGTourView.m in Sources */,
 				0F3C7EFA1D2F731B00284066 /* PGMeViewController.m in Sources */,
+				0F76A16A1D4A006600C5041C /* PGArticleParagraphGIFImageCell.m in Sources */,
 				0FFDEB821D2E356300C67445 /* PGRegisterUserInfoView.m in Sources */,
 				0F0F44751D34DB1F007B90F2 /* PGArticleBannerCell.m in Sources */,
 				0F0F44791D34F595007B90F2 /* PGBaseViewModel.m in Sources */,
@@ -873,6 +945,7 @@
 				0F2DC2A01D32995500277C9E /* PGBaseViewController.m in Sources */,
 				0F1392C71D3CD15800EF4CC8 /* PGArticleToHomeTransition.m in Sources */,
 				0FB4FE451D38939900A1EAAA /* PGArticleViewController.m in Sources */,
+				0F84FE221D485EAF0054F2D7 /* PGArticleParagraphTextCell.m in Sources */,
 				0FFCB5411D2D050D00D863FA /* PGLoginViewModel.m in Sources */,
 				0F3C7EF41D2F72FA00284066 /* PGExploreViewController.m in Sources */,
 				0FD590D31D38B71600731962 /* PGBaseViewController+TransitionAnimation.m in Sources */,

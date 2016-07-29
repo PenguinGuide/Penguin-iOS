@@ -110,8 +110,10 @@ static char ScrollViewNaviTitleLabel;
                 self.dimView.backgroundColor = [UIColor colorWithWhite:0.f alpha:0.6f*scale];
             }
             self.naviTitleLabel.frame = CGRectMake(70, 20+contentOffsetY, self.naviTitleLabel.frame.size.width, self.naviTitleLabel.frame.size.height);
-            if (scale >= 0.5f) {
-                self.naviTitleLabel.alpha = MIN(1.f*scale, 1.f);
+            if (scale >= 1.f) {
+                self.naviTitleLabel.alpha = 1.f;
+            } else if (scale >= 0.5f) {
+                self.naviTitleLabel.alpha = 1.f*((contentOffsetY-((self.headerView.frame.size.height-64)/2))/((self.headerView.frame.size.height-64)/2));
             } else {
                 self.naviTitleLabel.alpha = 0.f;
             }
