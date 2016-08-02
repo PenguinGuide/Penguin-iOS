@@ -26,6 +26,8 @@
 #import "PGArticleBannerCell.h"
 #import "PGHomeArticleHeaderView.h"
 
+#import "UIView+PGToast.h"
+
 @interface PGHomeViewController () <UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout>
 
 @property (nonatomic, strong) PGHomeViewModel *viewModel;
@@ -195,6 +197,8 @@
 
 - (void)searchButtonClicked
 {
+//    AppDelegate *delegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+//    [delegate.window showToast:@"傻逼你出错了！"];
     [PGRouterManager routeToLoginPage];
 }
 

@@ -24,6 +24,7 @@ target 'PenguinGuide' do
     pod 'PGImage', :path => '../BaseFramework/PGImage', :inhibit_warnings => true
     pod 'PGScrollNavigationBar', :path => '../BaseFramework/PGScrollNavigationBar', :inhibit_warnings => true
     pod 'PGScrollView', :path => '../BaseFramework/PGScrollView', :inhibit_warnings => true
+    pod 'PGToast', :path => '../BaseFramework/PGToast', :inhibit_warnings => true
     
     #vendor
     pod 'KVOController', :inhibit_warnings => true
