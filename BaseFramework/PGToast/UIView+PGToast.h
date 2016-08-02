@@ -25,8 +25,6 @@ typedef NS_ENUM(NSInteger, PGToastPosition) {
 @property (nonatomic, assign) CGFloat toastBorderWidth;
 @property (nonatomic, assign) CGFloat toastBorderRadius;
 
-+ (PGToastStyle *)defaultStyle;
-
 @end
 
 @class PGToastStyle;
@@ -35,6 +33,6 @@ typedef NS_ENUM(NSInteger, PGToastPosition) {
 
 - (void)showToast:(NSString *)message;
 - (void)showToast:(NSString *)message position:(PGToastPosition)position;
-- (void)showToast:(NSString *)message position:(PGToastPosition)position style:(PGToastStyle *)style;
+- (void)showToast:(NSString *)message position:(PGToastPosition)position styleConfig:(void(^)(PGToastStyle *style))styleConfig;
 
 @end
