@@ -12,6 +12,10 @@ static char ToastTimer;
 #import "UIView+PGToast.h"
 #import <objc/runtime.h>
 
+@implementation PGToastStyle
+
+@end
+
 @interface UIView ()
 
 @property (nonatomic, strong) UILabel *toastLabel;

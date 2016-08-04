@@ -9,10 +9,14 @@
 #import "PGBaseViewController.h"
 #import "PGBaseViewController+TransitionAnimation.h"
 
+#import "MBProgressHUD.h"
+#import "FLAnimatedImage.h"
+
 @interface PGBaseViewController () <UINavigationControllerDelegate>
 
 @property (nonatomic, strong, readwrite) PGAPIClient *apiClient;
 @property (nonatomic, strong, readwrite) FBKVOController *KVOController;
+@property (nonatomic, strong) MBProgressHUD *hud;
 
 @end
 
@@ -59,6 +63,8 @@
     [super viewDidDisappear:animated];
     
     self.navigationController.delegate = nil;
+    
+    [self dismissLoading];
 }
 
 #pragma mark - <Back Button>
@@ -85,6 +91,53 @@
 - (void)unobserve
 {
     [self.KVOController unobserveAll];
+}
+
+#pragma mark - <Toast>
+
+- (void)showToast:(NSString *)message
+{
+    AppDelegate *delegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+    [delegate.window showToast:message];
+}
+
+- (void)showToast:(NSString *)message position:(PGToastPosition)position
+{
+    AppDelegate *delegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+    [delegate.window showToast:message position:position];
+}
+
+#pragma mark - <Alert>
+
+- (void)showAlert:(NSString *)title message:(NSString *)message actions:(NSArray *)actions style:(void (^)(PGAlertStyle *))styleConfig
+{
+    PGAlertController *alertController = [PGAlertController alertControllerWithTitle:title message:message style:styleConfig];
+    [alertController addActions:actions];
+    
+    [self presentViewController:alertController animated:YES completion:nil];
+}
+
+#pragma mark - <Loading>
+
+- (void)showLoading
+{
+    if (!self.hud.superview) {
+        self.hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+        self.hud.mode = MBProgressHUDModeCustomView;
+        self.hud.bezelView.style = MBProgressHUDBackgroundStyleSolidColor;
+        self.hud.bezelView.backgroundColor = [UIColor whiteColor];
+        self.hud.userInteractionEnabled = NO;
+        
+        FLAnimatedImage *animatedImage = [FLAnimatedImage animatedImageWithGIFData:[NSData dataWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"egg" ofType:@"gif"]]];
+        FLAnimatedImageView *animatedImageView = [[FLAnimatedImageView alloc] init];
+        animatedImageView.animatedImage = animatedImage;
+        self.hud.customView = animatedImageView;
+    }
+}
+
+- (void)dismissLoading
+{
+    [self.hud hideAnimated:YES];
 }
 
 #pragma mark - <Setters && Getters>

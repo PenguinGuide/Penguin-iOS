@@ -25,16 +25,21 @@ target 'PenguinGuide' do
     pod 'PGScrollNavigationBar', :path => '../BaseFramework/PGScrollNavigationBar', :inhibit_warnings => true
     pod 'PGScrollView', :path => '../BaseFramework/PGScrollView', :inhibit_warnings => true
     pod 'PGToast', :path => '../BaseFramework/PGToast', :inhibit_warnings => true
+    pod 'PGAlertController', :path => '../BaseFramework/PGAlertController', :inhibit_warnings => true
     
     #vendor
     pod 'KVOController', :inhibit_warnings => true
     pod 'SVPullToRefresh', :inhibit_warnings => true
     pod 'UzysAnimatedGifPullToRefresh', :inhibit_warnings => true
     pod 'Masonry', :inhibit_warnings => true
+    pod 'MBProgressHUD', :inhibit_warnings => true
     
     #fabric
     pod 'Fabric'
     pod 'Crashlytics'
+    
+    #zhuge io
+    pod 'Zhugeio'
 end
 
 target 'PenguinGuideTests' do

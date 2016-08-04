@@ -32,7 +32,7 @@ typedef NS_ENUM(NSInteger, PGToastPosition) {
 @interface UIView (PGToast)
 
 - (void)showToast:(NSString *)message;
-- (void)showToast:(NSString *)message position:(PGToastPosition)position;
+- (void)showToast:(NSString *)message position:(PGToastPosition)position; 
 - (void)showToast:(NSString *)message position:(PGToastPosition)position styleConfig:(void(^)(PGToastStyle *style))styleConfig;
 
 @end

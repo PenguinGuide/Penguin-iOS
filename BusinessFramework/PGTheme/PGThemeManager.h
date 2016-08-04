@@ -28,5 +28,8 @@ typedef NS_ENUM(NSInteger, PGThemeStyle) {
 - (NSArray *)loadingImages;
 
 - (UIColor *)colorHighlight;
+- (UIColor *)colorDarkGray;
+- (UIColor *)colorGray;
+- (UIColor *)colorLightGray;
 
 @end

@@ -8,7 +8,7 @@
 
 static UIFont *fontSize12, *fontSize14, *fontSize16;
 static NSArray *loadingImages;
-static UIColor *colorHighlight;
+static UIColor *colorHighlight, *colorDarkGray, *colorGray, *colorLightGray;
 
 #import "PGThemeManager.h"
 
@@ -33,6 +33,7 @@ static UIColor *colorHighlight;
         fontSize16 = [UIFont systemFontOfSize:16.f weight:UIFontWeightLight];
         
         colorHighlight = [UIColor colorWithRed:239.f/256.f green:103.f/256.f blue:51.f/256.f alpha:1.f];
+        colorDarkGray = [UIColor colorWithRed:51.f/256.f green:51.f/256.f blue:51.f/256.f alpha:1.f];
         
         loadingImages = @[[UIImage imageNamed:@"pg_pull_loading_00"],
                           [UIImage imageNamed:@"pg_pull_loading_01"],
@@ -124,6 +125,33 @@ static UIColor *colorHighlight;
         return colorHighlight;
     } else {
         return colorHighlight;
+    }
+}
+
+- (UIColor *)colorDarkGray
+{
+    if (self.themeStyle == PGThemeStyleDefault) {
+        return colorDarkGray;
+    } else {
+        return colorDarkGray;
+    }
+}
+
+- (UIColor *)colorGray
+{
+    if (self.themeStyle == PGThemeStyleDefault) {
+        return colorGray;
+    } else {
+        return colorGray;
+    }
+}
+
+- (UIColor *)colorLightGray
+{
+    if (self.themeStyle == PGThemeStyleDefault) {
+        return colorLightGray;
+    } else {
+        return colorLightGray;
     }
 }
 

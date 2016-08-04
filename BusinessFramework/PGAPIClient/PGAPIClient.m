@@ -89,35 +89,24 @@ static const int DefaultMaxConcurrentConnections = 5;
     configBlock(clientConfig);
     
     __weak typeof(self) weakSelf = self;
-    [self.sessionManager makeGetRequest:^(PGRKRequestConfig *config) {
-        config.route = clientConfig.route;
-        config.keyPath = clientConfig.keyPath;
-        config.params = clientConfig.params;
-        config.model = clientConfig.model;
-        config.pattern = clientConfig.pattern;
-        config.isMockAPI = clientConfig.isMockAPI;
-        config.mockFileName = clientConfig.mockFileName;
-        config.mockStatusCode = clientConfig.mockStatusCode;
-        config.mockNetworkSpeed = clientConfig.mockNetworkSpeed;
-        config.mockResponseTime = clientConfig.mockResponseTime;
-        config.mockNoNetworkConnection = clientConfig.mockNoNetworkConnection;
-    } completion:^(id response) {
-        if ([response isKindOfClass:[NSArray class]]) {
-            if (completion) {
-                completion(response);
-            }
-        } else if ([response isKindOfClass:[clientConfig.model class]]) {
-            if (completion) {
-                completion(@[response]);
-            }
-        } else {
-            [weakSelf handleResponse:response completion:completion failure:failure];
-        }
-    } failure:^(NSError *error) {
-        if (failure) {
-            failure(error);
-        }
-    }];
+    [self.sessionManager makeGetRequest:configBlock
+                             completion:^(id response) {
+                                 if ([response isKindOfClass:[NSArray class]]) {
+                                     if (completion) {
+                                         completion(response);
+                                     }
+                                 } else if ([response isKindOfClass:[clientConfig.model class]]) {
+                                     if (completion) {
+                                         completion(@[response]);
+                                     }
+                                 } else {
+                                     [weakSelf handleResponse:response completion:completion failure:failure];
+                                 }
+                             } failure:^(NSError *error) {
+                                 if (failure) {
+                                     failure(error);
+                                 }
+                             }];
 }
 
 - (void)handleResponse:(id)response completion:(PGRKCompletionBlock)completion failure:(PGRKFailureBlock)failure
