@@ -22,6 +22,8 @@
 #import "PGStoreViewController.h"
 #import "PGMeViewController.h"
 
+#import "PGAnalytics.h"
+
 @interface AppDelegate ()
 
 @property (nonatomic, strong, readwrite) PGTabBarController *tabBarController;
@@ -47,6 +49,8 @@
     [PGLog turnOffLogging];
 #endif
     
+    [PGAnalytics setup:launchOptions];
+        
     PGHomeViewController *homeVC = [[PGHomeViewController alloc] init];
     PGExploreViewController *exploreVC = [[PGExploreViewController alloc] init];
     PGStoreViewController *storeVC = [[PGStoreViewController alloc] init];

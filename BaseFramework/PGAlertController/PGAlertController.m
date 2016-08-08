@@ -60,7 +60,7 @@
 
 @implementation PGAlertAction
 
-+ (PGAlertAction *)actionWithTitle:(NSString *)title style:(void (^)(PGAlertActionStyle *style))styleBlock hander:(PGAlertActionHandler)handler
++ (PGAlertAction *)actionWithTitle:(NSString *)title style:(void (^)(PGAlertActionStyle *style))styleBlock handler:(PGAlertActionHandler)handler
 {
     PGAlertActionStyle *style = [[PGAlertActionStyle alloc] init];
     if (styleBlock) {
@@ -105,8 +105,8 @@
 
 @interface PGAlertController ()
 
-@property (nonatomic, strong) NSString *title;
-@property (nonatomic, strong) NSString *message;
+@property (nonatomic, strong) NSString *alertTitle;
+@property (nonatomic, strong) NSString *alertMessage;
 @property (nonatomic, strong) NSArray *actions;
 @property (nonatomic, strong) PGAlertStyle *style;
 @property (nonatomic, strong) UIView *alertView;
@@ -119,8 +119,8 @@
 + (PGAlertController *)alertControllerWithTitle:(NSString *)title message:(NSString *)message style:(void (^)(PGAlertStyle *))styleConfig
 {
     PGAlertController *alertController = [[PGAlertController alloc] init];
-    alertController.title = title;
-    alertController.message = message;
+    alertController.alertTitle = title;
+    alertController.alertMessage = message;
     
     PGAlertStyle *style = [[PGAlertStyle alloc] init];
     if (styleConfig) {
@@ -156,7 +156,7 @@
 {
     self.actions = actions;
     
-    if (self.title && self.title.length > 0) {
+    if (self.alertTitle && self.alertTitle.length > 0) {
         if (self.style.alertType == PGAlertTypeAlert) {
             [self setupAlert];
         } else {
@@ -178,8 +178,8 @@
     CGFloat buttonsHeight = self.actions.count == 2 ? 44.f : 44.f * self.actions.count;
     CGFloat titleLabelHeight = 16.f;
     CGFloat messageLabelHeight = 0.f;
-    if (self.message && self.message.length > 0) {
-        CGSize messageSize = [self.message sizeWithAttributes:@{NSFontAttributeName:self.style.messageFont}];
+    if (self.alertMessage && self.alertMessage.length > 0) {
+        CGSize messageSize = [self.alertMessage sizeWithAttributes:@{NSFontAttributeName:self.style.messageFont}];
         messageLabelHeight = messageSize.height+5;
     }
     
@@ -187,7 +187,7 @@
     
     UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 20, alertViewWidth, titleLabelHeight)];
     titleLabel.numberOfLines = 1;
-    titleLabel.text = self.title;
+    titleLabel.text = self.alertTitle;
     titleLabel.font = self.style.titleFont;
     titleLabel.textColor = [UIColor colorWithRed:51.f/256.f green:51.f/256.f blue:51.f/256.f alpha:1.f];
     titleLabel.textAlignment = NSTextAlignmentCenter;
@@ -196,7 +196,7 @@
     if (messageLabelHeight > 0.f) {
         UILabel *messageLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, titleLabel.frame.origin.y+titleLabel.frame.size.height+10, alertViewWidth, messageLabelHeight)];
         messageLabel.numberOfLines = 0;
-        messageLabel.text = self.message;
+        messageLabel.text = self.alertMessage;
         messageLabel.font = self.style.messageFont;
         messageLabel.textColor = [UIColor colorWithRed:51.f/256.f green:51.f/256.f blue:51.f/256.f alpha:1.f];
         messageLabel.textAlignment = NSTextAlignmentCenter;
@@ -278,19 +278,18 @@
     self.actionSheetView = [[UIView alloc] init];
     self.actionSheetView.backgroundColor = [UIColor whiteColor];
     
-    CGFloat buttonsHeight = self.actions.count * 44.f;
-    CGFloat titleLabelHeight = (self.title && self.title.length > 0) ? 16.f : 0.f;
+    CGFloat titleLabelHeight = (self.alertTitle && self.alertTitle.length > 0) ? 16.f : 0.f;
     CGFloat messageLabelHeight = 0.f;
-    if (self.message && self.message.length > 0) {
-        CGSize messageSize = [self.message sizeWithAttributes:@{NSFontAttributeName:self.style.messageFont}];
+    if (self.alertMessage && self.alertMessage.length > 0) {
+        CGSize messageSize = [self.alertMessage sizeWithAttributes:@{NSFontAttributeName:self.style.messageFont}];
         messageLabelHeight = messageSize.height+5;
     }
     
     CGFloat actionSheetViewWidth = self.view.frame.size.width;
     
     UILabel *titleLabel = [[UILabel alloc] init];
-    if (self.title && self.title.length > 0) {
-        if (self.message && self.message.length > 0) {
+    if (self.alertTitle && self.alertTitle.length > 0) {
+        if (self.alertMessage && self.alertMessage.length > 0) {
             titleLabel.frame = CGRectMake(0, 20, actionSheetViewWidth, titleLabelHeight);
         } else {
             titleLabel.frame = CGRectMake(0, 0, actionSheetViewWidth, titleLabelHeight+30);
@@ -299,7 +298,7 @@
         titleLabel.frame = CGRectMake(0, 0, actionSheetViewWidth, titleLabelHeight);
     }
     titleLabel.numberOfLines = 1;
-    titleLabel.text = self.title;
+    titleLabel.text = self.alertTitle;
     titleLabel.font = self.style.titleFont;
     titleLabel.textColor = [UIColor colorWithRed:51.f/256.f green:51.f/256.f blue:51.f/256.f alpha:1.f];
     titleLabel.textAlignment = NSTextAlignmentCenter;
@@ -307,13 +306,13 @@
     
     UILabel *messageLabel = [[UILabel alloc] init];
     if (messageLabelHeight > 0.f) {
-        if (self.title && self.title.length > 0) {
+        if (self.alertTitle && self.alertTitle.length > 0) {
             messageLabel.frame = CGRectMake(0, titleLabel.frame.origin.y+titleLabel.frame.size.height+10, actionSheetViewWidth, messageLabelHeight);
         } else {
             messageLabel.frame = CGRectMake(0, titleLabel.frame.origin.y+titleLabel.frame.size.height, actionSheetViewWidth, messageLabelHeight+30);
         }
         messageLabel.numberOfLines = 0;
-        messageLabel.text = self.message;
+        messageLabel.text = self.alertMessage;
         messageLabel.font = self.style.messageFont;
         messageLabel.textColor = [UIColor colorWithRed:51.f/256.f green:51.f/256.f blue:51.f/256.f alpha:1.f];
         messageLabel.textAlignment = NSTextAlignmentCenter;
@@ -321,8 +320,8 @@
     }
     
     CGFloat top = 0.f;
-    if (self.title && self.title.length > 0) {
-        if (self.message && self.message.length > 0) {
+    if (self.alertTitle && self.alertTitle.length > 0) {
+        if (self.alertMessage && self.alertMessage.length > 0) {
             top = messageLabel.frame.origin.y+messageLabel.frame.size.height+10;
         } else {
             top = titleLabel.frame.origin.y+titleLabel.frame.size.height;

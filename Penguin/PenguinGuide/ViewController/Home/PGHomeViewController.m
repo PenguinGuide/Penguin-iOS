@@ -26,8 +26,6 @@
 #import "PGArticleBannerCell.h"
 #import "PGHomeArticleHeaderView.h"
 
-#import "UIView+PGToast.h"
-
 @interface PGHomeViewController () <UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout>
 
 @property (nonatomic, strong) PGHomeViewModel *viewModel;
@@ -43,6 +41,8 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+    self.pageView = @"首页";
+    
     self.parentViewController.navigationItem.leftBarButtonItem = self.searchButton;
     self.parentViewController.navigationItem.titleView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"pg_home_logo"]];
     
@@ -200,6 +200,28 @@
 //    AppDelegate *delegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
 //    [delegate.window showToast:@"傻逼你出错了！"];
     [PGRouterManager routeToLoginPage];
+    
+//    PGAlertController *alertController = [PGAlertController alertControllerWithTitle:@"弹窗"
+//                                                                             message:@"确认取消吗?"
+//                                                                         style:^(PGAlertStyle *style) {
+//                                                                             style.alertType = PGAlertTypeActionSheet;
+//                                                                         }];
+//    PGAlertAction *doneAction = [PGAlertAction actionWithTitle:@"完成"
+//                                                         style:nil
+//                                                        hander:^{
+//                                                            PGLogWarning(@"done button clicked");
+//                                                        }];
+//    PGAlertAction *deleteAction = [PGAlertAction actionWithTitle:@"删除"
+//                                                           style:^(PGAlertActionStyle *style) {
+//                                                               style.type = PGAlertActionTypeCancel;
+//                                                           } hander:^{
+//                                                               PGLogWarning(@"delete button clicked");
+//                                                           }];
+//    [alertController addActions:@[deleteAction, doneAction]];
+//    
+//    [self presentViewController:alertController animated:YES completion:nil];
+    
+//    [self showLoading];
 }
 
 #pragma mark - <Setters && Getters>

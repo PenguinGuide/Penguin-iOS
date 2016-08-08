@@ -29,7 +29,7 @@ typedef void(^PGAlertActionHandler)();
 
 @interface PGAlertAction : NSObject
 
-+ (PGAlertAction *)actionWithTitle:(NSString *)title style:(void(^)(PGAlertActionStyle *style))styleBlock hander:(PGAlertActionHandler)handler;
++ (PGAlertAction *)actionWithTitle:(NSString *)title style:(void(^)(PGAlertActionStyle *style))styleBlock handler:(PGAlertActionHandler)handler;
 
 @end
 

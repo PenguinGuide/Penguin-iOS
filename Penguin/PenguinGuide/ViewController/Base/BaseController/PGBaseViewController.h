@@ -14,6 +14,8 @@
 #import "UIView+PGToast.h"
 #import "PGAlertController.h"
 
+#import "PGAnalytics.h"
+
 @interface PGBaseViewController : UIViewController
 
 @property (nonatomic, strong, readonly) PGAPIClient *apiClient;

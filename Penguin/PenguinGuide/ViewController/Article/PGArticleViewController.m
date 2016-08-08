@@ -36,6 +36,8 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view
+    self.pageView = @"文章页面";
+    
     self.automaticallyAdjustsScrollViewInsets = NO;
     
     [self.view addSubview:self.articleCollectionView];

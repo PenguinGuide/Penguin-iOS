@@ -12,6 +12,7 @@ target 'PenguinGuide' do
     pod 'PGTabBarController', :path => '../BusinessFramework/PGTabBarController', :inhibit_warnings => true
     pod 'PGPagedScrollView', :path => '../BusinessFramework/PGPagedScrollView', :inhibit_warnings => true
     pod 'PGStringParser', :path => '../BusinessFramework/PGStringParser', :inhibit_warnings => true
+    pod 'PGAnalytics', :path => '../BusinessFramework/PGAnalytics', :inhibit_warnings => true
     
     #base framework
     pod 'PGRestKit', :path => '../BaseFramework/PGRestKit', :inhibit_warnings => true
@@ -37,9 +38,6 @@ target 'PenguinGuide' do
     #fabric
     pod 'Fabric'
     pod 'Crashlytics'
-    
-    #zhuge io
-    pod 'Zhugeio'
 end
 
 target 'PenguinGuideTests' do
