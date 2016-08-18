@@ -38,6 +38,14 @@
     return @"pg_tab_explore_highlight";
 }
 
+- (void)tabBarDidClicked
+{
+    PGLogWarning(@"explore tabBarDidClicked");
+    
+    self.parentViewController.navigationItem.leftBarButtonItem = nil;
+    self.parentViewController.navigationItem.titleView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"pg_home_logo"]];
+}
+
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.

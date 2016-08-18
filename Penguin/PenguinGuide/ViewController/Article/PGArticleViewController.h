@@ -13,4 +13,6 @@
 @property (nonatomic, strong, readonly) UICollectionView *articleCollectionView;
 @property (nonatomic, strong) UIImageView *imageView;
 
+- (void)animateCollectionView:(void(^)())completion;
+
 @end

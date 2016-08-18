@@ -67,6 +67,11 @@
     [self dismissLoading];
 }
 
+- (void)setNavigationTitle:(NSString *)title
+{
+    
+}
+
 #pragma mark - <Back Button>
 
 - (void)backButtonClicked

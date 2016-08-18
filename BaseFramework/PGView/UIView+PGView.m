@@ -123,4 +123,23 @@ static char PGTapHandlerKey;
     return screenshot;
 }
 
+- (UIImage *)screenshotFromRect:(CGRect)rect
+{
+    UIGraphicsBeginImageContext(self.bounds.size);
+    
+    // wrong screenshot, self.bounds.y will be the offsetY of collection view
+    //[self drawViewHierarchyInRect:self.bounds afterScreenUpdates:YES];
+    [self drawViewHierarchyInRect:CGRectMake(self.bounds.origin.x, 0, self.bounds.size.width, self.bounds.size.height) afterScreenUpdates:YES];
+    UIImage *screenshot = UIGraphicsGetImageFromCurrentImageContext();
+    
+    UIGraphicsEndImageContext();
+    
+    CGImageRef imageRef = [screenshot CGImage];
+    screenshot = [UIImage imageWithCGImage:CGImageCreateWithImageInRect(imageRef, rect)];
+    
+    CGImageRelease(imageRef);
+    
+    return screenshot;
+}
+
 @end

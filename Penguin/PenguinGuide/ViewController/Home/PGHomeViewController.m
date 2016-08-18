@@ -21,7 +21,6 @@
 #import "PGCarouselBanner.h"
 #import "PGArticleBanner.h"
 // views
-#import "PGScrollNavigationBar.h"
 #import "PGCarouselBannerCell.h"
 #import "PGArticleBannerCell.h"
 #import "PGHomeArticleHeaderView.h"
@@ -69,12 +68,39 @@
 {
     [super viewDidAppear:animated];
     
-    self.navigationController.scrollNavigationBar.scrollView = self.feedsCollectionView;
+    //self.navigationController.scrollNavigationBar.scrollView = self.feedsCollectionView;
 }
 
 - (void)viewWillDisappear:(BOOL)animated
 {
-    [self.navigationController.scrollNavigationBar resetToDefaultPositionWithAnimation:NO];
+    [super viewWillDisappear:animated];
+    
+    //[self.navigationController.scrollNavigationBar resetToDefaultPositionWithAnimation:NO];
+}
+
+#pragma mark - <PGTabBarControllerDelegate>
+
+- (NSString *)tabBarTitle
+{
+    return @"首页";
+}
+
+- (NSString *)tabBarImage
+{
+    return @"pg_tab_home";
+}
+
+- (NSString *)tabBarHighlightImage
+{
+    return @"pg_tab_home_highlight";
+}
+
+- (void)tabBarDidClicked
+{
+    PGLogWarning(@"home tabBarDidClicked");
+    
+    self.parentViewController.navigationItem.leftBarButtonItem = self.searchButton;
+    self.parentViewController.navigationItem.titleView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"pg_home_logo"]];
 }
 
 #pragma mark - <UICollectionViewDataSource>
@@ -174,23 +200,6 @@
 - (UIEdgeInsets)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout insetForSectionAtIndex:(NSInteger)section
 {
     return UIEdgeInsetsZero;
-}
-
-#pragma mark - <PGTabBarControllerDelegate>
-
-- (NSString *)tabBarTitle
-{
-    return @"首页";
-}
-
-- (NSString *)tabBarImage
-{
-    return @"pg_tab_home";
-}
-
-- (NSString *)tabBarHighlightImage
-{
-    return @"pg_tab_home_highlight";
 }
 
 #pragma mark - <Button Events>

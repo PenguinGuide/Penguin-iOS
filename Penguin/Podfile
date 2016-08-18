@@ -9,7 +9,7 @@ target 'PenguinGuide' do
     pod 'PGAPIClient', :path => '../BusinessFramework/PGAPIClient', :inhibit_warnings => true
     pod 'PGTheme', :path => '../BusinessFramework/PGTheme', :inhibit_warnings => true
     pod 'PGShare', :path => '../BusinessFramework/PGShare', :inhibit_warnings => true
-    pod 'PGTabBarController', :path => '../BusinessFramework/PGTabBarController', :inhibit_warnings => true
+    pod 'PGTabBarController', :path => '../BusinessFramework/PGTabBarController'
     pod 'PGPagedScrollView', :path => '../BusinessFramework/PGPagedScrollView', :inhibit_warnings => true
     pod 'PGStringParser', :path => '../BusinessFramework/PGStringParser', :inhibit_warnings => true
     pod 'PGAnalytics', :path => '../BusinessFramework/PGAnalytics', :inhibit_warnings => true
@@ -27,6 +27,8 @@ target 'PenguinGuide' do
     pod 'PGScrollView', :path => '../BaseFramework/PGScrollView', :inhibit_warnings => true
     pod 'PGToast', :path => '../BaseFramework/PGToast', :inhibit_warnings => true
     pod 'PGAlertController', :path => '../BaseFramework/PGAlertController', :inhibit_warnings => true
+    pod 'PGLaunchAds', :path => '../BaseFramework/PGLaunchAds'
+    pod 'PGTimer', :path => '../BaseFramework/PGTimer'
     
     #vendor
     pod 'KVOController', :inhibit_warnings => true

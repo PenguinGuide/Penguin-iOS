@@ -56,11 +56,17 @@ static const float TabBarHeight = 50.f;
 - (void)setSelectedViewController:(UIViewController *)viewController
 {
     if (![self.selectedViewController isEqual:viewController]) {
-        [self.selectedViewController viewWillDisappear:YES];
-        [viewController viewWillAppear:YES];
+        // remove child view controllers
+        [self.selectedViewController.view removeFromSuperview];
+        [self.selectedViewController removeFromParentViewController];
+        [self.selectedViewController didMoveToParentViewController:nil];
         
         viewController.view.frame = CGRectMake(0, 0, CGRectGetWidth(self.view.bounds), CGRectGetHeight(self.view.bounds)-TabBarHeight);
+        
+        // add child view controller
         [self.view addSubview:viewController.view];
+        [self addChildViewController:viewController];
+        [viewController didMoveToParentViewController:self];
         
         _selectedIndex = [self.viewControllers indexOfObject:viewController];
         _selectedViewController = viewController;
@@ -98,6 +104,11 @@ static const float TabBarHeight = 50.f;
     if (index < self.viewControllers.count) {
         UIViewController *selectedVC = self.viewControllers[index];
         [self setSelectedViewController:selectedVC];
+        
+        if ([selectedVC respondsToSelector:@selector(tabBarDidClicked)]) {
+            id<PGTabBarControllerDelegate> vc = selectedVC;
+            [vc tabBarDidClicked];
+        }
     }
 }
 
@@ -106,7 +117,7 @@ static const float TabBarHeight = 50.f;
 - (PGTabBar *)tabBar
 {
     if (!_tabBar) {
-        _tabBar = [[PGTabBar alloc] initWithFrame:CGRectMake(0, CGRectGetHeight(self.view.frame)-TabBarHeight-64, CGRectGetWidth(self.view.frame), TabBarHeight)];
+        _tabBar = [[PGTabBar alloc] initWithFrame:CGRectMake(0, CGRectGetHeight(self.view.frame)-TabBarHeight, CGRectGetWidth(self.view.frame), TabBarHeight)];
         _tabBar.delegate = self;
     }
     

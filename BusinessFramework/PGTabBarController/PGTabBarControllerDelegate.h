@@ -27,4 +27,11 @@
  */
 - (NSString *)tabBarHighlightImage;
 
+@optional
+
+/**
+ *  tab bar did clicked
+ */
+- (void)tabBarDidClicked;
+
 @end
