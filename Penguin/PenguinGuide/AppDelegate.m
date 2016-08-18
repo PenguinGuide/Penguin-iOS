@@ -13,6 +13,7 @@
 
 #import "PGThemeManager.h"
 #import "PGRouterManager.h"
+#import "PGLaunchAds.h"
 
 #import "PGBaseNavigationController.h"
 #import "PGScrollNavigationBar.h"
@@ -21,6 +22,8 @@
 #import "PGExploreViewController.h"
 #import "PGStoreViewController.h"
 #import "PGMeViewController.h"
+
+#import "PGAnalytics.h"
 
 @interface AppDelegate ()
 
@@ -47,6 +50,10 @@
     [PGLog turnOffLogging];
 #endif
     
+    [PGAnalytics setup:launchOptions];
+    
+    //[PGLaunchAds sharedInstance];
+        
     PGHomeViewController *homeVC = [[PGHomeViewController alloc] init];
     PGExploreViewController *exploreVC = [[PGExploreViewController alloc] init];
     PGStoreViewController *storeVC = [[PGStoreViewController alloc] init];
@@ -55,8 +62,9 @@
     self.tabBarController = [[PGTabBarController alloc] init];
     [self.tabBarController setViewControllers:@[homeVC, exploreVC, storeVC, meVC]];
     
-    PGBaseNavigationController *navigationController = [[PGBaseNavigationController alloc] initWithNavigationBarClass:[PGScrollNavigationBar class] toolbarClass:nil];
-    [navigationController setViewControllers:@[self.tabBarController]];
+//    PGBaseNavigationController *navigationController = [[PGBaseNavigationController alloc] initWithNavigationBarClass:[PGScrollNavigationBar class] toolbarClass:nil];
+//    [navigationController setViewControllers:@[self.tabBarController]];
+    PGBaseNavigationController *navigationController = [[PGBaseNavigationController alloc] initWithRootViewController:self.tabBarController];
     PGGlobal.rootNavigationController = navigationController;
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     self.window.rootViewController = navigationController;

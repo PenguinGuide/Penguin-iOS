@@ -14,20 +14,6 @@ static char ToastTimer;
 
 @implementation PGToastStyle
 
-+ (PGToastStyle *)defaultStyle
-{
-    PGToastStyle *defaultStyle = [[PGToastStyle alloc] init];
-    defaultStyle.textFont = [UIFont systemFontOfSize:16.f weight:UIFontWeightLight];
-    defaultStyle.textColor = [UIColor blackColor];
-    defaultStyle.textPadding = 5.f;
-    defaultStyle.toastBackgroundColor = [UIColor colorWithWhite:1.f alpha:0.8f];
-    defaultStyle.toastBorderColor = [UIColor blackColor];
-    defaultStyle.toastBorderWidth = 1.f;
-    defaultStyle.toastBorderRadius = 4.f;
-    
-    return defaultStyle;
-}
-
 @end
 
 @interface UIView ()
@@ -41,17 +27,36 @@ static char ToastTimer;
 
 - (void)showToast:(NSString *)message
 {
-    [self showToast:message position:PGToastPositionBottom style:[PGToastStyle defaultStyle]];
+    [self showToast:message position:PGToastPositionBottom styleConfig:^(PGToastStyle *style) {
+        style.textFont = [UIFont systemFontOfSize:16.f weight:UIFontWeightLight];
+        style.textColor = [UIColor blackColor];
+        style.textPadding = 5.f;
+        style.toastBackgroundColor = [UIColor colorWithWhite:1.f alpha:0.8f];
+        style.toastBorderColor = [UIColor blackColor];
+        style.toastBorderWidth = 1.f;
+        style.toastBorderRadius = 4.f;
+    }];
 }
 
 - (void)showToast:(NSString *)message position:(PGToastPosition)position
 {
-    [self showToast:message position:position style:[PGToastStyle defaultStyle]];
+    [self showToast:message position:position styleConfig:^(PGToastStyle *style) {
+        style.textFont = [UIFont systemFontOfSize:16.f weight:UIFontWeightLight];
+        style.textColor = [UIColor blackColor];
+        style.textPadding = 5.f;
+        style.toastBackgroundColor = [UIColor colorWithWhite:1.f alpha:0.8f];
+        style.toastBorderColor = [UIColor blackColor];
+        style.toastBorderWidth = 1.f;
+        style.toastBorderRadius = 4.f;
+    }];
 }
 
-- (void)showToast:(NSString *)message position:(PGToastPosition)position style:(PGToastStyle *)style
+- (void)showToast:(NSString *)message position:(PGToastPosition)position styleConfig:(void (^)(PGToastStyle *style))styleConfig
 {
     if (message && message.length > 0) {
+        PGToastStyle *style = [[PGToastStyle alloc] init];
+        styleConfig(style);
+        
         if (!self.toastLabel) {
             UILabel *toastLabel = [[UILabel alloc] init];
             objc_setAssociatedObject(self, &ToastLabel, toastLabel, OBJC_ASSOCIATION_RETAIN_NONATOMIC);

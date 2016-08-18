@@ -36,6 +36,8 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view
+    self.pageView = @"文章页面";
+    
     self.automaticallyAdjustsScrollViewInsets = NO;
     
     [self.view addSubview:self.articleCollectionView];
@@ -43,6 +45,7 @@
     self.imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, UISCREEN_WIDTH, UISCREEN_WIDTH*180/320)];
     self.imageView.image = [UIImage imageNamed:@"pg_article_top_banner"];
     [self.articleCollectionView setHeaderView:self.imageView naviTitle:@"从午间定食到深夜食堂！" rightNaviButton:nil];
+    self.articleCollectionView.alpha = 0.f;
     
     UIButton *backButton = [[UIButton alloc] initWithFrame:CGRectMake(20, 10, 60, 60)];
     [backButton setImage:[UIImage imageNamed:@"pg_navigation_back_button_light"] forState:UIControlStateNormal];
@@ -58,6 +61,25 @@
                                                               error:nil];
     PGStringParser *htmlParser = [PGStringParser htmlParserWithString:htmlString];
     self.viewModel.paragraphsArray = [htmlParser articleParsedStorages];
+}
+
+- (void)animateCollectionView:(void (^)())completion
+{
+    self.articleCollectionView.frame = CGRectMake(0, UISCREEN_HEIGHT-300, self.articleCollectionView.width, self.articleCollectionView.height);
+    self.articleCollectionView.alpha = 0.f;
+    
+    [UIView animateWithDuration:0.3f
+                          delay:0.f
+                        options:UIViewAnimationOptionCurveEaseOut
+                     animations:^{
+                         self.articleCollectionView.frame = CGRectMake(0, 0, self.articleCollectionView.width, self.articleCollectionView.height);
+                         self.articleCollectionView.alpha = 0.4f;
+                     } completion:^(BOOL finished) {
+                         self.articleCollectionView.alpha = 1.f;
+                         if (completion) {
+                             completion();
+                         }
+                     }];
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -130,7 +152,7 @@
 
 - (UIEdgeInsets)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout insetForSectionAtIndex:(NSInteger)section
 {
-    return UIEdgeInsetsMake(UISCREEN_WIDTH*180/320, 0, 0, 0);
+    return UIEdgeInsetsMake(UISCREEN_WIDTH*180/320+20, 0, 0, 0);
 }
 
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath

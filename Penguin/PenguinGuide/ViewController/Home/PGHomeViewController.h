@@ -7,6 +7,7 @@
 //
 
 #import "PGBaseViewController.h"
+#import "PGScrollNavigationBar.h"
 #import "PGTabBarControllerDelegate.h"
 
 @interface PGHomeViewController : PGBaseViewController <PGTabBarControllerDelegate>

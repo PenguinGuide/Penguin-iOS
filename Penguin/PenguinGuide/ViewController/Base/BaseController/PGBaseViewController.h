@@ -10,6 +10,12 @@
 #import "PGAPIClient.h"
 #import "FBKVOController.h"
 
+// popups
+#import "UIView+PGToast.h"
+#import "PGAlertController.h"
+
+#import "PGAnalytics.h"
+
 @interface PGBaseViewController : UIViewController
 
 @property (nonatomic, strong, readonly) PGAPIClient *apiClient;
@@ -19,5 +25,11 @@
 - (void)unobserve;
 
 - (void)backButtonClicked;
+
+- (void)showToast:(NSString *)message;
+- (void)showToast:(NSString *)message position:(PGToastPosition)position;
+- (void)showAlert:(NSString *)title message:(NSString *)message actions:(NSArray *)actions style:(void (^)(PGAlertStyle *))styleConfig;
+- (void)showLoading;
+- (void)dismissLoading;
 
 @end

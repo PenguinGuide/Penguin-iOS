@@ -10,6 +10,8 @@
 
 @interface UIImage (PGImage)
 
+- (UIImage *)roundedImage;
+
 - (UIImage *)applyLightEffect;
 - (UIImage *)applyExtraLightEffect;
 - (UIImage *)applyDarkEffect;

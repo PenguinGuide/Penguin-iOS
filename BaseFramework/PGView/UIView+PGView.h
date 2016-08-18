@@ -22,5 +22,6 @@
 
 - (void)setTapAction:(void(^)(void))completion;
 - (UIImage *)screenshot;
+- (UIImage *)screenshotFromRect:(CGRect)rect;
 
 @end
