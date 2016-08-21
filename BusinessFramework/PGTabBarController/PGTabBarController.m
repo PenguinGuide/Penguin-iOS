@@ -117,7 +117,7 @@ static const float TabBarHeight = 50.f;
 - (PGTabBar *)tabBar
 {
     if (!_tabBar) {
-        _tabBar = [[PGTabBar alloc] initWithFrame:CGRectMake(0, CGRectGetHeight(self.view.frame)-TabBarHeight, CGRectGetWidth(self.view.frame), TabBarHeight)];
+        _tabBar = [[PGTabBar alloc] initWithFrame:CGRectMake(0, CGRectGetHeight(self.view.frame)-TabBarHeight-64, CGRectGetWidth(self.view.frame), TabBarHeight)];
         _tabBar.delegate = self;
     }
     

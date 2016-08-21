@@ -29,6 +29,7 @@ target 'PenguinGuide' do
     pod 'PGAlertController', :path => '../BaseFramework/PGAlertController', :inhibit_warnings => true
     pod 'PGLaunchAds', :path => '../BaseFramework/PGLaunchAds'
     pod 'PGTimer', :path => '../BaseFramework/PGTimer'
+    pod 'PGCache', :path => '../BaseFramework/PGCache'
     
     #vendor
     pod 'KVOController', :inhibit_warnings => true

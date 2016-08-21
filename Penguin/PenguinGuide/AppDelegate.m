@@ -52,6 +52,14 @@
     
     [PGAnalytics setup:launchOptions];
     
+    PGGlobal.cache = [PGCache cacheWithDatabaseName:@"penguin.db"];
+//    NSDictionary *session = @{@"sessionId":@11111111, @"nickname":@"KobeKK", @"sex":@"male"};
+//    
+//    [PGGlobal.cache putObject:session forKey:@"123456" intoTable:@"Session"];
+    //[PGGlobal.cache deleteObjectForKey:@"123456" fromTable:@"Session"];
+    //[PGGlobal.cache clearTable:@"Session"];
+    //id result = [PGGlobal.cache getObjectFromKey:@"123456" fromTable:@"Session"];
+    
     //[PGLaunchAds sharedInstance];
         
     PGHomeViewController *homeVC = [[PGHomeViewController alloc] init];

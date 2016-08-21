@@ -12,6 +12,7 @@
 #import "PGThemeManager.h"
 #import "PGRouterManager.h"
 #import "PGLog.h"
+#import "PGCache.h"
 
 #import "UIImage+PGImage.h"
 #import "UIColor+PGColor.h"
