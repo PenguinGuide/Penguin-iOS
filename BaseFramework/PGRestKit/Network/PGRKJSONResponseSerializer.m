@@ -26,8 +26,8 @@ static const NSString *kModelClassKey = @"kModelClassKey";
     id responseObject = [super responseObjectForResponse:response data:data error:error];
     
     if (responseObject) {
-        if (responseObject[kResultKeyPathKey]) {
-            if ([responseObject[kResultKeyPathKey] isEqual:@0]) {
+        if (responseObject[@"result"]) {
+            if ([responseObject[@"result"] isEqual:@0]) {
                 NSString *absoluteUrl = response.URL.absoluteString;
                 if (self.serializersDict[absoluteUrl]) {
                     NSDictionary *requestDict = self.serializersDict[absoluteUrl];

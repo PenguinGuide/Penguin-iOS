@@ -76,7 +76,7 @@ static const int DefaultMaxConcurrentConnections = 5;
     // user-agent
     NSString *userAgent = [self.sessionManager.requestSerializer valueForHTTPHeaderField:@"User-Agent"];
     userAgent = [userAgent stringByAppendingString:[NSString stringWithFormat:@" Resolution/%@ Device/%@ Version/%@ Build/%@", [NSString stringWithFormat:@"%d*%d", (NSInteger)screenSize.width, (NSInteger)screenSize.height], deviceInfo, appVersion, appBuild]];
-    [self.sessionManager addValue:@"" forHTTPHeaderField:@"User-Agent"];
+    [self.sessionManager addValue:userAgent forHTTPHeaderField:@"User-Agent"];
     // accept
     [self.sessionManager addValue:@"application/json" forHTTPHeaderField:@"Accept"];
 }

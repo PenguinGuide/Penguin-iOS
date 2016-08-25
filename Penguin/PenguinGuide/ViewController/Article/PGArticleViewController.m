@@ -18,9 +18,11 @@
 #import "PGArticleParagraphImageCell.h"
 #import "PGArticleParagraphGIFImageCell.h"
 
-// view model
+// view models
 #import "PGArticleViewModel.h"
 
+// models
+#import "PGArticle.h"
 #import "PGStringParser.h"
 
 @interface PGArticleViewController () <UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, UIScrollViewDelegate>

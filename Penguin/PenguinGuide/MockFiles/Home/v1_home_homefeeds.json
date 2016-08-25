@@ -1,0 +1,194 @@
+{
+    "data": [
+             {
+                "type": "article",
+                "category": "city_guide",
+                "image": "https://s6.postimg.org/xde2wnynl/PG_HOME_article_home.png",
+                "link": "",
+                "reads": "8022",
+                "comments": "187"
+             },
+             {
+                "type": "flashbuy",
+                "goods": [
+                          {
+                          "discount_price": 199,
+                          "original_price": 238,
+                          "name": "美奇乐Mikkeller",
+                          "image": "https://s6.postimg.org/rq09iz0hd/PG_HOME_flashbuy_pic.png",
+                          "unit": "箱",
+                          "desc": "距离闪购开始",
+                          "time": 1472170813
+                          },
+                          {
+                          "discount_price": 199,
+                          "original_price": 238,
+                          "name": "美奇乐Mikkeller",
+                          "image": "https://s6.postimg.org/rq09iz0hd/PG_HOME_flashbuy_pic.png",
+                          "unit": "箱",
+                          "desc": "距离闪购开始",
+                          "time": 1472265313
+                          },
+                          {
+                          "discount_price": 199,
+                          "original_price": 238,
+                          "name": "美奇乐Mikkeller",
+                          "image": "https://s6.postimg.org/rq09iz0hd/PG_HOME_flashbuy_pic.png",
+                          "unit": "箱",
+                          "desc": "距离闪购开始",
+                          "time": 1472163040
+                          }
+                ]
+             },
+             {
+             "type": "goods_collection",
+             "title": "精酿啤酒：夏日清凉选择",
+             "desc": "夏日精选",
+             "goods": [
+                       {
+                       "discount_price": 199,
+                       "original_price": 238,
+                       "name": "美奇乐Mikkeller精酿啤酒",
+                       "image": "https://s6.postimg.org/8oh6elvld/PG_HOME_productlist_pic1.png",
+                       "unit": "瓶",
+                       "is_new": true,
+                       "collected": true
+                       },
+                       {
+                       "discount_price": 239,
+                       "original_price": 278,
+                       "name": "美奇乐Mikkeller精酿啤酒",
+                       "image": "https://s6.postimg.org/7ngxphelt/PG_HOME_productlist_pic2.png",
+                       "unit": "瓶",
+                       "is_new": true,
+                       "collected": true
+                       },
+                       {
+                       "discount_price": 199,
+                       "original_price": 238,
+                       "name": "美奇乐Mikkeller精酿啤酒",
+                       "image": "https://s6.postimg.org/8oh6elvld/PG_HOME_productlist_pic1.png",
+                       "unit": "瓶",
+                       "is_new": false,
+                       "collected": true
+                       },
+                       {
+                       "discount_price": 239,
+                       "original_price": 278,
+                       "name": "美奇乐Mikkeller精酿啤酒",
+                       "image": "https://s6.postimg.org/7ngxphelt/PG_HOME_productlist_pic2.png",
+                       "unit": "瓶",
+                       "collected": true
+                       },
+                       {
+                       "discount_price": 199,
+                       "original_price": 238,
+                       "name": "美奇乐Mikkeller精酿啤酒",
+                       "image": "https://s6.postimg.org/8oh6elvld/PG_HOME_productlist_pic1.png",
+                       "unit": "瓶",
+                       "collected": true
+                       },
+                       {
+                       "discount_price": 239,
+                       "original_price": 278,
+                       "name": "美奇乐Mikkeller精酿啤酒",
+                       "image": "https://s6.postimg.org/7ngxphelt/PG_HOME_productlist_pic2.png",
+                       "unit": "瓶",
+                       "collected": true
+                       },
+                       {
+                       "discount_price": 199,
+                       "original_price": 238,
+                       "name": "美奇乐Mikkeller精酿啤酒",
+                       "image": "https://s6.postimg.org/8oh6elvld/PG_HOME_productlist_pic1.png",
+                       "unit": "瓶",
+                       "is_new": true,
+                       "collected": true
+                       },
+                       {
+                       "discount_price": 239,
+                       "original_price": 278,
+                       "name": "美奇乐Mikkeller精酿啤酒",
+                       "image": "https://s6.postimg.org/7ngxphelt/PG_HOME_productlist_pic2.png",
+                       "unit": "瓶",
+                       "collected": true
+                       }
+                       ]
+             },
+             {
+             "type": "topic",
+             "image": "https://s6.postimg.org/47otfxhdd/PG_HOME_topic_banner.png",
+             "goods": [
+                       {
+                       "discount_price": 199,
+                       "original_price": 238,
+                       "name": "美奇乐Mikkeller精酿啤酒",
+                       "image": "https://s6.postimg.org/camzr91yp/PG_HOME_topic_pic1.png",
+                       "unit": "瓶",
+                       "status": "new",
+                       "collected": true,
+                       "is_new": true
+                       },
+                       {
+                       "discount_price": 199,
+                       "original_price": 238,
+                       "name": "美奇乐Mikkeller精酿啤酒",
+                       "image": "https://s6.postimg.org/nbi4w9u7l/PG_HOME_topic_pic2.png",
+                       "unit": "瓶",
+                       "status": "new",
+                       "collected": true,
+                       "is_new": true
+                       },
+                       {
+                       "discount_price": 199,
+                       "original_price": 238,
+                       "name": "美奇乐Mikkeller精酿啤酒",
+                       "image": "https://s6.postimg.org/camzr91yp/PG_HOME_topic_pic1.png",
+                       "unit": "瓶",
+                       "status": "new",
+                       "collected": true,
+                       "is_new": false
+                       },
+                       {
+                       "discount_price": 199,
+                       "original_price": 238,
+                       "name": "美奇乐Mikkeller精酿啤酒",
+                       "image": "https://s6.postimg.org/nbi4w9u7l/PG_HOME_topic_pic2.png",
+                       "unit": "瓶",
+                       "status": "new",
+                       "collected": true,
+                       "is_new": true
+                       },
+                       {
+                       "discount_price": 199,
+                       "original_price": 238,
+                       "name": "美奇乐Mikkeller精酿啤酒",
+                       "image": "https://s6.postimg.org/camzr91yp/PG_HOME_topic_pic1.png",
+                       "unit": "瓶",
+                       "status": "new",
+                       "collected": true
+                       },
+                       {
+                       "discount_price": 199,
+                       "original_price": 238,
+                       "name": "美奇乐Mikkeller精酿啤酒",
+                       "image": "https://s6.postimg.org/nbi4w9u7l/PG_HOME_topic_pic2.png",
+                       "unit": "瓶",
+                       "status": "new",
+                       "collected": true,
+                       "is_new": true
+                       }
+                       ]
+             },
+             {
+                "type": "good",
+                "discount_price": 199,
+                "original_price": 238,
+                "name": "美奇乐Mikkeller精酿啤酒",
+                "desc": "7种风味 x 12g",
+                "image": "https://s6.postimg.org/6dnpo6a7l/PG_HOME_product_pic.png",
+                "unit": "瓶",
+             }
+             ],
+    "result": 0
+}

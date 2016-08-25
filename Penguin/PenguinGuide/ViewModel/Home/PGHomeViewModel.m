@@ -10,10 +10,16 @@
 
 #import "PGCarouselBanner.h"
 #import "PGArticleBanner.h"
+#import "PGFlashbuyBanner.h"
+#import "PGGoodsCollectionBanner.h"
+#import "PGTopicBanner.h"
+#import "PGSingleGoodBanner.h"
+#import "PGImageBanner.h"
 
 @interface PGHomeViewModel ()
 
-@property (nonatomic, strong, readwrite) NSArray *dataArray;
+@property (nonatomic, strong, readwrite) NSArray *recommendsArray;
+@property (nonatomic, strong, readwrite) NSArray *feedsArray;
 
 @end
 
@@ -23,10 +29,27 @@
 {
     PGWeakSelf(self);
     [self.apiClient pg_makeGetRequest:^(PGRKRequestConfig *config) {
+        config.route = PG_Home_Recommends;
+        config.keyPath = @"data";
+        config.model = [PGImageBanner new];
+        config.isMockAPI = YES;
+        config.mockFileName = @"v1_home_recommends.json";
+    } completion:^(id response) {
+        weakself.recommendsArray = response;
+        [weakself requestFeeds];
+    } failure:^(NSError *error) {
+        
+    }];
+}
+
+- (void)requestFeeds
+{
+    PGWeakSelf(self);
+    [self.apiClient pg_makeGetRequest:^(PGRKRequestConfig *config) {
         config.route = PG_Home_HomeFeeds;
         config.keyPath = @"data";
         config.isMockAPI = YES;
-        config.mockFileName = @"v1_homefeeds.json";
+        config.mockFileName = @"v1_home_homefeeds.json";
     } completion:^(id response) {
         if (response[@"data"] && [response[@"data"] isKindOfClass:[NSArray class]]) {
             NSMutableArray *models = [NSMutableArray new];
@@ -44,13 +67,38 @@
                             [models addObject:articleBanner];
                         }
                     }
+                    if ([dict[@"type"] isEqualToString:@"flashbuy"]) {
+                        PGFlashbuyBanner *flashbuyBanner = [PGFlashbuyBanner modelFromDictionary:dict];
+                        if (flashbuyBanner) {
+                            [models addObject:flashbuyBanner];
+                        }
+                    }
+                    if ([dict[@"type"] isEqualToString:@"goods_collection"]) {
+                        PGGoodsCollectionBanner *goodsCollectionBanner = [PGGoodsCollectionBanner modelFromDictionary:dict];
+                        if (goodsCollectionBanner) {
+                            [models addObject:goodsCollectionBanner];
+                        }
+                    }
+                    if ([dict[@"type"] isEqualToString:@"topic"]) {
+                        PGTopicBanner *topicBanner = [PGTopicBanner modelFromDictionary:dict];
+                        if (topicBanner) {
+                            [models addObject:topicBanner];
+                        }
+                    }
+                    if ([dict[@"type"] isEqualToString:@"good"]) {
+                        PGSingleGoodBanner *singleGoodBanner = [PGSingleGoodBanner modelFromDictionary:dict];
+                        if (singleGoodBanner) {
+                            [models addObject:singleGoodBanner];
+                        }
+                    }
                 }
             }
-            weakself.dataArray = [NSArray arrayWithArray:models];
+            weakself.feedsArray = [NSArray arrayWithArray:models];
         }
     } failure:^(NSError *error) {
         
     }];
+
 }
 
 @end

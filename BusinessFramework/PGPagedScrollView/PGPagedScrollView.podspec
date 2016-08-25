@@ -21,5 +21,6 @@ s.resources = "Assets.xcassets"
 
 s.dependency "FXPageControl"
 s.dependency "FLAnimatedImage"
+s.dependency "PGImageView"
 
 end

@@ -15,8 +15,9 @@
     return @{
              @"image" : @"image",
              @"link" : @"link",
-             @"type": @"type"
-             };
+             @"type": @"type",
+             @"bannerId" : @"id"
+            };
 }
 
 @end

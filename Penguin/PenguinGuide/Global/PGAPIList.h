@@ -9,6 +9,7 @@
 #ifndef PGAPIList_h
 #define PGAPIList_h
 
-#define PG_Home_HomeFeeds   @"/api/v1/homefeeds"
+#define PG_Home_Recommends  @"/api/v1/home/recommends"
+#define PG_Home_HomeFeeds   @"/api/v1/home/homefeeds"
 
 #endif /* PGAPIList_h */

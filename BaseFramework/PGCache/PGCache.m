@@ -24,6 +24,12 @@ static const NSString *DROP_TABLE_QUERY = @"DROP TABLE '%@'";
 
 @interface PGCache ()
 
+// https://github.com/ccgus/fmdb#using-fmdatabasequeue-and-thread-safety
+/**
+ *  FMDatabaseQueue will run the blocks on a serialized queue (hence the name of the class). 
+ *  So if you call FMDatabaseQueue's methods from multiple threads at the same time, 
+ *  they will be executed in the order they are received.
+ */
 @property (nonatomic, strong) FMDatabaseQueue *dbQueue;
 
 @end

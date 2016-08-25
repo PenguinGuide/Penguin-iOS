@@ -8,8 +8,15 @@
 
 #define CarouselBannerCell @"CarouselBannerCell"
 #define ArticleBannerCell @"ArticleBannerCell"
+#define GoodsCollectionBannerCell @"GoodsCollectionBannerCell"
+#define TopicBannerCell @"TopicBannerCell"
+#define SingleGoodBannerCell @"SingleGoodBannerCell"
+#define FlashbuyBannerCell @"FlashbuyBannerCell"
 
-#define ArticleHeaderView @"ArticleHeaderView"
+#define HomeHeaderView @"HomeHeaderView"
+
+#import "UINavigationBar+PGTransparentNaviBar.h"
+#import "MSWeakTimer.h"
 
 // view controllers
 #import "PGHomeViewController.h"
@@ -20,18 +27,29 @@
 // models
 #import "PGCarouselBanner.h"
 #import "PGArticleBanner.h"
+#import "PGFlashbuyBanner.h"
+#import "PGGoodsCollectionBanner.h"
+#import "PGTopicBanner.h"
+#import "PGSingleGoodBanner.h"
 // views
+#import "PGHomeRecommendsHeaderView.h"
+// cells
 #import "PGCarouselBannerCell.h"
 #import "PGArticleBannerCell.h"
-#import "PGHomeArticleHeaderView.h"
+#import "PGGoodsCollectionBannerCell.h"
+#import "PGTopicBannerCell.h"
+#import "PGSingleGoodBannerCell.h"
+#import "PGFlashbuyBannerCell.h"
 
 @interface PGHomeViewController () <UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout>
 
 @property (nonatomic, strong) PGHomeViewModel *viewModel;
+@property (nonatomic, strong, readwrite) PGBaseCollectionView *feedsCollectionView;
 
 @property (nonatomic, strong) UIBarButtonItem *searchButton;
 @property (nonatomic, strong) UIBarButtonItem *messageButton;
-@property (nonatomic, strong, readwrite) PGBaseCollectionView *feedsCollectionView;
+
+@property (nonatomic, strong) MSWeakTimer *weakTimer;
 
 @end
 
@@ -43,7 +61,7 @@
     self.pageView = @"首页";
     
     self.parentViewController.navigationItem.leftBarButtonItem = self.searchButton;
-    self.parentViewController.navigationItem.titleView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"pg_home_logo"]];
+    self.parentViewController.navigationItem.titleView = nil;
     
     [self.view addSubview:self.feedsCollectionView];
     
@@ -51,7 +69,7 @@
     [self.viewModel requestData];
     
     PGWeakSelf(self);
-    [self observe:self.viewModel keyPath:@"dataArray" block:^(id changedObject) {
+    [self observe:self.viewModel keyPath:@"feedsArray" block:^(id changedObject) {
         NSArray *bannersArray = changedObject;
         if (bannersArray && [bannersArray isKindOfClass:[NSArray class]]) {
             [weakself.feedsCollectionView reloadData];
@@ -62,20 +80,45 @@
 - (void)dealloc
 {
     [self unobserve];
+    [self.weakTimer invalidate];
 }
 
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
+}
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
     
-    //self.navigationController.scrollNavigationBar.scrollView = self.feedsCollectionView;
+    // these codes in viewDidLoad will not work
+    [self.navigationController.navigationBar pg_setBackgroundColor:[UIColor clearColor]];
+    [self.navigationController.navigationBar setShadowImage:[UIImage new]];
+    [self.navigationController.navigationBar setTintColor:[UIColor whiteColor]];
+    [self setNeedsStatusBarAppearanceUpdate];
+    
+    self.weakTimer = [MSWeakTimer scheduledTimerWithTimeInterval:1.0
+                                                          target:self
+                                                        selector:@selector(countdown)
+                                                        userInfo:nil
+                                                         repeats:YES
+                                                   dispatchQueue:dispatch_get_main_queue()];
 }
 
 - (void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
     
-    //[self.navigationController.scrollNavigationBar resetToDefaultPositionWithAnimation:NO];
+    [self.navigationController.navigationBar pg_reset];
+    
+    [self.weakTimer invalidate];
+}
+
+- (UIStatusBarStyle)preferredStatusBarStyle
+{
+    // http://www.th7.cn/Program/IOS/201606/881633.shtml fix this method didn't called
+    return UIStatusBarStyleLightContent;
 }
 
 #pragma mark - <PGTabBarControllerDelegate>
@@ -99,32 +142,42 @@
 {
     PGLogWarning(@"home tabBarDidClicked");
     
+    [self.navigationController.navigationBar pg_setBackgroundColor:[UIColor clearColor]];
+    [self.navigationController.navigationBar setShadowImage:[UIImage new]];
+    [self.navigationController.navigationBar setTintColor:[UIColor whiteColor]];
     self.parentViewController.navigationItem.leftBarButtonItem = self.searchButton;
-    self.parentViewController.navigationItem.titleView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"pg_home_logo"]];
+    self.parentViewController.navigationItem.titleView = nil;
 }
 
 #pragma mark - <UICollectionViewDataSource>
 
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView
 {
-    return self.viewModel.dataArray.count;
+    return self.viewModel.feedsArray.count;
 }
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
 {
-    id banner = self.viewModel.dataArray[section];
+    id banner = self.viewModel.feedsArray[section];
     if ([banner isKindOfClass:[PGCarouselBanner class]]) {
         return 1;
     } else if ([banner isKindOfClass:[PGArticleBanner class]]) {
-        PGArticleBanner *articleBanner = (PGArticleBanner *)banner;
-        return articleBanner.banners.count;
+        return 1;
+    } else if ([banner isKindOfClass:[PGGoodsCollectionBanner class]]) {
+        return 1;
+    } else if ([banner isKindOfClass:[PGTopicBanner class]]) {
+        return 1;
+    } else if ([banner isKindOfClass:[PGSingleGoodBanner class]]) {
+        return 1;
+    } else if ([banner isKindOfClass:[PGFlashbuyBanner class]]) {
+        return 1;
     }
     return 0;
 }
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    id banner = self.viewModel.dataArray[indexPath.section];
+    id banner = self.viewModel.feedsArray[indexPath.section];
     if ([banner isKindOfClass:[PGCarouselBanner class]]) {
         PGCarouselBannerCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:CarouselBannerCell forIndexPath:indexPath];
         
@@ -136,8 +189,36 @@
         PGArticleBannerCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:ArticleBannerCell forIndexPath:indexPath];
         
         PGArticleBanner *articleBanner = (PGArticleBanner *)banner;
-        PGImageBanner *banner = articleBanner.banners[indexPath.item];
-        [cell setCellWithImageBanner:banner];
+        [cell setCellWithArticle:articleBanner];
+        
+        return cell;
+    } else if ([banner isKindOfClass:[PGGoodsCollectionBanner class]]) {
+        PGGoodsCollectionBannerCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:GoodsCollectionBannerCell forIndexPath:indexPath];
+        
+        PGGoodsCollectionBanner *goodsCollectionBanner = (PGGoodsCollectionBanner *)banner;
+        [cell setCellWithGoodsCollection:goodsCollectionBanner];
+        
+        return cell;
+    } else if ([banner isKindOfClass:[PGTopicBanner class]]) {
+        PGTopicBannerCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:TopicBannerCell forIndexPath:indexPath];
+        
+        PGTopicBanner *topicBanner = (PGTopicBanner *)banner;
+        [cell setCellWithTopic:topicBanner];
+        
+        return cell;
+    } else if ([banner isKindOfClass:[PGSingleGoodBanner class]]) {
+        PGSingleGoodBannerCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:SingleGoodBannerCell forIndexPath:indexPath];
+        
+        PGSingleGoodBanner *singleGoodBanner = (PGSingleGoodBanner *)banner;
+        [cell setCellWithSingleGood:singleGoodBanner];
+        
+        return cell;
+    } else if ([banner isKindOfClass:[PGFlashbuyBanner class]]) {
+        PGFlashbuyBannerCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:FlashbuyBannerCell forIndexPath:indexPath];
+        
+        PGFlashbuyBanner *flashbuyBanner = (PGFlashbuyBanner *)banner;
+        [cell reloadBannersWithFlashbuy:flashbuyBanner];
+        [cell countdown:flashbuyBanner];
         
         return cell;
     }
@@ -147,12 +228,9 @@
 
 - (UICollectionReusableView *)collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath
 {
-    id banner = self.viewModel.dataArray[indexPath.section];
-    if ([banner isKindOfClass:[PGArticleBanner class]]) {
-        PGHomeArticleHeaderView *headerView = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:ArticleHeaderView forIndexPath:indexPath];
-        
-        PGArticleBanner *articleBanner = (PGArticleBanner *)banner;
-        headerView.dateLabel.text = articleBanner.desc;
+    if (indexPath.section == 0) {
+        PGHomeRecommendsHeaderView *headerView = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:HomeHeaderView forIndexPath:indexPath];
+        [headerView reloadBannersWithData:self.viewModel.recommendsArray];
         
         return headerView;
     }
@@ -161,28 +239,37 @@
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    PGArticleViewController *articleVC = [[PGArticleViewController alloc] init];
-    [self.navigationController pushViewController:articleVC animated:YES];
+//    PGArticleViewController *articleVC = [[PGArticleViewController alloc] init];
+//    [self.navigationController pushViewController:articleVC animated:YES];
 }
 
 #pragma mark - <UICollectionViewDelegateFlowLayout>
 
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    id banner = self.viewModel.dataArray[indexPath.section];
+    id banner = self.viewModel.feedsArray[indexPath.section];
     if ([banner isKindOfClass:[PGCarouselBanner class]]) {
         return [PGCarouselBannerCell cellSize];
     } else if ([banner isKindOfClass:[PGArticleBanner class]]) {
         return [PGArticleBannerCell cellSize];
+    } else if ([banner isKindOfClass:[PGGoodsCollectionBanner class]]) {
+        return [PGGoodsCollectionBannerCell cellSize];
+    } else if ([banner isKindOfClass:[PGTopicBanner class]]) {
+        return [PGTopicBannerCell cellSize];
+    } else if ([banner isKindOfClass:[PGSingleGoodBanner class]]) {
+        return [PGSingleGoodBannerCell cellSize];
+    } else if ([banner isKindOfClass:[PGFlashbuyBanner class]]) {
+        return [PGFlashbuyBannerCell cellSize];
     }
     return CGSizeZero;
 }
 
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout referenceSizeForHeaderInSection:(NSInteger)section
 {
-    id banner = self.viewModel.dataArray[section];
-    if ([banner isKindOfClass:[PGArticleBanner class]]) {
-        return CGSizeMake(UISCREEN_WIDTH, 35);
+    if (section == 0) {
+        if (self.viewModel.recommendsArray) {
+            return [PGHomeRecommendsHeaderView headerViewSize];
+        }
     }
     return CGSizeZero;
 }
@@ -199,38 +286,30 @@
 
 - (UIEdgeInsets)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout insetForSectionAtIndex:(NSInteger)section
 {
-    return UIEdgeInsetsZero;
+    return UIEdgeInsetsMake(0, 0, 12, 0);
 }
 
 #pragma mark - <Button Events>
 
 - (void)searchButtonClicked
 {
-//    AppDelegate *delegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
-//    [delegate.window showToast:@"傻逼你出错了！"];
-    [PGRouterManager routeToLoginPage];
     
-//    PGAlertController *alertController = [PGAlertController alertControllerWithTitle:@"弹窗"
-//                                                                             message:@"确认取消吗?"
-//                                                                         style:^(PGAlertStyle *style) {
-//                                                                             style.alertType = PGAlertTypeActionSheet;
-//                                                                         }];
-//    PGAlertAction *doneAction = [PGAlertAction actionWithTitle:@"完成"
-//                                                         style:nil
-//                                                        hander:^{
-//                                                            PGLogWarning(@"done button clicked");
-//                                                        }];
-//    PGAlertAction *deleteAction = [PGAlertAction actionWithTitle:@"删除"
-//                                                           style:^(PGAlertActionStyle *style) {
-//                                                               style.type = PGAlertActionTypeCancel;
-//                                                           } hander:^{
-//                                                               PGLogWarning(@"delete button clicked");
-//                                                           }];
-//    [alertController addActions:@[deleteAction, doneAction]];
-//    
-//    [self presentViewController:alertController animated:YES completion:nil];
-    
-//    [self showLoading];
+}
+
+- (void)countdown
+{
+    for (UICollectionViewCell *visibleCell in self.feedsCollectionView.visibleCells) {
+        if ([visibleCell isKindOfClass:[PGFlashbuyBannerCell class]]) {
+            PGFlashbuyBannerCell *cell = (PGFlashbuyBannerCell *)visibleCell;
+            NSInteger index = [[self.feedsCollectionView indexPathForCell:cell] section];
+            if (index < self.viewModel.feedsArray.count) {
+                PGFlashbuyBanner *flashbuy = self.viewModel.feedsArray[index];
+                if (flashbuy && [flashbuy isKindOfClass:[PGFlashbuyBanner class]] && cell) {
+                    [cell countdown:flashbuy];
+                }
+            }
+        }
+    }
 }
 
 #pragma mark - <Setters && Getters>
@@ -254,11 +333,16 @@
         _feedsCollectionView.delegate = self;
         _feedsCollectionView.showsHorizontalScrollIndicator = NO;
         _feedsCollectionView.showsVerticalScrollIndicator = NO;
+        _feedsCollectionView.backgroundColor = Theme.colorBackground;
         
         [_feedsCollectionView registerClass:[PGCarouselBannerCell class] forCellWithReuseIdentifier:CarouselBannerCell];
         [_feedsCollectionView registerClass:[PGArticleBannerCell class] forCellWithReuseIdentifier:ArticleBannerCell];
+        [_feedsCollectionView registerClass:[PGGoodsCollectionBannerCell class] forCellWithReuseIdentifier:GoodsCollectionBannerCell];
+        [_feedsCollectionView registerClass:[PGTopicBannerCell class] forCellWithReuseIdentifier:TopicBannerCell];
+        [_feedsCollectionView registerClass:[PGSingleGoodBannerCell class] forCellWithReuseIdentifier:SingleGoodBannerCell];
+        [_feedsCollectionView registerClass:[PGFlashbuyBannerCell class] forCellWithReuseIdentifier:FlashbuyBannerCell];
         
-        [_feedsCollectionView registerClass:[PGHomeArticleHeaderView class] forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:ArticleHeaderView];
+        [_feedsCollectionView registerClass:[PGHomeRecommendsHeaderView class] forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:HomeHeaderView];
         
         __block PGBaseCollectionView *collectionView = _feedsCollectionView;
         PGWeakSelf(self);

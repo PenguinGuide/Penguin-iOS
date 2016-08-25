@@ -21,6 +21,11 @@
     self.view.backgroundColor = [UIColor redColor];
 }
 
+- (UIStatusBarStyle)preferredStatusBarStyle
+{
+    return UIStatusBarStyleDefault;
+}
+
 #pragma mark - <PGTabBarControllerDelegate>
 
 - (NSString *)tabBarTitle
@@ -36,6 +41,16 @@
 - (NSString *)tabBarHighlightImage
 {
     return @"pg_tab_store_highlight";
+}
+
+- (void)tabBarDidClicked
+{
+    PGLogWarning(@"store tabBarDidClicked");
+    
+    self.parentViewController.navigationItem.leftBarButtonItem = nil;
+    self.parentViewController.navigationItem.titleView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"pg_home_logo"]];
+    
+    [self setNeedsStatusBarAppearanceUpdate];
 }
 
 - (void)didReceiveMemoryWarning {

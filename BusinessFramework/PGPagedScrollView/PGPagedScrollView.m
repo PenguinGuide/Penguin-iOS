@@ -9,6 +9,9 @@
 #import "PGPagedScrollView.h"
 #import "FXPageControl.h"
 
+#import "FLAnimatedImageView+PGAnimatedImageView.h"
+#import "UIImageView+PGImageView.h"
+
 @interface UIColor (PGPagedScrollViewColor)
 
 + (UIColor *)colorWithHexString:(NSString *)hexString;
@@ -67,9 +70,10 @@
 
 @property (nonatomic, strong) UIScrollView *pagedScrollView;
 @property (nonatomic, strong) FXPageControl *pageControl;
-@property (nonatomic, strong) NSArray *banners;
+@property (nonatomic, strong) NSMutableArray *banners;
 @property (nonatomic) PGPagedScrollViewImageFillMode fillMode;
 @property (nonatomic) PGPagedScrollViewIconMode iconMode;
+@property (nonatomic, assign) NSInteger currentPage;
 
 @end
 
@@ -101,32 +105,50 @@
 - (void)reloadData
 {
     if (self.delegate && [self.delegate respondsToSelector:@selector(imagesForScrollView)]) {
-        self.banners = [self.delegate imagesForScrollView];
-        if (self.banners.count > 0) {
+        NSArray *fixedBanners = [self.delegate imagesForScrollView];
+        
+        if (fixedBanners.count > 0) {
+            self.banners = [NSMutableArray arrayWithArray:fixedBanners];
+//            [self.banners insertObject:fixedBanners.firstObject atIndex:0];
+//            [self.banners addObject:fixedBanners.lastObject];
+            
+            self.pagedScrollView.contentSize = CGSizeMake(self.frame.size.width*fixedBanners.count, self.pagedScrollView.frame.size.height);
+            for (UIView *subview in self.pagedScrollView.subviews) {
+                [subview removeFromSuperview];
+            }
+            for (int i = 0; i < fixedBanners.count; i++) {
+                NSString *imageName = fixedBanners[i];
+                if ([imageName containsString:@".gif"]) {
+                    FLAnimatedImageView *gifImageView = [[FLAnimatedImageView alloc] initWithFrame:CGRectMake(i*self.frame.size.width, 0, self.frame.size.width, self.frame.size.height-15-30)];
+                    gifImageView.backgroundColor = [UIColor colorWithHexString:@"454545"];
+                    [gifImageView setWithImageURL:imageName placeholder:nil completion:nil];
+                    [self.pagedScrollView addSubview:gifImageView];
+                } else {
+                    UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(i*self.frame.size.width, 0, self.frame.size.width, self.pagedScrollView.frame.size.height)];
+                    imageView.backgroundColor = [UIColor colorWithHexString:@"454545"];
+                    imageView.contentMode = UIViewContentModeScaleAspectFill;
+                    [imageView setWithImageURL:imageName placeholder:nil completion:nil];
+                    [self.pagedScrollView addSubview:imageView];
+                }
+            }
+            _pageControl.numberOfPages = fixedBanners.count;
+            _pageControl.currentPage = self.currentPage;
+        }
+    } else if (self.delegate && [self.delegate respondsToSelector:@selector(viewsForScrollView)]) {
+        NSArray *banners = [self.delegate viewsForScrollView];
+        if (banners.count > 0) {
+            self.banners = [NSArray arrayWithArray:banners];
             self.pagedScrollView.contentSize = CGSizeMake(self.frame.size.width*self.banners.count, self.pagedScrollView.frame.size.height);
             for (UIView *subview in self.pagedScrollView.subviews) {
                 [subview removeFromSuperview];
             }
             for (int i = 0; i < self.banners.count; i++) {
-                NSString *imageName = self.banners[i];
-                if ([imageName containsString:@".gif"]) {
-                    NSString *fileName = [imageName stringByReplacingOccurrencesOfString:@".gif" withString:@""];
-                    NSString *gifPath = [[NSBundle mainBundle] pathForResource:fileName ofType:@"gif"];
-                    FLAnimatedImage *gifImage = [FLAnimatedImage animatedImageWithGIFData:[NSData dataWithContentsOfFile:gifPath]];
-                    FLAnimatedImageView *gifImageView = [[FLAnimatedImageView alloc] init];
-                    gifImageView.animatedImage = gifImage;
-                    gifImageView.frame = CGRectMake(i*self.frame.size.width, 0, self.frame.size.width, self.frame.size.height-15-30);
-                    [self.pagedScrollView addSubview:gifImageView];
-                } else {
-                    UIImage *image = [UIImage imageNamed:imageName];
-                    UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(i*self.frame.size.width, 0, self.frame.size.width, self.pagedScrollView.frame.size.height)];
-                    imageView.contentMode = UIViewContentModeScaleAspectFill;
-                    imageView.image = image;
-                    [self.pagedScrollView addSubview:imageView];
-                }
+                UIView *view = self.banners[i];
+                view.frame = CGRectMake(i*self.frame.size.width, 0, self.frame.size.width, self.pagedScrollView.frame.size.height);
+                [self.pagedScrollView addSubview:view];
             }
             _pageControl.numberOfPages = self.banners.count;
-            _pageControl.currentPage = 0;
+            _pageControl.currentPage = self.currentPage;
         }
     }
 }
@@ -149,6 +171,8 @@
     if (currentPage != prePage) {
         [self.pageControl setCurrentPage:currentPage];
     }
+    
+    self.currentPage = currentPage;
 }
 
 #pragma mark - <Setters && Getters>
@@ -175,16 +199,30 @@
         _pageControl = [[FXPageControl alloc] initWithFrame:CGRectMake(0, self.frame.size.height-25, self.frame.size.width, 15)];
         _pageControl.userInteractionEnabled = NO;
         _pageControl.backgroundColor = [UIColor clearColor];
-        _pageControl.dotSize = 8.f;
-        _pageControl.selectedDotSize = 14.f;
         _pageControl.dotSpacing = 15.f;
         _pageControl.numberOfPages = 0;
         _pageControl.currentPage = 0;
-        _pageControl.dotColor = [UIColor colorWithHexString:@"dbdbdb"];
-        if (self.iconMode == PGPagedScrollViewIconModeLight) {
+        
+        if (self.iconMode == PGPagedScrollViewIconModeImageLight) {
             _pageControl.selectedDotImage = [UIImage imageNamed:@"paged_control_icon_light"];
-        } else {
+            _pageControl.dotSize = 8.f;
+            _pageControl.selectedDotSize = 14.f;
+            _pageControl.dotColor = [UIColor colorWithHexString:@"dbdbdb"];
+        } else if (self.iconMode == PGPagedScrollViewIconModeImageDark) {
             _pageControl.selectedDotImage = [UIImage imageNamed:@"paged_control_icon"];
+            _pageControl.dotSize = 8.f;
+            _pageControl.selectedDotSize = 14.f;
+            _pageControl.dotColor = [UIColor colorWithHexString:@"dbdbdb"];
+        } else if (self.iconMode == PGPagedScrollViewIconModeLight) {
+            _pageControl.dotSize = 6.f;
+            _pageControl.selectedDotSize = 6.f;
+            _pageControl.selectedDotColor = [UIColor colorWithHexString:@"F1F1F1"];
+            _pageControl.dotColor = [UIColor colorWithHexString:@"8B8B8B"];
+        } else {
+            _pageControl.dotSize = 6.f;
+            _pageControl.selectedDotSize = 6.f;
+            _pageControl.selectedDotColor = [UIColor whiteColor];
+            _pageControl.dotColor = [UIColor colorWithHexString:@"8B8B8B"];
         }
     }
     return _pageControl;

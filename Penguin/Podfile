@@ -30,6 +30,7 @@ target 'PenguinGuide' do
     pod 'PGLaunchAds', :path => '../BaseFramework/PGLaunchAds'
     pod 'PGTimer', :path => '../BaseFramework/PGTimer'
     pod 'PGCache', :path => '../BaseFramework/PGCache'
+    pod 'PGTransparentNaviBar', :path => '../BaseFramework/PGTransparentNaviBar'
     
     #vendor
     pod 'KVOController', :inhibit_warnings => true
@@ -37,6 +38,7 @@ target 'PenguinGuide' do
     pod 'UzysAnimatedGifPullToRefresh', :inhibit_warnings => true
     pod 'Masonry', :inhibit_warnings => true
     pod 'MBProgressHUD', :inhibit_warnings => true
+    pod 'MSWeakTimer', :inhibit_warnings => true
     
     #fabric
     pod 'Fabric'
