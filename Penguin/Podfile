@@ -7,7 +7,7 @@ target 'PenguinGuide' do
     
     #business framework
     pod 'PGAPIClient', :path => '../BusinessFramework/PGAPIClient', :inhibit_warnings => true
-    pod 'PGTheme', :path => '../BusinessFramework/PGTheme', :inhibit_warnings => true
+    pod 'PGTheme', :path => '../BusinessFramework/PGTheme'
     pod 'PGShare', :path => '../BusinessFramework/PGShare', :inhibit_warnings => true
     pod 'PGTabBarController', :path => '../BusinessFramework/PGTabBarController'
     pod 'PGPagedScrollView', :path => '../BusinessFramework/PGPagedScrollView', :inhibit_warnings => true
@@ -31,6 +31,7 @@ target 'PenguinGuide' do
     pod 'PGTimer', :path => '../BaseFramework/PGTimer'
     pod 'PGCache', :path => '../BaseFramework/PGCache'
     pod 'PGTransparentNaviBar', :path => '../BaseFramework/PGTransparentNaviBar'
+    pod 'PGPopupViewController', :path => '../BaseFramework/PGPopupViewController'
     
     #vendor
     pod 'KVOController', :inhibit_warnings => true

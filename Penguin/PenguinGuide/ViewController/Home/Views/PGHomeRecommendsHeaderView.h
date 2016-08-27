@@ -9,9 +9,16 @@
 #import <UIKit/UIKit.h>
 #import "PGPagedScrollView.h"
 
+@protocol PGHomeRecommendsHeaderViewDelegate <NSObject>
+
+- (void)channelDidSelect:(NSString *)channelType;
+
+@end
+
 @interface PGHomeRecommendsHeaderView : UICollectionReusableView
 
 @property (nonatomic, strong, readonly) PGPagedScrollView *bannersView;
+@property (nonatomic, weak) id<PGHomeRecommendsHeaderViewDelegate> delegate;
 
 + (CGSize)headerViewSize;
 - (void)reloadBannersWithData:(NSArray *)dataArray;

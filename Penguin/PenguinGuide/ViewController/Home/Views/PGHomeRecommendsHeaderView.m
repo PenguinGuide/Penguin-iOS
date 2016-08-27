@@ -6,10 +6,10 @@
 //  Copyright © 2016 Xinglian. All rights reserved.
 //
 
-static NSString *const CategoryCell = @"CategoryCell";
+static NSString *const ChannelCell = @"ChannelCell";
 
 #import "PGHomeRecommendsHeaderView.h"
-#import "PGHomeCategoryCell.h"
+#import "PGHomeChannelCell.h"
 #import "PGImageBanner.h"
 
 @interface PGHomeRecommendsHeaderView () <PGPagedScrollViewDelegate, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout>
@@ -75,23 +75,23 @@ static NSString *const CategoryCell = @"CategoryCell";
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    PGHomeCategoryCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:CategoryCell forIndexPath:indexPath];
+    PGHomeChannelCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:ChannelCell forIndexPath:indexPath];
     
     if (indexPath.item == 0) {
-        [cell.categoryButton setImage:[UIImage imageNamed:@"pg_home_category_wiki"] forState:UIControlStateNormal];
-        [cell.categoryLabel setText:@"涨知识"];
+        [cell.channelButton setImage:[UIImage imageNamed:@"pg_home_category_wiki"] forState:UIControlStateNormal];
+        [cell.channelLabel setText:@"涨知识"];
     } else if (indexPath.item == 1) {
-        [cell.categoryButton setImage:[UIImage imageNamed:@"pg_home_category_test"] forState:UIControlStateNormal];
-        [cell.categoryLabel setText:@"爱测评"];
+        [cell.channelButton setImage:[UIImage imageNamed:@"pg_home_category_test"] forState:UIControlStateNormal];
+        [cell.channelLabel setText:@"爱测评"];
     } else if (indexPath.item == 2) {
-        [cell.categoryButton setImage:[UIImage imageNamed:@"pg_home_category_store"] forState:UIControlStateNormal];
-        [cell.categoryLabel setText:@"企鹅市集"];
+        [cell.channelButton setImage:[UIImage imageNamed:@"pg_home_category_store"] forState:UIControlStateNormal];
+        [cell.channelLabel setText:@"企鹅市集"];
     } else if (indexPath.item == 3) {
-        [cell.categoryButton setImage:[UIImage imageNamed:@"pg_home_category_city_guide"] forState:UIControlStateNormal];
-        [cell.categoryLabel setText:@"城市指南"];
+        [cell.channelButton setImage:[UIImage imageNamed:@"pg_home_category_city_guide"] forState:UIControlStateNormal];
+        [cell.channelLabel setText:@"城市指南"];
     } else if (indexPath.item == 4) {
-        [cell.categoryButton setImage:[UIImage imageNamed:@"pg_home_category_video"] forState:UIControlStateNormal];
-        [cell.categoryLabel setText:@"教你做"];
+        [cell.channelButton setImage:[UIImage imageNamed:@"pg_home_category_video"] forState:UIControlStateNormal];
+        [cell.channelLabel setText:@"教你做"];
     }
     
     return cell;
@@ -107,6 +107,31 @@ static NSString *const CategoryCell = @"CategoryCell";
 - (UIEdgeInsets)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout insetForSectionAtIndex:(NSInteger)section
 {
     return UIEdgeInsetsMake(0, 10, 0, 10);
+}
+
+- (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    if (indexPath.item == 0) {
+        if (self.delegate && [self.delegate respondsToSelector:@selector(channelDidSelect:)]) {
+            [self.delegate channelDidSelect:@"111"];
+        }
+    } else if (indexPath.item == 1) {
+        if (self.delegate && [self.delegate respondsToSelector:@selector(channelDidSelect:)]) {
+            [self.delegate channelDidSelect:@"111"];
+        }
+    } else if (indexPath.item == 2) {
+        if (self.delegate && [self.delegate respondsToSelector:@selector(channelDidSelect:)]) {
+            [self.delegate channelDidSelect:@"111"];
+        }
+    } else if (indexPath.item == 3) {
+        if (self.delegate && [self.delegate respondsToSelector:@selector(channelDidSelect:)]) {
+            [self.delegate channelDidSelect:@"111"];
+        }
+    } else if (indexPath.item == 4) {
+        if (self.delegate && [self.delegate respondsToSelector:@selector(channelDidSelect:)]) {
+            [self.delegate channelDidSelect:@"111"];
+        }
+    }
 }
 
 #pragma mark - <Setters && Getters>
@@ -141,7 +166,7 @@ static NSString *const CategoryCell = @"CategoryCell";
         _categoriesCollectionView.showsHorizontalScrollIndicator = NO;
         _categoriesCollectionView.dataSource = self;
         _categoriesCollectionView.delegate = self;
-        [_categoriesCollectionView registerClass:[PGHomeCategoryCell class] forCellWithReuseIdentifier:CategoryCell];
+        [_categoriesCollectionView registerClass:[PGHomeChannelCell class] forCellWithReuseIdentifier:ChannelCell];
     }
     return _categoriesCollectionView;
 }

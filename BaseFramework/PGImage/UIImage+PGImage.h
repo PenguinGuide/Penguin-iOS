@@ -11,6 +11,7 @@
 @interface UIImage (PGImage)
 
 - (UIImage *)roundedImage;
++ (UIImage *)imageWithColor:(UIColor *)color;
 
 - (UIImage *)applyLightEffect;
 - (UIImage *)applyExtraLightEffect;

@@ -49,7 +49,7 @@
     [attrS addAttribute:NSForegroundColorAttributeName value:Theme.colorHighlight range:NSMakeRange(0, singleGood.discountPrice.length+1)];
     [attrS addAttribute:NSFontAttributeName value:Theme.fontMediumBold range:NSMakeRange(0, singleGood.discountPrice.length+1)];
     [attrS addAttribute:NSStrikethroughStyleAttributeName value:[NSNumber numberWithInt:0] range:NSMakeRange(0, singleGood.discountPrice.length+1)];
-    [attrS addAttribute:NSForegroundColorAttributeName value:[UIColor colorWithHexString:@"AFAFAF"] range:NSMakeRange(singleGood.discountPrice.length+2, singleGood.originalPrice.length)];
+    [attrS addAttribute:NSForegroundColorAttributeName value:Theme.colorLightText range:NSMakeRange(singleGood.discountPrice.length+2, singleGood.originalPrice.length)];
     [attrS addAttribute:NSFontAttributeName value:Theme.fontSmallBold range:NSMakeRange(singleGood.discountPrice.length+2, singleGood.originalPrice.length)];
     [attrS addAttribute:NSStrikethroughStyleAttributeName value:[NSNumber numberWithInt:1] range:NSMakeRange(singleGood.discountPrice.length+2, singleGood.originalPrice.length)];
     self.priceLabel.attributedText = attrS;
@@ -102,7 +102,7 @@
         CGFloat width = UISCREEN_WIDTH-20;
 		_descLabel = [[UILabel alloc] initWithFrame:CGRectMake(15, (width/2)*9/16-15-12, width/2-30, 12)];
         _descLabel.font = Theme.fontExtraSmallBold;
-        _descLabel.textColor = Theme.colorGray;
+        _descLabel.textColor = Theme.colorLightText;
 	}
 	return _descLabel;
 }

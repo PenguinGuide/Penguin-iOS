@@ -38,10 +38,17 @@ typedef NS_ENUM(NSInteger, PGThemeStyle) {
 
 - (UIColor *)colorHighlight;
 - (UIColor *)colorExtraHighlight;
-- (UIColor *)colorDarkGray;
-- (UIColor *)colorGray;
+
 - (UIColor *)colorLightGray;
+/**
+ *  @return 6C6C6C
+ */
 - (UIColor *)colorText;
+/**
+ *  @return AFAFAF
+ */
+- (UIColor *)colorLightText;
+
 - (UIColor *)colorBackground;
 - (UIColor *)colorLightBackground;
 

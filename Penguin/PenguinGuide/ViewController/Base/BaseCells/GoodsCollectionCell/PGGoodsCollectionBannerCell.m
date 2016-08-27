@@ -104,7 +104,7 @@ static NSString *const GoodCell = @"GoodCell";
 	if(_descLabel == nil) {
 		_descLabel = [[UILabel alloc] initWithFrame:CGRectMake(22, self.titleLabel.bottom+3, UISCREEN_WIDTH-25, 12)];
         _descLabel.font = Theme.fontExtraSmallBold;
-        _descLabel.textColor = Theme.colorGray;
+        _descLabel.textColor = Theme.colorLightText;
 	}
 	return _descLabel;
 }

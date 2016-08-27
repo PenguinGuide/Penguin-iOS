@@ -9,7 +9,7 @@
 static UIFont *fontSize10, *fontSize12, *fontSize14, *fontSize16, *fontSize18;
 static UIFont *fontSize10Bold, *fontSize12Bold, *fontSize14Bold, *fontSize16Bold, *fontSize18Bold;
 static NSArray *loadingImages;
-static UIColor *colorHighlight, *colorExtraHighlight, *colorDarkGray, *colorGray, *colorLightGray, *colorText, *colorBackground, *colorLightBackground;
+static UIColor *colorHighlight, *colorExtraHighlight, *colorLightGray, *colorText, *colorLightText, *colorBackground, *colorLightBackground;
 static UIColor *colorBorder, *colorLightBorder;
 
 #import "PGThemeManager.h"
@@ -44,9 +44,8 @@ static UIColor *colorBorder, *colorLightBorder;
         
         colorHighlight = [UIColor colorWithRed:241.f/256.f green:149.f/256.f blue:114.f/256.f alpha:1.f];
         colorExtraHighlight = [UIColor colorWithRed:239.f/256.f green:103.f/256.f blue:51.f/256.f alpha:1.f];
-        colorDarkGray = [UIColor colorWithRed:51.f/256.f green:51.f/256.f blue:51.f/256.f alpha:1.f];
-        colorGray = [UIColor colorWithRed:175.f/256.f green:175.f/256.f blue:175.f/256.f alpha:1.f];
         colorText = [UIColor colorWithRed:69.f/256.f green:69.f/256.f blue:69.f/256.f alpha:1.f];
+        colorLightText = [UIColor colorWithRed:175.f/256.f green:175.f/256.f blue:175.f/256.f alpha:1.f];
         colorBackground = [UIColor colorWithRed:241.f/256.f green:241.f/256.f blue:241.f/256.f alpha:1.f];
         colorLightBackground = [UIColor colorWithRed:248.f/256.f green:248.f/256.f blue:248.f/256.f alpha:1.f];
         
@@ -99,6 +98,8 @@ static UIColor *colorBorder, *colorLightBorder;
 {
     [[UINavigationBar appearance] setBackgroundImage:[[UIImage imageNamed:@"pg_navigation_bg_image"] resizableImageWithCapInsets:UIEdgeInsetsZero resizingMode:UIImageResizingModeStretch] forBarMetrics:UIBarMetricsDefault];
     [[UINavigationBar appearance] setTintColor:[UIColor blackColor]];
+    
+    [[UINavigationBar appearance] setHidden:YES];
 }
 
 - (NSArray *)loadingImages
@@ -218,24 +219,6 @@ static UIColor *colorBorder, *colorLightBorder;
     }
 }
 
-- (UIColor *)colorDarkGray
-{
-    if (self.themeStyle == PGThemeStyleDefault) {
-        return colorDarkGray;
-    } else {
-        return colorDarkGray;
-    }
-}
-
-- (UIColor *)colorGray
-{
-    if (self.themeStyle == PGThemeStyleDefault) {
-        return colorGray;
-    } else {
-        return colorGray;
-    }
-}
-
 - (UIColor *)colorLightGray
 {
     if (self.themeStyle == PGThemeStyleDefault) {
@@ -251,6 +234,15 @@ static UIColor *colorBorder, *colorLightBorder;
         return colorText;
     } else {
         return colorText;
+    }
+}
+
+- (UIColor *)colorLightText
+{
+    if (self.themeStyle == PGThemeStyleDefault) {
+        return colorLightText;
+    } else {
+        return colorLightText;
     }
 }
 

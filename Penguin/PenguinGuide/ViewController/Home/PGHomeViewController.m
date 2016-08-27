@@ -22,6 +22,7 @@
 #import "PGHomeViewController.h"
 #import "PGLoginViewController.h"
 #import "PGArticleViewController.h"
+#import "PGChannelViewController.h"
 // view models
 #import "PGHomeViewModel.h"
 // models
@@ -41,7 +42,7 @@
 #import "PGSingleGoodBannerCell.h"
 #import "PGFlashbuyBannerCell.h"
 
-@interface PGHomeViewController () <UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout>
+@interface PGHomeViewController () <UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, PGHomeRecommendsHeaderViewDelegate>
 
 @property (nonatomic, strong) PGHomeViewModel *viewModel;
 @property (nonatomic, strong, readwrite) PGBaseCollectionView *feedsCollectionView;
@@ -91,6 +92,8 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    
+    // http://blog.csdn.net/ws1352864983/article/details/51932388
     
     // these codes in viewDidLoad will not work
     [self.navigationController.navigationBar pg_setBackgroundColor:[UIColor clearColor]];
@@ -230,6 +233,7 @@
 {
     if (indexPath.section == 0) {
         PGHomeRecommendsHeaderView *headerView = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:HomeHeaderView forIndexPath:indexPath];
+        headerView.delegate = self;
         [headerView reloadBannersWithData:self.viewModel.recommendsArray];
         
         return headerView;
@@ -310,6 +314,14 @@
             }
         }
     }
+}
+
+#pragma mark - <PGHomeRecommendsHeaderViewDelegate>
+
+- (void)channelDidSelect:(NSString *)tagId
+{
+    PGChannelViewController *channelVC = [[PGChannelViewController alloc] init];
+    [self.navigationController pushViewController:channelVC animated:YES];
 }
 
 #pragma mark - <Setters && Getters>

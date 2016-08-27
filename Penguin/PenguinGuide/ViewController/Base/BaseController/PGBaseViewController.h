@@ -13,6 +13,7 @@
 // popups
 #import "UIView+PGToast.h"
 #import "PGAlertController.h"
+#import "PGPopupViewController.h"
 
 #import "PGAnalytics.h"
 
@@ -31,5 +32,8 @@
 - (void)showAlert:(NSString *)title message:(NSString *)message actions:(NSArray *)actions style:(void (^)(PGAlertStyle *))styleConfig;
 - (void)showLoading;
 - (void)dismissLoading;
+
+- (void)showPopup:(UIView *)popupView;
+- (void)dismissPopup;
 
 @end

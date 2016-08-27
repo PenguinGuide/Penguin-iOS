@@ -70,17 +70,17 @@
             NSMutableAttributedString *attrS = [[NSMutableAttributedString alloc] initWithString:countdownStr];
             [attrS addAttribute:NSForegroundColorAttributeName value:Theme.colorHighlight range:NSMakeRange(0, 2)];
             [attrS addAttribute:NSFontAttributeName value:Theme.fontExtraLargeBold range:NSMakeRange(0, 2)];
-            [attrS addAttribute:NSForegroundColorAttributeName value:[UIColor colorWithHexString:@"AFAFAF"] range:NSMakeRange(3, 1)];
+            [attrS addAttribute:NSForegroundColorAttributeName value:Theme.colorLightText range:NSMakeRange(3, 1)];
             [attrS addAttribute:NSFontAttributeName value:Theme.fontExtraSmallBold range:NSMakeRange(3, 1)];
             
             [attrS addAttribute:NSForegroundColorAttributeName value:Theme.colorHighlight range:NSMakeRange(5, 2)];
             [attrS addAttribute:NSFontAttributeName value:Theme.fontExtraLargeBold range:NSMakeRange(5, 2)];
-            [attrS addAttribute:NSForegroundColorAttributeName value:[UIColor colorWithHexString:@"AFAFAF"] range:NSMakeRange(8, 3)];
+            [attrS addAttribute:NSForegroundColorAttributeName value:Theme.colorLightText range:NSMakeRange(8, 3)];
             [attrS addAttribute:NSFontAttributeName value:Theme.fontExtraSmallBold range:NSMakeRange(8, 3)];
             
             [attrS addAttribute:NSForegroundColorAttributeName value:Theme.colorHighlight range:NSMakeRange(12, 2)];
             [attrS addAttribute:NSFontAttributeName value:Theme.fontExtraLargeBold range:NSMakeRange(12, 2)];
-            [attrS addAttribute:NSForegroundColorAttributeName value:[UIColor colorWithHexString:@"AFAFAF"] range:NSMakeRange(15, 1)];
+            [attrS addAttribute:NSForegroundColorAttributeName value:Theme.colorLightText range:NSMakeRange(15, 1)];
             [attrS addAttribute:NSFontAttributeName value:Theme.fontExtraSmallBold range:NSMakeRange(15, 1)];
             
             self.countdownLabel.attributedText = attrS;
@@ -89,17 +89,17 @@
             NSMutableAttributedString *attrS = [[NSMutableAttributedString alloc] initWithString:countdownStr];
             [attrS addAttribute:NSForegroundColorAttributeName value:Theme.colorHighlight range:NSMakeRange(0, 2)];
             [attrS addAttribute:NSFontAttributeName value:Theme.fontExtraLargeBold range:NSMakeRange(0, 2)];
-            [attrS addAttribute:NSForegroundColorAttributeName value:[UIColor colorWithHexString:@"AFAFAF"] range:NSMakeRange(3, 1)];
+            [attrS addAttribute:NSForegroundColorAttributeName value:Theme.colorLightText range:NSMakeRange(3, 1)];
             [attrS addAttribute:NSFontAttributeName value:Theme.fontExtraSmallBold range:NSMakeRange(3, 1)];
             
             [attrS addAttribute:NSForegroundColorAttributeName value:Theme.colorHighlight range:NSMakeRange(5, 2)];
             [attrS addAttribute:NSFontAttributeName value:Theme.fontExtraLargeBold range:NSMakeRange(5, 2)];
-            [attrS addAttribute:NSForegroundColorAttributeName value:[UIColor colorWithHexString:@"AFAFAF"] range:NSMakeRange(8, 3)];
+            [attrS addAttribute:NSForegroundColorAttributeName value:Theme.colorLightText range:NSMakeRange(8, 3)];
             [attrS addAttribute:NSFontAttributeName value:Theme.fontExtraSmallBold range:NSMakeRange(8, 3)];
             
             [attrS addAttribute:NSForegroundColorAttributeName value:Theme.colorHighlight range:NSMakeRange(12, 2)];
             [attrS addAttribute:NSFontAttributeName value:Theme.fontExtraLargeBold range:NSMakeRange(12, 2)];
-            [attrS addAttribute:NSForegroundColorAttributeName value:[UIColor colorWithHexString:@"AFAFAF"] range:NSMakeRange(15, 1)];
+            [attrS addAttribute:NSForegroundColorAttributeName value:Theme.colorLightText range:NSMakeRange(15, 1)];
             [attrS addAttribute:NSFontAttributeName value:Theme.fontExtraSmallBold range:NSMakeRange(15, 1)];
             
             self.countdownLabel.attributedText = attrS;
@@ -109,17 +109,17 @@
         NSMutableAttributedString *attrS = [[NSMutableAttributedString alloc] initWithString:countdownStr];
         [attrS addAttribute:NSForegroundColorAttributeName value:Theme.colorHighlight range:NSMakeRange(0, 2)];
         [attrS addAttribute:NSFontAttributeName value:Theme.fontExtraLargeBold range:NSMakeRange(0, 2)];
-        [attrS addAttribute:NSForegroundColorAttributeName value:[UIColor colorWithHexString:@"AFAFAF"] range:NSMakeRange(3, 1)];
+        [attrS addAttribute:NSForegroundColorAttributeName value:Theme.colorLightText range:NSMakeRange(3, 1)];
         [attrS addAttribute:NSFontAttributeName value:Theme.fontExtraSmallBold range:NSMakeRange(3, 1)];
         
         [attrS addAttribute:NSForegroundColorAttributeName value:Theme.colorHighlight range:NSMakeRange(5, 2)];
         [attrS addAttribute:NSFontAttributeName value:Theme.fontExtraLargeBold range:NSMakeRange(5, 2)];
-        [attrS addAttribute:NSForegroundColorAttributeName value:[UIColor colorWithHexString:@"AFAFAF"] range:NSMakeRange(8, 3)];
+        [attrS addAttribute:NSForegroundColorAttributeName value:Theme.colorLightText range:NSMakeRange(8, 3)];
         [attrS addAttribute:NSFontAttributeName value:Theme.fontExtraSmallBold range:NSMakeRange(8, 3)];
         
         [attrS addAttribute:NSForegroundColorAttributeName value:Theme.colorHighlight range:NSMakeRange(12, 2)];
         [attrS addAttribute:NSFontAttributeName value:Theme.fontExtraLargeBold range:NSMakeRange(12, 2)];
-        [attrS addAttribute:NSForegroundColorAttributeName value:[UIColor colorWithHexString:@"AFAFAF"] range:NSMakeRange(15, 1)];
+        [attrS addAttribute:NSForegroundColorAttributeName value:Theme.colorLightText range:NSMakeRange(15, 1)];
         [attrS addAttribute:NSFontAttributeName value:Theme.fontExtraSmallBold range:NSMakeRange(15, 1)];
         
         self.countdownLabel.attributedText = attrS;
@@ -159,7 +159,7 @@
 - (UILabel *)priceLabel {
 	if(_priceLabel == nil) {
 		_priceLabel = [[UILabel alloc] initWithFrame:CGRectMake(20, self.countdownLabel.bottom+10, self.width/2-40, 14)];
-        _priceLabel.textColor = [UIColor colorWithHexString:@"AFAFAF"];
+        _priceLabel.textColor = Theme.colorLightText;
         _priceLabel.font = Theme.fontSmallBold;
 	}
 	return _priceLabel;

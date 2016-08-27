@@ -17,6 +17,7 @@
 @property (nonatomic, strong, readwrite) PGAPIClient *apiClient;
 @property (nonatomic, strong, readwrite) FBKVOController *KVOController;
 @property (nonatomic, strong) MBProgressHUD *hud;
+@property (nonatomic, strong) PGPopupViewController *popupViewController;
 
 @end
 
@@ -120,6 +121,19 @@
     [alertController addActions:actions];
     
     [self presentViewController:alertController animated:YES completion:nil];
+}
+
+#pragma mark - <Popup>
+
+- (void)showPopup:(UIView *)popupView
+{
+    self.popupViewController = [PGPopupViewController popupViewControllerWithPopupView:popupView];
+    [self presentViewController:self.popupViewController animated:YES completion:nil];
+}
+
+- (void)dismissPopup
+{
+    [self.popupViewController dismissViewControllerAnimated:YES completion:nil];
 }
 
 #pragma mark - <Loading>
