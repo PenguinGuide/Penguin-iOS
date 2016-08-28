@@ -23,6 +23,7 @@
 #import "PGLoginViewController.h"
 #import "PGArticleViewController.h"
 #import "PGChannelViewController.h"
+#import "PGSearchRecommendsViewController.h"
 // view models
 #import "PGHomeViewModel.h"
 // models
@@ -243,8 +244,11 @@
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
-//    PGArticleViewController *articleVC = [[PGArticleViewController alloc] init];
-//    [self.navigationController pushViewController:articleVC animated:YES];
+    id banner = self.viewModel.feedsArray[indexPath.section];
+    if ([banner isKindOfClass:[PGArticleBanner class]]) {
+        PGArticleViewController *articleVC = [[PGArticleViewController alloc] init];
+        [self.navigationController pushViewController:articleVC animated:YES];
+    }
 }
 
 #pragma mark - <UICollectionViewDelegateFlowLayout>
@@ -297,7 +301,8 @@
 
 - (void)searchButtonClicked
 {
-    
+    PGSearchRecommendsViewController *searchRecommendsVC = [[PGSearchRecommendsViewController alloc] init];
+    [self presentViewController:searchRecommendsVC animated:NO completion:nil];
 }
 
 - (void)countdown

@@ -10,6 +10,7 @@
 
 #import "PGChannelViewController.h"
 #import "PGChannelAllCategoriesViewController.h"
+#import "PGArticleViewController.h"
 #import "UINavigationBar+PGTransparentNaviBar.h"
 
 #import "PGChannelViewModel.h"
@@ -141,6 +142,12 @@
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath
 {
     return [PGArticleBannerCell cellSize];
+}
+
+- (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    PGArticleViewController *articleVC = [[PGArticleViewController alloc] init];
+    [self.navigationController pushViewController:articleVC animated:YES];
 }
 
 #pragma mark - <UIScrollViewDelegate>
