@@ -123,6 +123,8 @@ static const int DefaultMaxConcurrentConnections = 5;
             } else if (resultCode == PG_API_Result_Failed) {
                 
             }
+        } else {
+            failure(nil);
         }
     }
 }

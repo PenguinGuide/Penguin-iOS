@@ -10,6 +10,9 @@
 #import "PGAPIClient.h"
 #import "FBKVOController.h"
 
+// navigation bar
+#import "UINavigationBar+PGTransparentNaviBar.h"
+
 // popups
 #import "UIView+PGToast.h"
 #import "PGAlertController.h"
@@ -21,6 +24,9 @@
 
 @property (nonatomic, strong, readonly) PGAPIClient *apiClient;
 @property (nonatomic, strong, readonly) FBKVOController *KVOController;
+
+- (void)setTransparentNavigationBar:(UIColor *)tintColor;
+- (void)resetTransparentNavigationBar;
 
 - (void)observe:(id)object keyPath:(NSString *)keyPath block:(void(^)(id changedObject))block;
 - (void)unobserve;

@@ -11,7 +11,6 @@
 #import "PGChannelViewController.h"
 #import "PGChannelAllCategoriesViewController.h"
 #import "PGArticleViewController.h"
-#import "UINavigationBar+PGTransparentNaviBar.h"
 
 #import "PGChannelViewModel.h"
 

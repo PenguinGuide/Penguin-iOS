@@ -15,6 +15,7 @@
     return @{
              @"image" : @"image",
              @"type" : @"type",
+             @"title": @"title",
              @"category" : @"category",
              @"link" : @"link",
              @"readsCount" : @"reads",

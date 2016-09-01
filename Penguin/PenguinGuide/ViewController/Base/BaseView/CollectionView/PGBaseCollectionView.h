@@ -10,7 +10,7 @@
 
 @interface PGBaseCollectionView : UICollectionView
 
-- (void)enablePullToRefresh:(void(^)(void))completion;
+- (void)enablePullToRefreshWithTopInset:(CGFloat)topInset completion:(void (^)(void))completion;
 - (void)enableInfiniteScrolling:(void(^)(void))completion;
 
 - (void)endTopRefreshing;

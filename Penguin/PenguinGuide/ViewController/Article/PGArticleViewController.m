@@ -28,6 +28,7 @@
 @interface PGArticleViewController () <UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, UIScrollViewDelegate>
 
 @property (nonatomic, strong, readwrite) UICollectionView *articleCollectionView;
+@property (nonatomic, strong, readwrite) UIButton *backButton;
 
 @property (nonatomic, strong) PGArticleViewModel *viewModel;
 
@@ -43,18 +44,12 @@
     self.automaticallyAdjustsScrollViewInsets = NO;
     
     [self.view addSubview:self.articleCollectionView];
+    [self.view addSubview:self.backButton];
     
-    self.imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, UISCREEN_WIDTH, UISCREEN_WIDTH*180/320)];
+    self.imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, UISCREEN_WIDTH, UISCREEN_WIDTH*9/16)];
     [self.imageView setWithImageURL:@"https://s6.postimg.org/xde2wnynl/PG_HOME_article_home.png" placeholder:nil completion:nil];
     [self.articleCollectionView setHeaderView:self.imageView naviTitle:@"从午间定食到深夜食堂！" rightNaviButton:nil];
-    //self.articleCollectionView.alpha = 0.f;
-    
-    UIButton *backButton = [[UIButton alloc] initWithFrame:CGRectMake(20, 10, 60, 60)];
-    [backButton setImage:[UIImage imageNamed:@"pg_navigation_back_button_light"] forState:UIControlStateNormal];
-    [backButton addTarget:self action:@selector(backButtonClicked) forControlEvents:UIControlEventTouchUpInside];
-    [backButton setContentHorizontalAlignment:UIControlContentHorizontalAlignmentLeft];
-    [backButton setContentVerticalAlignment:UIControlContentVerticalAlignmentCenter];
-    [self.view addSubview:backButton];
+    self.articleCollectionView.alpha = 0.f;
     
     self.viewModel = [[PGArticleViewModel alloc] init];
     
@@ -69,21 +64,21 @@
 
 - (void)animateCollectionView:(void (^)())completion
 {
-//    self.articleCollectionView.frame = CGRectMake(0, UISCREEN_HEIGHT-300, self.articleCollectionView.width, self.articleCollectionView.height);
-//    self.articleCollectionView.alpha = 0.f;
-//    
-//    [UIView animateWithDuration:0.3f
-//                          delay:0.f
-//                        options:UIViewAnimationOptionCurveEaseOut
-//                     animations:^{
-//                         self.articleCollectionView.frame = CGRectMake(0, 0, self.articleCollectionView.width, self.articleCollectionView.height);
-//                         self.articleCollectionView.alpha = 0.4f;
-//                     } completion:^(BOOL finished) {
-//                         self.articleCollectionView.alpha = 1.f;
-//                         if (completion) {
-//                             completion();
-//                         }
-//                     }];
+    self.articleCollectionView.frame = CGRectMake(0, UISCREEN_HEIGHT-300, self.articleCollectionView.width, self.articleCollectionView.height);
+    self.articleCollectionView.alpha = 0.f;
+    
+    [UIView animateWithDuration:0.3f
+                          delay:0.f
+                        options:UIViewAnimationOptionCurveEaseOut
+                     animations:^{
+                         self.articleCollectionView.frame = CGRectMake(0, 0, self.articleCollectionView.width, self.articleCollectionView.height);
+                         self.articleCollectionView.alpha = 0.4f;
+                     } completion:^(BOOL finished) {
+                         self.articleCollectionView.alpha = 1.f;
+                         if (completion) {
+                             completion();
+                         }
+                     }];
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -95,11 +90,7 @@
 {
     [super viewWillAppear:animated];
     
-    // http://www.ithao123.cn/content-680069.html
-    // http://blog.csdn.net/gxp1032901/article/details/41879557
-    [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
-    
-    [self.navigationController setNavigationBarHidden:YES animated:YES];
+    [self.navigationController setNavigationBarHidden:YES animated:NO];
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -107,9 +98,6 @@
     [super viewWillDisappear:animated];
     
     [self.navigationController setNavigationBarHidden:NO animated:NO];
-    
-    [self.navigationController.navigationBar setBackgroundImage:[[UIImage imageNamed:@"pg_navigation_bg_image"] resizableImageWithCapInsets:UIEdgeInsetsZero resizingMode:UIImageResizingModeStretch] forBarMetrics:UIBarMetricsDefault];
-    [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleDefault];
 }
 
 - (UIStatusBarStyle)preferredStatusBarStyle
@@ -161,7 +149,7 @@
 
 - (UIEdgeInsets)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout insetForSectionAtIndex:(NSInteger)section
 {
-    return UIEdgeInsetsMake(UISCREEN_WIDTH*180/320+20, 0, 0, 0);
+    return UIEdgeInsetsMake(UISCREEN_WIDTH*9/16+20, 0, 0, 0);
 }
 
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath
@@ -203,6 +191,17 @@
         [_articleCollectionView registerClass:[PGArticleParagraphGIFImageCell class] forCellWithReuseIdentifier:ArticleParagraphGIFImageCell];
     }
     return _articleCollectionView;
+}
+
+- (UIButton *)backButton {
+    if(_backButton == nil) {
+        _backButton = [[UIButton alloc] initWithFrame:CGRectMake(24, 35, 50, 50)];
+        [_backButton setImage:[UIImage imageNamed:@"pg_navigation_back_button_light"] forState:UIControlStateNormal];
+        [_backButton setContentVerticalAlignment:UIControlContentVerticalAlignmentTop];
+        [_backButton setContentHorizontalAlignment:UIControlContentHorizontalAlignmentLeft];
+        [_backButton addTarget:self action:@selector(backButtonClicked) forControlEvents:UIControlEventTouchUpInside];
+    }
+    return _backButton;
 }
 
 - (void)didReceiveMemoryWarning {

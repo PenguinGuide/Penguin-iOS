@@ -10,10 +10,16 @@
 #define PGAPIList_h
 
 #define PG_Home_Recommends              @"/api/v1/home/recommends"
-#define PG_Home_HomeFeeds               @"/api/v1/home/homefeeds"
+#define PG_Home_Feeds                   @"/api/v1/home/feeds"
 
 #define PG_Channel                      @"/api/v1/channel/:channelId"
 
 #define PG_Channel_Category_Articles    @"/api/v1/article/channel/:channelId/category/:categoryId"
+
+#define PG_Search_Articles              @"/api/v1/search/articles"
+#define PG_Search_Goods                 @"/api/v1/search/goods"
+
+#define PG_Scenario                     @"/api/v1/scenario/:scenarioId"
+#define PG_Scenario_Feeds               @"/api/v1/scenario/feeds/scenario/:scenarioId/category/:categoryId"
 
 #endif /* PGAPIList_h */

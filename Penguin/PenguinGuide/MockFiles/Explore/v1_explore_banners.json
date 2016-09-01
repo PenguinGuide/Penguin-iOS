@@ -1,44 +1,44 @@
 {
     "data": [
              {
-                "type": "article",
-                "category": "city_guide",
-                "image": "https://s6.postimg.org/xde2wnynl/PG_HOME_article_home.png",
-                "link": "",
-                "reads": "8022",
-                "comments": "187"
+             "type": "article",
+             "category": "city_guide",
+             "image": "https://s6.postimg.org/xde2wnynl/PG_HOME_article_home.png",
+             "link": "",
+             "reads": "8022",
+             "comments": "187"
              },
              {
-                "type": "flashbuy",
-                "goods": [
-                          {
-                          "discount_price": 199,
-                          "original_price": 238,
-                          "name": "美奇乐Mikkeller",
-                          "image": "https://s6.postimg.org/rq09iz0hd/PG_HOME_flashbuy_pic.png",
-                          "unit": "箱",
-                          "desc": "距离闪购开始",
-                          "time": 1472412142
-                          },
-                          {
-                          "discount_price": 199,
-                          "original_price": 238,
-                          "name": "美奇乐Mikkeller",
-                          "image": "https://s6.postimg.org/rq09iz0hd/PG_HOME_flashbuy_pic.png",
-                          "unit": "箱",
-                          "desc": "距离闪购开始",
-                          "time": 1472405024
-                          },
-                          {
-                          "discount_price": 199,
-                          "original_price": 238,
-                          "name": "美奇乐Mikkeller",
-                          "image": "https://s6.postimg.org/rq09iz0hd/PG_HOME_flashbuy_pic.png",
-                          "unit": "箱",
-                          "desc": "距离闪购开始",
-                          "time": 1472494931
-                          }
-                ]
+             "type": "flashbuy",
+             "goods": [
+                       {
+                       "discount_price": 199,
+                       "original_price": 238,
+                       "name": "美奇乐Mikkeller",
+                       "image": "https://s6.postimg.org/rq09iz0hd/PG_HOME_flashbuy_pic.png",
+                       "unit": "箱",
+                       "desc": "距离闪购开始",
+                       "time": 1472566918
+                       },
+                       {
+                       "discount_price": 199,
+                       "original_price": 238,
+                       "name": "美奇乐Mikkeller",
+                       "image": "https://s6.postimg.org/rq09iz0hd/PG_HOME_flashbuy_pic.png",
+                       "unit": "箱",
+                       "desc": "距离闪购开始",
+                       "time": 1472566918
+                       },
+                       {
+                       "discount_price": 199,
+                       "original_price": 238,
+                       "name": "美奇乐Mikkeller",
+                       "image": "https://s6.postimg.org/rq09iz0hd/PG_HOME_flashbuy_pic.png",
+                       "unit": "箱",
+                       "desc": "距离闪购开始",
+                       "time": 1472566918
+                       }
+                       ]
              },
              {
              "type": "goods_collection",
@@ -117,7 +117,7 @@
              },
              {
              "type": "topic",
-             "image": "https://s6.postimg.org/47otfxhdd/PG_HOME_topic_banner.png",
+             "image": "https://s6.postimg.io/hk0fvmqep/1b37dd41716489_57b1d4e4bed30.jpg",
              "goods": [
                        {
                        "discount_price": 199,
@@ -181,13 +181,13 @@
                        ]
              },
              {
-                "type": "good",
-                "discount_price": 199,
-                "original_price": 238,
-                "name": "美奇乐Mikkeller精酿啤酒",
-                "desc": "7种风味 x 12g",
-                "image": "https://s6.postimg.org/6dnpo6a7l/PG_HOME_product_pic.png",
-                "unit": "瓶",
+             "type": "good",
+             "discount_price": 199,
+             "original_price": 238,
+             "name": "美奇乐Mikkeller精酿啤酒",
+             "desc": "7种风味 x 12g",
+             "image": "https://s6.postimg.org/6dnpo6a7l/PG_HOME_product_pic.png",
+             "unit": "瓶",
              }
              ],
     "result": 0

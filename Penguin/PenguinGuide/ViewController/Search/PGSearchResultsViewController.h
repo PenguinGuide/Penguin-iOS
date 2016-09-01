@@ -10,4 +10,6 @@
 
 @interface PGSearchResultsViewController : PGBaseViewController
 
+- (id)initWithKeyword:(NSString *)keyword;
+
 @end

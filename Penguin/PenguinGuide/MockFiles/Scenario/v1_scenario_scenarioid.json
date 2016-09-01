@@ -1,0 +1,25 @@
+{
+    "data": {
+        "image": "https://s6.postimg.org/pvnvkluep/article2.png",
+        "title": "新手入门",
+        "categories": [
+                       {
+                       "image": "https://s6.postimg.org/7xkbegks1/article_list_menu1.png",
+                       "id": "categoryforall"
+                       },
+                       {
+                       "image": "https://s6.postimg.org/6wk2pc3sh/article_list_menu2.png",
+                       "id": "111111"
+                       },
+                       {
+                       "image": "https://s6.postimg.org/ruq8nf3n5/article_list_menu3.png",
+                       "id": "222222"
+                       },
+                       {
+                       "image": "https://s6.postimg.org/6wk2pc3sh/article_list_menu2.png",
+                       "id": "333333"
+                       }
+                       ]
+    },
+    "result": 0
+}

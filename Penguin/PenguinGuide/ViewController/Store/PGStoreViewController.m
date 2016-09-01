@@ -8,7 +8,15 @@
 
 #import "PGStoreViewController.h"
 
-@interface PGStoreViewController ()
+#import "PGStoreViewModel.h"
+
+#import "PGFeedsCollectionView.h"
+#import "PGStoreRecommendsHeaderView.h"
+
+@interface PGStoreViewController () <PGFeedsCollectionViewDelegate>
+
+@property (nonatomic, strong) PGStoreViewModel *viewModel;
+@property (nonatomic, strong) PGFeedsCollectionView *feedsCollectionView;
 
 @end
 
@@ -17,13 +25,51 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+    
+    [self.view addSubview:self.feedsCollectionView];
+    
+    self.viewModel = [[PGStoreViewModel alloc] initWithAPIClient:self.apiClient];
+    [self.viewModel requestData];
+    
+    PGWeakSelf(self);
+    [self observe:self.viewModel keyPath:@"bannersArray" block:^(id changedObject) {
+        NSArray *bannersArray = changedObject;
+        if (bannersArray && [bannersArray isKindOfClass:[NSArray class]]) {
+            [weakself.feedsCollectionView reloadData];
+        }
+    }];
+}
 
-    self.view.backgroundColor = [UIColor redColor];
+- (void)viewDidLayoutSubviews
+{
+    [super viewDidLayoutSubviews];
+    // http://stackoverflow.com/questions/19411442/uicollectionview-adds-top-margin
+    // ISSUE: put in setter doesn't work
+    self.feedsCollectionView.contentInset = UIEdgeInsetsMake(64, 0, 0, 0);
+}
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    
+    [self.navigationController setNavigationBarHidden:NO animated:NO];
+}
+
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    
+    [self.navigationController setNavigationBarHidden:NO animated:NO];
 }
 
 - (UIStatusBarStyle)preferredStatusBarStyle
 {
     return UIStatusBarStyleDefault;
+}
+
+- (void)dealloc
+{
+    [self unobserve];
 }
 
 #pragma mark - <PGTabBarControllerDelegate>
@@ -47,10 +93,34 @@
 {
     PGLogWarning(@"store tabBarDidClicked");
     
+    [self.navigationController setNavigationBarHidden:NO animated:NO];
+    
     self.parentViewController.navigationItem.leftBarButtonItem = nil;
     self.parentViewController.navigationItem.titleView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"pg_home_logo"]];
     
     [self setNeedsStatusBarAppearanceUpdate];
+}
+
+#pragma mark - <PGFeedsCollectionViewDelegate>
+
+- (NSArray *)recommendsArray
+{
+    return self.viewModel.recommendsArray;
+}
+
+- (NSArray *)feedsArray
+{
+    return self.viewModel.bannersArray;
+}
+
+- (CGSize)feedsHeaderSize
+{
+    return [PGStoreRecommendsHeaderView headerViewSize];
+}
+
+- (NSString *)tabType
+{
+    return @"store";
 }
 
 - (void)didReceiveMemoryWarning {
@@ -58,14 +128,26 @@
     // Dispose of any resources that can be recreated.
 }
 
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
+- (PGFeedsCollectionView *)feedsCollectionView {
+    if(_feedsCollectionView == nil) {
+        _feedsCollectionView = [[PGFeedsCollectionView alloc] initWithFrame:CGRectMake(0, 0, UISCREEN_WIDTH, UISCREEN_HEIGHT-50) collectionViewLayout:[UICollectionViewFlowLayout new]];
+        _feedsCollectionView.feedsDelegate = self;
+        
+        __block PGFeedsCollectionView *collectionView = _feedsCollectionView;
+        PGWeakSelf(self);
+        [_feedsCollectionView enablePullToRefreshWithTopInset:64.f completion:^{
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2.f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                [collectionView endTopRefreshing];
+                [weakself.viewModel requestData];
+            });
+        }];
+        [_feedsCollectionView enableInfiniteScrolling:^{
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                [collectionView endBottomRefreshing];
+            });
+        }];
+    }
+    return _feedsCollectionView;
 }
-*/
 
 @end

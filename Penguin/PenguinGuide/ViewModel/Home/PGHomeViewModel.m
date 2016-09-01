@@ -46,10 +46,10 @@
 {
     PGWeakSelf(self);
     [self.apiClient pg_makeGetRequest:^(PGRKRequestConfig *config) {
-        config.route = PG_Home_HomeFeeds;
+        config.route = PG_Home_Feeds;
         config.keyPath = @"data";
         config.isMockAPI = YES;
-        config.mockFileName = @"v1_home_homefeeds.json";
+        config.mockFileName = @"v1_home_feeds.json";
     } completion:^(id response) {
         if (response[@"data"] && [response[@"data"] isKindOfClass:[NSArray class]]) {
             NSMutableArray *models = [NSMutableArray new];

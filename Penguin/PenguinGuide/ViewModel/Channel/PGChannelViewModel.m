@@ -26,6 +26,7 @@
 
 - (void)requestData
 {
+    // FIXME: data without "result" key, completion & failure blocks will not be called
     if (self.channelId && self.channelId.length > 0) {
         PGWeakSelf(self);
         [self.apiClient pg_makeGetRequest:^(PGRKRequestConfig *config) {
@@ -56,7 +57,7 @@
         config.model = [PGArticleBanner new];
         config.keyPath = @"data";
         config.isMockAPI = YES;
-        config.mockFileName = @"v1_channel_channelid_category_categoryid.json";
+        config.mockFileName = @"v1_article_channel_channelid_category_categoryid.json";
     } completion:^(id response) {
         weakself.articlesArray = response;
     } failure:^(NSError *error) {

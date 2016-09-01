@@ -73,6 +73,21 @@
     
 }
 
+- (void)setTransparentNavigationBar:(UIColor *)tintColor
+{
+    [self.navigationController.navigationBar setBackgroundImage:[UIImage new] forBarMetrics:UIBarMetricsDefault]; // setBackgroundImage will remove _UIBackdropView
+    [self.navigationController.navigationBar setShadowImage:[UIImage new]];
+    if (tintColor) {
+        [self.navigationController.navigationBar setTintColor:tintColor];
+    }
+}
+
+- (void)resetTransparentNavigationBar
+{
+    [self.navigationController.navigationBar setBackgroundImage:nil forBarMetrics:UIBarMetricsDefault];
+    [self.navigationController.navigationBar setShadowImage:nil];
+}
+
 #pragma mark - <Back Button>
 
 - (void)backButtonClicked

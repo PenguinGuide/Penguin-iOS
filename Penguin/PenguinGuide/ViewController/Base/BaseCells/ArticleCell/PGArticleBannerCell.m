@@ -73,7 +73,7 @@
 
 + (CGSize)cellSize
 {
-    return CGSizeMake(UISCREEN_WIDTH, UISCREEN_WIDTH*180/320);
+    return CGSizeMake(UISCREEN_WIDTH, UISCREEN_WIDTH*9/16);
 }
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
@@ -108,6 +108,7 @@
 {
     if (!_bannerImageView) {
         _bannerImageView = [[FLAnimatedImageView alloc] initWithFrame:CGRectMake(0, 0, self.width, self.height)];
+        _bannerImageView.clipsToBounds = YES;
         _bannerImageView.contentMode = UIViewContentModeScaleAspectFill;
     }
     return _bannerImageView;

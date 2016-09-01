@@ -33,14 +33,14 @@
     PGArticleBannerCell *cell = (PGArticleBannerCell *)[homeVC.feedsCollectionView cellForItemAtIndexPath:[[homeVC.feedsCollectionView indexPathsForSelectedItems] firstObject]];
     CGRect rect = [containerView convertRect:cell.bannerImageView.frame fromView:cell.bannerImageView.superview];
     
-    CGRect topScreenshotRect = CGRectMake(0, 0, rect.size.width, rect.origin.y+rect.size.height-64);
+    CGRect topScreenshotRect = CGRectMake(0, 0, rect.size.width, rect.origin.y+rect.size.height);
     UIImageView *topScreenshotView = [[UIImageView alloc] init];
     if (topScreenshotRect.size.height < cell.frame.size.height) {
-        topScreenshotView.frame = CGRectMake(0, 64, cell.bannerImageView.image.size.width, cell.bannerImageView.image.size.height);
+        topScreenshotView.frame = CGRectMake(0, 0, cell.bannerImageView.image.size.width, cell.bannerImageView.image.size.height);
         topScreenshotView.image = cell.bannerImageView.image;
     } else {
         UIImage *topScreenshot = [homeVC.feedsCollectionView screenshotFromRect:topScreenshotRect];
-        topScreenshotView.frame = CGRectMake(0, 64, topScreenshot.size.width, topScreenshot.size.height);
+        topScreenshotView.frame = CGRectMake(0, 0, topScreenshot.size.width, topScreenshot.size.height);
         topScreenshotView.image = topScreenshot;
     }
     

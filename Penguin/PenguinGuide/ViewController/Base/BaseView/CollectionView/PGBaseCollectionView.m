@@ -15,14 +15,14 @@
 - (id)initWithFrame:(CGRect)frame collectionViewLayout:(UICollectionViewLayout *)layout
 {
     if (self = [super initWithFrame:frame collectionViewLayout:layout]) {
-        self.backgroundColor = [UIColor whiteColor];
+        self.backgroundColor = Theme.colorBackground;
         self.alwaysBounceVertical = YES;
     }
     
     return self;
 }
 
-- (void)enablePullToRefresh:(void (^)(void))completion
+- (void)enablePullToRefreshWithTopInset:(CGFloat)topInset completion:(void (^)(void))completion
 {
     [self addPullToRefreshActionHandler:^{
         if (completion) {
@@ -30,7 +30,7 @@
         }
     } ProgressImages:Theme.loadingImages LoadingImages:Theme.loadingImages ProgressScrollThreshold:60 LoadingImagesFrameRate:35];
     
-    [self addTopInsetInPortrait:0 TopInsetInLandscape:0];
+    [self addTopInsetInPortrait:topInset TopInsetInLandscape:0];
 }
 
 - (void)enableInfiniteScrolling:(void (^)(void))completion

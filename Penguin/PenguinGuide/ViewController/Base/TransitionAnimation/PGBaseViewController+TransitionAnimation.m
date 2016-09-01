@@ -22,23 +22,23 @@
                                                fromViewController:(UIViewController *)fromVC
                                                  toViewController:(UIViewController *)toVC
 {
-//    if (operation == UINavigationControllerOperationPush) {
-//        if ([fromVC isKindOfClass:[PGTabBarController class]]) {
-//            if ([toVC isKindOfClass:[PGArticleViewController class]]) {
-//                return [[PGHomeToArticleTransition alloc] init];
-//            }
-//        } else {
-//            
-//        }
-//    } else if (operation == UINavigationControllerOperationPop) {
-//        if ([toVC isKindOfClass:[PGTabBarController class]]) {
-//            if ([fromVC isKindOfClass:[PGArticleViewController class]]) {
-//                return [[PGArticleToHomeTransition alloc] init];
-//            }
-//        } else {
-//            
-//        }
-//    }
+    if (operation == UINavigationControllerOperationPush) {
+        if ([fromVC isKindOfClass:[PGTabBarController class]]) {
+            if ([toVC isKindOfClass:[PGArticleViewController class]]) {
+                return [[PGHomeToArticleTransition alloc] init];
+            }
+        } else {
+            
+        }
+    } else if (operation == UINavigationControllerOperationPop) {
+        if ([toVC isKindOfClass:[PGTabBarController class]]) {
+            if ([fromVC isKindOfClass:[PGArticleViewController class]]) {
+                return [[PGArticleToHomeTransition alloc] init];
+            }
+        } else {
+            
+        }
+    }
 
     return nil;
 }

@@ -96,10 +96,7 @@ static UIColor *colorBorder, *colorLightBorder;
 
 - (void)initAppearance
 {
-    [[UINavigationBar appearance] setBackgroundImage:[[UIImage imageNamed:@"pg_navigation_bg_image"] resizableImageWithCapInsets:UIEdgeInsetsZero resizingMode:UIImageResizingModeStretch] forBarMetrics:UIBarMetricsDefault];
-    [[UINavigationBar appearance] setTintColor:[UIColor blackColor]];
-    
-    [[UINavigationBar appearance] setHidden:YES];
+    //[[UINavigationBar appearance] setBackgroundImage:[UIImage imageNamed:@"pg_navigation_bg_image"] forBarPosition:UIBarPositionAny barMetrics:UIBarMetricsDefault];
 }
 
 - (NSArray *)loadingImages
