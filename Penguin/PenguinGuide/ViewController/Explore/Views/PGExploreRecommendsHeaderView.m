@@ -71,6 +71,12 @@ static NSString *const ScenarioCell = @"ScenarioCell";
     return [NSArray arrayWithArray:banners];
 }
 
+- (void)imageViewDidSelect:(NSInteger)index
+{
+    PGImageBanner *banner = self.dataArray[index];
+    [[PGRouter sharedInstance] openURL:banner.link];
+}
+
 - (void)scenarioButtonDidClicked:(id)sender
 {
     if (self.delegate && [self.delegate respondsToSelector:@selector(scenarioDidSelect:)]) {
@@ -102,13 +108,13 @@ static NSString *const ScenarioCell = @"ScenarioCell";
 		_scenarioView = [[UIView alloc] initWithFrame:CGRectMake(0, self.bannersView.bottom, UISCREEN_WIDTH, 185)];
         _scenarioView.backgroundColor = Theme.colorBackground;
         
-        NSArray *icons = @[@"pg_home_category_wiki", @"pg_home_category_test", @"pg_home_category_store", @"pg_home_category_city_guide", @"pg_home_category_video", @"discover_6_icon", @"discover_7_icon", @"discover_8_icon"];
-        NSArray *titles = @[@"新手入门", @"成长进阶", @"高端大人", @"御宅", @"办公室", @"爬梯", @"器具", @"伟哥推荐"];
+        NSArray *icons = @[@"pg_explore_scenario_beginner", @"pg_explore_scenario_growing", @"pg_explore_scenario_master", @"pg_explore_scenario_home", @"pg_explore_scenario_office", @"pg_explore_scenario_party", @"pg_explore_scenario_tool", @"pg_explore_scenario_ceo"];
+        NSArray *titles = @[@"新手入门", @"成长进阶", @"高端大人", @"御宅", @"办公室", @"派对", @"器具", @"CEO推荐"];
         
         NSMutableArray *buttonsArray = [NSMutableArray new];
         
-        CGFloat delta = (UISCREEN_WIDTH-25*2-60*4)/3;
-        CGFloat leftX = 25.f;
+        CGFloat delta = (UISCREEN_WIDTH-15*2-60*4)/3;
+        CGFloat leftX = 15.f;
         CGFloat topY = 25.f;
         for (int i = 0; i < 8; i++) {
             UIButton *scenarioButton = [[UIButton alloc] initWithFrame:CGRectMake(leftX, topY, 60, 80)];
@@ -128,7 +134,7 @@ static NSString *const ScenarioCell = @"ScenarioCell";
             [buttonsArray addObject:scenarioButton];
             
             if (i == 3) {
-                leftX = 25.f;
+                leftX = 15.f;
                 topY = 25.f+80.f;
             } else {
                 leftX = leftX+delta+60;

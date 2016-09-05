@@ -1,34 +1,34 @@
 {
     "data": [
              {
-                "type": "article",
-                "category": "city_guide",
-                "image": "https://s6.postimg.org/xde2wnynl/PG_HOME_article_home.png",
-                "link": "",
-                "reads": "8022",
-                "comments": "187"
-             },
-             {
              "type": "article",
+             "link": "qiechihe://article?articleId=1",
              "category": "city_guide",
-             "image": "https://s6.postimg.io/vqtyw35f5/e7f7ca40772537_578cf7173ad47.jpg",
-             "link": "",
+             "image": "https://s6.postimg.org/b933841m9/2ffeaf34247967_56c9e1880f88c_copy.jpg",
              "reads": "8022",
              "comments": "187"
              },
              {
              "type": "article",
-             "category": "city_guide",
-             "image": "https://s6.postimg.org/pvnvkluep/article2.png",
-             "link": "",
+             "link": "qiechihe://article?articleId=2",
+             "category": "shop",
+             "image": "https://s6.postimg.org/u2ow53zu9/2ffeaf34247967_56c9e1880f88c_copy1.jpg",
+             "reads": "8022",
+             "comments": "187"
+             },
+             {
+             "type": "article",
+             "link": "qiechihe://article?articleId=3",
+             "category": "test",
+             "image": "https://s6.postimg.org/gaah9h92p/2ffeaf34247967_56c9e1880f88c.jpg",
              "reads": "1899",
              "comments": "129"
              },
              {
              "type": "article",
+             "link": "qiechihe://article?articleId=4",
              "category": "city_guide",
-             "image": "https://s6.postimg.org/mq39uebsh/article3.png",
-             "link": "",
+             "image": "https://s6.postimg.org/3x28gb8s1/2ffeaf34247967_56c9e1880f88c222.jpg",
              "reads": "29",
              "comments": "12"
              },
@@ -141,6 +141,7 @@
              },
              {
              "type": "topic",
+             "link": "qiechihe://topic?topicId=1111",
              "image": "https://s6.postimg.io/hk0fvmqep/1b37dd41716489_57b1d4e4bed30.jpg",
              "goods": [
                        {
@@ -210,38 +211,38 @@
                 "original_price": 238,
                 "name": "美奇乐Mikkeller精酿啤酒",
                 "desc": "7种风味 x 12g",
-                "image": "https://s6.postimg.org/6dnpo6a7l/PG_HOME_product_pic.png",
+                "image": "https://s6.postimg.org/784dlf2up/image.jpg",
                 "unit": "瓶",
              },
              {
              "type": "article",
+             "link": "qiechihe://article?articleId=5",
              "category": "city_guide",
-             "image": "https://s6.postimg.org/xde2wnynl/PG_HOME_article_home.png",
-             "link": "",
+             "image": "https://s6.postimg.org/o5pm21835/2ffeaf34247967_56c9e1880f88c2222.jpg",
              "reads": "8022",
              "comments": "187"
              },
              {
              "type": "article",
-             "category": "city_guide",
-             "image": "https://s6.postimg.io/vqtyw35f5/e7f7ca40772537_578cf7173ad47.jpg",
-             "link": "",
+             "link": "qiechihe://article?articleId=1",
+             "category": "shop",
+             "image": "https://s6.postimg.org/b933841m9/2ffeaf34247967_56c9e1880f88c_copy.jpg",
              "reads": "8022",
              "comments": "187"
              },
              {
              "type": "article",
-             "category": "city_guide",
-             "image": "https://s6.postimg.org/pvnvkluep/article2.png",
-             "link": "",
+             "link": "qiechihe://article?articleId=2",
+             "category": "test",
+             "image": "https://s6.postimg.org/u2ow53zu9/2ffeaf34247967_56c9e1880f88c_copy1.jpg",
              "reads": "1899",
              "comments": "129"
              },
              {
              "type": "article",
+             "link": "qiechihe://article?articleId=3",
              "category": "city_guide",
-             "image": "https://s6.postimg.org/mq39uebsh/article3.png",
-             "link": "",
+             "image": "https://s6.postimg.org/gaah9h92p/2ffeaf34247967_56c9e1880f88c.jpg",
              "reads": "29",
              "comments": "12"
              }

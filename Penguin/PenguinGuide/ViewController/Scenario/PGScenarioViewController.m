@@ -7,6 +7,7 @@
 //
 
 #import "PGScenarioViewController.h"
+#import "PGArticleViewController.h"
 
 #import "PGScenarioViewModel.h"
 
@@ -112,6 +113,16 @@
 - (UIEdgeInsets)topEdgeInsets
 {
     return UIEdgeInsetsMake(UISCREEN_WIDTH*9/16+54, 0, 7, 0);
+}
+
+- (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    id banner = self.viewModel.feedsArray[indexPath.item];
+    
+    if ([banner isKindOfClass:[PGArticleBanner class]]) {
+        PGArticleBanner *articleBanner = (PGArticleBanner *)banner;
+        [[PGRouter sharedInstance] openURL:articleBanner.link];
+    }
 }
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView

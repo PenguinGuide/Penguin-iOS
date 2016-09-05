@@ -145,8 +145,8 @@
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    PGArticleViewController *articleVC = [[PGArticleViewController alloc] init];
-    [self.navigationController pushViewController:articleVC animated:YES];
+    PGArticleBanner *articleBanner = self.viewModel.articlesArray[indexPath.item];
+    [[PGRouter sharedInstance] openURL:articleBanner.link];
 }
 
 #pragma mark - <UIScrollViewDelegate>

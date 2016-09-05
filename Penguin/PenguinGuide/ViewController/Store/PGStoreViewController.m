@@ -7,6 +7,7 @@
 //
 
 #import "PGStoreViewController.h"
+#import "PGStoreCategoryViewController.h"
 
 #import "PGStoreViewModel.h"
 
@@ -121,6 +122,22 @@
 - (NSString *)tabType
 {
     return @"store";
+}
+
+- (void)categoryDidSelect:(PGCategoryIcon *)category
+{
+    PGStoreCategoryViewController *categoryVC = [[PGStoreCategoryViewController alloc] init];
+    [self.navigationController pushViewController:categoryVC animated:YES];
+}
+
+- (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    id banner = self.viewModel.bannersArray[indexPath.section];
+    
+    if ([banner isKindOfClass:[PGTopicBanner class]]) {
+        PGTopicBanner *topicBanner = (PGTopicBanner *)banner;
+        [[PGRouter sharedInstance] openURL:topicBanner.link];
+    }
 }
 
 - (void)didReceiveMemoryWarning {

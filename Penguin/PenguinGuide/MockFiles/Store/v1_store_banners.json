@@ -2,6 +2,7 @@
     "data": [
              {
              "type": "topic",
+             "link": "qiechihe://topic?topicId=1111",
              "image": "https://s6.postimg.io/hk0fvmqep/1b37dd41716489_57b1d4e4bed30.jpg",
              "goods": [
                        {
@@ -67,6 +68,7 @@
              },
              {
              "type": "topic",
+             "link": "qiechihe://topic?topicId=1111",
              "image": "https://s6.postimg.io/auyhtcugh/54b04e40772537_578cf71737b1e.jpg",
              "goods": [
                        {
@@ -132,6 +134,7 @@
              },
              {
              "type": "topic",
+             "link": "qiechihe://topic?topicId=1111",
              "image": "https://s6.postimg.io/8hgk2cg1d/5639eb24594181_56336da8c082c.jpg",
              "goods": [
                        {
@@ -197,6 +200,7 @@
              },
              {
              "type": "topic",
+             "link": "qiechihe://topic?topicId=1111",
              "image": "https://s6.postimg.io/hk0fvmqep/1b37dd41716489_57b1d4e4bed30.jpg",
              "goods": [
                        {
@@ -262,6 +266,7 @@
              },
              {
              "type": "topic",
+             "link": "qiechihe://topic?topicId=1111",
              "image": "https://s6.postimg.io/auyhtcugh/54b04e40772537_578cf71737b1e.jpg",
              "goods": [
                        {
@@ -327,6 +332,7 @@
              },
              {
              "type": "topic",
+             "link": "qiechihe://topic?topicId=1111",
              "image": "https://s6.postimg.io/8hgk2cg1d/5639eb24594181_56336da8c082c.jpg",
              "goods": [
                        {
@@ -471,7 +477,7 @@
              "original_price": 238,
              "name": "美奇乐Mikkeller精酿啤酒",
              "desc": "7种风味 x 12g",
-             "image": "https://s6.postimg.org/6dnpo6a7l/PG_HOME_product_pic.png",
+             "image": "https://s6.postimg.org/784dlf2up/image.jpg",
              "unit": "瓶",
              }
              ],

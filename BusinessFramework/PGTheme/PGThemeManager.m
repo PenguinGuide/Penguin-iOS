@@ -96,7 +96,7 @@ static UIColor *colorBorder, *colorLightBorder;
 
 - (void)initAppearance
 {
-    //[[UINavigationBar appearance] setBackgroundImage:[UIImage imageNamed:@"pg_navigation_bg_image"] forBarPosition:UIBarPositionAny barMetrics:UIBarMetricsDefault];
+//    [[UINavigationBar appearance] setBackgroundImage:[UIImage imageNamed:@"pg_navigation_bg_image"] forBarPosition:UIBarPositionAny barMetrics:UIBarMetricsDefault];
 }
 
 - (NSArray *)loadingImages

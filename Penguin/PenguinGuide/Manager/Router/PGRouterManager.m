@@ -7,10 +7,11 @@
 //
 
 #import "PGRouterManager.h"
-#import "PGRouter.h"
 
 // view controllers
 #import "PGLoginViewController.h"
+#import "PGTopicViewController.h"
+#import "PGArticleViewController.h"
 
 @implementation PGRouterManager
 
@@ -34,11 +35,31 @@
             [PGGlobal.rootNavigationController presentViewController:loginVC animated:YES completion:nil];
         }
     }];
+    
+    [[PGRouter sharedInstance] registerRoute:@"qiechihe://topic" toHandler:^(NSDictionary *params) {
+        if (PGGlobal.rootNavigationController) {
+            PGTopicViewController *topicVC = [[PGTopicViewController alloc] initWithTopicId:@""];
+            [PGGlobal.rootNavigationController pushViewController:topicVC animated:YES];
+        }
+    }];
+    
+    [[PGRouter sharedInstance] registerRoute:@"qiechihe://article" toHandler:^(NSDictionary *params) {
+        if (PGGlobal.rootNavigationController) {
+            NSString *articleId = params[@"articleId"];
+            PGArticleViewController *articleVC = [[PGArticleViewController alloc] initWithArticleId:articleId animated:NO];
+            [PGGlobal.rootNavigationController pushViewController:articleVC animated:YES];
+        }
+    }];
 }
 
 + (void)routeToLoginPage
 {
     [[PGRouter sharedInstance] openURL:@"qiechihe://login"];
+}
+
++ (void)routeToTopicPage
+{
+    [[PGRouter sharedInstance] openURL:@"qiechihe://topic"];
 }
 
 @end

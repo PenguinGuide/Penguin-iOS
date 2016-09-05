@@ -170,8 +170,11 @@
 {
     id banner = self.viewModel.feedsArray[indexPath.section];
     if ([banner isKindOfClass:[PGArticleBanner class]]) {
-        PGArticleViewController *articleVC = [[PGArticleViewController alloc] init];
-        [self.navigationController pushViewController:articleVC animated:YES];
+        PGArticleBanner *articleBanner = (PGArticleBanner *)banner;
+        [[PGRouter sharedInstance] openURL:articleBanner.link];
+    } else if ([banner isKindOfClass:[PGTopicBanner class]]) {
+        PGTopicBanner *topicBanner = (PGTopicBanner *)banner;
+        [[PGRouter sharedInstance] openURL:topicBanner.link];
     }
 }
 

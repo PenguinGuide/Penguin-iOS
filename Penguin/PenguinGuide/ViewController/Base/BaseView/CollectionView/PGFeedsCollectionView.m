@@ -22,7 +22,7 @@
 #import "PGExploreRecommendsHeaderView.h"
 #import "PGStoreRecommendsHeaderView.h"
 
-@interface PGFeedsCollectionView () <UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, PGExploreRecommendsHeaderViewDelegate, PGHomeRecommendsHeaderViewDelegate>
+@interface PGFeedsCollectionView () <UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, PGExploreRecommendsHeaderViewDelegate, PGHomeRecommendsHeaderViewDelegate, PGStoreRecommendsHeaderViewDelegate>
 
 @end
 
@@ -158,8 +158,8 @@
             return headerView;
         } else if ([tabType isEqualToString:@"store"]) {
             PGStoreRecommendsHeaderView *headerView = [collectionView dequeueReusableSupplementaryViewOfKind:kind withReuseIdentifier:StoreHeaderView forIndexPath:indexPath];
-            //headerView.delegate = self;
-            [headerView reloadBannersWithData:[self.feedsDelegate recommendsArray]];
+            headerView.delegate = self;
+            [headerView reloadBannersWithData:[self.feedsDelegate recommendsArray] categoriesArray:@[]];
             
             return headerView;
         }
@@ -254,6 +254,15 @@
 {
     if (self.feedsDelegate && [self.feedsDelegate respondsToSelector:@selector(scenarioDidSelect:)]) {
         [self.feedsDelegate scenarioDidSelect:scenarioType];
+    }
+}
+
+#pragma mark - <PGStoreRecommendsHeaderViewDelegate>
+
+- (void)categoryDidSelect:(PGCategoryIcon *)categoryIcon
+{
+    if (self.feedsDelegate && [self.feedsDelegate respondsToSelector:@selector(categoryDidSelect:)]) {
+        [self.feedsDelegate categoryDidSelect:categoryIcon];
     }
 }
 

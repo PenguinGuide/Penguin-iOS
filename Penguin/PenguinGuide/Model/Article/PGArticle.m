@@ -10,4 +10,14 @@
 
 @implementation PGArticle
 
++ (NSDictionary *)JSONKeyPathsByPropertyKey
+{
+    return @{
+             @"body": @"body",
+             @"image": @"image",
+             @"title": @"title",
+             @"shareUrl": @"share_url"
+            };
+}
+
 @end

@@ -7,11 +7,16 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "PGRouter.h"
 
 @interface PGRouterManager : NSObject
+
+@property (nonatomic, strong) UINavigationController *tempNaviController;
 
 + (void)registerRouters;
 
 + (void)routeToLoginPage;
+
++ (void)routeToTopicPage;
 
 @end

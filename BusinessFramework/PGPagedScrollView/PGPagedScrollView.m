@@ -114,6 +114,9 @@
             
             self.pagedScrollView.contentSize = CGSizeMake(self.frame.size.width*fixedBanners.count, self.pagedScrollView.frame.size.height);
             for (UIView *subview in self.pagedScrollView.subviews) {
+                for (UIGestureRecognizer *gesture in subview.gestureRecognizers) {
+                    [subview removeGestureRecognizer:gesture];
+                }
                 [subview removeFromSuperview];
             }
             for (int i = 0; i < fixedBanners.count; i++) {
@@ -123,12 +126,22 @@
                     gifImageView.backgroundColor = [UIColor colorWithHexString:@"454545"];
                     [gifImageView setWithImageURL:imageName placeholder:nil completion:nil];
                     [self.pagedScrollView addSubview:gifImageView];
+                    
+                    UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(imageViewDidTapped:)];
+                    gifImageView.userInteractionEnabled = YES;
+                    gifImageView.tag = i;
+                    [gifImageView addGestureRecognizer:tapGesture];
                 } else {
                     UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(i*self.frame.size.width, 0, self.frame.size.width, self.pagedScrollView.frame.size.height)];
                     imageView.backgroundColor = [UIColor colorWithHexString:@"454545"];
                     imageView.contentMode = UIViewContentModeScaleAspectFill;
                     [imageView setWithImageURL:imageName placeholder:nil completion:nil];
                     [self.pagedScrollView addSubview:imageView];
+                    
+                    UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(imageViewDidTapped:)];
+                    imageView.userInteractionEnabled = YES;
+                    imageView.tag = i;
+                    [imageView addGestureRecognizer:tapGesture];
                 }
             }
             _pageControl.numberOfPages = fixedBanners.count;
@@ -173,6 +186,16 @@
     }
     
     self.currentPage = currentPage;
+}
+
+- (void)imageViewDidTapped:(UIGestureRecognizer *)recognizer
+{
+    UIImageView *tappedView = [recognizer view];
+    if (tappedView) {
+        if (self.delegate && [self.delegate respondsToSelector:@selector(imageViewDidSelect:)]) {
+            [self.delegate imageViewDidSelect:tappedView.tag];
+        }
+    }
 }
 
 #pragma mark - <Setters && Getters>

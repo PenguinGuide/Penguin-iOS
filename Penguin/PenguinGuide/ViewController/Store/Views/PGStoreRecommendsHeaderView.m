@@ -12,9 +12,12 @@
 #import "PGHomeChannelCell.h"
 #import "PGImageBanner.h"
 
+#import "UIButton+WebCache.h"
+
 @interface PGStoreRecommendsHeaderView () <PGPagedScrollViewDelegate, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout>
 
 @property (nonatomic, strong) NSArray *dataArray;
+@property (nonatomic, strong) NSArray *categoriesArray;
 @property (nonatomic, strong) UICollectionView *categoriesCollectionView;
 @property (nonatomic, strong, readwrite) PGPagedScrollView *bannersView;
 
@@ -34,18 +37,36 @@
 - (void)initialize
 {
     [self addSubview:self.bannersView];
+    
+    UIView *verticalLine = [[UIView alloc] initWithFrame:CGRectMake(13, self.bannersView.bottom+10, 3, 16)];
+    verticalLine.backgroundColor = Theme.colorExtraHighlight;
+    UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(verticalLine.right+5, self.bannersView.bottom+10, 100, 16)];
+    label.font = Theme.fontMediumBold;
+    label.textColor = Theme.colorText;
+    label.text = @"品类";
+    [self addSubview:verticalLine];
+    [self addSubview:label];
+    
     [self addSubview:self.categoriesCollectionView];
 }
 
-- (void)reloadBannersWithData:(NSArray *)dataArray
+- (void)reloadBannersWithData:(NSArray *)dataArray categoriesArray:(NSArray *)categoriesArray
 {
     self.dataArray = dataArray;
+    self.categoriesArray = categoriesArray;
+    [self.categoriesCollectionView reloadData];
     [self.bannersView reloadData];
 }
 
 + (CGSize)headerViewSize
 {
-    return CGSizeMake(UISCREEN_WIDTH, UISCREEN_WIDTH*160/320+80);
+    return CGSizeMake(UISCREEN_WIDTH, UISCREEN_WIDTH*160/320+10+16+80);
+}
+
+- (void)imageViewDidSelect:(NSInteger)index
+{
+    PGImageBanner *banner = self.dataArray[index];
+    [[PGRouter sharedInstance] openURL:banner.link];
 }
 
 #pragma mark - <PGPagedScrollViewDelegate>
@@ -92,7 +113,7 @@
     } else if (indexPath.item == 4) {
         [cell.channelButton setImage:[UIImage imageNamed:@"pg_store_category_food"] forState:UIControlStateNormal];
         [cell.channelLabel setText:@"食品"];
-    } else if (indexPath.item == 4) {
+    } else if (indexPath.item == 5) {
         [cell.channelButton setImage:[UIImage imageNamed:@"pg_store_category_tool"] forState:UIControlStateNormal];
         [cell.channelLabel setText:@"器具"];
     } else {
@@ -117,6 +138,9 @@
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
+    if (self.delegate && [self.delegate respondsToSelector:@selector(categoryDidSelect:)]) {
+        [self.delegate categoryDidSelect:nil];
+    }
 //    if (indexPath.item == 0) {
 //        if (self.delegate && [self.delegate respondsToSelector:@selector(channelDidSelect:)]) {
 //            [self.delegate channelDidSelect:@"111"];
@@ -153,7 +177,7 @@
 - (PGPagedScrollView *)bannersView
 {
     if (!_bannersView) {
-        _bannersView = [[PGPagedScrollView alloc] initWithFrame:CGRectMake(0, 0, self.width, self.height-80) imageFillMode:PGPagedScrollViewImageFillModeFill iconMode:PGPagedScrollViewIconModeDefault];
+        _bannersView = [[PGPagedScrollView alloc] initWithFrame:CGRectMake(0, 0, UISCREEN_WIDTH, UISCREEN_WIDTH*160/320) imageFillMode:PGPagedScrollViewImageFillModeFill iconMode:PGPagedScrollViewIconModeDefault];
         _bannersView.delegate = self;
     }
     return _bannersView;
@@ -166,7 +190,7 @@
         layout.scrollDirection = UICollectionViewScrollDirectionHorizontal;
         layout.minimumLineSpacing = 15.f;
         layout.minimumInteritemSpacing = 0.f;
-        _categoriesCollectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(0, self.bannersView.bottom, self.width, 80) collectionViewLayout:layout];
+        _categoriesCollectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(0, self.bannersView.bottom+10+16, self.width, 80) collectionViewLayout:layout];
         _categoriesCollectionView.backgroundColor = Theme.colorBackground;
         _categoriesCollectionView.showsVerticalScrollIndicator = NO;
         _categoriesCollectionView.showsHorizontalScrollIndicator = NO;

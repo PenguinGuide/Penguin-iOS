@@ -70,7 +70,8 @@
 
 - (void)setNavigationTitle:(NSString *)title
 {
-    
+    [self.navigationController.navigationBar setTitleTextAttributes:@{NSFontAttributeName:Theme.fontMediumBold, NSForegroundColorAttributeName:Theme.colorText}];
+    [self.navigationItem setTitle:title];
 }
 
 - (void)setTransparentNavigationBar:(UIColor *)tintColor
@@ -157,12 +158,20 @@
 {
     if (!self.hud.superview) {
         self.hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+        self.hud.frame = CGRectMake(0, 0, 100, 100);
+        self.hud.center = self.view.center;
+        self.hud.margin = 15.f;
         self.hud.mode = MBProgressHUDModeCustomView;
         self.hud.bezelView.style = MBProgressHUDBackgroundStyleSolidColor;
+        // http://stackoverflow.com/questions/10384207/uiview-shadow-not-working
         self.hud.bezelView.backgroundColor = [UIColor whiteColor];
+        self.hud.bezelView.layer.shadowColor = Theme.colorText.CGColor;
+        self.hud.bezelView.layer.shadowOffset = CGSizeMake(1.f, 1.f);
+        self.hud.bezelView.layer.shadowOpacity = 0.5f;
+        self.hud.bezelView.layer.masksToBounds = NO;
         self.hud.userInteractionEnabled = NO;
         
-        FLAnimatedImage *animatedImage = [FLAnimatedImage animatedImageWithGIFData:[NSData dataWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"egg" ofType:@"gif"]]];
+        FLAnimatedImage *animatedImage = [FLAnimatedImage animatedImageWithGIFData:[NSData dataWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"center" ofType:@"gif"]]];
         FLAnimatedImageView *animatedImageView = [[FLAnimatedImageView alloc] init];
         animatedImageView.animatedImage = animatedImage;
         self.hud.customView = animatedImageView;

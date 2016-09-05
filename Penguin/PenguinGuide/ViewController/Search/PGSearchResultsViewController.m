@@ -157,6 +157,12 @@
     return UIEdgeInsetsMake(10, 10, 10, 10);
 }
 
+- (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
+{
+//    PGArticleBanner *articleBanner = self.viewModel.articlesArray[indexPath.item];
+//    [[PGRouter sharedInstance] openURL:articleBanner.link];
+}
+
 #pragma mark - <PGSearchResultsHeaderViewDelegate>
 
 - (void)segmentDidClicked:(NSInteger)index

@@ -69,6 +69,19 @@
     
     self.backgroundColor = [UIColor colorWithHexString:@"f19572"];
     self.collectLabel.text = @"收藏";
+    
+    if ([article.category isEqualToString:@"city_guide"]) {
+        self.categoryImageView.hidden = NO;
+        [self.categoryImageView setImage:[UIImage imageNamed:@"pg_home_article_category_city_guide"]];
+    } else if ([article.category isEqualToString:@"shop"]) {
+        self.categoryImageView.hidden = NO;
+        [self.categoryImageView setImage:[UIImage imageNamed:@"pg_home_article_category_shop"]];
+    } else if ([article.category isEqualToString:@"test"]) {
+        self.categoryImageView.hidden = NO;
+        [self.categoryImageView setImage:[UIImage imageNamed:@"pg_home_article_category_test"]];
+    } else {
+        self.categoryImageView.hidden = YES;
+    }
 }
 
 + (CGSize)cellSize

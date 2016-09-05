@@ -10,6 +10,7 @@
 
 #import "PGExploreViewController.h"
 #import "PGScenarioViewController.h"
+#import "PGArticleViewController.h"
 
 #import "PGFeedsCollectionView.h"
 #import "PGExploreRecommendsHeaderView.h"
@@ -130,6 +131,19 @@
 {
     PGScenarioViewController *scenarioVC = [[PGScenarioViewController alloc] init];
     [self.navigationController pushViewController:scenarioVC animated:YES];
+}
+
+- (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    id banner = self.viewModel.bannersArray[indexPath.section];
+    
+    if ([banner isKindOfClass:[PGArticleBanner class]]) {
+        PGArticleBanner *articleBanner = (PGArticleBanner *)banner;
+        [[PGRouter sharedInstance] openURL:articleBanner.link];
+    } else if ([banner isKindOfClass:[PGTopicBanner class]]) {
+        PGTopicBanner *topicBanner = (PGTopicBanner *)banner;
+        [[PGRouter sharedInstance] openURL:topicBanner.link];
+    }
 }
 
 - (void)didReceiveMemoryWarning {

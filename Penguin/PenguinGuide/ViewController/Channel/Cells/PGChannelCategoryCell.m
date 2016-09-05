@@ -62,7 +62,8 @@
 - (UIImageView *)categoryImageView {
 	if(_categoryImageView == nil) {
 		_categoryImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, self.width, self.height)];
-        _categoryImageView.backgroundColor = Theme.colorBackground;
+        _categoryImageView.contentMode = UIViewContentModeScaleAspectFill;
+        _categoryImageView.backgroundColor = Theme.colorText;
 	}
 	return _categoryImageView;
 }

@@ -30,11 +30,24 @@
 @property (nonatomic, strong, readwrite) UICollectionView *articleCollectionView;
 @property (nonatomic, strong, readwrite) UIButton *backButton;
 
+@property (nonatomic, strong) NSString *articleId;
 @property (nonatomic, strong) PGArticleViewModel *viewModel;
+
+@property (nonatomic, assign) BOOL animated;
 
 @end
 
 @implementation PGArticleViewController
+
+- (id)initWithArticleId:(NSString *)articleId animated:(BOOL)animated
+{
+    if (self = [super init]) {
+        self.articleId = articleId;
+        self.animated = animated;
+    }
+    
+    return self;
+}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -46,12 +59,23 @@
     [self.view addSubview:self.articleCollectionView];
     [self.view addSubview:self.backButton];
     
-    self.imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, UISCREEN_WIDTH, UISCREEN_WIDTH*9/16)];
-    [self.imageView setWithImageURL:@"https://s6.postimg.org/xde2wnynl/PG_HOME_article_home.png" placeholder:nil completion:nil];
-    [self.articleCollectionView setHeaderView:self.imageView naviTitle:@"从午间定食到深夜食堂！" rightNaviButton:nil];
-    self.articleCollectionView.alpha = 0.f;
+    if (self.animated) {
+        self.articleCollectionView.alpha = 0.f;
+    }
     
-    self.viewModel = [[PGArticleViewModel alloc] init];
+    self.viewModel = [[PGArticleViewModel alloc] initWithAPIClient:self.apiClient];
+    self.viewModel.articleId = self.articleId;
+    [self.viewModel requestData];
+    
+    PGWeakSelf(self);
+    [self observe:self.viewModel keyPath:@"article" block:^(id changedObject) {
+        PGArticle *article = changedObject;
+        if (article && [article isKindOfClass:[PGArticle class]]) {
+            weakself.imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, UISCREEN_WIDTH, UISCREEN_WIDTH*9/16)];
+            [weakself.imageView setWithImageURL:weakself.viewModel.article.image placeholder:nil completion:nil];
+            [weakself.articleCollectionView setHeaderView:weakself.imageView naviTitle:weakself.viewModel.article.title rightNaviButton:nil];
+        }
+    }];
     
     NSString *htmlString = [[NSString alloc] initWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"demo" ofType:@"html"]
                                                            encoding:NSUTF8StringEncoding
@@ -98,6 +122,11 @@
     [super viewWillDisappear:animated];
     
     [self.navigationController setNavigationBarHidden:NO animated:NO];
+}
+
+- (void)dealloc
+{
+    [self unobserve];
 }
 
 - (UIStatusBarStyle)preferredStatusBarStyle

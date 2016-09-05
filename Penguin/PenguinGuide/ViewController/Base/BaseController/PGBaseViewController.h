@@ -25,6 +25,7 @@
 @property (nonatomic, strong, readonly) PGAPIClient *apiClient;
 @property (nonatomic, strong, readonly) FBKVOController *KVOController;
 
+- (void)setNavigationTitle:(NSString *)title;
 - (void)setTransparentNavigationBar:(UIColor *)tintColor;
 - (void)resetTransparentNavigationBar;
 

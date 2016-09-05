@@ -35,6 +35,15 @@ static NSString *const ChannelCell = @"ChannelCell";
 {
     [self addSubview:self.bannersView];
     [self addSubview:self.categoriesCollectionView];
+    
+    UIView *verticalLine = [[UIView alloc] initWithFrame:CGRectMake(13, self.bannersView.bottom+11, 3, 16)];
+    verticalLine.backgroundColor = Theme.colorExtraHighlight;
+    UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(verticalLine.right+5, self.bannersView.bottom+11, 100, 16)];
+    label.font = Theme.fontMediumBold;
+    label.textColor = Theme.colorText;
+    label.text = @"文章";
+    [self addSubview:verticalLine];
+    [self addSubview:label];
 }
 
 - (void)reloadBannersWithData:(NSArray *)dataArray
@@ -45,7 +54,7 @@ static NSString *const ChannelCell = @"ChannelCell";
 
 + (CGSize)headerViewSize
 {
-    return CGSizeMake(UISCREEN_WIDTH, UISCREEN_WIDTH*160/320+80);
+    return CGSizeMake(UISCREEN_WIDTH, UISCREEN_WIDTH*160/320+80+11+16);
 }
 
 #pragma mark - <PGPagedScrollViewDelegate>
@@ -59,6 +68,12 @@ static NSString *const ChannelCell = @"ChannelCell";
         }
     }
     return [NSArray arrayWithArray:banners];
+}
+
+- (void)imageViewDidSelect:(NSInteger)index
+{
+    PGImageBanner *banner = self.dataArray[index];
+    [[PGRouter sharedInstance] openURL:banner.link];
 }
 
 #pragma mark - <UICollectionViewDataSource>
@@ -147,7 +162,7 @@ static NSString *const ChannelCell = @"ChannelCell";
 - (PGPagedScrollView *)bannersView
 {
     if (!_bannersView) {
-        _bannersView = [[PGPagedScrollView alloc] initWithFrame:CGRectMake(0, 0, self.width, self.height-80) imageFillMode:PGPagedScrollViewImageFillModeFill iconMode:PGPagedScrollViewIconModeDefault];
+        _bannersView = [[PGPagedScrollView alloc] initWithFrame:CGRectMake(0, 0, self.width, self.height-80-11-16) imageFillMode:PGPagedScrollViewImageFillModeFill iconMode:PGPagedScrollViewIconModeDefault];
         _bannersView.delegate = self;
     }
     return _bannersView;
@@ -160,7 +175,7 @@ static NSString *const ChannelCell = @"ChannelCell";
         layout.scrollDirection = UICollectionViewScrollDirectionHorizontal;
         layout.minimumLineSpacing = 15.f;
         layout.minimumInteritemSpacing = 0.f;
-        _categoriesCollectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(0, self.bannersView.bottom, self.width, 80) collectionViewLayout:layout];
+        _categoriesCollectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(0, self.bannersView.bottom+11+16, self.width, 80) collectionViewLayout:layout];
         _categoriesCollectionView.backgroundColor = Theme.colorBackground;
         _categoriesCollectionView.showsVerticalScrollIndicator = NO;
         _categoriesCollectionView.showsHorizontalScrollIndicator = NO;

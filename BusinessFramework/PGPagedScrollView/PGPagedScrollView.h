@@ -27,6 +27,7 @@ typedef NS_ENUM(NSInteger, PGPagedScrollViewIconMode) {
 
 - (NSArray *)imagesForScrollView;
 - (NSArray *)viewsForScrollView;
+- (void)imageViewDidSelect:(NSInteger)index;
 
 @end
 

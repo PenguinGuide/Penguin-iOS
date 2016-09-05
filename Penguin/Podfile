@@ -32,6 +32,7 @@ target 'PenguinGuide' do
     pod 'PGCache', :path => '../BaseFramework/PGCache'
     pod 'PGTransparentNaviBar', :path => '../BaseFramework/PGTransparentNaviBar'
     pod 'PGPopupViewController', :path => '../BaseFramework/PGPopupViewController'
+    pod 'PGPopover', :path => '../BaseFramework/PGPopover'
     
     #vendor
     pod 'KVOController', :inhibit_warnings => true

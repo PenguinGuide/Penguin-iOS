@@ -22,4 +22,10 @@
 #define PG_Scenario                     @"/api/v1/scenario/:scenarioId"
 #define PG_Scenario_Feeds               @"/api/v1/scenario/feeds/scenario/:scenarioId/category/:categoryId"
 
+#define PG_Store_Category_Goods         @"/api/v1/goods/category/:categoryId"
+
+#define PG_Topic                        @"/api/v1/topic/:topicId"
+
+#define PG_Article                      @"/api/v1/article/:articleId"
+
 #endif /* PGAPIList_h */

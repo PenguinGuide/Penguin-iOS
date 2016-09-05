@@ -16,7 +16,7 @@ static const float TabBarHeight = 50.f;
 
 @property (nonatomic, strong, readwrite) NSArray *viewControllers;
 
-@property (nonatomic, strong) UIViewController *selectedViewController;
+@property (nonatomic, strong, readwrite) UIViewController *selectedViewController;
 @property (nonatomic) NSInteger selectedIndex;
 
 @property (nonatomic, strong) PGTabBar *tabBar;
