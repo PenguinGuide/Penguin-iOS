@@ -19,7 +19,8 @@
              @"category" : @"category",
              @"link" : @"link",
              @"readsCount" : @"reads",
-             @"commentsCount" : @"comments"
+             @"commentsCount" : @"comments",
+             @"articleId": @"id"
              };
 }
 

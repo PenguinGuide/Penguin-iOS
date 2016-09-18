@@ -96,7 +96,12 @@ static UIColor *colorBorder, *colorLightBorder;
 
 - (void)initAppearance
 {
-//    [[UINavigationBar appearance] setBackgroundImage:[UIImage imageNamed:@"pg_navigation_bg_image"] forBarPosition:UIBarPositionAny barMetrics:UIBarMetricsDefault];
+    // http://blog.csdn.net/G_eorge/article/details/51144017 navigation bar translucent
+    //[[UINavigationBar appearance] setTranslucent:NO];
+    [[UINavigationBar appearance] setBarTintColor:[UIColor whiteColor]];
+//    [[UINavigationBar appearance] setBackgroundImage:[[UIImage imageNamed:@"pg_navigation_bg_image"] resizableImageWithCapInsets:UIEdgeInsetsZero]
+//                                      forBarPosition:UIBarPositionAny
+//                                          barMetrics:UIBarMetricsDefault];
 }
 
 - (NSArray *)loadingImages

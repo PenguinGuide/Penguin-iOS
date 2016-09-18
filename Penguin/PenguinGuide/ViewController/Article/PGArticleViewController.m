@@ -67,21 +67,23 @@
     self.viewModel.articleId = self.articleId;
     [self.viewModel requestData];
     
+    self.headerImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, UISCREEN_WIDTH, UISCREEN_WIDTH*9/16)];
+    
     PGWeakSelf(self);
     [self observe:self.viewModel keyPath:@"article" block:^(id changedObject) {
         PGArticle *article = changedObject;
         if (article && [article isKindOfClass:[PGArticle class]]) {
-            weakself.imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, UISCREEN_WIDTH, UISCREEN_WIDTH*9/16)];
-            [weakself.imageView setWithImageURL:weakself.viewModel.article.image placeholder:nil completion:nil];
-            [weakself.articleCollectionView setHeaderView:weakself.imageView naviTitle:weakself.viewModel.article.title rightNaviButton:nil];
+            [weakself.headerImageView setWithImageURL:weakself.viewModel.article.image placeholder:nil completion:nil];
+            [weakself.articleCollectionView setHeaderView:weakself.headerImageView naviTitle:weakself.viewModel.article.title rightNaviButton:nil];
+            
+            if (article.body && article.body.length > 0) {
+                PGStringParser *htmlParser = [PGStringParser htmlParserWithString:article.body];
+                weakself.viewModel.paragraphsArray = [htmlParser articleParsedStorages];
+                
+                [weakself.articleCollectionView reloadData];
+            }
         }
     }];
-    
-    NSString *htmlString = [[NSString alloc] initWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"demo" ofType:@"html"]
-                                                           encoding:NSUTF8StringEncoding
-                                                              error:nil];
-    PGStringParser *htmlParser = [PGStringParser htmlParserWithString:htmlString];
-    self.viewModel.paragraphsArray = [htmlParser articleParsedStorages];
     
     [self setNeedsStatusBarAppearanceUpdate];
 }
@@ -201,7 +203,7 @@
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
-    [scrollView scrollViewShouldUpdate];
+    [scrollView scrollViewShouldUpdateHeaderView];
 }
 
 #pragma mark - <Setters && Getters>

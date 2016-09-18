@@ -16,7 +16,6 @@
 #define HomeHeaderView @"HomeHeaderView"
 
 #import "MSWeakTimer.h"
-#import "PGFeedsCollectionView.h"
 
 // view controllers
 #import "PGHomeViewController.h"
@@ -74,6 +73,8 @@
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
+    
+    [self setNeedsStatusBarAppearanceUpdate];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -86,7 +87,6 @@
     
     // these codes in viewDidLoad will not work
     [self.navigationController setNavigationBarHidden:YES animated:NO];
-    [self setNeedsStatusBarAppearanceUpdate];
     
     self.weakTimer = [MSWeakTimer scheduledTimerWithTimeInterval:1.0
                                                           target:self
@@ -130,12 +130,14 @@
 
 - (void)tabBarDidClicked
 {
-    PGLogWarning(@"home tabBarDidClicked");
+    //PGLogWarning(@"home tabBarDidClicked");
     
     [self.navigationController setNavigationBarHidden:YES animated:NO];
     
     self.parentViewController.navigationItem.leftBarButtonItem = nil;
     self.parentViewController.navigationItem.titleView = nil;
+    
+    [self setNeedsStatusBarAppearanceUpdate];
 }
 
 #pragma mark - <PGFeedsCollectionViewDelegate>
@@ -171,7 +173,8 @@
     id banner = self.viewModel.feedsArray[indexPath.section];
     if ([banner isKindOfClass:[PGArticleBanner class]]) {
         PGArticleBanner *articleBanner = (PGArticleBanner *)banner;
-        [[PGRouter sharedInstance] openURL:articleBanner.link];
+        PGArticleViewController *articleVC = [[PGArticleViewController alloc] initWithArticleId:articleBanner.articleId animated:YES];
+        [self.navigationController pushViewController:articleVC animated:YES];
     } else if ([banner isKindOfClass:[PGTopicBanner class]]) {
         PGTopicBanner *topicBanner = (PGTopicBanner *)banner;
         [[PGRouter sharedInstance] openURL:topicBanner.link];

@@ -45,13 +45,6 @@
     }];
 }
 
-- (void)viewDidLayoutSubviews
-{
-    [super viewDidLayoutSubviews];
-    
-    self.feedsCollectionView.contentInset = UIEdgeInsetsMake(64, 0, 0, 0);
-}
-
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
@@ -63,7 +56,9 @@
 {
     [super viewWillDisappear:animated];
     
-    [self.navigationController setNavigationBarHidden:NO animated:NO];
+    // http://stackoverflow.com/questions/11656055/scrollviewdidscroll-delegate-is-invoking-automatically
+    // ISSUE: if barHidden sets to NO, scrollViewDidScroll will not be called (next page nothing to update)
+    [self.navigationController setNavigationBarHidden:YES animated:NO];
 }
 
 - (UIStatusBarStyle)preferredStatusBarStyle
@@ -95,7 +90,7 @@
 
 - (void)tabBarDidClicked
 {
-    PGLogWarning(@"explore tabBarDidClicked");
+    //PGLogWarning(@"explore tabBarDidClicked");
     
     [self.navigationController setNavigationBarHidden:NO animated:NO];
     

@@ -126,4 +126,18 @@ static char ScrollViewNaviTitleLabel;
     }
 }
 
+- (void)scrollViewShouldUpdateHeaderView
+{
+    if (self.headerView) {
+        CGFloat headerImageHeight = [self.imageViewOriginalHeight floatValue];
+        CGFloat contentOffsetY = self.contentOffset.y;
+        if (self.contentOffset.y <= 0) {
+            // pull refresh
+            self.headerView.frame = CGRectMake(0, contentOffsetY, self.headerView.frame.size.width, headerImageHeight+fabs(contentOffsetY));
+            self.dimView.frame = CGRectMake(0, 0, self.headerView.frame.size.width, headerImageHeight+fabs(contentOffsetY));
+            self.naviTitleLabel.frame = CGRectMake(70, 20, self.naviTitleLabel.frame.size.width, self.naviTitleLabel.frame.size.height);
+        }
+    }
+}
+
 @end

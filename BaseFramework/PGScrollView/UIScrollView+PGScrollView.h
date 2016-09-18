@@ -16,6 +16,7 @@
             naviTitle:(NSString *)naviTitle
       rightNaviButton:(UIButton *)rightNaviButton;
 
-- (CGFloat)scrollViewShouldUpdate;
+- (void)scrollViewShouldUpdate;
+- (void)scrollViewShouldUpdateHeaderView;
 
 @end

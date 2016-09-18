@@ -53,7 +53,7 @@
     
     articleVC.view.frame = [transitionContext finalFrameForViewController:articleVC];
     articleVC.view.alpha = 0.f;
-    articleVC.imageView.hidden = YES;
+    articleVC.headerImageView.hidden = YES;
     
     [containerView addSubview:articleVC.view];
     [containerView addSubview:topScreenshotView];
@@ -61,7 +61,7 @@
     
     [UIView animateWithDuration:[self transitionDuration:transitionContext]
                      animations:^{
-                         CGRect frame = [containerView convertRect:articleVC.imageView.frame fromView:articleVC.imageView.superview];
+                         CGRect frame = [containerView convertRect:articleVC.headerImageView.frame fromView:articleVC.headerImageView.superview];
                          topScreenshotView.frame = CGRectMake(frame.origin.x, -(topScreenshotView.height-frame.size.height), topScreenshotView.width, topScreenshotView.height);
                          bottomScreenshotView.frame = CGRectMake(bottomScreenshotView.x, UISCREEN_HEIGHT, bottomScreenshotView.width, bottomScreenshotView.height);
                          articleVC.view.alpha = 1.f;
@@ -71,7 +71,7 @@
                              [bottomScreenshotView removeFromSuperview];
                              homeVC.feedsCollectionView.hidden = NO;
                              cell.bannerImageView.hidden = NO;
-                             articleVC.imageView.hidden = NO;
+                             articleVC.headerImageView.hidden = NO;
                              
                              [transitionContext completeTransition:!transitionContext.transitionWasCancelled];
                          }];

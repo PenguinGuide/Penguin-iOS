@@ -32,6 +32,15 @@ static const float TabBarHeight = 50.f;
     self.view.backgroundColor = [UIColor whiteColor];
 }
 
+- (void)viewDidLayoutSubviews
+{
+    [super viewDidLayoutSubviews];
+    
+    //NSLog(@"viewDidLayoutSubviews: %@", NSStringFromCGRect(self.view.frame));
+    
+    self.tabBar.frame = CGRectMake(0, CGRectGetHeight(self.view.frame)-TabBarHeight, CGRectGetWidth(self.view.frame), TabBarHeight);
+}
+
 - (void)setViewControllers:(NSArray *)viewControllers
 {
     if (viewControllers.count == 0) {

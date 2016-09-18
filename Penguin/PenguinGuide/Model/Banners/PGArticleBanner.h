@@ -18,5 +18,6 @@
 @property (nonatomic, strong) NSString *link;
 @property (nonatomic, strong) NSString *readsCount;
 @property (nonatomic, strong) NSString *commentsCount;
+@property (nonatomic, strong) NSString *articleId;
 
 @end

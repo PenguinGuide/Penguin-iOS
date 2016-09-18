@@ -13,7 +13,7 @@
 @interface PGArticleViewController : PGBaseViewController
 
 @property (nonatomic, strong, readonly) UICollectionView *articleCollectionView;
-@property (nonatomic, strong) UIImageView *imageView;
+@property (nonatomic, strong) UIImageView *headerImageView;
 
 - (id)initWithArticleId:(NSString *)articleId animated:(BOOL)animated;
 - (void)animateCollectionView:(void(^)())completion;

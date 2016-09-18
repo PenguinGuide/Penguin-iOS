@@ -16,7 +16,7 @@
 
 - (NSAttributedString *)paragraphAttributedString
 {
-    NSAttributedString *attrS = [[NSAttributedString alloc] initWithString:self attributes:@{NSFontAttributeName:[UIFont systemFontOfSize:16.f weight:UIFontWeightLight],
+    NSAttributedString *attrS = [[NSAttributedString alloc] initWithString:self attributes:@{NSFontAttributeName:[UIFont systemFontOfSize:14.f weight:UIFontWeightLight],
                                                                                              NSParagraphStyleAttributeName:[self defaultParagraphStyle]}];
     
     return attrS;
@@ -31,7 +31,7 @@
     paragraphStyle.tailIndent = -20.f;
     paragraphStyle.lineSpacing = 5.f;
     
-    NSAttributedString *attrS = [[NSAttributedString alloc] initWithString:self attributes:@{NSFontAttributeName:[UIFont systemFontOfSize:16.f weight:UIFontWeightBold],
+    NSAttributedString *attrS = [[NSAttributedString alloc] initWithString:self attributes:@{NSFontAttributeName:[UIFont systemFontOfSize:14.f weight:UIFontWeightBold],
                                                                                              NSForegroundColorAttributeName:[UIColor colorWithHexString:@"EF6733"],
                                                                                              NSParagraphStyleAttributeName:paragraphStyle}];
     return attrS;

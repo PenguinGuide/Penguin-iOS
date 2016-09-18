@@ -12,6 +12,7 @@
 #define GoodsCollectionViewTag 2
 
 #import "PGSearchResultsViewController.h"
+#import "PGArticleViewController.h"
 
 #import "PGSearchResultsViewModel.h"
 
@@ -159,8 +160,13 @@
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
-//    PGArticleBanner *articleBanner = self.viewModel.articlesArray[indexPath.item];
-//    [[PGRouter sharedInstance] openURL:articleBanner.link];
+    if (collectionView.tag == ArticlesCollectionViewTag) {
+        PGArticleBanner *articleBanner = self.viewModel.articlesArray[indexPath.item];
+        PGArticleViewController *articleVC = [[PGArticleViewController alloc] initWithArticleId:articleBanner.articleId animated:NO];
+        [self.navigationController pushViewController:articleVC animated:YES];
+    } else if (collectionView.tag == GoodsCollectionViewTag) {
+        
+    }
 }
 
 #pragma mark - <PGSearchResultsHeaderViewDelegate>

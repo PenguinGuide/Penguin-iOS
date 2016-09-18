@@ -46,7 +46,7 @@
     [super viewDidLayoutSubviews];
     // http://stackoverflow.com/questions/19411442/uicollectionview-adds-top-margin
     // ISSUE: put in setter doesn't work
-    self.feedsCollectionView.contentInset = UIEdgeInsetsMake(64, 0, 0, 0);
+    //self.feedsCollectionView.contentInset = UIEdgeInsetsMake(64, 0, 0, 0);
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -60,7 +60,8 @@
 {
     [super viewWillDisappear:animated];
     
-    [self.navigationController setNavigationBarHidden:NO animated:NO];
+    // ISSUE: if set to YES, scrollViewDidScroll will not be called (next page nothing to update)
+    [self.navigationController setNavigationBarHidden:YES animated:NO];
 }
 
 - (UIStatusBarStyle)preferredStatusBarStyle
@@ -92,7 +93,7 @@
 
 - (void)tabBarDidClicked
 {
-    PGLogWarning(@"store tabBarDidClicked");
+    //PGLogWarning(@"store tabBarDidClicked");
     
     [self.navigationController setNavigationBarHidden:NO animated:NO];
     

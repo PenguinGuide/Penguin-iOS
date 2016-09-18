@@ -11,8 +11,6 @@
 
 @interface PGRouterManager : NSObject
 
-@property (nonatomic, strong) UINavigationController *tempNaviController;
-
 + (void)registerRouters;
 
 + (void)routeToLoginPage;

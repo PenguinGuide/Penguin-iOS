@@ -86,6 +86,7 @@
     // http://stackoverflow.com/questions/15216245/uicollectionview-calling-scrollviewdidscroll-when-popped-from-the-navigation-st
     // http://stackoverflow.com/questions/24113751/scrollviewdidscroll-get-called-when-back-button-pressed-and-make-app-crash
     self.articlesCollectionView.delegate = nil;
+    [self.navigationItem setTitleView:nil];
     
     [self.navigationController.navigationBar pg_reset];
 }
