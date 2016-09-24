@@ -34,16 +34,16 @@
             
         }
     } else if (operation == UINavigationControllerOperationPop) {
-        if ([toVC isKindOfClass:[PGTabBarController class]]) {
-            PGTabBarController *tabbarController = (PGTabBarController *)toVC;
-            if ([fromVC isKindOfClass:[PGArticleViewController class]]) {
-                if ([tabbarController.selectedViewController isKindOfClass:[PGHomeViewController class]]) {
-                    return [[PGArticleToHomeTransition alloc] init];
-                }
-            }
-        } else {
-            
-        }
+//        if ([toVC isKindOfClass:[PGTabBarController class]]) {
+//            PGTabBarController *tabbarController = (PGTabBarController *)toVC;
+//            if ([fromVC isKindOfClass:[PGArticleViewController class]]) {
+//                if ([tabbarController.selectedViewController isKindOfClass:[PGHomeViewController class]]) {
+//                    return [[PGArticleToHomeTransition alloc] init];
+//                }
+//            }
+//        } else {
+//            
+//        }
     }
 
     return nil;

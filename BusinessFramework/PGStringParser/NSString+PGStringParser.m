@@ -8,6 +8,7 @@
 
 #define CSS_Style_Text_Color @"color"
 #define CSS_Style_Font_Size @"font-size"
+#define CSS_Style_Font_Bold @"bold"
 
 #import "NSString+PGStringParser.h"
 #import "UIColor+PGColor.h"
@@ -57,6 +58,8 @@
                         fontSize = [fontSize stringByReplacingOccurrencesOfString:@"px" withString:@""];
                         [attrS addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:[fontSize floatValue] weight:UIFontWeightLight] range:range];
                     }
+                } else if ([key isEqualToString:CSS_Style_Font_Bold]) {
+                    [attrS addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:14.f weight:UIFontWeightBold] range:range];
                 }
             }
         }
@@ -96,9 +99,9 @@
 {
     NSMutableParagraphStyle *defaultParagraphStyle = [[NSMutableParagraphStyle alloc] init];
     defaultParagraphStyle.alignment = NSTextAlignmentJustified;
-    defaultParagraphStyle.firstLineHeadIndent = 20.f;
-    defaultParagraphStyle.headIndent = 20.f;
-    defaultParagraphStyle.tailIndent = -20.f;
+    defaultParagraphStyle.firstLineHeadIndent = 30.f;
+    defaultParagraphStyle.headIndent = 30.f;
+    defaultParagraphStyle.tailIndent = -30.f;
     defaultParagraphStyle.lineSpacing = 5.f;
     
     return defaultParagraphStyle;

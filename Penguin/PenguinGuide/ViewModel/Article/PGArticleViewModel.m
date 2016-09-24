@@ -10,8 +10,6 @@
 
 @interface PGArticleViewModel ()
 
-
-
 @end
 
 @implementation PGArticleViewModel
@@ -29,6 +27,22 @@
         config.mockFileName = fileName;
     } completion:^(id response) {
         weakself.article = [response firstObject];
+    } failure:^(NSError *error) {
+        
+    }];
+}
+
+- (void)requestComments
+{
+    PGWeakSelf(self);
+    [self.apiClient pg_makeGetRequest:^(PGRKRequestConfig *config) {
+        config.route = PG_Comments;
+        config.keyPath = @"data";
+        config.model = [PGComment new];
+        config.isMockAPI = YES;
+        config.mockFileName = @"pg_comments.json";
+    } completion:^(id response) {
+        weakself.commentsArray = response;
     } failure:^(NSError *error) {
         
     }];

@@ -32,15 +32,38 @@
 
 - (void)setCellWithTagName:(NSString *)tagName
 {
-    CGSize size = [tagName sizeWithAttributes:@{NSFontAttributeName:Theme.fontMediumBold}];
+    CGSize size = [tagName sizeWithAttributes:@{NSFontAttributeName:Theme.fontSmall}];
     
+    self.nameLabel.backgroundColor = Theme.colorText;
+    self.nameLabel.textColor = [UIColor whiteColor];
+    self.nameLabel.font = Theme.fontSmall;
     self.nameLabel.text = tagName;
+    self.nameLabel.layer.cornerRadius = 10.f;
     self.nameLabel.width = size.width+24;
 }
 
 + (CGSize)cellSize:(NSString *)tagName
 {
-    CGSize size = [tagName sizeWithAttributes:@{NSFontAttributeName:Theme.fontMediumBold}];
+    CGSize size = [tagName sizeWithAttributes:@{NSFontAttributeName:Theme.fontSmall}];
+    
+    return CGSizeMake(size.width+24, 20.f);
+}
+
+- (void)setCellWithKeyword:(NSString *)keyword
+{
+    CGSize size = [keyword sizeWithAttributes:@{NSFontAttributeName:Theme.fontMediumBold}];
+    
+    self.nameLabel.backgroundColor = [UIColor colorWithHexString:@"E1E1E1"];
+    self.nameLabel.font = Theme.fontMediumBold;
+    self.nameLabel.textColor = Theme.colorExtraHighlight;
+    self.nameLabel.text = keyword;
+    self.nameLabel.layer.cornerRadius = 12.f;
+    self.nameLabel.width = size.width+24;
+}
+
++ (CGSize)keywordCellSize:(NSString *)keyword
+{
+    CGSize size = [keyword sizeWithAttributes:@{NSFontAttributeName:Theme.fontMediumBold}];
     
     return CGSizeMake(size.width+24, 24.f);
 }

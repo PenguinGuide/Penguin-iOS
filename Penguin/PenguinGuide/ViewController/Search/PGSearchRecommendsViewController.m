@@ -112,7 +112,7 @@
     if (indexPath.section == 0) {
         PGTagCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:TagCell forIndexPath:indexPath];
         
-        [cell setCellWithTagName:self.viewModel.tagsArray[indexPath.item]];
+        [cell setCellWithKeyword:self.viewModel.tagsArray[indexPath.item]];
         
         return cell;
     } else if (indexPath.section == 1) {
@@ -143,7 +143,7 @@
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath
 {
     if (indexPath.section == 0) {
-        return [PGTagCell cellSize:self.viewModel.tagsArray[indexPath.item]];
+        return [PGTagCell keywordCellSize:self.viewModel.tagsArray[indexPath.item]];
     } else if (indexPath.section == 1) {
         return [PGSearchRecommendsHistoryCell cellSize];
     }

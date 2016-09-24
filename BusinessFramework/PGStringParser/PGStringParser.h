@@ -9,6 +9,10 @@
 #import <Foundation/Foundation.h>
 #import "PGParserTextStorage.h"
 #import "PGParserImageStorage.h"
+#import "PGParserCatalogImageStorage.h"
+#import "PGParserVideoStorage.h"
+#import "PGParserSingleGoodStorage.h"
+#import "PGParserGoodsCollectionStorage.h"
 
 @interface PGStringParser : NSObject
 

@@ -11,16 +11,22 @@
 #define HTML_Tag_Paragraph @"p"
 #define HTML_Tag_Span @"span"
 #define HTML_Tag_Style @"style"
+#define HTML_Tag_Bold @"b"
 #define HTML_Tag_Image @"img"
 #define HTML_Tag_Class @"class"
+#define HTML_Tag_Hyper_Link @"a"
 
 #define HTML_Attribute_Class @"class"
 #define HTML_Attribute_Src @"src"
 #define HTML_Attribute_Width @"width"
 #define HTML_Attribute_Height @"height"
+#define HTML_Attribute_Hyper_Ref @"href"
 
 #define CSS_Style_Color @"color"
 #define CSS_Style_Text_Font @"text-font"
+
+#define Paragraph_Class_Catalog_Title @"catalog-title"
+#define Paragraph_Class_Video @"video"
 
 #import "PGStringParser.h"
 #import "NSString+PGStringParser.h"
@@ -81,7 +87,7 @@
                             }
                         } else {
                             if ([element valueForAttribute:HTML_Tag_Class]) {
-                                if ([[element valueForAttribute:HTML_Tag_Class] isEqualToString:@"catalog-title"]) {
+                                if ([[element valueForAttribute:HTML_Tag_Class] isEqualToString:Paragraph_Class_Catalog_Title]) {
                                     // <p class=catalog-title></p>
                                     if (element.stringValue && element.stringValue.length > 0) {
                                         PGParserTextStorage *textStorage = [PGParserTextStorage new];
@@ -95,7 +101,32 @@
                             }
                         }
                     } else {
-                        if (element.stringValue && element.stringValue.length > 0) {
+                        if ([[element valueForAttribute:HTML_Tag_Class] isEqualToString:Paragraph_Class_Video]) {
+                            // <p class=video></p>
+                            __block PGParserVideoStorage *videoStorage = [PGParserVideoStorage new];
+                            [element enumerateElementsWithXPath:HTML_Tag_Hyper_Link usingBlock:^(ONOXMLElement *element, NSUInteger idx, BOOL *stop) {
+                                if (idx > 0) {
+                                    *stop = YES;
+                                }
+                                if ([element valueForAttribute:HTML_Attribute_Hyper_Ref]) {
+                                    NSString *href = [element valueForAttribute:HTML_Attribute_Hyper_Ref];
+                                    videoStorage.link = href;
+                                }
+                                
+                                [element enumerateElementsWithXPath:HTML_Tag_Image usingBlock:^(ONOXMLElement *element, NSUInteger idx, BOOL *stop) {
+                                    if (idx > 0) {
+                                        *stop = YES;
+                                    }
+                                    if ([element valueForAttribute:HTML_Attribute_Src]) {
+                                        videoStorage.image = [element valueForAttribute:HTML_Attribute_Src];
+                                        videoStorage.width = [[element valueForAttribute:HTML_Attribute_Width] floatValue];
+                                        videoStorage.height = [[element valueForAttribute:HTML_Attribute_Height] floatValue];
+                                        
+                                        [storages addObject:videoStorage];
+                                    }
+                                }];
+                            }];
+                        } else if (element.stringValue && element.stringValue.length > 0) {
                             NSMutableArray *styles = [NSMutableArray new];
                             __block NSString *paragraphStr = element.stringValue;
                             // <span style=""></span>
@@ -108,6 +139,13 @@
                                                                 @"styles":cssStyles}];
                                         }
                                     }
+                                }
+                            }];
+                            [element enumerateElementsWithXPath:HTML_Tag_Bold usingBlock:^(ONOXMLElement *element, NSUInteger idx, BOOL *stop) {
+                                NSDictionary *cssStyles = @{@"bold":@"bold"};
+                                if (element.stringValue && element.stringValue.length > 0 && [paragraphStr rangeOfString:element.stringValue].location != NSNotFound) {
+                                    [styles addObject:@{@"range":[NSValue valueWithRange:[paragraphStr rangeOfString:element.stringValue]],
+                                                        @"styles":cssStyles}];
                                 }
                             }];
                             PGParserTextStorage *textStorage = [PGParserTextStorage new];
@@ -142,6 +180,20 @@
                                     imageStorage.width = [[element valueForAttribute:HTML_Attribute_Width] floatValue];
                                     imageStorage.height = [[element valueForAttribute:HTML_Attribute_Height] floatValue];
                                     imageStorage.isGIF = YES;
+                                    
+                                    [storages addObject:imageStorage];
+                                }
+                            }];
+                            // <p><img class="content-catalog" /></p>
+                            [element enumerateElementsWithXPath:@"img[@class=\"content-catalog\"]" usingBlock:^(ONOXMLElement *element, NSUInteger idx, BOOL *stop) {
+                                if (idx > 0) {
+                                    *stop = YES;
+                                }
+                                if ([element valueForAttribute:HTML_Attribute_Src]) {
+                                    PGParserCatalogImageStorage *imageStorage = [PGParserCatalogImageStorage new];
+                                    imageStorage.image = [element valueForAttribute:HTML_Attribute_Src];
+                                    imageStorage.width = [[element valueForAttribute:HTML_Attribute_Width] floatValue];
+                                    imageStorage.height = [[element valueForAttribute:HTML_Attribute_Height] floatValue];
                                     
                                     [storages addObject:imageStorage];
                                 }

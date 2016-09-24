@@ -11,7 +11,9 @@
 @interface PGTagCell : UICollectionViewCell
 
 - (void)setCellWithTagName:(NSString *)tagName;
+- (void)setCellWithKeyword:(NSString *)keyword;
 
 + (CGSize)cellSize:(NSString *)tagName;
++ (CGSize)keywordCellSize:(NSString *)keyword;
 
 @end

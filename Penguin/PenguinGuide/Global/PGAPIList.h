@@ -28,4 +28,8 @@
 
 #define PG_Article                      @"/api/v1/article/:articleId"
 
+#define PG_Comments                     @"/api/v1/comments/:articleId"
+
+#define PG_Me                           @"/api/v1/user/:userId"
+
 #endif /* PGAPIList_h */

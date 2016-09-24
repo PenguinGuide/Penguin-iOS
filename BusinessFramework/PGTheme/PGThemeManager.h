@@ -41,7 +41,7 @@ typedef NS_ENUM(NSInteger, PGThemeStyle) {
 
 - (UIColor *)colorLightGray;
 /**
- *  @return 6C6C6C
+ *  @return 454545
  */
 - (UIColor *)colorText;
 /**
