@@ -20,6 +20,7 @@
 #import "PGArticleViewController.h"
 #import "UIScrollView+PGScrollView.h"
 #import "PGAlertController.h"
+#import "PGVideoPlayerViewController.h"
 
 // views
 #import "PGArticleParagraphInfoCell.h"
@@ -336,6 +337,17 @@
         }
     }
     return CGSizeZero;
+}
+
+- (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    if (indexPath.section == 0) {
+        id storage = self.viewModel.paragraphsArray[indexPath.item-1];
+        if ([storage isKindOfClass:[PGParserVideoStorage class]]) {
+            PGVideoPlayerViewController *playerViewController = [[PGVideoPlayerViewController alloc] init];
+            [self.navigationController pushViewController:playerViewController animated:YES];
+        }
+    }
 }
 
 // ISSUE: highlight UICollectionViewCell

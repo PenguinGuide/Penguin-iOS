@@ -47,8 +47,16 @@
                                                                              style:UIBarButtonItemStyleDone
                                                                             target:self
                                                                             action:@selector(backButtonClicked)];
-    // fix left sliding not working, http://blog.csdn.net/meegomeego/article/details/25879605
+    // ISSUE: fix left sliding not working, http://blog.csdn.net/meegomeego/article/details/25879605
     self.navigationController.interactivePopGestureRecognizer.delegate = (id)self;
+}
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    
+    AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+    appDelegate.allowRotation = NO;
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -66,6 +74,16 @@
     self.navigationController.delegate = nil;
     
     [self dismissLoading];
+}
+
+- (UIInterfaceOrientationMask)supportedInterfaceOrientations
+{
+    return UIInterfaceOrientationMaskPortrait;
+}
+
+- (BOOL)shouldAutorotate
+{
+    return YES;
 }
 
 - (void)setNavigationTitle:(NSString *)title

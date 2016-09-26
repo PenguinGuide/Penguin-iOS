@@ -28,6 +28,9 @@
 		0F141FC61D7474BE00884052 /* v1_explore_recommends.json in Resources */ = {isa = PBXBuildFile; fileRef = 0F141FC51D7474BE00884052 /* v1_explore_recommends.json */; };
 		0F141FC81D7474D700884052 /* v1_explore_banners.json in Resources */ = {isa = PBXBuildFile; fileRef = 0F141FC71D7474D700884052 /* v1_explore_banners.json */; };
 		0F141FCC1D74752500884052 /* PGExploreViewModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 0F141FCB1D74752500884052 /* PGExploreViewModel.m */; };
+		0F16668A1D991581009E71BB /* PGPersonalSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0F1666891D991581009E71BB /* PGPersonalSettingsViewController.m */; };
+		0F16668D1D99158E009E71BB /* PGSystemSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0F16668C1D99158E009E71BB /* PGSystemSettingsViewController.m */; };
+		0F1666901D9916FB009E71BB /* PGSettingsCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0F16668F1D9916FB009E71BB /* PGSettingsCell.m */; };
 		0F1790BC1D2DFCC600672B27 /* PGPasswordLoginView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0F1790BB1D2DFCC600672B27 /* PGPasswordLoginView.m */; };
 		0F1790BF1D2DFD0500672B27 /* PGLoginPasswordTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = 0F1790BE1D2DFD0500672B27 /* PGLoginPasswordTextField.m */; };
 		0F1790C21D2E0D6F00672B27 /* PGResetPasswordView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0F1790C11D2E0D6F00672B27 /* PGResetPasswordView.m */; };
@@ -72,6 +75,8 @@
 		0F51B31C1D6D85B200B4690F /* PGGoodsCollectionBanner.m in Sources */ = {isa = PBXBuildFile; fileRef = 0F51B31B1D6D85B200B4690F /* PGGoodsCollectionBanner.m */; };
 		0F51B31F1D6D87C800B4690F /* PGTopicBanner.m in Sources */ = {isa = PBXBuildFile; fileRef = 0F51B31E1D6D87C800B4690F /* PGTopicBanner.m */; };
 		0F51B3221D6D887D00B4690F /* PGSingleGoodBanner.m in Sources */ = {isa = PBXBuildFile; fileRef = 0F51B3211D6D887D00B4690F /* PGSingleGoodBanner.m */; };
+		0F52AB601D96B7AB004598C3 /* PGVideoPlayerSlider.m in Sources */ = {isa = PBXBuildFile; fileRef = 0F52AB5F1D96B7AB004598C3 /* PGVideoPlayerSlider.m */; };
+		0F52AB631D96D742004598C3 /* PGVideoVolumeSlider.m in Sources */ = {isa = PBXBuildFile; fileRef = 0F52AB621D96D742004598C3 /* PGVideoVolumeSlider.m */; };
 		0F55BA841D70180B00D9D159 /* v1_article_channel_channelid_category_categoryid.json in Resources */ = {isa = PBXBuildFile; fileRef = 0F55BA831D70180B00D9D159 /* v1_article_channel_channelid_category_categoryid.json */; };
 		0F55BA881D701A8900D9D159 /* PGChannelViewModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 0F55BA871D701A8900D9D159 /* PGChannelViewModel.m */; };
 		0F55BA8C1D701CBF00D9D159 /* PGChannelCategory.m in Sources */ = {isa = PBXBuildFile; fileRef = 0F55BA8B1D701CBF00D9D159 /* PGChannelCategory.m */; };
@@ -85,6 +90,7 @@
 		0F6281BA1D8FB6EA004E0596 /* PGTag.m in Sources */ = {isa = PBXBuildFile; fileRef = 0F6281B91D8FB6EA004E0596 /* PGTag.m */; };
 		0F6281BD1D8FE61E004E0596 /* PGArticleParagraphCatalogImageCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0F6281BC1D8FE61E004E0596 /* PGArticleParagraphCatalogImageCell.m */; };
 		0F6E900C1D7528E400F4ED32 /* PGScenarioViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0F6E900B1D7528E400F4ED32 /* PGScenarioViewController.m */; };
+		0F7298711D96578F001821C9 /* PGVideoPlayerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0F7298701D96578F001821C9 /* PGVideoPlayerViewController.m */; };
 		0F76A16A1D4A006600C5041C /* PGArticleParagraphGIFImageCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0F76A1691D4A006600C5041C /* PGArticleParagraphGIFImageCell.m */; };
 		0F76D60E1D937A9D00ACA73D /* PGCommentInputAccessoryView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0F76D60D1D937A9D00ACA73D /* PGCommentInputAccessoryView.m */; };
 		0F79B1021D6FF5030080BC4F /* PGChannelViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0F79B1011D6FF5030080BC4F /* PGChannelViewController.m */; };
@@ -129,6 +135,7 @@
 		0FD590D31D38B71600731962 /* PGBaseViewController+TransitionAnimation.m in Sources */ = {isa = PBXBuildFile; fileRef = 0FD590D21D38B71600731962 /* PGBaseViewController+TransitionAnimation.m */; };
 		0FD590D61D38BB3100731962 /* PGHomeToArticleTransition.m in Sources */ = {isa = PBXBuildFile; fileRef = 0FD590D51D38BB3100731962 /* PGHomeToArticleTransition.m */; };
 		0FD9061C1D47AABA00AEBE4B /* demo.html in Resources */ = {isa = PBXBuildFile; fileRef = 0FD9061B1D47AABA00AEBE4B /* demo.html */; };
+		0FECBE8F1D97C6C700A411BA /* video.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = 0FECBE8E1D97C6C700A411BA /* video.mp4 */; };
 		0FEDA3BF1D8F88BF004ECDE2 /* PGArticleParagraphInfoCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0FEDA3BE1D8F88BF004ECDE2 /* PGArticleParagraphInfoCell.m */; };
 		0FFAD0F11D780A2B009F9E27 /* PGCategoryIcon.m in Sources */ = {isa = PBXBuildFile; fileRef = 0FFAD0F01D780A2B009F9E27 /* PGCategoryIcon.m */; };
 		0FFAD0F41D780DF8009F9E27 /* PGGoodsCollectionView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0FFAD0F31D780DF8009F9E27 /* PGGoodsCollectionView.m */; };
@@ -210,6 +217,12 @@
 		0F141FC71D7474D700884052 /* v1_explore_banners.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = v1_explore_banners.json; sourceTree = "<group>"; };
 		0F141FCA1D74752500884052 /* PGExploreViewModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PGExploreViewModel.h; sourceTree = "<group>"; };
 		0F141FCB1D74752500884052 /* PGExploreViewModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PGExploreViewModel.m; sourceTree = "<group>"; };
+		0F1666881D991581009E71BB /* PGPersonalSettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PGPersonalSettingsViewController.h; sourceTree = "<group>"; };
+		0F1666891D991581009E71BB /* PGPersonalSettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PGPersonalSettingsViewController.m; sourceTree = "<group>"; };
+		0F16668B1D99158E009E71BB /* PGSystemSettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PGSystemSettingsViewController.h; sourceTree = "<group>"; };
+		0F16668C1D99158E009E71BB /* PGSystemSettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PGSystemSettingsViewController.m; sourceTree = "<group>"; };
+		0F16668E1D9916FB009E71BB /* PGSettingsCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PGSettingsCell.h; sourceTree = "<group>"; };
+		0F16668F1D9916FB009E71BB /* PGSettingsCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PGSettingsCell.m; sourceTree = "<group>"; };
 		0F1790BA1D2DFCC600672B27 /* PGPasswordLoginView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PGPasswordLoginView.h; sourceTree = "<group>"; };
 		0F1790BB1D2DFCC600672B27 /* PGPasswordLoginView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PGPasswordLoginView.m; sourceTree = "<group>"; };
 		0F1790BD1D2DFD0500672B27 /* PGLoginPasswordTextField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PGLoginPasswordTextField.h; sourceTree = "<group>"; };
@@ -291,6 +304,10 @@
 		0F51B31E1D6D87C800B4690F /* PGTopicBanner.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PGTopicBanner.m; sourceTree = "<group>"; };
 		0F51B3201D6D887D00B4690F /* PGSingleGoodBanner.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PGSingleGoodBanner.h; sourceTree = "<group>"; };
 		0F51B3211D6D887D00B4690F /* PGSingleGoodBanner.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PGSingleGoodBanner.m; sourceTree = "<group>"; };
+		0F52AB5E1D96B7AB004598C3 /* PGVideoPlayerSlider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PGVideoPlayerSlider.h; sourceTree = "<group>"; };
+		0F52AB5F1D96B7AB004598C3 /* PGVideoPlayerSlider.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PGVideoPlayerSlider.m; sourceTree = "<group>"; };
+		0F52AB611D96D742004598C3 /* PGVideoVolumeSlider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PGVideoVolumeSlider.h; sourceTree = "<group>"; };
+		0F52AB621D96D742004598C3 /* PGVideoVolumeSlider.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PGVideoVolumeSlider.m; sourceTree = "<group>"; };
 		0F55BA831D70180B00D9D159 /* v1_article_channel_channelid_category_categoryid.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = v1_article_channel_channelid_category_categoryid.json; sourceTree = "<group>"; };
 		0F55BA861D701A8900D9D159 /* PGChannelViewModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PGChannelViewModel.h; sourceTree = "<group>"; };
 		0F55BA871D701A8900D9D159 /* PGChannelViewModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PGChannelViewModel.m; sourceTree = "<group>"; };
@@ -314,6 +331,8 @@
 		0F6281BC1D8FE61E004E0596 /* PGArticleParagraphCatalogImageCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PGArticleParagraphCatalogImageCell.m; sourceTree = "<group>"; };
 		0F6E900A1D7528E400F4ED32 /* PGScenarioViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PGScenarioViewController.h; sourceTree = "<group>"; };
 		0F6E900B1D7528E400F4ED32 /* PGScenarioViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PGScenarioViewController.m; sourceTree = "<group>"; };
+		0F72986F1D96578F001821C9 /* PGVideoPlayerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PGVideoPlayerViewController.h; sourceTree = "<group>"; };
+		0F7298701D96578F001821C9 /* PGVideoPlayerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PGVideoPlayerViewController.m; sourceTree = "<group>"; };
 		0F76A1681D4A006600C5041C /* PGArticleParagraphGIFImageCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PGArticleParagraphGIFImageCell.h; sourceTree = "<group>"; };
 		0F76A1691D4A006600C5041C /* PGArticleParagraphGIFImageCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PGArticleParagraphGIFImageCell.m; sourceTree = "<group>"; };
 		0F76D60C1D937A9D00ACA73D /* PGCommentInputAccessoryView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PGCommentInputAccessoryView.h; sourceTree = "<group>"; };
@@ -395,6 +414,7 @@
 		0FD590D41D38BB3100731962 /* PGHomeToArticleTransition.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PGHomeToArticleTransition.h; sourceTree = "<group>"; };
 		0FD590D51D38BB3100731962 /* PGHomeToArticleTransition.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PGHomeToArticleTransition.m; sourceTree = "<group>"; };
 		0FD9061B1D47AABA00AEBE4B /* demo.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = demo.html; sourceTree = "<group>"; };
+		0FECBE8E1D97C6C700A411BA /* video.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = video.mp4; sourceTree = "<group>"; };
 		0FEDA3BD1D8F88BF004ECDE2 /* PGArticleParagraphInfoCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PGArticleParagraphInfoCell.h; sourceTree = "<group>"; };
 		0FEDA3BE1D8F88BF004ECDE2 /* PGArticleParagraphInfoCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PGArticleParagraphInfoCell.m; sourceTree = "<group>"; };
 		0FFAD0EF1D780A2B009F9E27 /* PGCategoryIcon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PGCategoryIcon.h; sourceTree = "<group>"; };
@@ -829,6 +849,10 @@
 				0FA5F2E81D94DEE800E9242B /* Views */,
 				0F3C7EF81D2F731B00284066 /* PGMeViewController.h */,
 				0F3C7EF91D2F731B00284066 /* PGMeViewController.m */,
+				0F1666881D991581009E71BB /* PGPersonalSettingsViewController.h */,
+				0F1666891D991581009E71BB /* PGPersonalSettingsViewController.m */,
+				0F16668B1D99158E009E71BB /* PGSystemSettingsViewController.h */,
+				0F16668C1D99158E009E71BB /* PGSystemSettingsViewController.m */,
 			);
 			path = Me;
 			sourceTree = "<group>";
@@ -871,6 +895,17 @@
 				0F51B3211D6D887D00B4690F /* PGSingleGoodBanner.m */,
 			);
 			path = Banners;
+			sourceTree = "<group>";
+		};
+		0F52AB5D1D96B751004598C3 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				0F52AB5E1D96B7AB004598C3 /* PGVideoPlayerSlider.h */,
+				0F52AB5F1D96B7AB004598C3 /* PGVideoPlayerSlider.m */,
+				0F52AB611D96D742004598C3 /* PGVideoVolumeSlider.h */,
+				0F52AB621D96D742004598C3 /* PGVideoVolumeSlider.m */,
+			);
+			path = Views;
 			sourceTree = "<group>";
 		};
 		0F55BA851D701A6D00D9D159 /* Channel */ = {
@@ -948,6 +983,9 @@
 		0F72986E1D965673001821C9 /* Video */ = {
 			isa = PBXGroup;
 			children = (
+				0F52AB5D1D96B751004598C3 /* Views */,
+				0F72986F1D96578F001821C9 /* PGVideoPlayerViewController.h */,
+				0F7298701D96578F001821C9 /* PGVideoPlayerViewController.m */,
 			);
 			path = Video;
 			sourceTree = "<group>";
@@ -1033,6 +1071,7 @@
 				0F7EEF601D210F63008D175C /* ViewController.h */,
 				0F7EEF611D210F63008D175C /* ViewController.m */,
 				0FD9061B1D47AABA00AEBE4B /* demo.html */,
+				0FECBE8E1D97C6C700A411BA /* video.mp4 */,
 				0F7EEF5A1D210F63008D175C /* Supporting Files */,
 			);
 			path = PenguinGuide;
@@ -1228,6 +1267,8 @@
 			children = (
 				0FA5F2EC1D94DFFF00E9242B /* PGMeCell.h */,
 				0FA5F2ED1D94DFFF00E9242B /* PGMeCell.m */,
+				0F16668E1D9916FB009E71BB /* PGSettingsCell.h */,
+				0F16668F1D9916FB009E71BB /* PGSettingsCell.m */,
 			);
 			path = Cells;
 			sourceTree = "<group>";
@@ -1637,6 +1678,7 @@
 				0F55BA841D70180B00D9D159 /* v1_article_channel_channelid_category_categoryid.json in Resources */,
 				0F18E49D1D7D64D3004377F1 /* pg_article_5.json in Resources */,
 				0FFAD0FD1D7818B9009F9E27 /* v1_goods_category_categoryid.json in Resources */,
+				0FECBE8F1D97C6C700A411BA /* video.mp4 in Resources */,
 				0F7EEF941D211914008D175C /* Theme.xcassets in Resources */,
 				0FA5F2F11D95012300E9242B /* pg_me.json in Resources */,
 				0F7EEF671D210F63008D175C /* Assets.xcassets in Resources */,
@@ -1686,7 +1728,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "KEYWORDS=\"TODO:|FIXME:|ISSUE:|\\?\\?\\?:|\\!\\!\\!:\"\nfind \"${SRCROOT}/PenguinGuide\" \\( -name \"*.h\" -or -name \"*.m\" \\) -print0 | xargs -0 egrep --with-filename --line-number --only-matching \"($KEYWORDS).*\\$\" | perl -p -e \"s/($KEYWORDS)/ warning: \\$1/\"";
+			shellScript = "KEYWORDS=\"TODO:|FIXME:|ISSUE:|NOTE:|\\?\\?\\?:|\\!\\!\\!:\"\nfind \"${SRCROOT}/PenguinGuide\" \\( -name \"*.h\" -or -name \"*.m\" \\) -print0 | xargs -0 egrep --with-filename --line-number --only-matching \"($KEYWORDS).*\\$\" | perl -p -e \"s/($KEYWORDS)/ warning: \\$1/\"";
 		};
 		0F3C7EEA1D2F6B8200284066 /* Run Script */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -1767,9 +1809,11 @@
 				0F21FEB71D9126720036F14A /* PGArticleParagraphFooterCell.m in Sources */,
 				0F877A311D7D0F1F007BDBE9 /* PGTopicViewController.m in Sources */,
 				0F51B3191D6D853C00B4690F /* PGFlashbuyBanner.m in Sources */,
+				0F16668D1D99158E009E71BB /* PGSystemSettingsViewController.m in Sources */,
 				0F141FCC1D74752500884052 /* PGExploreViewModel.m in Sources */,
 				0FBBEDE41D741894001E75BA /* PGSearchResultsHeaderView.m in Sources */,
 				0F79B1071D6FF8FE0080BC4F /* PGChannelCategoriesView.m in Sources */,
+				0F16668A1D991581009E71BB /* PGPersonalSettingsViewController.m in Sources */,
 				0F1790C21D2E0D6F00672B27 /* PGResetPasswordView.m in Sources */,
 				0F141FBF1D7468AF00884052 /* PGFeedsCollectionView.m in Sources */,
 				0FA5F2EB1D94DFE000E9242B /* PGMeHeaderView.m in Sources */,
@@ -1797,6 +1841,7 @@
 				0F3765341D6F254E007B9481 /* PGArticleBannerCell.m in Sources */,
 				0FAADD151D767EBB00FC7933 /* PGScenarioCategory.m in Sources */,
 				0F0008CC1D7187A400BED6FA /* PGSearchResultsViewController.m in Sources */,
+				0F1666901D9916FB009E71BB /* PGSettingsCell.m in Sources */,
 				0F51B3221D6D887D00B4690F /* PGSingleGoodBanner.m in Sources */,
 				0F55BA8C1D701CBF00D9D159 /* PGChannelCategory.m in Sources */,
 				0F21FEBE1D9150FB0036F14A /* PGDashedLineView.m in Sources */,
@@ -1830,6 +1875,7 @@
 				0F877A3C1D7D15D0007BDBE9 /* PGTopicViewModel.m in Sources */,
 				0F9308461D93C0FF00EA3D43 /* PGCommentTextView.m in Sources */,
 				0FFCB5241D2CABDE00D863FA /* PGTourView.m in Sources */,
+				0F7298711D96578F001821C9 /* PGVideoPlayerViewController.m in Sources */,
 				0F3C7EFA1D2F731B00284066 /* PGMeViewController.m in Sources */,
 				0F3765431D6F256B007B9481 /* PGGoodsCollectionGoodCell.m in Sources */,
 				0F76A16A1D4A006600C5041C /* PGArticleParagraphGIFImageCell.m in Sources */,
@@ -1847,6 +1893,7 @@
 				0F7EEF5C1D210F63008D175C /* main.m in Sources */,
 				0FFEAF221D76B4920067C888 /* PGStoreRecommendsHeaderView.m in Sources */,
 				0FFAD0F11D780A2B009F9E27 /* PGCategoryIcon.m in Sources */,
+				0F52AB631D96D742004598C3 /* PGVideoVolumeSlider.m in Sources */,
 				0F21FEB41D9114B30036F14A /* PGArticleParagraphVideoCell.m in Sources */,
 				0F2DC2A01D32995500277C9E /* PGBaseViewController.m in Sources */,
 				0F3765421D6F256B007B9481 /* PGGoodsCollectionBannerCell.m in Sources */,
@@ -1867,6 +1914,7 @@
 				0FFAD0F41D780DF8009F9E27 /* PGGoodsCollectionView.m in Sources */,
 				0FA5F2EE1D94DFFF00E9242B /* PGMeCell.m in Sources */,
 				0FAADD121D767E5200FC7933 /* PGScenario.m in Sources */,
+				0F52AB601D96B7AB004598C3 /* PGVideoPlayerSlider.m in Sources */,
 				0F51B3171D6D853C00B4690F /* PGArticleBanner.m in Sources */,
 				0FFCB53A1D2D01E200D863FA /* PGLoginView.m in Sources */,
 				0FA5F2F91D9504DE00E9242B /* PGMeViewModel.m in Sources */,
