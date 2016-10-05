@@ -129,14 +129,15 @@
     self.articleCollectionView.frame = CGRectMake(0, UISCREEN_HEIGHT-300, self.articleCollectionView.width, self.articleCollectionView.height);
     self.articleCollectionView.alpha = 0.f;
     
+    PGWeakSelf(self);
     [UIView animateWithDuration:0.3f
                           delay:0.f
                         options:UIViewAnimationOptionCurveEaseOut
                      animations:^{
-                         self.articleCollectionView.frame = CGRectMake(0, 0, self.articleCollectionView.width, self.articleCollectionView.height);
-                         self.articleCollectionView.alpha = 0.4f;
+                         weakself.articleCollectionView.frame = CGRectMake(0, 0, weakself.articleCollectionView.width, weakself.articleCollectionView.height);
+                         weakself.articleCollectionView.alpha = 0.4f;
                      } completion:^(BOOL finished) {
-                         self.articleCollectionView.alpha = 1.f;
+                         weakself.articleCollectionView.alpha = 1.f;
                          if (completion) {
                              completion();
                          }
@@ -321,6 +322,7 @@
                 CGFloat height = 0.f;
                 if (imageStorage.ratio > 0.f) {
                     height = 20+width*(1/imageStorage.ratio)+20;
+                    // NOTE: app will be stucked if ratio == 0.f
                     return CGSizeMake(width, height);
                 }
             } else if ([storage isKindOfClass:[PGParserCatalogImageStorage class]]) {

@@ -44,10 +44,14 @@
         topScreenshotView.image = topScreenshot;
     }
     
-    CGRect bottomScreenshotRect = CGRectMake(0, topScreenshotRect.size.height, topScreenshotRect.size.width, homeVC.feedsCollectionView.height-topScreenshotRect.size.height);
-    UIImage *bottomScreenshot = [homeVC.feedsCollectionView screenshotFromRect:bottomScreenshotRect];
-    UIImageView *bottomScreenshotView = [[UIImageView alloc] initWithFrame:CGRectMake(0, topScreenshotView.bottom, bottomScreenshot.size.width, bottomScreenshot.size.height)];
-    bottomScreenshotView.image = bottomScreenshot;
+    UIImageView *bottomScreenshotView = nil;
+    CGFloat bottomScreenshotHeight = homeVC.feedsCollectionView.height-topScreenshotRect.size.height;
+    if (bottomScreenshotHeight > 0.f) {
+        CGRect bottomScreenshotRect = CGRectMake(0, topScreenshotRect.size.height, topScreenshotRect.size.width, homeVC.feedsCollectionView.height-topScreenshotRect.size.height);
+        UIImage *bottomScreenshot = [homeVC.feedsCollectionView screenshotFromRect:bottomScreenshotRect];
+        bottomScreenshotView = [[UIImageView alloc] initWithFrame:CGRectMake(0, topScreenshotView.bottom, bottomScreenshot.size.width, bottomScreenshot.size.height)];
+        bottomScreenshotView.image = bottomScreenshot;
+    }
     
     homeVC.feedsCollectionView.hidden = YES;
     
@@ -63,7 +67,9 @@
                      animations:^{
                          CGRect frame = [containerView convertRect:articleVC.headerImageView.frame fromView:articleVC.headerImageView.superview];
                          topScreenshotView.frame = CGRectMake(frame.origin.x, -(topScreenshotView.height-frame.size.height), topScreenshotView.width, topScreenshotView.height);
-                         bottomScreenshotView.frame = CGRectMake(bottomScreenshotView.x, UISCREEN_HEIGHT, bottomScreenshotView.width, bottomScreenshotView.height);
+                         if (bottomScreenshotView) {
+                             bottomScreenshotView.frame = CGRectMake(bottomScreenshotView.x, UISCREEN_HEIGHT, bottomScreenshotView.width, bottomScreenshotView.height);
+                         }
                          articleVC.view.alpha = 1.f;
                      } completion:^(BOOL finished) {
                          [articleVC animateCollectionView:^{
