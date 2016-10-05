@@ -53,7 +53,6 @@
     [self.view addSubview:self.searchButton];
     
     self.viewModel = [[PGHomeViewModel alloc] initWithAPIClient:self.apiClient];
-    [self.viewModel requestData];
     
     PGWeakSelf(self);
     [self observe:self.viewModel keyPath:@"feedsArray" block:^(id changedObject) {
@@ -61,6 +60,8 @@
         if (bannersArray && [bannersArray isKindOfClass:[NSArray class]]) {
             [weakself.feedsCollectionView reloadData];
         }
+        [weakself dismissLoading];
+        [weakself.feedsCollectionView endBottomRefreshing];
     }];
 }
 
@@ -75,6 +76,11 @@
     [super viewDidAppear:animated];
     
     [self setNeedsStatusBarAppearanceUpdate];
+    
+    if (self.viewModel.feedsArray.count == 0) {
+        [self showLoading];
+        [self.viewModel requestData];
+    }
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -281,9 +287,7 @@
             });
         }];
         [_feedsCollectionView enableInfiniteScrolling:^{
-            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                [collectionView endBottomRefreshing];
-            });
+            [weakself.viewModel loadNextPage];
         }];
     }
     return _feedsCollectionView;

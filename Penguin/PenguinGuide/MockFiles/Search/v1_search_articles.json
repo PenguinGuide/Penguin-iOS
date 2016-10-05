@@ -1,8 +1,8 @@
 {
-    "data": [
+    "items": [
              {
              "type": "article",
-             "link": "qiechihe://article?articleId=1",
+             "link": "qiechihe://article?article_id=1",
              "category": "city_guide",
              "title": "从午间定食到深夜食堂",
              "image": "https://s6.postimg.org/o3pusl4q9/article1.png",
@@ -12,7 +12,7 @@
              },
              {
              "type": "article",
-             "link": "qiechihe://article?articleId=1",
+             "link": "qiechihe://article?article_id=1",
              "category": "city_guide",
              "title": "从午间定食到深夜食堂",
              "image": "https://s6.postimg.org/pvnvkluep/article2.png",
@@ -22,7 +22,7 @@
              },
              {
              "type": "article",
-             "link": "qiechihe://article?articleId=1",
+             "link": "qiechihe://article?article_id=1",
              "category": "city_guide",
              "title": "从午间定食到深夜食堂",
              "image": "https://s6.postimg.org/mq39uebsh/article3.png",
@@ -32,7 +32,7 @@
              },
              {
              "type": "article",
-             "link": "qiechihe://article?articleId=1",
+             "link": "qiechihe://article?article_id=1",
              "category": "city_guide",
              "title": "从午间定食到深夜食堂",
              "image": "https://s6.postimg.org/o3pusl4q9/article1.png",
@@ -42,7 +42,7 @@
              },
              {
              "type": "article",
-             "link": "qiechihe://article?articleId=1",
+             "link": "qiechihe://article?article_id=1",
              "category": "city_guide",
              "title": "从午间定食到深夜食堂",
              "image": "https://s6.postimg.org/pvnvkluep/article2.png",
@@ -52,7 +52,7 @@
              },
              {
              "type": "article",
-             "link": "qiechihe://article?articleId=1",
+             "link": "qiechihe://article?article_id=1",
              "category": "city_guide",
              "title": "从午间定食到深夜食堂",
              "image": "https://s6.postimg.org/mq39uebsh/article3.png",
@@ -62,7 +62,7 @@
              },
              {
              "type": "article",
-             "link": "qiechihe://article?articleId=1",
+             "link": "qiechihe://article?article_id=1",
              "category": "city_guide",
              "title": "从午间定食到深夜食堂",
              "image": "https://s6.postimg.org/o3pusl4q9/article1.png",
@@ -72,7 +72,7 @@
              },
              {
              "type": "article",
-             "link": "qiechihe://article?articleId=1",
+             "link": "qiechihe://article?article_id=1",
              "category": "city_guide",
              "title": "从午间定食到深夜食堂",
              "image": "https://s6.postimg.org/pvnvkluep/article2.png",
@@ -82,7 +82,7 @@
              },
              {
              "type": "article",
-             "link": "qiechihe://article?articleId=1",
+             "link": "qiechihe://article?article_id=1",
              "category": "city_guide",
              "title": "从午间定食到深夜食堂",
              "image": "https://s6.postimg.org/o3pusl4q9/article1.png",
@@ -92,7 +92,7 @@
              },
              {
              "type": "article",
-             "link": "qiechihe://article?articleId=1",
+             "link": "qiechihe://article?article_id=1",
              "category": "city_guide",
              "title": "从午间定食到深夜食堂",
              "image": "https://s6.postimg.org/pvnvkluep/article2.png",
@@ -102,7 +102,7 @@
              },
              {
              "type": "article",
-             "link": "qiechihe://article?articleId=1",
+             "link": "qiechihe://article?article_id=1",
              "category": "city_guide",
              "title": "从午间定食到深夜食堂",
              "image": "https://s6.postimg.org/mq39uebsh/article3.png",
@@ -112,7 +112,7 @@
              },
              {
              "type": "article",
-             "link": "qiechihe://article?articleId=1",
+             "link": "qiechihe://article?article_id=1",
              "category": "city_guide",
              "title": "从午间定食到深夜食堂",
              "image": "https://s6.postimg.org/o3pusl4q9/article1.png",
@@ -122,7 +122,7 @@
              },
              {
              "type": "article",
-             "link": "qiechihe://article?articleId=1",
+             "link": "qiechihe://article?article_id=1",
              "category": "city_guide",
              "title": "从午间定食到深夜食堂",
              "image": "https://s6.postimg.org/pvnvkluep/article2.png",
@@ -132,7 +132,7 @@
              },
              {
              "type": "article",
-             "link": "qiechihe://article?articleId=1",
+             "link": "qiechihe://article?article_id=1",
              "category": "city_guide",
              "title": "从午间定食到深夜食堂",
              "image": "https://s6.postimg.org/mq39uebsh/article3.png",
@@ -142,7 +142,7 @@
              },
              {
              "type": "article",
-             "link": "qiechihe://article?articleId=1",
+             "link": "qiechihe://article?article_id=1",
              "category": "city_guide",
              "title": "从午间定食到深夜食堂",
              "image": "https://s6.postimg.org/o3pusl4q9/article1.png",
@@ -152,7 +152,7 @@
              },
              {
              "type": "article",
-             "link": "qiechihe://article?articleId=1",
+             "link": "qiechihe://article?article_id=1",
              "category": "city_guide",
              "title": "从午间定食到深夜食堂",
              "image": "https://s6.postimg.org/pvnvkluep/article2.png",
@@ -160,6 +160,5 @@
              "comments": "555",
              "id": "2"
              }
-    ],
-    "result": 0
+    ]
 }

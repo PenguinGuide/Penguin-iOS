@@ -6,7 +6,8 @@
   "data" : [
     {
       "idiom" : "universal",
-      "filename" : "egg.gif"
+      "filename" : "center.gif",
+      "universal-type-identifier" : "com.compuserve.gif"
     }
   ]
 }

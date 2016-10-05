@@ -14,7 +14,7 @@
 {
     self = [super init];
     if (self) {
-        self.keyPath = @"data";
+        self.keyPath = @"items";
         self.isMockAPI = NO;
     }
     return self;

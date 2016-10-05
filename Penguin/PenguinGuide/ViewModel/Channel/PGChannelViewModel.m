@@ -33,7 +33,7 @@
             config.route = PG_Channel;
             config.pattern = @{@"channelId":weakself.channelId};
             config.model = [PGChannel new];
-            config.keyPath = @"data";
+            config.keyPath = nil;
             config.isMockAPI = YES;
             config.mockFileName = @"v1_channel_channelid.json";
         } completion:^(id response) {
@@ -55,7 +55,7 @@
         config.route = PG_Channel_Category_Articles;
         config.pattern = @{@"channelId":weakself.channelId, @"categoryId":categoryId};
         config.model = [PGArticleBanner new];
-        config.keyPath = @"data";
+        config.keyPath = @"items";
         config.isMockAPI = YES;
         config.mockFileName = @"v1_article_channel_channelid_category_categoryid.json";
     } completion:^(id response) {

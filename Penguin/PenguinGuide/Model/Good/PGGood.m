@@ -20,7 +20,12 @@
              @"unit" : @"unit",
              @"desc" : @"desc",
              @"time" : @"time",
-             @"isNew" : @"is_new"
+             @"isNew" : @"is_new",
+             @"isCollected": @"collected",
+             
+             @"bannersArray": @"banners",
+             @"tagsArray": @"tags",
+             @"relatedArticlesArray": @"related_articles"
             };
 }
 
@@ -37,6 +42,21 @@
 + (NSValueTransformer *)timeJSONTransformer
 {
     return [NSValueTransformer valueTransformerForName:PGStringValueTransformer];
+}
+
++ (NSValueTransformer *)bannersArrayJSONTransformer
+{
+    return [MTLJSONAdapter arrayTransformerWithModelClass:[PGImageBanner class]];
+}
+
++ (NSValueTransformer *)tagsArrayJSONTransformer
+{
+    return [MTLJSONAdapter arrayTransformerWithModelClass:[PGTag class]];
+}
+
++ (NSValueTransformer *)relatedArticlesArrayJSONTransformer
+{
+    return [MTLJSONAdapter arrayTransformerWithModelClass:[PGImageBanner class]];
 }
 
 @end

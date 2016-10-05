@@ -21,7 +21,7 @@
     PGWeakSelf(self);
     [self.apiClient pg_makeGetRequest:^(PGRKRequestConfig *config) {
         config.route = PG_Topic;
-        config.keyPath = @"data";
+        config.keyPath = nil;
         config.model = [PGTopic new];
         config.isMockAPI = YES;
         config.mockFileName = @"v1_topic_topicid.json";

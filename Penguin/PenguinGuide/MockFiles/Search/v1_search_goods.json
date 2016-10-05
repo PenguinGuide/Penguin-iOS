@@ -1,5 +1,5 @@
 {
-    "data": [
+    "items": [
              {
              "type": "good",
              "discount_price": 199,
@@ -180,6 +180,5 @@
              "image": "https://s6.postimg.org/784dlf2up/image.jpg",
              "unit": "瓶",
              }
-    ],
-    "result": 0
+    ]
 }

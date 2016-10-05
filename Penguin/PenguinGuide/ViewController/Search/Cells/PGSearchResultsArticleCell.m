@@ -48,8 +48,8 @@
     [self.bannerImageView setWithImageURL:article.image placeholder:nil completion:nil];
     [self.titleLabel setText:[NSString stringWithFormat:@"- %@ -", article.title]];
     
-    self.readsCountButton.frame = CGRectMake(self.width/2-60, self.titleLabel.bottom+10, 12+16+[self labelWidth:article.readsCount], 26);
-    [self.readsCountButton setTitle:article.readsCount forState:UIControlStateNormal];
+    self.readsCountButton.frame = CGRectMake(self.width/2-60, self.titleLabel.bottom+10, 12+16+[self labelWidth:article.likesCount], 26);
+    [self.readsCountButton setTitle:article.likesCount forState:UIControlStateNormal];
     
     self.commentsCountButton.frame = CGRectMake(self.width/2, self.titleLabel.bottom+10, 12+16+[self labelWidth:article.commentsCount], 26);
     [self.commentsCountButton setTitle:article.commentsCount forState:UIControlStateNormal];

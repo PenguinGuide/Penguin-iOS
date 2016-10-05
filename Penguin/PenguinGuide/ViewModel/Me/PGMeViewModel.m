@@ -22,7 +22,7 @@
     [self.apiClient pg_makeGetRequest:^(PGRKRequestConfig *config) {
         config.route = PG_Me;
         config.model = [PGMe new];
-        config.keyPath = @"data";
+        config.keyPath = nil;
         config.isMockAPI = YES;
         config.mockFileName = @"pg_me.json";
     } completion:^(id response) {

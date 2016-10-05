@@ -135,6 +135,7 @@ static char ScrollViewNaviTitleLabel;
             // pull refresh
             self.headerView.frame = CGRectMake(0, contentOffsetY, self.headerView.frame.size.width, headerImageHeight+fabs(contentOffsetY));
             self.dimView.frame = CGRectMake(0, 0, self.headerView.frame.size.width, headerImageHeight+fabs(contentOffsetY));
+            self.dimView.userInteractionEnabled = NO;
             self.naviTitleLabel.frame = CGRectMake(70, 20, self.naviTitleLabel.frame.size.width, self.naviTitleLabel.frame.size.height);
         }
     }

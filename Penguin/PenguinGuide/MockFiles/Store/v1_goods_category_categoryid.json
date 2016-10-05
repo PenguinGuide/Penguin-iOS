@@ -1,5 +1,5 @@
 {
-    "data": [
+    "items": [
              {
              "discount_price": 199,
              "original_price": 238,
@@ -258,6 +258,5 @@
              "is_new": true,
              "collected": true
              }
-    ],
-    "result": 0
+    ]
 }

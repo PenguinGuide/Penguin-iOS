@@ -1,5 +1,5 @@
 {
-    "data": [
+    "items": [
              {
              "likes": 120,
              "liked": false,
@@ -69,6 +69,5 @@
              },
              "id": "6"	
              }
-             ],
-    "result": 0
+             ]
 }

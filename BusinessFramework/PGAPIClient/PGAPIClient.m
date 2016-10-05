@@ -55,7 +55,7 @@ static const int DefaultMaxConcurrentConnections = 5;
 
 - (void)initSessionManager:(NSTimeInterval)timeout operationCount:(NSInteger)operationCount
 {
-    self.sessionManager = [PGRKHTTPSessionManager sessionManagerWithBaseURL:@"http://www.penguinguide.com" timeout:timeout operationCount:operationCount];
+    self.sessionManager = [PGRKHTTPSessionManager sessionManagerWithBaseURL:@"https://testing.penguin.guide" timeout:timeout operationCount:operationCount];
     
     // content-type
     [self.sessionManager addAcceptableContentTypes:[NSSet setWithObjects:@"application/json", @"text/json", @"text/javascript", @"text/html", @"text/css", @"text/plain", nil]];
@@ -79,6 +79,16 @@ static const int DefaultMaxConcurrentConnections = 5;
     [self.sessionManager addValue:userAgent forHTTPHeaderField:@"User-Agent"];
     // accept
     [self.sessionManager addValue:@"application/json" forHTTPHeaderField:@"Accept"];
+}
+
++ (void)enableLogging
+{
+    [PGRKHTTPSessionManager enableLogging];
+}
+
++ (void)disableLogging
+{
+    [PGRKHTTPSessionManager disableLogging];
 }
 
 - (void)pg_makeGetRequest:(void (^)(PGRKRequestConfig *config))configBlock
@@ -113,19 +123,22 @@ static const int DefaultMaxConcurrentConnections = 5;
 {
     if ([response isKindOfClass:[NSDictionary class]]) {
         NSDictionary *responseDict = (NSDictionary *)response;
-        if (responseDict[@"result"]) {
-            NSInteger resultCode = [responseDict[@"result"] integerValue];
-            
-            if (resultCode == PG_API_Result_Success) {
-                if (completion) {
-                    completion(responseDict);
-                }
-            } else if (resultCode == PG_API_Result_Failed) {
-                
-            }
-        } else {
-            failure(nil);
+        if (completion) {
+            completion(responseDict);
         }
+//        if (responseDict[@"result"]) {
+//            NSInteger resultCode = [responseDict[@"result"] integerValue];
+//            
+//            if (resultCode == PG_API_Result_Success) {
+//                if (completion) {
+//                    completion(responseDict);
+//                }
+//            } else if (resultCode == PG_API_Result_Failed) {
+//                
+//            }
+//        } else {
+//            failure(nil);
+//        }
     }
 }
 

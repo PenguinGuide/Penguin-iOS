@@ -1,5 +1,5 @@
 {
-    "data": [
+    "items": [
              {
              "type": "topic",
              "link": "qiechihe://topic?topicId=1111",
@@ -480,6 +480,5 @@
              "image": "https://s6.postimg.org/784dlf2up/image.jpg",
              "unit": "瓶",
              }
-             ],
-    "result": 0
+             ]
 }

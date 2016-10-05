@@ -22,7 +22,7 @@
     [self.apiClient pg_makeGetRequest:^(PGRKRequestConfig *config) {
         config.route = PG_Store_Category_Goods;
         config.model = [PGGood new];
-        config.keyPath = @"data";
+        config.keyPath = @"items";
         config.isMockAPI = YES;
         config.mockFileName = @"v1_goods_category_categoryid.json";
     } completion:^(id response) {

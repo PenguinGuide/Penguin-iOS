@@ -16,6 +16,9 @@
 + (id)clientWithOperationCount:(NSInteger)operationCount;
 + (id)clientWithTimeout:(NSTimeInterval)timeout operationCount:(NSInteger)operationCount;
 
++ (void)enableLogging;
++ (void)disableLogging;
+
 - (void)pg_makeGetRequest:(void(^)(PGRKRequestConfig *config))configBlock
                completion:(PGRKCompletionBlock)completion
                   failure:(PGRKFailureBlock)failure;

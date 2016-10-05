@@ -20,6 +20,9 @@ typedef void(^PGRKFailureBlock)(NSError *error);
 + (id)sessionManagerWithBaseURL:(NSString *)baseURL operationCount:(NSInteger)operationCount;
 + (id)sessionManagerWithBaseURL:(NSString *)baseURL timeout:(NSTimeInterval)timeout operationCount:(NSInteger)operationCount;
 
++ (void)enableLogging;
++ (void)disableLogging;
+
 - (void)addAcceptableContentTypes:(NSSet *)contentTypes;
 - (void)addValue:(NSString *)value forHTTPHeaderField:(nonnull NSString *)field;
 

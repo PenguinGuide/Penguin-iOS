@@ -1,25 +1,22 @@
 {
-    "data": {
-        "total_articles": 78,
-        "desc": "大多数人其实都生活在平凡里，对旁人的成功和幸福羡慕或多或少，有时候得不到，有时候舍不得。你我皆生活在这平凡里。大多数人其实都生活在平凡里，对旁人的成功和幸福羡慕或多或少，有时候得不到，有时候舍不得。你我皆生活在这平凡里。大多数人其实都生活在平凡里，对旁人的成功和幸福羡慕或多或少，有时候得不到，有时候舍不得。你我皆生活在这平凡里。",
-        "categories": [
-                       {
-                       "image": "https://s6.postimg.org/7xkbegks1/article_list_menu1.png",
-                       "id": "categoryforall"
-                       },
-                       {
-                       "image": "https://s6.postimg.org/6wk2pc3sh/article_list_menu2.png",
-                       "id": "111111"
-                       },
-                       {
-                       "image": "https://s6.postimg.org/ruq8nf3n5/article_list_menu3.png",
-                       "id": "222222"
-                       },
-                       {
-                       "image": "https://s6.postimg.org/6wk2pc3sh/article_list_menu2.png",
-                       "id": "333333"
-                       }
-                       ]
-    },
-    "result": 0
+    "total_articles": 78,
+    "desc": "大多数人其实都生活在平凡里，对旁人的成功和幸福羡慕或多或少，有时候得不到，有时候舍不得。你我皆生活在这平凡里。大多数人其实都生活在平凡里，对旁人的成功和幸福羡慕或多或少，有时候得不到，有时候舍不得。你我皆生活在这平凡里。大多数人其实都生活在平凡里，对旁人的成功和幸福羡慕或多或少，有时候得不到，有时候舍不得。你我皆生活在这平凡里。",
+    "categories": [
+                   {
+                   "image": "https://s6.postimg.org/7xkbegks1/article_list_menu1.png",
+                   "id": "categoryforall"
+                   },
+                   {
+                   "image": "https://s6.postimg.org/6wk2pc3sh/article_list_menu2.png",
+                   "id": "111111"
+                   },
+                   {
+                   "image": "https://s6.postimg.org/ruq8nf3n5/article_list_menu3.png",
+                   "id": "222222"
+                   },
+                   {
+                   "image": "https://s6.postimg.org/6wk2pc3sh/article_list_menu2.png",
+                   "id": "333333"
+                   }
+                   ]
 }

@@ -93,9 +93,9 @@
     
     self.viewModel = [[PGArticleViewModel alloc] initWithAPIClient:self.apiClient];
     self.viewModel.articleId = self.articleId;
-    [self.viewModel requestData];
     
     self.headerImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, UISCREEN_WIDTH, UISCREEN_WIDTH*9/16)];
+    self.headerImageView.backgroundColor = Theme.colorText;
     
     PGWeakSelf(self);
     [self observe:self.viewModel keyPath:@"article" block:^(id changedObject) {
@@ -110,6 +110,7 @@
                 
                 [weakself.articleCollectionView reloadData];
             }
+            //[weakself dismissLoading];
         }
     }];
     [self observe:self.viewModel keyPath:@"commentsArray" block:^(id changedObject) {
@@ -145,6 +146,11 @@
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
+    
+    if (self.viewModel.article == nil) {
+        //[self showLoading];
+        [self.viewModel requestData];
+    }
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -182,7 +188,7 @@
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
 {
     if (section == 0) {
-        return 1 + self.viewModel.paragraphsArray.count + 1;
+        return self.viewModel.paragraphsArray.count > 0 ? 1 + self.viewModel.paragraphsArray.count + 1 : 0;
     } else if (section == 1) {
         return self.viewModel.article.relatedArticlesArray.count > 0 ? 1 : 0;
     } else if (section == 2) {
@@ -312,18 +318,27 @@
             } else if ([storage isKindOfClass:[PGParserImageStorage class]]) {
                 PGParserImageStorage *imageStorage = (PGParserImageStorage *)storage;
                 CGFloat width = UISCREEN_WIDTH;
-                CGFloat height = 20+width*imageStorage.height/imageStorage.width+20;
-                return CGSizeMake(width, height);
+                CGFloat height = 0.f;
+                if (imageStorage.ratio > 0.f) {
+                    height = 20+width*(1/imageStorage.ratio)+20;
+                    return CGSizeMake(width, height);
+                }
             } else if ([storage isKindOfClass:[PGParserCatalogImageStorage class]]) {
                 PGParserCatalogImageStorage *imageStorage = (PGParserCatalogImageStorage *)storage;
                 CGFloat width = UISCREEN_WIDTH-60;
-                CGFloat height = 20+width*imageStorage.height/imageStorage.width+20;
-                return CGSizeMake(width, height);
+                CGFloat height = 0.f;
+                if (imageStorage.ratio > 0.f) {
+                    height = 20+width*(1/imageStorage.ratio)+20;
+                    return CGSizeMake(width, height);
+                }
             } else if ([storage isKindOfClass:[PGParserVideoStorage class]]) {
                 PGParserVideoStorage *videoStorage = (PGParserVideoStorage *)storage;
                 CGFloat width = UISCREEN_WIDTH-30;
-                CGFloat height = 20+width*videoStorage.height/videoStorage.width+20;
-                return CGSizeMake(width, height);
+                CGFloat height = 0.f;
+                if (videoStorage.ratio > 0.f) {
+                    height = 20+width*(1/videoStorage.ratio)+20;
+                    return CGSizeMake(width, height);
+                }
             }
         }
     } else if (indexPath.section == 1) {

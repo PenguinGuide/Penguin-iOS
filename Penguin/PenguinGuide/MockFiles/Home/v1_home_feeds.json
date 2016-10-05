@@ -1,9 +1,9 @@
 {
-    "data": [
+    "items": [
              {
              "type": "article",
-             "link": "qiechihe://article?articleId=1",
-             "category": "city_guide",
+             "link": "qiechihe://article?article_id=1",
+             "channel": "city_guide",
              "image": "https://s6.postimg.org/b933841m9/2ffeaf34247967_56c9e1880f88c_copy.jpg",
              "reads": "8022",
              "comments": "187",
@@ -11,7 +11,7 @@
              },
              {
              "type": "article",
-             "link": "qiechihe://article?articleId=2",
+             "link": "qiechihe://article?article_id=2",
              "category": "shop",
              "image": "https://s6.postimg.org/u2ow53zu9/2ffeaf34247967_56c9e1880f88c_copy1.jpg",
              "reads": "8022",
@@ -20,7 +20,7 @@
              },
              {
              "type": "article",
-             "link": "qiechihe://article?articleId=3",
+             "link": "qiechihe://article?article_id=3",
              "category": "test",
              "image": "https://s6.postimg.org/gaah9h92p/2ffeaf34247967_56c9e1880f88c.jpg",
              "reads": "1899",
@@ -29,7 +29,7 @@
              },
              {
              "type": "article",
-             "link": "qiechihe://article?articleId=4",
+             "link": "qiechihe://article?article_id=4",
              "category": "city_guide",
              "image": "https://s6.postimg.org/3x28gb8s1/2ffeaf34247967_56c9e1880f88c222.jpg",
              "reads": "29",
@@ -220,7 +220,7 @@
              },
              {
              "type": "article",
-             "link": "qiechihe://article?articleId=5",
+             "link": "qiechihe://article?article_id=5",
              "category": "city_guide",
              "image": "https://s6.postimg.org/o5pm21835/2ffeaf34247967_56c9e1880f88c2222.jpg",
              "reads": "8022",
@@ -229,7 +229,7 @@
              },
              {
              "type": "article",
-             "link": "qiechihe://article?articleId=1",
+             "link": "qiechihe://article?article_id=1",
              "category": "shop",
              "image": "https://s6.postimg.org/b933841m9/2ffeaf34247967_56c9e1880f88c_copy.jpg",
              "reads": "8022",
@@ -238,7 +238,7 @@
              },
              {
              "type": "article",
-             "link": "qiechihe://article?articleId=2",
+             "link": "qiechihe://article?article_id=2",
              "category": "test",
              "image": "https://s6.postimg.org/u2ow53zu9/2ffeaf34247967_56c9e1880f88c_copy1.jpg",
              "reads": "1899",
@@ -247,13 +247,12 @@
              },
              {
              "type": "article",
-             "link": "qiechihe://article?articleId=3",
+             "link": "qiechihe://article?article_id=3",
              "category": "city_guide",
              "image": "https://s6.postimg.org/gaah9h92p/2ffeaf34247967_56c9e1880f88c.jpg",
              "reads": "29",
              "comments": "12",
              "id": "3"
              }
-             ],
-    "result": 0
+             ]
 }

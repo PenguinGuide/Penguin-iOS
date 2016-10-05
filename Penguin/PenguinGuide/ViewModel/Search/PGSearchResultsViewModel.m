@@ -23,7 +23,7 @@
     
     [self.apiClient pg_makeGetRequest:^(PGRKRequestConfig *config) {
         config.route = PG_Search_Articles;
-        config.keyPath = @"data";
+        config.keyPath = @"items";
         config.model = [PGArticleBanner new];
         config.isMockAPI = YES;
         config.mockFileName = @"v1_search_articles.json";
@@ -40,7 +40,7 @@
     
     [self.apiClient pg_makeGetRequest:^(PGRKRequestConfig *config) {
         config.route = PG_Search_Goods;
-        config.keyPath = @"data";
+        config.keyPath = @"items";
         config.model = [PGGood new];
         config.isMockAPI = YES;
         config.mockFileName = @"v1_search_goods.json";

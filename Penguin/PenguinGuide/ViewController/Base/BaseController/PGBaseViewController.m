@@ -34,7 +34,9 @@
 
 - (void)dealloc
 {
+    [self dismissLoading];
     [self.apiClient cancelAllRequests];
+    self.apiClient = nil;
 }
 
 - (void)viewDidLoad {
@@ -72,8 +74,6 @@
     [super viewDidDisappear:animated];
     
     self.navigationController.delegate = nil;
-    
-    [self dismissLoading];
 }
 
 - (UIInterfaceOrientationMask)supportedInterfaceOrientations
@@ -177,7 +177,7 @@
     if (!self.hud.superview) {
         self.hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
         self.hud.frame = CGRectMake(0, 0, 100, 100);
-        self.hud.center = self.view.center;
+        self.hud.center = CGPointMake(UISCREEN_WIDTH/2, UISCREEN_HEIGHT/2);
         self.hud.margin = 15.f;
         self.hud.mode = MBProgressHUDModeCustomView;
         self.hud.bezelView.style = MBProgressHUDBackgroundStyleSolidColor;
@@ -189,7 +189,7 @@
         self.hud.bezelView.layer.masksToBounds = NO;
         self.hud.userInteractionEnabled = NO;
         
-        FLAnimatedImage *animatedImage = [FLAnimatedImage animatedImageWithGIFData:[NSData dataWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"center" ofType:@"gif"]]];
+        FLAnimatedImage *animatedImage = [FLAnimatedImage animatedImageWithGIFData:[NSData dataWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"loading" ofType:@"gif"]]];
         FLAnimatedImageView *animatedImageView = [[FLAnimatedImageView alloc] init];
         animatedImageView.animatedImage = animatedImage;
         self.hud.customView = animatedImageView;

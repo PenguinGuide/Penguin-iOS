@@ -1,5 +1,5 @@
 {
-    "data": [
+    "items": [
              {
              "image": "https://s6.postimg.io/gqx0uhz5d/14369315958693_569683ba0e203.jpg",
              "link": "qiechihe://topic",
@@ -15,6 +15,5 @@
              "link": "qiechihe://topic",
              "id": ""
              }
-             ],
-    "result": 0
+             ]
 }

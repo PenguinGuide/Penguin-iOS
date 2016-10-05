@@ -26,54 +26,39 @@ static const NSString *kModelClassKey = @"kModelClassKey";
     id responseObject = [super responseObjectForResponse:response data:data error:error];
     
     if (responseObject) {
-        if (responseObject[@"result"]) {
-            if ([responseObject[@"result"] isEqual:@0]) {
-                NSString *absoluteUrl = response.URL.absoluteString;
-                if (self.serializersDict[absoluteUrl]) {
-                    NSDictionary *requestDict = self.serializersDict[absoluteUrl];
-                    NSString *keyPath = requestDict[kKeyPathKey];
-                    Class modelClass = requestDict[kModelClassKey];
-                    if (keyPath.length > 0) {
-                        responseObject = [responseObject valueForKeyPath:keyPath];
-                        if (!responseObject) {
-                            NSMutableDictionary *userInfo = [NSMutableDictionary dictionary];
-                            if (*error) {
-                                userInfo[NSUnderlyingErrorKey] = *error;
-                            }
-                            userInfo[NSLocalizedDescriptionKey] = [NSString stringWithFormat:@"Failed to find value for key: %@", keyPath];
-                            *error = [NSError errorWithDomain:NSURLErrorDomain code:707 userInfo:userInfo];
-                            return nil;
-                        }
+        NSString *absoluteUrl = response.URL.absoluteString;
+        if (self.serializersDict[absoluteUrl]) {
+            NSDictionary *requestDict = self.serializersDict[absoluteUrl];
+            NSString *keyPath = requestDict[kKeyPathKey];
+            Class modelClass = requestDict[kModelClassKey];
+            if (keyPath.length > 0) {
+                responseObject = [responseObject valueForKeyPath:keyPath];
+                if (!responseObject) {
+                    NSMutableDictionary *userInfo = [NSMutableDictionary dictionary];
+                    if (*error) {
+                        userInfo[NSUnderlyingErrorKey] = *error;
                     }
-                    NSValueTransformer *valueTransformer = nil;
-                    if ([responseObject isKindOfClass:[NSDictionary class]]) {
-                        valueTransformer = [MTLJSONAdapter dictionaryTransformerWithModelClass:modelClass];
-                    } else if ([responseObject isKindOfClass:[NSArray class]]) {
-                        valueTransformer = [MTLJSONAdapter arrayTransformerWithModelClass:modelClass];
-                    }
-                    if ([valueTransformer conformsToProtocol:@protocol(MTLTransformerErrorHandling)]) {
-                        BOOL success = NO;
-                        responseObject = [(NSValueTransformer<MTLTransformerErrorHandling> *)valueTransformer transformedValue:responseObject success:&success error:error];
-                    } else {
-                        responseObject = [valueTransformer transformedValue:responseObject];
-                    }
+                    userInfo[NSLocalizedDescriptionKey] = [NSString stringWithFormat:@"Failed to find value for key: %@", keyPath];
+                    *error = [NSError errorWithDomain:NSURLErrorDomain code:707 userInfo:userInfo];
+                    return nil;
                 }
+            }
+            NSValueTransformer *valueTransformer = nil;
+            if ([responseObject isKindOfClass:[NSDictionary class]]) {
+                valueTransformer = [MTLJSONAdapter dictionaryTransformerWithModelClass:modelClass];
+            } else if ([responseObject isKindOfClass:[NSArray class]]) {
+                valueTransformer = [MTLJSONAdapter arrayTransformerWithModelClass:modelClass];
+            }
+            if ([valueTransformer conformsToProtocol:@protocol(MTLTransformerErrorHandling)]) {
+                BOOL success = NO;
+                responseObject = [(NSValueTransformer<MTLTransformerErrorHandling> *)valueTransformer transformedValue:responseObject success:&success error:error];
+            } else {
+                responseObject = [valueTransformer transformedValue:responseObject];
             }
         }
     }
     
     return responseObject;
-}
-
-- (void)registerKeyPath:(NSString *)keyPath resultKeyPath:(NSString *)resultKeyPath modelClass:(Class)modelClass toTask:(NSURLSessionTask *)task
-{
-    NSURLRequest *request = [task originalRequest];
-    NSString *absoluteUrl = [[request URL] absoluteString];
-    
-    if (keyPath && keyPath.length > 0 && modelClass) {
-        NSDictionary *requestDict = @{kKeyPathKey:keyPath, kResultKeyPathKey:resultKeyPath, kModelClassKey:modelClass};
-        [self.serializersDict setObject:requestDict forKey:absoluteUrl];
-    }
 }
 
 - (void)registerKeyPath:(NSString *)keyPath modelClass:(Class)modelClass toTask:(NSURLSessionTask *)task
@@ -82,7 +67,10 @@ static const NSString *kModelClassKey = @"kModelClassKey";
     NSString *absoluteUrl = [[request URL] absoluteString];
     
     if (keyPath && keyPath.length > 0 && modelClass) {
-        NSDictionary *requestDict = @{kKeyPathKey:keyPath, kResultKeyPathKey:@"result", kModelClassKey:modelClass};
+        NSDictionary *requestDict = @{kKeyPathKey:keyPath, kModelClassKey:modelClass};
+        [self.serializersDict setObject:requestDict forKey:absoluteUrl];
+    } else {
+        NSDictionary *requestDict = @{kModelClassKey:modelClass};
         [self.serializersDict setObject:requestDict forKey:absoluteUrl];
     }
 }

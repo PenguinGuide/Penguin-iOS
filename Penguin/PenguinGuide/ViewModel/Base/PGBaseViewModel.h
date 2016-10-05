@@ -12,9 +12,11 @@
 @interface PGBaseViewModel : NSObject
 
 @property (nonatomic, strong, readonly) PGAPIClient *apiClient;
+@property (nonatomic, assign, readwrite) NSInteger page;
 
 - (id)initWithAPIClient:(PGAPIClient *)apiClient;
 
 - (void)requestData;
+- (void)loadNextPage;
 
 @end

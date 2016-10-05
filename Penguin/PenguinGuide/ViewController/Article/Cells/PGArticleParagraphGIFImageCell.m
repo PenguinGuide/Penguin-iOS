@@ -42,6 +42,7 @@
     if (!_imageView) {
         _imageView = [[FLAnimatedImageView alloc] initWithFrame:CGRectMake(0, 20, self.width, self.height-40)];
         _imageView.contentMode = UIViewContentModeScaleAspectFill;
+        _imageView.backgroundColor = Theme.colorText;
     }
     return _imageView;
 }

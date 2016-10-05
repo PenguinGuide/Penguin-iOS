@@ -22,6 +22,7 @@
 #import "PGMacros.h"
 #import "PGGlobalObject.h"
 #import "PGAPIList.h"
+#import "PGParams.h"
 
 #import "AppDelegate.h"
 #import "PGBaseNavigationController.h"

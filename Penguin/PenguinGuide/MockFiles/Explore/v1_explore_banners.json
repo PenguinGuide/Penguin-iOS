@@ -1,8 +1,8 @@
 {
-    "data": [
+    "items": [
              {
              "type": "article",
-             "link": "qiechihe://article?articleId=1",
+             "link": "qiechihe://article?article_id=1",
              "category": "city_guide",
              "image": "https://s6.postimg.org/b933841m9/2ffeaf34247967_56c9e1880f88c_copy.jpg",
              "reads": "8022",
@@ -190,6 +190,5 @@
              "image": "https://s6.postimg.org/784dlf2up/image.jpg",
              "unit": "瓶",
              }
-             ],
-    "result": 0
+             ]
 }

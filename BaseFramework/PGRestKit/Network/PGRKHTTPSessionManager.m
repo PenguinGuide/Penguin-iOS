@@ -12,6 +12,7 @@ static const int DefaultMaxConcurrentConnections = 5;
 #import "PGRKHTTPSessionManager.h"
 #import "SOCKit.h"
 #import "PGRKMockAPIManager.h"
+#import "PGRKNetworkLogger.h"
 
 @interface NSString (PGRKValidate)
 
@@ -56,6 +57,16 @@ static const int DefaultMaxConcurrentConnections = 5;
                                                                         sessionConfiguration:config];
     sessionManager.responseSerializer = [PGRKJSONResponseSerializer serializer];
     return sessionManager;
+}
+
++ (void)enableLogging
+{
+    [[PGRKNetworkLogger sharedInstance] startLogging];
+}
+
++ (void)disableLogging
+{
+    [[PGRKNetworkLogger sharedInstance] stopLogging];
 }
 
 - (void)addAcceptableContentTypes:(NSSet *)contentTypes

@@ -16,12 +16,22 @@
              @"image" : @"image",
              @"type" : @"type",
              @"title": @"title",
-             @"category" : @"category",
+             @"channel" : @"channel",
              @"link" : @"link",
-             @"readsCount" : @"reads",
+             @"likesCount" : @"likes",
              @"commentsCount" : @"comments",
              @"articleId": @"id"
              };
+}
+
++ (NSValueTransformer *)likesCountJSONTransformer
+{
+    return [NSValueTransformer valueTransformerForName:PGStringValueTransformer];
+}
+
++ (NSValueTransformer *)commentsCountJSONTransformer
+{
+    return [NSValueTransformer valueTransformerForName:PGStringValueTransformer];
 }
 
 @end

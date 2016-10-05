@@ -20,12 +20,18 @@
 {
     if (self = [super init]) {
         self.apiClient = apiClient;
+        self.page = 1;
     }
     
     return self;
 }
 
 - (void)requestData
+{
+    
+}
+
+- (void)loadNextPage
 {
     
 }

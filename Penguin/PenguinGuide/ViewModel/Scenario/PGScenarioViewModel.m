@@ -34,7 +34,7 @@
         [self.apiClient pg_makeGetRequest:^(PGRKRequestConfig *config) {
             config.route = PG_Scenario;
             config.pattern = @{@"scenarioId":@""};
-            config.keyPath = @"data";
+            config.keyPath = nil;
             config.model = [PGScenario new];
             config.isMockAPI = YES;
             config.mockFileName = @"v1_scenario_scenarioid.json";
@@ -57,13 +57,13 @@
     PGWeakSelf(self);
     [self.apiClient pg_makeGetRequest:^(PGRKRequestConfig *config) {
         config.route = PG_Scenario_Feeds;
-        config.keyPath = @"data";
+        config.keyPath = @"items";
         config.isMockAPI = YES;
         config.mockFileName = @"v1_scenario_feeds_scenario_scenarioid_category_categoryid.json";
     } completion:^(id response) {
-        if (response[@"data"] && [response[@"data"] isKindOfClass:[NSArray class]]) {
+        if (response[@"items"] && [response[@"items"] isKindOfClass:[NSArray class]]) {
             NSMutableArray *models = [NSMutableArray new];
-            for (NSDictionary *dict in response[@"data"]) {
+            for (NSDictionary *dict in response[@"items"]) {
                 if (dict[@"type"]) {
                     if ([dict[@"type"] isEqualToString:@"carousel"]) {
                         PGCarouselBanner *carouseBanner = [PGCarouselBanner modelFromDictionary:dict];

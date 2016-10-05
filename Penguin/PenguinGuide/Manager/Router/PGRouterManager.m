@@ -12,6 +12,7 @@
 #import "PGLoginViewController.h"
 #import "PGTopicViewController.h"
 #import "PGArticleViewController.h"
+#import "PGGoodViewController.h"
 
 @implementation PGRouterManager
 
@@ -45,9 +46,17 @@
     
     [[PGRouter sharedInstance] registerRoute:@"qiechihe://article" toHandler:^(NSDictionary *params) {
         if (PGGlobal.rootNavigationController) {
-            NSString *articleId = params[@"articleId"];
+            NSString *articleId = params[@"article_id"];
             PGArticleViewController *articleVC = [[PGArticleViewController alloc] initWithArticleId:articleId animated:NO];
             [PGGlobal.rootNavigationController pushViewController:articleVC animated:YES];
+        }
+    }];
+    
+    [[PGRouter sharedInstance] registerRoute:@"qiechihe://good" toHandler:^(NSDictionary *params) {
+        if (PGGlobal.rootNavigationController) {
+            NSString *goodId = params[@"good_id"];
+            PGGoodViewController *goodVC = [[PGGoodViewController alloc] initWithGoodId:goodId];
+            [PGGlobal.rootNavigationController pushViewController:goodVC animated:YES];
         }
     }];
 }

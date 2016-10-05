@@ -11,10 +11,11 @@
 @interface NSString (PGStringParser)
 
 - (NSAttributedString *)paragraphAttributedString;
+- (NSAttributedString *)centerAlignedParagraphAttributedString;
 
 - (NSAttributedString *)catalogTitleAttributedString;
 
-- (NSAttributedString *)styledParagraphAttributedString:(NSArray *)styles;
+- (NSAttributedString *)styledParagraphAttributedString:(NSDictionary *)style;
 
 - (NSAttributedString *)attributedStringWithColor:(NSString *)color font:(UIFont *)font;
 

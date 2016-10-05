@@ -7,6 +7,8 @@
 //
 
 #import <PGRestKit/PGRestKit.h>
+#import "PGImageBanner.h"
+#import "PGTag.h"
 
 @interface PGGood : PGRKModel
 
@@ -17,6 +19,12 @@
 @property (nonatomic, strong) NSString *unit;
 @property (nonatomic, strong) NSString *desc;
 @property (nonatomic, strong) NSString *time;
+
+@property (nonatomic, strong) NSArray *bannersArray;
+@property (nonatomic, strong) NSArray *tagsArray;
+@property (nonatomic, strong) NSArray *relatedArticlesArray;
+
 @property (nonatomic, assign) BOOL isNew;
+@property (nonatomic, assign) BOOL isCollected;
 
 @end

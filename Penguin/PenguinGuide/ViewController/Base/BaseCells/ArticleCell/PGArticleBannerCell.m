@@ -64,19 +64,19 @@
     self.commentsCountButton.frame = CGRectMake(UISCREEN_WIDTH-18-(12+16+[self labelWidth:article.commentsCount]), self.height-15-26, 12+16+[self labelWidth:article.commentsCount], 26);
     [self.commentsCountButton setTitle:article.commentsCount forState:UIControlStateNormal];
     
-    self.readsCountButton.frame = CGRectMake(self.commentsCountButton.left-18-(12+16+[self labelWidth:article.readsCount]), self.height-15-26, 12+16+[self labelWidth:article.readsCount], 26);
-    [self.readsCountButton setTitle:article.readsCount forState:UIControlStateNormal];
+    self.readsCountButton.frame = CGRectMake(self.commentsCountButton.left-18-(12+16+[self labelWidth:article.likesCount]), self.height-15-26, 12+16+[self labelWidth:article.likesCount], 26);
+    [self.readsCountButton setTitle:article.likesCount forState:UIControlStateNormal];
     
     self.backgroundColor = [UIColor colorWithHexString:@"f19572"];
     self.collectLabel.text = @"收藏";
     
-    if ([article.category isEqualToString:@"city_guide"]) {
+    if ([article.channel isEqualToString:@"city_guide"]) {
         self.categoryImageView.hidden = NO;
         [self.categoryImageView setImage:[UIImage imageNamed:@"pg_home_article_category_city_guide"]];
-    } else if ([article.category isEqualToString:@"shop"]) {
+    } else if ([article.channel isEqualToString:@"shop"]) {
         self.categoryImageView.hidden = NO;
         [self.categoryImageView setImage:[UIImage imageNamed:@"pg_home_article_category_shop"]];
-    } else if ([article.category isEqualToString:@"test"]) {
+    } else if ([article.channel isEqualToString:@"test"]) {
         self.categoryImageView.hidden = NO;
         [self.categoryImageView setImage:[UIImage imageNamed:@"pg_home_article_category_test"]];
     } else {

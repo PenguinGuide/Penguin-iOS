@@ -45,8 +45,10 @@
     // Log
 #ifdef DEBUG
     [PGLog setup];
+    [PGAPIClient enableLogging];
 #else
     [PGLog turnOffLogging];
+    [PGAPIClient disableLogging];
 #endif
     
     [PGAnalytics setup:launchOptions];

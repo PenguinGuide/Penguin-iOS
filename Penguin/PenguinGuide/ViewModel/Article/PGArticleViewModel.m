@@ -16,15 +16,16 @@
 
 - (void)requestData
 {
-    __block NSString *fileName = [NSString stringWithFormat:@"pg_article_%@.json", self.articleId];
+//    __block NSString *fileName = [NSString stringWithFormat:@"pg_article_%@.json", @"1"];
     
     PGWeakSelf(self);
     [self.apiClient pg_makeGetRequest:^(PGRKRequestConfig *config) {
         config.route = PG_Article;
-        config.keyPath = @"data";
+        config.keyPath = nil;
         config.model = [PGArticle new];
-        config.isMockAPI = YES;
-        config.mockFileName = fileName;
+        config.pattern = @{@"articleId": weakself.articleId ? weakself.articleId : @""};
+//        config.isMockAPI = YES;
+//        config.mockFileName = fileName;
     } completion:^(id response) {
         weakself.article = [response firstObject];
     } failure:^(NSError *error) {
@@ -37,7 +38,7 @@
     PGWeakSelf(self);
     [self.apiClient pg_makeGetRequest:^(PGRKRequestConfig *config) {
         config.route = PG_Comments;
-        config.keyPath = @"data";
+        config.keyPath = @"items";
         config.model = [PGComment new];
         config.isMockAPI = YES;
         config.mockFileName = @"pg_comments.json";
