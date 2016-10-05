@@ -24,17 +24,17 @@
 - (void)animateTransition:(id<UIViewControllerContextTransitioning>)transitionContext
 {
     PGTabBarController *tabBarController = (PGTabBarController *)[transitionContext viewControllerForKey:UITransitionContextFromViewControllerKey];
-    PGHomeViewController *homeVC = [tabBarController.viewControllers objectAtIndex:0];
-    PGArticleViewController *articleVC = [transitionContext viewControllerForKey:UITransitionContextToViewControllerKey];
+    __block PGHomeViewController *homeVC = [tabBarController.viewControllers objectAtIndex:0];
+    __block PGArticleViewController *articleVC = [transitionContext viewControllerForKey:UITransitionContextToViewControllerKey];
     
     UIView *containerView = [transitionContext containerView];
     
     // http://blog.sina.com.cn/s/blog_8764c3140100xfo7.html
-    PGArticleBannerCell *cell = (PGArticleBannerCell *)[homeVC.feedsCollectionView cellForItemAtIndexPath:[[homeVC.feedsCollectionView indexPathsForSelectedItems] firstObject]];
+    __block PGArticleBannerCell *cell = (PGArticleBannerCell *)[homeVC.feedsCollectionView cellForItemAtIndexPath:[[homeVC.feedsCollectionView indexPathsForSelectedItems] firstObject]];
     CGRect rect = [containerView convertRect:cell.bannerImageView.frame fromView:cell.bannerImageView.superview];
     
     CGRect topScreenshotRect = CGRectMake(0, 0, rect.size.width, rect.origin.y+rect.size.height);
-    UIImageView *topScreenshotView = [[UIImageView alloc] init];
+    __block UIImageView *topScreenshotView = [[UIImageView alloc] init];
     if (topScreenshotRect.size.height < cell.frame.size.height) {
         topScreenshotView.frame = CGRectMake(0, 0, cell.bannerImageView.image.size.width, cell.bannerImageView.image.size.height);
         topScreenshotView.image = cell.bannerImageView.image;
@@ -44,7 +44,7 @@
         topScreenshotView.image = topScreenshot;
     }
     
-    UIImageView *bottomScreenshotView = nil;
+    __block UIImageView *bottomScreenshotView = nil;
     CGFloat bottomScreenshotHeight = homeVC.feedsCollectionView.height-topScreenshotRect.size.height;
     if (bottomScreenshotHeight > 0.f) {
         CGRect bottomScreenshotRect = CGRectMake(0, topScreenshotRect.size.height, topScreenshotRect.size.width, homeVC.feedsCollectionView.height-topScreenshotRect.size.height);
@@ -78,9 +78,8 @@
                              homeVC.feedsCollectionView.hidden = NO;
                              cell.bannerImageView.hidden = NO;
                              articleVC.headerImageView.hidden = NO;
-                             
-                             [transitionContext completeTransition:!transitionContext.transitionWasCancelled];
                          }];
+                         [transitionContext completeTransition:!transitionContext.transitionWasCancelled];
                      }];
 }
 

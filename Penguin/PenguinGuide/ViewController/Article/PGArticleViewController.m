@@ -58,6 +58,7 @@
 @property (nonatomic, strong) NSString *articleId;
 @property (nonatomic, strong) PGArticleViewModel *viewModel;
 
+@property (nonatomic, copy) void(^animationCompletion)();
 @property (nonatomic, assign) BOOL animated;
 
 @end
@@ -109,8 +110,23 @@
                 weakself.viewModel.paragraphsArray = [htmlParser articleParsedStorages];
                 
                 [weakself.articleCollectionView reloadData];
+                
+                weakself.articleCollectionView.frame = CGRectMake(0, UISCREEN_HEIGHT-300, weakself.articleCollectionView.width, self.articleCollectionView.height);
+                weakself.articleCollectionView.alpha = 0.f;
+                [UIView animateWithDuration:0.3f
+                                      delay:0.f
+                                    options:UIViewAnimationOptionCurveEaseOut
+                                 animations:^{
+                                     weakself.articleCollectionView.frame = CGRectMake(0, 0, weakself.articleCollectionView.width, weakself.articleCollectionView.height);
+                                     weakself.articleCollectionView.alpha = 0.4f;
+                                 } completion:^(BOOL finished) {
+                                     weakself.articleCollectionView.alpha = 1.f;
+                                     if (weakself.animationCompletion) {
+                                         weakself.animationCompletion();
+                                     }
+                                 }];
             }
-            //[weakself dismissLoading];
+            [weakself dismissLoading];
         }
     }];
     [self observe:self.viewModel keyPath:@"commentsArray" block:^(id changedObject) {
@@ -126,22 +142,7 @@
 
 - (void)animateCollectionView:(void (^)())completion
 {
-    self.articleCollectionView.frame = CGRectMake(0, UISCREEN_HEIGHT-300, self.articleCollectionView.width, self.articleCollectionView.height);
-    self.articleCollectionView.alpha = 0.f;
-    
-    PGWeakSelf(self);
-    [UIView animateWithDuration:0.3f
-                          delay:0.f
-                        options:UIViewAnimationOptionCurveEaseOut
-                     animations:^{
-                         weakself.articleCollectionView.frame = CGRectMake(0, 0, weakself.articleCollectionView.width, weakself.articleCollectionView.height);
-                         weakself.articleCollectionView.alpha = 0.4f;
-                     } completion:^(BOOL finished) {
-                         weakself.articleCollectionView.alpha = 1.f;
-                         if (completion) {
-                             completion();
-                         }
-                     }];
+    self.animationCompletion = completion;
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -149,7 +150,7 @@
     [super viewDidAppear:animated];
     
     if (self.viewModel.article == nil) {
-        //[self showLoading];
+        [self showLoading];
         [self.viewModel requestData];
     }
 }
