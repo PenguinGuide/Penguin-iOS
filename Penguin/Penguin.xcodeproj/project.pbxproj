@@ -98,6 +98,8 @@
 		0F79B1021D6FF5030080BC4F /* PGChannelViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0F79B1011D6FF5030080BC4F /* PGChannelViewController.m */; };
 		0F79B1071D6FF8FE0080BC4F /* PGChannelCategoriesView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0F79B1061D6FF8FE0080BC4F /* PGChannelCategoriesView.m */; };
 		0F79B10A1D6FF9740080BC4F /* PGChannelCategoryCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0F79B1091D6FF9740080BC4F /* PGChannelCategoryCell.m */; };
+		0F7A67E11DA7E65100699AA2 /* PGSettingsHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0F7A67E01DA7E65100699AA2 /* PGSettingsHeaderView.m */; };
+		0F7A67E41DA7F45A00699AA2 /* PGSettingsLogoutFooterView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0F7A67E31DA7F45A00699AA2 /* PGSettingsLogoutFooterView.m */; };
 		0F7EEF5C1D210F63008D175C /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 0F7EEF5B1D210F63008D175C /* main.m */; };
 		0F7EEF5F1D210F63008D175C /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 0F7EEF5E1D210F63008D175C /* AppDelegate.m */; };
 		0F7EEF621D210F63008D175C /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0F7EEF611D210F63008D175C /* ViewController.m */; };
@@ -354,6 +356,10 @@
 		0F79B1061D6FF8FE0080BC4F /* PGChannelCategoriesView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PGChannelCategoriesView.m; sourceTree = "<group>"; };
 		0F79B1081D6FF9740080BC4F /* PGChannelCategoryCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PGChannelCategoryCell.h; sourceTree = "<group>"; };
 		0F79B1091D6FF9740080BC4F /* PGChannelCategoryCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PGChannelCategoryCell.m; sourceTree = "<group>"; };
+		0F7A67DF1DA7E65100699AA2 /* PGSettingsHeaderView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PGSettingsHeaderView.h; sourceTree = "<group>"; };
+		0F7A67E01DA7E65100699AA2 /* PGSettingsHeaderView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PGSettingsHeaderView.m; sourceTree = "<group>"; };
+		0F7A67E21DA7F45A00699AA2 /* PGSettingsLogoutFooterView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PGSettingsLogoutFooterView.h; sourceTree = "<group>"; };
+		0F7A67E31DA7F45A00699AA2 /* PGSettingsLogoutFooterView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PGSettingsLogoutFooterView.m; sourceTree = "<group>"; };
 		0F7EEF581D210F63008D175C /* PenguinGuide.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PenguinGuide.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		0F7EEF5B1D210F63008D175C /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		0F7EEF5D1D210F63008D175C /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -1349,6 +1355,10 @@
 			children = (
 				0FA5F2E91D94DFE000E9242B /* PGMeHeaderView.h */,
 				0FA5F2EA1D94DFE000E9242B /* PGMeHeaderView.m */,
+				0F7A67DF1DA7E65100699AA2 /* PGSettingsHeaderView.h */,
+				0F7A67E01DA7E65100699AA2 /* PGSettingsHeaderView.m */,
+				0F7A67E21DA7F45A00699AA2 /* PGSettingsLogoutFooterView.h */,
+				0F7A67E31DA7F45A00699AA2 /* PGSettingsLogoutFooterView.m */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -1702,7 +1712,7 @@
 		0F7EEF161D210F37008D175C /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0730;
+				LastUpgradeCheck = 0800;
 				ORGANIZATIONNAME = Xinglian;
 				TargetAttributes = {
 					0F7EEF571D210F63008D175C = {
@@ -1909,6 +1919,7 @@
 				0FB8F9721D339EBA005E6C56 /* PGGlobalObject.m in Sources */,
 				0F59B91F1D9276AC00DB9FCE /* PGComment.m in Sources */,
 				0F76D60E1D937A9D00ACA73D /* PGCommentInputAccessoryView.m in Sources */,
+				0F7A67E41DA7F45A00699AA2 /* PGSettingsLogoutFooterView.m in Sources */,
 				0F0008D41D718B5E00BED6FA /* PGSearchTextField.m in Sources */,
 				0F1790CB1D2E24DE00672B27 /* PGSMSCodeLoginView.m in Sources */,
 				0F0008DE1D7190C900BED6FA /* PGTagCell.m in Sources */,
@@ -1932,6 +1943,7 @@
 				0FFCB5371D2D009100D863FA /* PGLoginBaseView.m in Sources */,
 				0F3765371D6F2558007B9481 /* PGCarouselBannerCell.m in Sources */,
 				0F0008C51D7184AE00BED6FA /* PGChannelAllCategoryCell.m in Sources */,
+				0F7A67E11DA7E65100699AA2 /* PGSettingsHeaderView.m in Sources */,
 				0F41AE621D35318000E7AD71 /* PGHomeRecommendsHeaderView.m in Sources */,
 				0F141FC31D746BFD00884052 /* PGExploreRecommendsHeaderView.m in Sources */,
 				0FFAD0F81D780FF1009F9E27 /* PGGoodCell.m in Sources */,
@@ -2047,8 +2059,10 @@
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
@@ -2155,8 +2169,10 @@
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
@@ -2201,8 +2217,10 @@
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";

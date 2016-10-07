@@ -10,6 +10,8 @@
 #define HeaderView @"HeaderView"
 
 #import "PGMeViewController.h"
+#import "PGPersonalSettingsViewController.h"
+#import "PGSystemSettingsViewController.h"
 
 #import "PGMeViewModel.h"
 
@@ -153,11 +155,27 @@
 {
     if (kind == UICollectionElementKindSectionHeader) {
         PGMeHeaderView *headerView = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:HeaderView forIndexPath:indexPath];
+        [headerView.avatarButton addTarget:self action:@selector(avatarButtonClicked) forControlEvents:UIControlEventTouchUpInside];
+        [headerView.settingButton addTarget:self action:@selector(settingButtonClicked) forControlEvents:UIControlEventTouchUpInside];
         [headerView setViewWithMe:self.viewModel.me];
         
         return headerView;
     }
     return nil;
+}
+
+- (void)avatarButtonClicked
+{
+    PGPersonalSettingsViewController *personalSettingsVC = [[PGPersonalSettingsViewController alloc] init];
+    
+    [self.navigationController pushViewController:personalSettingsVC animated:YES];
+}
+
+- (void)settingButtonClicked
+{
+    PGSystemSettingsViewController *systemSettingsVC = [[PGSystemSettingsViewController alloc] init];
+    
+    [self.navigationController pushViewController:systemSettingsVC animated:YES];
 }
 
 - (PGBaseCollectionView *)meCollectionView

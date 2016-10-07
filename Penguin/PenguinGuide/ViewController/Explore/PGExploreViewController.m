@@ -57,7 +57,7 @@
     [super viewWillDisappear:animated];
     
     // http://stackoverflow.com/questions/11656055/scrollviewdidscroll-delegate-is-invoking-automatically
-    // ISSUE: if barHidden sets to NO, scrollViewDidScroll will not be called (next page nothing to update)
+    // NOTE: if barHidden sets to NO, scrollViewDidScroll will not be called (next page nothing to update)
     [self.navigationController setNavigationBarHidden:YES animated:NO];
 }
 

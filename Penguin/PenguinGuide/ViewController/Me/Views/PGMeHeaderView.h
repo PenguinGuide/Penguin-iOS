@@ -11,6 +11,9 @@
 
 @interface PGMeHeaderView : UICollectionReusableView
 
+@property (nonatomic, strong) UIButton *avatarButton;
+@property (nonatomic, strong) UIButton *settingButton;
+
 - (void)setViewWithMe:(PGMe *)me;
 
 + (CGSize)headerViewSize;

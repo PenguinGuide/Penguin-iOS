@@ -368,7 +368,7 @@
     }
 }
 
-// ISSUE: highlight UICollectionViewCell
+// NOTE: how to highlight UICollectionViewCell
 - (BOOL)collectionView:(UICollectionView *)collectionView shouldHighlightItemAtIndexPath:(NSIndexPath *)indexPath
 {
     if (indexPath.section == 2) {

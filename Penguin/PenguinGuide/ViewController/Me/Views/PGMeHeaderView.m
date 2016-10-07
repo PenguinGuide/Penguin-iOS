@@ -11,8 +11,6 @@
 
 @interface PGMeHeaderView ()
 
-@property (nonatomic, strong) UIButton *settingButton;
-@property (nonatomic, strong) UIButton *avatarButton;
 @property (nonatomic, strong) UILabel *nameLabel;
 @property (nonatomic, strong) UIImageView *sexImageView;
 @property (nonatomic, strong) UILabel *locationLabel;

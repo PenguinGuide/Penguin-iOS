@@ -65,7 +65,7 @@
 {
     [super viewDidAppear:animated];
     
-    // ISSUE: video player landscape orientation
+    // NOTE: video player landscape orientation
     // http://www.cnblogs.com/ladyotao/p/5674194.html
     // http://blog.csdn.net/wws6773075/article/details/51144225
     [[UIDevice currentDevice] setValue:[NSNumber numberWithInteger:UIDeviceOrientationPortrait]  forKey:@"orientation"];

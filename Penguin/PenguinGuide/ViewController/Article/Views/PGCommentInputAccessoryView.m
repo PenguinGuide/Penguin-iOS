@@ -36,7 +36,7 @@
 
 - (void)textViewDidChange
 {
-    // ISSUE: boundingRectWithSize doesn't work
+    // NOTE: boundingRectWithSize doesn't work. use sizeThatFits instead.
     CGSize textSize = [self.commentTextView sizeThatFits:CGSizeMake(self.width-30, MAXFLOAT)];
     
     if (textSize.height > 100) {
@@ -53,7 +53,7 @@
     NSLog(@"%@", NSStringFromCGSize(textSize));
 }
 
-// ISSUE: UITextView does not have any methods which will be called when the user hits the return key http://stackoverflow.com/questions/703754/how-to-dismiss-keyboard-for-uitextview-with-return-key
+// NOTE: fix UITextView does not have any methods which will be called when the user hits the return key http://stackoverflow.com/questions/703754/how-to-dismiss-keyboard-for-uitextview-with-return-key
 - (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text
 {
     if ([text isEqualToString:@"\n"]) {

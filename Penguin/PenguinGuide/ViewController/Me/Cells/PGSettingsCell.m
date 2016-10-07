@@ -32,6 +32,10 @@
     [self.contentView addSubview:self.descLabel];
     [self.contentView addSubview:self.contentLabel];
     [self.contentView addSubview:self.contentImageView];
+    
+    UIView *horizontalLine = [[UIView alloc] initWithFrame:CGRectMake(27, self.height-1/[UIScreen mainScreen].scale, self.width-27-39, 1/[UIScreen mainScreen].scale)];
+    horizontalLine.backgroundColor = [UIColor colorWithHexString:@"E1E1E1"];
+    [self.contentView addSubview:horizontalLine];
 }
 
 - (void)setCellWithDesc:(NSString *)desc content:(NSString *)content isImage:(BOOL)isImage
@@ -63,6 +67,7 @@
         _contentLabel = [[UILabel alloc] initWithFrame:CGRectMake(self.width-44-100, 0, 100, self.height)];
         _contentLabel.font = Theme.fontMediumBold;
         _contentLabel.textColor = Theme.colorLightText;
+        _contentLabel.textAlignment = NSTextAlignmentRight;
     }
     return _contentLabel;
 }
