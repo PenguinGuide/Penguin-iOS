@@ -12,5 +12,8 @@
 @interface PGGoodViewModel : PGBaseViewModel
 
 @property (nonatomic, strong, readonly) PGGood *good;
+@property (nonatomic, strong, readonly) NSArray *relatedGoods;
+
+- (void)requestRelatedGoods;
 
 @end

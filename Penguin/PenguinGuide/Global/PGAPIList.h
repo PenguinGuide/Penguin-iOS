@@ -22,6 +22,7 @@
 #define PG_Scenario_Feeds               @"/api/v1/scenario/feeds/scenario/:scenarioId/category/:categoryId"
 
 #define PG_Good                         @"/api/v1/good/:goodId"
+#define PG_Related_Goods                @"/api/v1/goods/related/:goodId"
 #define PG_Store_Category_Goods         @"/api/v1/goods/category/:categoryId"
 
 #define PG_Topic                        @"/api/v1/topic/:topicId"

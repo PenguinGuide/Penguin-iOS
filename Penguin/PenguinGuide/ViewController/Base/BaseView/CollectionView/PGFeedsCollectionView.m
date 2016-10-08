@@ -54,6 +54,7 @@
 
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView
 {
+    // FIXME: if feedsArray is empty, header view will not show up
     if (self.feedsDelegate && [self.feedsDelegate respondsToSelector:@selector(feedsArray)]) {
         return [self.feedsDelegate feedsArray].count;
     } else {

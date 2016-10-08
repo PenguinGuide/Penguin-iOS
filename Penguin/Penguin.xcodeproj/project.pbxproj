@@ -119,6 +119,9 @@
 		0F9308461D93C0FF00EA3D43 /* PGCommentTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0F9308451D93C0FF00EA3D43 /* PGCommentTextView.m */; };
 		0F9761C21D9A672A00002430 /* PGGoodViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0F9761C11D9A672A00002430 /* PGGoodViewController.m */; };
 		0F9761C51D9A70AB00002430 /* v1_good_goodid.json in Resources */ = {isa = PBXBuildFile; fileRef = 0F9761C41D9A70AB00002430 /* v1_good_goodid.json */; };
+		0F9BD3941DA898550063DD7E /* PGGoodTagsCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0F9BD3931DA898550063DD7E /* PGGoodTagsCell.m */; };
+		0F9BD3961DA8B10D0063DD7E /* v1_goods_related_goodid.json in Resources */ = {isa = PBXBuildFile; fileRef = 0F9BD3951DA8B10D0063DD7E /* v1_goods_related_goodid.json */; };
+		0F9BD39A1DA8BED70063DD7E /* PGGoodRelatedGoodsHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0F9BD3991DA8BED70063DD7E /* PGGoodRelatedGoodsHeaderView.m */; };
 		0FA5F2EB1D94DFE000E9242B /* PGMeHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0FA5F2EA1D94DFE000E9242B /* PGMeHeaderView.m */; };
 		0FA5F2EE1D94DFFF00E9242B /* PGMeCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0FA5F2ED1D94DFFF00E9242B /* PGMeCell.m */; };
 		0FA5F2F11D95012300E9242B /* pg_me.json in Resources */ = {isa = PBXBuildFile; fileRef = 0FA5F2F01D95012300E9242B /* pg_me.json */; };
@@ -396,6 +399,11 @@
 		0F9761C01D9A672A00002430 /* PGGoodViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PGGoodViewController.h; sourceTree = "<group>"; };
 		0F9761C11D9A672A00002430 /* PGGoodViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PGGoodViewController.m; sourceTree = "<group>"; };
 		0F9761C41D9A70AB00002430 /* v1_good_goodid.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = v1_good_goodid.json; sourceTree = "<group>"; };
+		0F9BD3921DA898550063DD7E /* PGGoodTagsCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PGGoodTagsCell.h; sourceTree = "<group>"; };
+		0F9BD3931DA898550063DD7E /* PGGoodTagsCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PGGoodTagsCell.m; sourceTree = "<group>"; };
+		0F9BD3951DA8B10D0063DD7E /* v1_goods_related_goodid.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = v1_goods_related_goodid.json; sourceTree = "<group>"; };
+		0F9BD3981DA8BED70063DD7E /* PGGoodRelatedGoodsHeaderView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PGGoodRelatedGoodsHeaderView.h; sourceTree = "<group>"; };
+		0F9BD3991DA8BED70063DD7E /* PGGoodRelatedGoodsHeaderView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PGGoodRelatedGoodsHeaderView.m; sourceTree = "<group>"; };
 		0FA5F2E91D94DFE000E9242B /* PGMeHeaderView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PGMeHeaderView.h; sourceTree = "<group>"; };
 		0FA5F2EA1D94DFE000E9242B /* PGMeHeaderView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PGMeHeaderView.m; sourceTree = "<group>"; };
 		0FA5F2EC1D94DFFF00E9242B /* PGMeCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PGMeCell.h; sourceTree = "<group>"; };
@@ -949,6 +957,8 @@
 				0FE6D8651D9BB767000B8B46 /* PGGoodInfoCell.m */,
 				0FE6D8671D9BB775000B8B46 /* PGGoodDescCell.h */,
 				0FE6D8681D9BB775000B8B46 /* PGGoodDescCell.m */,
+				0F9BD3921DA898550063DD7E /* PGGoodTagsCell.h */,
+				0F9BD3931DA898550063DD7E /* PGGoodTagsCell.m */,
 			);
 			path = Cells;
 			sourceTree = "<group>";
@@ -1325,6 +1335,7 @@
 			isa = PBXGroup;
 			children = (
 				0F5274F91D9B7539006A5A56 /* Cells */,
+				0F9BD3971DA8BD2F0063DD7E /* Views */,
 				0F9761C01D9A672A00002430 /* PGGoodViewController.h */,
 				0F9761C11D9A672A00002430 /* PGGoodViewController.m */,
 			);
@@ -1335,8 +1346,18 @@
 			isa = PBXGroup;
 			children = (
 				0F9761C41D9A70AB00002430 /* v1_good_goodid.json */,
+				0F9BD3951DA8B10D0063DD7E /* v1_goods_related_goodid.json */,
 			);
 			path = Good;
+			sourceTree = "<group>";
+		};
+		0F9BD3971DA8BD2F0063DD7E /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				0F9BD3981DA8BED70063DD7E /* PGGoodRelatedGoodsHeaderView.h */,
+				0F9BD3991DA8BED70063DD7E /* PGGoodRelatedGoodsHeaderView.m */,
+			);
+			path = Views;
 			sourceTree = "<group>";
 		};
 		0FA5F2E71D94DEE800E9242B /* Cells */ = {
@@ -1773,6 +1794,7 @@
 				0FFEAF171D76B2950067C888 /* v1_store_banners.json in Resources */,
 				0F7EEF921D2118F6008D175C /* Controller.xcassets in Resources */,
 				0FAADD0E1D7678D500FC7933 /* v1_scenario_scenarioid.json in Resources */,
+				0F9BD3961DA8B10D0063DD7E /* v1_goods_related_goodid.json in Resources */,
 				0F18E4951D7D64AA004377F1 /* pg_article_1.json in Resources */,
 				0F141FC61D7474BE00884052 /* v1_explore_recommends.json in Resources */,
 				0F463AB71D6D4CC300654C34 /* v1_home_feeds.json in Resources */,
@@ -1906,6 +1928,7 @@
 				0F0008C91D71879400BED6FA /* PGSearchRecommendsViewController.m in Sources */,
 				0F79B1021D6FF5030080BC4F /* PGChannelViewController.m in Sources */,
 				0F3677821D2D6B050023CD3D /* PGLoginPhoneTextField.m in Sources */,
+				0F9BD39A1DA8BED70063DD7E /* PGGoodRelatedGoodsHeaderView.m in Sources */,
 				0F51B31C1D6D85B200B4690F /* PGGoodsCollectionBanner.m in Sources */,
 				0F0008BF1D7171CD00BED6FA /* PGChannelAllCategoriesViewController.m in Sources */,
 				0FFDEB7C1D2E340000C67445 /* PGLoginUserInfoTextField.m in Sources */,
@@ -1946,6 +1969,7 @@
 				0F7A67E11DA7E65100699AA2 /* PGSettingsHeaderView.m in Sources */,
 				0F41AE621D35318000E7AD71 /* PGHomeRecommendsHeaderView.m in Sources */,
 				0F141FC31D746BFD00884052 /* PGExploreRecommendsHeaderView.m in Sources */,
+				0F9BD3941DA898550063DD7E /* PGGoodTagsCell.m in Sources */,
 				0FFAD0F81D780FF1009F9E27 /* PGGoodCell.m in Sources */,
 				0F6281BD1D8FE61E004E0596 /* PGArticleParagraphCatalogImageCell.m in Sources */,
 				0F141FBC1D74684000884052 /* PGBaseCollectionView.m in Sources */,

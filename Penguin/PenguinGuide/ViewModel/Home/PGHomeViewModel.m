@@ -44,6 +44,8 @@
 
 - (void)requestFeeds
 {
+    self.page = 1;
+    
     PGParams *params = [PGParams new];
     params[ParamsPage] = @(self.page);
     params[ParamsPerPage] = @10;

@@ -15,7 +15,7 @@
 - (id)initWithFrame:(CGRect)frame collectionViewLayout:(UICollectionViewLayout *)layout
 {
     if (self = [super initWithFrame:frame collectionViewLayout:layout]) {
-        self.backgroundColor = Theme.colorBackground;
+        self.backgroundColor = [UIColor whiteColor];
         self.alwaysBounceVertical = YES;
     }
     

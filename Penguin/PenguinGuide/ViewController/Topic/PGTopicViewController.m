@@ -110,7 +110,7 @@
     [scrollView scrollViewShouldUpdate];
 }
 
-- (UICollectionView *)topicCollectionView {
+- (PGGoodsCollectionView *)topicCollectionView {
 	if(_topicCollectionView == nil) {
 		_topicCollectionView = [[PGGoodsCollectionView alloc] initWithFrame:self.view.bounds collectionViewLayout:[UICollectionViewFlowLayout new]];
         _topicCollectionView.goodsDelegate = self;

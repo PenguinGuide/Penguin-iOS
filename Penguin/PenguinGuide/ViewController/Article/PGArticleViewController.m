@@ -485,6 +485,17 @@
     [self.viewModel requestComments];
 }
 
+#pragma mark - <Button Events>
+
+- (void)backButtonClicked
+{
+    [super backButtonClicked];
+    
+    if (self.animationCompletion) {
+        self.animationCompletion();
+    }
+}
+
 #pragma mark - <Setters && Getters>
 
 - (PGBaseCollectionView *)articleCollectionView
