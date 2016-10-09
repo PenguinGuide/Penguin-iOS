@@ -50,7 +50,7 @@
 - (UIButton *)weiboButton
 {
     if (!_weiboButton) {
-        _weiboButton = [[UIButton alloc] initWithFrame:CGRectMake(self.weixinButton.right+22, 12, 50, 50)];
+        _weiboButton = [[UIButton alloc] initWithFrame:CGRectMake(self.weixinButton.pg_right+22, 12, 50, 50)];
         _weiboButton.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
         _weiboButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentCenter;
         [_weiboButton setImage:[UIImage imageNamed:@"pg_login_weibo"] forState:UIControlStateNormal];

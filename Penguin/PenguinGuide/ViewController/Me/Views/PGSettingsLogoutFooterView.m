@@ -27,7 +27,7 @@
 - (UIButton *)logoutButton
 {
     if (!_logoutButton) {
-        _logoutButton = [[UIButton alloc] initWithFrame:CGRectMake(35, 28, self.width-35-46, 42)];
+        _logoutButton = [[UIButton alloc] initWithFrame:CGRectMake(35, 28, self.pg_width-35-46, 42)];
         [_logoutButton setTitle:@"退 出 登 录" forState:UIControlStateNormal];
         [_logoutButton setTitleColor:Theme.colorText forState:UIControlStateNormal];
         [_logoutButton.titleLabel setFont:Theme.fontMediumBold];

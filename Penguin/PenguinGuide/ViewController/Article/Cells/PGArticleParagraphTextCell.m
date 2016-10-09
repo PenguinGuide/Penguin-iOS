@@ -32,14 +32,14 @@
 
 - (void)setCellWithStr:(NSAttributedString *)attrStr
 {
-    self.textLabel.frame = CGRectMake(0, 0, self.width, self.height);
+    self.textLabel.frame = CGRectMake(0, 0, self.pg_width, self.pg_height);
     self.textLabel.attributedText = attrStr;
 }
 
 - (UILabel *)textLabel
 {
     if (!_textLabel) {
-        _textLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.width, self.height)];
+        _textLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.pg_width, self.pg_height)];
         _textLabel.numberOfLines = 0;
     }
     return _textLabel;

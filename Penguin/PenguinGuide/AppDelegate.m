@@ -14,6 +14,7 @@
 #import "PGThemeManager.h"
 #import "PGRouterManager.h"
 #import "PGLaunchAds.h"
+#import "PGAlibcTraderManager.h"
 
 #import "PGBaseNavigationController.h"
 
@@ -62,6 +63,8 @@
     //id result = [PGGlobal.cache getObjectFromKey:@"123456" fromTable:@"Session"];
     
     //[PGLaunchAds sharedInstance];
+    
+    [PGAlibcTraderManager registerAlibcTraderSDK];
         
     PGHomeViewController *homeVC = [[PGHomeViewController alloc] init];
     PGExploreViewController *exploreVC = [[PGExploreViewController alloc] init];
@@ -76,6 +79,30 @@
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     self.window.rootViewController = navigationController;
     [self.window makeKeyAndVisible];
+    
+    return YES;
+}
+
+- (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation
+{
+    // 如果阿里百川处理过会返回YES
+    BOOL isHandled = [PGAlibcTraderManager handleOpenURL:url];
+    
+    if (!isHandled) {
+        
+    }
+    
+    return YES;
+}
+
+- (BOOL)application:(UIApplication *)app openURL:(NSURL *)url options:(NSDictionary<UIApplicationOpenURLOptionsKey,id> *)options
+{
+    // 如果阿里百川处理过会返回YES - iOS 9
+    BOOL isHandled = [PGAlibcTraderManager handleOpenURL:url];
+    
+    if (!isHandled) {
+        
+    }
     
     return YES;
 }

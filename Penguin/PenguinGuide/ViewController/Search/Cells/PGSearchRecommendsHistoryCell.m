@@ -42,7 +42,7 @@
 
 - (UILabel *)historyLabel {
 	if(_historyLabel == nil) {
-		_historyLabel = [[UILabel alloc] initWithFrame:CGRectMake(20, 0, UISCREEN_WIDTH-40, self.height)];
+		_historyLabel = [[UILabel alloc] initWithFrame:CGRectMake(20, 0, UISCREEN_WIDTH-40, self.pg_height)];
         _historyLabel.font = Theme.fontExtraLargeBold;
         _historyLabel.textColor = Theme.colorText;
 	}

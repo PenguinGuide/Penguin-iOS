@@ -257,14 +257,14 @@
         iconImageView.image = [UIImage imageNamed:@"pg_channel_info_city_guide"];
         [_channelInfoView addSubview:iconImageView];
         
-        UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, iconImageView.bottom+8, width, 16)];
+        UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, iconImageView.pg_bottom+8, width, 16)];
         titleLabel.text = @"城市指南";
         titleLabel.font = Theme.fontMediumBold;
         titleLabel.textColor = Theme.colorText;
         titleLabel.textAlignment = NSTextAlignmentCenter;
         [_channelInfoView addSubview:titleLabel];
         
-        UILabel *countLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, titleLabel.bottom+12, width, 12)];
+        UILabel *countLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, titleLabel.pg_bottom+12, width, 12)];
         countLabel.text = [NSString stringWithFormat:@"-共%@篇-", self.viewModel.channel.totalArticles];
         countLabel.font = Theme.fontExtraSmall;
         countLabel.textColor = Theme.colorLightText;

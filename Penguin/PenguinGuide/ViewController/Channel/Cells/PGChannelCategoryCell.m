@@ -33,7 +33,7 @@
     [self.contentView addSubview:self.categoryImageView];
     [self.contentView addSubview:self.dimView];
     
-    UIImageView *maskImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, self.width, self.height)];
+    UIImageView *maskImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, self.pg_width, self.pg_height)];
     maskImageView.image = [[UIImage imageNamed:@"pg_bg_corner_mask"] resizableImageWithCapInsets:UIEdgeInsetsMake(4, 4, 4, 4) resizingMode:UIImageResizingModeStretch];
     [self.contentView addSubview:maskImageView];
 }
@@ -61,7 +61,7 @@
 
 - (UIImageView *)categoryImageView {
 	if(_categoryImageView == nil) {
-		_categoryImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, self.width, self.height)];
+		_categoryImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, self.pg_width, self.pg_height)];
         _categoryImageView.contentMode = UIViewContentModeScaleAspectFill;
         _categoryImageView.backgroundColor = Theme.colorText;
 	}
@@ -70,7 +70,7 @@
 
 - (UIView *)dimView {
 	if(_dimView == nil) {
-        _dimView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.width, self.height)];
+        _dimView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.pg_width, self.pg_height)];
         _dimView.backgroundColor = [UIColor whiteColorWithAlpha:0.5f];
         _dimView.hidden = YES;
 	}

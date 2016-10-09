@@ -34,7 +34,7 @@
     [self.contentView addSubview:self.bannerFrameView];
     [self.contentView addSubview:self.pagedScrollView];
     
-    PGDashedLineView *dashedLine = [[PGDashedLineView alloc] initWithFrame:CGRectMake(30, self.height-5-2, self.width-60, 2)];
+    PGDashedLineView *dashedLine = [[PGDashedLineView alloc] initWithFrame:CGRectMake(30, self.pg_height-5-2, self.pg_width-60, 2)];
     dashedLine.backgroundColor = [UIColor whiteColor];
     [self.contentView addSubview:dashedLine];
 }
@@ -69,7 +69,7 @@
 - (UIImageView *)bannerFrameView
 {
     if (!_bannerFrameView) {
-        _bannerFrameView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, self.width, self.height-60)];
+        _bannerFrameView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, self.pg_width, self.pg_height-60)];
         _bannerFrameView.clipsToBounds = YES;
         _bannerFrameView.contentMode = UIViewContentModeScaleAspectFill;
         _bannerFrameView.image = [UIImage imageNamed:@"pg_article_banner_frame"];
@@ -80,9 +80,9 @@
 - (PGPagedScrollView *)pagedScrollView
 {
     if (!_pagedScrollView) {
-        CGFloat width = self.width-24-15;
+        CGFloat width = self.pg_width-24-15;
         CGFloat height = width*9/16;
-        _pagedScrollView = [[PGPagedScrollView alloc] initWithFrame:CGRectMake(24, self.height-13-height-60, width, height) imageFillMode:PGPagedScrollViewImageFillModeFill iconMode:PGPagedScrollViewIconModeLight];
+        _pagedScrollView = [[PGPagedScrollView alloc] initWithFrame:CGRectMake(24, self.pg_height-13-height-60, width, height) imageFillMode:PGPagedScrollViewImageFillModeFill iconMode:PGPagedScrollViewIconModeLight];
         _pagedScrollView.delegate = self;
     }
     return _pagedScrollView;

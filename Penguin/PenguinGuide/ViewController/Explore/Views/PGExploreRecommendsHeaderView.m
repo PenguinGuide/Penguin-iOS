@@ -39,7 +39,7 @@ static NSString *const ScenarioCell = @"ScenarioCell";
     
     UIView *verticalLine = [[UIView alloc] initWithFrame:CGRectMake(13, 11, 3, 16)];
     verticalLine.backgroundColor = Theme.colorExtraHighlight;
-    UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(verticalLine.right+5, 11, 100, 16)];
+    UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(verticalLine.pg_right+5, 11, 100, 16)];
     label.font = Theme.fontMediumBold;
     label.textColor = Theme.colorText;
     label.text = @"场景";
@@ -97,7 +97,7 @@ static NSString *const ScenarioCell = @"ScenarioCell";
 - (PGPagedScrollView *)bannersView
 {
     if (!_bannersView) {
-        _bannersView = [[PGPagedScrollView alloc] initWithFrame:CGRectMake(0, 0, self.width, self.height-185) imageFillMode:PGPagedScrollViewImageFillModeFill iconMode:PGPagedScrollViewIconModeDefault];
+        _bannersView = [[PGPagedScrollView alloc] initWithFrame:CGRectMake(0, 0, self.pg_width, self.pg_height-185) imageFillMode:PGPagedScrollViewImageFillModeFill iconMode:PGPagedScrollViewIconModeDefault];
         _bannersView.delegate = self;
     }
     return _bannersView;
@@ -105,7 +105,7 @@ static NSString *const ScenarioCell = @"ScenarioCell";
 
 - (UIView *)scenarioView {
 	if(_scenarioView == nil) {
-		_scenarioView = [[UIView alloc] initWithFrame:CGRectMake(0, self.bannersView.bottom, UISCREEN_WIDTH, 185)];
+		_scenarioView = [[UIView alloc] initWithFrame:CGRectMake(0, self.bannersView.pg_bottom, UISCREEN_WIDTH, 185)];
         _scenarioView.backgroundColor = Theme.colorBackground;
         
         NSArray *icons = @[@"pg_explore_scenario_beginner", @"pg_explore_scenario_growing", @"pg_explore_scenario_master", @"pg_explore_scenario_home", @"pg_explore_scenario_office", @"pg_explore_scenario_party", @"pg_explore_scenario_tool", @"pg_explore_scenario_ceo"];

@@ -39,7 +39,7 @@
     self.nameLabel.font = Theme.fontSmall;
     self.nameLabel.text = tagName;
     self.nameLabel.layer.cornerRadius = 10.f;
-    self.nameLabel.width = size.width+24;
+    self.nameLabel.pg_width = size.width+24;
 }
 
 + (CGSize)cellSize:(NSString *)tagName
@@ -58,7 +58,7 @@
     self.nameLabel.textColor = Theme.colorExtraHighlight;
     self.nameLabel.text = keyword;
     self.nameLabel.layer.cornerRadius = 12.f;
-    self.nameLabel.width = size.width+24;
+    self.nameLabel.pg_width = size.width+24;
 }
 
 + (CGSize)keywordCellSize:(NSString *)keyword
@@ -70,7 +70,7 @@
 
 - (UILabel *)nameLabel {
 	if(_nameLabel == nil) {
-		_nameLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.width, self.height)];
+		_nameLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.pg_width, self.pg_height)];
         _nameLabel.clipsToBounds = YES;
         _nameLabel.layer.cornerRadius = 12.f;
         _nameLabel.backgroundColor = [UIColor colorWithHexString:@"E1E1E1"];

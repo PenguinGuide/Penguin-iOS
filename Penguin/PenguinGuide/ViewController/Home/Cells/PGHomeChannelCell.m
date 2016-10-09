@@ -27,7 +27,7 @@
 
 - (UIButton *)channelButton {
     if(_channelButton == nil) {
-        _channelButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, self.width, self.height)];
+        _channelButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, self.pg_width, self.pg_height)];
         _channelButton.userInteractionEnabled = NO;
         [_channelButton setImageEdgeInsets:UIEdgeInsetsMake(0, 0, 20, 0)];
     }
@@ -36,7 +36,7 @@
 
 - (UILabel *)channelLabel {
     if(_channelLabel == nil) {
-        _channelLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, self.height-22, self.width, 16)];
+        _channelLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, self.pg_height-22, self.pg_width, 16)];
         _channelLabel.font = Theme.fontExtraSmallBold;
         _channelLabel.textColor = Theme.colorText;
         _channelLabel.textAlignment = NSTextAlignmentCenter;

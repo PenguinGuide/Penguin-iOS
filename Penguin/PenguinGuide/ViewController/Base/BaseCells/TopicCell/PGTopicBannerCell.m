@@ -39,7 +39,7 @@ static NSString *const GoodCell = @"GoodCell";
     [self.contentView addSubview:self.bannerImageView];
     [self.contentView addSubview:self.goodsCollectionView];
     
-    UIImageView *maskImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, self.width, self.height)];
+    UIImageView *maskImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, self.pg_width, self.pg_height)];
     maskImageView.image = [[UIImage imageNamed:@"pg_white_corner_mask"] resizableImageWithCapInsets:UIEdgeInsetsMake(4, 4, 4, 4) resizingMode:UIImageResizingModeStretch];
     [self.contentView addSubview:maskImageView];
 }
@@ -109,7 +109,7 @@ static NSString *const GoodCell = @"GoodCell";
         layout.scrollDirection = UICollectionViewScrollDirectionHorizontal;
         layout.minimumInteritemSpacing = 0.f;
         layout.minimumLineSpacing = 10.f;
-        _goodsCollectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(0, self.bannerImageView.bottom+10, UISCREEN_WIDTH-20, 155-10) collectionViewLayout:layout];
+        _goodsCollectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(0, self.bannerImageView.pg_bottom+10, UISCREEN_WIDTH-20, 155-10) collectionViewLayout:layout];
         _goodsCollectionView.dataSource = self;
         _goodsCollectionView.delegate = self;
         _goodsCollectionView.showsVerticalScrollIndicator = NO;

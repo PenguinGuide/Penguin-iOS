@@ -25,11 +25,11 @@
     horizontalView.backgroundColor = [UIColor colorWithHexString:@"E1E1E1"];
     [self addSubview:horizontalView];
     
-    UIView *verticalView = [[UIView alloc] initWithFrame:CGRectMake(20, horizontalView.bottom+10, 3, 20)];
+    UIView *verticalView = [[UIView alloc] initWithFrame:CGRectMake(20, horizontalView.pg_bottom+10, 3, 20)];
     verticalView.backgroundColor = Theme.colorExtraHighlight;
     [self addSubview:verticalView];
     
-    UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(verticalView.right+5, horizontalView.bottom+10, 100, 20)];
+    UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(verticalView.pg_right+5, horizontalView.pg_bottom+10, 100, 20)];
     label.text = @"历史记录";
     label.textColor = Theme.colorText;
     label.font = Theme.fontMediumBold;

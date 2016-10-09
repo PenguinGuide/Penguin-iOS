@@ -46,8 +46,8 @@
     self.priceLabel.attributedText = attrS;
     
     CGSize textSize = [good.name boundingRectWithSize:CGSizeMake(UISCREEN_WIDTH-80, 50) options:NSStringDrawingUsesLineFragmentOrigin attributes:@{NSFontAttributeName:[UIFont systemFontOfSize:20.f weight:UIFontWeightRegular]} context:nil].size;
-    self.titleLabel.height = textSize.height;
-    self.priceLabel.frame = CGRectMake(self.priceLabel.x, self.titleLabel.bottom+10, self.priceLabel.width, self.priceLabel.height);
+    self.titleLabel.pg_height = textSize.height;
+    self.priceLabel.frame = CGRectMake(self.priceLabel.pg_x, self.titleLabel.pg_bottom+10, self.priceLabel.pg_width, self.priceLabel.pg_height);
 }
 
 + (CGSize)cellSize:(PGGood *)good
@@ -60,7 +60,7 @@
 - (UILabel *)titleLabel
 {
     if (!_titleLabel) {
-        _titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(40, 20, self.width-80, 30)];
+        _titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(40, 20, self.pg_width-80, 30)];
         _titleLabel.font = [UIFont systemFontOfSize:20.f weight:UIFontWeightRegular];
         _titleLabel.textColor = Theme.colorText;
         _titleLabel.numberOfLines = 2;
@@ -70,7 +70,7 @@
 
 - (UILabel *)priceLabel {
     if(_priceLabel == nil) {
-        _priceLabel = [[UILabel alloc] initWithFrame:CGRectMake(40, self.titleLabel.bottom+10, 100, 16)];
+        _priceLabel = [[UILabel alloc] initWithFrame:CGRectMake(40, self.titleLabel.pg_bottom+10, 100, 16)];
     }
     return _priceLabel;
 }

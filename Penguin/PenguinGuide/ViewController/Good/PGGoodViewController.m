@@ -283,11 +283,11 @@
         [buyButton.titleLabel setFont:Theme.fontMediumBold];
         [_bottomToolBar addSubview:buyButton];
         
-        UIButton *collectButton = [[UIButton alloc] initWithFrame:CGRectMake(buyButton.left-60, 0, 44, 44)];
+        UIButton *collectButton = [[UIButton alloc] initWithFrame:CGRectMake(buyButton.pg_left-60, 0, 44, 44)];
         [collectButton setImage:[UIImage imageNamed:@"pg_article_collect"] forState:UIControlStateNormal];
         [_bottomToolBar addSubview:collectButton];
         
-        UIButton *shareButton = [[UIButton alloc] initWithFrame:CGRectMake(collectButton.left-44, 0, 44, 44)];
+        UIButton *shareButton = [[UIButton alloc] initWithFrame:CGRectMake(collectButton.pg_left-44, 0, 44, 44)];
         [shareButton setImage:[UIImage imageNamed:@"pg_article_share"] forState:UIControlStateNormal];
         [_bottomToolBar addSubview:shareButton];
     }

@@ -38,9 +38,9 @@
 {
     [self addSubview:self.bannersView];
     
-    UIView *verticalLine = [[UIView alloc] initWithFrame:CGRectMake(13, self.bannersView.bottom+10, 3, 16)];
+    UIView *verticalLine = [[UIView alloc] initWithFrame:CGRectMake(13, self.bannersView.pg_bottom+10, 3, 16)];
     verticalLine.backgroundColor = Theme.colorExtraHighlight;
-    UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(verticalLine.right+5, self.bannersView.bottom+10, 100, 16)];
+    UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(verticalLine.pg_right+5, self.bannersView.pg_bottom+10, 100, 16)];
     label.font = Theme.fontMediumBold;
     label.textColor = Theme.colorText;
     label.text = @"品类";
@@ -190,7 +190,7 @@
         layout.scrollDirection = UICollectionViewScrollDirectionHorizontal;
         layout.minimumLineSpacing = 15.f;
         layout.minimumInteritemSpacing = 0.f;
-        _categoriesCollectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(0, self.bannersView.bottom+10+16, self.width, 80) collectionViewLayout:layout];
+        _categoriesCollectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(0, self.bannersView.pg_bottom+10+16, self.pg_width, 80) collectionViewLayout:layout];
         _categoriesCollectionView.backgroundColor = Theme.colorBackground;
         _categoriesCollectionView.showsVerticalScrollIndicator = NO;
         _categoriesCollectionView.showsHorizontalScrollIndicator = NO;

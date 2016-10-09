@@ -49,9 +49,9 @@
                                                                   attributes:@{NSFontAttributeName:Theme.fontExtraSmall,
                                                                                NSForegroundColorAttributeName:Theme.colorText,
                                                                                NSParagraphStyleAttributeName:paragraphStyle}];
-    CGSize textSize = [descStr boundingRectWithSize:CGSizeMake(self.width-26*2, UISCREEN_HEIGHT) options:NSStringDrawingUsesLineFragmentOrigin context:nil].size;
+    CGSize textSize = [descStr boundingRectWithSize:CGSizeMake(self.pg_width-26*2, UISCREEN_HEIGHT) options:NSStringDrawingUsesLineFragmentOrigin context:nil].size;
     
-    self.descLabel.frame = CGRectMake(32, self.countLabel.bottom+12, self.width-32*2, textSize.height+10);
+    self.descLabel.frame = CGRectMake(32, self.countLabel.pg_bottom+12, self.pg_width-32*2, textSize.height+10);
     self.descLabel.attributedText = descStr;
 }
 
@@ -71,7 +71,7 @@
 
 - (UIImageView *)iconImageView {
 	if(_iconImageView == nil) {
-		_iconImageView = [[UIImageView alloc] initWithFrame:CGRectMake(self.width/2-17/2.f, 30, 17, 20)];
+		_iconImageView = [[UIImageView alloc] initWithFrame:CGRectMake(self.pg_width/2-17/2.f, 30, 17, 20)];
         _iconImageView.image = [UIImage imageNamed:@"pg_channel_info_city_guide"];
 	}
 	return _iconImageView;
@@ -79,7 +79,7 @@
 
 - (UILabel *)titleLabel {
 	if(_titleLabel == nil) {
-		_titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, self.iconImageView.bottom+8, self.width, 16)];
+		_titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, self.iconImageView.pg_bottom+8, self.pg_width, 16)];
         _titleLabel.text = @"城市指南";
         _titleLabel.font = Theme.fontMediumBold;
         _titleLabel.textColor = Theme.colorText;
@@ -90,7 +90,7 @@
 
 - (UILabel *)countLabel {
 	if(_countLabel == nil) {
-		_countLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, self.titleLabel.bottom+12, self.width, 12)];
+		_countLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, self.titleLabel.pg_bottom+12, self.pg_width, 12)];
         _countLabel.font = Theme.fontExtraSmall;
         _countLabel.textColor = Theme.colorLightText;
         _countLabel.textAlignment = NSTextAlignmentCenter;
@@ -100,7 +100,7 @@
 
 - (UILabel *)descLabel {
 	if(_descLabel == nil) {
-		_descLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, self.countLabel.bottom+12, self.width, 12)];
+		_descLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, self.countLabel.pg_bottom+12, self.pg_width, 12)];
         _descLabel.numberOfLines = 0;
 	}
 	return _descLabel;

@@ -22,11 +22,11 @@
     if (self) {
         [self.logoView removeFromSuperview];
         
-        UIImageView *successImageView = [[UIImageView alloc] initWithFrame:CGRectMake(self.width/2-60, 80, 120, 120)];
+        UIImageView *successImageView = [[UIImageView alloc] initWithFrame:CGRectMake(self.pg_width/2-60, 80, 120, 120)];
         successImageView.image = [UIImage imageNamed:@"pg_login_success"];
         [self addSubview:successImageView];
         
-        UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, successImageView.bottom+40, self.width, 16)];
+        UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, successImageView.pg_bottom+40, self.pg_width, 16)];
         label.font = Theme.fontMedium;
         label.textColor = [UIColor blackColor];
         label.text = @"注 册 成 功";
@@ -42,9 +42,9 @@
 {
     if (!_doneButton) {
         if (DEVICE_IS_LESS_OR_EQUAL_TO_IPHONE_5) {
-            _doneButton = [[UIButton alloc] initWithFrame:CGRectMake(26, self.height-22-30, self.width-26*2, 30)];
+            _doneButton = [[UIButton alloc] initWithFrame:CGRectMake(26, self.pg_height-22-30, self.pg_width-26*2, 30)];
         } else {
-            _doneButton = [[UIButton alloc] initWithFrame:CGRectMake(26, self.height-22-45, self.width-26*2, 45)];
+            _doneButton = [[UIButton alloc] initWithFrame:CGRectMake(26, self.pg_height-22-45, self.pg_width-26*2, 45)];
         }
         [_doneButton setBackgroundColor:[UIColor blackColor]];
         [_doneButton setTitle:@"完 成" forState:UIControlStateNormal];

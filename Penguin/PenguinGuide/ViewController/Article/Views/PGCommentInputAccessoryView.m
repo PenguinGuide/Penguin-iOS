@@ -37,17 +37,17 @@
 - (void)textViewDidChange
 {
     // NOTE: boundingRectWithSize doesn't work. use sizeThatFits instead.
-    CGSize textSize = [self.commentTextView sizeThatFits:CGSizeMake(self.width-30, MAXFLOAT)];
+    CGSize textSize = [self.commentTextView sizeThatFits:CGSizeMake(self.pg_width-30, MAXFLOAT)];
     
     if (textSize.height > 100) {
         self.commentTextView.scrollEnabled = YES;
         return;
     }
     
-    if (self.commentTextView.height != textSize.height) {
+    if (self.commentTextView.pg_height != textSize.height) {
         
-        self.frame = CGRectMake(0, self.y+self.height-(textSize.height+14), UISCREEN_WIDTH, textSize.height+14);
-        self.commentTextView.frame = CGRectMake(15, (self.height-textSize.height)/2, self.width-30, textSize.height);
+        self.frame = CGRectMake(0, self.pg_y+self.pg_height-(textSize.height+14), UISCREEN_WIDTH, textSize.height+14);
+        self.commentTextView.frame = CGRectMake(15, (self.pg_height-textSize.height)/2, self.pg_width-30, textSize.height);
     }
     
     NSLog(@"%@", NSStringFromCGSize(textSize));
@@ -68,7 +68,7 @@
 - (UITextView *)commentTextView
 {
     if (!_commentTextView) {
-        _commentTextView = [[PGCommentTextView alloc] initWithFrame:CGRectMake(15, 7, self.width-30, 30)];
+        _commentTextView = [[PGCommentTextView alloc] initWithFrame:CGRectMake(15, 7, self.pg_width-30, 30)];
         _commentTextView.textColor = Theme.colorText;
         _commentTextView.font = Theme.fontSmall;
         _commentTextView.backgroundColor = Theme.colorLightBackground;
@@ -76,8 +76,8 @@
         _commentTextView.delegate = self;
         _commentTextView.placeholder = @"输 入 你 的 回 复";
         
-        CGSize textSize = [_commentTextView sizeThatFits:CGSizeMake(self.width-30, MAXFLOAT)];
-        _commentTextView.frame = CGRectMake(15, (self.height-textSize.height)/2, self.width-30, textSize.height);
+        CGSize textSize = [_commentTextView sizeThatFits:CGSizeMake(self.pg_width-30, MAXFLOAT)];
+        _commentTextView.frame = CGRectMake(15, (self.pg_height-textSize.height)/2, self.pg_width-30, textSize.height);
     }
     return _commentTextView;
 }

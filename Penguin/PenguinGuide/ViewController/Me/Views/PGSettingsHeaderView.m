@@ -29,7 +29,7 @@
 {
     [self addSubview:self.titleLabel];
     
-    UIView *horizontalLine = [[UIView alloc] initWithFrame:CGRectMake(27, self.height-2, self.width-27-39, 2)];
+    UIView *horizontalLine = [[UIView alloc] initWithFrame:CGRectMake(27, self.pg_height-2, self.pg_width-27-39, 2)];
     horizontalLine.backgroundColor = Theme.colorText;
     [self addSubview:horizontalLine];
 }
@@ -42,7 +42,7 @@
 - (UILabel *)titleLabel
 {
     if (!_titleLabel) {
-        _titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(30, 0, self.width-60, self.height)];
+        _titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(30, 0, self.pg_width-60, self.pg_height)];
         _titleLabel.font = Theme.fontLargeBold;
         _titleLabel.textColor = Theme.colorText;
     }

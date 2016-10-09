@@ -48,8 +48,8 @@
     self.replyLabel.text = [NSString stringWithFormat:@"回复%@:", comment.replyTo];
     
     CGSize nameSize = [comment.user.nickname sizeWithAttributes:@{NSFontAttributeName:Theme.fontSmall}];
-    self.nameLabel.width = nameSize.width;
-    self.replyLabel.frame = CGRectMake(self.nameLabel.right+5, self.replyLabel.top, self.width-self.replyLabel.left-10, self.replyLabel.height);
+    self.nameLabel.pg_width = nameSize.width;
+    self.replyLabel.frame = CGRectMake(self.nameLabel.pg_right+5, self.replyLabel.pg_top, self.pg_width-self.replyLabel.pg_left-10, self.replyLabel.pg_height);
     
     NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle defaultParagraphStyle] mutableCopy];
     paragraphStyle.lineSpacing = 5.f;
@@ -62,7 +62,7 @@
                                                   options:NSStringDrawingUsesLineFragmentOrigin
                                                attributes:@{NSFontAttributeName:Theme.fontSmall, NSParagraphStyleAttributeName:paragraphStyle}
                                                   context:nil].size;
-    self.commentLabel.height = textSize.height+5;
+    self.commentLabel.pg_height = textSize.height+5;
 }
 
 + (CGSize)cellSize:(PGComment *)comment
@@ -116,7 +116,7 @@
 - (UILabel *)nameLabel
 {
     if (!_nameLabel) {
-        _nameLabel = [[UILabel alloc] initWithFrame:CGRectMake(self.avatarImageView.right+12, 1, 50, 14)];
+        _nameLabel = [[UILabel alloc] initWithFrame:CGRectMake(self.avatarImageView.pg_right+12, 1, 50, 14)];
         _nameLabel.font = Theme.fontSmall;
         _nameLabel.textColor = Theme.colorText;
     }
@@ -126,7 +126,7 @@
 - (UILabel *)replyLabel
 {
     if (!_replyLabel) {
-        _replyLabel = [[UILabel alloc] initWithFrame:CGRectMake(self.nameLabel.right+5, 1, 50, 14)];
+        _replyLabel = [[UILabel alloc] initWithFrame:CGRectMake(self.nameLabel.pg_right+5, 1, 50, 14)];
         _replyLabel.font = Theme.fontSmall;
         _replyLabel.textColor = Theme.colorExtraHighlight;
     }
@@ -136,7 +136,7 @@
 - (UILabel *)timeLabel
 {
     if (!_timeLabel) {
-        _timeLabel = [[UILabel alloc] initWithFrame:CGRectMake(self.avatarImageView.right+12, self.nameLabel.bottom+2, 100, 12)];
+        _timeLabel = [[UILabel alloc] initWithFrame:CGRectMake(self.avatarImageView.pg_right+12, self.nameLabel.pg_bottom+2, 100, 12)];
         _timeLabel.font = Theme.fontExtraSmall;
         _timeLabel.textColor = Theme.colorLightText;
     }
@@ -146,7 +146,7 @@
 - (UILabel *)commentLabel
 {
     if (!_commentLabel) {
-        _commentLabel = [[UILabel alloc] initWithFrame:CGRectMake(69, self.avatarImageView.bottom+15, self.width-69-25, 0)];
+        _commentLabel = [[UILabel alloc] initWithFrame:CGRectMake(69, self.avatarImageView.pg_bottom+15, self.pg_width-69-25, 0)];
         _commentLabel.numberOfLines = 0;
         _commentLabel.font = Theme.fontSmall;
         _commentLabel.textColor = Theme.colorText;

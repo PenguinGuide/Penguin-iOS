@@ -205,6 +205,7 @@
     } else if ([banner isKindOfClass:[PGFlashbuyBanner class]]) {
         return [PGFlashbuyBannerCell cellSize];
     }
+    
     return CGSizeZero;
 }
 

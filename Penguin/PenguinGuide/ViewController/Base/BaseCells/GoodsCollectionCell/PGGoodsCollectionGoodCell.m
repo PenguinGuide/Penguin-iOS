@@ -38,7 +38,7 @@
     [self.contentView addSubview:self.priceLabel];
     [self.contentView addSubview:self.stockImageView];
     
-    UIImageView *maskImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, self.width, self.height)];
+    UIImageView *maskImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, self.pg_width, self.pg_height)];
     maskImageView.image = [[UIImage imageNamed:@"pg_bg_corner_mask"] resizableImageWithCapInsets:UIEdgeInsetsMake(4, 4, 4, 4) resizingMode:UIImageResizingModeStretch];
     [self.contentView addSubview:maskImageView];
 }
@@ -79,7 +79,7 @@
 
 - (UILabel *)titleLabel {
 	if(_titleLabel == nil) {
-		_titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(20, self.goodImageView.bottom, 160-40, 30)];
+		_titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(20, self.goodImageView.pg_bottom, 160-40, 30)];
         _titleLabel.textColor = Theme.colorText;
         _titleLabel.font = Theme.fontSmallBold;
         _titleLabel.numberOfLines = 2;
@@ -89,7 +89,7 @@
 
 - (UILabel *)priceLabel {
 	if(_priceLabel == nil) {
-		_priceLabel = [[UILabel alloc] initWithFrame:CGRectMake(20, self.titleLabel.bottom+3, 160-40, 16)];
+		_priceLabel = [[UILabel alloc] initWithFrame:CGRectMake(20, self.titleLabel.pg_bottom+3, 160-40, 16)];
 	}
 	return _priceLabel;
 }

@@ -33,7 +33,7 @@
     [self.contentView addSubview:self.contentLabel];
     [self.contentView addSubview:self.contentImageView];
     
-    UIView *horizontalLine = [[UIView alloc] initWithFrame:CGRectMake(27, self.height-1/[UIScreen mainScreen].scale, self.width-27-39, 1/[UIScreen mainScreen].scale)];
+    UIView *horizontalLine = [[UIView alloc] initWithFrame:CGRectMake(27, self.pg_height-1/[UIScreen mainScreen].scale, self.pg_width-27-39, 1/[UIScreen mainScreen].scale)];
     horizontalLine.backgroundColor = [UIColor colorWithHexString:@"E1E1E1"];
     [self.contentView addSubview:horizontalLine];
 }
@@ -54,7 +54,7 @@
 - (UILabel *)descLabel
 {
     if (!_descLabel) {
-        _descLabel = [[UILabel alloc] initWithFrame:CGRectMake(36, 0, 100, self.height)];
+        _descLabel = [[UILabel alloc] initWithFrame:CGRectMake(36, 0, 100, self.pg_height)];
         _descLabel.font = Theme.fontMediumBold;
         _descLabel.textColor = Theme.colorText;
     }
@@ -64,7 +64,7 @@
 - (UILabel *)contentLabel
 {
     if (!_contentLabel) {
-        _contentLabel = [[UILabel alloc] initWithFrame:CGRectMake(self.width-44-100, 0, 100, self.height)];
+        _contentLabel = [[UILabel alloc] initWithFrame:CGRectMake(self.pg_width-44-100, 0, 100, self.pg_height)];
         _contentLabel.font = Theme.fontMediumBold;
         _contentLabel.textColor = Theme.colorLightText;
         _contentLabel.textAlignment = NSTextAlignmentRight;
@@ -75,7 +75,7 @@
 - (UIImageView *)contentImageView
 {
     if (!_contentImageView) {
-        _contentImageView = [[UIImageView alloc] initWithFrame:CGRectMake(self.width-48-30, self.height/2-15, 30, 30)];
+        _contentImageView = [[UIImageView alloc] initWithFrame:CGRectMake(self.pg_width-48-30, self.pg_height/2-15, 30, 30)];
         _contentImageView.clipsToBounds = YES;
         _contentImageView.layer.cornerRadius = 15.f;
     }

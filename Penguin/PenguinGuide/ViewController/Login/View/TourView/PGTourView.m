@@ -60,11 +60,11 @@
     if (!_registerButton) {
         float buttonWidth = (self.frame.size.width-18*2-14)/2;
         if (DEVICE_IS_IPHONE_5) {
-            _registerButton = [[UIButton alloc] initWithFrame:CGRectMake(18, self.socialView.top-45, buttonWidth, 30)];
+            _registerButton = [[UIButton alloc] initWithFrame:CGRectMake(18, self.socialView.pg_top-45, buttonWidth, 30)];
         } else if (DEVICE_IS_IPHONE_4) {
             _registerButton = [[UIButton alloc] initWithFrame:CGRectMake(18, self.frame.size.height-45, buttonWidth, 30)];
         } else {
-            _registerButton = [[UIButton alloc] initWithFrame:CGRectMake(18, self.socialView.top-15-45, buttonWidth, 45)];
+            _registerButton = [[UIButton alloc] initWithFrame:CGRectMake(18, self.socialView.pg_top-15-45, buttonWidth, 45)];
         }
         _registerButton.clipsToBounds = YES;
         _registerButton.layer.cornerRadius = 2.f;
@@ -81,11 +81,11 @@
     if (!_loginButton) {
         float buttonWidth = (self.frame.size.width-18*2-14)/2;
         if (DEVICE_IS_IPHONE_5) {
-            _loginButton = [[UIButton alloc] initWithFrame:CGRectMake(_registerButton.right+14, self.socialView.top-45, buttonWidth, 30)];
+            _loginButton = [[UIButton alloc] initWithFrame:CGRectMake(_registerButton.pg_right+14, self.socialView.pg_top-45, buttonWidth, 30)];
         } else if (DEVICE_IS_IPHONE_4) {
-            _loginButton = [[UIButton alloc] initWithFrame:CGRectMake(_registerButton.right+14, self.frame.size.height-45, buttonWidth, 30)];
+            _loginButton = [[UIButton alloc] initWithFrame:CGRectMake(_registerButton.pg_right+14, self.frame.size.height-45, buttonWidth, 30)];
         } else {
-            _loginButton = [[UIButton alloc] initWithFrame:CGRectMake(_registerButton.right+14, self.socialView.top-15-45, buttonWidth, 45)];
+            _loginButton = [[UIButton alloc] initWithFrame:CGRectMake(_registerButton.pg_right+14, self.socialView.pg_top-15-45, buttonWidth, 45)];
         }
         _loginButton.clipsToBounds = YES;
         _loginButton.layer.cornerRadius = 2.f;

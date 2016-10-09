@@ -34,7 +34,7 @@
     
     [self.contentView addSubview:self.bannersView];
     
-    UIImageView *maskImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, self.width, self.height)];
+    UIImageView *maskImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, self.pg_width, self.pg_height)];
     maskImageView.image = [[UIImage imageNamed:@"pg_white_corner_mask"] resizableImageWithCapInsets:UIEdgeInsetsMake(4, 4, 4, 4) resizingMode:UIImageResizingModeStretch];
     [self.contentView addSubview:maskImageView];
 }
@@ -43,7 +43,7 @@
 {
     NSMutableArray *views = [NSMutableArray new];
     for (PGGood *good in flashbuy.goodsArray) {
-        PGFlashbuyGoodView *flashbuyGoodView = [[PGFlashbuyGoodView alloc] initWithFrame:CGRectMake(0, 0, self.width, self.height)];
+        PGFlashbuyGoodView *flashbuyGoodView = [[PGFlashbuyGoodView alloc] initWithFrame:CGRectMake(0, 0, self.pg_width, self.pg_height)];
         [flashbuyGoodView setViewWithGood:good];
         [views addObject:flashbuyGoodView];
     }
@@ -82,7 +82,7 @@
 - (PGPagedScrollView *)bannersView
 {
     if (!_bannersView) {
-        _bannersView = [[PGPagedScrollView alloc] initWithFrame:CGRectMake(0, 0, self.width, self.height) imageFillMode:PGPagedScrollViewImageFillModeFill iconMode:PGPagedScrollViewIconModeLight];
+        _bannersView = [[PGPagedScrollView alloc] initWithFrame:CGRectMake(0, 0, self.pg_width, self.pg_height) imageFillMode:PGPagedScrollViewImageFillModeFill iconMode:PGPagedScrollViewIconModeLight];
         _bannersView.delegate = self;
     }
     return _bannersView;

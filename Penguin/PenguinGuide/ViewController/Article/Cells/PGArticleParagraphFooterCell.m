@@ -21,14 +21,14 @@
 
 - (void)initialize
 {
-    UILabel *topLabel = [[UILabel alloc] initWithFrame:CGRectMake((self.width-180)/2, 30, 180, 22)];
+    UILabel *topLabel = [[UILabel alloc] initWithFrame:CGRectMake((self.pg_width-180)/2, 30, 180, 22)];
     topLabel.backgroundColor = [UIColor colorWithHexString:@"FEE500"];
     topLabel.font = Theme.fontSmallBold;
     topLabel.textColor = Theme.colorText;
     topLabel.textAlignment = NSTextAlignmentCenter;
     topLabel.text = @"企鹅转载，未经允许不得转载";
     
-    UILabel *bottomLabel = [[UILabel alloc] initWithFrame:CGRectMake((self.width-180)/2, 52, 180, 22)];
+    UILabel *bottomLabel = [[UILabel alloc] initWithFrame:CGRectMake((self.pg_width-180)/2, 52, 180, 22)];
     bottomLabel.backgroundColor = [UIColor colorWithHexString:@"FEE500"];
     bottomLabel.font = Theme.fontSmallBold;
     bottomLabel.textColor = Theme.colorText;
@@ -38,7 +38,7 @@
     [self.contentView addSubview:topLabel];
     [self.contentView addSubview:bottomLabel];
     
-    UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake((self.width-196)/2, bottomLabel.bottom+50, 196, 20)];
+    UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake((self.pg_width-196)/2, bottomLabel.pg_bottom+50, 196, 20)];
     imageView.image = [UIImage imageNamed:@"pg_article_footer_separator"];
     [self.contentView addSubview:imageView];
 }

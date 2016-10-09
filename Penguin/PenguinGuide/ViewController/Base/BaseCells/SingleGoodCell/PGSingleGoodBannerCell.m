@@ -38,7 +38,7 @@
     [self.contentView addSubview:self.descLabel];
     [self.contentView addSubview:self.goodImageView];
     
-    UIImageView *maskImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, self.width, self.height)];
+    UIImageView *maskImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, self.pg_width, self.pg_height)];
     maskImageView.image = [[UIImage imageNamed:@"pg_white_corner_mask"] resizableImageWithCapInsets:UIEdgeInsetsMake(4, 4, 4, 4) resizingMode:UIImageResizingModeStretch];
     [self.contentView addSubview:maskImageView];
 }
@@ -81,7 +81,7 @@
 - (UILabel *)titleLabel {
 	if(_titleLabel == nil) {
         CGFloat width = UISCREEN_WIDTH-20;
-		_titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(15, self.priceLabel.bottom+3, width/2-30, 35)];
+		_titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(15, self.priceLabel.pg_bottom+3, width/2-30, 35)];
         _titleLabel.textColor = Theme.colorText;
         _titleLabel.font = Theme.fontMediumBold;
         _titleLabel.numberOfLines = 2;

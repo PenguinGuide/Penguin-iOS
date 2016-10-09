@@ -36,8 +36,8 @@
 
 - (void)setValue:(float)value
 {
-    self.maximumTrackLine.frame = CGRectMake(10, self.maximumTrackImageView.bottom+7, LineWidth, 88*(1-value));
-    self.minimumTrackLine.frame = CGRectMake(10, self.maximumTrackLine.bottom, LineWidth, 88*value);
+    self.maximumTrackLine.frame = CGRectMake(10, self.maximumTrackImageView.pg_bottom+7, LineWidth, 88*(1-value));
+    self.minimumTrackLine.frame = CGRectMake(10, self.maximumTrackLine.pg_bottom, LineWidth, 88*value);
 }
 
 #pragma mark - <Setters && Getters>
@@ -54,7 +54,7 @@
 - (UIView *)maximumTrackLine
 {
     if (!_maximumTrackLine) {
-        _maximumTrackLine = [[UIView alloc] initWithFrame:CGRectMake(10, self.maximumTrackImageView.bottom+7, LineWidth, 44)];
+        _maximumTrackLine = [[UIView alloc] initWithFrame:CGRectMake(10, self.maximumTrackImageView.pg_bottom+7, LineWidth, 44)];
         _maximumTrackLine.backgroundColor = [UIColor colorWithHexString:@"E1E1E1"];
     }
     return _maximumTrackLine;
@@ -63,7 +63,7 @@
 - (UIView *)minimumTrackLine
 {
     if (!_minimumTrackLine) {
-        _minimumTrackLine = [[UIView alloc] initWithFrame:CGRectMake(10, self.maximumTrackLine.bottom, LineWidth, 44)];
+        _minimumTrackLine = [[UIView alloc] initWithFrame:CGRectMake(10, self.maximumTrackLine.pg_bottom, LineWidth, 44)];
         _minimumTrackLine.backgroundColor = [UIColor whiteColor];
     }
     return _minimumTrackLine;
@@ -72,7 +72,7 @@
 - (UIImageView *)minimumTrackImageView
 {
     if (!_minimumTrackImageView) {
-        _minimumTrackImageView = [[UIImageView alloc] initWithFrame:CGRectMake(3, self.minimumTrackLine.bottom+7, 20, 16)];
+        _minimumTrackImageView = [[UIImageView alloc] initWithFrame:CGRectMake(3, self.minimumTrackLine.pg_bottom+7, 20, 16)];
         _minimumTrackImageView.image = [UIImage imageNamed:@"pg_video_volumn_slider_min"];
     }
     return _minimumTrackImageView;

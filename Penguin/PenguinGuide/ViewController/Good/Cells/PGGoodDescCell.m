@@ -40,7 +40,7 @@
         self.descLabel.attributedText = attrS;
         
         CGSize textSize = [attrS boundingRectWithSize:CGSizeMake(UISCREEN_WIDTH-80, 1000) options:NSStringDrawingUsesLineFragmentOrigin context:nil].size;
-        self.descLabel.height = textSize.height;
+        self.descLabel.pg_height = textSize.height;
     }
 }
 
@@ -61,7 +61,7 @@
 - (UILabel *)descLabel
 {
     if (!_descLabel) {
-        _descLabel = [[UILabel alloc] initWithFrame:CGRectMake(40, 0, self.width-80, 30)];
+        _descLabel = [[UILabel alloc] initWithFrame:CGRectMake(40, 0, self.pg_width-80, 30)];
         _descLabel.font = Theme.fontMedium;
         _descLabel.textColor = Theme.colorText;
         _descLabel.numberOfLines = 0;

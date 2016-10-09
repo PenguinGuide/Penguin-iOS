@@ -43,7 +43,7 @@
 
 - (UIImageView *)categoryImageView {
     if(_categoryImageView == nil) {
-        _categoryImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, self.width, self.height)];
+        _categoryImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, self.pg_width, self.pg_height)];
         _categoryImageView.backgroundColor = Theme.colorBackground;
         _categoryImageView.clipsToBounds = YES;
         _categoryImageView.layer.cornerRadius = 10.f;

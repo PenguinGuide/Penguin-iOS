@@ -253,7 +253,7 @@
             // forward
             self.forwardButton.hidden = NO;
             self.backwardButton.hidden = YES;
-            float scale = fabs(translation.x)/self.playerSlider.width;
+            float scale = fabs(translation.x)/self.playerSlider.pg_width;
             self.playerSlider.value = self.playerSlider.value+(scale-self.currentPlayerTranslationScale);
             self.currentPlayerTranslationScale = scale;
             
@@ -262,7 +262,7 @@
             // backward
             self.backwardButton.hidden = NO;
             self.forwardButton.hidden = YES;
-            float scale = fabs(translation.x)/self.playerSlider.width;
+            float scale = fabs(translation.x)/self.playerSlider.pg_width;
             self.playerSlider.value = self.playerSlider.value-(scale-self.currentPlayerTranslationScale);
             self.currentPlayerTranslationScale = scale;
             
@@ -343,7 +343,7 @@
 {
     if (!_playerLayer) {
         _playerLayer = [AVPlayerLayer playerLayerWithPlayer:self.player];
-        _playerLayer.frame = CGRectMake(0, 0, self.view.height, self.view.width);
+        _playerLayer.frame = CGRectMake(0, 0, self.view.pg_height, self.view.pg_width);
         _playerLayer.videoGravity = AVLayerVideoGravityResizeAspectFill;
         ;
     }
@@ -382,7 +382,7 @@
 - (UIButton *)forwardButton
 {
     if (!_forwardButton) {
-        _forwardButton = [[UIButton alloc] initWithFrame:CGRectMake(self.playButton.right+90, UISCREEN_WIDTH/2-25, 50, 50)];
+        _forwardButton = [[UIButton alloc] initWithFrame:CGRectMake(self.playButton.pg_right+90, UISCREEN_WIDTH/2-25, 50, 50)];
         _forwardButton.hidden = YES;
         [_forwardButton setImage:[UIImage imageNamed:@"pg_video_forward"] forState:UIControlStateNormal];
     }
@@ -392,7 +392,7 @@
 - (UIButton *)backwardButton
 {
     if (!_backwardButton) {
-        _backwardButton = [[UIButton alloc] initWithFrame:CGRectMake(self.playButton.left-90-50, UISCREEN_WIDTH/2-25, 50, 50)];
+        _backwardButton = [[UIButton alloc] initWithFrame:CGRectMake(self.playButton.pg_left-90-50, UISCREEN_WIDTH/2-25, 50, 50)];
         _backwardButton.hidden = YES;
         [_backwardButton setImage:[UIImage imageNamed:@"pg_video_backward"] forState:UIControlStateNormal];
     }

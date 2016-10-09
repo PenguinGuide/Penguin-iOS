@@ -21,7 +21,7 @@
 
 - (void)initialize
 {
-    UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(self.width/2-117/2.f, 15, 117, 14)];
+    UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(self.pg_width/2-117/2.f, 15, 117, 14)];
     imageView.image = [UIImage imageNamed:@"pg_good_related_goods_header"];
     [self addSubview:imageView];
 }

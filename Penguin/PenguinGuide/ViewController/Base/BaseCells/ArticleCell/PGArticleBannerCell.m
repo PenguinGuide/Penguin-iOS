@@ -61,10 +61,10 @@
     }
     self.bannerImageView.backgroundColor = Theme.colorText;
     
-    self.commentsCountButton.frame = CGRectMake(UISCREEN_WIDTH-18-(12+16+[self labelWidth:article.commentsCount]), self.height-15-26, 12+16+[self labelWidth:article.commentsCount], 26);
+    self.commentsCountButton.frame = CGRectMake(UISCREEN_WIDTH-18-(12+16+[self labelWidth:article.commentsCount]), self.frame.size.height-15-26, 12+16+[self labelWidth:article.commentsCount], 26);
     [self.commentsCountButton setTitle:article.commentsCount forState:UIControlStateNormal];
     
-    self.readsCountButton.frame = CGRectMake(self.commentsCountButton.left-18-(12+16+[self labelWidth:article.likesCount]), self.height-15-26, 12+16+[self labelWidth:article.likesCount], 26);
+    self.readsCountButton.frame = CGRectMake(self.commentsCountButton.pg_left-18-(12+16+[self labelWidth:article.likesCount]), self.pg_height-15-26, 12+16+[self labelWidth:article.likesCount], 26);
     [self.readsCountButton setTitle:article.likesCount forState:UIControlStateNormal];
     
     self.backgroundColor = [UIColor colorWithHexString:@"f19572"];
@@ -105,13 +105,13 @@
 - (UIScrollView *)bannerImageScrollView
 {
     if (!_bannerImageScrollView) {
-        _bannerImageScrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, self.width, self.height)];
+        _bannerImageScrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, self.pg_width, self.pg_height)];
         _bannerImageScrollView.delegate = self;
         _bannerImageScrollView.showsHorizontalScrollIndicator = NO;
         _bannerImageScrollView.showsVerticalScrollIndicator = NO;
         _bannerImageScrollView.alwaysBounceHorizontal = YES;
         _bannerImageScrollView.backgroundColor = [UIColor clearColor];
-        _bannerImageScrollView.contentSize = CGSizeMake(self.width, self.height);
+        _bannerImageScrollView.contentSize = CGSizeMake(self.pg_width, self.pg_height);
         _bannerImageScrollView.userInteractionEnabled = NO;
     }
     return _bannerImageScrollView;
@@ -120,7 +120,7 @@
 - (FLAnimatedImageView *)bannerImageView
 {
     if (!_bannerImageView) {
-        _bannerImageView = [[FLAnimatedImageView alloc] initWithFrame:CGRectMake(0, 0, self.width, self.height)];
+        _bannerImageView = [[FLAnimatedImageView alloc] initWithFrame:CGRectMake(0, 0, self.pg_width, self.pg_height)];
         _bannerImageView.clipsToBounds = YES;
         _bannerImageView.contentMode = UIViewContentModeScaleAspectFill;
     }
@@ -130,7 +130,7 @@
 - (UIImageView *)collectImageView
 {
     if (!_collectImageView) {
-        _collectImageView = [[UIImageView alloc] initWithFrame:CGRectMake(self.width-32-24, self.height/2-14-18, 24, 28)];
+        _collectImageView = [[UIImageView alloc] initWithFrame:CGRectMake(self.pg_width-32-24, self.pg_height/2-14-18, 24, 28)];
         _collectImageView.image = [UIImage imageNamed:@"pg_home_article_collect"];
     }
     return _collectImageView;
@@ -139,7 +139,7 @@
 - (UILabel *)collectLabel
 {
     if (!_collectLabel) {
-        _collectLabel = [[UILabel alloc] initWithFrame:CGRectMake(self.width-90, self.collectImageView.bottom+6, 85, 14)];
+        _collectLabel = [[UILabel alloc] initWithFrame:CGRectMake(self.pg_width-90, self.collectImageView.pg_bottom+6, 85, 14)];
         _collectLabel.font = Theme.fontSmall;
         _collectLabel.textColor = [UIColor whiteColor];
         _collectLabel.textAlignment = NSTextAlignmentCenter;
@@ -158,7 +158,7 @@
 
 - (UIView *)readsCountButton {
 	if(_readsCountButton == nil) {
-		_readsCountButton = [[UIButton alloc] initWithFrame:CGRectMake(self.commentsCountButton.left-18-(12+16+[self labelWidth:@"0"]), self.height-15-26, 12+16+[self labelWidth:@"0"], 26)];
+		_readsCountButton = [[UIButton alloc] initWithFrame:CGRectMake(self.commentsCountButton.pg_left-18-(12+16+[self labelWidth:@"0"]), self.pg_height-15-26, 12+16+[self labelWidth:@"0"], 26)];
         _readsCountButton.backgroundColor = [UIColor colorWithRed:241.f/256.f green:241.f/256.f blue:241.f/256.f alpha:0.9f];
         _readsCountButton.clipsToBounds = YES;
         _readsCountButton.layer.cornerRadius = 13;
@@ -176,7 +176,7 @@
 
 - (UIView *)commentsCountButton {
 	if(_commentsCountButton == nil) {
-		_commentsCountButton = [[UIButton alloc] initWithFrame:CGRectMake(UISCREEN_WIDTH-18-(12+16+[self labelWidth:@"0"]), self.height-15-26, 12+16+[self labelWidth:@"0"], 26)];
+		_commentsCountButton = [[UIButton alloc] initWithFrame:CGRectMake(UISCREEN_WIDTH-18-(12+16+[self labelWidth:@"0"]), self.pg_height-15-26, 12+16+[self labelWidth:@"0"], 26)];
         _commentsCountButton.backgroundColor = [UIColor colorWithRed:241.f/256.f green:241.f/256.f blue:241.f/256.f alpha:0.9f];
         _commentsCountButton.clipsToBounds = YES;
         _commentsCountButton.layer.cornerRadius = 13;

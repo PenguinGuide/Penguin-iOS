@@ -42,13 +42,13 @@
         [self.segmentLine removeFromSuperview];
         
         self.segmentsArray = segments;
-        CGFloat buttonWidth = self.width/self.segmentsArray.count;
+        CGFloat buttonWidth = self.pg_width/self.segmentsArray.count;
         
         NSMutableArray *buttonsArray = [NSMutableArray new];
         for (int i = 0; i < self.segmentsArray.count; i++) {
             NSString *segmentStr = self.segmentsArray[i];
             
-            UIButton *segmentButton = [[UIButton alloc] initWithFrame:CGRectMake(i*buttonWidth, 0, buttonWidth, self.height)];
+            UIButton *segmentButton = [[UIButton alloc] initWithFrame:CGRectMake(i*buttonWidth, 0, buttonWidth, self.pg_height)];
             [segmentButton setTitle:segmentStr forState:UIControlStateNormal];
             [segmentButton setTitleColor:Theme.colorText forState:UIControlStateSelected];
             [segmentButton setTitleColor:Theme.colorLightText forState:UIControlStateNormal];
@@ -60,7 +60,7 @@
             
             if (i == 0) {
                 segmentButton.selected = YES;
-                self.segmentLine.frame = CGRectMake(0, self.height-2, self.width/self.segmentsArray.count, 2);
+                self.segmentLine.frame = CGRectMake(0, self.pg_height-2, self.pg_width/self.segmentsArray.count, 2);
                 [self addSubview:self.segmentLine];
             }
         }
@@ -82,7 +82,7 @@
         
         PGWeakSelf(self)
         [UIView animateWithDuration:0.2f animations:^{
-            weakself.segmentLine.frame = CGRectMake(currentSelectedButton.x, weakself.segmentLine.y, weakself.segmentLine.width, weakself.segmentLine.height);
+            weakself.segmentLine.frame = CGRectMake(currentSelectedButton.pg_x, weakself.segmentLine.pg_y, weakself.segmentLine.pg_width, weakself.segmentLine.pg_height);
         }];
         
         if (self.delegate && [self.delegate respondsToSelector:@selector(segmentDidClicked:)]) {
@@ -93,7 +93,7 @@
 
 - (UIView *)segmentLine {
 	if(_segmentLine == nil) {
-		_segmentLine = [[UIView alloc] initWithFrame:CGRectMake(0, self.height-2, self.width/self.segmentsArray.count, 2)];
+		_segmentLine = [[UIView alloc] initWithFrame:CGRectMake(0, self.pg_height-2, self.pg_width/self.segmentsArray.count, 2)];
         _segmentLine.backgroundColor = Theme.colorExtraHighlight;
 	}
 	return _segmentLine;

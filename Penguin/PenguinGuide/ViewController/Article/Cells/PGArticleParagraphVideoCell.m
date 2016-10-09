@@ -32,14 +32,14 @@
 
 - (void)setCellWithImage:(NSString *)image
 {
-    self.videoImageView.frame = CGRectMake(0, 20, self.width, self.height-40);
+    self.videoImageView.frame = CGRectMake(0, 20, self.pg_width, self.pg_height-40);
     [self.videoImageView setWithImageURL:image placeholder:nil completion:nil];
 }
 
 - (UIImageView *)videoImageView
 {
     if (!_videoImageView) {
-        _videoImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 20, self.width, self.height-40)];
+        _videoImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 20, self.pg_width, self.pg_height-40)];
         _videoImageView.clipsToBounds = YES;
         _videoImageView.contentMode = UIViewContentModeScaleAspectFill;
     }

@@ -38,7 +38,7 @@
     [self addSubview:self.sexImageView];
     [self addSubview:self.locationLabel];
     
-    UIView *horizontalLine = [[UIView alloc] initWithFrame:CGRectMake(self.width/2-1/[UIScreen mainScreen].scale, self.nameLabel.bottom+11, 1/[UIScreen mainScreen].scale, 20)];
+    UIView *horizontalLine = [[UIView alloc] initWithFrame:CGRectMake(self.pg_width/2-1/[UIScreen mainScreen].scale, self.nameLabel.pg_bottom+11, 1/[UIScreen mainScreen].scale, 20)];
     horizontalLine.backgroundColor = Theme.colorText;
     [self addSubview:horizontalLine];
 }
@@ -62,7 +62,7 @@
 - (UIButton *)settingButton
 {
     if (!_settingButton) {
-        _settingButton = [[UIButton alloc] initWithFrame:CGRectMake(self.width-20-50, 30, 50, 50)];
+        _settingButton = [[UIButton alloc] initWithFrame:CGRectMake(self.pg_width-20-50, 30, 50, 50)];
         _settingButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentRight;
         _settingButton.contentVerticalAlignment = UIControlContentVerticalAlignmentTop;
         [_settingButton setImage:[UIImage imageNamed:@"pg_me_setting"] forState:UIControlStateNormal];
@@ -73,7 +73,7 @@
 - (UIButton *)avatarButton
 {
     if (!_avatarButton) {
-        _avatarButton = [[UIButton alloc] initWithFrame:CGRectMake(self.width/2-42, 55, 84, 84)];
+        _avatarButton = [[UIButton alloc] initWithFrame:CGRectMake(self.pg_width/2-42, 55, 84, 84)];
         _avatarButton.clipsToBounds = YES;
         _avatarButton.layer.cornerRadius = 42.f;
     }
@@ -83,7 +83,7 @@
 - (UILabel *)nameLabel
 {
     if (!_nameLabel) {
-        _nameLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, self.avatarButton.bottom+10, self.width, 22)];
+        _nameLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, self.avatarButton.pg_bottom+10, self.pg_width, 22)];
         _nameLabel.font = [UIFont systemFontOfSize:20.f];
         _nameLabel.textColor = Theme.colorText;
         _nameLabel.textAlignment = NSTextAlignmentCenter;
@@ -94,7 +94,7 @@
 - (UIImageView *)sexImageView
 {
     if (!_sexImageView) {
-        _sexImageView = [[UIImageView alloc] initWithFrame:CGRectMake(self.width/2-20-22, self.nameLabel.bottom+10, 22, 22)];
+        _sexImageView = [[UIImageView alloc] initWithFrame:CGRectMake(self.pg_width/2-20-22, self.nameLabel.pg_bottom+10, 22, 22)];
         _sexImageView.image = [UIImage imageNamed:@"pg_me_sex_male"];
     }
     return _sexImageView;
@@ -103,7 +103,7 @@
 - (UILabel *)locationLabel
 {
     if (!_locationLabel) {
-        _locationLabel = [[UILabel alloc] initWithFrame:CGRectMake(self.width/2+20, self.nameLabel.bottom+10, 100, 22)];
+        _locationLabel = [[UILabel alloc] initWithFrame:CGRectMake(self.pg_width/2+20, self.nameLabel.pg_bottom+10, 100, 22)];
         _locationLabel.font = Theme.fontSmallBold;
         _locationLabel.textColor = Theme.colorText;
     }

@@ -34,7 +34,7 @@
 - (PGLoginPhoneTextField *)phoneTextField
 {
     if (!_phoneTextField) {
-        _phoneTextField = [[PGLoginPhoneTextField alloc] initWithFrame:CGRectMake(22, self.logoView.bottom+18, self.frame.size.width-22*2, 46)];
+        _phoneTextField = [[PGLoginPhoneTextField alloc] initWithFrame:CGRectMake(22, self.logoView.pg_bottom+18, self.frame.size.width-22*2, 46)];
     }
     return _phoneTextField;
 }
@@ -42,7 +42,7 @@
 - (UIButton *)pwdLoginButton
 {
     if (!_pwdLoginButton) {
-        _pwdLoginButton = [[UIButton alloc] initWithFrame:CGRectMake(self.width/2-40, self.phoneTextField.bottom+18, 80, 40)];
+        _pwdLoginButton = [[UIButton alloc] initWithFrame:CGRectMake(self.pg_width/2-40, self.phoneTextField.pg_bottom+18, 80, 40)];
         [_pwdLoginButton setContentHorizontalAlignment:UIControlContentHorizontalAlignmentCenter];
         [_pwdLoginButton setContentVerticalAlignment:UIControlContentVerticalAlignmentTop];
         [_pwdLoginButton setTitle:@"密码登录" forState:UIControlStateNormal];
@@ -61,7 +61,7 @@
 - (PGSocialView *)socialView
 {
     if (!_socialView) {
-        _socialView = [[PGSocialView alloc] initWithFrame:CGRectMake(0, self.pwdLoginButton.bottom+28, self.width, 62)];
+        _socialView = [[PGSocialView alloc] initWithFrame:CGRectMake(0, self.pwdLoginButton.pg_bottom+28, self.pg_width, 62)];
     }
     return _socialView;
 }
@@ -70,9 +70,9 @@
 {
     if (!_nextButton) {
         if (DEVICE_IS_LESS_OR_EQUAL_TO_IPHONE_5) {
-            _nextButton = [[UIButton alloc] initWithFrame:CGRectMake(26, self.height-22-30, self.width-26*2, 30)];
+            _nextButton = [[UIButton alloc] initWithFrame:CGRectMake(26, self.pg_height-22-30, self.pg_width-26*2, 30)];
         } else {
-            _nextButton = [[UIButton alloc] initWithFrame:CGRectMake(26, self.height-22-45, self.width-26*2, 45)];
+            _nextButton = [[UIButton alloc] initWithFrame:CGRectMake(26, self.pg_height-22-45, self.pg_width-26*2, 45)];
         }
         [_nextButton setBackgroundColor:[UIColor blackColor]];
         [_nextButton setTitle:@"下 一 步" forState:UIControlStateNormal];

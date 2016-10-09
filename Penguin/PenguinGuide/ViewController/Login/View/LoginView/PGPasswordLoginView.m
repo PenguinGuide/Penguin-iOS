@@ -34,7 +34,7 @@
 - (PGLoginPhoneTextField *)phoneTextField
 {
     if (!_phoneTextField) {
-        _phoneTextField = [[PGLoginPhoneTextField alloc] initWithFrame:CGRectMake(22, self.logoView.bottom+18, self.width-22*2, 46)];
+        _phoneTextField = [[PGLoginPhoneTextField alloc] initWithFrame:CGRectMake(22, self.logoView.pg_bottom+18, self.pg_width-22*2, 46)];
     }
     return _phoneTextField;
 }
@@ -42,7 +42,7 @@
 - (PGLoginPasswordTextField *)pwdTextField
 {
     if (!_pwdTextField) {
-        _pwdTextField = [[PGLoginPasswordTextField alloc] initWithFrame:CGRectMake(22, self.phoneTextField.bottom+29, self.width-22*2, 46)];
+        _pwdTextField = [[PGLoginPasswordTextField alloc] initWithFrame:CGRectMake(22, self.phoneTextField.pg_bottom+29, self.pg_width-22*2, 46)];
     }
     return _pwdTextField;
 }
@@ -50,7 +50,7 @@
 - (UIButton *)forgotPwdButton
 {
     if (!_forgotPwdButton) {
-        _forgotPwdButton = [[UIButton alloc] initWithFrame:CGRectMake(self.width/2-40, self.pwdTextField.bottom+18, 80, 40)];
+        _forgotPwdButton = [[UIButton alloc] initWithFrame:CGRectMake(self.pg_width/2-40, self.pwdTextField.pg_bottom+18, 80, 40)];
         [_forgotPwdButton setContentHorizontalAlignment:UIControlContentHorizontalAlignmentCenter];
         [_forgotPwdButton setContentVerticalAlignment:UIControlContentVerticalAlignmentTop];
         [_forgotPwdButton setTitle:@"忘记密码" forState:UIControlStateNormal];
@@ -70,9 +70,9 @@
 {
     if (!_loginButton) {
         if (DEVICE_IS_LESS_OR_EQUAL_TO_IPHONE_5) {
-            _loginButton = [[UIButton alloc] initWithFrame:CGRectMake(26, self.height-22-30, self.width-26*2, 30)];
+            _loginButton = [[UIButton alloc] initWithFrame:CGRectMake(26, self.pg_height-22-30, self.pg_width-26*2, 30)];
         } else {
-            _loginButton = [[UIButton alloc] initWithFrame:CGRectMake(26, self.height-22-45, self.width-26*2, 45)];
+            _loginButton = [[UIButton alloc] initWithFrame:CGRectMake(26, self.pg_height-22-45, self.pg_width-26*2, 45)];
         }
         [_loginButton setBackgroundColor:[UIColor blackColor]];
         [_loginButton setTitle:@"登 录" forState:UIControlStateNormal];

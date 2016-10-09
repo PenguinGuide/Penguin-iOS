@@ -19,7 +19,6 @@ s.public_header_files = "*.h"
 s.source_files = "*.{h,m}"
 
 s.dependency "PGColor"
-s.dependency "Ono"
 s.dependency "hpple"
 
 end

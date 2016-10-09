@@ -41,10 +41,10 @@
 {
     [super setValue:value];
     
-    float minimumTrackValue = (self.width-self.currentThumbImage.size.width)*self.value;
+    float minimumTrackValue = (self.pg_width-self.currentThumbImage.size.width)*self.value;
     
-    self.minimumTrackLine.frame = CGRectMake(0, self.height/2-LineHeight/2, minimumTrackValue, LineHeight);
-    self.maximumTrackLine.frame = CGRectMake(self.minimumTrackLine.right+self.currentThumbImage.size.width, self.height/2-LineHeight/2, self.width-self.minimumTrackLine.right-self.currentThumbImage.size.width, LineHeight);
+    self.minimumTrackLine.frame = CGRectMake(0, self.pg_height/2-LineHeight/2, minimumTrackValue, LineHeight);
+    self.maximumTrackLine.frame = CGRectMake(self.minimumTrackLine.pg_right+self.currentThumbImage.size.width, self.pg_height/2-LineHeight/2, self.pg_width-self.minimumTrackLine.pg_right-self.currentThumbImage.size.width, LineHeight);
 }
 
 - (void)sliderValueChanged:(UISlider *)slider
@@ -53,16 +53,16 @@
         [self.delegate playerSliderValueChanged];
     }
     
-    float minimumTrackValue = (self.width-self.currentThumbImage.size.width)*slider.value;
+    float minimumTrackValue = (self.pg_width-self.currentThumbImage.size.width)*slider.value;
     
-    self.minimumTrackLine.frame = CGRectMake(0, self.height/2-LineHeight/2, minimumTrackValue, LineHeight);
-    self.maximumTrackLine.frame = CGRectMake(self.minimumTrackLine.right+self.currentThumbImage.size.width, self.height/2-LineHeight/2, self.width-self.minimumTrackLine.right-self.currentThumbImage.size.width, LineHeight);
+    self.minimumTrackLine.frame = CGRectMake(0, self.pg_height/2-LineHeight/2, minimumTrackValue, LineHeight);
+    self.maximumTrackLine.frame = CGRectMake(self.minimumTrackLine.pg_right+self.currentThumbImage.size.width, self.pg_height/2-LineHeight/2, self.pg_width-self.minimumTrackLine.pg_right-self.currentThumbImage.size.width, LineHeight);
 }
 
 - (UIView *)minimumTrackLine
 {
     if (!_minimumTrackLine) {
-        _minimumTrackLine = [[UIView alloc] initWithFrame:CGRectMake(0, self.height/2-LineHeight/2, 0, LineHeight)];
+        _minimumTrackLine = [[UIView alloc] initWithFrame:CGRectMake(0, self.pg_height/2-LineHeight/2, 0, LineHeight)];
         _minimumTrackLine.backgroundColor = [UIColor whiteColor];
     }
     return _minimumTrackLine;
@@ -71,7 +71,7 @@
 - (UIView *)maximumTrackLine
 {
     if (!_maximumTrackLine) {
-        _maximumTrackLine = [[UIView alloc] initWithFrame:CGRectMake(self.currentThumbImage.size.width, self.height/2-LineHeight/2, self.width-self.currentThumbImage.size.width, LineHeight)];
+        _maximumTrackLine = [[UIView alloc] initWithFrame:CGRectMake(self.currentThumbImage.size.width, self.pg_height/2-LineHeight/2, self.pg_width-self.currentThumbImage.size.width, LineHeight)];
         _maximumTrackLine.backgroundColor = [UIColor colorWithHexString:@"E1E1E1"];
     }
     return _maximumTrackLine;

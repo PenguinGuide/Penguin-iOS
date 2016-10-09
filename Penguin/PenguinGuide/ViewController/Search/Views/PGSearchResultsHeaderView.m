@@ -94,7 +94,7 @@
 
 - (PGSegmentView *)segmentView {
 	if(_segmentView == nil) {
-		_segmentView = [[PGSegmentView alloc] initWithFrame:CGRectMake(0, self.searchTextField.bottom, UISCREEN_WIDTH, self.height-self.searchTextField.bottom)];
+		_segmentView = [[PGSegmentView alloc] initWithFrame:CGRectMake(0, self.searchTextField.pg_bottom, UISCREEN_WIDTH, self.pg_height-self.searchTextField.pg_bottom)];
         _segmentView.delegate = self;
 	}
 	return _segmentView;

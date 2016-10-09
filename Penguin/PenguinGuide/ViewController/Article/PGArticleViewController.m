@@ -111,13 +111,13 @@
                 
                 [weakself.articleCollectionView reloadData];
                 
-                weakself.articleCollectionView.frame = CGRectMake(0, UISCREEN_HEIGHT-300, weakself.articleCollectionView.width, self.articleCollectionView.height);
+                weakself.articleCollectionView.frame = CGRectMake(0, UISCREEN_HEIGHT-300, weakself.articleCollectionView.pg_width, self.articleCollectionView.pg_height);
                 weakself.articleCollectionView.alpha = 0.f;
                 [UIView animateWithDuration:0.3f
                                       delay:0.f
                                     options:UIViewAnimationOptionCurveEaseOut
                                  animations:^{
-                                     weakself.articleCollectionView.frame = CGRectMake(0, 0, weakself.articleCollectionView.width, weakself.articleCollectionView.height);
+                                     weakself.articleCollectionView.frame = CGRectMake(0, 0, weakself.articleCollectionView.pg_width, weakself.articleCollectionView.pg_height);
                                      weakself.articleCollectionView.alpha = 0.4f;
                                  } completion:^(BOOL finished) {
                                      weakself.articleCollectionView.alpha = 1.f;
@@ -473,7 +473,7 @@
     
     PGWeakSelf(self);
     [UIView animateWithDuration:animationDuration animations:^{
-        weakself.commentInputAccessoryView.frame = CGRectMake(weakself.commentInputAccessoryView.x, endFrame.origin.y-44, weakself.commentInputAccessoryView.width, weakself.commentInputAccessoryView.height);
+        weakself.commentInputAccessoryView.frame = CGRectMake(weakself.commentInputAccessoryView.pg_x, endFrame.origin.y-44, weakself.commentInputAccessoryView.pg_width, weakself.commentInputAccessoryView.pg_height);
         [weakself.commentInputAccessoryView.commentTextView becomeFirstResponder];
     }];
 }
@@ -547,15 +547,15 @@
         [self.likeButton setImage:[UIImage imageNamed:@"pg_article_like"] forState:UIControlStateNormal];
         [_toolbar addSubview:self.likeButton];
         
-        self.commentButton = [[UIButton alloc] initWithFrame:CGRectMake(self.likeButton.left-44, 0, 44, 44)];
+        self.commentButton = [[UIButton alloc] initWithFrame:CGRectMake(self.likeButton.pg_left-44, 0, 44, 44)];
         [self.commentButton setImage:[UIImage imageNamed:@"pg_article_comment"] forState:UIControlStateNormal];
         [_toolbar addSubview:self.commentButton];
         
-        self.collectButton = [[UIButton alloc] initWithFrame:CGRectMake(self.commentButton.left-44, 0, 44, 44)];
+        self.collectButton = [[UIButton alloc] initWithFrame:CGRectMake(self.commentButton.pg_left-44, 0, 44, 44)];
         [self.collectButton setImage:[UIImage imageNamed:@"pg_article_collect"] forState:UIControlStateNormal];
         [_toolbar addSubview:self.collectButton];
         
-        self.shareButton = [[UIButton alloc] initWithFrame:CGRectMake(self.collectButton.left-44, 0, 44, 44)];
+        self.shareButton = [[UIButton alloc] initWithFrame:CGRectMake(self.collectButton.pg_left-44, 0, 44, 44)];
         [self.shareButton setImage:[UIImage imageNamed:@"pg_article_share"] forState:UIControlStateNormal];
         [_toolbar addSubview:self.shareButton];
     }

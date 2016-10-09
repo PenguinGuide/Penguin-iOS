@@ -46,18 +46,18 @@ static NSString *TagCell = @"TagCell";
     [self.contentView addSubview:self.channelImageView];
     [self.contentView addSubview:self.channelLabel];
     
-    UIView *dateHorizontalLine = [[UIView alloc] initWithFrame:CGRectMake(30, self.dayLabel.bottom, 30, 1/[UIScreen mainScreen].scale)];
+    UIView *dateHorizontalLine = [[UIView alloc] initWithFrame:CGRectMake(30, self.dayLabel.pg_bottom, 30, 1/[UIScreen mainScreen].scale)];
     dateHorizontalLine.backgroundColor = [UIColor colorWithHexString:@"282527"];
     [self.contentView addSubview:dateHorizontalLine];
     
-    UIView *dateVerticalLine = [[UIView alloc] initWithFrame:CGRectMake(self.dayLabel.right+9, 20, 2, 30)];
+    UIView *dateVerticalLine = [[UIView alloc] initWithFrame:CGRectMake(self.dayLabel.pg_right+9, 20, 2, 30)];
     dateVerticalLine.backgroundColor = Theme.colorText;
     [self.contentView addSubview:dateVerticalLine];
     
     [self.contentView addSubview:self.titleLabel];
     [self.contentView addSubview:self.subtitleLabel];
     
-    UIView *titleHorizontalLine = [[UIView alloc] initWithFrame:CGRectMake(30, self.subtitleLabel.bottom+15, 40, 1/[UIScreen mainScreen].scale)];
+    UIView *titleHorizontalLine = [[UIView alloc] initWithFrame:CGRectMake(30, self.subtitleLabel.pg_bottom+15, 40, 1/[UIScreen mainScreen].scale)];
     titleHorizontalLine.backgroundColor = Theme.colorText;
     [self.contentView addSubview:titleHorizontalLine];
     
@@ -88,9 +88,9 @@ static NSString *TagCell = @"TagCell";
         self.descLabel.text = article.desc;
         
         if (article.tagsArray.count > 0) {
-            self.tagsCollectionView.height = 20.f;
+            self.tagsCollectionView.pg_height = 20.f;
         } else {
-            self.tagsCollectionView.height = 0.f;
+            self.tagsCollectionView.pg_height = 0.f;
         }
         [self.tagsCollectionView reloadData];
     }
@@ -171,7 +171,7 @@ static NSString *TagCell = @"TagCell";
 - (UILabel *)monthLabel
 {
     if (!_monthLabel) {
-        _monthLabel = [[UILabel alloc] initWithFrame:CGRectMake(30, self.dayLabel.bottom+1/[UIScreen mainScreen].scale, 30, 8)];
+        _monthLabel = [[UILabel alloc] initWithFrame:CGRectMake(30, self.dayLabel.pg_bottom+1/[UIScreen mainScreen].scale, 30, 8)];
         _monthLabel.font = [UIFont boldSystemFontOfSize:8.f];
         _monthLabel.textAlignment = NSTextAlignmentCenter;
         _monthLabel.textColor = [UIColor colorWithHexString:@"282527"];
@@ -182,7 +182,7 @@ static NSString *TagCell = @"TagCell";
 - (UIImageView *)channelImageView
 {
     if (!_channelImageView) {
-        _channelImageView = [[UIImageView alloc] initWithFrame:CGRectMake(self.dayLabel.right+20, 20, 28, 28)];
+        _channelImageView = [[UIImageView alloc] initWithFrame:CGRectMake(self.dayLabel.pg_right+20, 20, 28, 28)];
     }
     return _channelImageView;
 }
@@ -190,7 +190,7 @@ static NSString *TagCell = @"TagCell";
 - (UILabel *)channelLabel
 {
     if (!_channelLabel) {
-        _channelLabel = [[UILabel alloc] initWithFrame:CGRectMake(self.channelImageView.right+5, 20, 100, 28)];
+        _channelLabel = [[UILabel alloc] initWithFrame:CGRectMake(self.channelImageView.pg_right+5, 20, 100, 28)];
         _channelLabel.font = Theme.fontLargeBold;
         _channelLabel.textColor = Theme.colorText;
     }
@@ -200,7 +200,7 @@ static NSString *TagCell = @"TagCell";
 - (UILabel *)titleLabel
 {
     if (!_titleLabel) {
-        _titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(30, self.channelImageView.bottom+20, UISCREEN_WIDTH-60, 28)];
+        _titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(30, self.channelImageView.pg_bottom+20, UISCREEN_WIDTH-60, 28)];
         _titleLabel.font = [UIFont systemFontOfSize:26.f weight:UIFontWeightRegular];
         _titleLabel.textColor = Theme.colorText;
     }
@@ -210,7 +210,7 @@ static NSString *TagCell = @"TagCell";
 - (UILabel *)subtitleLabel
 {
     if (!_subtitleLabel) {
-        _subtitleLabel = [[UILabel alloc] initWithFrame:CGRectMake(30, self.titleLabel.bottom+10, UISCREEN_WIDTH-60, 28)];
+        _subtitleLabel = [[UILabel alloc] initWithFrame:CGRectMake(30, self.titleLabel.pg_bottom+10, UISCREEN_WIDTH-60, 28)];
         _subtitleLabel.font = [UIFont systemFontOfSize:26.f weight:UIFontWeightRegular];
         _subtitleLabel.textColor = Theme.colorText;
     }
@@ -220,7 +220,7 @@ static NSString *TagCell = @"TagCell";
 - (UILabel *)authorLabel
 {
     if (!_authorLabel) {
-        _authorLabel = [[UILabel alloc] initWithFrame:CGRectMake(30, self.subtitleLabel.bottom+30, UISCREEN_WIDTH-60, 12)];
+        _authorLabel = [[UILabel alloc] initWithFrame:CGRectMake(30, self.subtitleLabel.pg_bottom+30, UISCREEN_WIDTH-60, 12)];
         _authorLabel.font = Theme.fontExtraSmallBold;
         _authorLabel.textColor = Theme.colorText;
     }
@@ -230,7 +230,7 @@ static NSString *TagCell = @"TagCell";
 - (UILabel *)designerLabel
 {
     if (!_designerLabel) {
-        _designerLabel = [[UILabel alloc] initWithFrame:CGRectMake(30, self.authorLabel.bottom+10, UISCREEN_WIDTH-60, 12)];
+        _designerLabel = [[UILabel alloc] initWithFrame:CGRectMake(30, self.authorLabel.pg_bottom+10, UISCREEN_WIDTH-60, 12)];
         _designerLabel.font = Theme.fontExtraSmallBold;
         _designerLabel.textColor = Theme.colorText;
     }
@@ -240,7 +240,7 @@ static NSString *TagCell = @"TagCell";
 - (UILabel *)descLabel
 {
     if (!_descLabel) {
-        _descLabel = [[UILabel alloc] initWithFrame:CGRectMake(30, self.designerLabel.bottom+10, UISCREEN_WIDTH-60, 12)];
+        _descLabel = [[UILabel alloc] initWithFrame:CGRectMake(30, self.designerLabel.pg_bottom+10, UISCREEN_WIDTH-60, 12)];
         _descLabel.font = Theme.fontExtraSmallBold;
         _descLabel.textColor = Theme.colorText;
     }
@@ -252,7 +252,7 @@ static NSString *TagCell = @"TagCell";
     if (!_tagsCollectionView) {
         UICollectionViewFlowLayout *layout = [UICollectionViewFlowLayout new];
         layout.scrollDirection = UICollectionViewScrollDirectionHorizontal;
-        _tagsCollectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(0, self.descLabel.bottom+20, UISCREEN_WIDTH, 20) collectionViewLayout:layout];
+        _tagsCollectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(0, self.descLabel.pg_bottom+20, UISCREEN_WIDTH, 20) collectionViewLayout:layout];
         _tagsCollectionView.dataSource = self;
         _tagsCollectionView.delegate = self;
         _tagsCollectionView.backgroundColor = [UIColor whiteColor];

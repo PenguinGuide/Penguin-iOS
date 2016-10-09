@@ -32,11 +32,11 @@
     [self.contentView addSubview:self.iconImageView];
     [self.contentView addSubview:self.nameLabel];
     
-    UIImageView *indicatorImageView = [[UIImageView alloc] initWithFrame:CGRectMake(self.width-40-8, (self.height-9)/2, 8, 9)];
+    UIImageView *indicatorImageView = [[UIImageView alloc] initWithFrame:CGRectMake(self.pg_width-40-8, (self.pg_height-9)/2, 8, 9)];
     indicatorImageView.image = [UIImage imageNamed:@"pg_me_cell_indicator"];
     [self.contentView addSubview:indicatorImageView];
     
-    UIView *horizontalLine = [[UIView alloc] initWithFrame:CGRectMake(27, self.height-1/[UIScreen mainScreen].scale, self.width-27-40, 1/[UIScreen mainScreen].scale)];
+    UIView *horizontalLine = [[UIView alloc] initWithFrame:CGRectMake(27, self.pg_height-1/[UIScreen mainScreen].scale, self.pg_width-27-40, 1/[UIScreen mainScreen].scale)];
     horizontalLine.backgroundColor = [UIColor colorWithHexString:@"E1E1E1"];
     [self.contentView addSubview:horizontalLine];
     
@@ -58,7 +58,7 @@
 - (UIImageView *)iconImageView
 {
     if (!_iconImageView) {
-        _iconImageView = [[UIImageView alloc] initWithFrame:CGRectMake(50, (self.height-30)/2, 29, 30)];
+        _iconImageView = [[UIImageView alloc] initWithFrame:CGRectMake(50, (self.pg_height-30)/2, 29, 30)];
     }
     return _iconImageView;
 }
@@ -66,7 +66,7 @@
 - (UILabel *)nameLabel
 {
     if (!_nameLabel) {
-        _nameLabel = [[UILabel alloc] initWithFrame:CGRectMake(self.iconImageView.right+20, (self.height-16)/2, 100, 16)];
+        _nameLabel = [[UILabel alloc] initWithFrame:CGRectMake(self.iconImageView.pg_right+20, (self.pg_height-16)/2, 100, 16)];
         _nameLabel.font = Theme.fontMediumBold;
         _nameLabel.textColor = Theme.colorText;
     }
@@ -76,7 +76,7 @@
 - (UILabel *)numberLabel
 {
     if (!_numberLabel) {
-        _numberLabel = [[UILabel alloc] initWithFrame:CGRectMake(self.width-68-30, (self.height-30)/2, 30, 30)];
+        _numberLabel = [[UILabel alloc] initWithFrame:CGRectMake(self.pg_width-68-30, (self.pg_height-30)/2, 30, 30)];
         _numberLabel.font = Theme.fontMediumBold;
         _numberLabel.textColor = Theme.colorText;
     }

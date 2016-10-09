@@ -30,7 +30,7 @@
 - (PGLoginPasswordTextField *)pwdTextField
 {
     if (!_pwdTextField) {
-        _pwdTextField = [[PGLoginPasswordTextField alloc] initWithFrame:CGRectMake(22, self.logoView.bottom+18, self.width-22*2, 46)];
+        _pwdTextField = [[PGLoginPasswordTextField alloc] initWithFrame:CGRectMake(22, self.logoView.pg_bottom+18, self.pg_width-22*2, 46)];
     }
     return _pwdTextField;
 }
@@ -39,9 +39,9 @@
 {
     if (!_updatePwdButton) {
         if (DEVICE_IS_LESS_OR_EQUAL_TO_IPHONE_5) {
-            _updatePwdButton = [[UIButton alloc] initWithFrame:CGRectMake(26, self.height-22-30, self.width-26*2, 30)];
+            _updatePwdButton = [[UIButton alloc] initWithFrame:CGRectMake(26, self.pg_height-22-30, self.pg_width-26*2, 30)];
         } else {
-            _updatePwdButton = [[UIButton alloc] initWithFrame:CGRectMake(26, self.height-22-45, self.width-26*2, 45)];
+            _updatePwdButton = [[UIButton alloc] initWithFrame:CGRectMake(26, self.pg_height-22-45, self.pg_width-26*2, 45)];
         }
         [_updatePwdButton setBackgroundColor:[UIColor blackColor]];
         [_updatePwdButton setTitle:@"保 存 新 密 码" forState:UIControlStateNormal];

@@ -45,7 +45,7 @@
 {
     NSString *title = [NSString stringWithFormat:@"￥%@  %@", good.discountPrice, good.name];
     CGSize titleSize = [title sizeWithAttributes:@{NSFontAttributeName:Theme.fontMediumBold}];
-    self.titleButton.width = titleSize.width+25;
+    self.titleButton.pg_width = titleSize.width+25;
     
     [self.titleButton setTitle:[NSString stringWithFormat:@"￥%@  %@", good.discountPrice, good.name] forState:UIControlStateNormal];
     [self.descLabel setText:good.desc];
@@ -142,7 +142,7 @@
 
 - (UILabel *)descLabel {
 	if(_descLabel == nil) {
-		_descLabel = [[UILabel alloc] initWithFrame:CGRectMake(20, self.titleButton.bottom+20, self.width/2-40, 18)];
+		_descLabel = [[UILabel alloc] initWithFrame:CGRectMake(20, self.titleButton.pg_bottom+20, self.pg_width/2-40, 18)];
         _descLabel.textColor = Theme.colorText;
         _descLabel.font = Theme.fontLargeBold;
 	}
@@ -151,14 +151,14 @@
 
 - (UILabel *)countdownLabel {
 	if(_countdownLabel == nil) {
-		_countdownLabel = [[UILabel alloc] initWithFrame:CGRectMake(20, self.descLabel.bottom+5, self.width/2-40, 20)];
+		_countdownLabel = [[UILabel alloc] initWithFrame:CGRectMake(20, self.descLabel.pg_bottom+5, self.pg_width/2-40, 20)];
 	}
 	return _countdownLabel;
 }
 
 - (UILabel *)priceLabel {
 	if(_priceLabel == nil) {
-		_priceLabel = [[UILabel alloc] initWithFrame:CGRectMake(20, self.countdownLabel.bottom+10, self.width/2-40, 14)];
+		_priceLabel = [[UILabel alloc] initWithFrame:CGRectMake(20, self.countdownLabel.pg_bottom+10, self.pg_width/2-40, 14)];
         _priceLabel.textColor = Theme.colorLightText;
         _priceLabel.font = Theme.fontSmallBold;
 	}
@@ -167,7 +167,7 @@
 
 - (UIImageView *)goodImageView {
 	if(_goodImageView == nil) {
-		_goodImageView = [[UIImageView alloc] initWithFrame:CGRectMake(self.width/2, 0, self.width/2, self.height)];
+		_goodImageView = [[UIImageView alloc] initWithFrame:CGRectMake(self.pg_width/2, 0, self.pg_width/2, self.pg_height)];
         _goodImageView.contentMode = UIViewContentModeScaleAspectFill;
         _goodImageView.clipsToBounds = YES;
         _goodImageView.backgroundColor = Theme.colorText;

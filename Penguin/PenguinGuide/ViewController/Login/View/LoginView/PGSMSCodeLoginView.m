@@ -32,7 +32,7 @@
 - (PGLoginPhoneTextField *)phoneTextField
 {
     if (!_phoneTextField) {
-        _phoneTextField = [[PGLoginPhoneTextField alloc] initWithFrame:CGRectMake(22, self.logoView.bottom+18, self.width-22*2, 46)];
+        _phoneTextField = [[PGLoginPhoneTextField alloc] initWithFrame:CGRectMake(22, self.logoView.pg_bottom+18, self.pg_width-22*2, 46)];
         _phoneTextField.userInteractionEnabled = NO;
     }
     return _phoneTextField;
@@ -41,7 +41,7 @@
 - (PGLoginSMSCodeTextField *)smsCodeTextField
 {
     if (!_smsCodeTextField) {
-        _smsCodeTextField = [[PGLoginSMSCodeTextField alloc] initWithFrame:CGRectMake(22, self.phoneTextField.bottom+29, self.width-22*2, 46)];
+        _smsCodeTextField = [[PGLoginSMSCodeTextField alloc] initWithFrame:CGRectMake(22, self.phoneTextField.pg_bottom+29, self.pg_width-22*2, 46)];
     }
     return _smsCodeTextField;
 }
@@ -50,9 +50,9 @@
 {
     if (!_loginButton) {
         if (DEVICE_IS_LESS_OR_EQUAL_TO_IPHONE_5) {
-            _loginButton = [[UIButton alloc] initWithFrame:CGRectMake(26, self.height-22-30, self.width-26*2, 30)];
+            _loginButton = [[UIButton alloc] initWithFrame:CGRectMake(26, self.pg_height-22-30, self.pg_width-26*2, 30)];
         } else {
-            _loginButton = [[UIButton alloc] initWithFrame:CGRectMake(26, self.height-22-45, self.width-26*2, 45)];
+            _loginButton = [[UIButton alloc] initWithFrame:CGRectMake(26, self.pg_height-22-45, self.pg_width-26*2, 45)];
         }
         [_loginButton setBackgroundColor:[UIColor blackColor]];
         [_loginButton setTitle:@"登 录" forState:UIControlStateNormal];

@@ -3,6 +3,9 @@
 # Uncomment this line if you're using Swift
 # use_frameworks!
 
+source 'https://github.com/CocoaPods/Specs.git'
+source 'http://repo.baichuan-ios.taobao.com/baichuanSDK/AliBCSpecs.git'
+
 target 'PenguinGuide' do
     
     #business framework
@@ -41,6 +44,8 @@ target 'PenguinGuide' do
     pod 'Masonry', :inhibit_warnings => true
     pod 'MBProgressHUD', :inhibit_warnings => true
     pod 'MSWeakTimer', :inhibit_warnings => true
+    
+    pod 'AlibcTradeSDK'
     
     #fabric
     pod 'Fabric'

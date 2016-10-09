@@ -38,7 +38,7 @@
     [self.contentView addSubview:self.readsCountButton];
     [self.contentView addSubview:self.commentsCountButton];
     
-    UIImageView *maskImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, self.width, self.height)];
+    UIImageView *maskImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, self.pg_width, self.pg_height)];
     maskImageView.image = [[UIImage imageNamed:@"pg_white_corner_mask"] resizableImageWithCapInsets:UIEdgeInsetsMake(4, 4, 4, 4) resizingMode:UIImageResizingModeStretch];
     [self.contentView addSubview:maskImageView];
 }
@@ -48,10 +48,10 @@
     [self.bannerImageView setWithImageURL:article.image placeholder:nil completion:nil];
     [self.titleLabel setText:[NSString stringWithFormat:@"- %@ -", article.title]];
     
-    self.readsCountButton.frame = CGRectMake(self.width/2-60, self.titleLabel.bottom+10, 12+16+[self labelWidth:article.likesCount], 26);
+    self.readsCountButton.frame = CGRectMake(self.pg_width/2-60, self.titleLabel.pg_bottom+10, 12+16+[self labelWidth:article.likesCount], 26);
     [self.readsCountButton setTitle:article.likesCount forState:UIControlStateNormal];
     
-    self.commentsCountButton.frame = CGRectMake(self.width/2, self.titleLabel.bottom+10, 12+16+[self labelWidth:article.commentsCount], 26);
+    self.commentsCountButton.frame = CGRectMake(self.pg_width/2, self.titleLabel.pg_bottom+10, 12+16+[self labelWidth:article.commentsCount], 26);
     [self.commentsCountButton setTitle:article.commentsCount forState:UIControlStateNormal];
 }
 
@@ -74,7 +74,7 @@
 
 - (UILabel *)titleLabel {
 	if(_titleLabel == nil) {
-		_titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, self.bannerImageView.bottom+10, UISCREEN_WIDTH-20, 14)];
+		_titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, self.bannerImageView.pg_bottom+10, UISCREEN_WIDTH-20, 14)];
         _titleLabel.font = Theme.fontMediumBold;
         _titleLabel.textColor = Theme.colorText;
         _titleLabel.textAlignment = NSTextAlignmentCenter;
@@ -92,7 +92,7 @@
 
 - (UIView *)readsCountButton {
     if(_readsCountButton == nil) {
-        _readsCountButton = [[UIButton alloc] initWithFrame:CGRectMake(self.width/2-60, self.titleLabel.bottom+10, 12+16+[self labelWidth:@"0"], 26)];
+        _readsCountButton = [[UIButton alloc] initWithFrame:CGRectMake(self.pg_width/2-60, self.titleLabel.pg_bottom+10, 12+16+[self labelWidth:@"0"], 26)];
         _readsCountButton.backgroundColor = [UIColor whiteColor];
         [_readsCountButton.titleLabel setFont:Theme.fontExtraSmallBold];
         [_readsCountButton setTitleColor:Theme.colorHighlight forState:UIControlStateNormal];
@@ -108,7 +108,7 @@
 
 - (UIView *)commentsCountButton {
     if(_commentsCountButton == nil) {
-        _commentsCountButton = [[UIButton alloc] initWithFrame:CGRectMake(self.width/2, self.titleLabel.bottom+10, 12+16+[self labelWidth:@"0"], 26)];
+        _commentsCountButton = [[UIButton alloc] initWithFrame:CGRectMake(self.pg_width/2, self.titleLabel.pg_bottom+10, 12+16+[self labelWidth:@"0"], 26)];
         _commentsCountButton.backgroundColor = [UIColor whiteColor];
         [_commentsCountButton.titleLabel setFont:Theme.fontExtraSmallBold];
         [_commentsCountButton setTitleColor:Theme.colorHighlight forState:UIControlStateNormal];

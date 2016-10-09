@@ -60,7 +60,7 @@
                                                     options:NSStringDrawingUsesLineFragmentOrigin
                                                  attributes:@{NSFontAttributeName:Theme.fontSmall, NSParagraphStyleAttributeName:paragraphStyle}
                                                     context:nil].size;
-    self.commentLabel.height = textSize.height+5;
+    self.commentLabel.pg_height = textSize.height+5;
 }
 
 - (void)selectLabel
@@ -123,7 +123,7 @@
 - (UILabel *)nameLabel
 {
     if (!_nameLabel) {
-        _nameLabel = [[UILabel alloc] initWithFrame:CGRectMake(self.avatarImageView.right+12, 4, 150, 16)];
+        _nameLabel = [[UILabel alloc] initWithFrame:CGRectMake(self.avatarImageView.pg_right+12, 4, 150, 16)];
         _nameLabel.font = Theme.fontMedium;
         _nameLabel.textColor = Theme.colorText;
     }
@@ -133,7 +133,7 @@
 - (UILabel *)timeLabel
 {
     if (!_timeLabel) {
-        _timeLabel = [[UILabel alloc] initWithFrame:CGRectMake(self.avatarImageView.right+12, self.nameLabel.bottom+3, 100, 14)];
+        _timeLabel = [[UILabel alloc] initWithFrame:CGRectMake(self.avatarImageView.pg_right+12, self.nameLabel.pg_bottom+3, 100, 14)];
         _timeLabel.font = Theme.fontSmall;
         _timeLabel.textColor = Theme.colorLightText;
     }
@@ -151,7 +151,7 @@
 - (UIButton *)moreButton
 {
     if (!_moreButton) {
-        _moreButton = [[UIButton alloc] initWithFrame:CGRectMake(self.width-30-20, 10, 20, 20)];
+        _moreButton = [[UIButton alloc] initWithFrame:CGRectMake(self.pg_width-30-20, 10, 20, 20)];
         [_moreButton setImage:[UIImage imageNamed:@"pg_article_comment_more"] forState:UIControlStateNormal];
         [_moreButton addTarget:self action:@selector(moreButtonClicked) forControlEvents:UIControlEventTouchUpInside];
     }
@@ -161,7 +161,7 @@
 - (UILabel *)commentLabel
 {
     if (!_commentLabel) {
-        _commentLabel = [[UILabel alloc] initWithFrame:CGRectMake(26, self.avatarImageView.bottom+15, self.width-52, 0)];
+        _commentLabel = [[UILabel alloc] initWithFrame:CGRectMake(26, self.avatarImageView.pg_bottom+15, self.pg_width-52, 0)];
         _commentLabel.numberOfLines = 0;
         _commentLabel.font = Theme.fontSmall;
         _commentLabel.textColor = Theme.colorText;

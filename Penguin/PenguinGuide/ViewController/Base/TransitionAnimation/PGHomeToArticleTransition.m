@@ -45,11 +45,11 @@
     }
     
     __block UIImageView *bottomScreenshotView = nil;
-    CGFloat bottomScreenshotHeight = homeVC.feedsCollectionView.height-topScreenshotRect.size.height;
+    CGFloat bottomScreenshotHeight = homeVC.feedsCollectionView.pg_height-topScreenshotRect.size.height;
     if (bottomScreenshotHeight > 0.f) {
-        CGRect bottomScreenshotRect = CGRectMake(0, topScreenshotRect.size.height, topScreenshotRect.size.width, homeVC.feedsCollectionView.height-topScreenshotRect.size.height);
+        CGRect bottomScreenshotRect = CGRectMake(0, topScreenshotRect.size.height, topScreenshotRect.size.width, homeVC.feedsCollectionView.pg_height-topScreenshotRect.size.height);
         UIImage *bottomScreenshot = [homeVC.feedsCollectionView screenshotFromRect:bottomScreenshotRect];
-        bottomScreenshotView = [[UIImageView alloc] initWithFrame:CGRectMake(0, topScreenshotView.bottom, bottomScreenshot.size.width, bottomScreenshot.size.height)];
+        bottomScreenshotView = [[UIImageView alloc] initWithFrame:CGRectMake(0, topScreenshotView.pg_bottom, bottomScreenshot.size.width, bottomScreenshot.size.height)];
         bottomScreenshotView.image = bottomScreenshot;
     }
     
@@ -66,9 +66,9 @@
     [UIView animateWithDuration:[self transitionDuration:transitionContext]
                      animations:^{
                          CGRect frame = [containerView convertRect:articleVC.headerImageView.frame fromView:articleVC.headerImageView.superview];
-                         topScreenshotView.frame = CGRectMake(frame.origin.x, -(topScreenshotView.height-frame.size.height), topScreenshotView.width, topScreenshotView.height);
+                         topScreenshotView.frame = CGRectMake(frame.origin.x, -(topScreenshotView.pg_height-frame.size.height), topScreenshotView.pg_width, topScreenshotView.pg_height);
                          if (bottomScreenshotView) {
-                             bottomScreenshotView.frame = CGRectMake(bottomScreenshotView.x, UISCREEN_HEIGHT, bottomScreenshotView.width, bottomScreenshotView.height);
+                             bottomScreenshotView.frame = CGRectMake(bottomScreenshotView.pg_x, UISCREEN_HEIGHT, bottomScreenshotView.pg_width, bottomScreenshotView.pg_height);
                          }
                          articleVC.view.alpha = 1.f;
                      } completion:^(BOOL finished) {

@@ -82,7 +82,7 @@
 
 - (UIEdgeInsets)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout insetForSectionAtIndex:(NSInteger)section
 {
-    return UIEdgeInsetsMake((self.height-45)/2, 8, (self.height-45)/2, 8);
+    return UIEdgeInsetsMake((self.pg_height-45)/2, 8, (self.pg_height-45)/2, 8);
 }
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
@@ -107,7 +107,7 @@
         layout.scrollDirection = UICollectionViewScrollDirectionHorizontal;
         layout.minimumLineSpacing = 5.f;
         layout.minimumInteritemSpacing = 0.f;
-		_categoriesCollectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(0, 0, self.width, self.height) collectionViewLayout:layout];
+		_categoriesCollectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(0, 0, self.pg_width, self.pg_height) collectionViewLayout:layout];
         _categoriesCollectionView.dataSource = self;
         _categoriesCollectionView.delegate = self;
         _categoriesCollectionView.backgroundColor = Theme.colorBackground;
