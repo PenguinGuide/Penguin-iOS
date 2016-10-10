@@ -9,7 +9,15 @@
 #import <UIKit/UIKit.h>
 #import "PGArticle.h"
 
+@protocol PGArticleParagraphInfoCellDelegate <NSObject>
+
+- (void)tagDidSelect:(PGTag *)tag;
+
+@end
+
 @interface PGArticleParagraphInfoCell : UICollectionViewCell
+
+@property (nonatomic, weak) id<PGArticleParagraphInfoCellDelegate> delegate;
 
 - (void)setCellWithArticle:(PGArticle *)article;
 + (CGSize)cellSize:(PGArticle *)article;

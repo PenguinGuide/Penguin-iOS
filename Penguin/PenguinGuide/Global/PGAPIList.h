@@ -35,4 +35,6 @@
 
 #define PG_Home_Feeds                   @"/api/v1/feeds/home"
 
+#define PG_Tag                          @"/api/v1/tag/:tagId"
+
 #endif /* PGAPIList_h */

@@ -10,4 +10,6 @@
 
 @interface PGTagViewController : PGBaseViewController
 
+- (id)initWithTagId:(NSString *)tagId;
+
 @end

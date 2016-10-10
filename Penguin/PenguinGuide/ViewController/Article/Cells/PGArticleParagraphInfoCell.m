@@ -155,6 +155,13 @@ static NSString *TagCell = @"TagCell";
     return 0.f;
 }
 
+- (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    if (self.delegate && [self.delegate respondsToSelector:@selector(tagDidSelect:)]) {
+        [self.delegate tagDidSelect:self.article.tagsArray[indexPath.item]];
+    }
+}
+
 #pragma mark - <Setters && Getters>
 
 - (UILabel *)dayLabel

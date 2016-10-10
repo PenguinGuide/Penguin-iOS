@@ -42,7 +42,7 @@
 #import "PGArticle.h"
 #import "PGStringParser.h"
 
-@interface PGArticleViewController () <UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, UIScrollViewDelegate, PGArticleCommentCellDelegate, PGArticleCommentReplyCellDelegate, PGCommentInputAccessoryViewDelegate>
+@interface PGArticleViewController () <UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, UIScrollViewDelegate, PGArticleCommentCellDelegate, PGArticleCommentReplyCellDelegate, PGCommentInputAccessoryViewDelegate, PGArticleParagraphInfoCellDelegate>
 
 @property (nonatomic, strong, readwrite) PGBaseCollectionView *articleCollectionView;
 
@@ -205,6 +205,7 @@
     if (indexPath.section == 0) {
         if (indexPath.item == 0) {
             PGArticleParagraphInfoCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:ArticleParagraphInfoCell forIndexPath:indexPath];
+            cell.delegate = self;
             
             [cell setCellWithArticle:self.viewModel.article];
             
@@ -415,6 +416,13 @@
             }
         }
     });
+}
+
+#pragma mark - <PGArticleParagraphInfoCellDelegate>
+
+- (void)tagDidSelect:(PGTag *)tag
+{
+    [[PGRouter sharedInstance] openURL:tag.link];
 }
 
 #pragma mark - <PGArticleCommentCellDelegate>

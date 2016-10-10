@@ -25,7 +25,11 @@ static NSString *const AppKey = @"23465992";
         NSLog(@"AlibcSDK init failed: %@", [error description]);
     }];
     
+#ifdef DEBUG
     [[AlibcTradeSDK sharedInstance] setDebugLogOpen:YES];
+#else
+    [[AlibcTradeSDK sharedInstance] setDebugLogOpen:NO];
+#endif
 }
 
 + (BOOL)handleOpenURL:(NSURL *)url
