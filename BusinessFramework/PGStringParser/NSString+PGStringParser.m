@@ -33,21 +33,6 @@
     return attrS;
 }
 
-- (NSAttributedString *)catalogTitleAttributedString
-{
-    NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
-    paragraphStyle.alignment = NSTextAlignmentCenter;
-    paragraphStyle.firstLineHeadIndent = 20.f;
-    paragraphStyle.headIndent = 20.f;
-    paragraphStyle.tailIndent = -20.f;
-    paragraphStyle.lineSpacing = 5.f;
-    
-    NSAttributedString *attrS = [[NSAttributedString alloc] initWithString:self attributes:@{NSFontAttributeName:[UIFont systemFontOfSize:14.f weight:UIFontWeightBold],
-                                                                                             NSForegroundColorAttributeName:[UIColor colorWithHexString:@"EF6733"],
-                                                                                             NSParagraphStyleAttributeName:paragraphStyle}];
-    return attrS;
-}
-
 - (NSAttributedString *)styledParagraphAttributedString:(NSDictionary *)style
 {
     NSMutableAttributedString *attrS = nil;
@@ -128,6 +113,7 @@
     defaultParagraphStyle.headIndent = 30.f;
     defaultParagraphStyle.tailIndent = -30.f;
     defaultParagraphStyle.lineSpacing = 5.f;
+    defaultParagraphStyle.lineBreakMode = NSLineBreakByWordWrapping;
     
     return defaultParagraphStyle;
 }
@@ -140,6 +126,7 @@
     centerAlignedParagraphStyle.headIndent = 30.f;
     centerAlignedParagraphStyle.tailIndent = -30.f;
     centerAlignedParagraphStyle.lineSpacing = 5.f;
+    centerAlignedParagraphStyle.lineBreakMode = NSLineBreakByWordWrapping;
     
     return centerAlignedParagraphStyle;
 }

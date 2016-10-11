@@ -53,6 +53,10 @@
 @property (nonatomic, strong) UIButton *commentButton;
 @property (nonatomic, strong) UIButton *likeButton;
 
+@property (nonatomic, strong) NSTextContainer *textContainer;
+@property (nonatomic, strong) NSLayoutManager *layoutManager;
+@property (nonatomic, strong) UITextView *calculatedTextHeightTextView;
+
 @property (nonatomic, strong) PGCommentInputAccessoryView *commentInputAccessoryView;
 
 @property (nonatomic, strong) NSString *articleId;
@@ -316,8 +320,8 @@
             id storage = self.viewModel.paragraphsArray[indexPath.item-1];
             if ([storage isKindOfClass:[PGParserTextStorage class]]) {
                 PGParserTextStorage *textStorage = (PGParserTextStorage *)storage;
-                CGSize textSize = [textStorage.text boundingRectWithSize:CGSizeMake(UISCREEN_WIDTH-60, 1000) options:NSStringDrawingUsesLineFragmentOrigin context:nil].size;
-                return CGSizeMake(UISCREEN_WIDTH, textSize.height);
+                
+                return [self textSize:textStorage.text];
             } else if ([storage isKindOfClass:[PGParserImageStorage class]]) {
                 PGParserImageStorage *imageStorage = (PGParserImageStorage *)storage;
                 CGFloat width = UISCREEN_WIDTH;
@@ -361,11 +365,52 @@
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
     if (indexPath.section == 0) {
+        // FIXME: crash when selected if indexPath.item == 0
         id storage = self.viewModel.paragraphsArray[indexPath.item-1];
         if ([storage isKindOfClass:[PGParserVideoStorage class]]) {
             PGVideoPlayerViewController *playerViewController = [[PGVideoPlayerViewController alloc] init];
             [self.navigationController pushViewController:playerViewController animated:YES];
         }
+    } else if (indexPath.section == 2) {
+        // NOTE: how to highlight UICollectionViewCell, write a sample code to show called sequence of UICollectionView delegate methods.
+        
+        // (when the touch begins)
+        // 1. -collectionView:shouldHighlightItemAtIndexPath:
+        // 2. -collectionView:didHighlightItemAtIndexPath:
+        //
+        // (when the touch lifts)
+        // 3. -collectionView:shouldSelectItemAtIndexPath: or -collectionView:shouldDeselectItemAtIndexPath:
+        // 4. -collectionView:didSelectItemAtIndexPath: or -collectionView:didDeselectItemAtIndexPath:
+        // 5. -collectionView:didUnhighlightItemAtIndexPath:
+        PGWeakSelf(self);
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            if (indexPath.section == 2) {
+                UICollectionViewCell *cell = [collectionView cellForItemAtIndexPath:indexPath];
+                if ([cell isKindOfClass:[PGArticleCommentCell class]]) {
+                    PGArticleCommentCell *commentCell = (PGArticleCommentCell *)cell;
+                    [commentCell unselectLabel];
+                    
+                    if (indexPath.item < weakself.viewModel.commentsArray.count) {
+                        PGComment *selectedComment = weakself.viewModel.commentsArray[indexPath.item];
+                        weakself.commentInputAccessoryView.commentTextView.text = @"";
+                        weakself.commentInputAccessoryView.commentTextView.placeholder = [NSString stringWithFormat:@"回复%@", selectedComment.user.nickname];
+                        
+                        [weakself.commentInputAccessoryView.commentTextView becomeFirstResponder];
+                    }
+                } else if ([cell isKindOfClass:[PGArticleCommentReplyCell class]]) {
+                    PGArticleCommentReplyCell *replyCell = (PGArticleCommentReplyCell *)cell;
+                    [replyCell unselectLabel];
+                    
+                    if (indexPath.item < weakself.viewModel.commentsArray.count) {
+                        PGComment *selectedComment = self.viewModel.commentsArray[indexPath.item];
+                        weakself.commentInputAccessoryView.commentTextView.text = @"";
+                        weakself.commentInputAccessoryView.commentTextView.placeholder = [NSString stringWithFormat:@"回复%@", selectedComment.user.nickname];
+                        
+                        [weakself.commentInputAccessoryView.commentTextView becomeFirstResponder];
+                    }
+                }
+            }
+        });
     }
 }
 
@@ -387,32 +432,15 @@
 
 - (void)collectionView:(UICollectionView *)collectionView didUnhighlightItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    PGWeakSelf(self);
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         if (indexPath.section == 2) {
             UICollectionViewCell *cell = [collectionView cellForItemAtIndexPath:indexPath];
             if ([cell isKindOfClass:[PGArticleCommentCell class]]) {
                 PGArticleCommentCell *commentCell = (PGArticleCommentCell *)cell;
                 [commentCell unselectLabel];
-                
-                if (indexPath.item < weakself.viewModel.commentsArray.count) {
-                    PGComment *selectedComment = weakself.viewModel.commentsArray[indexPath.item];
-                    weakself.commentInputAccessoryView.commentTextView.text = @"";
-                    weakself.commentInputAccessoryView.commentTextView.placeholder = [NSString stringWithFormat:@"回复%@", selectedComment.user.nickname];
-                    
-                    [weakself.commentInputAccessoryView.commentTextView becomeFirstResponder];
-                }
             } else if ([cell isKindOfClass:[PGArticleCommentReplyCell class]]) {
                 PGArticleCommentReplyCell *replyCell = (PGArticleCommentReplyCell *)cell;
                 [replyCell unselectLabel];
-                
-                if (indexPath.item < weakself.viewModel.commentsArray.count) {
-                    PGComment *selectedComment = self.viewModel.commentsArray[indexPath.item];
-                    weakself.commentInputAccessoryView.commentTextView.text = @"";
-                    weakself.commentInputAccessoryView.commentTextView.placeholder = [NSString stringWithFormat:@"回复%@", selectedComment.user.nickname];
-                    
-                    [weakself.commentInputAccessoryView.commentTextView becomeFirstResponder];
-                }
             }
         }
     });
@@ -504,6 +532,43 @@
     }
 }
 
+#pragma mark - <Calculate Text Cell Size>
+
+- (CGSize)textSize:(NSAttributedString *)attrS
+{
+    @autoreleasepool {
+        // NOTE: calculate NSAttributedString size http://stackoverflow.com/questions/13621084/boundingrectwithsize-for-nsattributedstring-returning-wrong-size, https://developer.apple.com/library/content/documentation/Cocoa/Conceptual/TextLayout/Tasks/StringHeight.html
+        
+        // NOTE: counting NSAttributedString number of lines https://developer.apple.com/library/content/documentation/Cocoa/Conceptual/TextLayout/Tasks/CountLines.html
+        if (attrS) {
+            NSTextStorage *storage = [[NSTextStorage alloc] initWithAttributedString:attrS];
+            [storage addLayoutManager:self.layoutManager];
+            [self.layoutManager glyphRangeForTextContainer:self.textContainer];
+            
+            NSUInteger numberOfLines, index;
+            NSUInteger numberOfGlyphs = [self.layoutManager numberOfGlyphs];
+            NSRange lineRange;
+            for (numberOfLines = 0, index = 0; index < numberOfGlyphs; numberOfLines++) {
+                if (numberOfLines > 1) {
+                    break;
+                } else {
+                    (void) [self.layoutManager lineFragmentRectForGlyphAtIndex:index
+                                                                effectiveRange:&lineRange];
+                    index = NSMaxRange(lineRange);
+                }
+            }
+            if (numberOfLines == 1) {
+                CGSize textSize = CGSizeMake(UISCREEN_WIDTH, ceilf([self.layoutManager usedRectForTextContainer:self.textContainer].size.height));
+                return CGSizeMake(UISCREEN_WIDTH, textSize.height+15);
+            } else {
+                CGSize textSize = CGSizeMake(UISCREEN_WIDTH, ceilf([self.layoutManager usedRectForTextContainer:self.textContainer].size.height));
+                return CGSizeMake(UISCREEN_WIDTH, textSize.height);
+            }
+        }
+        return CGSizeZero;
+    }
+}
+
 #pragma mark - <Setters && Getters>
 
 - (PGBaseCollectionView *)articleCollectionView
@@ -577,6 +642,16 @@
         _commentInputAccessoryView.delegate = self;
     }
     return _commentInputAccessoryView;
+}
+
+- (NSLayoutManager *)layoutManager
+{
+    if (!_layoutManager) {
+        self.textContainer = [[NSTextContainer alloc] initWithSize:CGSizeMake(UISCREEN_WIDTH-60, CGFLOAT_MAX)];
+        _layoutManager = [[NSLayoutManager alloc] init];
+        [_layoutManager addTextContainer:self.textContainer];
+    }
+    return _layoutManager;
 }
 
 - (void)didReceiveMemoryWarning {

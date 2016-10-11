@@ -124,7 +124,7 @@
 {
     if (!_nameLabel) {
         _nameLabel = [[UILabel alloc] initWithFrame:CGRectMake(self.avatarImageView.pg_right+12, 4, 150, 16)];
-        _nameLabel.font = Theme.fontMedium;
+        _nameLabel.font = Theme.fontMediumBold;
         _nameLabel.textColor = Theme.colorText;
     }
     return _nameLabel;
@@ -134,7 +134,7 @@
 {
     if (!_timeLabel) {
         _timeLabel = [[UILabel alloc] initWithFrame:CGRectMake(self.avatarImageView.pg_right+12, self.nameLabel.pg_bottom+3, 100, 14)];
-        _timeLabel.font = Theme.fontSmall;
+        _timeLabel.font = Theme.fontSmallBold;
         _timeLabel.textColor = Theme.colorLightText;
     }
     return _timeLabel;

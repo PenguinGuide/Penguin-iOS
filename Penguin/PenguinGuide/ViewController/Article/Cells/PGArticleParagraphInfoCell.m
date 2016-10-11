@@ -22,6 +22,7 @@ static NSString *TagCell = @"TagCell";
 @property (nonatomic, strong) UILabel *authorLabel;
 @property (nonatomic, strong) UILabel *designerLabel;
 @property (nonatomic, strong) UILabel *descLabel;
+@property (nonatomic, strong) UIView *titleHorizontalLine;
 
 @property (nonatomic, strong) UICollectionView *tagsCollectionView;
 @property (nonatomic, strong) PGArticle *article;
@@ -57,9 +58,9 @@ static NSString *TagCell = @"TagCell";
     [self.contentView addSubview:self.titleLabel];
     [self.contentView addSubview:self.subtitleLabel];
     
-    UIView *titleHorizontalLine = [[UIView alloc] initWithFrame:CGRectMake(30, self.subtitleLabel.pg_bottom+15, 40, 1/[UIScreen mainScreen].scale)];
-    titleHorizontalLine.backgroundColor = Theme.colorText;
-    [self.contentView addSubview:titleHorizontalLine];
+    self.titleHorizontalLine = [[UIView alloc] initWithFrame:CGRectMake(30, self.subtitleLabel.pg_bottom+15, 40, 1/[UIScreen mainScreen].scale)];
+    self.titleHorizontalLine.backgroundColor = Theme.colorText;
+    [self.contentView addSubview:self.titleHorizontalLine];
     
     [self.contentView addSubview:self.authorLabel];
     [self.contentView addSubview:self.designerLabel];
@@ -80,17 +81,41 @@ static NSString *TagCell = @"TagCell";
             self.channelLabel.text = @"城市指南";
         }
         
+        CGFloat titleHeight = 0.f;
+        CGFloat subtitleHeight = 0.f;
+        
+        if (article.title.length > 0) {
+            titleHeight = [article.title boundingRectWithSize:CGSizeMake(UISCREEN_WIDTH-60, 500)
+                                                      options:NSStringDrawingUsesLineFragmentOrigin
+                                                   attributes:@{NSFontAttributeName:[UIFont systemFontOfSize:26.f weight:UIFontWeightRegular]}
+                                                      context:nil].size.height;
+            self.titleLabel.pg_height = titleHeight;
+        }
+        
+        if (article.subTitle.length > 0) {
+            subtitleHeight = [article.subTitle boundingRectWithSize:CGSizeMake(UISCREEN_WIDTH-60, 500)
+                                                            options:NSStringDrawingUsesLineFragmentOrigin
+                                                         attributes:@{NSFontAttributeName:[UIFont systemFontOfSize:14.f weight:UIFontWeightRegular]}
+                                                            context:nil].size.height;
+            self.subtitleLabel.frame = CGRectMake(self.subtitleLabel.pg_x, self.titleLabel.pg_bottom+10, self.subtitleLabel.pg_width, subtitleHeight);
+        }
+        
         self.titleLabel.text = article.title;
         self.subtitleLabel.text = article.subTitle;
+        self.titleHorizontalLine.frame = CGRectMake(30, self.subtitleLabel.pg_bottom+15, 40, 1/[UIScreen mainScreen].scale);
         
         self.authorLabel.text = [NSString stringWithFormat:@"文 | %@", article.author];
         self.designerLabel.text = [NSString stringWithFormat:@"图 | %@", article.designer];
         self.descLabel.text = article.desc;
         
+        self.authorLabel.frame = CGRectMake(self.authorLabel.pg_x, self.subtitleLabel.pg_bottom+30, self.authorLabel.pg_width, self.authorLabel.pg_height);
+        self.designerLabel.frame = CGRectMake(self.designerLabel.pg_x, self.authorLabel.pg_bottom+10, self.designerLabel.pg_width, self.designerLabel.pg_height);
+        self.descLabel.frame = CGRectMake(self.descLabel.pg_x, self.designerLabel.pg_bottom+10, self.descLabel.pg_width, self.descLabel.pg_height);
+        
         if (article.tagsArray.count > 0) {
-            self.tagsCollectionView.pg_height = 20.f;
+            self.tagsCollectionView.frame = CGRectMake(self.tagsCollectionView.pg_x, self.descLabel.pg_bottom+20, self.descLabel.pg_width, 20.f);
         } else {
-            self.tagsCollectionView.pg_height = 0.f;
+            self.tagsCollectionView.frame = CGRectMake(self.tagsCollectionView.pg_x, self.descLabel.pg_bottom+20, self.descLabel.pg_width, 0.f);
         }
         [self.tagsCollectionView reloadData];
     }
@@ -99,7 +124,23 @@ static NSString *TagCell = @"TagCell";
 + (CGSize)cellSize:(PGArticle *)article
 {
     if (article) {
-        CGFloat height = 20+28+20+28+10+28+30+12+10+12+10+12+20;
+        CGFloat titleHeight = 0.f;
+        CGFloat subtitleHeight = 0.f;
+        
+        if (article.title.length > 0) {
+            titleHeight = [article.title boundingRectWithSize:CGSizeMake(UISCREEN_WIDTH-60, 500)
+                                                      options:NSStringDrawingUsesLineFragmentOrigin
+                                                   attributes:@{NSFontAttributeName:[UIFont systemFontOfSize:26.f weight:UIFontWeightRegular]}
+                                                      context:nil].size.height;
+        }
+        
+        if (article.subTitle.length > 0) {
+            subtitleHeight = [article.subTitle boundingRectWithSize:CGSizeMake(UISCREEN_WIDTH-60, 500)
+                                                            options:NSStringDrawingUsesLineFragmentOrigin
+                                                         attributes:@{NSFontAttributeName:[UIFont systemFontOfSize:14.f weight:UIFontWeightRegular]}
+                                                            context:nil].size.height;
+        }
+        CGFloat height = 20+28+20+titleHeight+10+subtitleHeight+30+12+10+12+10+12+20;
         if (article.tagsArray.count > 0) {
             return CGSizeMake(UISCREEN_WIDTH, height+30.f);
         } else {
@@ -210,6 +251,7 @@ static NSString *TagCell = @"TagCell";
         _titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(30, self.channelImageView.pg_bottom+20, UISCREEN_WIDTH-60, 28)];
         _titleLabel.font = [UIFont systemFontOfSize:26.f weight:UIFontWeightRegular];
         _titleLabel.textColor = Theme.colorText;
+        _titleLabel.numberOfLines = 0;
     }
     return _titleLabel;
 }
@@ -217,9 +259,9 @@ static NSString *TagCell = @"TagCell";
 - (UILabel *)subtitleLabel
 {
     if (!_subtitleLabel) {
-        _subtitleLabel = [[UILabel alloc] initWithFrame:CGRectMake(30, self.titleLabel.pg_bottom+10, UISCREEN_WIDTH-60, 28)];
-        _subtitleLabel.font = [UIFont systemFontOfSize:26.f weight:UIFontWeightRegular];
-        _subtitleLabel.textColor = Theme.colorText;
+        _subtitleLabel = [[UILabel alloc] initWithFrame:CGRectMake(30, self.titleLabel.pg_bottom+10, UISCREEN_WIDTH-60, 16)];
+        _subtitleLabel.font = [UIFont systemFontOfSize:14.f weight:UIFontWeightRegular];
+        _subtitleLabel.textColor = Theme.colorLightText;
     }
     return _subtitleLabel;
 }
