@@ -232,7 +232,7 @@
 
 - (void)buyButtonClicked
 {
-    
+    [PGAlibcTraderManager openGoodDetailPage:@"536212841769" native:NO];
 }
 
 #pragma mark - <Setters && Getters>
@@ -277,6 +277,7 @@
         [_bottomToolBar addSubview:backButton];
         
         UIButton *buyButton = [[UIButton alloc] initWithFrame:CGRectMake(UISCREEN_WIDTH-100, 0, 100, 44)];
+        [buyButton addTarget:self action:@selector(buyButtonClicked) forControlEvents:UIControlEventTouchUpInside];
         [buyButton setBackgroundColor:[UIColor colorWithHexString:@"EF6733"]];
         [buyButton setTitle:@"前往购买" forState:UIControlStateNormal];
         [buyButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];

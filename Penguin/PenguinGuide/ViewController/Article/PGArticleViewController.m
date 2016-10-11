@@ -16,11 +16,13 @@
 #define ArticleRelatedArticlesCell @"ArticleRelatedArticlesCell"
 #define ArticleCommentCell @"ArticleCommentCell"
 #define ArticleCommentReplyCell @"ArticleCommentReplyCell"
+#define ArticleCommentsFooterView @"ArticleCommentsFooterView"
 
 #import "PGArticleViewController.h"
 #import "UIScrollView+PGScrollView.h"
 #import "PGAlertController.h"
 #import "PGVideoPlayerViewController.h"
+#import "PGCommentsViewController.h"
 
 // views
 #import "PGArticleParagraphInfoCell.h"
@@ -34,6 +36,7 @@
 #import "PGArticleCommentCell.h"
 #import "PGArticleCommentReplyCell.h"
 #import "PGCommentInputAccessoryView.h"
+#import "PGArticleCommentsFooterView.h"
 
 // view models
 #import "PGArticleViewModel.h"
@@ -280,6 +283,17 @@
     return nil;
 }
 
+- (UICollectionReusableView *)collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath
+{
+    if (indexPath.section == 2 && kind == UICollectionElementKindSectionFooter && self.viewModel.commentsArray.count > 0) {
+        PGArticleCommentsFooterView *footerView = [collectionView dequeueReusableSupplementaryViewOfKind:kind withReuseIdentifier:ArticleCommentsFooterView forIndexPath:indexPath];
+        [footerView.allCommentsButton addTarget:self action:@selector(allCommentsButtonClicked) forControlEvents:UIControlEventTouchUpInside];
+        return footerView;
+    }
+    
+    return nil;
+}
+
 #pragma mark - <UICollectionViewDelegate>
 
 - (UIEdgeInsets)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout insetForSectionAtIndex:(NSInteger)section
@@ -362,14 +376,24 @@
     return CGSizeZero;
 }
 
+- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout referenceSizeForFooterInSection:(NSInteger)section
+{
+    if (section == 2 && self.viewModel.commentsArray.count > 0) {
+        return CGSizeMake(UISCREEN_WIDTH, 81);
+    }
+    return CGSizeZero;
+}
+
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
     if (indexPath.section == 0) {
         // FIXME: crash when selected if indexPath.item == 0
-        id storage = self.viewModel.paragraphsArray[indexPath.item-1];
-        if ([storage isKindOfClass:[PGParserVideoStorage class]]) {
-            PGVideoPlayerViewController *playerViewController = [[PGVideoPlayerViewController alloc] init];
-            [self.navigationController pushViewController:playerViewController animated:YES];
+        if (indexPath.item > 0) {
+            id storage = self.viewModel.paragraphsArray[indexPath.item-1];
+            if ([storage isKindOfClass:[PGParserVideoStorage class]]) {
+                PGVideoPlayerViewController *playerViewController = [[PGVideoPlayerViewController alloc] init];
+                [self.navigationController pushViewController:playerViewController animated:YES];
+            }
         }
     } else if (indexPath.section == 2) {
         // NOTE: how to highlight UICollectionViewCell, write a sample code to show called sequence of UICollectionView delegate methods.
@@ -510,7 +534,6 @@
     PGWeakSelf(self);
     [UIView animateWithDuration:animationDuration animations:^{
         weakself.commentInputAccessoryView.frame = CGRectMake(weakself.commentInputAccessoryView.pg_x, endFrame.origin.y-44, weakself.commentInputAccessoryView.pg_width, weakself.commentInputAccessoryView.pg_height);
-        [weakself.commentInputAccessoryView.commentTextView becomeFirstResponder];
     }];
 }
 
@@ -518,7 +541,11 @@
 
 - (void)loadComments
 {
-    [self.viewModel requestComments];
+    if (self.viewModel.commentsArray.count == 0) {
+        [self.viewModel requestComments];
+    } else {
+        [self.articleCollectionView endBottomRefreshing];
+    }
 }
 
 #pragma mark - <Button Events>
@@ -530,6 +557,12 @@
     if (self.animationCompletion) {
         self.animationCompletion();
     }
+}
+
+- (void)allCommentsButtonClicked
+{
+    PGCommentsViewController *commentsVC = [[PGCommentsViewController alloc] init];
+    [self.navigationController pushViewController:commentsVC animated:YES];
 }
 
 #pragma mark - <Calculate Text Cell Size>
@@ -592,6 +625,7 @@
         
         [_articleCollectionView registerClass:[PGArticleCommentCell class] forCellWithReuseIdentifier:ArticleCommentCell];
         [_articleCollectionView registerClass:[PGArticleCommentReplyCell class] forCellWithReuseIdentifier:ArticleCommentReplyCell];
+        [_articleCollectionView registerClass:[PGArticleCommentsFooterView class] forSupplementaryViewOfKind:UICollectionElementKindSectionFooter withReuseIdentifier:ArticleCommentsFooterView];
         
         PGWeakSelf(self);
         [_articleCollectionView enableInfiniteScrolling:^{
