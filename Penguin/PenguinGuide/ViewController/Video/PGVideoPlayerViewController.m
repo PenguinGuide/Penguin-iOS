@@ -15,6 +15,8 @@
 
 @interface PGVideoPlayerViewController () <PGVideoPlayerSliderDelegate>
 
+@property (nonatomic, strong) NSString *videoURL;
+
 @property (nonatomic, strong) AVPlayer *player;
 @property (nonatomic, strong) AVPlayerItem *playerItem;
 @property (nonatomic, strong) AVPlayerLayer *playerLayer;
@@ -47,6 +49,15 @@
 @end
 
 @implementation PGVideoPlayerViewController
+
+- (id)initWithVideoURL:(NSString *)url
+{
+    if (self = [super init]) {
+        self.videoURL = url;
+    }
+    
+    return self;
+}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -331,8 +342,8 @@
 {
     if (!_playerItem) {
 //        NSURL *url = [NSURL URLWithString:@"http://222.73.3.97/vhot2.qqvideo.tc.qq.com/g0328tr4ibr.mp4?vkey=D1A814BF316E2BCC33A722E71BE64AD720B5916AABCD0AAFE1B13436DC3458B3AB1B0A4CF4110DE6A999A6D22BF33256B6C0FE24DB81CECD8C44810B4C4331503DFF51A86C561589FECE1E0C4C6A1EE9CE5B9838ABB2110B&br=60&platform=2&fmt=auto&level=0&sdtfrom=v3010&locid=a1ea72b8-dc52-4fb0-8c8b-c675fb1fc509&size=6713441&ocid=3390775212"];
-        NSURL *url = [NSURL fileURLWithPath:[[NSBundle mainBundle] pathForResource:@"video" ofType:@"mp4"]];
-        _playerItem = [AVPlayerItem playerItemWithURL:url];
+        //NSURL *url = [NSURL fileURLWithPath:[[NSBundle mainBundle] pathForResource:@"video" ofType:@"mp4"]];
+        _playerItem = [AVPlayerItem playerItemWithURL:[NSURL URLWithString:self.videoURL]];
         
         [_playerItem addObserver:self forKeyPath:@"status" options:NSKeyValueObservingOptionNew context:nil];
     }

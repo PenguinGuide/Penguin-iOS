@@ -10,4 +10,6 @@
 
 @interface PGVideoPlayerViewController : PGBaseViewController
 
+- (id)initWithVideoURL:(NSString *)url;
+
 @end

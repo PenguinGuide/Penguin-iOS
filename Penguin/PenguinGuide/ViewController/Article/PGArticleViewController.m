@@ -391,8 +391,11 @@
         if (indexPath.item > 0) {
             id storage = self.viewModel.paragraphsArray[indexPath.item-1];
             if ([storage isKindOfClass:[PGParserVideoStorage class]]) {
-                PGVideoPlayerViewController *playerViewController = [[PGVideoPlayerViewController alloc] init];
-                [self.navigationController pushViewController:playerViewController animated:YES];
+                PGParserVideoStorage *videoStorage = (PGParserVideoStorage *)storage;
+                if (videoStorage.link && videoStorage.link.length > 0) {
+                    PGVideoPlayerViewController *playerViewController = [[PGVideoPlayerViewController alloc] initWithVideoURL:videoStorage.link];
+                    [self.navigationController pushViewController:playerViewController animated:YES];
+                }
             }
         }
     } else if (indexPath.section == 2) {
@@ -646,7 +649,7 @@
         [_toolbar addSubview:horizontalLine];
         
         self.backButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 44, 44)];
-        [self.backButton setImage:[UIImage imageNamed:@"pg_login_back"] forState:UIControlStateNormal];
+        [self.backButton setImage:[UIImage imageNamed:@"pg_navigation_back_button"] forState:UIControlStateNormal];
         [self.backButton addTarget:self action:@selector(backButtonClicked) forControlEvents:UIControlEventTouchUpInside];
         [_toolbar addSubview:self.backButton];
         

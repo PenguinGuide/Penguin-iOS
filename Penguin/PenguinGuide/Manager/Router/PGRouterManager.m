@@ -31,10 +31,10 @@
 + (void)registerRouters
 {
     [[PGRouter sharedInstance] registerRoute:@"qiechihe://login" toHandler:^(NSDictionary *params) {
-        PGLoginViewController *loginVC = [[PGLoginViewController alloc] initWithScreenshot:[[(AppDelegate *)[UIApplication sharedApplication].delegate window] screenshot]];
+        PGLoginViewController *loginVC = [[PGLoginViewController alloc] init];
         if (PGGlobal.rootNavigationController) {
-            loginVC.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
-            [PGGlobal.rootNavigationController presentViewController:loginVC animated:YES completion:nil];
+            PGBaseNavigationController *navi = [[PGBaseNavigationController alloc] initWithRootViewController:loginVC];
+            [PGGlobal.rootNavigationController presentViewController:navi animated:YES completion:nil];
         }
     }];
     

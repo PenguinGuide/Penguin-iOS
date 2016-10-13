@@ -238,9 +238,10 @@
 
 - (void)searchButtonClicked
 {
-    PGSearchRecommendsViewController *searchRecommendsVC = [[PGSearchRecommendsViewController alloc] init];
-    PGBaseNavigationController *naviController = [[PGBaseNavigationController alloc] initWithRootViewController:searchRecommendsVC];
-    [self presentViewController:naviController animated:NO completion:nil];
+    [PGRouterManager routeToLoginPage];
+//    PGSearchRecommendsViewController *searchRecommendsVC = [[PGSearchRecommendsViewController alloc] init];
+//    PGBaseNavigationController *naviController = [[PGBaseNavigationController alloc] initWithRootViewController:searchRecommendsVC];
+//    [self presentViewController:naviController animated:NO completion:nil];
 }
 
 - (void)countdown
