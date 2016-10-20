@@ -3,11 +3,14 @@
 # Uncomment this line if you're using Swift
 # use_frameworks!
 
+source 'https://github.com/CocoaPods/Specs.git'
+source 'http://repo.baichuan-ios.taobao.com/baichuanSDK/AliBCSpecs.git'
+
 target 'PenguinGuide' do
     
     #business framework
     pod 'PGAPIClient', :path => '../BusinessFramework/PGAPIClient', :inhibit_warnings => true
-    pod 'PGTheme', :path => '../BusinessFramework/PGTheme', :inhibit_warnings => true
+    pod 'PGTheme', :path => '../BusinessFramework/PGTheme'
     pod 'PGShare', :path => '../BusinessFramework/PGShare', :inhibit_warnings => true
     pod 'PGTabBarController', :path => '../BusinessFramework/PGTabBarController'
     pod 'PGPagedScrollView', :path => '../BusinessFramework/PGPagedScrollView', :inhibit_warnings => true
@@ -29,6 +32,10 @@ target 'PenguinGuide' do
     pod 'PGAlertController', :path => '../BaseFramework/PGAlertController', :inhibit_warnings => true
     pod 'PGLaunchAds', :path => '../BaseFramework/PGLaunchAds'
     pod 'PGTimer', :path => '../BaseFramework/PGTimer'
+    pod 'PGCache', :path => '../BaseFramework/PGCache'
+    pod 'PGTransparentNaviBar', :path => '../BaseFramework/PGTransparentNaviBar'
+    pod 'PGPopupViewController', :path => '../BaseFramework/PGPopupViewController'
+    pod 'PGPopover', :path => '../BaseFramework/PGPopover'
     
     #vendor
     pod 'KVOController', :inhibit_warnings => true
@@ -36,6 +43,9 @@ target 'PenguinGuide' do
     pod 'UzysAnimatedGifPullToRefresh', :inhibit_warnings => true
     pod 'Masonry', :inhibit_warnings => true
     pod 'MBProgressHUD', :inhibit_warnings => true
+    pod 'MSWeakTimer', :inhibit_warnings => true
+    
+    pod 'AlibcTradeSDK'
     
     #fabric
     pod 'Fabric'

@@ -8,6 +8,8 @@
 
 #import <Foundation/Foundation.h>
 
-@interface PGRKParams : NSObject
+@interface PGRKParams : NSMutableDictionary
+
+@property (nonatomic, strong) NSMutableDictionary *dict;
 
 @end

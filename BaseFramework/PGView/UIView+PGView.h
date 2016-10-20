@@ -10,15 +10,15 @@
 
 @interface UIView (PGView)
 
-@property (nonatomic) float x;
-@property (nonatomic) float y;
-@property (nonatomic) float width;
-@property (nonatomic) float height;
+@property (nonatomic) CGFloat pg_x;
+@property (nonatomic) CGFloat pg_y;
+@property (nonatomic) CGFloat pg_width;
+@property (nonatomic) CGFloat pg_height;
 
-@property (nonatomic) float left;
-@property (nonatomic) float right;
-@property (nonatomic) float top;
-@property (nonatomic) float bottom;
+@property (nonatomic) CGFloat pg_left;
+@property (nonatomic) CGFloat pg_right;
+@property (nonatomic) CGFloat pg_top;
+@property (nonatomic) CGFloat pg_bottom;
 
 - (void)setTapAction:(void(^)(void))completion;
 - (UIImage *)screenshot;

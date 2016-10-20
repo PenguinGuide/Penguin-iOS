@@ -20,12 +20,18 @@
 {
     if (self = [super init]) {
         self.apiClient = apiClient;
+        self.maxId = nil;
     }
     
     return self;
 }
 
 - (void)requestData
+{
+    
+}
+
+- (void)loadNextPage
 {
     
 }

@@ -13,6 +13,7 @@
 
 @property (nonatomic, strong) UIWindow *window;
 @property (nonatomic, strong, readonly) PGTabBarController *tabBarController;
+@property (nonatomic, assign) BOOL allowRotation;
 
 
 @end

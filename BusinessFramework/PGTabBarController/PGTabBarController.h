@@ -12,6 +12,7 @@
 @interface PGTabBarController : UIViewController
 
 @property (nonatomic, strong, readonly) NSArray *viewControllers;
+@property (nonatomic, strong, readonly) UIViewController *selectedViewController;
 
 - (void)setViewControllers:(NSArray *)viewControllers;
 - (void)selectTab:(NSInteger)index;

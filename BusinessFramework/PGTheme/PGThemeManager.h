@@ -22,14 +22,37 @@ typedef NS_ENUM(NSInteger, PGThemeStyle) {
 
 + (PGThemeManager *)sharedManager;
 
+- (UIFont *)fontExtraSmall;
 - (UIFont *)fontSmall;
 - (UIFont *)fontMedium;
 - (UIFont *)fontLarge;
+- (UIFont *)fontExtraLarge;
+
+- (UIFont *)fontExtraSmallBold;
+- (UIFont *)fontSmallBold;
+- (UIFont *)fontMediumBold;
+- (UIFont *)fontLargeBold;
+- (UIFont *)fontExtraLargeBold;
+
 - (NSArray *)loadingImages;
 
 - (UIColor *)colorHighlight;
-- (UIColor *)colorDarkGray;
-- (UIColor *)colorGray;
+- (UIColor *)colorExtraHighlight;
+
 - (UIColor *)colorLightGray;
+/**
+ *  @return 454545
+ */
+- (UIColor *)colorText;
+/**
+ *  @return AFAFAF
+ */
+- (UIColor *)colorLightText;
+
+- (UIColor *)colorBackground;
+- (UIColor *)colorLightBackground;
+
+- (UIColor *)colorBorder;   // 225
+- (UIColor *)colorLightBorder;  // 234
 
 @end

@@ -39,38 +39,38 @@
 
 + (void)startPageView:(NSString *)pageView
 {
-    if (pageView.isValid) {
-        [MobClick beginLogPageView:pageView];
-        [[Zhuge sharedInstance] track:[NSString stringWithFormat:@"查看%@", pageView]];
-    }
+//    if (pageView.isValid) {
+//        [MobClick beginLogPageView:pageView];
+//        [[Zhuge sharedInstance] track:[NSString stringWithFormat:@"查看%@", pageView]];
+//    }
 }
 
 + (void)endPageView:(NSString *)pageView
 {
-    if (pageView.isValid) {
-        [MobClick endLogPageView:pageView];
-    }
+//    if (pageView.isValid) {
+//        [MobClick endLogPageView:pageView];
+//    }
 }
 
 + (void)trackEvent:(NSString *)eventName pageView:(NSString *)pageView
 {
-    if (eventName.isValid && pageView.isValid) {
-        NSMutableDictionary *properties = [NSMutableDictionary dictionary];
-        properties[@"Page View"] = pageView;
-        
-        [[Zhuge sharedInstance] track:[NSString stringWithFormat:@"%@+%@", pageView, eventName] properties:properties];
-    }
+//    if (eventName.isValid && pageView.isValid) {
+//        NSMutableDictionary *properties = [NSMutableDictionary dictionary];
+//        properties[@"Page View"] = pageView;
+//        
+//        [[Zhuge sharedInstance] track:[NSString stringWithFormat:@"%@+%@", pageView, eventName] properties:properties];
+//    }
 }
 
 + (void)trackEvent:(NSString *)eventName pageView:(NSString *)pageView params:(NSDictionary *)params
 {
-    if (eventName.isValid && pageView.isValid && params) {
-        NSMutableDictionary *properties = [NSMutableDictionary dictionary];
-        properties[@"Page View"] = pageView;
-        properties[@"Attributes"] = params;
-        
-        [[Zhuge sharedInstance] track:[NSString stringWithFormat:@"%@+%@", pageView, eventName] properties:properties];
-    }
+//    if (eventName.isValid && pageView.isValid && params) {
+//        NSMutableDictionary *properties = [NSMutableDictionary dictionary];
+//        properties[@"Page View"] = pageView;
+//        properties[@"Attributes"] = params;
+//        
+//        [[Zhuge sharedInstance] track:[NSString stringWithFormat:@"%@+%@", pageView, eventName] properties:properties];
+//    }
 }
 
 + (void)swizzleMethodWithClass:(Class)class originalSelector:(SEL)originalSelector swizzledSelector:(SEL)swizzledSelector

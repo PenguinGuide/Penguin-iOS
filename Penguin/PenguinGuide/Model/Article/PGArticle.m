@@ -10,4 +10,32 @@
 
 @implementation PGArticle
 
++ (NSDictionary *)JSONKeyPathsByPropertyKey
+{
+    return @{
+             @"body": @"body",
+             @"image": @"image",
+             @"title": @"title",
+             @"subTitle": @"sub_title",
+             @"author": @"author",
+             @"designer": @"designer",
+             @"desc": @"desc",
+             @"channel": @"channel",
+             @"date": @"date",
+             @"shareUrl": @"share_url",
+             @"tagsArray": @"tags",
+             @"relatedArticlesArray": @"related_articles"
+            };
+}
+
++ (NSValueTransformer *)tagsArrayJSONTransformer
+{
+    return [MTLJSONAdapter arrayTransformerWithModelClass:[PGTag class]];
+}
+
++ (NSValueTransformer *)relatedArticlesArrayJSONTransformer
+{
+    return [MTLJSONAdapter arrayTransformerWithModelClass:[PGImageBanner class]];
+}
+
 @end

@@ -17,5 +17,6 @@
       rightNaviButton:(UIButton *)rightNaviButton;
 
 - (void)scrollViewShouldUpdate;
+- (void)scrollViewShouldUpdateHeaderView;
 
 @end

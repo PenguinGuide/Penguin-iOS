@@ -17,6 +17,7 @@
 @property (nonatomic, strong, readwrite) PGAPIClient *apiClient;
 @property (nonatomic, strong, readwrite) FBKVOController *KVOController;
 @property (nonatomic, strong) MBProgressHUD *hud;
+@property (nonatomic, strong) PGPopupViewController *popupViewController;
 
 @end
 
@@ -25,7 +26,7 @@
 - (id)init
 {
     if (self = [super init]) {
-        self.apiClient = [PGAPIClient client];
+        [self.apiClient updateAccessToken:[NSString stringWithFormat:@"Bearer %@", PGGlobal.accessToken]];
     }
     
     return self;
@@ -33,7 +34,9 @@
 
 - (void)dealloc
 {
+    [self dismissLoading];
     [self.apiClient cancelAllRequests];
+    self.apiClient = nil;
 }
 
 - (void)viewDidLoad {
@@ -46,8 +49,16 @@
                                                                              style:UIBarButtonItemStyleDone
                                                                             target:self
                                                                             action:@selector(backButtonClicked)];
-    // fix left sliding not working, http://blog.csdn.net/meegomeego/article/details/25879605
+    // ISSUE: fix left sliding not working, http://blog.csdn.net/meegomeego/article/details/25879605
     self.navigationController.interactivePopGestureRecognizer.delegate = (id)self;
+}
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    
+    AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+    appDelegate.allowRotation = NO;
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -63,13 +74,37 @@
     [super viewDidDisappear:animated];
     
     self.navigationController.delegate = nil;
-    
-    [self dismissLoading];
+}
+
+- (UIInterfaceOrientationMask)supportedInterfaceOrientations
+{
+    return UIInterfaceOrientationMaskPortrait;
+}
+
+- (BOOL)shouldAutorotate
+{
+    return YES;
 }
 
 - (void)setNavigationTitle:(NSString *)title
 {
-    
+    [self.navigationController.navigationBar setTitleTextAttributes:@{NSFontAttributeName:Theme.fontMediumBold, NSForegroundColorAttributeName:Theme.colorText}];
+    [self.navigationItem setTitle:title];
+}
+
+- (void)setTransparentNavigationBar:(UIColor *)tintColor
+{
+    [self.navigationController.navigationBar setBackgroundImage:[UIImage new] forBarMetrics:UIBarMetricsDefault]; // setBackgroundImage will remove _UIBackdropView
+    [self.navigationController.navigationBar setShadowImage:[UIImage new]];
+    if (tintColor) {
+        [self.navigationController.navigationBar setTintColor:tintColor];
+    }
+}
+
+- (void)resetTransparentNavigationBar
+{
+    [self.navigationController.navigationBar setBackgroundImage:nil forBarMetrics:UIBarMetricsDefault];
+    [self.navigationController.navigationBar setShadowImage:nil];
 }
 
 #pragma mark - <Back Button>
@@ -122,18 +157,39 @@
     [self presentViewController:alertController animated:YES completion:nil];
 }
 
+#pragma mark - <Popup>
+
+- (void)showPopup:(UIView *)popupView
+{
+    self.popupViewController = [PGPopupViewController popupViewControllerWithPopupView:popupView];
+    [self presentViewController:self.popupViewController animated:YES completion:nil];
+}
+
+- (void)dismissPopup
+{
+    [self.popupViewController dismissViewControllerAnimated:YES completion:nil];
+}
+
 #pragma mark - <Loading>
 
 - (void)showLoading
 {
     if (!self.hud.superview) {
         self.hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+        self.hud.frame = CGRectMake(0, 0, 100, 100);
+        self.hud.center = CGPointMake(UISCREEN_WIDTH/2, UISCREEN_HEIGHT/2);
+        self.hud.margin = 15.f;
         self.hud.mode = MBProgressHUDModeCustomView;
         self.hud.bezelView.style = MBProgressHUDBackgroundStyleSolidColor;
+        // http://stackoverflow.com/questions/10384207/uiview-shadow-not-working
         self.hud.bezelView.backgroundColor = [UIColor whiteColor];
+        self.hud.bezelView.layer.shadowColor = Theme.colorText.CGColor;
+        self.hud.bezelView.layer.shadowOffset = CGSizeMake(1.f, 1.f);
+        self.hud.bezelView.layer.shadowOpacity = 0.5f;
+        self.hud.bezelView.layer.masksToBounds = NO;
         self.hud.userInteractionEnabled = NO;
         
-        FLAnimatedImage *animatedImage = [FLAnimatedImage animatedImageWithGIFData:[NSData dataWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"egg" ofType:@"gif"]]];
+        FLAnimatedImage *animatedImage = [FLAnimatedImage animatedImageWithGIFData:[NSData dataWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"loading" ofType:@"gif"]]];
         FLAnimatedImageView *animatedImageView = [[FLAnimatedImageView alloc] init];
         animatedImageView.animatedImage = animatedImage;
         self.hud.customView = animatedImageView;
@@ -145,11 +201,41 @@
     [self.hud hideAnimated:YES];
 }
 
+#pragma mark - <Error Handling>
+
+- (void)observeError:(PGBaseViewModel *)viewModel
+{
+    PGWeakSelf(self);
+    [self observe:viewModel keyPath:@"error" block:^(id changedObject) {
+        NSError *error = changedObject;
+        if (error && [error isKindOfClass:[NSError class]]) {
+            [weakself showErrorMessage:error];
+        }
+    }];
+}
+
+- (void)showErrorMessage:(NSError *)error
+{
+    if (error.userInfo) {
+        NSDictionary *userInfo = error.userInfo;
+        if (userInfo[@"message"]) {
+            NSString *errorMsg = userInfo[@"message"];
+            if (errorMsg && errorMsg.length > 0) {
+                [self showToast:errorMsg position:PGToastPositionTop];
+            }
+        }
+    }
+    NSInteger errorCode = error.code;
+    if (errorCode == 401) {
+        [PGRouterManager routeToLoginPage];
+    }
+}
+
 #pragma mark - <Setters && Getters>
 
 - (PGAPIClient *)apiClient
 {
-    if (_apiClient) {
+    if (!_apiClient) {
         _apiClient = [PGAPIClient client];
     }
     

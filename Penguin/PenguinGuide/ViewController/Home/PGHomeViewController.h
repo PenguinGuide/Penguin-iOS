@@ -9,9 +9,10 @@
 #import "PGBaseViewController.h"
 #import "PGScrollNavigationBar.h"
 #import "PGTabBarControllerDelegate.h"
+#import "PGFeedsCollectionView.h"
 
 @interface PGHomeViewController : PGBaseViewController <PGTabBarControllerDelegate>
 
-@property (nonatomic, strong, readonly) PGBaseCollectionView *feedsCollectionView;
+@property (nonatomic, strong, readonly) PGFeedsCollectionView *feedsCollectionView;
 
 @end

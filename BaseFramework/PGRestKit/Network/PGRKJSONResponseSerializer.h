@@ -11,6 +11,5 @@
 @interface PGRKJSONResponseSerializer : AFJSONResponseSerializer
 
 - (void)registerKeyPath:(NSString *)keyPath modelClass:(Class)modelClass toTask:(NSURLSessionTask *)task;
-- (void)registerKeyPath:(NSString *)keyPath resultKeyPath:(NSString *)resultKeyPath modelClass:(Class)modelClass toTask:(NSURLSessionTask *)task;
 
 @end

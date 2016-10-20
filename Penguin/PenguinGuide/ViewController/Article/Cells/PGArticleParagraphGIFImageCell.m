@@ -33,14 +33,14 @@
 
 - (void)setCellWithImage:(NSString *)image
 {
-    self.imageView.frame = CGRectMake(0, 0, self.width, self.height);
+    self.imageView.frame = CGRectMake(0, 20, self.pg_width, self.pg_height-40);
     [self.imageView setWithImageURL:image placeholder:nil completion:nil];
 }
 
 - (UIImageView *)imageView
 {
     if (!_imageView) {
-        _imageView = [[FLAnimatedImageView alloc] initWithFrame:CGRectMake(0, 0, self.width, self.height)];
+        _imageView = [[FLAnimatedImageView alloc] initWithFrame:CGRectMake(0, 20, self.pg_width, self.pg_height-40)];
         _imageView.contentMode = UIViewContentModeScaleAspectFill;
     }
     return _imageView;

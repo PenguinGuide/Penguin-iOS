@@ -55,6 +55,8 @@
  */
 @property (nonatomic, strong) NSDictionary *pattern;
 
+@property (nonatomic, strong) NSString *accessToken;
+
 /**
  *  Mock Configs ********* IMPORTANT DEBUG ONLY *********
  */

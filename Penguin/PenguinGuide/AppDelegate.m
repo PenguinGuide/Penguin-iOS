@@ -13,10 +13,11 @@
 
 #import "PGThemeManager.h"
 #import "PGRouterManager.h"
+#import "PGShareManager.h"
 #import "PGLaunchAds.h"
+#import "PGAlibcTraderManager.h"
 
 #import "PGBaseNavigationController.h"
-#import "PGScrollNavigationBar.h"
 
 #import "PGHomeViewController.h"
 #import "PGExploreViewController.h"
@@ -46,13 +47,19 @@
     // Log
 #ifdef DEBUG
     [PGLog setup];
+    [PGAPIClient enableLogging];
 #else
     [PGLog turnOffLogging];
+    [PGAPIClient disableLogging];
 #endif
     
+    [PGShareManager registerShareSDK];
+    [PGAlibcTraderManager registerAlibcTraderSDK];
     [PGAnalytics setup:launchOptions];
     
     //[PGLaunchAds sharedInstance];
+    
+    
         
     PGHomeViewController *homeVC = [[PGHomeViewController alloc] init];
     PGExploreViewController *exploreVC = [[PGExploreViewController alloc] init];
@@ -62,13 +69,35 @@
     self.tabBarController = [[PGTabBarController alloc] init];
     [self.tabBarController setViewControllers:@[homeVC, exploreVC, storeVC, meVC]];
     
-//    PGBaseNavigationController *navigationController = [[PGBaseNavigationController alloc] initWithNavigationBarClass:[PGScrollNavigationBar class] toolbarClass:nil];
-//    [navigationController setViewControllers:@[self.tabBarController]];
     PGBaseNavigationController *navigationController = [[PGBaseNavigationController alloc] initWithRootViewController:self.tabBarController];
     PGGlobal.rootNavigationController = navigationController;
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     self.window.rootViewController = navigationController;
     [self.window makeKeyAndVisible];
+    
+    return YES;
+}
+
+- (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation
+{
+    // 如果阿里百川处理过会返回YES
+    BOOL isHandled = [PGAlibcTraderManager handleOpenURL:url];
+    
+    if (!isHandled) {
+        
+    }
+    
+    return YES;
+}
+
+- (BOOL)application:(UIApplication *)app openURL:(NSURL *)url options:(NSDictionary<UIApplicationOpenURLOptionsKey,id> *)options
+{
+    // 如果阿里百川处理过会返回YES - iOS 9
+    BOOL isHandled = [PGAlibcTraderManager handleOpenURL:url];
+    
+    if (!isHandled) {
+        
+    }
     
     return YES;
 }
@@ -93,6 +122,15 @@
 
 - (void)applicationWillTerminate:(UIApplication *)application {
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
+}
+
+- (UIInterfaceOrientationMask)application:(UIApplication *)application supportedInterfaceOrientationsForWindow:(UIWindow *)window
+{
+    if (self.allowRotation) {
+        return UIInterfaceOrientationMaskAll;
+    } else {
+        return UIInterfaceOrientationMaskPortrait;
+    }
 }
 
 @end

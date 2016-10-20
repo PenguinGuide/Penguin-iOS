@@ -1,0 +1,303 @@
+{
+    "image": "https://s6.postimg.io/kboazzeb5/022ed541882551_57b7f33fd3097.jpg",
+    "title": "新手入门",
+    "desc": "夏日尾声，你又比去年老了一个夏天，虚度了吗？没事，抓紧在秋天享受人生！",
+    "articles": [
+                 {
+                 "type": "article",
+                 "link": "qiechihe://article?article_id=1",
+                 "channel": "city_guide",
+                 "image": "https://s6.postimg.org/b933841m9/2ffeaf34247967_56c9e1880f88c_copy.jpg",
+                 "reads": "8022",
+                 "comments": "187",
+                 "id": "1"
+                 },
+                 {
+                 "type": "article",
+                 "link": "qiechihe://article?article_id=2",
+                 "category": "shop",
+                 "image": "https://s6.postimg.org/u2ow53zu9/2ffeaf34247967_56c9e1880f88c_copy1.jpg",
+                 "reads": "8022",
+                 "comments": "187",
+                 "id": "2"
+                 },
+                 {
+                 "type": "article",
+                 "link": "qiechihe://article?article_id=3",
+                 "category": "test",
+                 "image": "https://s6.postimg.org/gaah9h92p/2ffeaf34247967_56c9e1880f88c.jpg",
+                 "reads": "1899",
+                 "comments": "129",
+                 "id": "3"
+                 },
+                 {
+                 "type": "article",
+                 "link": "qiechihe://article?article_id=4",
+                 "category": "city_guide",
+                 "image": "https://s6.postimg.org/3x28gb8s1/2ffeaf34247967_56c9e1880f88c222.jpg",
+                 "reads": "29",
+                 "comments": "12",
+                 "id": "4"
+                 }
+    ],
+    "goods": [
+              {
+              "discount_price": 199,
+              "original_price": 238,
+              "name": "美奇乐Mikkeller精酿啤酒",
+              "image": "https://s6.postimg.org/tqrbapq29/image.jpg",
+              "unit": "瓶",
+              "is_new": true,
+              "collected": true
+              },
+              {
+              "discount_price": 239,
+              "original_price": 278,
+              "name": "美奇乐Mikkeller精酿啤酒",
+              "image": "https://s6.postimg.org/h0robd7ht/image.jpg",
+              "unit": "瓶",
+              "is_new": true,
+              "collected": true
+              },
+              {
+              "discount_price": 199,
+              "original_price": 238,
+              "name": "美奇乐Mikkeller精酿啤酒",
+              "image": "https://s6.postimg.org/5068an035/image.jpg",
+              "unit": "瓶",
+              "is_new": false,
+              "collected": true
+              },
+              {
+              "discount_price": 239,
+              "original_price": 278,
+              "name": "美奇乐Mikkeller精酿啤酒",
+              "image": "https://s6.postimg.org/r0mkr9ir5/image.jpg",
+              "unit": "瓶",
+              "collected": true
+              },
+              {
+              "discount_price": 199,
+              "original_price": 238,
+              "name": "美奇乐Mikkeller精酿啤酒",
+              "image": "https://s6.postimg.org/8mc1na6gh/image.jpg",
+              "unit": "瓶",
+              "collected": true
+              },
+              {
+              "discount_price": 239,
+              "original_price": 278,
+              "name": "美奇乐Mikkeller精酿啤酒",
+              "image": "https://s6.postimg.org/s5gmwn581/image.jpg",
+              "unit": "瓶",
+              "collected": true
+              },
+              {
+              "discount_price": 199,
+              "original_price": 238,
+              "name": "美奇乐Mikkeller精酿啤酒",
+              "image": "https://s6.postimg.org/6kbk918hd/image.jpg",
+              "unit": "瓶",
+              "is_new": true,
+              "collected": true
+              },
+              {
+              "discount_price": 239,
+              "original_price": 278,
+              "name": "美奇乐Mikkeller精酿啤酒",
+              "image": "https://s6.postimg.org/auq84mdkh/image.jpg",
+              "unit": "瓶",
+              "collected": true
+              },
+              {
+              "discount_price": 199,
+              "original_price": 238,
+              "name": "美奇乐Mikkeller精酿啤酒",
+              "image": "https://s6.postimg.org/h9p91aka9/image.jpg",
+              "unit": "瓶",
+              "is_new": true,
+              "collected": true
+              },
+              {
+              "discount_price": 239,
+              "original_price": 278,
+              "name": "美奇乐Mikkeller精酿啤酒",
+              "image": "https://s6.postimg.org/mme3ff86p/image.jpg",
+              "unit": "瓶",
+              "is_new": true,
+              "collected": true
+              },
+              {
+              "discount_price": 199,
+              "original_price": 238,
+              "name": "美奇乐Mikkeller精酿啤酒",
+              "image": "https://s6.postimg.org/tqrbapq29/image.jpg",
+              "unit": "瓶",
+              "is_new": true,
+              "collected": true
+              },
+              {
+              "discount_price": 239,
+              "original_price": 278,
+              "name": "美奇乐Mikkeller精酿啤酒",
+              "image": "https://s6.postimg.org/h0robd7ht/image.jpg",
+              "unit": "瓶",
+              "is_new": true,
+              "collected": true
+              },
+              {
+              "discount_price": 199,
+              "original_price": 238,
+              "name": "美奇乐Mikkeller精酿啤酒",
+              "image": "https://s6.postimg.org/5068an035/image.jpg",
+              "unit": "瓶",
+              "is_new": false,
+              "collected": true
+              },
+              {
+              "discount_price": 239,
+              "original_price": 278,
+              "name": "美奇乐Mikkeller精酿啤酒",
+              "image": "https://s6.postimg.org/r0mkr9ir5/image.jpg",
+              "unit": "瓶",
+              "collected": true
+              },
+              {
+              "discount_price": 199,
+              "original_price": 238,
+              "name": "美奇乐Mikkeller精酿啤酒",
+              "image": "https://s6.postimg.org/8mc1na6gh/image.jpg",
+              "unit": "瓶",
+              "collected": true
+              },
+              {
+              "discount_price": 239,
+              "original_price": 278,
+              "name": "美奇乐Mikkeller精酿啤酒",
+              "image": "https://s6.postimg.org/s5gmwn581/image.jpg",
+              "unit": "瓶",
+              "collected": true
+              },
+              {
+              "discount_price": 199,
+              "original_price": 238,
+              "name": "美奇乐Mikkeller精酿啤酒",
+              "image": "https://s6.postimg.org/6kbk918hd/image.jpg",
+              "unit": "瓶",
+              "is_new": true,
+              "collected": true
+              },
+              {
+              "discount_price": 239,
+              "original_price": 278,
+              "name": "美奇乐Mikkeller精酿啤酒",
+              "image": "https://s6.postimg.org/auq84mdkh/image.jpg",
+              "unit": "瓶",
+              "collected": true
+              },
+              {
+              "discount_price": 199,
+              "original_price": 238,
+              "name": "美奇乐Mikkeller精酿啤酒",
+              "image": "https://s6.postimg.org/h9p91aka9/image.jpg",
+              "unit": "瓶",
+              "is_new": true,
+              "collected": true
+              },
+              {
+              "discount_price": 239,
+              "original_price": 278,
+              "name": "美奇乐Mikkeller精酿啤酒",
+              "image": "https://s6.postimg.org/mme3ff86p/image.jpg",
+              "unit": "瓶",
+              "is_new": true,
+              "collected": true
+              },
+              {
+              "discount_price": 199,
+              "original_price": 238,
+              "name": "美奇乐Mikkeller精酿啤酒",
+              "image": "https://s6.postimg.org/tqrbapq29/image.jpg",
+              "unit": "瓶",
+              "is_new": true,
+              "collected": true
+              },
+              {
+              "discount_price": 239,
+              "original_price": 278,
+              "name": "美奇乐Mikkeller精酿啤酒",
+              "image": "https://s6.postimg.org/h0robd7ht/image.jpg",
+              "unit": "瓶",
+              "is_new": true,
+              "collected": true
+              },
+              {
+              "discount_price": 199,
+              "original_price": 238,
+              "name": "美奇乐Mikkeller精酿啤酒",
+              "image": "https://s6.postimg.org/5068an035/image.jpg",
+              "unit": "瓶",
+              "is_new": false,
+              "collected": true
+              },
+              {
+              "discount_price": 239,
+              "original_price": 278,
+              "name": "美奇乐Mikkeller精酿啤酒",
+              "image": "https://s6.postimg.org/r0mkr9ir5/image.jpg",
+              "unit": "瓶",
+              "collected": true
+              },
+              {
+              "discount_price": 199,
+              "original_price": 238,
+              "name": "美奇乐Mikkeller精酿啤酒",
+              "image": "https://s6.postimg.org/8mc1na6gh/image.jpg",
+              "unit": "瓶",
+              "collected": true
+              },
+              {
+              "discount_price": 239,
+              "original_price": 278,
+              "name": "美奇乐Mikkeller精酿啤酒",
+              "image": "https://s6.postimg.org/s5gmwn581/image.jpg",
+              "unit": "瓶",
+              "collected": true
+              },
+              {
+              "discount_price": 199,
+              "original_price": 238,
+              "name": "美奇乐Mikkeller精酿啤酒",
+              "image": "https://s6.postimg.org/6kbk918hd/image.jpg",
+              "unit": "瓶",
+              "is_new": true,
+              "collected": true
+              },
+              {
+              "discount_price": 239,
+              "original_price": 278,
+              "name": "美奇乐Mikkeller精酿啤酒",
+              "image": "https://s6.postimg.org/auq84mdkh/image.jpg",
+              "unit": "瓶",
+              "collected": true
+              },
+              {
+              "discount_price": 199,
+              "original_price": 238,
+              "name": "美奇乐Mikkeller精酿啤酒",
+              "image": "https://s6.postimg.org/h9p91aka9/image.jpg",
+              "unit": "瓶",
+              "is_new": true,
+              "collected": true
+              },
+              {
+              "discount_price": 239,
+              "original_price": 278,
+              "name": "美奇乐Mikkeller精酿啤酒",
+              "image": "https://s6.postimg.org/mme3ff86p/image.jpg",
+              "unit": "瓶",
+              "is_new": true,
+              "collected": true
+              }
+              ]
+}

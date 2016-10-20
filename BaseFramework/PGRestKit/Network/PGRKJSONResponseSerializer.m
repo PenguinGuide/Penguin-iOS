@@ -23,16 +23,20 @@ static const NSString *kModelClassKey = @"kModelClassKey";
 
 - (nullable id)responseObjectForResponse:(NSURLResponse *)response data:(NSData *)data error:(NSError *__autoreleasing  _Nullable *)error
 {
-    id responseObject = [super responseObjectForResponse:response data:data error:error];
+    NSUInteger responseStatusCode = 200;
+    if ([response isKindOfClass:[NSHTTPURLResponse class]]) {
+        responseStatusCode = (NSUInteger)[(NSHTTPURLResponse *)response statusCode];
+    }
     
-    if (responseObject) {
-        if (responseObject[kResultKeyPathKey]) {
-            if ([responseObject[kResultKeyPathKey] isEqual:@0]) {
-                NSString *absoluteUrl = response.URL.absoluteString;
-                if (self.serializersDict[absoluteUrl]) {
-                    NSDictionary *requestDict = self.serializersDict[absoluteUrl];
+    if (responseStatusCode >= 200 && responseStatusCode <= 299) {
+        id responseObject = [super responseObjectForResponse:response data:data error:error];
+        
+        if (responseObject) {
+            NSString *absoluteUrl = response.URL.absoluteString;
+            if (self.serializersDict[absoluteUrl]) {
+                NSDictionary *requestDict = self.serializersDict[absoluteUrl];
+                if (requestDict[kKeyPathKey]) {
                     NSString *keyPath = requestDict[kKeyPathKey];
-                    Class modelClass = requestDict[kModelClassKey];
                     if (keyPath.length > 0) {
                         responseObject = [responseObject valueForKeyPath:keyPath];
                         if (!responseObject) {
@@ -45,34 +49,33 @@ static const NSString *kModelClassKey = @"kModelClassKey";
                             return nil;
                         }
                     }
-                    NSValueTransformer *valueTransformer = nil;
-                    if ([responseObject isKindOfClass:[NSDictionary class]]) {
-                        valueTransformer = [MTLJSONAdapter dictionaryTransformerWithModelClass:modelClass];
-                    } else if ([responseObject isKindOfClass:[NSArray class]]) {
-                        valueTransformer = [MTLJSONAdapter arrayTransformerWithModelClass:modelClass];
-                    }
-                    if ([valueTransformer conformsToProtocol:@protocol(MTLTransformerErrorHandling)]) {
-                        BOOL success = NO;
-                        responseObject = [(NSValueTransformer<MTLTransformerErrorHandling> *)valueTransformer transformedValue:responseObject success:&success error:error];
-                    } else {
-                        responseObject = [valueTransformer transformedValue:responseObject];
-                    }
+                }
+                Class modelClass = requestDict[kModelClassKey];
+                
+                NSValueTransformer *valueTransformer = nil;
+                if ([responseObject isKindOfClass:[NSDictionary class]]) {
+                    valueTransformer = [MTLJSONAdapter dictionaryTransformerWithModelClass:modelClass];
+                } else if ([responseObject isKindOfClass:[NSArray class]]) {
+                    valueTransformer = [MTLJSONAdapter arrayTransformerWithModelClass:modelClass];
+                }
+                if ([valueTransformer conformsToProtocol:@protocol(MTLTransformerErrorHandling)]) {
+                    BOOL success = NO;
+                    responseObject = [(NSValueTransformer<MTLTransformerErrorHandling> *)valueTransformer transformedValue:responseObject success:&success error:error];
+                } else {
+                    responseObject = [valueTransformer transformedValue:responseObject];
                 }
             }
         }
-    }
-    
-    return responseObject;
-}
-
-- (void)registerKeyPath:(NSString *)keyPath resultKeyPath:(NSString *)resultKeyPath modelClass:(Class)modelClass toTask:(NSURLSessionTask *)task
-{
-    NSURLRequest *request = [task originalRequest];
-    NSString *absoluteUrl = [[request URL] absoluteString];
-    
-    if (keyPath && keyPath.length > 0 && modelClass) {
-        NSDictionary *requestDict = @{kKeyPathKey:keyPath, kResultKeyPathKey:resultKeyPath, kModelClassKey:modelClass};
-        [self.serializersDict setObject:requestDict forKey:absoluteUrl];
+        return responseObject;
+    } else {
+        id responseObject = [super responseObjectForResponse:response data:data error:error];
+        
+        if ([responseObject isKindOfClass:[NSDictionary class]]) {
+            *error = [NSError errorWithDomain:NSURLErrorDomain code:responseStatusCode userInfo:responseObject];
+        } else {
+            *error = [NSError errorWithDomain:NSURLErrorDomain code:responseStatusCode userInfo:nil];
+        }
+        return nil;
     }
 }
 
@@ -82,7 +85,10 @@ static const NSString *kModelClassKey = @"kModelClassKey";
     NSString *absoluteUrl = [[request URL] absoluteString];
     
     if (keyPath && keyPath.length > 0 && modelClass) {
-        NSDictionary *requestDict = @{kKeyPathKey:keyPath, kResultKeyPathKey:@"result", kModelClassKey:modelClass};
+        NSDictionary *requestDict = @{kKeyPathKey:keyPath, kModelClassKey:modelClass};
+        [self.serializersDict setObject:requestDict forKey:absoluteUrl];
+    } else {
+        NSDictionary *requestDict = @{kModelClassKey:modelClass};
         [self.serializersDict setObject:requestDict forKey:absoluteUrl];
     }
 }

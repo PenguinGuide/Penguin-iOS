@@ -11,5 +11,6 @@
 @interface FLAnimatedImageView (PGAnimatedImageView)
 
 - (void)setWithImageURL:(NSString *)imageURL placeholder:(UIImage *)placeholder completion:(void(^)(UIImage *image))completion;
+- (void)setStaticImageURL:(NSString *)imageURL placeholder:(UIImage *)placeholder completion:(void(^)(UIImage *image))completion;
 
 @end

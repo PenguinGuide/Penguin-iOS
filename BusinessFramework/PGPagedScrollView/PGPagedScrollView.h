@@ -15,13 +15,19 @@ typedef NS_ENUM(NSInteger, PGPagedScrollViewImageFillMode) {
 };
 
 typedef NS_ENUM(NSInteger, PGPagedScrollViewIconMode) {
-    PGPagedScrollViewIconModeDark,
-    PGPagedScrollViewIconModeLight
+    PGPagedScrollViewIconModeDefault,
+    PGPagedScrollViewIconModeLight,
+    PGPagedScrollViewIconModeImageDark,
+    PGPagedScrollViewIconModeImageLight
 };
 
 @protocol PGPagedScrollViewDelegate <NSObject>
 
+@optional
+
 - (NSArray *)imagesForScrollView;
+- (NSArray *)viewsForScrollView;
+- (void)imageViewDidSelect:(NSInteger)index;
 
 @end
 

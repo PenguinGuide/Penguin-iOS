@@ -18,74 +18,74 @@ static char PGTapHandlerKey;
 
 @implementation UIView (PGView)
 
-- (float)x
+- (CGFloat)pg_x
 {
     return self.frame.origin.x;
 }
 
-- (float)y
+- (CGFloat)pg_y
 {
     return self.frame.origin.y;
 }
 
-- (float)width
+- (CGFloat)pg_width
 {
     return CGRectGetWidth(self.frame);
 }
 
-- (float)height
+- (CGFloat)pg_height
 {
     return CGRectGetHeight(self.frame);
 }
 
-- (float)left
+- (CGFloat)pg_left
 {
     return self.frame.origin.x;
 }
 
-- (float)right
+- (CGFloat)pg_right
 {
     return self.frame.origin.x+self.frame.size.width;
 }
 
-- (float)top
+- (CGFloat)pg_top
 {
     return self.frame.origin.y;
 }
 
-- (float)bottom
+- (CGFloat)pg_bottom
 {
     return self.frame.origin.y+self.frame.size.height;
 }
 
-- (void)setX:(float)x
+- (void)setPg_x:(CGFloat)pg_x
 {
     CGRect frame = self.frame;
-    CGRect newFrame = CGRectMake(x, frame.origin.y, frame.size.width, frame.size.height);
+    CGRect newFrame = CGRectMake(pg_x, frame.origin.y, frame.size.width, frame.size.height);
     
     self.frame = newFrame;
 }
 
-- (void)setY:(float)y
+- (void)setPg_y:(CGFloat)pg_y
 {
     CGRect frame = self.frame;
-    CGRect newFrame = CGRectMake(frame.origin.x, y, frame.size.width, frame.size.height);
+    CGRect newFrame = CGRectMake(frame.origin.x, pg_y, frame.size.width, frame.size.height);
     
     self.frame = newFrame;
 }
 
-- (void)setWidth:(float)width
+- (void)setPg_width:(CGFloat)pg_width
 {
     CGRect frame = self.frame;
-    CGRect newFrame = CGRectMake(frame.origin.x, frame.origin.y, width, frame.size.height);
+    CGRect newFrame = CGRectMake(frame.origin.x, frame.origin.y, pg_width, frame.size.height);
     
     self.frame = newFrame;
 }
 
-- (void)setHeight:(float)height
+- (void)setPg_height:(CGFloat)pg_height
 {
     CGRect frame = self.frame;
-    CGRect newFrame = CGRectMake(frame.origin.x, frame.origin.y, frame.size.width, height);
+    CGRect newFrame = CGRectMake(frame.origin.x, frame.origin.y, frame.size.width, pg_height);
     
     self.frame = newFrame;
 }

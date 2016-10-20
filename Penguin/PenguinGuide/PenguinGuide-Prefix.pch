@@ -11,7 +11,10 @@
 
 #import "PGThemeManager.h"
 #import "PGRouterManager.h"
+#import "PGShareManager.h"
+#import "PGAlibcTraderManager.h"
 #import "PGLog.h"
+#import "PGCache.h"
 
 #import "UIImage+PGImage.h"
 #import "UIColor+PGColor.h"
@@ -21,9 +24,12 @@
 #import "PGMacros.h"
 #import "PGGlobalObject.h"
 #import "PGAPIList.h"
+#import "PGParams.h"
 
 #import "AppDelegate.h"
 #import "PGBaseNavigationController.h"
 #import "PGBaseCollectionView.h"
+
+#import "PGUser.h"
 
 #endif /* PenguinGuide_Prefix_pch */

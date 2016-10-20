@@ -2,14 +2,12 @@
 //  PGLoginViewController.h
 //  Penguin
 //
-//  Created by Jing Dai on 7/6/16.
+//  Created by Jing Dai on 11/10/2016.
 //  Copyright © 2016 Xinglian. All rights reserved.
 //
 
-#import "PGBaseViewController.h"
+#import "PGLoginBaseViewController.h"
 
-@interface PGLoginViewController : PGBaseViewController
-
-- (id)initWithScreenshot:(UIImage *)screenshot;
+@interface PGLoginViewController : PGLoginBaseViewController
 
 @end

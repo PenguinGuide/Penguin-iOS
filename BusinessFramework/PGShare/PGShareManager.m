@@ -8,6 +8,11 @@
 
 static const NSString *sdkKey = @"145aaacfc8950";
 
+static const NSString *WeixinAppId = @"wxc6b9a21b374107ba";
+static const NSString *WeixinAppSecret = @"f760489f7e86e265c623c44c6cb54da2";
+static const NSString *WeiboAppKey = @"1943859143";
+static const NSString *WeiboAppSecret = @"fcb5a4ca57d16b1462997c4441935e38";
+
 #import "PGShareManager.h"
 
 @implementation PGShareManager
@@ -16,15 +21,11 @@ static const NSString *sdkKey = @"145aaacfc8950";
 {
     [ShareSDK registerApp:sdkKey
           activePlatforms:@[@(SSDKPlatformTypeWechat),
-                            @(SSDKPlatformTypeQQ),
                             @(SSDKPlatformTypeSinaWeibo)]
                  onImport:^(SSDKPlatformType platformType) {
                      switch (platformType) {
                          case SSDKPlatformTypeWechat:
                              [ShareSDKConnector connectWeChat:[WXApi class]];
-                             break;
-                         case SSDKPlatformTypeQQ:
-                             [ShareSDKConnector connectQQ:[QQApiInterface class] tencentOAuthClass:[TencentOAuth class]];
                              break;
                          case SSDKPlatformTypeSinaWeibo:
                              [ShareSDKConnector connectWeibo:[WeiboSDK class]];
@@ -35,19 +36,14 @@ static const NSString *sdkKey = @"145aaacfc8950";
                  } onConfiguration:^(SSDKPlatformType platformType, NSMutableDictionary *appInfo) {
                      switch (platformType) {
                          case SSDKPlatformTypeWechat:
-                             [appInfo SSDKSetupWeChatByAppId:@""
-                                                   appSecret:@""];
-                             break;
-                         case SSDKPlatformTypeQQ:
-                             [appInfo SSDKSetupQQByAppId:@""
-                                                  appKey:@""
-                                                authType:SSDKAuthTypeBoth];
+                             [appInfo SSDKSetupWeChatByAppId:WeixinAppId
+                                                   appSecret:WeixinAppSecret];
                              break;
                          case SSDKPlatformTypeSinaWeibo:
-                             [appInfo SSDKSetupSinaWeiboByAppKey:@""
-                                                       appSecret:@""
-                                                     redirectUri:@"http://www.sharesdk.cn"
-                                                        authType:SSDKAuthTypeBoth];
+                             [appInfo SSDKSetupSinaWeiboByAppKey:WeiboAppKey
+                                                       appSecret:WeiboAppSecret
+                                                     redirectUri:@"http://penguinguide.cn/mobile"
+                                                        authType:SSDKAuthTypeWeb];
                          default:
                              break;
                      }
@@ -69,13 +65,35 @@ static const NSString *sdkKey = @"145aaacfc8950";
         case SSDKPlatformTypeSinaWeibo:
             [PGShareManager shareToWeibo:shareItem completion:completion];
             break;
-        case SSDKPlatformTypeQQ:
-            [PGShareManager shareToQQ:shareItem completion:completion];
-            break;
         default:
             break;
     }
 }
+
++ (void)loginWithWechatOnStateChanged:(SSDKGetUserStateChangedHandler)stateChangedHandler
+{
+    // NOTE: LSApplicationQueriesSchemes need configured for iOS 9+
+    [ShareSDK cancelAuthorize:SSDKPlatformTypeWechat];
+    [ShareSDK getUserInfo:SSDKPlatformTypeWechat
+           onStateChanged:^(SSDKResponseState state, SSDKUser *user, NSError *error) {
+               if (stateChangedHandler) {
+                   stateChangedHandler(state, user, error);
+               }
+           }];
+}
+
++ (void)loginWithWeiboOnStateChanged:(SSDKGetUserStateChangedHandler)stateChangedHandler
+{
+    [ShareSDK cancelAuthorize:SSDKPlatformTypeSinaWeibo];
+    [ShareSDK getUserInfo:SSDKPlatformTypeSinaWeibo
+           onStateChanged:^(SSDKResponseState state, SSDKUser *user, NSError *error) {
+               if (stateChangedHandler) {
+                   stateChangedHandler(state, user, error);
+               }
+           }];
+}
+
+#pragma mark - <Private Methods>
 
 + (void)shareToWechatTimeline:(PGShareItem *)shareItem completion:(void (^)(BOOL))completion
 {
@@ -137,25 +155,6 @@ static const NSString *sdkKey = @"145aaacfc8950";
                                                 type:SSDKContentTypeWebPage];
     
     [ShareSDK share:SSDKPlatformTypeSinaWeibo
-         parameters:shareParams
-     onStateChanged:^(SSDKResponseState state, NSDictionary *userData, SSDKContentEntity *contentEntity, NSError *error) {
-         
-     }];
-}
-
-+ (void)shareToQQ:(PGShareItem *)shareItem completion:(void (^)(BOOL))completion
-{
-    NSMutableDictionary *shareParams = [NSMutableDictionary dictionary];
-    
-    [shareParams SSDKSetupQQParamsByText:shareItem.text
-                                   title:shareItem.title
-                                     url:shareItem.url
-                              thumbImage:shareItem.thumbnailImage
-                                   image:shareItem.image
-                                    type:SSDKContentTypeWebPage
-                      forPlatformSubType:SSDKPlatformSubTypeQQFriend];
-    
-    [ShareSDK share:SSDKPlatformTypeQQ
          parameters:shareParams
      onStateChanged:^(SSDKResponseState state, NSDictionary *userData, SSDKContentEntity *contentEntity, NSError *error) {
          

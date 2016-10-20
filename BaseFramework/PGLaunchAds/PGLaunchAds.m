@@ -62,6 +62,7 @@
 {
     self.countdownSec = 3;
     
+    // http://www.cocoachina.com/ios/20160628/16828.html
     self.window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
     self.window.windowLevel = UIWindowLevelStatusBar + 1;
     self.window.hidden = NO;    // default is NO, set to YES will show the window

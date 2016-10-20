@@ -7,11 +7,16 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "PGRouter.h"
 
 @interface PGRouterManager : NSObject
 
 + (void)registerRouters;
 
 + (void)routeToLoginPage;
+
++ (void)routeToTopicPage;
+
++ (void)routeToHomePage;
 
 @end

@@ -1,0 +1,258 @@
+{
+    "items": [
+             {
+             "type": "article",
+             "link": "qiechihe://article?article_id=1",
+             "channel": "city_guide",
+             "image": "https://s6.postimg.org/b933841m9/2ffeaf34247967_56c9e1880f88c_copy.jpg",
+             "reads": "8022",
+             "comments": "187",
+             "id": "1"
+             },
+             {
+             "type": "article",
+             "link": "qiechihe://article?article_id=2",
+             "category": "shop",
+             "image": "https://s6.postimg.org/u2ow53zu9/2ffeaf34247967_56c9e1880f88c_copy1.jpg",
+             "reads": "8022",
+             "comments": "187",
+             "id": "2"
+             },
+             {
+             "type": "article",
+             "link": "qiechihe://article?article_id=3",
+             "category": "test",
+             "image": "https://s6.postimg.org/gaah9h92p/2ffeaf34247967_56c9e1880f88c.jpg",
+             "reads": "1899",
+             "comments": "129",
+             "id": "3"
+             },
+             {
+             "type": "article",
+             "link": "qiechihe://article?article_id=4",
+             "category": "city_guide",
+             "image": "https://s6.postimg.org/3x28gb8s1/2ffeaf34247967_56c9e1880f88c222.jpg",
+             "reads": "29",
+             "comments": "12",
+             "id": "4"
+             },
+             {
+                "type": "flashbuy",
+                "goods": [
+                          {
+                          "discount_price": 199,
+                          "original_price": 238,
+                          "name": "美奇乐Mikkeller",
+                          "image": "https://s6.postimg.org/rq09iz0hd/PG_HOME_flashbuy_pic.png",
+                          "unit": "箱",
+                          "desc": "距离闪购开始",
+                          "time": 1472772156
+                          },
+                          {
+                          "discount_price": 199,
+                          "original_price": 238,
+                          "name": "美奇乐Mikkeller",
+                          "image": "https://s6.postimg.org/rq09iz0hd/PG_HOME_flashbuy_pic.png",
+                          "unit": "箱",
+                          "desc": "距离闪购开始",
+                          "time": 1472772156
+                          },
+                          {
+                          "discount_price": 199,
+                          "original_price": 238,
+                          "name": "美奇乐Mikkeller",
+                          "image": "https://s6.postimg.org/rq09iz0hd/PG_HOME_flashbuy_pic.png",
+                          "unit": "箱",
+                          "desc": "距离闪购开始",
+                          "time": 1472772156
+                          }
+                ]
+             },
+             {
+             "type": "goods_collection",
+             "title": "精酿啤酒：夏日清凉选择",
+             "desc": "夏日精选",
+             "goods": [
+                       {
+                       "discount_price": 199,
+                       "original_price": 238,
+                       "name": "美奇乐Mikkeller精酿啤酒",
+                       "image": "https://s6.postimg.org/8oh6elvld/PG_HOME_productlist_pic1.png",
+                       "unit": "瓶",
+                       "is_new": true,
+                       "collected": true
+                       },
+                       {
+                       "discount_price": 239,
+                       "original_price": 278,
+                       "name": "美奇乐Mikkeller精酿啤酒",
+                       "image": "https://s6.postimg.org/7ngxphelt/PG_HOME_productlist_pic2.png",
+                       "unit": "瓶",
+                       "is_new": true,
+                       "collected": true
+                       },
+                       {
+                       "discount_price": 199,
+                       "original_price": 238,
+                       "name": "美奇乐Mikkeller精酿啤酒",
+                       "image": "https://s6.postimg.org/8oh6elvld/PG_HOME_productlist_pic1.png",
+                       "unit": "瓶",
+                       "is_new": false,
+                       "collected": true
+                       },
+                       {
+                       "discount_price": 239,
+                       "original_price": 278,
+                       "name": "美奇乐Mikkeller精酿啤酒",
+                       "image": "https://s6.postimg.org/7ngxphelt/PG_HOME_productlist_pic2.png",
+                       "unit": "瓶",
+                       "collected": true
+                       },
+                       {
+                       "discount_price": 199,
+                       "original_price": 238,
+                       "name": "美奇乐Mikkeller精酿啤酒",
+                       "image": "https://s6.postimg.org/8oh6elvld/PG_HOME_productlist_pic1.png",
+                       "unit": "瓶",
+                       "collected": true
+                       },
+                       {
+                       "discount_price": 239,
+                       "original_price": 278,
+                       "name": "美奇乐Mikkeller精酿啤酒",
+                       "image": "https://s6.postimg.org/7ngxphelt/PG_HOME_productlist_pic2.png",
+                       "unit": "瓶",
+                       "collected": true
+                       },
+                       {
+                       "discount_price": 199,
+                       "original_price": 238,
+                       "name": "美奇乐Mikkeller精酿啤酒",
+                       "image": "https://s6.postimg.org/8oh6elvld/PG_HOME_productlist_pic1.png",
+                       "unit": "瓶",
+                       "is_new": true,
+                       "collected": true
+                       },
+                       {
+                       "discount_price": 239,
+                       "original_price": 278,
+                       "name": "美奇乐Mikkeller精酿啤酒",
+                       "image": "https://s6.postimg.org/7ngxphelt/PG_HOME_productlist_pic2.png",
+                       "unit": "瓶",
+                       "collected": true
+                       }
+                       ]
+             },
+             {
+             "type": "topic",
+             "link": "qiechihe://topic?topicId=1111",
+             "image": "https://s6.postimg.io/hk0fvmqep/1b37dd41716489_57b1d4e4bed30.jpg",
+             "goods": [
+                       {
+                       "discount_price": 199,
+                       "original_price": 238,
+                       "name": "美奇乐Mikkeller精酿啤酒",
+                       "image": "https://s6.postimg.org/camzr91yp/PG_HOME_topic_pic1.png",
+                       "unit": "瓶",
+                       "status": "new",
+                       "collected": true,
+                       "is_new": true
+                       },
+                       {
+                       "discount_price": 199,
+                       "original_price": 238,
+                       "name": "美奇乐Mikkeller精酿啤酒",
+                       "image": "https://s6.postimg.org/nbi4w9u7l/PG_HOME_topic_pic2.png",
+                       "unit": "瓶",
+                       "status": "new",
+                       "collected": true,
+                       "is_new": true
+                       },
+                       {
+                       "discount_price": 199,
+                       "original_price": 238,
+                       "name": "美奇乐Mikkeller精酿啤酒",
+                       "image": "https://s6.postimg.org/camzr91yp/PG_HOME_topic_pic1.png",
+                       "unit": "瓶",
+                       "status": "new",
+                       "collected": true,
+                       "is_new": false
+                       },
+                       {
+                       "discount_price": 199,
+                       "original_price": 238,
+                       "name": "美奇乐Mikkeller精酿啤酒",
+                       "image": "https://s6.postimg.org/nbi4w9u7l/PG_HOME_topic_pic2.png",
+                       "unit": "瓶",
+                       "status": "new",
+                       "collected": true,
+                       "is_new": true
+                       },
+                       {
+                       "discount_price": 199,
+                       "original_price": 238,
+                       "name": "美奇乐Mikkeller精酿啤酒",
+                       "image": "https://s6.postimg.org/camzr91yp/PG_HOME_topic_pic1.png",
+                       "unit": "瓶",
+                       "status": "new",
+                       "collected": true
+                       },
+                       {
+                       "discount_price": 199,
+                       "original_price": 238,
+                       "name": "美奇乐Mikkeller精酿啤酒",
+                       "image": "https://s6.postimg.org/nbi4w9u7l/PG_HOME_topic_pic2.png",
+                       "unit": "瓶",
+                       "status": "new",
+                       "collected": true,
+                       "is_new": true
+                       }
+                       ]
+             },
+             {
+                "type": "good",
+                "discount_price": 199,
+                "original_price": 238,
+                "name": "美奇乐Mikkeller精酿啤酒",
+                "desc": "7种风味 x 12g",
+                "image": "https://s6.postimg.org/784dlf2up/image.jpg",
+                "unit": "瓶",
+             },
+             {
+             "type": "article",
+             "link": "qiechihe://article?article_id=5",
+             "category": "city_guide",
+             "image": "https://s6.postimg.org/o5pm21835/2ffeaf34247967_56c9e1880f88c2222.jpg",
+             "reads": "8022",
+             "comments": "187",
+             "id": "5"
+             },
+             {
+             "type": "article",
+             "link": "qiechihe://article?article_id=1",
+             "category": "shop",
+             "image": "https://s6.postimg.org/b933841m9/2ffeaf34247967_56c9e1880f88c_copy.jpg",
+             "reads": "8022",
+             "comments": "187",
+             "id": "1"
+             },
+             {
+             "type": "article",
+             "link": "qiechihe://article?article_id=2",
+             "category": "test",
+             "image": "https://s6.postimg.org/u2ow53zu9/2ffeaf34247967_56c9e1880f88c_copy1.jpg",
+             "reads": "1899",
+             "comments": "129",
+             "id": "2"
+             },
+             {
+             "type": "article",
+             "link": "qiechihe://article?article_id=3",
+             "category": "city_guide",
+             "image": "https://s6.postimg.org/gaah9h92p/2ffeaf34247967_56c9e1880f88c.jpg",
+             "reads": "29",
+             "comments": "12",
+             "id": "3"
+             }
+             ]
+}

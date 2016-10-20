@@ -16,9 +16,22 @@
 + (id)clientWithOperationCount:(NSInteger)operationCount;
 + (id)clientWithTimeout:(NSTimeInterval)timeout operationCount:(NSInteger)operationCount;
 
++ (void)enableLogging;
++ (void)disableLogging;
+
+- (void)updateAccessToken:(NSString *)accessToken;
+
 - (void)pg_makeGetRequest:(void(^)(PGRKRequestConfig *config))configBlock
                completion:(PGRKCompletionBlock)completion
                   failure:(PGRKFailureBlock)failure;
+
+- (void)pg_makePostRequest:(void(^)(PGRKRequestConfig *config))configBlock
+                completion:(PGRKCompletionBlock)completion
+                   failure:(PGRKFailureBlock)failure;
+
+- (void)pg_makePatchRequest:(void(^)(PGRKRequestConfig *config))configBlock
+                 completion:(PGRKCompletionBlock)completion
+                    failure:(PGRKFailureBlock)failure;
 
 - (void)cancelAllRequests;
 

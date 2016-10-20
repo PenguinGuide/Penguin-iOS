@@ -1,0 +1,49 @@
+{
+    "banners": [
+                {
+                "image": "https://i.imgsafe.org/b67d0581ee.jpg",
+                "link": "qiechihe://topic",
+                "id": ""
+                },
+                {
+                "image": "https://s6.postimg.org/u2ow53zu9/2ffeaf34247967_56c9e1880f88c_copy1.jpg",
+                "link": "qiechihe://article?article_id=2",
+                "id": ""
+                },
+                {
+                "image": "https://s6.postimg.org/gaah9h92p/2ffeaf34247967_56c9e1880f88c.jpg",
+                "link": "qiechihe://article?article_id=3",
+                "id": ""
+                }
+                ],
+    "tags": [
+             {
+             "name": "啤酒",
+             "link": "deep_link"
+             },
+             {
+             "name": "咖啡",
+             "link": "deep_link"
+             }
+             ],
+    "related_articles": [
+                         {
+                         "image": "https://i.imgsafe.org/108a95be5f.jpg",
+                         "link": ""
+                         },
+                         {
+                         "image": "https://i.imgsafe.org/108a881277.jpg",
+                         "link": ""
+                         },
+                         {
+                         "image": "https://i.imgsafe.org/108a7a2146.jpg",
+                         "link": ""
+                         }
+                         ],
+    "name": "意大利圣马利佐低醇白葡萄酒750ml 莫斯卡托 Asti",
+    "discount_price": 199,
+    "original_price": 238,
+    "unit": "瓶",
+    "desc": "布雷特酵母三料啤酒，法国勃艮第白葡萄酒桶窖。藏梨、白桃、树木、麦芽的风味，酸度为酒带来了漂亮的骨架，麦芽和水果的风味提供了圆润的酒体，轻盈平衡。布雷特酵母三料啤酒，法国勃艮第白葡萄酒桶窖。藏梨、白桃、树木、麦芽的风味，酸度为酒带来了漂亮的骨架，麦芽和水果的风味提供了圆润的酒体，轻盈平衡。布雷特酵母三料啤酒，法国勃艮第白葡萄酒桶窖。藏梨、白桃、树木、麦芽的风味，酸度为酒带来了漂亮的骨架，麦芽和水果的风味提供了圆润的酒体，轻盈平衡。",
+    "collected": true
+}

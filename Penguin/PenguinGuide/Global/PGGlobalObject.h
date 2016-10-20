@@ -6,13 +6,24 @@
 //  Copyright © 2016 Xinglian. All rights reserved.
 //
 
+#define PGGlobal [PGGlobalObject sharedInstance]
+
 #import <Foundation/Foundation.h>
 #import "PGBaseNavigationController.h"
+#import "PGCache.h"
+#import "PGUser.h"
 
 @interface PGGlobalObject : NSObject
 
 + (PGGlobalObject *)sharedInstance;
 
 @property (nonatomic, strong) PGBaseNavigationController *rootNavigationController;
+
+@property (nonatomic, strong, readonly) PGCache *cache;
+@property (nonatomic, strong, readonly) NSString *userId;
+@property (nonatomic, strong, readonly) NSString *accessToken;
+
+- (void)synchronizeUserId:(NSString *)userId;
+- (void)synchronizeToken:(NSString *)accessToken;
 
 @end

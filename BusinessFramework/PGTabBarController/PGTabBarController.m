@@ -16,7 +16,7 @@ static const float TabBarHeight = 50.f;
 
 @property (nonatomic, strong, readwrite) NSArray *viewControllers;
 
-@property (nonatomic, strong) UIViewController *selectedViewController;
+@property (nonatomic, strong, readwrite) UIViewController *selectedViewController;
 @property (nonatomic) NSInteger selectedIndex;
 
 @property (nonatomic, strong) PGTabBar *tabBar;
@@ -30,6 +30,15 @@ static const float TabBarHeight = 50.f;
     // Do any additional setup after loading the view.
     
     self.view.backgroundColor = [UIColor whiteColor];
+}
+
+- (void)viewDidLayoutSubviews
+{
+    [super viewDidLayoutSubviews];
+    
+    //NSLog(@"viewDidLayoutSubviews: %@", NSStringFromCGRect(self.view.frame));
+    
+    self.tabBar.frame = CGRectMake(0, CGRectGetHeight(self.view.frame)-TabBarHeight, CGRectGetWidth(self.view.frame), TabBarHeight);
 }
 
 - (void)setViewControllers:(NSArray *)viewControllers
@@ -50,7 +59,9 @@ static const float TabBarHeight = 50.f;
 
 - (void)selectTab:(NSInteger)index
 {
-    
+    if (index < self.viewControllers.count) {
+        [self tabBarDidSelect:index];
+    }
 }
 
 - (void)setSelectedViewController:(UIViewController *)viewController
@@ -93,6 +104,7 @@ static const float TabBarHeight = 50.f;
         [tabs addObject:tab];
     }
     
+    self.tabBar.selectedIndex = self.selectedIndex;
     [self.tabBar setTabs:[NSArray arrayWithArray:tabs]];
     [self.view addSubview:self.tabBar];
 }
@@ -110,6 +122,12 @@ static const float TabBarHeight = 50.f;
             [vc tabBarDidClicked];
         }
     }
+}
+
+- (UIViewController *)childViewControllerForStatusBarStyle
+{
+    // http://www.th7.cn/Program/IOS/201606/881633.shtml
+    return _selectedViewController;
 }
 
 #pragma mark - <Setters && Getters>

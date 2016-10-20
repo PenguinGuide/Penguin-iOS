@@ -12,7 +12,6 @@
 @interface PGTabBar ()
 
 @property (nonatomic, strong, readwrite) NSArray *tabs;
-@property (nonatomic) NSInteger selectedIndex;
 
 @end
 
