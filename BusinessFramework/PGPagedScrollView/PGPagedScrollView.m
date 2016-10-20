@@ -161,6 +161,11 @@
                 UIView *view = self.banners[i];
                 view.frame = CGRectMake(i*self.frame.size.width, 0, self.frame.size.width, self.pagedScrollView.frame.size.height);
                 [self.pagedScrollView addSubview:view];
+                
+                UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(imageViewDidTapped:)];
+                view.userInteractionEnabled = YES;
+                view.tag = i;
+                [view addGestureRecognizer:tapGesture];
             }
             _pageControl.numberOfPages = self.banners.count;
             _pageControl.currentPage = self.currentPage;
@@ -192,7 +197,7 @@
 
 - (void)imageViewDidTapped:(UIGestureRecognizer *)recognizer
 {
-    UIImageView *tappedView = [recognizer view];
+    UIView *tappedView = [recognizer view];
     if (tappedView) {
         if (self.delegate && [self.delegate respondsToSelector:@selector(imageViewDidSelect:)]) {
             [self.delegate imageViewDidSelect:tappedView.tag];

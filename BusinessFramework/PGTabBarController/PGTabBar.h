@@ -17,6 +17,7 @@
 @interface PGTabBar : UIView
 
 @property (nonatomic, weak) id<PGTabBarDelegate> delegate;
+@property (nonatomic, assign) NSInteger selectedIndex;
 @property (nonatomic, strong, readonly) NSArray *tabs;
 
 - (void)setTabs:(NSArray *)tabs;

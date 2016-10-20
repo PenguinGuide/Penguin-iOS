@@ -7,7 +7,14 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "PGLoginDelegate.h"
+#import "PGLoginTextField.h"
 
 @interface PGPwdSaveView : UIView
+
+@property (nonatomic, weak) id<PGLoginDelegate> delegate;
+
+@property (nonatomic, strong) PGLoginTextField *newPwdTextField;
+@property (nonatomic, strong) UIButton *saveButton;
 
 @end

@@ -32,6 +32,9 @@
 {
     if (!_pwdSaveView) {
         _pwdSaveView = [[PGPwdSaveView alloc] initWithFrame:CGRectMake(0, self.logoImageView.pg_bottom+45, UISCREEN_WIDTH, UISCREEN_HEIGHT-180-(self.logoImageView.pg_bottom+45))];
+        _pwdSaveView.newPwdTextField.delegate = self;
+        _pwdSaveView.newPwdTextField.placeholder = @"请输入新密码";
+        [_pwdSaveView.saveButton setTitle:@"保 存 新 密 码" forState:UIControlStateNormal];
     }
     return _pwdSaveView;
 }

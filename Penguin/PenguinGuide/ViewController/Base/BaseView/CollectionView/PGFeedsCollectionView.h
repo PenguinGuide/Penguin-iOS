@@ -27,13 +27,14 @@
 @protocol PGFeedsCollectionViewDelegate <NSObject>
 
 - (NSArray *)recommendsArray;
+- (NSArray *)iconsArray;
 - (NSArray *)feedsArray;
 - (CGSize)feedsHeaderSize;
 - (NSString *)tabType;
 
 @optional
 
-- (void)channelDidSelect:(NSString *)channelType;
+- (void)channelDidSelect:(NSString *)link;
 - (void)scenarioDidSelect:(NSString *)scenarioType;
 - (void)categoryDidSelect:(PGCategoryIcon *)category;
 

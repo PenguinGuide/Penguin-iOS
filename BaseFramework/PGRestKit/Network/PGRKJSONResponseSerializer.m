@@ -23,42 +23,60 @@ static const NSString *kModelClassKey = @"kModelClassKey";
 
 - (nullable id)responseObjectForResponse:(NSURLResponse *)response data:(NSData *)data error:(NSError *__autoreleasing  _Nullable *)error
 {
-    id responseObject = [super responseObjectForResponse:response data:data error:error];
-    
-    if (responseObject) {
-        NSString *absoluteUrl = response.URL.absoluteString;
-        if (self.serializersDict[absoluteUrl]) {
-            NSDictionary *requestDict = self.serializersDict[absoluteUrl];
-            NSString *keyPath = requestDict[kKeyPathKey];
-            Class modelClass = requestDict[kModelClassKey];
-            if (keyPath.length > 0) {
-                responseObject = [responseObject valueForKeyPath:keyPath];
-                if (!responseObject) {
-                    NSMutableDictionary *userInfo = [NSMutableDictionary dictionary];
-                    if (*error) {
-                        userInfo[NSUnderlyingErrorKey] = *error;
-                    }
-                    userInfo[NSLocalizedDescriptionKey] = [NSString stringWithFormat:@"Failed to find value for key: %@", keyPath];
-                    *error = [NSError errorWithDomain:NSURLErrorDomain code:707 userInfo:userInfo];
-                    return nil;
-                }
-            }
-            NSValueTransformer *valueTransformer = nil;
-            if ([responseObject isKindOfClass:[NSDictionary class]]) {
-                valueTransformer = [MTLJSONAdapter dictionaryTransformerWithModelClass:modelClass];
-            } else if ([responseObject isKindOfClass:[NSArray class]]) {
-                valueTransformer = [MTLJSONAdapter arrayTransformerWithModelClass:modelClass];
-            }
-            if ([valueTransformer conformsToProtocol:@protocol(MTLTransformerErrorHandling)]) {
-                BOOL success = NO;
-                responseObject = [(NSValueTransformer<MTLTransformerErrorHandling> *)valueTransformer transformedValue:responseObject success:&success error:error];
-            } else {
-                responseObject = [valueTransformer transformedValue:responseObject];
-            }
-        }
+    NSUInteger responseStatusCode = 200;
+    if ([response isKindOfClass:[NSHTTPURLResponse class]]) {
+        responseStatusCode = (NSUInteger)[(NSHTTPURLResponse *)response statusCode];
     }
     
-    return responseObject;
+    if (responseStatusCode >= 200 && responseStatusCode <= 299) {
+        id responseObject = [super responseObjectForResponse:response data:data error:error];
+        
+        if (responseObject) {
+            NSString *absoluteUrl = response.URL.absoluteString;
+            if (self.serializersDict[absoluteUrl]) {
+                NSDictionary *requestDict = self.serializersDict[absoluteUrl];
+                if (requestDict[kKeyPathKey]) {
+                    NSString *keyPath = requestDict[kKeyPathKey];
+                    if (keyPath.length > 0) {
+                        responseObject = [responseObject valueForKeyPath:keyPath];
+                        if (!responseObject) {
+                            NSMutableDictionary *userInfo = [NSMutableDictionary dictionary];
+                            if (*error) {
+                                userInfo[NSUnderlyingErrorKey] = *error;
+                            }
+                            userInfo[NSLocalizedDescriptionKey] = [NSString stringWithFormat:@"Failed to find value for key: %@", keyPath];
+                            *error = [NSError errorWithDomain:NSURLErrorDomain code:707 userInfo:userInfo];
+                            return nil;
+                        }
+                    }
+                }
+                Class modelClass = requestDict[kModelClassKey];
+                
+                NSValueTransformer *valueTransformer = nil;
+                if ([responseObject isKindOfClass:[NSDictionary class]]) {
+                    valueTransformer = [MTLJSONAdapter dictionaryTransformerWithModelClass:modelClass];
+                } else if ([responseObject isKindOfClass:[NSArray class]]) {
+                    valueTransformer = [MTLJSONAdapter arrayTransformerWithModelClass:modelClass];
+                }
+                if ([valueTransformer conformsToProtocol:@protocol(MTLTransformerErrorHandling)]) {
+                    BOOL success = NO;
+                    responseObject = [(NSValueTransformer<MTLTransformerErrorHandling> *)valueTransformer transformedValue:responseObject success:&success error:error];
+                } else {
+                    responseObject = [valueTransformer transformedValue:responseObject];
+                }
+            }
+        }
+        return responseObject;
+    } else {
+        id responseObject = [super responseObjectForResponse:response data:data error:error];
+        
+        if ([responseObject isKindOfClass:[NSDictionary class]]) {
+            *error = [NSError errorWithDomain:NSURLErrorDomain code:responseStatusCode userInfo:responseObject];
+        } else {
+            *error = [NSError errorWithDomain:NSURLErrorDomain code:responseStatusCode userInfo:nil];
+        }
+        return nil;
+    }
 }
 
 - (void)registerKeyPath:(NSString *)keyPath modelClass:(Class)modelClass toTask:(NSURLSessionTask *)task

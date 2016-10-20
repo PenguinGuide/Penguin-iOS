@@ -11,10 +11,13 @@ static NSString *const ChannelCell = @"ChannelCell";
 #import "PGHomeRecommendsHeaderView.h"
 #import "PGHomeChannelCell.h"
 #import "PGImageBanner.h"
+#import "PGCategoryIcon.h"
+#import "UIButton+WebCache.h"
 
 @interface PGHomeRecommendsHeaderView () <PGPagedScrollViewDelegate, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout>
 
-@property (nonatomic, strong) NSArray *dataArray;
+@property (nonatomic, strong) NSArray *recommendsArray;
+@property (nonatomic, strong) NSArray *channelsArray;
 @property (nonatomic, strong) UICollectionView *categoriesCollectionView;
 @property (nonatomic, strong, readwrite) PGPagedScrollView *bannersView;
 
@@ -46,9 +49,10 @@ static NSString *const ChannelCell = @"ChannelCell";
     [self addSubview:label];
 }
 
-- (void)reloadBannersWithData:(NSArray *)dataArray
+- (void)reloadBannersWithRecommendsArray:(NSArray *)recommendsArray channelsArray:(NSArray *)channelsArray
 {
-    self.dataArray = dataArray;
+    self.recommendsArray = recommendsArray;
+    self.channelsArray = channelsArray;
     [self.bannersView reloadData];
 }
 
@@ -62,7 +66,7 @@ static NSString *const ChannelCell = @"ChannelCell";
 - (NSArray *)imagesForScrollView
 {
     NSMutableArray *banners = [NSMutableArray new];
-    for (PGImageBanner *banner in self.dataArray) {
+    for (PGImageBanner *banner in self.recommendsArray) {
         if (banner.image) {
             [banners addObject:banner.image];
         }
@@ -72,7 +76,7 @@ static NSString *const ChannelCell = @"ChannelCell";
 
 - (void)imageViewDidSelect:(NSInteger)index
 {
-    PGImageBanner *banner = self.dataArray[index];
+    PGImageBanner *banner = self.recommendsArray[index];
     [[PGRouter sharedInstance] openURL:banner.link];
 }
 
@@ -85,29 +89,17 @@ static NSString *const ChannelCell = @"ChannelCell";
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
 {
-    return 5;
+    return self.channelsArray.count;
 }
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
     PGHomeChannelCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:ChannelCell forIndexPath:indexPath];
     
-    if (indexPath.item == 0) {
-        [cell.channelButton setImage:[UIImage imageNamed:@"pg_home_category_wiki"] forState:UIControlStateNormal];
-        [cell.channelLabel setText:@"涨知识"];
-    } else if (indexPath.item == 1) {
-        [cell.channelButton setImage:[UIImage imageNamed:@"pg_home_category_test"] forState:UIControlStateNormal];
-        [cell.channelLabel setText:@"爱测评"];
-    } else if (indexPath.item == 2) {
-        [cell.channelButton setImage:[UIImage imageNamed:@"pg_home_category_store"] forState:UIControlStateNormal];
-        [cell.channelLabel setText:@"企鹅市集"];
-    } else if (indexPath.item == 3) {
-        [cell.channelButton setImage:[UIImage imageNamed:@"pg_home_category_city_guide"] forState:UIControlStateNormal];
-        [cell.channelLabel setText:@"城市指南"];
-    } else if (indexPath.item == 4) {
-        [cell.channelButton setImage:[UIImage imageNamed:@"pg_home_category_video"] forState:UIControlStateNormal];
-        [cell.channelLabel setText:@"教你做"];
-    }
+    PGCategoryIcon *icon = self.channelsArray[indexPath.item];
+    
+    [cell.channelButton sd_setImageWithURL:[NSURL URLWithString:icon.image] forState:UIControlStateNormal placeholderImage:nil];
+    [cell.channelLabel setText:icon.title];
     
     return cell;
 }
@@ -126,37 +118,28 @@ static NSString *const ChannelCell = @"ChannelCell";
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (indexPath.item == 0) {
-        if (self.delegate && [self.delegate respondsToSelector:@selector(channelDidSelect:)]) {
-            [self.delegate channelDidSelect:@"111"];
-        }
-    } else if (indexPath.item == 1) {
-        if (self.delegate && [self.delegate respondsToSelector:@selector(channelDidSelect:)]) {
-            [self.delegate channelDidSelect:@"111"];
-        }
-    } else if (indexPath.item == 2) {
-        if (self.delegate && [self.delegate respondsToSelector:@selector(channelDidSelect:)]) {
-            [self.delegate channelDidSelect:@"111"];
-        }
-    } else if (indexPath.item == 3) {
-        if (self.delegate && [self.delegate respondsToSelector:@selector(channelDidSelect:)]) {
-            [self.delegate channelDidSelect:@"111"];
-        }
-    } else if (indexPath.item == 4) {
-        if (self.delegate && [self.delegate respondsToSelector:@selector(channelDidSelect:)]) {
-            [self.delegate channelDidSelect:@"111"];
-        }
+    if (self.delegate && [self.delegate respondsToSelector:@selector(channelDidSelect:)]) {
+        PGCategoryIcon *icon = self.channelsArray[indexPath.item];
+        [self.delegate channelDidSelect:icon.link];
     }
 }
 
 #pragma mark - <Setters && Getters>
 
-- (NSArray *)dataArray
+- (NSArray *)recommendsArray
 {
-    if (!_dataArray) {
-        _dataArray = [NSArray new];
+    if (!_recommendsArray) {
+        _recommendsArray = [NSArray new];
     }
-    return _dataArray;
+    return _recommendsArray;
+}
+
+- (NSArray *)channelsArray
+{
+    if (!_channelsArray) {
+        _channelsArray = [NSArray new];
+    }
+    return _channelsArray;
 }
 
 - (PGPagedScrollView *)bannersView

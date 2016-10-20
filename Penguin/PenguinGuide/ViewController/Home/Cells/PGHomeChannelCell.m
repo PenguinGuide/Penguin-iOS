@@ -22,14 +22,13 @@
 - (void)initialize
 {
     [self.contentView addSubview:self.channelButton];
-    [self.channelButton addSubview:self.channelLabel];
+    [self.contentView addSubview:self.channelLabel];
 }
 
 - (UIButton *)channelButton {
     if(_channelButton == nil) {
-        _channelButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, self.pg_width, self.pg_height)];
+        _channelButton = [[UIButton alloc] initWithFrame:CGRectMake(15, 15, 30, 30)];
         _channelButton.userInteractionEnabled = NO;
-        [_channelButton setImageEdgeInsets:UIEdgeInsetsMake(0, 0, 20, 0)];
     }
     return _channelButton;
 }

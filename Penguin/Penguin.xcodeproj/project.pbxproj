@@ -87,6 +87,7 @@
 		0F59B9291D92886100DB9FCE /* PGArticleCommentReplyCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0F59B9281D92886100DB9FCE /* PGArticleCommentReplyCell.m */; };
 		0F6281BA1D8FB6EA004E0596 /* PGTag.m in Sources */ = {isa = PBXBuildFile; fileRef = 0F6281B91D8FB6EA004E0596 /* PGTag.m */; };
 		0F6281BD1D8FE61E004E0596 /* PGArticleParagraphCatalogImageCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0F6281BC1D8FE61E004E0596 /* PGArticleParagraphCatalogImageCell.m */; };
+		0F67A1031DB77F3E0021250B /* PGSignupInfoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0F67A1021DB77F3E0021250B /* PGSignupInfoViewController.m */; };
 		0F6E900C1D7528E400F4ED32 /* PGScenarioViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0F6E900B1D7528E400F4ED32 /* PGScenarioViewController.m */; };
 		0F7298711D96578F001821C9 /* PGVideoPlayerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0F7298701D96578F001821C9 /* PGVideoPlayerViewController.m */; };
 		0F76A16A1D4A006600C5041C /* PGArticleParagraphGIFImageCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0F76A1691D4A006600C5041C /* PGArticleParagraphGIFImageCell.m */; };
@@ -137,6 +138,7 @@
 		0FB4FE451D38939900A1EAAA /* PGArticleViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0FB4FE441D38939900A1EAAA /* PGArticleViewController.m */; };
 		0FB8F96F1D339CD0005E6C56 /* PGRouterManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 0FB8F96E1D339CD0005E6C56 /* PGRouterManager.m */; };
 		0FB8F9721D339EBA005E6C56 /* PGGlobalObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 0FB8F9711D339EBA005E6C56 /* PGGlobalObject.m */; };
+		0FBBB0DA1DB4C8A900BA33AF /* PGSignupPwdViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0FBBB0D91DB4C8A900BA33AF /* PGSignupPwdViewController.m */; };
 		0FBBEDE11D73E08C001E75BA /* PGSearchResultsArticleCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0FBBEDE01D73E08C001E75BA /* PGSearchResultsArticleCell.m */; };
 		0FBBEDE41D741894001E75BA /* PGSearchResultsHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0FBBEDE31D741894001E75BA /* PGSearchResultsHeaderView.m */; };
 		0FBBEDE81D7420F8001E75BA /* PGSegmentView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0FBBEDE71D7420F8001E75BA /* PGSegmentView.m */; };
@@ -149,6 +151,8 @@
 		0FC160101DACD85D00EC462C /* PGLoginView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0FC1600F1DACD85D00EC462C /* PGLoginView.m */; };
 		0FC160131DACD8B600EC462C /* PGLoginTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = 0FC160121DACD8B600EC462C /* PGLoginTextField.m */; };
 		0FC160161DACDAE100EC462C /* PGSMSCodeButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 0FC160151DACDAE100EC462C /* PGSMSCodeButton.m */; };
+		0FC9E6B51DB083FC007069D5 /* PGTopicInfoHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0FC9E6B41DB083FC007069D5 /* PGTopicInfoHeaderView.m */; };
+		0FC9E6B81DB08E5C007069D5 /* PGTopicHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0FC9E6B71DB08E5C007069D5 /* PGTopicHeaderView.m */; };
 		0FD590D31D38B71600731962 /* PGBaseViewController+TransitionAnimation.m in Sources */ = {isa = PBXBuildFile; fileRef = 0FD590D21D38B71600731962 /* PGBaseViewController+TransitionAnimation.m */; };
 		0FD590D61D38BB3100731962 /* PGHomeToArticleTransition.m in Sources */ = {isa = PBXBuildFile; fileRef = 0FD590D51D38BB3100731962 /* PGHomeToArticleTransition.m */; };
 		0FD9061C1D47AABA00AEBE4B /* demo.html in Resources */ = {isa = PBXBuildFile; fileRef = 0FD9061B1D47AABA00AEBE4B /* demo.html */; };
@@ -338,6 +342,8 @@
 		0F6281B91D8FB6EA004E0596 /* PGTag.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PGTag.m; sourceTree = "<group>"; };
 		0F6281BB1D8FE61E004E0596 /* PGArticleParagraphCatalogImageCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PGArticleParagraphCatalogImageCell.h; sourceTree = "<group>"; };
 		0F6281BC1D8FE61E004E0596 /* PGArticleParagraphCatalogImageCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PGArticleParagraphCatalogImageCell.m; sourceTree = "<group>"; };
+		0F67A1011DB77F3E0021250B /* PGSignupInfoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PGSignupInfoViewController.h; sourceTree = "<group>"; };
+		0F67A1021DB77F3E0021250B /* PGSignupInfoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PGSignupInfoViewController.m; sourceTree = "<group>"; };
 		0F6E900A1D7528E400F4ED32 /* PGScenarioViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PGScenarioViewController.h; sourceTree = "<group>"; };
 		0F6E900B1D7528E400F4ED32 /* PGScenarioViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PGScenarioViewController.m; sourceTree = "<group>"; };
 		0F72986F1D96578F001821C9 /* PGVideoPlayerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PGVideoPlayerViewController.h; sourceTree = "<group>"; };
@@ -431,6 +437,8 @@
 		0FB8F96E1D339CD0005E6C56 /* PGRouterManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PGRouterManager.m; sourceTree = "<group>"; };
 		0FB8F9701D339EBA005E6C56 /* PGGlobalObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PGGlobalObject.h; sourceTree = "<group>"; };
 		0FB8F9711D339EBA005E6C56 /* PGGlobalObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PGGlobalObject.m; sourceTree = "<group>"; };
+		0FBBB0D81DB4C8A900BA33AF /* PGSignupPwdViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PGSignupPwdViewController.h; sourceTree = "<group>"; };
+		0FBBB0D91DB4C8A900BA33AF /* PGSignupPwdViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PGSignupPwdViewController.m; sourceTree = "<group>"; };
 		0FBBEDDF1D73E08C001E75BA /* PGSearchResultsArticleCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PGSearchResultsArticleCell.h; sourceTree = "<group>"; };
 		0FBBEDE01D73E08C001E75BA /* PGSearchResultsArticleCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PGSearchResultsArticleCell.m; sourceTree = "<group>"; };
 		0FBBEDE21D741894001E75BA /* PGSearchResultsHeaderView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PGSearchResultsHeaderView.h; sourceTree = "<group>"; };
@@ -452,6 +460,10 @@
 		0FC160121DACD8B600EC462C /* PGLoginTextField.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PGLoginTextField.m; sourceTree = "<group>"; };
 		0FC160141DACDAE100EC462C /* PGSMSCodeButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PGSMSCodeButton.h; sourceTree = "<group>"; };
 		0FC160151DACDAE100EC462C /* PGSMSCodeButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PGSMSCodeButton.m; sourceTree = "<group>"; };
+		0FC9E6B31DB083FC007069D5 /* PGTopicInfoHeaderView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PGTopicInfoHeaderView.h; sourceTree = "<group>"; };
+		0FC9E6B41DB083FC007069D5 /* PGTopicInfoHeaderView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PGTopicInfoHeaderView.m; sourceTree = "<group>"; };
+		0FC9E6B61DB08E5C007069D5 /* PGTopicHeaderView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PGTopicHeaderView.h; sourceTree = "<group>"; };
+		0FC9E6B71DB08E5C007069D5 /* PGTopicHeaderView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PGTopicHeaderView.m; sourceTree = "<group>"; };
 		0FD590D11D38B71600731962 /* PGBaseViewController+TransitionAnimation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "PGBaseViewController+TransitionAnimation.h"; sourceTree = "<group>"; };
 		0FD590D21D38B71600731962 /* PGBaseViewController+TransitionAnimation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "PGBaseViewController+TransitionAnimation.m"; sourceTree = "<group>"; };
 		0FD590D41D38BB3100731962 /* PGHomeToArticleTransition.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PGHomeToArticleTransition.h; sourceTree = "<group>"; };
@@ -1301,6 +1313,7 @@
 		0F877A2E1D7D0F06007BDBE9 /* Topic */ = {
 			isa = PBXGroup;
 			children = (
+				0FC9E6B21DB083D9007069D5 /* Views */,
 				0F877A2F1D7D0F1F007BDBE9 /* PGTopicViewController.h */,
 				0F877A301D7D0F1F007BDBE9 /* PGTopicViewController.m */,
 			);
@@ -1344,12 +1357,16 @@
 				0FC1600B1DACCDEA00EC462C /* PGLoginViewController.m */,
 				0FED899F1DADEAED0081B999 /* PGSignupViewController.h */,
 				0FED89A01DADEAED0081B999 /* PGSignupViewController.m */,
+				0FBBB0D81DB4C8A900BA33AF /* PGSignupPwdViewController.h */,
+				0FBBB0D91DB4C8A900BA33AF /* PGSignupPwdViewController.m */,
 				0FAF649D1DAE2CD000543513 /* PGPwdLoginViewController.h */,
 				0FAF649E1DAE2CD000543513 /* PGPwdLoginViewController.m */,
 				0FF76F8E1DAF2DAE008831D8 /* PGPwdResetViewController.h */,
 				0FF76F8F1DAF2DAE008831D8 /* PGPwdResetViewController.m */,
 				0FF76F911DAF2F2A008831D8 /* PGPwdSaveViewController.h */,
 				0FF76F921DAF2F2A008831D8 /* PGPwdSaveViewController.m */,
+				0F67A1011DB77F3E0021250B /* PGSignupInfoViewController.h */,
+				0F67A1021DB77F3E0021250B /* PGSignupInfoViewController.m */,
 			);
 			path = Login;
 			sourceTree = "<group>";
@@ -1533,6 +1550,17 @@
 				0FAF64A11DAE2EC100543513 /* PGPwdLoginView.m */,
 				0FF76F941DAF2F82008831D8 /* PGPwdSaveView.h */,
 				0FF76F951DAF2F82008831D8 /* PGPwdSaveView.m */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		0FC9E6B21DB083D9007069D5 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				0FC9E6B31DB083FC007069D5 /* PGTopicInfoHeaderView.h */,
+				0FC9E6B41DB083FC007069D5 /* PGTopicInfoHeaderView.m */,
+				0FC9E6B61DB08E5C007069D5 /* PGTopicHeaderView.h */,
+				0FC9E6B71DB08E5C007069D5 /* PGTopicHeaderView.m */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -1892,6 +1920,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0FC9E6B81DB08E5C007069D5 /* PGTopicHeaderView.m in Sources */,
 				0F79B10A1D6FF9740080BC4F /* PGChannelCategoryCell.m in Sources */,
 				0FB8F96F1D339CD0005E6C56 /* PGRouterManager.m in Sources */,
 				0F3C7EF11D2F72E700284066 /* PGHomeViewController.m in Sources */,
@@ -1944,6 +1973,7 @@
 				0F55BA8C1D701CBF00D9D159 /* PGChannelCategory.m in Sources */,
 				0F12070C1D9CBFD4007993AE /* PGGoodBannersCell.m in Sources */,
 				0F21FEBE1D9150FB0036F14A /* PGDashedLineView.m in Sources */,
+				0FBBB0DA1DB4C8A900BA33AF /* PGSignupPwdViewController.m in Sources */,
 				0F7EEF5F1D210F63008D175C /* AppDelegate.m in Sources */,
 				0F84FE291D485F3D0054F2D7 /* PGArticleViewModel.m in Sources */,
 				0FBBEDEB1D742C12001E75BA /* PGSearchResultsViewModel.m in Sources */,
@@ -1970,6 +2000,7 @@
 				0F2D09BE1D6F102F00957301 /* PGTagViewController.m in Sources */,
 				0F6281BA1D8FB6EA004E0596 /* PGTag.m in Sources */,
 				0F59B9231D92771D00DB9FCE /* PGUser.m in Sources */,
+				0FC9E6B51DB083FC007069D5 /* PGTopicInfoHeaderView.m in Sources */,
 				0F59B91B1D925B4300DB9FCE /* PGArticleCommentCell.m in Sources */,
 				0F877A381D7D1433007BDBE9 /* PGTopic.m in Sources */,
 				0F21FEBA1D9140EF0036F14A /* PGArticleRelatedArticlesCell.m in Sources */,
@@ -2016,6 +2047,7 @@
 				0F0008C21D71724A00BED6FA /* PGChannelAllCategoriesHeaderView.m in Sources */,
 				0FC1600C1DACCDEA00EC462C /* PGLoginViewController.m in Sources */,
 				0F51B3091D6D671600B4690F /* PGHomeChannelCell.m in Sources */,
+				0F67A1031DB77F3E0021250B /* PGSignupInfoViewController.m in Sources */,
 				0FF76F901DAF2DAE008831D8 /* PGPwdResetViewController.m in Sources */,
 				0FFAD0F41D780DF8009F9E27 /* PGGoodsCollectionView.m in Sources */,
 				0FA5F2EE1D94DFFF00E9242B /* PGMeCell.m in Sources */,

@@ -28,4 +28,7 @@
 
 + (void)shareItem:(void(^)(PGShareItem *shareItem))itemBlock toPlatform:(SSDKPlatformType)platformType completion:(void(^)(BOOL success))completion;
 
++ (void)loginWithWechatOnStateChanged:(SSDKGetUserStateChangedHandler)stateChangedHandler;
++ (void)loginWithWeiboOnStateChanged:(SSDKGetUserStateChangedHandler)stateChangedHandler;
+
 @end

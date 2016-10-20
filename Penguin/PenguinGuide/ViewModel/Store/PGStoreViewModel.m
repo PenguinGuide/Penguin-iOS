@@ -8,17 +8,20 @@
 
 #import "PGStoreViewModel.h"
 
+#import "PGImageBanner.h"
+#import "PGCategoryIcon.h"
+
 #import "PGCarouselBanner.h"
 #import "PGArticleBanner.h"
 #import "PGFlashbuyBanner.h"
 #import "PGGoodsCollectionBanner.h"
 #import "PGTopicBanner.h"
 #import "PGSingleGoodBanner.h"
-#import "PGImageBanner.h"
 
 @interface PGStoreViewModel ()
 
 @property (nonatomic, strong, readwrite) NSArray *recommendsArray;
+@property (nonatomic, strong, readwrite) NSArray *categoriesArray;
 @property (nonatomic, strong, readwrite) NSArray *bannersArray;
 
 @end
@@ -29,16 +32,21 @@
 {
     PGWeakSelf(self);
     [self.apiClient pg_makeGetRequest:^(PGRKRequestConfig *config) {
-        config.route = PG_Home_Recommends;
-        config.keyPath = @"items";
-        config.model = [PGImageBanner new];
-        config.isMockAPI = YES;
-        config.mockFileName = @"v1_store_recommends.json";
+        config.route = PG_Store_Recommends;
+        config.keyPath = nil;
     } completion:^(id response) {
-        weakself.recommendsArray = response;
+        NSDictionary *responseDict = [response firstObject];
+        if (responseDict && [responseDict isKindOfClass:[NSDictionary class]]) {
+            if (responseDict[@"banners"]) {
+                weakself.recommendsArray = [PGImageBanner modelsFromArray:responseDict[@"banners"]];
+            }
+            if (responseDict[@"categories"]) {
+                weakself.categoriesArray = [PGCategoryIcon modelsFromArray:responseDict[@"categories"]];
+            }
+        }
         [weakself requestFeeds];
     } failure:^(NSError *error) {
-        
+        [weakself requestFeeds];
     }];
 }
 
@@ -46,14 +54,13 @@
 {
     PGWeakSelf(self);
     [self.apiClient pg_makeGetRequest:^(PGRKRequestConfig *config) {
-        config.route = PG_Home_Feeds;
+        config.route = PG_Store_Feeds;
         config.keyPath = @"items";
-        config.isMockAPI = YES;
-        config.mockFileName = @"v1_store_banners.json";
     } completion:^(id response) {
-        if (response[@"items"] && [response[@"items"] isKindOfClass:[NSArray class]]) {
+        NSDictionary *responseDict = [response firstObject];
+        if (responseDict[@"items"] && [responseDict[@"items"] isKindOfClass:[NSArray class]]) {
             NSMutableArray *models = [NSMutableArray new];
-            for (NSDictionary *dict in response[@"items"]) {
+            for (NSDictionary *dict in responseDict[@"items"]) {
                 if (dict[@"type"]) {
                     if ([dict[@"type"] isEqualToString:@"carousel"]) {
                         PGCarouselBanner *carouseBanner = [PGCarouselBanner modelFromDictionary:dict];

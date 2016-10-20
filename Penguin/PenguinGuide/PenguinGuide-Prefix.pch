@@ -11,6 +11,7 @@
 
 #import "PGThemeManager.h"
 #import "PGRouterManager.h"
+#import "PGShareManager.h"
 #import "PGAlibcTraderManager.h"
 #import "PGLog.h"
 #import "PGCache.h"
@@ -28,5 +29,7 @@
 #import "AppDelegate.h"
 #import "PGBaseNavigationController.h"
 #import "PGBaseCollectionView.h"
+
+#import "PGUser.h"
 
 #endif /* PenguinGuide_Prefix_pch */

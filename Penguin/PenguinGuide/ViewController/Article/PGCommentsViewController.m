@@ -37,7 +37,7 @@
     [self.view addSubview:self.commentInputAccessoryView];
     
     self.viewModel = [[PGCommentsViewModel alloc] initWithAPIClient:self.apiClient];
-    [self.viewModel requestData];
+    [self.viewModel requestComments:self.articleId];
     
     PGWeakSelf(self);
     [self observe:self.viewModel keyPath:@"commentsArray" block:^(id changedObject) {
@@ -45,7 +45,19 @@
         if (commentsArray && [commentsArray isKindOfClass:[NSArray class]]) {
             [weakself.commentsCollectionView reloadData];
         }
+        [weakself dismissLoading];
     }];
+    [self observeError:self.viewModel];
+}
+
+- (void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    
+    if (!self.viewModel.commentsArray) {
+        [self showLoading];
+        [self.viewModel requestComments:self.articleId];
+    }
 }
 
 - (void)dealloc
@@ -69,7 +81,7 @@
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
     PGComment *comment = self.viewModel.commentsArray[indexPath.item];
-    if (comment.comment.length > 0) {
+    if (!comment.replyComment) {
         PGArticleCommentCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:ArticleCommentCell forIndexPath:indexPath];
         cell.delegate = self;
         
@@ -91,7 +103,7 @@
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath
 {
     PGComment *comment = self.viewModel.commentsArray[indexPath.item];
-    if (comment.comment.length > 0) {
+    if (!comment.replyComment) {
         return [PGArticleCommentCell cellSize:comment];
     } else {
         return [PGArticleCommentReplyCell cellSize:comment];

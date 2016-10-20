@@ -13,13 +13,13 @@
 + (NSDictionary *)JSONKeyPathsByPropertyKey
 {
     return @{
-             @"likes": @"likes",
+             @"likes": @"favor_count",
              @"liked": @"liked",
-             @"comment": @"comment",
-             @"reply": @"reply",
-             @"replyTo": @"reply_to",
-             @"time": @"time",
-             @"user": @"user"
+             @"content": @"content",
+             @"time": @"created_at",
+             @"user": @"user",
+             
+             @"replyComment": @"reply"
             };
 }
 
@@ -28,9 +28,19 @@
     return [NSValueTransformer valueTransformerForName:PGStringValueTransformer];
 }
 
++ (NSValueTransformer *)timeJSONTransformer
+{
+    return [NSValueTransformer valueTransformerForName:PGCommentTimeValueTransformer];
+}
+
 + (NSValueTransformer *)userJSONTransformer
 {
     return [MTLJSONAdapter dictionaryTransformerWithModelClass:[PGUser class]];
+}
+
++ (NSValueTransformer *)replyCommentJSONTransformer
+{
+    return [MTLJSONAdapter dictionaryTransformerWithModelClass:[PGComment class]];
 }
 
 @end

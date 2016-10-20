@@ -19,6 +19,8 @@
              @"image" : @"image",
              @"unit" : @"unit",
              @"desc" : @"desc",
+             @"link" : @"link",
+             @"goodsId" : @"id"
             };
 }
 

@@ -38,7 +38,6 @@
     [self.view addSubview:self.meCollectionView];
     
     self.viewModel = [[PGMeViewModel alloc] initWithAPIClient:self.apiClient];
-    [self.viewModel requestData];
     
     PGWeakSelf(self);
     [self observe:self.viewModel keyPath:@"me" block:^(id changedObject) {
@@ -47,6 +46,21 @@
             [weakself.meCollectionView reloadData];
         }
     }];
+    [self observeError:self.viewModel];
+}
+
+- (void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    
+    if (!PGGlobal.userId) {
+        [PGRouterManager routeToLoginPage];
+        [PGRouterManager routeToHomePage];
+    } else {
+        if (!self.viewModel.me) {
+            [self.viewModel requestData];
+        }
+    }
 }
 
 - (void)viewWillAppear:(BOOL)animated

@@ -11,5 +11,6 @@
 @interface NSValueTransformer (PGRKValueTransformer)
 
 extern NSString * const PGStringValueTransformer;
+extern NSString * const PGCommentTimeValueTransformer;
 
 @end

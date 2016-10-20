@@ -24,6 +24,7 @@
     self.backgroundColor = [UIColor clearColor];
     self.textColor = [UIColor whiteColor];
     self.font = Theme.fontSmallBold;
+    self.returnKeyType = UIReturnKeyDone;
     
     UIView *horizontalLine = [[UIView alloc] initWithFrame:CGRectMake(0, self.pg_height-1/[UIScreen mainScreen].scale, self.pg_width, 1/[UIScreen mainScreen].scale)];
     horizontalLine.backgroundColor = [UIColor whiteColor];

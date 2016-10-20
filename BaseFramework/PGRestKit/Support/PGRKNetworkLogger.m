@@ -6,6 +6,12 @@
 //  Copyright © 2016 Xinglian. All rights reserved.
 //
 
+#ifdef DEBUG
+#define NSLog(format, ...) printf("\n[%s] %s %s\n", __TIME__, __FUNCTION__, [[NSString stringWithFormat:format, ## __VA_ARGS__] UTF8String]);
+#else
+#define NSLog(format, ...)
+#endif
+
 #import "PGRKNetworkLogger.h"
 #import <AFNetworking/AFNetworking.h>
 

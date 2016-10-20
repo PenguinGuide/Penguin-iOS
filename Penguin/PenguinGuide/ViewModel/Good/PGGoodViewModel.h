@@ -14,6 +14,7 @@
 @property (nonatomic, strong, readonly) PGGood *good;
 @property (nonatomic, strong, readonly) NSArray *relatedGoods;
 
+- (void)requestGood:(NSString *)goodId;
 - (void)requestRelatedGoods;
 
 @end

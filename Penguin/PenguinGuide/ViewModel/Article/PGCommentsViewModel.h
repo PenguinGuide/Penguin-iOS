@@ -13,4 +13,6 @@
 
 @property (nonatomic, strong, readonly) NSArray *commentsArray;
 
+- (void)requestComments:(NSString *)articleId;
+
 @end

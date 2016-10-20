@@ -13,10 +13,11 @@
 
 @property (nonatomic, strong) NSString *likes;
 @property (nonatomic) BOOL liked;
-@property (nonatomic, strong) NSString *comment;
-@property (nonatomic, strong) NSString *reply;
-@property (nonatomic, strong) NSString *replyTo;
+@property (nonatomic, strong) NSString *commentId;
+@property (nonatomic, strong) NSString *content;
 @property (nonatomic, strong) NSString *time;
 @property (nonatomic, strong) PGUser *user;
+
+@property (nonatomic, strong) PGComment *replyComment;
 
 @end

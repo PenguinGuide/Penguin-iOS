@@ -8,9 +8,12 @@
 
 #import <UIKit/UIKit.h>
 #import "PGLoginDelegate.h"
+#import "PGLoginTextField.h"
 
 @interface PGPwdLoginView : UIView
 
 @property (nonatomic, weak) id<PGLoginDelegate> delegate;
+@property (nonatomic, strong) PGLoginTextField *phoneTextField;
+@property (nonatomic, strong) PGLoginTextField *pwdTextField;
 
 @end

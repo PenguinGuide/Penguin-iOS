@@ -11,6 +11,7 @@
 @interface PGStoreViewModel : PGBaseViewModel
 
 @property (nonatomic, strong, readonly) NSArray *recommendsArray;
+@property (nonatomic, strong, readonly) NSArray *categoriesArray;
 @property (nonatomic, strong, readonly) NSArray *bannersArray;
 
 @end

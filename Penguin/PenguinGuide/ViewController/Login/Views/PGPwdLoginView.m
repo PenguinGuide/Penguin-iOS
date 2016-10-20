@@ -7,12 +7,9 @@
 //
 
 #import "PGPwdLoginView.h"
-#import "PGLoginTextField.h"
 
 @interface PGPwdLoginView ()
 
-@property (nonatomic, strong) PGLoginTextField *phoneTextField;
-@property (nonatomic, strong) PGLoginTextField *pwdTextField;
 @property (nonatomic, strong) UIButton *forgotPwdButton;
 @property (nonatomic, strong) UIButton *loginButton;
 
@@ -39,7 +36,9 @@
 
 - (void)loginButtonClicked
 {
-    
+    if (self.delegate && [self.delegate respondsToSelector:@selector(loginButtonClicked:)]) {
+        [self.delegate loginButtonClicked:self];
+    }
 }
 
 - (void)forgotPwdButtonClicked

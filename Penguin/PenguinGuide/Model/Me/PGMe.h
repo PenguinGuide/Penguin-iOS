@@ -13,7 +13,6 @@
 @property (nonatomic, strong) NSString *nickname;
 @property (nonatomic, strong) NSString *avatar;
 @property (nonatomic, strong) NSString *userId;
-@property (nonatomic, strong) NSString *session;
 @property (nonatomic, assign) NSInteger sex;
 @property (nonatomic, strong) NSString *location;
 @property (nonatomic, strong) NSString *collectionCount;

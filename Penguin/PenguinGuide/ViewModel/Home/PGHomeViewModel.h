@@ -11,6 +11,7 @@
 @interface PGHomeViewModel : PGBaseViewModel
 
 @property (nonatomic, strong, readonly) NSArray *recommendsArray;
+@property (nonatomic, strong, readonly) NSArray *channelsArray;
 @property (nonatomic, strong, readonly) NSArray *feedsArray;
 
 @end

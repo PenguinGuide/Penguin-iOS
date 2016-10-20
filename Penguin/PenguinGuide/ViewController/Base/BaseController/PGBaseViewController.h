@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "PGAPIClient.h"
 #import "FBKVOController.h"
+#import "PGBaseViewModel.h"
 
 // navigation bar
 #import "UINavigationBar+PGTransparentNaviBar.h"
@@ -42,5 +43,8 @@
 
 - (void)showPopup:(UIView *)popupView;
 - (void)dismissPopup;
+
+- (void)observeError:(PGBaseViewModel *)viewModel;
+- (void)showErrorMessage:(NSError *)error;
 
 @end

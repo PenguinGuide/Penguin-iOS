@@ -26,7 +26,7 @@ static NSString *const AppKey = @"23465992";
     }];
     
 #ifdef DEBUG
-    [[AlibcTradeSDK sharedInstance] setDebugLogOpen:YES];
+    [[AlibcTradeSDK sharedInstance] setDebugLogOpen:NO];
 #else
     [[AlibcTradeSDK sharedInstance] setDebugLogOpen:NO];
 #endif

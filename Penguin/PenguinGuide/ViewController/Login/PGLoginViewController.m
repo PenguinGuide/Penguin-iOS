@@ -9,6 +9,7 @@
 #import "PGLoginViewController.h"
 #import "PGSignupViewController.h"
 #import "PGPwdLoginViewController.h"
+#import "PGSignupInfoViewController.h"
 
 #import "PGLoginView.h"
 #import "PGLoginSocialView.h"
@@ -52,8 +53,167 @@
 - (void)loginButtonClicked:(UIView *)view
 {
     if ([view isKindOfClass:[PGLoginView class]]) {
+        PGParams *params = [PGParams new];
+        params[@"mobile"] = self.loginView.phoneTextField.text;
+        params[@"validation_code"] = self.loginView.smsCodeTextField.text;
         
+        [self showLoading];
+        
+        PGWeakSelf(self);
+        [self.apiClient pg_makePostRequest:^(PGRKRequestConfig *config) {
+            config.route = PG_Phone_Login;
+            config.params = params;
+            config.keyPath = nil;
+        } completion:^(id response) {
+            if (response && [response isKindOfClass:[NSDictionary class]]) {
+                if (response[@"access_token"]) {
+                    NSString *accessToken = response[@"access_token"];
+                    if (accessToken && accessToken.length > 0) {
+                        [PGGlobal synchronizeToken:accessToken];
+                        [weakself.apiClient updateAccessToken:accessToken];
+                    }
+                }
+                if (response[@"user_id"]) {
+                    NSString *userId = response[@"user_id"];
+                    if (userId && userId.length > 0) {
+                        [PGGlobal synchronizeUserId:userId];
+                    }
+                }
+                [weakself dismissLoading];
+                [weakself dismissViewControllerAnimated:YES completion:nil];
+            }
+        } failure:^(NSError *error) {
+            [weakself dismissLoading];
+            [weakself showErrorMessage:error];
+        }];
     }
+}
+
+- (void)smsCodeButtonClicked:(UIView *)view
+{
+    if ([view isKindOfClass:[PGLoginView class]]) {
+        PGParams *params = [PGParams new];
+        params[@"mobile"] = self.loginView.phoneTextField.text;
+        
+        [self showLoading];
+        
+        PGWeakSelf(self);
+        [self.apiClient pg_makePostRequest:^(PGRKRequestConfig *config) {
+            config.route = PG_Send_SMS_Code;
+            config.params = params;
+            config.keyPath = nil;
+        } completion:^(id response) {
+            [weakself dismissLoading];
+        } failure:^(NSError *error) {
+            [weakself showErrorMessage:error];
+            [weakself dismissLoading];
+        }];
+    }
+}
+
+- (void)weixinButtonClicked
+{
+    PGWeakSelf(self);
+    [PGShareManager loginWithWechatOnStateChanged:^(SSDKResponseState state, SSDKUser *user, NSError *error) {
+        if (state == SSDKResponseStateSuccess) {
+            PGParams *params = [PGParams new];
+            params[@"openid"] = user.uid;
+            params[@"access_token"] = user.credential.token;
+            params[@"avatar"] = user.icon;
+            params[@"nick_name"] = user.nickname;
+            
+            [weakself showLoading];
+            
+            [weakself.apiClient pg_makePostRequest:^(PGRKRequestConfig *config) {
+                config.route = PG_Wechat_Login;
+                config.params = params;
+                config.keyPath = nil;
+            } completion:^(id response) {
+                if (response && [response isKindOfClass:[NSDictionary class]]) {
+                    if (response[@"access_token"]) {
+                        NSString *accessToken = response[@"access_token"];
+                        if (accessToken && accessToken.length > 0) {
+                            [PGGlobal synchronizeToken:accessToken];
+                            [weakself.apiClient updateAccessToken:accessToken];
+                        }
+                    }
+                    if (response[@"user_id"]) {
+                        NSString *userId = response[@"user_id"];
+                        if (userId && userId.length > 0) {
+                            [PGGlobal synchronizeUserId:userId];
+                        }
+                    }
+                    if (response[@"is_new_user"] && [response[@"is_new_user"] boolValue] && PGGlobal.userId) {
+                        PGSignupInfoViewController *signupInfoVC = [[PGSignupInfoViewController alloc] init];
+                        signupInfoVC.userId = PGGlobal.userId;
+                        [weakself.navigationController pushViewController:signupInfoVC animated:YES];
+                    } else {
+                        [weakself dismissViewControllerAnimated:YES completion:nil];
+                    }
+                }
+                [weakself dismissLoading];
+            } failure:^(NSError *error) {
+                [weakself dismissLoading];
+                [weakself showErrorMessage:error];
+            }];
+        }
+        if (state == SSDKResponseStateCancel || state == SSDKResponseStateFail) {
+            [self showToast:@"登录失败"];
+        }
+    }];
+}
+
+- (void)weiboButtonClicked
+{
+    PGWeakSelf(self);
+    [PGShareManager loginWithWeiboOnStateChanged:^(SSDKResponseState state, SSDKUser *user, NSError *error) {
+        if (state == SSDKResponseStateSuccess) {
+            NSDictionary *userInfoDict = user.rawData;
+            
+            PGParams *params = [PGParams new];
+            params[@"nick_name"] = user.nickname;
+            params[@"access_token"] = user.credential.token;
+            params[@"avatar"] = userInfoDict[@"avatar_hd"];
+            
+            [weakself showLoading];
+            
+            [weakself.apiClient pg_makePostRequest:^(PGRKRequestConfig *config) {
+                config.route = PG_Weibo_Login;
+                config.params = params;
+                config.keyPath = nil;
+            } completion:^(id response) {
+                if (response && [response isKindOfClass:[NSDictionary class]]) {
+                    if (response[@"access_token"]) {
+                        NSString *accessToken = response[@"access_token"];
+                        if (accessToken && accessToken.length > 0) {
+                            [PGGlobal synchronizeToken:accessToken];
+                            [weakself.apiClient updateAccessToken:accessToken];
+                        }
+                    }
+                    if (response[@"user_id"]) {
+                        NSString *userId = response[@"user_id"];
+                        if (userId && userId.length > 0) {
+                            [PGGlobal synchronizeUserId:userId];
+                        }
+                    }
+                    if (response[@"is_new_user"] && [response[@"is_new_user"] boolValue] && PGGlobal.userId) {
+                        PGSignupInfoViewController *signupInfoVC = [[PGSignupInfoViewController alloc] init];
+                        signupInfoVC.userId = PGGlobal.userId;
+                        [weakself.navigationController pushViewController:signupInfoVC animated:YES];
+                    } else {
+                        [weakself dismissViewControllerAnimated:YES completion:nil];
+                    }
+                }
+                [weakself dismissLoading];
+            } failure:^(NSError *error) {
+                [weakself dismissLoading];
+                [weakself showErrorMessage:error];
+            }];
+        }
+        if (state == SSDKResponseStateCancel || state == SSDKResponseStateFail) {
+            [self showToast:@"登录失败"];
+        }
+    }];
 }
 
 #pragma mark - <Button Events>
@@ -77,6 +237,8 @@
     if (!_loginView) {
         _loginView = [[PGLoginView alloc] initWithFrame:CGRectMake(0, self.logoImageView.pg_bottom+45, UISCREEN_WIDTH, UISCREEN_HEIGHT-180-(self.logoImageView.pg_bottom+45))];
         _loginView.delegate = self;
+        _loginView.phoneTextField.delegate = self;
+        _loginView.smsCodeTextField.delegate = self;
         [_loginView.loginButton setTitle:@"登 录" forState:UIControlStateNormal];
     }
     return _loginView;
@@ -86,6 +248,7 @@
 {
     if (!_loginSocialView) {
         _loginSocialView = [[PGLoginSocialView alloc] initWithFrame:CGRectMake(65, UISCREEN_HEIGHT-95, UISCREEN_WIDTH-65*2, 95)];
+        _loginSocialView.delegate = self;
         _loginSocialView.socialLabel.text = @"使用其他方式登录：";
     }
     return _loginSocialView;

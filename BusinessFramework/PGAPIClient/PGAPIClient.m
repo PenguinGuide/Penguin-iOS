@@ -19,6 +19,7 @@ static const int DefaultMaxConcurrentConnections = 5;
 @interface PGAPIClient ()
 
 @property (nonatomic, strong) PGRKHTTPSessionManager *sessionManager;
+@property (nonatomic, strong) NSString *accessToken;
 
 @end
 
@@ -91,6 +92,17 @@ static const int DefaultMaxConcurrentConnections = 5;
     [PGRKHTTPSessionManager disableLogging];
 }
 
+- (void)updateAccessToken:(NSString *)accessToken
+{
+    self.accessToken = accessToken;
+    
+    if (accessToken) {
+        [self.sessionManager addValue:accessToken forHTTPHeaderField:@"Authorization"];
+    } else {
+        [self.sessionManager addValue:@"" forHTTPHeaderField:@"Authorization"];
+    }
+}
+
 - (void)pg_makeGetRequest:(void (^)(PGRKRequestConfig *config))configBlock
                completion:(PGRKCompletionBlock)completion
                   failure:(PGRKFailureBlock)failure
@@ -110,7 +122,9 @@ static const int DefaultMaxConcurrentConnections = 5;
                                          completion(@[response]);
                                      }
                                  } else {
-                                     [weakSelf handleResponse:response completion:completion failure:failure];
+                                     if (completion) {
+                                         completion(@[response]);
+                                     }
                                  }
                              } failure:^(NSError *error) {
                                  if (failure) {
@@ -119,27 +133,42 @@ static const int DefaultMaxConcurrentConnections = 5;
                              }];
 }
 
-- (void)handleResponse:(id)response completion:(PGRKCompletionBlock)completion failure:(PGRKFailureBlock)failure
+- (void)pg_makePostRequest:(void (^)(PGRKRequestConfig *))configBlock
+                completion:(PGRKCompletionBlock)completion
+                   failure:(PGRKFailureBlock)failure
 {
-    if ([response isKindOfClass:[NSDictionary class]]) {
-        NSDictionary *responseDict = (NSDictionary *)response;
-        if (completion) {
-            completion(responseDict);
-        }
-//        if (responseDict[@"result"]) {
-//            NSInteger resultCode = [responseDict[@"result"] integerValue];
-//            
-//            if (resultCode == PG_API_Result_Success) {
-//                if (completion) {
-//                    completion(responseDict);
-//                }
-//            } else if (resultCode == PG_API_Result_Failed) {
-//                
-//            }
-//        } else {
-//            failure(nil);
-//        }
-    }
+    __block PGRKRequestConfig *clientConfig = [[PGRKRequestConfig alloc] init];
+    configBlock(clientConfig);
+    
+    [self.sessionManager makePostRequest:configBlock
+                              completion:^(id response) {
+                                  if (completion) {
+                                      completion(response);
+                                  }
+                              } failure:^(NSError *error) {
+                                  if (failure) {
+                                      failure(error);
+                                  }
+                              }];
+}
+
+- (void)pg_makePatchRequest:(void (^)(PGRKRequestConfig *))configBlock
+                 completion:(PGRKCompletionBlock)completion
+                    failure:(PGRKFailureBlock)failure
+{
+    __block PGRKRequestConfig *clientConfig = [[PGRKRequestConfig alloc] init];
+    configBlock(clientConfig);
+    
+    [self.sessionManager makePatchRequest:configBlock
+                               completion:^(id response) {
+                                   if (completion) {
+                                       completion(response);
+                                   }
+                               } failure:^(NSError *error) {
+                                   if (failure) {
+                                       failure(error);
+                                   }
+                               }];
 }
 
 - (void)cancelAllRequests

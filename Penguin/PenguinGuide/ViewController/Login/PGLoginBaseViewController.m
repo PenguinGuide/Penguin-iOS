@@ -19,6 +19,8 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillChangeFrame:) name:UIKeyboardWillChangeFrameNotification object:nil];
+    
     self.view.backgroundColor = [UIColor whiteColor];
     
     self.automaticallyAdjustsScrollViewInsets = NO;
@@ -45,9 +47,41 @@
     [self.navigationController setNavigationBarHidden:NO animated:NO];
 }
 
+- (void)dealloc
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
 - (BOOL)prefersStatusBarHidden
 {
     return YES;
+}
+
+#pragma mark - <UITextFieldDelegate>
+
+- (BOOL)textFieldShouldReturn:(UITextField *)textField
+{
+    [textField resignFirstResponder];
+    
+    return YES;
+}
+
+- (void)keyboardWillChangeFrame:(NSNotification *)notification
+{
+    __block CGRect beginFrame = [notification.userInfo[UIKeyboardFrameBeginUserInfoKey] CGRectValue];
+    __block CGRect endFrame = [notification.userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue];
+    
+    float duration = [notification.userInfo[UIKeyboardAnimationDurationUserInfoKey] floatValue];
+    
+    PGWeakSelf(self);
+    [UIView animateWithDuration:duration
+                     animations:^{
+                         if (endFrame.origin.y <= beginFrame.origin.y) {
+                             weakself.loginScrollView.contentOffset = CGPointMake(weakself.loginScrollView.contentOffset.x, weakself.loginScrollView.contentOffset.y+(beginFrame.origin.y-endFrame.origin.y)/2);
+                         } else {
+                             weakself.loginScrollView.contentOffset = CGPointMake(weakself.loginScrollView.contentOffset.x, 0);
+                         }
+                     }];
 }
 
 #pragma mark - <Button Events>

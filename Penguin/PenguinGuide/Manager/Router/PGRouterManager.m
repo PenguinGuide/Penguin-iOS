@@ -10,6 +10,8 @@
 
 // view controllers
 #import "PGLoginViewController.h"
+#import "PGHomeViewController.h"
+#import "PGChannelViewController.h"
 #import "PGTopicViewController.h"
 #import "PGArticleViewController.h"
 #import "PGGoodViewController.h"
@@ -55,10 +57,10 @@
         }
     }];
     
-    [[PGRouter sharedInstance] registerRoute:@"qiechihe://good" toHandler:^(NSDictionary *params) {
+    [[PGRouter sharedInstance] registerRoute:@"qiechihe://goods" toHandler:^(NSDictionary *params) {
         if (PGGlobal.rootNavigationController) {
-            if (params[@"good_id"]) {
-                NSString *goodId = params[@"good_id"];
+            if (params[@"goodsId"]) {
+                NSString *goodId = params[@"goodsId"];
                 PGGoodViewController *goodVC = [[PGGoodViewController alloc] initWithGoodId:goodId];
                 [PGGlobal.rootNavigationController pushViewController:goodVC animated:YES];
             }
@@ -74,11 +76,31 @@
             }
         }
     }];
+    
+    [[PGRouter sharedInstance] registerRoute:@"qiechihe://channel" toHandler:^(NSDictionary *params) {
+        if (PGGlobal.rootNavigationController) {
+            if (params[@"channelId"]) {
+                NSString *categoryId = params[@"channelId"];
+                PGChannelViewController *channelVC = [[PGChannelViewController alloc] initWithChannelId:categoryId];
+                [PGGlobal.rootNavigationController pushViewController:channelVC animated:YES];
+            }
+        }
+    }];
+    
+    [[PGRouter sharedInstance] registerRoute:@"qiechihe://home" toHandler:^(NSDictionary *params) {
+        AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+        [appDelegate.tabBarController selectTab:0];
+    }];
 }
 
 + (void)routeToLoginPage
 {
     [[PGRouter sharedInstance] openURL:@"qiechihe://login"];
+}
+
++ (void)routeToHomePage
+{
+    [[PGRouter sharedInstance] openURL:@"qiechihe://home"];
 }
 
 + (void)routeToTopicPage

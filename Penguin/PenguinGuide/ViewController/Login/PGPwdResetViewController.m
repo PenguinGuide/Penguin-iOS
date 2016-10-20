@@ -34,6 +34,8 @@
     if (!_loginView) {
         _loginView = [[PGLoginView alloc] initWithFrame:CGRectMake(0, self.logoImageView.pg_bottom+45, UISCREEN_WIDTH, UISCREEN_HEIGHT-180-(self.logoImageView.pg_bottom+45))];
         _loginView.delegate = self;
+        _loginView.phoneTextField.delegate = self;
+        _loginView.smsCodeTextField.delegate = self;
         [_loginView.loginButton setTitle:@"设 置 密 码" forState:UIControlStateNormal];
     }
     return _loginView;

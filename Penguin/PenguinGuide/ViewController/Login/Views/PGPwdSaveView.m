@@ -7,12 +7,8 @@
 //
 
 #import "PGPwdSaveView.h"
-#import "PGLoginTextField.h"
 
 @interface PGPwdSaveView ()
-
-@property (nonatomic, strong) PGLoginTextField *newPwdTextField;
-@property (nonatomic, strong) UIButton *saveButton;
 
 @end
 
@@ -35,14 +31,15 @@
 
 - (void)saveButtonClicked
 {
-    
+    if (self.delegate && [self.delegate respondsToSelector:@selector(setPwdButtonClicked:)]) {
+        [self.delegate setPwdButtonClicked:self];
+    }
 }
 
 - (PGLoginTextField *)newPwdTextField
 {
     if (!_newPwdTextField) {
         _newPwdTextField = [[PGLoginTextField alloc] initWithFrame:CGRectMake(45, 0, self.pg_width-90, 40)];
-        _newPwdTextField.placeholder = @"请输入新密码";
     }
     return _newPwdTextField;
 }
@@ -54,7 +51,6 @@
         _saveButton.clipsToBounds = YES;
         _saveButton.layer.cornerRadius = 16.f;
         [_saveButton setBackgroundColor:[UIColor whiteColor]];
-        [_saveButton setTitle:@"保 存 新 密 码" forState:UIControlStateNormal];
         [_saveButton setTitleColor:Theme.colorText forState:UIControlStateNormal];
         [_saveButton.titleLabel setFont:Theme.fontMediumBold];
         [_saveButton addTarget:self action:@selector(saveButtonClicked) forControlEvents:UIControlEventTouchUpInside];

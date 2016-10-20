@@ -61,9 +61,10 @@
         config.isMockAPI = YES;
         config.mockFileName = @"v1_scenario_feeds_scenario_scenarioid_category_categoryid.json";
     } completion:^(id response) {
-        if (response[@"items"] && [response[@"items"] isKindOfClass:[NSArray class]]) {
+        NSDictionary *responseDict = [response firstObject];
+        if (responseDict[@"items"] && [responseDict[@"items"] isKindOfClass:[NSArray class]]) {
             NSMutableArray *models = [NSMutableArray new];
-            for (NSDictionary *dict in response[@"items"]) {
+            for (NSDictionary *dict in responseDict[@"items"]) {
                 if (dict[@"type"]) {
                     if ([dict[@"type"] isEqualToString:@"carousel"]) {
                         PGCarouselBanner *carouseBanner = [PGCarouselBanner modelFromDictionary:dict];

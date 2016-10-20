@@ -14,7 +14,8 @@
 
 @property (nonatomic, strong) NSString *image;
 @property (nonatomic, strong) NSString *title;
-@property (nonatomic, strong) NSArray *aritclesArray;
+@property (nonatomic, strong) NSString *desc;
+@property (nonatomic, strong) NSArray *articlesArray;
 @property (nonatomic, strong) NSArray *goodsArray;
 
 @end

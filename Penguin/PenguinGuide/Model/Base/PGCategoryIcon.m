@@ -14,7 +14,7 @@
 {
     return @{
              @"image": @"image",
-             @"title": @"title",
+             @"title": @"name",
              @"categoryId": @"id",
              @"link": @"link"
             };

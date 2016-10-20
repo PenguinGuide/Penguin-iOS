@@ -26,11 +26,14 @@
         config.isMockAPI = YES;
         config.mockFileName = @"pg_tag_tagid.json";
     } completion:^(id response) {
-        if (response[@"name"]) {
-            weakself.tagName = response[@"name"];
-        }
-        if (response[@"items"] && [response[@"items"] isKindOfClass:[NSArray class]]) {
-            weakself.feedsArray = [PGArticleBanner modelsFromArray:response[@"items"]];
+        NSDictionary *responseDict = [response firstObject];
+        if (responseDict) {
+            if (responseDict[@"name"]) {
+                weakself.tagName = responseDict[@"name"];
+            }
+            if (responseDict[@"items"] && [responseDict[@"items"] isKindOfClass:[NSArray class]]) {
+                weakself.feedsArray = [PGArticleBanner modelsFromArray:responseDict[@"items"]];
+            }
         }
     } failure:^(NSError *error) {
         

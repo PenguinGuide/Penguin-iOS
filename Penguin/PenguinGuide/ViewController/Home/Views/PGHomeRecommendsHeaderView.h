@@ -21,6 +21,6 @@
 @property (nonatomic, weak) id<PGHomeRecommendsHeaderViewDelegate> delegate;
 
 + (CGSize)headerViewSize;
-- (void)reloadBannersWithData:(NSArray *)dataArray;
+- (void)reloadBannersWithRecommendsArray:(NSArray *)recommendsArray channelsArray:(NSArray *)channelsArray;
 
 @end

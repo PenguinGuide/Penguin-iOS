@@ -20,10 +20,13 @@
              @"unit" : @"unit",
              @"desc" : @"desc",
              @"time" : @"time",
+             @"link" : @"link",
              @"isNew" : @"is_new",
              @"isCollected": @"collected",
+             @"goodId" : @"id",
+             @"goodTaobaoId" : @"num_iid",
              
-             @"bannersArray": @"banners",
+             @"bannersArray": @"images",
              @"tagsArray": @"tags",
              @"relatedArticlesArray": @"related_articles"
             };
@@ -42,11 +45,6 @@
 + (NSValueTransformer *)timeJSONTransformer
 {
     return [NSValueTransformer valueTransformerForName:PGStringValueTransformer];
-}
-
-+ (NSValueTransformer *)bannersArrayJSONTransformer
-{
-    return [MTLJSONAdapter arrayTransformerWithModelClass:[PGImageBanner class]];
 }
 
 + (NSValueTransformer *)tagsArrayJSONTransformer

@@ -27,7 +27,7 @@ static char ToastTimer;
 
 - (void)showToast:(NSString *)message
 {
-    [self showToast:message position:PGToastPositionBottom styleConfig:^(PGToastStyle *style) {
+    [self showToast:message position:PGToastPositionTop styleConfig:^(PGToastStyle *style) {
         style.textFont = [UIFont systemFontOfSize:16.f weight:UIFontWeightLight];
         style.textColor = [UIColor blackColor];
         style.textPadding = 5.f;

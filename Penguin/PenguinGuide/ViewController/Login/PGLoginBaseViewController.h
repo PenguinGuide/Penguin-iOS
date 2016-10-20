@@ -9,7 +9,7 @@
 #import "PGBaseViewController.h"
 #import "PGLoginDelegate.h"
 
-@interface PGLoginBaseViewController : PGBaseViewController <PGLoginDelegate>
+@interface PGLoginBaseViewController : PGBaseViewController <PGLoginDelegate, UITextFieldDelegate>
 
 @property (nonatomic, strong) UIScrollView *loginScrollView;
 @property (nonatomic, strong) UIImageView *logoImageView;

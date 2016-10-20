@@ -16,21 +16,22 @@
 
 @implementation PGCommentsViewModel
 
-- (void)requestData
+- (void)requestComments:(NSString *)articleId
 {
-    PGWeakSelf(self);
-    
-    [self.apiClient pg_makeGetRequest:^(PGRKRequestConfig *config) {
-        config.route = PG_Comments;
-        config.keyPath = @"items";
-        config.model = [PGComment new];
-        config.isMockAPI = YES;
-        config.mockFileName = @"pg_comments.json";
-    } completion:^(id response) {
-        weakself.commentsArray = response;
-    } failure:^(NSError *error) {
+    if (articleId && articleId.length > 0) {
+        PGWeakSelf(self);
         
-    }];
+        [self.apiClient pg_makeGetRequest:^(PGRKRequestConfig *config) {
+            config.route = PG_Article_Comments;
+            config.keyPath = @"items";
+            config.model = [PGComment new];
+            config.pattern = @{@"articleId":articleId};
+        } completion:^(id response) {
+            weakself.commentsArray = response;
+        } failure:^(NSError *error) {
+            weakself.error = error;
+        }];
+    }
 }
 
 @end

@@ -16,5 +16,7 @@
 @property (nonatomic, strong) NSString *image;
 @property (nonatomic, strong) NSString *unit;
 @property (nonatomic, strong) NSString *desc;
+@property (nonatomic, strong) NSString *link;
+@property (nonatomic, strong) NSString *goodsId;
 
 @end

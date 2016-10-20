@@ -50,10 +50,8 @@
 - (NSArray *)imagesForScrollView
 {
     NSMutableArray *banners = [NSMutableArray new];
-    for (PGImageBanner *banner in self.bannersArray) {
-        if (banner.image) {
-            [banners addObject:banner.image];
-        }
+    for (NSString *banner in self.bannersArray) {
+        [banners addObject:banner];
     }
     return [NSArray arrayWithArray:banners];
 }

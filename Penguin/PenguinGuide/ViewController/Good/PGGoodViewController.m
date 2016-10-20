@@ -56,7 +56,6 @@
     [self.view addSubview:self.bottomToolBar];
     
     self.viewModel = [[PGGoodViewModel alloc] initWithAPIClient:self.apiClient];
-    [self.viewModel requestData];
     
     PGWeakSelf(self);
     [self observe:self.viewModel keyPath:@"good" block:^(id changedObject) {
@@ -64,6 +63,7 @@
         if (good && [good isKindOfClass:[PGGood class]]) {
             [weakself.goodCollectionView reloadData];
         }
+        [weakself dismissLoading];
     }];
     
     [self observe:self.viewModel keyPath:@"relatedGoods" block:^(id changedObject) {
@@ -79,9 +79,22 @@
 {
     [super viewWillAppear:animated];
     
+    if (self.viewModel.good == nil) {
+        [self showLoading];
+    }
+    
     [self setNeedsStatusBarAppearanceUpdate];
     
     [self.navigationController setNavigationBarHidden:YES animated:NO];
+}
+
+- (void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    
+    if (!self.viewModel.good) {
+        [self.viewModel requestGood:self.goodId];
+    }
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -232,7 +245,7 @@
 
 - (void)buyButtonClicked
 {
-    [PGAlibcTraderManager openGoodDetailPage:@"536212841769" native:NO];
+    [PGAlibcTraderManager openGoodDetailPage:self.viewModel.good.goodTaobaoId native:NO];
 }
 
 #pragma mark - <Setters && Getters>
@@ -267,12 +280,8 @@
         _bottomToolBar = [[UIView alloc] initWithFrame:CGRectMake(0, UISCREEN_HEIGHT-44, UISCREEN_WIDTH, 44)];
         _bottomToolBar.backgroundColor = [UIColor whiteColor];
         
-        UIView *horizontalLine = [[UIView alloc] initWithFrame:CGRectMake(0, 0, UISCREEN_WIDTH, 1/[UIScreen mainScreen].scale)];
-        horizontalLine.backgroundColor = [UIColor colorWithHexString:@"F1F1F1"];
-        [_bottomToolBar addSubview:horizontalLine];
-        
         UIButton *backButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 44, 44)];
-        [backButton setImage:[UIImage imageNamed:@"pg_login_back"] forState:UIControlStateNormal];
+        [backButton setImage:[UIImage imageNamed:@"pg_navigation_back_button"] forState:UIControlStateNormal];
         [backButton addTarget:self action:@selector(backButtonClicked) forControlEvents:UIControlEventTouchUpInside];
         [_bottomToolBar addSubview:backButton];
         
@@ -291,6 +300,10 @@
         UIButton *shareButton = [[UIButton alloc] initWithFrame:CGRectMake(collectButton.pg_left-44, 0, 44, 44)];
         [shareButton setImage:[UIImage imageNamed:@"pg_article_share"] forState:UIControlStateNormal];
         [_bottomToolBar addSubview:shareButton];
+        
+        UIView *horizontalLine = [[UIView alloc] initWithFrame:CGRectMake(0, 0, UISCREEN_WIDTH, 1/[UIScreen mainScreen].scale)];
+        horizontalLine.backgroundColor = [UIColor colorWithHexString:@"E1E1E1"];
+        [_bottomToolBar addSubview:horizontalLine];
     }
     return _bottomToolBar;
 }

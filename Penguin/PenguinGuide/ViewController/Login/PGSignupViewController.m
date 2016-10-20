@@ -7,6 +7,7 @@
 //
 
 #import "PGSignupViewController.h"
+#import "PGSignupPwdViewController.h"
 
 #import "PGLoginView.h"
 #import "PGLoginSocialView.h"
@@ -36,7 +37,10 @@
 - (void)loginButtonClicked:(UIView *)view
 {
     if ([view isKindOfClass:[PGLoginView class]]) {
-        
+        PGSignupPwdViewController *pwdVC = [[PGSignupPwdViewController alloc] init];
+        pwdVC.phoneNumber = self.loginView.phoneTextField.text;
+        pwdVC.smsCode = self.loginView.smsCodeTextField.text;
+        [self.navigationController pushViewController:pwdVC animated:YES];
     }
 }
 
@@ -47,6 +51,8 @@
     if (!_loginView) {
         _loginView = [[PGLoginView alloc] initWithFrame:CGRectMake(0, self.logoImageView.pg_bottom+45, UISCREEN_WIDTH, UISCREEN_HEIGHT-180-(self.logoImageView.pg_bottom+45))];
         _loginView.delegate = self;
+        _loginView.phoneTextField.delegate = self;
+        _loginView.smsCodeTextField.delegate = self;
         [_loginView.loginButton setTitle:@"注 册" forState:UIControlStateNormal];
     }
     return _loginView;

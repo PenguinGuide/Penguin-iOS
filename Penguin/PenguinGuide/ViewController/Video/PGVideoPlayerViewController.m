@@ -123,6 +123,14 @@
     [self.navigationController setNavigationBarHidden:NO animated:NO];
 }
 
+- (void)dealloc
+{
+    [self.playerItem removeObserver:self forKeyPath:@"status" context:nil];
+    self.player = nil;
+    self.playerItem = nil;
+    self.playerLayer = nil;
+}
+
 - (BOOL)prefersStatusBarHidden
 {
     return YES;
@@ -323,7 +331,7 @@
     }
     
     PGWeakSelf(self);
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(4.f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         weakself.videoDimView.hidden = YES;
     });
 }

@@ -17,4 +17,6 @@
 
 + (void)routeToTopicPage;
 
++ (void)routeToHomePage;
+
 @end

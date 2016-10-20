@@ -72,6 +72,7 @@
 	if(_goodImageView == nil) {
         CGFloat width = (UISCREEN_WIDTH-20)/2;
 		_goodImageView = [[UIImageView alloc] initWithFrame:CGRectMake(width, 0, width, width*9/16)];
+        _goodImageView.contentMode = UIViewContentModeScaleAspectFill;
         _goodImageView.clipsToBounds = YES;
         _goodImageView.backgroundColor = Theme.colorText;
 	}

@@ -10,6 +10,6 @@
 
 @interface PGChannelViewController : PGBaseViewController
 
-- (id)initWithChannelType:(NSString *)channelType;
+- (id)initWithChannelId:(NSString *)channelId;
 
 @end

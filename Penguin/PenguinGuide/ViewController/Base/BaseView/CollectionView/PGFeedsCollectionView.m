@@ -148,7 +148,7 @@
         if ([tabType isEqualToString:@"home"]) {
             PGHomeRecommendsHeaderView *headerView = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:HomeHeaderView forIndexPath:indexPath];
             headerView.delegate = self;
-            [headerView reloadBannersWithData:[self.feedsDelegate recommendsArray]];
+            [headerView reloadBannersWithRecommendsArray:[self.feedsDelegate recommendsArray] channelsArray:[self.feedsDelegate iconsArray]];
             
             return headerView;
         } else if ([tabType isEqualToString:@"explore"]) {
@@ -160,7 +160,7 @@
         } else if ([tabType isEqualToString:@"store"]) {
             PGStoreRecommendsHeaderView *headerView = [collectionView dequeueReusableSupplementaryViewOfKind:kind withReuseIdentifier:StoreHeaderView forIndexPath:indexPath];
             headerView.delegate = self;
-            [headerView reloadBannersWithData:[self.feedsDelegate recommendsArray] categoriesArray:@[]];
+            [headerView reloadBannersWithRecommendsArray:[self.feedsDelegate recommendsArray] categoriesArray:[self.feedsDelegate iconsArray]];
             
             return headerView;
         }

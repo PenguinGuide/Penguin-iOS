@@ -10,6 +10,7 @@
 
 @interface PGGoodViewModel ()
 
+@property (nonatomic, strong, readwrite) NSString *goodId;
 @property (nonatomic, strong, readwrite) PGGood *good;
 @property (nonatomic, strong, readwrite) NSArray *relatedGoods;
 
@@ -17,20 +18,23 @@
 
 @implementation PGGoodViewModel
 
-- (void)requestData
+- (void)requestGood:(NSString *)goodId
 {
-    PGWeakSelf(self);
-    [self.apiClient pg_makeGetRequest:^(PGRKRequestConfig *config) {
-        config.route = PG_Good;
-        config.keyPath = nil;
-        config.model = [PGGood new];
-        config.isMockAPI = YES;
-        config.mockFileName = @"v1_good_goodid.json";
-    } completion:^(id response) {
-        weakself.good = [response firstObject];
-    } failure:^(NSError *error) {
-        
-    }];
+    self.goodId = goodId;
+    if (goodId && goodId.length > 0) {
+        PGWeakSelf(self);
+        [self.apiClient pg_makeGetRequest:^(PGRKRequestConfig *config) {
+            config.route = PG_Good;
+            config.keyPath = nil;
+            config.pattern = @{@"goodId":weakself.goodId};
+            config.model = [PGGood new];
+        } completion:^(id response) {
+            weakself.good = [response firstObject];
+            [weakself requestRelatedGoods];
+        } failure:^(NSError *error) {
+            weakself.error = error;
+        }];
+    }
 }
 
 - (void)requestRelatedGoods
@@ -45,7 +49,7 @@
     } completion:^(id response) {
         weakself.relatedGoods = response;
     } failure:^(NSError *error) {
-        
+        weakself.error = error;
     }];
 }
 

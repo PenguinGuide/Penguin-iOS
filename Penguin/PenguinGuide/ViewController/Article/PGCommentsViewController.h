@@ -10,4 +10,6 @@
 
 @interface PGCommentsViewController : PGBaseViewController
 
+@property (nonatomic, strong) NSString *articleId;
+
 @end

@@ -13,6 +13,7 @@
 @interface PGFlashbuyBannerCell () <PGPagedScrollViewDelegate>
 
 @property (nonatomic, strong) NSArray *viewsArray;
+@property (nonatomic, strong) PGFlashbuyBanner *flashbuy;
 @property (nonatomic, strong, readwrite) PGPagedScrollView *bannersView;
 
 @end
@@ -41,6 +42,7 @@
 
 - (void)reloadBannersWithFlashbuy:(PGFlashbuyBanner *)flashbuy
 {
+    self.flashbuy = flashbuy;
     NSMutableArray *views = [NSMutableArray new];
     for (PGGood *good in flashbuy.goodsArray) {
         PGFlashbuyGoodView *flashbuyGoodView = [[PGFlashbuyGoodView alloc] initWithFrame:CGRectMake(0, 0, self.pg_width, self.pg_height)];
@@ -75,6 +77,12 @@
 - (NSArray *)viewsForScrollView
 {
     return self.viewsArray;
+}
+
+- (void)imageViewDidSelect:(NSInteger)index
+{
+    PGGood *good = self.flashbuy.goodsArray[index];
+    [[PGRouter sharedInstance] openURL:good.link];
 }
 
 #pragma mark - <Setters && Getters>

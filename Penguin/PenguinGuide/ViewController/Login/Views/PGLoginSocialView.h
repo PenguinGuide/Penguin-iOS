@@ -7,9 +7,11 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "PGLoginDelegate.h"
 
 @interface PGLoginSocialView : UIView
 
+@property (nonatomic, weak) id<PGLoginDelegate> delegate;
 @property (nonatomic, strong) UILabel *socialLabel;
 
 @end

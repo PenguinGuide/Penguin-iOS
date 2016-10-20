@@ -19,6 +19,9 @@
 @property (nonatomic, strong) NSString *unit;
 @property (nonatomic, strong) NSString *desc;
 @property (nonatomic, strong) NSString *time;
+@property (nonatomic, strong) NSString *link;
+@property (nonatomic, strong) NSString *goodId;
+@property (nonatomic, strong) NSString *goodTaobaoId;
 
 @property (nonatomic, strong) NSArray *bannersArray;
 @property (nonatomic, strong) NSArray *tagsArray;

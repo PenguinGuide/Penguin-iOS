@@ -38,6 +38,10 @@ typedef void(^PGRKFailureBlock)(NSError *error);
              completion:(PGRKCompletionBlock)completion
                 failure:(PGRKFailureBlock)failure;
 
+- (void)makePatchRequest:(void(^)(PGRKRequestConfig *config))configBlock
+              completion:(PGRKCompletionBlock)completion
+                 failure:(PGRKFailureBlock)failure;
+
 - (void)makeDeleteRequest:(void(^)(PGRKRequestConfig *config))configBlock
                completion:(PGRKCompletionBlock)completion
                   failure:(PGRKFailureBlock)failure;

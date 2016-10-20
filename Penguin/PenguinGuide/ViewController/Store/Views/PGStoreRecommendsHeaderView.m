@@ -16,7 +16,7 @@
 
 @interface PGStoreRecommendsHeaderView () <PGPagedScrollViewDelegate, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout>
 
-@property (nonatomic, strong) NSArray *dataArray;
+@property (nonatomic, strong) NSArray *recommendsArray;
 @property (nonatomic, strong) NSArray *categoriesArray;
 @property (nonatomic, strong) UICollectionView *categoriesCollectionView;
 @property (nonatomic, strong, readwrite) PGPagedScrollView *bannersView;
@@ -50,9 +50,9 @@
     [self addSubview:self.categoriesCollectionView];
 }
 
-- (void)reloadBannersWithData:(NSArray *)dataArray categoriesArray:(NSArray *)categoriesArray
+- (void)reloadBannersWithRecommendsArray:(NSArray *)recommendsArray categoriesArray:(NSArray *)categoriesArray
 {
-    self.dataArray = dataArray;
+    self.recommendsArray = recommendsArray;
     self.categoriesArray = categoriesArray;
     [self.categoriesCollectionView reloadData];
     [self.bannersView reloadData];
@@ -91,35 +91,17 @@
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
 {
-    return 7;
+    return self.categoriesArray.count;
 }
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
     PGHomeChannelCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:ChannelCell forIndexPath:indexPath];
     
-    if (indexPath.item == 0) {
-        [cell.channelButton setImage:[UIImage imageNamed:@"pg_store_category_beer"] forState:UIControlStateNormal];
-        [cell.channelLabel setText:@"精酿啤酒"];
-    } else if (indexPath.item == 1) {
-        [cell.channelButton setImage:[UIImage imageNamed:@"pg_store_category_wine"] forState:UIControlStateNormal];
-        [cell.channelLabel setText:@"葡萄酒"];
-    } else if (indexPath.item == 2) {
-        [cell.channelButton setImage:[UIImage imageNamed:@"pg_store_category_tea"] forState:UIControlStateNormal];
-        [cell.channelLabel setText:@"茶"];
-    } else if (indexPath.item == 3) {
-        [cell.channelButton setImage:[UIImage imageNamed:@"pg_store_category_coffee"] forState:UIControlStateNormal];
-        [cell.channelLabel setText:@"咖啡"];
-    } else if (indexPath.item == 4) {
-        [cell.channelButton setImage:[UIImage imageNamed:@"pg_store_category_food"] forState:UIControlStateNormal];
-        [cell.channelLabel setText:@"食品"];
-    } else if (indexPath.item == 5) {
-        [cell.channelButton setImage:[UIImage imageNamed:@"pg_store_category_tool"] forState:UIControlStateNormal];
-        [cell.channelLabel setText:@"器具"];
-    } else {
-        [cell.channelButton setImage:[UIImage imageNamed:@"pg_store_category_kitchen"] forState:UIControlStateNormal];
-        [cell.channelLabel setText:@"厨房"];
-    }
+    PGCategoryIcon *icon = self.categoriesArray[indexPath.item];
+    
+    [cell.channelButton sd_setImageWithURL:[NSURL URLWithString:icon.image] forState:UIControlStateNormal placeholderImage:nil];
+    [cell.channelLabel setText:icon.title];
     
     return cell;
 }
@@ -168,10 +150,18 @@
 
 - (NSArray *)dataArray
 {
-    if (!_dataArray) {
-        _dataArray = [NSArray new];
+    if (!_recommendsArray) {
+        _recommendsArray = [NSArray new];
     }
-    return _dataArray;
+    return _recommendsArray;
+}
+
+- (NSArray *)categoriesArray
+{
+    if (!_categoriesArray) {
+        _categoriesArray = [NSArray new];
+    }
+    return _categoriesArray;
 }
 
 - (PGPagedScrollView *)bannersView

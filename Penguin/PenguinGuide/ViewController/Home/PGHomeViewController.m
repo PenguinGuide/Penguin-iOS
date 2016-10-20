@@ -63,6 +63,7 @@
         [weakself dismissLoading];
         [weakself.feedsCollectionView endBottomRefreshing];
     }];
+    [self observeError:self.viewModel];
 }
 
 - (void)dealloc
@@ -153,6 +154,11 @@
     return self.viewModel.recommendsArray;
 }
 
+- (NSArray *)iconsArray
+{
+    return self.viewModel.channelsArray;
+}
+
 - (NSArray *)feedsArray
 {
     return self.viewModel.feedsArray;
@@ -168,10 +174,9 @@
     return @"home";
 }
 
-- (void)channelDidSelect:(NSString *)channelType
+- (void)channelDidSelect:(NSString *)link
 {
-    PGChannelViewController *channelVC = [[PGChannelViewController alloc] init];
-    [self.navigationController pushViewController:channelVC animated:YES];
+    [[PGRouter sharedInstance] openURL:link];
 }
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
@@ -184,6 +189,9 @@
     } else if ([banner isKindOfClass:[PGTopicBanner class]]) {
         PGTopicBanner *topicBanner = (PGTopicBanner *)banner;
         [[PGRouter sharedInstance] openURL:topicBanner.link];
+    } else if ([banner isKindOfClass:[PGSingleGoodBanner class]]) {
+        PGSingleGoodBanner *singleGoodBanner = (PGSingleGoodBanner *)banner;
+        [[PGRouter sharedInstance] openURL:singleGoodBanner.link];
     }
 }
 
@@ -238,10 +246,9 @@
 
 - (void)searchButtonClicked
 {
-    [PGRouterManager routeToLoginPage];
-//    PGSearchRecommendsViewController *searchRecommendsVC = [[PGSearchRecommendsViewController alloc] init];
-//    PGBaseNavigationController *naviController = [[PGBaseNavigationController alloc] initWithRootViewController:searchRecommendsVC];
-//    [self presentViewController:naviController animated:NO completion:nil];
+    PGSearchRecommendsViewController *searchRecommendsVC = [[PGSearchRecommendsViewController alloc] init];
+    PGBaseNavigationController *naviController = [[PGBaseNavigationController alloc] initWithRootViewController:searchRecommendsVC];
+    [self presentViewController:naviController animated:NO completion:nil];
 }
 
 - (void)countdown
@@ -274,7 +281,7 @@
     return _searchButton;
 }
 
-- (PGBaseCollectionView *)feedsCollectionView
+- (PGFeedsCollectionView *)feedsCollectionView
 {
     if (!_feedsCollectionView) {
         _feedsCollectionView = [[PGFeedsCollectionView alloc] initWithFrame:self.view.bounds collectionViewLayout:[UICollectionViewFlowLayout new]];

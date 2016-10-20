@@ -26,7 +26,7 @@
 - (id)init
 {
     if (self = [super init]) {
-        self.apiClient = [PGAPIClient client];
+        [self.apiClient updateAccessToken:[NSString stringWithFormat:@"Bearer %@", PGGlobal.accessToken]];
     }
     
     return self;
@@ -201,11 +201,41 @@
     [self.hud hideAnimated:YES];
 }
 
+#pragma mark - <Error Handling>
+
+- (void)observeError:(PGBaseViewModel *)viewModel
+{
+    PGWeakSelf(self);
+    [self observe:viewModel keyPath:@"error" block:^(id changedObject) {
+        NSError *error = changedObject;
+        if (error && [error isKindOfClass:[NSError class]]) {
+            [weakself showErrorMessage:error];
+        }
+    }];
+}
+
+- (void)showErrorMessage:(NSError *)error
+{
+    if (error.userInfo) {
+        NSDictionary *userInfo = error.userInfo;
+        if (userInfo[@"message"]) {
+            NSString *errorMsg = userInfo[@"message"];
+            if (errorMsg && errorMsg.length > 0) {
+                [self showToast:errorMsg position:PGToastPositionTop];
+            }
+        }
+    }
+    NSInteger errorCode = error.code;
+    if (errorCode == 401) {
+        [PGRouterManager routeToLoginPage];
+    }
+}
+
 #pragma mark - <Setters && Getters>
 
 - (PGAPIClient *)apiClient
 {
-    if (_apiClient) {
+    if (!_apiClient) {
         _apiClient = [PGAPIClient client];
     }
     

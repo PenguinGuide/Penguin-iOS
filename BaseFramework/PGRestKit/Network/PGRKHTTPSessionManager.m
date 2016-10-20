@@ -259,18 +259,54 @@ static const int DefaultMaxConcurrentConnections = 5;
     PGRKRequestConfig *config = [[PGRKRequestConfig alloc] init];
     configBlock(config);
     
-    [self POST:config.route
-    parameters:config.params
-      progress:nil
-       success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
-           if (completion) {
-               completion(responseObject);
-           }
-       } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
-           if (failure) {
-               failure(error);
-           }
-       }];
+    if (config.route.isValid) {
+        NSString *finalRoute = config.route;
+        if (config.pattern) {
+            NSString *route = SOCStringFromStringWithDictionary(config.route, config.pattern);
+            finalRoute = route ? route : config.route;
+        }
+        
+        [self POST:finalRoute
+        parameters:config.params
+          progress:nil
+           success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+               if (completion) {
+                   completion(responseObject);
+               }
+           } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+               if (failure) {
+                   failure(error);
+               }
+           }];
+    }
+}
+
+- (void)makePatchRequest:(void (^)(PGRKRequestConfig *))configBlock
+              completion:(PGRKCompletionBlock)completion
+                 failure:(PGRKFailureBlock)failure
+{
+    PGRKRequestConfig *config = [[PGRKRequestConfig alloc] init];
+    configBlock(config);
+    
+    if (config.route.isValid) {
+        NSString *finalRoute = config.route;
+        if (config.pattern) {
+            NSString *route = SOCStringFromStringWithDictionary(config.route, config.pattern);
+            finalRoute = route ? route : config.route;
+        }
+        
+        [self PATCH:finalRoute
+         parameters:config.params
+            success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+                if (completion) {
+                    completion(responseObject);
+                }
+            } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+                if (failure) {
+                    failure(error);
+                }
+            }];
+    }
 }
 
 - (void)makeDeleteRequest:(void (^)(PGRKRequestConfig *config))configBlock

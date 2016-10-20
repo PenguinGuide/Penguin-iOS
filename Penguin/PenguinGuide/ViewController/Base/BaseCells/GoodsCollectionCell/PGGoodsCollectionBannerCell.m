@@ -89,6 +89,12 @@ static NSString *const GoodCell = @"GoodCell";
     return CGSizeMake(160, 220);
 }
 
+- (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    PGGood *good = self.goodsArray[indexPath.item];
+    [[PGRouter sharedInstance] openURL:good.link];
+}
+
 #pragma mark - <Setters && Getters>
 
 - (UILabel *)titleLabel {

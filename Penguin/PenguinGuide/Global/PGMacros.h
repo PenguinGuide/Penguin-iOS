@@ -21,4 +21,11 @@
 
 #define PGWeakSelf(type) __weak typeof(type) weak##type = type;
 
+// NOTE: http://www.cocoachina.com/ios/20160927/17656.html
+#ifdef DEBUG
+#define NSLog(format, ...) printf("\n[%s] %s [第%d行] %s\n", __TIME__, __FUNCTION__, __LINE__, [[NSString stringWithFormat:format, ## __VA_ARGS__] UTF8String]);
+#else
+#define NSLog(format, ...)
+#endif
+
 #endif /* PGMacros_h */

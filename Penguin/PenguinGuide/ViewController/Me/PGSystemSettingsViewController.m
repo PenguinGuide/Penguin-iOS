@@ -130,11 +130,22 @@
         }
     } else if (kind == UICollectionElementKindSectionFooter) {
         PGSettingsLogoutFooterView *footerView = [collectionView dequeueReusableSupplementaryViewOfKind:kind withReuseIdentifier:LogoutFooterView forIndexPath:indexPath];
+        [footerView.logoutButton addTarget:self action:@selector(logoutButtonClicked) forControlEvents:UIControlEventTouchUpInside];
         
         return footerView;
     }
     
     return nil;
+}
+
+#pragma mark - <Button Events>
+
+- (void)logoutButtonClicked
+{
+    [PGGlobal synchronizeUserId:nil];
+    [PGGlobal synchronizeToken:nil];
+    
+    [PGRouterManager routeToLoginPage];
 }
 
 - (PGBaseCollectionView *)settingsCollectionView

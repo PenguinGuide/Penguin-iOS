@@ -8,18 +8,24 @@
 
 #import "PGHomeViewModel.h"
 
+#import "PGImageBanner.h"
+#import "PGCategoryIcon.h"
+
 #import "PGCarouselBanner.h"
 #import "PGArticleBanner.h"
 #import "PGFlashbuyBanner.h"
 #import "PGGoodsCollectionBanner.h"
 #import "PGTopicBanner.h"
 #import "PGSingleGoodBanner.h"
-#import "PGImageBanner.h"
 
 @interface PGHomeViewModel ()
 
 @property (nonatomic, strong, readwrite) NSArray *recommendsArray;
+@property (nonatomic, strong, readwrite) NSArray *channelsArray;
 @property (nonatomic, strong, readwrite) NSArray *feedsArray;
+
+@property (nonatomic, strong, readwrite) NSError *recommendsError;
+@property (nonatomic, strong, readwrite) NSError *feedsError;
 
 @end
 
@@ -30,24 +36,29 @@
     PGWeakSelf(self);
     [self.apiClient pg_makeGetRequest:^(PGRKRequestConfig *config) {
         config.route = PG_Home_Recommends;
-        config.keyPath = @"items";
-        config.model = [PGImageBanner new];
-        config.isMockAPI = YES;
-        config.mockFileName = @"v1_home_recommends.json";
+        config.keyPath = nil;
     } completion:^(id response) {
-        weakself.recommendsArray = response;
+        NSDictionary *responseDict = [response firstObject];
+        if (responseDict && [responseDict isKindOfClass:[NSDictionary class]]) {
+            if (responseDict[@"banners"]) {
+                weakself.recommendsArray = [PGImageBanner modelsFromArray:responseDict[@"banners"]];
+            }
+            if (responseDict[@"channels"]) {
+                weakself.channelsArray = [PGCategoryIcon modelsFromArray:responseDict[@"channels"]];
+            }
+        }
         [weakself requestFeeds];
     } failure:^(NSError *error) {
-        
+        [weakself requestFeeds];
     }];
 }
 
 - (void)requestFeeds
 {
-    self.page = 1;
+    self.maxId = nil;
     
     PGParams *params = [PGParams new];
-    params[ParamsPage] = @(self.page);
+    params[ParamsPage] = self.maxId;
     params[ParamsPerPage] = @10;
     
     PGWeakSelf(self);
@@ -55,15 +66,14 @@
         config.route = PG_Home_Feeds;
         config.keyPath = nil;
         config.params = params;
-//        config.isMockAPI = YES;
-//        config.mockFileName = @"v1_home_feeds.json";
     } completion:^(id response) {
-        if (response[@"items"] && [response[@"items"] isKindOfClass:[NSArray class]]) {
-            if ([response[@"items"] count] > 0) {
-                weakself.page++;
+        NSDictionary *responseDict = [response firstObject];
+        if (responseDict[@"items"] && [responseDict[@"items"] isKindOfClass:[NSArray class]]) {
+            if ([responseDict[@"items"] count] > 0 && responseDict[@"max_id"]) {
+                weakself.maxId = responseDict[@"max_id"];
             }
             NSMutableArray *models = [NSMutableArray new];
-            for (NSDictionary *dict in response[@"items"]) {
+            for (NSDictionary *dict in responseDict[@"items"]) {
                 if (dict[@"type"]) {
                     if ([dict[@"type"] isEqualToString:@"carousel"]) {
                         PGCarouselBanner *carouseBanner = [PGCarouselBanner modelFromDictionary:dict];
@@ -95,7 +105,7 @@
                             [models addObject:topicBanner];
                         }
                     }
-                    if ([dict[@"type"] isEqualToString:@"good"]) {
+                    if ([dict[@"type"] isEqualToString:@"goods"]) {
                         PGSingleGoodBanner *singleGoodBanner = [PGSingleGoodBanner modelFromDictionary:dict];
                         if (singleGoodBanner) {
                             [models addObject:singleGoodBanner];
@@ -106,14 +116,14 @@
             weakself.feedsArray = [NSArray arrayWithArray:models];
         }
     } failure:^(NSError *error) {
-        
+        weakself.error = error;
     }];
 }
 
 - (void)loadNextPage
 {
     PGParams *params = [PGParams new];
-    params[ParamsPage] = @(self.page);
+    params[ParamsPage] = self.maxId;
     params[ParamsPerPage] = @10;
     
     // NOTE: use reloadData or reloadSections http://blog.csdn.net/iosswift/article/details/50001145
@@ -123,15 +133,14 @@
         config.route = PG_Home_Feeds;
         config.keyPath = nil;
         config.params = params;
-//        config.isMockAPI = YES;
-//        config.mockFileName = @"v1_home_feeds.json";
     } completion:^(id response) {
-        if (response[@"items"] && [response[@"items"] isKindOfClass:[NSArray class]]) {
-            if ([response[@"items"] count] > 0) {
-                weakself.page++;
+        NSDictionary *responseDict = [response firstObject];
+        if (responseDict[@"items"] && [responseDict[@"items"] isKindOfClass:[NSArray class]]) {
+            if ([responseDict[@"items"] count] > 0 && responseDict[@"max_id"]) {
+                weakself.maxId = responseDict[@"max_id"];
             }
             NSMutableArray *models = [NSMutableArray arrayWithArray:weakself.feedsArray];
-            for (NSDictionary *dict in response[@"items"]) {
+            for (NSDictionary *dict in responseDict[@"items"]) {
                 if (dict[@"type"]) {
                     if ([dict[@"type"] isEqualToString:@"carousel"]) {
                         PGCarouselBanner *carouseBanner = [PGCarouselBanner modelFromDictionary:dict];
@@ -174,7 +183,7 @@
             weakself.feedsArray = [NSArray arrayWithArray:models];
         }
     } failure:^(NSError *error) {
-        
+        weakself.error = error;
     }];
 }
 

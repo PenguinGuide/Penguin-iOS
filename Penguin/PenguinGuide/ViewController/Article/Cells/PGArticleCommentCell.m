@@ -51,12 +51,12 @@
     
     NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle defaultParagraphStyle] mutableCopy];
     paragraphStyle.lineSpacing = 5.f;
-    NSAttributedString *commentsStr = [[NSAttributedString alloc] initWithString:comment.comment attributes:@{NSFontAttributeName:Theme.fontSmall,
+    NSAttributedString *commentsStr = [[NSAttributedString alloc] initWithString:comment.content attributes:@{NSFontAttributeName:Theme.fontSmall,
                                                                                                               NSForegroundColorAttributeName:Theme.colorText,
                                                                                                               NSParagraphStyleAttributeName:paragraphStyle}];
     self.commentLabel.attributedText = commentsStr;
     
-    CGSize textSize = [comment.comment boundingRectWithSize:CGSizeMake(UISCREEN_WIDTH-26*2, 1000)
+    CGSize textSize = [comment.content boundingRectWithSize:CGSizeMake(UISCREEN_WIDTH-26*2, 1000)
                                                     options:NSStringDrawingUsesLineFragmentOrigin
                                                  attributes:@{NSFontAttributeName:Theme.fontSmall, NSParagraphStyleAttributeName:paragraphStyle}
                                                     context:nil].size;
@@ -75,12 +75,12 @@
 
 + (CGSize)cellSize:(PGComment *)comment
 {
-    if (comment.comment && comment.comment.length > 0) {
+    if (comment.content && comment.content.length > 0) {
         CGFloat height = 42+15;
         
         NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle defaultParagraphStyle] mutableCopy];
         paragraphStyle.lineSpacing = 5.f;
-        CGSize textSize = [comment.comment boundingRectWithSize:CGSizeMake(UISCREEN_WIDTH-26*2, 1000)
+        CGSize textSize = [comment.content boundingRectWithSize:CGSizeMake(UISCREEN_WIDTH-26*2, 1000)
                                                         options:NSStringDrawingUsesLineFragmentOrigin
                                                      attributes:@{NSFontAttributeName:Theme.fontSmall, NSParagraphStyleAttributeName:paragraphStyle}
                                                         context:nil].size;

@@ -110,6 +110,11 @@
     return self.viewModel.recommendsArray;
 }
 
+- (NSArray *)iconsArray
+{
+    return self.viewModel.categoriesArray;
+}
+
 - (NSArray *)feedsArray
 {
     return self.viewModel.bannersArray;

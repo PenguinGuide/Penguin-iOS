@@ -15,7 +15,8 @@
     return @{
              @"image": @"image",
              @"title": @"title",
-             @"aritclesArray": @"articles",
+             @"desc": @"desc",
+             @"articlesArray": @"articles",
              @"goodsArray": @"goods"
             };
 }

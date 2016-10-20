@@ -18,18 +18,23 @@
 
 - (void)requestData
 {
-    PGWeakSelf(self);
-    [self.apiClient pg_makeGetRequest:^(PGRKRequestConfig *config) {
-        config.route = PG_Me;
-        config.model = [PGMe new];
-        config.keyPath = nil;
-        config.isMockAPI = YES;
-        config.mockFileName = @"pg_me.json";
-    } completion:^(id response) {
-        weakself.me = [response firstObject];
-    } failure:^(NSError *error) {
+    if (PGGlobal.userId && PGGlobal.userId.length > 0) {
+        PGParams *params = [PGParams new];
+        params[@"user_id"] = PGGlobal.userId;
         
-    }];
+        PGWeakSelf(self);
+        [self.apiClient pg_makeGetRequest:^(PGRKRequestConfig *config) {
+            config.route = PG_Me;
+            config.params = params;
+            config.model = [PGMe new];
+            config.pattern = @{@"userId":PGGlobal.userId};
+            config.keyPath = nil;
+        } completion:^(id response) {
+            weakself.me = [response firstObject];
+        } failure:^(NSError *error) {
+            weakself.error = error;
+        }];
+    }
 }
 
 @end

@@ -19,7 +19,7 @@
 
 @interface PGChannelViewController () <UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, PGChannelCategoriesViewDelegate>
 
-@property (nonatomic, strong) NSString *channelType;
+@property (nonatomic, strong) NSString *channelId;
 
 @property (nonatomic, strong) PGChannelViewModel *viewModel;
 
@@ -32,10 +32,10 @@
 
 @implementation PGChannelViewController
 
-- (id)initWithChannelType:(NSString *)channelType
+- (id)initWithChannelId:(NSString *)channelId
 {
     if (self = [super init]) {
-        self.channelType = channelType;
+        self.channelId = channelId;
     }
     
     return self;
@@ -48,7 +48,7 @@
     self.view.backgroundColor = Theme.colorBackground;
     
     self.viewModel = [[PGChannelViewModel alloc] initWithAPIClient:self.apiClient];
-    [self.viewModel setViewModelWithChannelId:@"111"];
+    [self.viewModel setViewModelWithChannelId:self.channelId];
     [self.viewModel requestData];
     
     PGWeakSelf(self);

@@ -139,12 +139,17 @@
     [self observe:self.viewModel keyPath:@"commentsArray" block:^(id changedObject) {
         NSArray *comments = changedObject;
         if (comments && [comments isKindOfClass:[NSArray class]]) {
-            [weakself.articleCollectionView reloadData];
             [weakself.articleCollectionView endBottomRefreshing];
+            [weakself.articleCollectionView reloadData];
         }
     }];
-    
-    [self setNeedsStatusBarAppearanceUpdate];
+    [self observe:self.viewModel keyPath:@"error" block:^(id changedObject) {
+        NSError *error = changedObject;
+        if (error && [error isKindOfClass:[NSError class]]) {
+            [weakself showErrorMessage:error];
+            [weakself dismissLoading];
+        }
+    }];
 }
 
 - (void)animateCollectionView:(void (^)())completion
@@ -156,8 +161,9 @@
 {
     [super viewDidAppear:animated];
     
+    [self setNeedsStatusBarAppearanceUpdate];
+    
     if (self.viewModel.article == nil) {
-        [self showLoading];
         [self.viewModel requestData];
     }
 }
@@ -165,6 +171,10 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    
+    if (self.viewModel.article == nil) {
+        [self showLoading];
+    }
     
     [self.navigationController setNavigationBarHidden:YES animated:NO];
 }
@@ -264,7 +274,7 @@
         return cell;
     } else if (indexPath.section == 2) {
         PGComment *comment = self.viewModel.commentsArray[indexPath.item];
-        if (comment.comment.length > 0) {
+        if (!comment.replyComment) {
             PGArticleCommentCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:ArticleCommentCell forIndexPath:indexPath];
             cell.delegate = self;
             
@@ -367,7 +377,7 @@
         return [PGArticleRelatedArticlesCell cellSize];
     } else if (indexPath.section == 2) {
         PGComment *comment = self.viewModel.commentsArray[indexPath.item];
-        if (comment.comment.length > 0) {
+        if (!comment.replyComment) {
             return [PGArticleCommentCell cellSize:comment];
         } else {
             return [PGArticleCommentReplyCell cellSize:comment];
@@ -512,8 +522,15 @@
 - (void)sendComment:(NSString *)comment
 {
     if (comment.length > 0) {
-        [self.commentInputAccessoryView.commentTextView resignFirstResponder];
-        [self showToast:@"发送成功" position:PGToastPositionTop];
+        PGWeakSelf(self);
+        [self showLoading];
+        [self.viewModel sendComment:comment completion:^(BOOL success) {
+            if (success) {
+                [weakself.commentInputAccessoryView.commentTextView resignFirstResponder];
+                [weakself showToast:@"发送成功" position:PGToastPositionTop];
+            }
+            [weakself dismissLoading];
+        }];
     } else {
         [self showToast:@"回复内容不能为空" position:PGToastPositionTop];
     }
@@ -562,9 +579,15 @@
     }
 }
 
+- (void)commentButtonClicked
+{
+    [self.commentInputAccessoryView.commentTextView becomeFirstResponder];
+}
+
 - (void)allCommentsButtonClicked
 {
     PGCommentsViewController *commentsVC = [[PGCommentsViewController alloc] init];
+    commentsVC.articleId = self.articleId;
     [self.navigationController pushViewController:commentsVC animated:YES];
 }
 
@@ -644,10 +667,6 @@
         _toolbar = [[UIView alloc] initWithFrame:CGRectMake(0, UISCREEN_HEIGHT-44, UISCREEN_WIDTH, 44)];
         _toolbar.backgroundColor = [UIColor whiteColor];
         
-        UIView *horizontalLine = [[UIView alloc] initWithFrame:CGRectMake(0, 0, UISCREEN_WIDTH, 1/[UIScreen mainScreen].scale)];
-        horizontalLine.backgroundColor = [UIColor colorWithHexString:@"F1F1F1"];
-        [_toolbar addSubview:horizontalLine];
-        
         self.backButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 44, 44)];
         [self.backButton setImage:[UIImage imageNamed:@"pg_navigation_back_button"] forState:UIControlStateNormal];
         [self.backButton addTarget:self action:@selector(backButtonClicked) forControlEvents:UIControlEventTouchUpInside];
@@ -659,6 +678,7 @@
         
         self.commentButton = [[UIButton alloc] initWithFrame:CGRectMake(self.likeButton.pg_left-44, 0, 44, 44)];
         [self.commentButton setImage:[UIImage imageNamed:@"pg_article_comment"] forState:UIControlStateNormal];
+        [self.commentButton addTarget:self action:@selector(commentButtonClicked) forControlEvents:UIControlEventTouchUpInside];
         [_toolbar addSubview:self.commentButton];
         
         self.collectButton = [[UIButton alloc] initWithFrame:CGRectMake(self.commentButton.pg_left-44, 0, 44, 44)];
@@ -668,6 +688,10 @@
         self.shareButton = [[UIButton alloc] initWithFrame:CGRectMake(self.collectButton.pg_left-44, 0, 44, 44)];
         [self.shareButton setImage:[UIImage imageNamed:@"pg_article_share"] forState:UIControlStateNormal];
         [_toolbar addSubview:self.shareButton];
+        
+        UIView *horizontalLine = [[UIView alloc] initWithFrame:CGRectMake(0, 0, UISCREEN_WIDTH, 1/[UIScreen mainScreen].scale)];
+        horizontalLine.backgroundColor = [UIColor colorWithHexString:@"E1E1E1"];
+        [_toolbar addSubview:horizontalLine];
     }
     return _toolbar;
 }

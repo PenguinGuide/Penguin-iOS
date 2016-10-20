@@ -14,5 +14,9 @@
 
 - (void)loginButtonClicked:(UIView *)view;
 - (void)forgotPwdButtonClicked;
+- (void)setPwdButtonClicked:(UIView *)view;
+- (void)smsCodeButtonClicked:(UIView *)view;
+- (void)weixinButtonClicked;
+- (void)weiboButtonClicked;
 
 @end

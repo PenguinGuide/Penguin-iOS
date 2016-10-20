@@ -7,14 +7,11 @@
 //
 
 #import "PGLoginView.h"
-#import "PGLoginTextField.h"
 #import "PGSMSCodeButton.h"
 
 @interface PGLoginView ()
 
 @property (nonatomic, strong) PGSMSCodeButton *smsCodeButton;
-@property (nonatomic, strong) PGLoginTextField *phoneTextField;
-@property (nonatomic, strong) PGLoginTextField *smsCodeTextField;
 
 @end
 
@@ -46,10 +43,18 @@
     }
 }
 
+- (void)smsCodeButtonClicked
+{
+    if (self.delegate && [self.delegate respondsToSelector:@selector(smsCodeButtonClicked:)]) {
+        [self.delegate smsCodeButtonClicked:self];
+    }
+}
+
 - (PGSMSCodeButton *)smsCodeButton
 {
     if (!_smsCodeButton) {
         _smsCodeButton = [[PGSMSCodeButton alloc] initWithFrame:CGRectMake(self.pg_width-45-100, 0, 100, 40)];
+        [_smsCodeButton addTarget:self action:@selector(smsCodeButtonClicked) forControlEvents:UIControlEventTouchUpInside];
     }
     return _smsCodeButton;
 }

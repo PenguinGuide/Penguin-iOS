@@ -59,7 +59,9 @@ static const float TabBarHeight = 50.f;
 
 - (void)selectTab:(NSInteger)index
 {
-    
+    if (index < self.viewControllers.count) {
+        [self tabBarDidSelect:index];
+    }
 }
 
 - (void)setSelectedViewController:(UIViewController *)viewController
@@ -102,6 +104,7 @@ static const float TabBarHeight = 50.f;
         [tabs addObject:tab];
     }
     
+    self.tabBar.selectedIndex = self.selectedIndex;
     [self.tabBar setTabs:[NSArray arrayWithArray:tabs]];
     [self.view addSubview:self.tabBar];
 }
