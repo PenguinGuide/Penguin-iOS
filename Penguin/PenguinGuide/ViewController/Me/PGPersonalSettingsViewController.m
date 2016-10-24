@@ -10,12 +10,13 @@
 #define SettingHeaderView @"SettingHeaderView"
 
 #import "PGPersonalSettingsViewController.h"
+#import "PGSettingsUpdateViewController.h"
 #import "PGSettingsCell.h"
 #import "PGSettingsHeaderView.h"
 
 #import "UINavigationBar+PGTransparentNaviBar.h"
 
-@interface PGPersonalSettingsViewController () <UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout>
+@interface PGPersonalSettingsViewController () <UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, UIImagePickerControllerDelegate, UINavigationControllerDelegate>
 
 @property (nonatomic, strong) PGBaseCollectionView *settingsCollectionView;
 
@@ -68,15 +69,19 @@
         PGSettingsCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:SettingCell forIndexPath:indexPath];
         
         if (indexPath.item == 0) {
-            [cell setCellWithDesc:@"头 像" content:@"https://i.imgsafe.org/2590228277.jpg" isImage:YES];
+            [cell setCellWithDesc:@"头 像" content:self.me.avatar isImage:YES];
         } else if (indexPath.item == 1) {
-            [cell setCellWithDesc:@"昵 称" content:@"KobeKK" isImage:NO];
+            [cell setCellWithDesc:@"昵 称" content:self.me.nickname isImage:NO];
         } else if (indexPath.item == 2) {
-            [cell setCellWithDesc:@"性 别" content:@"男" isImage:NO];
+            if (self.me.sex == 0) {
+                [cell setCellWithDesc:@"性 别" content:@"男" isImage:NO];
+            } else {
+                [cell setCellWithDesc:@"性 别" content:@"女" isImage:NO];
+            }
         } else if (indexPath.item == 3) {
-            [cell setCellWithDesc:@"城 市" content:@"上海" isImage:NO];
+            [cell setCellWithDesc:@"城 市" content:self.me.location isImage:NO];
         } else if (indexPath.item == 4) {
-            [cell setCellWithDesc:@"生 日" content:@"12.19" isImage:NO];
+            [cell setCellWithDesc:@"生 日" content:self.me.birthday isImage:NO];
         } else if (indexPath.item == 5) {
             [cell setCellWithDesc:@"密 码" content:@"未设置" isImage:NO];
         }
@@ -86,7 +91,7 @@
         PGSettingsCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:SettingCell forIndexPath:indexPath];
         
         if (indexPath.item == 0) {
-            [cell setCellWithDesc:@"手 机 号" content:@"18521001948" isImage:NO];
+            [cell setCellWithDesc:@"手 机 号" content:self.me.phoneNumber isImage:NO];
         } else if (indexPath.item == 1) {
             [cell setCellWithDesc:@"微 信" content:@"已绑定" isImage:NO];
         } else if (indexPath.item == 2) {
@@ -144,6 +149,47 @@
     
     return nil;
 }
+
+- (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    if (indexPath.section == 0) {
+        if (indexPath.item == 0) {
+            UIImagePickerController *imagePickerController = [[UIImagePickerController alloc] init];
+            imagePickerController.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
+            imagePickerController.allowsEditing = YES;
+            imagePickerController.delegate = self;
+            
+            [self.navigationController presentViewController:imagePickerController animated:YES completion:nil];
+        } else if (indexPath.item == 1) {
+            PGSettingsUpdateViewController *settingsUpdateVC = [[PGSettingsUpdateViewController alloc] initWithType:PGSettingsTypeNickname content:self.me.nickname];
+            [self.navigationController pushViewController:settingsUpdateVC animated:YES];
+        }
+    }
+}
+
+#pragma mark - <UIImagePickerControllerDelegate>
+
+- (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary<NSString *,id> *)info
+{
+    __block UIImage *image = [info objectForKey:UIImagePickerControllerOriginalImage];
+    if (image) {
+        [self showLoading];
+        PGWeakSelf(self);
+        [self.apiClient pg_uploadImage:^(PGRKRequestConfig *config) {
+            config.route = PG_Upload_Image;
+            config.keyPath = nil;
+            config.image = image;
+        } completion:^(id response) {
+            [weakself dismissLoading];
+        } failure:^(NSError *error) {
+            [weakself showErrorMessage:error];
+            [weakself dismissLoading];
+        }];
+    }
+    [picker dismissViewControllerAnimated:YES completion:nil];
+}
+
+#pragma mark - <Setters && Getters>
 
 - (PGBaseCollectionView *)settingsCollectionView
 {

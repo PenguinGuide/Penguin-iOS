@@ -54,7 +54,7 @@
 - (UILabel *)descLabel
 {
     if (!_descLabel) {
-        _descLabel = [[UILabel alloc] initWithFrame:CGRectMake(36, 0, 100, self.pg_height)];
+        _descLabel = [[UILabel alloc] initWithFrame:CGRectMake(36, 0, 70, self.pg_height)];
         _descLabel.font = Theme.fontMediumBold;
         _descLabel.textColor = Theme.colorText;
     }
@@ -64,7 +64,7 @@
 - (UILabel *)contentLabel
 {
     if (!_contentLabel) {
-        _contentLabel = [[UILabel alloc] initWithFrame:CGRectMake(self.pg_width-44-100, 0, 100, self.pg_height)];
+        _contentLabel = [[UILabel alloc] initWithFrame:CGRectMake(self.descLabel.pg_right+10, 0, self.pg_width-44-self.descLabel.pg_right-10, self.pg_height)];
         _contentLabel.font = Theme.fontMediumBold;
         _contentLabel.textColor = Theme.colorLightText;
         _contentLabel.textAlignment = NSTextAlignmentRight;

@@ -7,6 +7,7 @@
 //
 
 #import "PGArticleCommentReplyCell.h"
+#import "PGArticleCommentLikeButton.h"
 
 @interface PGArticleCommentReplyCell ()
 
@@ -15,6 +16,8 @@
 @property (nonatomic, strong) UILabel *nameLabel;
 @property (nonatomic, strong) UILabel *timeLabel;
 @property (nonatomic, strong) UILabel *commentLabel;
+@property (nonatomic, strong) PGArticleCommentLikeButton *likeButton;
+@property (nonatomic, strong) UIButton *moreButton;
 
 @property (nonatomic, strong) UILabel *replyLabel;
 @property (nonatomic, strong) UIImageView *replyLabelMaskView;
@@ -38,6 +41,9 @@
     [self.contentView addSubview:self.avatarMaskImageView];
     [self.contentView addSubview:self.nameLabel];
     [self.contentView addSubview:self.timeLabel];
+    [self.contentView addSubview:self.moreButton];
+    [self.contentView addSubview:self.likeButton];
+    
     [self.contentView addSubview:self.commentLabel];
     
     [self.contentView addSubview:self.replyLabel];
@@ -50,8 +56,19 @@
     self.nameLabel.text = comment.user.nickname;
     self.timeLabel.text = comment.time;
     
-    CGSize nameSize = [comment.user.nickname sizeWithAttributes:@{NSFontAttributeName:Theme.fontSmall}];
+    CGSize nameSize = [comment.user.nickname sizeWithAttributes:@{NSFontAttributeName:Theme.fontMediumBold}];
     self.nameLabel.pg_width = nameSize.width;
+    
+    // NOTE: set UIButton with image && title http://www.tuicool.com/articles/bIvyYvQ
+    if (comment.likesCount > 0) {
+        NSString *likesStr = [NSString stringWithFormat:@"%ld", (long)comment.likesCount];
+        [self.likeButton setTitle:likesStr forState:UIControlStateNormal];
+        CGSize likesSize = [likesStr sizeWithAttributes:@{NSFontAttributeName:Theme.fontSmallBold}];
+        self.likeButton.frame = CGRectMake(self.moreButton.pg_left-(33+likesSize.width+15), 0, 33+likesSize.width+15, 40);
+    } else {
+        [self.likeButton setTitle:nil forState:UIControlStateNormal];
+        self.likeButton.frame = CGRectMake(self.moreButton.pg_left-46, 0, 46, 40);
+    }
     
     NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle defaultParagraphStyle] mutableCopy];
     paragraphStyle.lineSpacing = 5.f;
@@ -158,6 +175,24 @@
         _timeLabel.textColor = Theme.colorLightText;
     }
     return _timeLabel;
+}
+
+- (UIButton *)moreButton
+{
+    if (!_moreButton) {
+        _moreButton = [[UIButton alloc] initWithFrame:CGRectMake(self.pg_width-30-20, 10, 20, 20)];
+        [_moreButton setImage:[UIImage imageNamed:@"pg_article_comment_more"] forState:UIControlStateNormal];
+        //[_moreButton addTarget:self action:@selector(moreButtonClicked) forControlEvents:UIControlEventTouchUpInside];
+    }
+    return _moreButton;
+}
+
+- (UIButton *)likeButton
+{
+    if (!_likeButton) {
+        _likeButton = [[PGArticleCommentLikeButton alloc] initWithFrame:CGRectMake(self.moreButton.pg_left-46, 0, 46, 40)];
+    }
+    return _likeButton;
 }
 
 - (UILabel *)commentLabel

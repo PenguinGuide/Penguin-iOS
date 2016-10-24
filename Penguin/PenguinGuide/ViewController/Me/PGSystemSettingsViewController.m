@@ -15,8 +15,6 @@
 #import "PGSettingsHeaderView.h"
 #import "PGSettingsLogoutFooterView.h"
 
-#import "UINavigationBar+PGTransparentNaviBar.h"
-
 @interface PGSystemSettingsViewController () <UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout>
 
 @property (nonatomic, strong) PGBaseCollectionView *settingsCollectionView;

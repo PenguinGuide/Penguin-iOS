@@ -336,20 +336,28 @@ static const int DefaultMaxConcurrentConnections = 5;
     PGRKRequestConfig *config = [[PGRKRequestConfig alloc] init];
     configBlock(config);
     
-    __block NSData *imageData = UIImageJPEGRepresentation(config.image, 0.95f);
-    [[self POST:config.route parameters:nil constructingBodyWithBlock:^(id<AFMultipartFormData>  _Nonnull formData) {
-        [formData appendPartWithFileData:imageData name:@"upload_file" fileName:@"avatar.jpg" mimeType:@"image/jpeg"];
-    } progress:^(NSProgress * _Nonnull uploadProgress) {
-        NSLog(@"-------- percentage: %@", @(uploadProgress.fractionCompleted));
-    } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
-        if (completion) {
-            completion(responseObject);
-        }
-    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
-        if (failure) {
-            failure(error);
-        }
-    }] resume];
+    __block NSData *imageData = UIImageJPEGRepresentation(config.image, 0.9f);
+    
+    if (!config.params) {
+        config.params = [PGRKParams new];
+        config.params[@"image_data"] = [imageData base64EncodedStringWithOptions:0];
+    } else {
+        config.params[@"image_data"] = [imageData base64EncodedStringWithOptions:0];
+    }
+    
+    [self POST:config.route
+    parameters:config.params
+      progress:^(NSProgress * _Nonnull uploadProgress) {
+          NSLog(@"-------- percentage: %@", @(uploadProgress.fractionCompleted));
+      } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+          if (completion) {
+              completion(responseObject);
+          }
+      } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+          if (failure) {
+              failure(error);
+          }
+      }];
 }
 
 - (void)cancelAllTasks

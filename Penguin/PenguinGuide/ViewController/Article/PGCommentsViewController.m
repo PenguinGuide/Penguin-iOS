@@ -22,6 +22,8 @@
 
 @property (nonatomic, strong) PGCommentsViewModel *viewModel;
 
+@property (nonatomic, strong) PGComment *selectedComment;
+
 @end
 
 @implementation PGCommentsViewController
@@ -37,7 +39,6 @@
     [self.view addSubview:self.commentInputAccessoryView];
     
     self.viewModel = [[PGCommentsViewModel alloc] initWithAPIClient:self.apiClient];
-    [self.viewModel requestComments:self.articleId];
     
     PGWeakSelf(self);
     [self observe:self.viewModel keyPath:@"commentsArray" block:^(id changedObject) {
@@ -46,8 +47,16 @@
             [weakself.commentsCollectionView reloadData];
         }
         [weakself dismissLoading];
+        [weakself.commentsCollectionView endBottomRefreshing];
     }];
-    [self observeError:self.viewModel];
+    [self observe:self.viewModel keyPath:@"error" block:^(id changedObject) {
+        NSError *error = changedObject;
+        if (error && [error isKindOfClass:[NSError class]]) {
+            [weakself showErrorMessage:error];
+            [weakself dismissLoading];
+            [weakself.commentsCollectionView endBottomRefreshing];
+        }
+    }];
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -138,9 +147,9 @@
             [commentCell unselectLabel];
             
             if (indexPath.item < weakself.viewModel.commentsArray.count) {
-                PGComment *selectedComment = weakself.viewModel.commentsArray[indexPath.item];
+                weakself.selectedComment = weakself.viewModel.commentsArray[indexPath.item];
                 weakself.commentInputAccessoryView.commentTextView.text = @"";
-                weakself.commentInputAccessoryView.commentTextView.placeholder = [NSString stringWithFormat:@"回复%@", selectedComment.user.nickname];
+                weakself.commentInputAccessoryView.commentTextView.placeholder = [NSString stringWithFormat:@"回复%@", weakself.selectedComment.user.nickname];
                 
                 [weakself.commentInputAccessoryView.commentTextView becomeFirstResponder];
             }
@@ -149,9 +158,9 @@
             [replyCell unselectLabel];
             
             if (indexPath.item < weakself.viewModel.commentsArray.count) {
-                PGComment *selectedComment = self.viewModel.commentsArray[indexPath.item];
+                weakself.selectedComment = self.viewModel.commentsArray[indexPath.item];
                 weakself.commentInputAccessoryView.commentTextView.text = @"";
-                weakself.commentInputAccessoryView.commentTextView.placeholder = [NSString stringWithFormat:@"回复%@", selectedComment.user.nickname];
+                weakself.commentInputAccessoryView.commentTextView.placeholder = [NSString stringWithFormat:@"回复%@", weakself.selectedComment.user.nickname];
                 
                 [weakself.commentInputAccessoryView.commentTextView becomeFirstResponder];
             }
@@ -205,10 +214,16 @@
     PGAlertController *alertController = [PGAlertController alertControllerWithTitle:nil message:nil style:^(PGAlertStyle *style) {
         style.alertType = PGAlertTypeActionSheet;
     }];
-    [alertController addActions:@[reportAction, deleteAction]];
-    
-    [self presentViewController:alertController animated:YES completion:nil];
-    
+    NSIndexPath *indexPath = [self.commentsCollectionView indexPathForCell:cell];
+    if (indexPath.item < self.viewModel.commentsArray.count) {
+        PGComment *comment = self.viewModel.commentsArray[indexPath.item];
+        if ([comment.user.userId isEqualToString:PGGlobal.userId]) {
+            [alertController addActions:@[reportAction, deleteAction]];
+        } else {
+            [alertController addActions:@[reportAction]];
+        }
+        [self presentViewController:alertController animated:YES completion:nil];
+    }
 }
 
 #pragma mark - <PGArticleCommentReplyCellDelegate>
@@ -218,10 +233,31 @@
 - (void)sendComment:(NSString *)comment
 {
     if (comment.length > 0) {
-        [self.commentInputAccessoryView.commentTextView resignFirstResponder];
-        [self showToast:@"发送成功" position:PGToastPositionTop];
+        PGWeakSelf(self);
+        [self showLoading];
+        if (!self.selectedComment) {
+            [self.viewModel sendComment:comment completion:^(BOOL success) {
+                if (success) {
+                    weakself.selectedComment = nil;
+                    [weakself.commentInputAccessoryView.commentTextView resignFirstResponder];
+                    [weakself showToast:@"评论成功"];
+                }
+                [weakself dismissLoading];
+            }];
+        } else {
+            [self.viewModel sendReplyComment:comment commentId:self.selectedComment.commentId completion:^(BOOL success) {
+                if (success) {
+                    weakself.selectedComment = nil;
+                    [weakself.commentInputAccessoryView.commentTextView resignFirstResponder];
+                    [weakself showToast:@"回复成功"];
+                } else {
+                    [weakself showToast:@"回复失败"];
+                }
+                [weakself dismissLoading];
+            }];
+        }
     } else {
-        [self showToast:@"回复内容不能为空" position:PGToastPositionTop];
+        [self showToast:@"回复内容不能为空"];
     }
 }
 
@@ -229,6 +265,7 @@
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
+    self.selectedComment = nil;
     [self.commentInputAccessoryView.commentTextView resignFirstResponder];
 }
 
@@ -262,6 +299,11 @@
         
         [_commentsCollectionView registerClass:[PGArticleCommentCell class] forCellWithReuseIdentifier:ArticleCommentCell];
         [_commentsCollectionView registerClass:[PGArticleCommentReplyCell class] forCellWithReuseIdentifier:ArticleCommentReplyCell];
+        
+        PGWeakSelf(self);
+        [_commentsCollectionView enableInfiniteScrolling:^{
+            [weakself.viewModel loadNextPage];
+        }];
     }
     return _commentsCollectionView;
 }

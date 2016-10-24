@@ -14,6 +14,8 @@
 @property (nonatomic, strong) NSString *avatar;
 @property (nonatomic, strong) NSString *userId;
 @property (nonatomic, assign) NSInteger sex;
+@property (nonatomic, strong) NSString *birthday;
+@property (nonatomic, strong) NSString *phoneNumber;
 @property (nonatomic, strong) NSString *location;
 @property (nonatomic, strong) NSString *collectionCount;
 @property (nonatomic, strong) NSString *messageCount;

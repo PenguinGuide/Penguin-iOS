@@ -7,7 +7,10 @@
 //
 
 #import "PGBaseViewController.h"
+#import "PGMe.h"
 
 @interface PGPersonalSettingsViewController : PGBaseViewController
+
+@property (nonatomic, strong) PGMe *me;
 
 @end

@@ -65,6 +65,8 @@
 @property (nonatomic, strong) NSString *articleId;
 @property (nonatomic, strong) PGArticleViewModel *viewModel;
 
+@property (nonatomic, strong) PGComment *selectedComment;
+
 @property (nonatomic, copy) void(^animationCompletion)();
 @property (nonatomic, assign) BOOL animated;
 
@@ -148,6 +150,7 @@
         if (error && [error isKindOfClass:[NSError class]]) {
             [weakself showErrorMessage:error];
             [weakself dismissLoading];
+            [weakself.articleCollectionView endBottomRefreshing];
         }
     }];
 }
@@ -428,9 +431,9 @@
                     [commentCell unselectLabel];
                     
                     if (indexPath.item < weakself.viewModel.commentsArray.count) {
-                        PGComment *selectedComment = weakself.viewModel.commentsArray[indexPath.item];
+                        weakself.selectedComment = weakself.viewModel.commentsArray[indexPath.item];
                         weakself.commentInputAccessoryView.commentTextView.text = @"";
-                        weakself.commentInputAccessoryView.commentTextView.placeholder = [NSString stringWithFormat:@"回复%@", selectedComment.user.nickname];
+                        weakself.commentInputAccessoryView.commentTextView.placeholder = [NSString stringWithFormat:@"回复%@", weakself.selectedComment.user.nickname];
                         
                         [weakself.commentInputAccessoryView.commentTextView becomeFirstResponder];
                     }
@@ -439,9 +442,9 @@
                     [replyCell unselectLabel];
                     
                     if (indexPath.item < weakself.viewModel.commentsArray.count) {
-                        PGComment *selectedComment = self.viewModel.commentsArray[indexPath.item];
+                        weakself.selectedComment = self.viewModel.commentsArray[indexPath.item];
                         weakself.commentInputAccessoryView.commentTextView.text = @"";
-                        weakself.commentInputAccessoryView.commentTextView.placeholder = [NSString stringWithFormat:@"回复%@", selectedComment.user.nickname];
+                        weakself.commentInputAccessoryView.commentTextView.placeholder = [NSString stringWithFormat:@"回复%@", weakself.selectedComment.user.nickname];
                         
                         [weakself.commentInputAccessoryView.commentTextView becomeFirstResponder];
                     }
@@ -509,9 +512,18 @@
     PGAlertController *alertController = [PGAlertController alertControllerWithTitle:nil message:nil style:^(PGAlertStyle *style) {
         style.alertType = PGAlertTypeActionSheet;
     }];
-    [alertController addActions:@[reportAction, deleteAction]];
     
-    [self presentViewController:alertController animated:YES completion:nil];
+    NSIndexPath *indexPath = [self.articleCollectionView indexPathForCell:cell];
+    if (indexPath.item < self.viewModel.commentsArray.count) {
+        PGComment *comment = self.viewModel.commentsArray[indexPath.item];
+        if ([comment.user.userId isEqualToString:PGGlobal.userId]) {
+            [alertController addActions:@[reportAction, deleteAction]];
+        } else {
+            [alertController addActions:@[reportAction]];
+        }
+        [self presentViewController:alertController animated:YES completion:nil];
+    }
+
 
 }
 
@@ -524,15 +536,29 @@
     if (comment.length > 0) {
         PGWeakSelf(self);
         [self showLoading];
-        [self.viewModel sendComment:comment completion:^(BOOL success) {
-            if (success) {
-                [weakself.commentInputAccessoryView.commentTextView resignFirstResponder];
-                [weakself showToast:@"发送成功" position:PGToastPositionTop];
-            }
-            [weakself dismissLoading];
-        }];
+        if (!self.selectedComment) {
+            [self.viewModel sendComment:comment completion:^(BOOL success) {
+                if (success) {
+                    weakself.selectedComment = nil;
+                    [weakself.commentInputAccessoryView.commentTextView resignFirstResponder];
+                    [weakself showToast:@"评论成功"];
+                }
+                [weakself dismissLoading];
+            }];
+        } else {
+            [self.viewModel sendReplyComment:comment commentId:self.selectedComment.commentId completion:^(BOOL success) {
+                if (success) {
+                    weakself.selectedComment = nil;
+                    [weakself.commentInputAccessoryView.commentTextView resignFirstResponder];
+                    [weakself showToast:@"回复成功"];
+                } else {
+                    [weakself showToast:@"回复失败"];
+                }
+                [weakself dismissLoading];
+            }];
+        }
     } else {
-        [self showToast:@"回复内容不能为空" position:PGToastPositionTop];
+        [self showToast:@"回复内容不能为空"];
     }
 }
 
@@ -542,6 +568,7 @@
 {
     [scrollView scrollViewShouldUpdateHeaderView];
     
+    self.selectedComment = nil;
     [self.commentInputAccessoryView.commentTextView resignFirstResponder];
 }
 

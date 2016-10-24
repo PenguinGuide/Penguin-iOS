@@ -7,6 +7,7 @@
 //
 
 #import "PGArticleCommentCell.h"
+#import "PGArticleCommentLikeButton.h"
 
 @interface PGArticleCommentCell ()
 
@@ -14,7 +15,7 @@
 @property (nonatomic, strong) UIImageView *avatarMaskImageView;
 @property (nonatomic, strong) UILabel *nameLabel;
 @property (nonatomic, strong) UILabel *timeLabel;
-@property (nonatomic, strong) UIButton *likeButton;
+@property (nonatomic, strong) PGArticleCommentLikeButton *likeButton;
 @property (nonatomic, strong) UIButton *moreButton;
 
 @property (nonatomic, strong) UILabel *commentLabel;
@@ -39,6 +40,7 @@
     [self.contentView addSubview:self.nameLabel];
     [self.contentView addSubview:self.timeLabel];
     [self.contentView addSubview:self.moreButton];
+    [self.contentView addSubview:self.likeButton];
     
     [self.contentView addSubview:self.commentLabel];
 }
@@ -48,6 +50,20 @@
     [self.avatarImageView setWithImageURL:comment.user.avatar placeholder:nil completion:nil];
     self.nameLabel.text = comment.user.nickname;
     self.timeLabel.text = comment.time;
+    
+    CGSize nameSize = [comment.user.nickname sizeWithAttributes:@{NSFontAttributeName:Theme.fontMediumBold}];
+    self.nameLabel.pg_width = nameSize.width;
+    
+    // NOTE: set UIButton with image && title http://www.tuicool.com/articles/bIvyYvQ
+    if (comment.likesCount > 0) {
+        NSString *likesStr = [NSString stringWithFormat:@"%ld", (long)comment.likesCount];
+        [self.likeButton setTitle:likesStr forState:UIControlStateNormal];
+        CGSize likesSize = [likesStr sizeWithAttributes:@{NSFontAttributeName:Theme.fontSmallBold}];
+        self.likeButton.frame = CGRectMake(self.moreButton.pg_left-(33+likesSize.width+15), 0, 33+likesSize.width+15, 40);
+    } else {
+        [self.likeButton setTitle:nil forState:UIControlStateNormal];
+        self.likeButton.frame = CGRectMake(self.moreButton.pg_left-46, 0, 46, 40);
+    }
     
     NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle defaultParagraphStyle] mutableCopy];
     paragraphStyle.lineSpacing = 5.f;
@@ -140,14 +156,6 @@
     return _timeLabel;
 }
 
-- (UIButton *)likeButton
-{
-    if (!_likeButton) {
-        
-    }
-    return _likeButton;
-}
-
 - (UIButton *)moreButton
 {
     if (!_moreButton) {
@@ -156,6 +164,14 @@
         [_moreButton addTarget:self action:@selector(moreButtonClicked) forControlEvents:UIControlEventTouchUpInside];
     }
     return _moreButton;
+}
+
+- (UIButton *)likeButton
+{
+    if (!_likeButton) {
+        _likeButton = [[PGArticleCommentLikeButton alloc] initWithFrame:CGRectMake(self.moreButton.pg_left-46, 0, 46, 40)];
+    }
+    return _likeButton;
 }
 
 - (UILabel *)commentLabel

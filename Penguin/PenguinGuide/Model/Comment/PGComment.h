@@ -11,11 +11,12 @@
 
 @interface PGComment : PGRKModel
 
-@property (nonatomic, strong) NSString *likes;
-@property (nonatomic) BOOL liked;
-@property (nonatomic, strong) NSString *commentId;
+@property (nonatomic, assign) NSInteger likesCount;
+@property (nonatomic, assign) BOOL liked;
 @property (nonatomic, strong) NSString *content;
 @property (nonatomic, strong) NSString *time;
+@property (nonatomic, strong) NSString *commentId;
+
 @property (nonatomic, strong) PGUser *user;
 
 @property (nonatomic, strong) PGComment *replyComment;

@@ -14,5 +14,7 @@
 @property (nonatomic, strong, readonly) NSArray *commentsArray;
 
 - (void)requestComments:(NSString *)articleId;
+- (void)sendComment:(NSString *)content completion:(void(^)(BOOL success))completion;
+- (void)sendReplyComment:(NSString *)content commentId:(NSString *)commentId completion:(void(^)(BOOL success))completion;
 
 @end

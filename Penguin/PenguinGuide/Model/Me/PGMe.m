@@ -18,6 +18,8 @@
              @"userId": @"id",
              @"location": @"location",
              @"sex": @"sex",
+             @"birthday": @"birthday",
+             @"phoneNumber": @"mobile",
              @"collectionCount": @"collection_count",
              @"messageCount": @"message_count"
             };

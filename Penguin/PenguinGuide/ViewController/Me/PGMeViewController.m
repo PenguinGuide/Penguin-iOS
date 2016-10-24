@@ -181,6 +181,7 @@
 - (void)avatarButtonClicked
 {
     PGPersonalSettingsViewController *personalSettingsVC = [[PGPersonalSettingsViewController alloc] init];
+    personalSettingsVC.me = self.viewModel.me;
     
     [self.navigationController pushViewController:personalSettingsVC animated:YES];
 }

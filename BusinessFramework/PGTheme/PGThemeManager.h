@@ -52,6 +52,8 @@ typedef NS_ENUM(NSInteger, PGThemeStyle) {
 - (UIColor *)colorBackground;
 - (UIColor *)colorLightBackground;
 
+- (UIColor *)colorRed;
+
 - (UIColor *)colorBorder;   // 225
 - (UIColor *)colorLightBorder;  // 234
 

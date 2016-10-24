@@ -56,7 +56,7 @@ static const int DefaultMaxConcurrentConnections = 5;
 
 - (void)initSessionManager:(NSTimeInterval)timeout operationCount:(NSInteger)operationCount
 {
-    self.sessionManager = [PGRKHTTPSessionManager sessionManagerWithBaseURL:@"https://testing.penguin.guide" timeout:timeout operationCount:operationCount];
+    self.sessionManager = [PGRKHTTPSessionManager sessionManagerWithBaseURL:@"https://api.penguin.guide" timeout:timeout operationCount:operationCount];
     
     // content-type
     [self.sessionManager addAcceptableContentTypes:[NSSet setWithObjects:@"application/json", @"text/json", @"text/javascript", @"text/html", @"text/css", @"text/plain", nil]];
