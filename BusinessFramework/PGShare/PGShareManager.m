@@ -73,7 +73,6 @@ static const NSString *WeiboAppSecret = @"fcb5a4ca57d16b1462997c4441935e38";
 + (void)loginWithWechatOnStateChanged:(SSDKGetUserStateChangedHandler)stateChangedHandler
 {
     // NOTE: LSApplicationQueriesSchemes need configured for iOS 9+
-    [ShareSDK cancelAuthorize:SSDKPlatformTypeWechat];
     [ShareSDK getUserInfo:SSDKPlatformTypeWechat
            onStateChanged:^(SSDKResponseState state, SSDKUser *user, NSError *error) {
                if (stateChangedHandler) {
@@ -84,13 +83,18 @@ static const NSString *WeiboAppSecret = @"fcb5a4ca57d16b1462997c4441935e38";
 
 + (void)loginWithWeiboOnStateChanged:(SSDKGetUserStateChangedHandler)stateChangedHandler
 {
-    [ShareSDK cancelAuthorize:SSDKPlatformTypeSinaWeibo];
     [ShareSDK getUserInfo:SSDKPlatformTypeSinaWeibo
            onStateChanged:^(SSDKResponseState state, SSDKUser *user, NSError *error) {
                if (stateChangedHandler) {
                    stateChangedHandler(state, user, error);
                }
            }];
+}
+
++ (void)logout
+{
+    [ShareSDK cancelAuthorize:SSDKPlatformTypeWechat];
+    [ShareSDK cancelAuthorize:SSDKPlatformTypeSinaWeibo];
 }
 
 #pragma mark - <Private Methods>

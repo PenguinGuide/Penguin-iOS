@@ -30,5 +30,6 @@
 
 + (void)loginWithWechatOnStateChanged:(SSDKGetUserStateChangedHandler)stateChangedHandler;
 + (void)loginWithWeiboOnStateChanged:(SSDKGetUserStateChangedHandler)stateChangedHandler;
++ (void)logout;
 
 @end

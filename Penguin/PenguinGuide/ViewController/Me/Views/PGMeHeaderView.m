@@ -49,8 +49,12 @@
         [self.avatarButton sd_setImageWithURL:[NSURL URLWithString:me.avatar]
                                      forState:UIControlStateNormal
                              placeholderImage:nil];
-        self.nameLabel.text = me.nickname;
-        self.locationLabel.text = [NSString stringWithFormat:@"来自%@", me.location];
+        if (me.nickname) {
+            self.nameLabel.text = me.nickname;
+        }
+        if (me.location) {
+            self.locationLabel.text = [NSString stringWithFormat:@"来自%@", me.location];
+        }
     }
 }
 

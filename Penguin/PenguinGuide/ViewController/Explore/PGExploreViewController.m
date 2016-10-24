@@ -107,6 +107,11 @@
     return self.viewModel.recommendsArray;
 }
 
+- (NSArray *)iconsArray
+{
+    return self.viewModel.scenariosArray;
+}
+
 - (NSArray *)feedsArray
 {
     return self.viewModel.bannersArray;

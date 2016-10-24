@@ -10,6 +10,7 @@
 #define PGAPIList_h
 
 #define PG_Home_Recommends              @"/api/v1/recommends/home"
+#define PG_Explore_Recommends           @"/api/v1/recommends/explore"
 #define PG_Store_Recommends             @"/api/v1/recommends/store"
 
 #define PG_Home_Feeds                   @"/api/v1/feeds/home"
@@ -45,8 +46,12 @@
 
 #define PG_Phone_Register               @"/api/v1/register"
 #define PG_Phone_Login                  @"/api/v1/login"
-#define PG_Send_SMS_Code                @"/api/v1/auth_validation_code"
 #define PG_Wechat_Login                 @"/api/v1/wechat_login"
 #define PG_Weibo_Login                  @"/api/v1/weibo_login"
+#define PG_Send_SMS_Code                @"/api/v1/auth_validation_code"
+#define PG_Send_Reset_Pwd_SMS_Code      @"/api/v1/reset_password_validation_code"
+#define PG_Reset_Pwd                    @"/api/v1/reset_password"
+
+#define PG_Upload_Image                 @"/api/v1/upload_avatar"
 
 #endif /* PGAPIList_h */

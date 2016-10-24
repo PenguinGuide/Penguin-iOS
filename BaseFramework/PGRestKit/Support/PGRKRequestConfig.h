@@ -57,6 +57,8 @@
 
 @property (nonatomic, strong) NSString *accessToken;
 
+@property (nonatomic, strong) UIImage *image;
+
 /**
  *  Mock Configs ********* IMPORTANT DEBUG ONLY *********
  */

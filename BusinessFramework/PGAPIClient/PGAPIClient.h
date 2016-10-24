@@ -33,6 +33,10 @@
                  completion:(PGRKCompletionBlock)completion
                     failure:(PGRKFailureBlock)failure;
 
+- (void)pg_uploadImage:(void(^)(PGRKRequestConfig *config))configBlock
+            completion:(PGRKCompletionBlock)completion
+               failure:(PGRKFailureBlock)failure;
+
 - (void)cancelAllRequests;
 
 @end

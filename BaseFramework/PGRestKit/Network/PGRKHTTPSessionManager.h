@@ -46,6 +46,10 @@ typedef void(^PGRKFailureBlock)(NSError *error);
                completion:(PGRKCompletionBlock)completion
                   failure:(PGRKFailureBlock)failure;
 
+- (void)makeUploadImage:(void(^)(PGRKRequestConfig *config))configBlock
+             completion:(PGRKCompletionBlock)completion
+                failure:(PGRKFailureBlock)failure;
+
 - (void)cancelAllTasks;
 
 @end

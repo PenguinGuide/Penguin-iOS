@@ -49,6 +49,7 @@
         }
         [weakself requestFeeds];
     } failure:^(NSError *error) {
+        weakself.error = error;
         [weakself requestFeeds];
     }];
 }

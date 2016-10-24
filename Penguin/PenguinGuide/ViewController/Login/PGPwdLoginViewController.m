@@ -29,6 +29,14 @@
     [self.loginScrollView addSubview:self.pwdLoginView];
 }
 
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    
+    [self.pwdLoginView.phoneTextField resignFirstResponder];
+    [self.pwdLoginView.pwdTextField resignFirstResponder];
+}
+
 #pragma mark - <PGLoginDelegate>
 
 - (void)loginButtonClicked:(UIView *)view

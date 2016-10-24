@@ -63,7 +63,15 @@
         [weakself dismissLoading];
         [weakself.feedsCollectionView endBottomRefreshing];
     }];
-    [self observeError:self.viewModel];
+    [self observe:self.viewModel keyPath:@"error" block:^(id changedObject) {
+        NSError *error = changedObject;
+        if (error && [error isKindOfClass:[NSError class]]) {
+            [weakself showErrorMessage:error];
+            [weakself dismissLoading];
+            [weakself.feedsCollectionView endTopRefreshing];
+            [weakself.feedsCollectionView endBottomRefreshing];
+        }
+    }];
 }
 
 - (void)dealloc

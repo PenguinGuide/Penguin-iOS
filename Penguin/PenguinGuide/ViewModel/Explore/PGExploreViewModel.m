@@ -15,10 +15,12 @@
 #import "PGTopicBanner.h"
 #import "PGSingleGoodBanner.h"
 #import "PGImageBanner.h"
+#import "PGCategoryIcon.h"
 
 @interface PGExploreViewModel ()
 
 @property (nonatomic, strong, readwrite) NSArray *recommendsArray;
+@property (nonatomic, strong, readwrite) NSArray *scenariosArray;
 @property (nonatomic, strong, readwrite) NSArray *bannersArray;
 
 @end
@@ -29,16 +31,21 @@
 {
     PGWeakSelf(self);
     [self.apiClient pg_makeGetRequest:^(PGRKRequestConfig *config) {
-        config.route = PG_Home_Recommends;
-        config.keyPath = @"items";
-        config.model = [PGImageBanner new];
-        config.isMockAPI = YES;
-        config.mockFileName = @"v1_explore_recommends.json";
+        config.route = PG_Explore_Recommends;
+        config.keyPath = nil;
     } completion:^(id response) {
-        weakself.recommendsArray = response;
+        NSDictionary *responseDict = [response firstObject];
+        if (responseDict && [responseDict isKindOfClass:[NSDictionary class]]) {
+            if (responseDict[@"banners"]) {
+                weakself.recommendsArray = [PGImageBanner modelsFromArray:responseDict[@"banners"]];
+            }
+            if (responseDict[@"scenarios"]) {
+                weakself.scenariosArray = [PGCategoryIcon modelsFromArray:responseDict[@"scenarios"]];
+            }
+        }
         [weakself requestFeeds];
     } failure:^(NSError *error) {
-        
+        [weakself requestFeeds];
     }];
 }
 

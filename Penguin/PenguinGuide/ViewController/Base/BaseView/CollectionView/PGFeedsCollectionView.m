@@ -154,7 +154,7 @@
         } else if ([tabType isEqualToString:@"explore"]) {
             PGExploreRecommendsHeaderView *headerView = [collectionView dequeueReusableSupplementaryViewOfKind:kind withReuseIdentifier:ExploreHeaderView forIndexPath:indexPath];
             headerView.delegate = self;
-            [headerView reloadBannersWithData:[self.feedsDelegate recommendsArray]];
+            [headerView reloadBannersWithRecommendsArray:[self.feedsDelegate recommendsArray] scenariosArray:[self.feedsDelegate iconsArray]];
             
             return headerView;
         } else if ([tabType isEqualToString:@"store"]) {

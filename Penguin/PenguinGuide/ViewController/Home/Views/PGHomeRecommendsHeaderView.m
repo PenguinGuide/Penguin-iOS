@@ -54,6 +54,7 @@ static NSString *const ChannelCell = @"ChannelCell";
     self.recommendsArray = recommendsArray;
     self.channelsArray = channelsArray;
     [self.bannersView reloadData];
+    [self.categoriesCollectionView reloadData];
 }
 
 + (CGSize)headerViewSize

@@ -10,4 +10,7 @@
 
 @interface PGPwdSaveViewController : PGLoginBaseViewController
 
+@property (nonatomic, strong) NSString *phoneNumber;
+@property (nonatomic, strong) NSString *smsCode;
+
 @end

@@ -329,6 +329,29 @@ static const int DefaultMaxConcurrentConnections = 5;
          }];
 }
 
+- (void)makeUploadImage:(void (^)(PGRKRequestConfig *config))configBlock
+             completion:(PGRKCompletionBlock)completion
+                failure:(PGRKFailureBlock)failure
+{
+    PGRKRequestConfig *config = [[PGRKRequestConfig alloc] init];
+    configBlock(config);
+    
+    __block NSData *imageData = UIImageJPEGRepresentation(config.image, 0.95f);
+    [[self POST:config.route parameters:nil constructingBodyWithBlock:^(id<AFMultipartFormData>  _Nonnull formData) {
+        [formData appendPartWithFileData:imageData name:@"upload_file" fileName:@"avatar.jpg" mimeType:@"image/jpeg"];
+    } progress:^(NSProgress * _Nonnull uploadProgress) {
+        NSLog(@"-------- percentage: %@", @(uploadProgress.fractionCompleted));
+    } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        if (completion) {
+            completion(responseObject);
+        }
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        if (failure) {
+            failure(error);
+        }
+    }] resume];
+}
+
 - (void)cancelAllTasks
 {
     [self.tasks enumerateObjectsUsingBlock:^(NSURLSessionTask * _Nonnull task, NSUInteger idx, BOOL * _Nonnull stop) {

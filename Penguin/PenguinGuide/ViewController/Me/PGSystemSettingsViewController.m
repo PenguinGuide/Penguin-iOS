@@ -142,8 +142,11 @@
 
 - (void)logoutButtonClicked
 {
+    [self.navigationController popToRootViewControllerAnimated:YES];
+    
     [PGGlobal synchronizeUserId:nil];
     [PGGlobal synchronizeToken:nil];
+    [PGShareManager logout];
     
     [PGRouterManager routeToLoginPage];
 }

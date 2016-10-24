@@ -210,6 +210,7 @@
         NSError *error = changedObject;
         if (error && [error isKindOfClass:[NSError class]]) {
             [weakself showErrorMessage:error];
+            [weakself dismissLoading];
         }
     }];
 }
@@ -223,6 +224,8 @@
             if (errorMsg && errorMsg.length > 0) {
                 [self showToast:errorMsg position:PGToastPositionTop];
             }
+        } else if (userInfo[NSLocalizedDescriptionKey]) {
+            [self showToast:userInfo[NSLocalizedDescriptionKey] position:PGToastPositionTop];
         }
     }
     NSInteger errorCode = error.code;

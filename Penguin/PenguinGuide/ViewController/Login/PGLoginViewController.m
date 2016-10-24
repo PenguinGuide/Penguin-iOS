@@ -46,6 +46,9 @@
 - (void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
+    
+    [self.loginView.phoneTextField resignFirstResponder];
+    [self.loginView.smsCodeTextField resignFirstResponder];
 }
 
 #pragma mark - <PGLoginDelegate>

@@ -9,7 +9,7 @@
 #import "PGSignupInfoViewController.h"
 #import "PGLoginTextField.h"
 
-@interface PGSignupInfoViewController () <UIPickerViewDataSource, UIPickerViewDelegate>
+@interface PGSignupInfoViewController () <UIPickerViewDataSource, UIPickerViewDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate>
 
 @property (nonatomic, strong) UIButton *cameraButton;
 @property (nonatomic, strong) PGLoginTextField *nicknameTextField;
@@ -43,6 +43,16 @@
     [self.loginScrollView addSubview:self.locationTextField];
     [self.loginScrollView addSubview:self.doneButton];
     [self.loginScrollView addSubview:self.skipButton];
+}
+
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    
+    [self.nicknameTextField resignFirstResponder];
+    [self.dobTextField resignFirstResponder];
+    [self.sexTextField resignFirstResponder];
+    [self.locationTextField resignFirstResponder];
 }
 
 #pragma mark - <UIPickerViewDataSource>
@@ -85,6 +95,16 @@
 
 #pragma mark - <Button Evvents>
 
+- (void)cameraButtonClicked
+{
+    UIImagePickerController *imagePickerController = [[UIImagePickerController alloc] init];
+    imagePickerController.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
+    imagePickerController.allowsEditing = YES;
+    imagePickerController.delegate = self;
+    
+    [self.navigationController presentViewController:imagePickerController animated:YES completion:nil];
+}
+
 - (void)doneButtonClicked
 {
     if (self.userId) {
@@ -126,12 +146,32 @@
     [self.locationTextField resignFirstResponder];
 }
 
+#pragma mark - <UIImagePickerControllerDelegate>
+
+- (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary<NSString *,id> *)info
+{
+//    __block UIImage *image = [info objectForKey:UIImagePickerControllerOriginalImage];
+//    if (image) {
+//        [self.apiClient pg_uploadImage:^(PGRKRequestConfig *config) {
+//            config.route = PG_Upload_Image;
+//            config.keyPath = nil;
+//            config.image = image;
+//        } completion:^(id response) {
+//            
+//        } failure:^(NSError *error) {
+//            
+//        }];
+//    }
+    [picker dismissViewControllerAnimated:YES completion:nil];
+}
+
 #pragma mark - <Setters && Getters>
 
 - (UIButton *)cameraButton
 {
     if (!_cameraButton) {
         _cameraButton = [[UIButton alloc] initWithFrame:CGRectMake((UISCREEN_WIDTH-92)/2, 50, 92, 92)];
+        [_cameraButton addTarget:self action:@selector(cameraButtonClicked) forControlEvents:UIControlEventTouchUpInside];
         [_cameraButton setImage:[UIImage imageNamed:@"pg_login_camera"] forState:UIControlStateNormal];
     }
     return _cameraButton;

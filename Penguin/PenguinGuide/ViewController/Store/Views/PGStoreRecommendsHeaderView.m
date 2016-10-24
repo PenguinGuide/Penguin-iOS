@@ -123,27 +123,6 @@
     if (self.delegate && [self.delegate respondsToSelector:@selector(categoryDidSelect:)]) {
         [self.delegate categoryDidSelect:nil];
     }
-//    if (indexPath.item == 0) {
-//        if (self.delegate && [self.delegate respondsToSelector:@selector(channelDidSelect:)]) {
-//            [self.delegate channelDidSelect:@"111"];
-//        }
-//    } else if (indexPath.item == 1) {
-//        if (self.delegate && [self.delegate respondsToSelector:@selector(channelDidSelect:)]) {
-//            [self.delegate channelDidSelect:@"111"];
-//        }
-//    } else if (indexPath.item == 2) {
-//        if (self.delegate && [self.delegate respondsToSelector:@selector(channelDidSelect:)]) {
-//            [self.delegate channelDidSelect:@"111"];
-//        }
-//    } else if (indexPath.item == 3) {
-//        if (self.delegate && [self.delegate respondsToSelector:@selector(channelDidSelect:)]) {
-//            [self.delegate channelDidSelect:@"111"];
-//        }
-//    } else if (indexPath.item == 4) {
-//        if (self.delegate && [self.delegate respondsToSelector:@selector(channelDidSelect:)]) {
-//            [self.delegate channelDidSelect:@"111"];
-//        }
-//    }
 }
 
 #pragma mark - <Setters && Getters>

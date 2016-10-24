@@ -171,6 +171,25 @@ static const int DefaultMaxConcurrentConnections = 5;
                                }];
 }
 
+- (void)pg_uploadImage:(void (^)(PGRKRequestConfig *))configBlock
+            completion:(PGRKCompletionBlock)completion
+               failure:(PGRKFailureBlock)failure
+{
+    __block PGRKRequestConfig *clientConfig = [[PGRKRequestConfig alloc] init];
+    configBlock(clientConfig);
+    
+    [self.sessionManager makeUploadImage:configBlock
+                              completion:^(id response) {
+                                  if (completion) {
+                                      completion(response);
+                                  }
+                              } failure:^(NSError *error) {
+                                  if (failure) {
+                                      failure(error);
+                                  }
+                              }];
+}
+
 - (void)cancelAllRequests
 {
     [self.sessionManager cancelAllTasks];
