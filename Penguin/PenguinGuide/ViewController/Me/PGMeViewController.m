@@ -12,6 +12,8 @@
 #import "PGMeViewController.h"
 #import "PGPersonalSettingsViewController.h"
 #import "PGSystemSettingsViewController.h"
+#import "PGCollectionsViewController.h"
+#import "PGMessageViewController.h"
 
 #import "PGMeViewModel.h"
 
@@ -45,6 +47,7 @@
         if (me && [me isKindOfClass:[PGMe class]]) {
             [weakself.meCollectionView reloadData];
         }
+        [weakself dismissLoading];
     }];
     [self observeError:self.viewModel];
 }
@@ -58,6 +61,7 @@
         [PGRouterManager routeToHomePage];
     } else {
         if (!self.viewModel.me) {
+            [self showLoading];
             [self.viewModel requestData];
         }
     }
@@ -177,6 +181,21 @@
     }
     return nil;
 }
+
+- (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    if (indexPath.item == 0) {
+        
+    } else if (indexPath.item == 1) {
+        PGCollectionsViewController *collectionsVC = [[PGCollectionsViewController alloc] init];
+        [self.navigationController pushViewController:collectionsVC animated:YES];
+    } else if (indexPath.item == 2) {
+        PGMessageViewController *messageVC = [[PGMessageViewController alloc] init];
+        [self.navigationController pushViewController:messageVC animated:YES];
+    }
+}
+
+#pragma mark - <Button Events>
 
 - (void)avatarButtonClicked
 {

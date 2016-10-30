@@ -15,6 +15,7 @@
 - (void)setWithImageURL:(NSString *)imageURL placeholder:(UIImage *)placeholder completion:(void (^)(UIImage *))completion
 {
     __weak typeof(self) weakSelf = self;
+    imageURL = [imageURL stringByAppendingString:@"?imageView2/2/w/1000/h/1000"];
     [[SDWebImageDownloader sharedDownloader] downloadImageWithURL:[NSURL URLWithString:imageURL]
                                                           options:SDWebImageDownloaderHighPriority
                                                          progress:nil
@@ -30,6 +31,7 @@
 - (void)setStaticImageURL:(NSString *)imageURL placeholder:(UIImage *)placeholder completion:(void (^)(UIImage *))completion
 {
     __weak typeof(self) weakSelf = self;
+    imageURL = [imageURL stringByAppendingString:@"?imageView2/2/w/1000/h/1000"];
     [self sd_setImageWithURL:[NSURL URLWithString:imageURL]
             placeholderImage:placeholder
                    completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {

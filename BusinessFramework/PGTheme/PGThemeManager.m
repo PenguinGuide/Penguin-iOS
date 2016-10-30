@@ -30,11 +30,11 @@ static UIColor *colorBorder, *colorLightBorder;
 - (id)init
 {
     if (self = [super init]) {
-        fontSize10 = [UIFont systemFontOfSize:10.f weight:UIFontWeightLight];
-        fontSize12 = [UIFont systemFontOfSize:12.f weight:UIFontWeightLight];
-        fontSize14 = [UIFont systemFontOfSize:14.f weight:UIFontWeightLight];
-        fontSize16 = [UIFont systemFontOfSize:16.f weight:UIFontWeightLight];
-        fontSize18 = [UIFont systemFontOfSize:18.f weight:UIFontWeightLight];
+        fontSize10 = [UIFont systemFontOfSize:10.f weight:UIFontWeightRegular];
+        fontSize12 = [UIFont systemFontOfSize:12.f weight:UIFontWeightRegular];
+        fontSize14 = [UIFont systemFontOfSize:14.f weight:UIFontWeightRegular];
+        fontSize16 = [UIFont systemFontOfSize:16.f weight:UIFontWeightRegular];
+        fontSize18 = [UIFont systemFontOfSize:18.f weight:UIFontWeightRegular];
         
         fontSize10Bold = [UIFont systemFontOfSize:10.f weight:UIFontWeightMedium];
         fontSize12Bold = [UIFont systemFontOfSize:12.f weight:UIFontWeightMedium];

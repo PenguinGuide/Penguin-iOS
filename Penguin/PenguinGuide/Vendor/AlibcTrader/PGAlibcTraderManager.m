@@ -42,11 +42,11 @@ static NSString *const AppKey = @"23465992";
     AlibcTradeShowParams *showParams = [[AlibcTradeShowParams alloc] init];
     if (showNative) {
         showParams.openType = ALiOpenTypeNative;
-        showParams.backUrl = [NSString stringWithFormat:@"tbopen%@:https://h5.m.taobao.com", AppKey];
-        showParams.isNeedPush = YES;
     } else {
         showParams.openType = ALiOpenTypeH5;
     }
+    showParams.backUrl = [NSString stringWithFormat:@"tbopen%@:https://h5.m.taobao.com", AppKey];
+    showParams.isNeedPush = YES;
     
     id <AlibcTradePage> goodDetailPage = [AlibcTradePageFactory itemDetailPage:goodId];
     
@@ -59,7 +59,7 @@ static NSString *const AppKey = @"23465992";
                                               tradeProcessSuccessCallback:^(AlibcTradeResult * _Nullable result) {
                                                   NSLog(@"open success: %@", result);
                                               } tradeProcessFailedCallback:^(NSError * _Nullable error) {
-                                                  NSLog(@"open failed: %@", [error description]);
+                                                  NSLog(@"open failed: %@", error);
                                               }];
         NSLog(@"open return code: %@", @(ret));
     }

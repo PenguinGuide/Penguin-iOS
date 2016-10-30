@@ -316,17 +316,25 @@ static const int DefaultMaxConcurrentConnections = 5;
     PGRKRequestConfig *config = [[PGRKRequestConfig alloc] init];
     configBlock(config);
     
-    [self DELETE:config.route
-      parameters:config.params
-         success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
-             if (completion) {
-                 completion(responseObject);
-             }
-         } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
-             if (failure) {
-                 failure(error);
-             }
-         }];
+    if (config.route.isValid) {
+        NSString *finalRoute = config.route;
+        if (config.pattern) {
+            NSString *route = SOCStringFromStringWithDictionary(config.route, config.pattern);
+            finalRoute = route ? route : config.route;
+        }
+        
+        [self DELETE:finalRoute
+          parameters:config.params
+             success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+                 if (completion) {
+                     completion(responseObject);
+                 }
+             } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+                 if (failure) {
+                     failure(error);
+                 }
+             }];
+    }
 }
 
 - (void)makeUploadImage:(void (^)(PGRKRequestConfig *config))configBlock
@@ -338,11 +346,14 @@ static const int DefaultMaxConcurrentConnections = 5;
     
     __block NSData *imageData = UIImageJPEGRepresentation(config.image, 0.9f);
     
+    NSString *mimeType = @"image/jpeg";
+    NSString *finalStr = [NSString stringWithFormat:@"data:%@;base64,%@", mimeType, [imageData base64EncodedStringWithOptions:0]];
+    
     if (!config.params) {
         config.params = [PGRKParams new];
-        config.params[@"image_data"] = [imageData base64EncodedStringWithOptions:0];
+        config.params[@"image_data"] = finalStr;
     } else {
-        config.params[@"image_data"] = [imageData base64EncodedStringWithOptions:0];
+        config.params[@"image_data"] = finalStr;
     }
     
     [self POST:config.route

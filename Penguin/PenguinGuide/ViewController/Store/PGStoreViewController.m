@@ -37,6 +37,7 @@
         NSArray *bannersArray = changedObject;
         if (bannersArray && [bannersArray isKindOfClass:[NSArray class]]) {
             [weakself.feedsCollectionView reloadData];
+            [weakself dismissLoading];
         }
     }];
 }
@@ -54,6 +55,16 @@
     [super viewWillAppear:animated];
     
     [self.navigationController setNavigationBarHidden:NO animated:NO];
+}
+
+- (void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    
+    if (self.viewModel.bannersArray.count == 0) {
+        [self showLoading];
+        [self.viewModel requestData];
+    }
 }
 
 - (void)viewWillDisappear:(BOOL)animated

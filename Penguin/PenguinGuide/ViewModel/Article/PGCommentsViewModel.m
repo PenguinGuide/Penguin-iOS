@@ -37,6 +37,9 @@
         } completion:^(id response) {
             if ([response count] > 0) {
                 weakself.page++;
+                weakself.endFlag = NO;
+            } else {
+                weakself.endFlag = YES;
             }
             weakself.commentsArray = response;
         } failure:^(NSError *error) {
@@ -64,6 +67,9 @@
             if ([response count] > 0) {
                 weakself.page++;
                 [comments addObjectsFromArray:response];
+                weakself.endFlag = NO;
+            } else {
+                weakself.endFlag = YES;
             }
             weakself.commentsArray = [NSArray arrayWithArray:comments];
         } failure:^(NSError *error) {
@@ -122,6 +128,53 @@
             completion(NO);
         }
     }
+}
+
+- (void)likeComment:(NSString *)commentId completion:(void (^)(BOOL))completion
+{
+    if (commentId && commentId.length > 0) {
+        PGWeakSelf(self);
+        [self.apiClient pg_makePutRequest:^(PGRKRequestConfig *config) {
+            config.route = PG_Article_Comment_Like;
+            config.keyPath = nil;
+            config.pattern = @{@"commentId":commentId};
+        } completion:^(id response) {
+            if (completion) {
+                completion(YES);
+            }
+        } failure:^(NSError *error) {
+            if (completion) {
+                completion(NO);
+            }
+            weakself.error = error;
+        }];
+    }
+}
+
+- (void)dislikeComment:(NSString *)commentId completion:(void (^)(BOOL))completion
+{
+    if (commentId && commentId.length > 0) {
+        PGWeakSelf(self);
+        [self.apiClient pg_makeDeleteRequest:^(PGRKRequestConfig *config) {
+            config.route = PG_Article_Comment_Like;
+            config.keyPath = nil;
+            config.pattern = @{@"commentId":commentId};
+        } completion:^(id response) {
+            if (completion) {
+                completion(YES);
+            }
+        } failure:^(NSError *error) {
+            if (completion) {
+                completion(NO);
+            }
+            weakself.error = error;
+        }];
+    }
+}
+
+- (void)deleteComment:(NSString *)commentId
+{
+    
 }
 
 @end

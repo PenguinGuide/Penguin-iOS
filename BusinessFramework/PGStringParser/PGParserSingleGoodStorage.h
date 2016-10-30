@@ -10,4 +10,8 @@
 
 @interface PGParserSingleGoodStorage : NSObject
 
+@property (nonatomic, strong) NSString *image;
+@property (nonatomic, strong) NSString *goodId;
+@property (nonatomic, strong) id good;
+
 @end

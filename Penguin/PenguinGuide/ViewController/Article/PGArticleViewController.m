@@ -13,6 +13,8 @@
 #define ArticleParagraphCatalogImageCell @"PGArticleParagraphCatalogImageCell"
 #define ArticleParagraphVideoCell @"ArticleParagraphVideoCell"
 #define ArticleParagraphFooterCell @"ArticleParagraphFooterCell"
+#define ArticleParagraphSingleGoodCell @"ArticleParagraphSingleGoodCell"
+#define ArticleParagraphGoodsCollectionCell @"ArticleParagraphGoodsCollectionCell"
 #define ArticleRelatedArticlesCell @"ArticleRelatedArticlesCell"
 #define ArticleCommentCell @"ArticleCommentCell"
 #define ArticleCommentReplyCell @"ArticleCommentReplyCell"
@@ -23,6 +25,7 @@
 #import "PGAlertController.h"
 #import "PGVideoPlayerViewController.h"
 #import "PGCommentsViewController.h"
+#import "PGGoodViewController.h"
 
 // views
 #import "PGArticleParagraphInfoCell.h"
@@ -32,6 +35,8 @@
 #import "PGArticleParagraphCatalogImageCell.h"
 #import "PGArticleParagraphVideoCell.h"
 #import "PGArticleParagraphFooterCell.h"
+#import "PGArticleParagraphSingleGoodCell.h"
+#import "PGArticleParagraphGoodsCollectionCell.h"
 #import "PGArticleRelatedArticlesCell.h"
 #import "PGArticleCommentCell.h"
 #import "PGArticleCommentReplyCell.h"
@@ -106,6 +111,7 @@
     
     self.headerImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, UISCREEN_WIDTH, UISCREEN_WIDTH*9/16)];
     self.headerImageView.backgroundColor = Theme.colorText;
+    self.headerImageView.clipsToBounds = YES;
     
     PGWeakSelf(self);
     [self observe:self.viewModel keyPath:@"article" block:^(id changedObject) {
@@ -114,29 +120,80 @@
             [weakself.headerImageView setWithImageURL:weakself.viewModel.article.image placeholder:nil completion:nil];
             [weakself.articleCollectionView setHeaderView:weakself.headerImageView naviTitle:weakself.viewModel.article.title rightNaviButton:nil];
             
+            if (article.isLiked) {
+                [weakself.likeButton setImage:[UIImage imageNamed:@"pg_article_liked"] forState:UIControlStateNormal];
+                [weakself.likeButton setTag:1];
+            } else {
+                [weakself.likeButton setImage:[UIImage imageNamed:@"pg_article_like"] forState:UIControlStateNormal];
+                [weakself.likeButton setTag:0];
+            }
+            if (article.isCollected) {
+                [weakself.collectButton setImage:[UIImage imageNamed:@"pg_article_collected"] forState:UIControlStateNormal];
+                [weakself.collectButton setTag:1];
+            } else {
+                [weakself.collectButton setImage:[UIImage imageNamed:@"pg_article_collect"] forState:UIControlStateNormal];
+                [weakself.collectButton setTag:0];
+            }
+            
             if (article.body && article.body.length > 0) {
                 PGStringParser *htmlParser = [PGStringParser htmlParserWithString:article.body];
                 weakself.viewModel.paragraphsArray = [htmlParser articleParsedStorages];
                 
-                [weakself.articleCollectionView reloadData];
-                
-                weakself.articleCollectionView.frame = CGRectMake(0, UISCREEN_HEIGHT-300, weakself.articleCollectionView.pg_width, self.articleCollectionView.pg_height);
-                weakself.articleCollectionView.alpha = 0.f;
-                [UIView animateWithDuration:0.3f
-                                      delay:0.f
-                                    options:UIViewAnimationOptionCurveEaseOut
-                                 animations:^{
-                                     weakself.articleCollectionView.frame = CGRectMake(0, 0, weakself.articleCollectionView.pg_width, weakself.articleCollectionView.pg_height);
-                                     weakself.articleCollectionView.alpha = 0.4f;
-                                 } completion:^(BOOL finished) {
-                                     weakself.articleCollectionView.alpha = 1.f;
-                                     if (weakself.animationCompletion) {
-                                         weakself.animationCompletion();
-                                     }
-                                 }];
+                [weakself.viewModel requestGoods:^{
+                    [weakself.articleCollectionView reloadData];
+                    
+                    if (weakself.animated) {
+                        weakself.articleCollectionView.frame = CGRectMake(0, UISCREEN_HEIGHT-300, weakself.articleCollectionView.pg_width, weakself.articleCollectionView.pg_height);
+                        weakself.articleCollectionView.alpha = 0.f;
+                        [UIView animateWithDuration:0.3f
+                                              delay:0.f
+                                            options:UIViewAnimationOptionCurveEaseOut
+                                         animations:^{
+                                             weakself.articleCollectionView.frame = CGRectMake(0, 0, weakself.articleCollectionView.pg_width, weakself.articleCollectionView.pg_height);
+                                             weakself.articleCollectionView.alpha = 0.4f;
+                                         } completion:^(BOOL finished) {
+                                             weakself.articleCollectionView.alpha = 1.f;
+                                             if (weakself.animationCompletion) {
+                                                 weakself.animationCompletion();
+                                             }
+                                         }];
+                    }
+                    [weakself dismissLoading];
+                }];
             }
-            [weakself dismissLoading];
         }
+    }];
+    [self observe:self.viewModel keyPath:@"likeSuccess" block:^(id changedObject) {
+        BOOL likeSuccess = [changedObject boolValue];
+        if (likeSuccess) {
+            weakself.likeButton.tag = 1;
+            [weakself.likeButton setImage:[UIImage imageNamed:@"pg_article_liked"] forState:UIControlStateNormal];
+        }
+        [weakself dismissLoading];
+    }];
+    [self observe:self.viewModel keyPath:@"dislikeSuccess" block:^(id changedObject) {
+        BOOL dislikeSuccess = [changedObject boolValue];
+        if (dislikeSuccess) {
+            weakself.likeButton.tag = 0;
+            [weakself.likeButton setImage:[UIImage imageNamed:@"pg_article_like"] forState:UIControlStateNormal];
+        }
+        [weakself dismissLoading];
+    }];
+    [self observe:self.viewModel keyPath:@"collectSuccess" block:^(id changedObject) {
+        BOOL collectSuccess = [changedObject boolValue];
+        if (collectSuccess) {
+            weakself.collectButton.tag = 1;
+            [weakself.collectButton setImage:[UIImage imageNamed:@"pg_article_collected"] forState:UIControlStateNormal];
+        }
+        [weakself dismissLoading];
+    }];
+    [self observe:self.viewModel keyPath:@"discollectSuccess" block:^(id changedObject) {
+        BOOL collectSuccess = [changedObject boolValue];
+        if (collectSuccess) {
+            weakself.collectButton.tag = 0;
+            [weakself.collectButton setImage:[UIImage imageNamed:@"pg_article_collect"] forState:UIControlStateNormal];
+        }
+        [weakself dismissLoading];
     }];
     [self observe:self.viewModel keyPath:@"commentsArray" block:^(id changedObject) {
         NSArray *comments = changedObject;
@@ -268,6 +325,22 @@
                 [cell setCellWithImage:videoStorage.image];
                 
                 return cell;
+            } else if ([storage isKindOfClass:[PGParserSingleGoodStorage class]]) {
+                PGParserSingleGoodStorage *singleGoodStorage = (PGParserSingleGoodStorage *)storage;
+                
+                PGArticleParagraphSingleGoodCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:ArticleParagraphSingleGoodCell forIndexPath:indexPath];
+                
+                [cell setCellWithGood:singleGoodStorage.good];
+                
+                return cell;
+            } else if ([storage isKindOfClass:[PGParserGoodsCollectionStorage class]]) {
+                PGParserGoodsCollectionStorage *goodsCollectionStorage = (PGParserGoodsCollectionStorage *)storage;
+                
+                PGArticleParagraphGoodsCollectionCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:ArticleParagraphGoodsCollectionCell forIndexPath:indexPath];
+                
+                [cell reloadCellWithGoodsArray:goodsCollectionStorage.goodsArray];
+                
+                return cell;
             }
         }
     } else if (indexPath.section == 1) {
@@ -374,6 +447,10 @@
                     height = 20+width*(1/videoStorage.ratio)+20;
                     return CGSizeMake(width, height);
                 }
+            } else if ([storage isKindOfClass:[PGParserSingleGoodStorage class]]) {
+                return CGSizeMake(UISCREEN_WIDTH-60, UISCREEN_WIDTH+30);
+            } else if ([storage isKindOfClass:[PGParserGoodsCollectionStorage class]]) {
+                return CGSizeMake(UISCREEN_WIDTH-60, 250.f);
             }
         }
     } else if (indexPath.section == 1) {
@@ -408,6 +485,12 @@
                 if (videoStorage.link && videoStorage.link.length > 0) {
                     PGVideoPlayerViewController *playerViewController = [[PGVideoPlayerViewController alloc] initWithVideoURL:videoStorage.link];
                     [self.navigationController pushViewController:playerViewController animated:YES];
+                }
+            } else if ([storage isKindOfClass:[PGParserSingleGoodStorage class]]) {
+                PGParserSingleGoodStorage *singleGoodStorage = (PGParserSingleGoodStorage *)storage;
+                if (singleGoodStorage.goodId && singleGoodStorage.goodId.length > 0) {
+                    PGGoodViewController *goodVC = [[PGGoodViewController alloc] initWithGoodId:singleGoodStorage.goodId];
+                    [self.navigationController pushViewController:goodVC animated:YES];
                 }
             }
         }
@@ -523,8 +606,40 @@
         }
         [self presentViewController:alertController animated:YES completion:nil];
     }
+}
 
+- (void)commentLikeButtonClicked:(PGArticleCommentCell *)cell
+{
+    __block PGArticleCommentCell *weakCell = cell;
+    
+    NSIndexPath *indexPath = [self.articleCollectionView indexPathForCell:cell];
+    if (indexPath.item < self.viewModel.commentsArray.count) {
+        __block PGComment *comment = self.viewModel.commentsArray[indexPath.item];
+        [self.viewModel likeComment:comment.commentId completion:^(BOOL success) {
+            if (success) {
+                comment.likesCount++;
+                comment.liked = YES;
+                [weakCell animateLikeButton:comment.likesCount];
+            }
+        }];
+    }
+}
 
+- (void)commentDislikeButtonClicked:(PGArticleCommentCell *)cell
+{
+    __block PGArticleCommentCell *weakCell = cell;
+    
+    NSIndexPath *indexPath = [self.articleCollectionView indexPathForCell:cell];
+    if (indexPath.item < self.viewModel.commentsArray.count) {
+        PGComment *comment = self.viewModel.commentsArray[indexPath.item];
+        [self.viewModel dislikeComment:comment.commentId completion:^(BOOL success) {
+            if (success) {
+                comment.likesCount--;
+                comment.liked = NO;
+                [weakCell animateDislikeButton:comment.likesCount];
+            }
+        }];
+    }
 }
 
 #pragma mark - <PGArticleCommentReplyCellDelegate>
@@ -606,6 +721,28 @@
     }
 }
 
+- (void)likeButtonClicked
+{
+    if (self.likeButton.tag == 0) {
+        [self showLoading];
+        [self.viewModel likeArticle];
+    } else {
+        [self showLoading];
+        [self.viewModel dislikeArticle];
+    }
+}
+
+- (void)collectButtonClicked
+{
+    if (self.collectButton.tag == 0) {
+        [self showLoading];
+        [self.viewModel collectArticle];
+    } else {
+        [self showLoading];
+        [self.viewModel discollectArticle];
+    }
+}
+
 - (void)commentButtonClicked
 {
     [self.commentInputAccessoryView.commentTextView becomeFirstResponder];
@@ -672,6 +809,8 @@
         [_articleCollectionView registerClass:[PGArticleParagraphGIFImageCell class] forCellWithReuseIdentifier:ArticleParagraphGIFImageCell];
         [_articleCollectionView registerClass:[PGArticleParagraphCatalogImageCell class] forCellWithReuseIdentifier:ArticleParagraphCatalogImageCell];
         [_articleCollectionView registerClass:[PGArticleParagraphVideoCell class] forCellWithReuseIdentifier:ArticleParagraphVideoCell];
+        [_articleCollectionView registerClass:[PGArticleParagraphSingleGoodCell class] forCellWithReuseIdentifier:ArticleParagraphSingleGoodCell];
+        [_articleCollectionView registerClass:[PGArticleParagraphGoodsCollectionCell class] forCellWithReuseIdentifier:ArticleParagraphGoodsCollectionCell];
         [_articleCollectionView registerClass:[PGArticleParagraphFooterCell class] forCellWithReuseIdentifier:ArticleParagraphFooterCell];
         
         [_articleCollectionView registerClass:[PGArticleRelatedArticlesCell class] forCellWithReuseIdentifier:ArticleRelatedArticlesCell];
@@ -701,6 +840,8 @@
         
         self.likeButton = [[UIButton alloc] initWithFrame:CGRectMake(UISCREEN_WIDTH-44, 0, 44, 44)];
         [self.likeButton setImage:[UIImage imageNamed:@"pg_article_like"] forState:UIControlStateNormal];
+        [self.likeButton addTarget:self action:@selector(likeButtonClicked) forControlEvents:UIControlEventTouchUpInside];
+        [self.likeButton setTag:0];
         [_toolbar addSubview:self.likeButton];
         
         self.commentButton = [[UIButton alloc] initWithFrame:CGRectMake(self.likeButton.pg_left-44, 0, 44, 44)];
@@ -710,6 +851,8 @@
         
         self.collectButton = [[UIButton alloc] initWithFrame:CGRectMake(self.commentButton.pg_left-44, 0, 44, 44)];
         [self.collectButton setImage:[UIImage imageNamed:@"pg_article_collect"] forState:UIControlStateNormal];
+        [self.collectButton addTarget:self action:@selector(collectButtonClicked) forControlEvents:UIControlEventTouchUpInside];
+        [self.collectButton setTag:0];
         [_toolbar addSubview:self.collectButton];
         
         self.shareButton = [[UIButton alloc] initWithFrame:CGRectMake(self.collectButton.pg_left-44, 0, 44, 44)];

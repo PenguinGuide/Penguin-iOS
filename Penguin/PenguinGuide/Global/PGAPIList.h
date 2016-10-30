@@ -14,6 +14,7 @@
 #define PG_Store_Recommends             @"/recommends/store"
 
 #define PG_Home_Feeds                   @"/feeds/home"
+#define PG_Explore_Feeds                @"feeds/explore"
 #define PG_Store_Feeds                  @"/feeds/store"
 
 #define PG_Channel                      @"/channel/:channelId"
@@ -27,20 +28,25 @@
 #define PG_Scenario_Feeds               @"/scenario/feeds/scenario/:scenarioId/category/:categoryId"
 
 #define PG_Good                         @"/goods/:goodId"
+#define PG_Goods_Collection             @"/goods_collection/:collectionId"
 #define PG_Related_Goods                @"/goods/related/:goodId"
 #define PG_Store_Category_Goods         @"/goods/category/:categoryId"
 
 #define PG_Topic                        @"/topic/:topicId"
 
 #define PG_Article                      @"/article/:articleId"
+#define PG_Article_Like                 @"/article_favor/:articleId"
+#define PG_Article_Collect              @"/article_store/:articleId"
 #define PG_Article_Comments             @"/article/:articleId/comments"
 #define PG_Article_Hot_Comments         @"/article/:articleId/hot_comments"
 #define PG_Article_Comment_Reply        @"/article_comment/:commentId/reply"
+#define PG_Article_Comment_Like         @"/comment_favor/:commentId"
 
 #define PG_Comments                     @"/comments/:articleId"
 
 #define PG_Me                           @"/user/:userId"
-#define PG_User                         @"/user/:userId";
+#define PG_User                         @"/user/:userId"
+#define PG_Message                      @"message"
 
 #define PG_Tag                          @"/tag/:tagId"
 

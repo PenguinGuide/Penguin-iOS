@@ -72,7 +72,7 @@
     if (!_forgotPwdButton) {
         _forgotPwdButton = [[UIButton alloc] initWithFrame:CGRectMake(self.pg_width-45-70, self.pwdTextField.pg_bottom+10, 70, 20)];
         [_forgotPwdButton addTarget:self action:@selector(forgotPwdButtonClicked) forControlEvents:UIControlEventTouchUpInside];
-        NSAttributedString *attrS = [[NSAttributedString alloc] initWithString:@"忘记密码?" attributes:@{NSForegroundColorAttributeName:[UIColor colorWithHexString:Theme.colorRed],
+        NSAttributedString *attrS = [[NSAttributedString alloc] initWithString:@"忘记密码?" attributes:@{NSForegroundColorAttributeName:Theme.colorRed,
                                                                                                         NSFontAttributeName:Theme.fontExtraSmallBold,
                                                                                                         NSUnderlineStyleAttributeName:@(NSUnderlineStyleSingle)}];
         [_forgotPwdButton setAttributedTitle:attrS forState:UIControlStateNormal];

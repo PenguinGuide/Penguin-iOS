@@ -11,6 +11,6 @@
 @interface PGParserCatalogImageStorage : NSObject
 
 @property (nonatomic, strong) NSString *image;
-@property (nonatomic) CGFloat ratio;
+@property (nonatomic, assign) CGFloat ratio;
 
 @end

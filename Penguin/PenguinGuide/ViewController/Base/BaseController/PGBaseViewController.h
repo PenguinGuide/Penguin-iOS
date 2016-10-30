@@ -32,6 +32,7 @@
 
 - (void)observe:(id)object keyPath:(NSString *)keyPath block:(void(^)(id changedObject))block;
 - (void)unobserve;
+- (void)observeCollectionView:(PGBaseCollectionView *)collectionView endOfFeeds:(PGBaseViewModel *)viewModel;
 
 - (void)backButtonClicked;
 

@@ -69,6 +69,13 @@
         [self.likeButton setTitle:nil forState:UIControlStateNormal];
         self.likeButton.frame = CGRectMake(self.moreButton.pg_left-46, 0, 46, 40);
     }
+    if (comment.liked) {
+        self.likeButton.selected = YES;
+        self.likeButton.tag = 1;
+    } else {
+        self.likeButton.selected = NO;
+        self.likeButton.tag = 0;
+    }
     
     NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle defaultParagraphStyle] mutableCopy];
     paragraphStyle.lineSpacing = 5.f;
@@ -135,6 +142,51 @@
     [self.commentLabel setBackgroundColor:[UIColor whiteColor]];
 }
 
+- (void)moreButtonClicked
+{
+    if (self.delegate && [self.delegate respondsToSelector:@selector(commentReplyMoreButtonClicked:)]) {
+        [self.delegate commentReplyMoreButtonClicked:self];
+    }
+}
+
+- (void)likeButtonClicked
+{
+    if (self.likeButton.tag == 0) {
+        if (self.delegate && [self.delegate respondsToSelector:@selector(commentReplyLikeButtonClicked:)]) {
+            [self.delegate commentReplyLikeButtonClicked:self];
+        }
+    } else {
+        if (self.delegate && [self.delegate respondsToSelector:@selector(commentReplyDislikeButtonClicked:)]) {
+            [self.delegate commentReplyDislikeButtonClicked:self];
+        }
+    }
+}
+
+- (void)animateLikeButton:(NSInteger)count
+{
+    NSString *likesStr = [NSString stringWithFormat:@"%ld", (long)count];
+    [self.likeButton setTitle:likesStr forState:UIControlStateNormal];
+    CGSize likesSize = [likesStr sizeWithAttributes:@{NSFontAttributeName:Theme.fontSmallBold}];
+    self.likeButton.frame = CGRectMake(self.moreButton.pg_left-(33+likesSize.width+15), 0, 33+likesSize.width+15, 40);
+    self.likeButton.selected = YES;
+    self.likeButton.tag = 1;
+}
+
+- (void)animateDislikeButton:(NSInteger)count
+{
+    if (count == 0) {
+        [self.likeButton setTitle:nil forState:UIControlStateNormal];
+        self.likeButton.frame = CGRectMake(self.moreButton.pg_left-46, 0, 46, 40);
+    } else {
+        NSString *likesStr = [NSString stringWithFormat:@"%ld", (long)count];
+        [self.likeButton setTitle:likesStr forState:UIControlStateNormal];
+        CGSize likesSize = [likesStr sizeWithAttributes:@{NSFontAttributeName:Theme.fontSmallBold}];
+        self.likeButton.frame = CGRectMake(self.moreButton.pg_left-(33+likesSize.width+15), 0, 33+likesSize.width+15, 40);
+    }
+    self.likeButton.selected = NO;
+    self.likeButton.tag = 0;
+}
+
 #pragma mark - <Setters && Getters>
 
 - (UIImageView *)avatarImageView
@@ -182,7 +234,7 @@
     if (!_moreButton) {
         _moreButton = [[UIButton alloc] initWithFrame:CGRectMake(self.pg_width-30-20, 10, 20, 20)];
         [_moreButton setImage:[UIImage imageNamed:@"pg_article_comment_more"] forState:UIControlStateNormal];
-        //[_moreButton addTarget:self action:@selector(moreButtonClicked) forControlEvents:UIControlEventTouchUpInside];
+        [_moreButton addTarget:self action:@selector(moreButtonClicked) forControlEvents:UIControlEventTouchUpInside];
     }
     return _moreButton;
 }
@@ -191,6 +243,7 @@
 {
     if (!_likeButton) {
         _likeButton = [[PGArticleCommentLikeButton alloc] initWithFrame:CGRectMake(self.moreButton.pg_left-46, 0, 46, 40)];
+        [_likeButton addTarget:self action:@selector(likeButtonClicked) forControlEvents:UIControlEventTouchUpInside];
     }
     return _likeButton;
 }

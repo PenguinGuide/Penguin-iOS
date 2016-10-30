@@ -20,7 +20,6 @@
 {
     if (PGGlobal.userId && PGGlobal.userId.length > 0) {
         PGParams *params = [PGParams new];
-        params[@"user_id"] = PGGlobal.userId;
         
         PGWeakSelf(self);
         [self.apiClient pg_makeGetRequest:^(PGRKRequestConfig *config) {

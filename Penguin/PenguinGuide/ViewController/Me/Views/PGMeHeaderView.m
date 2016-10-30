@@ -55,6 +55,11 @@
         if (me.location) {
             self.locationLabel.text = [NSString stringWithFormat:@"来自%@", me.location];
         }
+        if ([me.sex isEqualToString:@"男"]) {
+            self.sexImageView.image = [UIImage imageNamed:@"pg_me_sex_male"];
+        } else {
+            self.sexImageView.image = [UIImage imageNamed:@"pg_me_sex_female"];
+        }
     }
 }
 
@@ -80,6 +85,7 @@
         _avatarButton = [[UIButton alloc] initWithFrame:CGRectMake(self.pg_width/2-42, 55, 84, 84)];
         _avatarButton.clipsToBounds = YES;
         _avatarButton.layer.cornerRadius = 42.f;
+        _avatarButton.contentMode = UIViewContentModeScaleAspectFill;
     }
     return _avatarButton;
 }
@@ -99,7 +105,6 @@
 {
     if (!_sexImageView) {
         _sexImageView = [[UIImageView alloc] initWithFrame:CGRectMake(self.pg_width/2-20-22, self.nameLabel.pg_bottom+10, 22, 22)];
-        _sexImageView.image = [UIImage imageNamed:@"pg_me_sex_male"];
     }
     return _sexImageView;
 }

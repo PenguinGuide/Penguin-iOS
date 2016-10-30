@@ -10,7 +10,7 @@
 #define ArticleCommentReplyCell @"ArticleCommentReplyCell"
 
 #import "PGCommentsViewController.h"
-#import "PGCommentsViewModel.h"
+//#import "PGCommentsViewModel.h"
 #import "PGArticleCommentCell.h"
 #import "PGArticleCommentReplyCell.h"
 #import "PGCommentInputAccessoryView.h"
@@ -57,6 +57,7 @@
             [weakself.commentsCollectionView endBottomRefreshing];
         }
     }];
+    [self observeCollectionView:self.commentsCollectionView endOfFeeds:self.viewModel];
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -119,6 +120,14 @@
     }
 }
 
+- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout referenceSizeForFooterInSection:(NSInteger)section
+{
+    if (self.viewModel.endFlag) {
+        return [PGBaseCollectionViewFooterView footerViewSize];
+    }
+    return CGSizeZero;
+}
+
 - (UIEdgeInsets)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout insetForSectionAtIndex:(NSInteger)section
 {
     if (self.viewModel.commentsArray.count > 0) {
@@ -135,6 +144,17 @@
 - (CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout minimumLineSpacingForSectionAtIndex:(NSInteger)section
 {
     return 15.f;
+}
+
+- (UICollectionReusableView *)collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath
+{
+    if (kind == UICollectionElementKindSectionFooter) {
+        PGBaseCollectionViewFooterView *footerView = [collectionView dequeueReusableSupplementaryViewOfKind:kind withReuseIdentifier:BaseCollectionViewFooterView forIndexPath:indexPath];
+        
+        return footerView;
+    }
+    
+    return nil;
 }
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
@@ -226,7 +246,102 @@
     }
 }
 
+- (void)commentLikeButtonClicked:(PGArticleCommentCell *)cell
+{
+    __block PGArticleCommentCell *weakCell = cell;
+    
+    NSIndexPath *indexPath = [self.commentsCollectionView indexPathForCell:cell];
+    if (indexPath.item < self.viewModel.commentsArray.count) {
+        __block PGComment *comment = self.viewModel.commentsArray[indexPath.item];
+        [self.viewModel likeComment:comment.commentId completion:^(BOOL success) {
+            if (success) {
+                comment.likesCount++;
+                comment.liked = YES;
+                [weakCell animateLikeButton:comment.likesCount];
+            }
+        }];
+    }
+}
+
+- (void)commentDislikeButtonClicked:(PGArticleCommentCell *)cell
+{
+    __block PGArticleCommentCell *weakCell = cell;
+    
+    NSIndexPath *indexPath = [self.commentsCollectionView indexPathForCell:cell];
+    if (indexPath.item < self.viewModel.commentsArray.count) {
+        PGComment *comment = self.viewModel.commentsArray[indexPath.item];
+        [self.viewModel dislikeComment:comment.commentId completion:^(BOOL success) {
+            if (success) {
+                comment.likesCount--;
+                comment.liked = NO;
+                [weakCell animateDislikeButton:comment.likesCount];
+            }
+        }];
+    }
+}
+
 #pragma mark - <PGArticleCommentReplyCellDelegate>
+
+- (void)commentReplyMoreButtonClicked:(PGArticleCommentReplyCell *)cell
+{
+    PGAlertAction *reportAction = [PGAlertAction actionWithTitle:@"举报"
+                                                           style:^(PGAlertActionStyle *style) {
+                                                               
+                                                           } handler:^{
+                                                               
+                                                           }];
+    PGAlertAction *deleteAction = [PGAlertAction actionWithTitle:@"删除"
+                                                           style:^(PGAlertActionStyle *style) {
+                                                               style.type = PGAlertActionTypeDestructive;
+                                                           } handler:^{
+                                                               
+                                                           }];
+    PGAlertController *alertController = [PGAlertController alertControllerWithTitle:nil message:nil style:^(PGAlertStyle *style) {
+        style.alertType = PGAlertTypeActionSheet;
+    }];
+    NSIndexPath *indexPath = [self.commentsCollectionView indexPathForCell:cell];
+    if (indexPath.item < self.viewModel.commentsArray.count) {
+        PGComment *comment = self.viewModel.commentsArray[indexPath.item];
+        if ([comment.user.userId isEqualToString:PGGlobal.userId]) {
+            [alertController addActions:@[reportAction, deleteAction]];
+        } else {
+            [alertController addActions:@[reportAction]];
+        }
+        [self presentViewController:alertController animated:YES completion:nil];
+    }
+}
+
+- (void)commentReplyLikeButtonClicked:(PGArticleCommentReplyCell *)cell
+{
+    __block PGArticleCommentReplyCell *weakCell = cell;
+    
+    NSIndexPath *indexPath = [self.commentsCollectionView indexPathForCell:cell];
+    if (indexPath.item < self.viewModel.commentsArray.count) {
+        __block PGComment *comment = self.viewModel.commentsArray[indexPath.item];
+        [self.viewModel likeComment:comment.commentId completion:^(BOOL success) {
+            if (success) {
+                comment.likesCount++;
+                [weakCell animateLikeButton:comment.likesCount];
+            }
+        }];
+    }
+}
+
+- (void)commentReplyDislikeButtonClicked:(PGArticleCommentReplyCell *)cell
+{
+    __block PGArticleCommentReplyCell *weakCell = cell;
+    
+    NSIndexPath *indexPath = [self.commentsCollectionView indexPathForCell:cell];
+    if (indexPath.item < self.viewModel.commentsArray.count) {
+        PGComment *comment = self.viewModel.commentsArray[indexPath.item];
+        [self.viewModel dislikeComment:comment.commentId completion:^(BOOL success) {
+            if (success) {
+                comment.likesCount--;
+                [weakCell animateDislikeButton:comment.likesCount];
+            }
+        }];
+    }
+}
 
 #pragma mark - <PGCommentInputAccessoryViewDelegate>
 

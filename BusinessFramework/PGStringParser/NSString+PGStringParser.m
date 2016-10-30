@@ -19,7 +19,7 @@
 
 - (NSAttributedString *)paragraphAttributedString
 {
-    NSAttributedString *attrS = [[NSAttributedString alloc] initWithString:self attributes:@{NSFontAttributeName:[UIFont systemFontOfSize:14.f weight:UIFontWeightLight],
+    NSAttributedString *attrS = [[NSAttributedString alloc] initWithString:self attributes:@{NSFontAttributeName:[UIFont systemFontOfSize:14.f weight:UIFontWeightRegular],
                                                                                              NSParagraphStyleAttributeName:[self defaultParagraphStyle]}];
     
     return attrS;
@@ -27,7 +27,7 @@
 
 - (NSAttributedString *)centerAlignedParagraphAttributedString
 {
-    NSAttributedString *attrS = [[NSAttributedString alloc] initWithString:self attributes:@{NSFontAttributeName:[UIFont systemFontOfSize:14.f weight:UIFontWeightLight],
+    NSAttributedString *attrS = [[NSAttributedString alloc] initWithString:self attributes:@{NSFontAttributeName:[UIFont systemFontOfSize:14.f weight:UIFontWeightRegular],
                                                                                              NSParagraphStyleAttributeName:[self centerAlignedParagraphStyle]}];
     
     return attrS;
@@ -109,10 +109,10 @@
 {
     NSMutableParagraphStyle *defaultParagraphStyle = [[NSMutableParagraphStyle alloc] init];
     defaultParagraphStyle.alignment = NSTextAlignmentJustified;
-    defaultParagraphStyle.firstLineHeadIndent = 30.f;
-    defaultParagraphStyle.headIndent = 30.f;
-    defaultParagraphStyle.tailIndent = -30.f;
-    defaultParagraphStyle.lineSpacing = 5.f;
+    defaultParagraphStyle.firstLineHeadIndent = 20.f;
+    defaultParagraphStyle.headIndent = 20.f;
+    defaultParagraphStyle.tailIndent = -20.f;
+    defaultParagraphStyle.lineSpacing = 3.f;
     defaultParagraphStyle.lineBreakMode = NSLineBreakByWordWrapping;
     
     return defaultParagraphStyle;
@@ -122,10 +122,10 @@
 {
     NSMutableParagraphStyle *centerAlignedParagraphStyle = [[NSMutableParagraphStyle alloc] init];
     centerAlignedParagraphStyle.alignment = NSTextAlignmentCenter;
-    centerAlignedParagraphStyle.firstLineHeadIndent = 30.f;
-    centerAlignedParagraphStyle.headIndent = 30.f;
-    centerAlignedParagraphStyle.tailIndent = -30.f;
-    centerAlignedParagraphStyle.lineSpacing = 5.f;
+    centerAlignedParagraphStyle.firstLineHeadIndent = 20.f;
+    centerAlignedParagraphStyle.headIndent = 20.f;
+    centerAlignedParagraphStyle.tailIndent = -20.f;
+    centerAlignedParagraphStyle.lineSpacing = 3.f;
     centerAlignedParagraphStyle.lineBreakMode = NSLineBreakByWordWrapping;
     
     return centerAlignedParagraphStyle;

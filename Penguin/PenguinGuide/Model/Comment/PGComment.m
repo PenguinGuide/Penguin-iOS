@@ -14,7 +14,7 @@
 {
     return @{
              @"likesCount": @"favor_count",
-             @"liked": @"liked",
+             @"liked": @"is_favored",
              @"content": @"content",
              @"time": @"created_at",
              @"user": @"user",

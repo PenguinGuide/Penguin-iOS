@@ -4,7 +4,6 @@
 <dict>
 	<key>北京</key>
 	<array>
-		<string>不限</string>
 		<string>东城区</string>
 		<string>西城区</string>
 		<string>海淀区</string>
@@ -24,7 +23,6 @@
 	</array>
 	<key>天津</key>
 	<array>
-		<string>不限</string>
 		<string>和平区</string>
 		<string>河西区</string>
 		<string>南开区</string>
@@ -44,7 +42,6 @@
 	</array>
 	<key>河北</key>
 	<array>
-		<string>不限</string>
 		<string>石家庄</string>
 		<string>唐山</string>
 		<string>秦皇岛</string>
@@ -59,7 +56,6 @@
 	</array>
 	<key>山西</key>
 	<array>
-		<string>不限</string>
 		<string>太原</string>
 		<string>大同</string>
 		<string>阳泉</string>
@@ -74,7 +70,6 @@
 	</array>
 	<key>内蒙古</key>
 	<array>
-		<string>不限</string>
 		<string>呼和浩特</string>
 		<string>包头</string>
 		<string>乌海</string>
@@ -90,7 +85,6 @@
 	</array>
 	<key>辽宁</key>
 	<array>
-		<string>不限</string>
 		<string>沈阳</string>
 		<string>大连</string>
 		<string>鞍山</string>
@@ -108,7 +102,6 @@
 	</array>
 	<key>吉林</key>
 	<array>
-		<string>不限</string>
 		<string>长春</string>
 		<string>吉林</string>
 		<string>四平</string>
@@ -121,7 +114,6 @@
 	</array>
 	<key>黑龙江</key>
 	<array>
-		<string>不限</string>
 		<string>哈尔滨</string>
 		<string>齐齐哈尔</string>
 		<string>鸡西</string>
@@ -138,7 +130,6 @@
 	</array>
 	<key>上海</key>
 	<array>
-		<string>不限</string>
 		<string>黄浦区</string>
 		<string>徐汇区</string>
 		<string>长宁区</string>
@@ -159,7 +150,6 @@
 	</array>
 	<key>江苏</key>
 	<array>
-		<string>不限</string>
 		<string>南京</string>
 		<string>无锡</string>
 		<string>徐州</string>
@@ -176,7 +166,6 @@
 	</array>
 	<key>浙江</key>
 	<array>
-		<string>不限</string>
 		<string>杭州</string>
 		<string>宁波</string>
 		<string>温州</string>
@@ -191,7 +180,6 @@
 	</array>
 	<key>安徽</key>
 	<array>
-		<string>不限</string>
 		<string>合肥</string>
 		<string>芜湖</string>
 		<string>蚌埠</string>
@@ -211,7 +199,6 @@
 	</array>
 	<key>福建</key>
 	<array>
-		<string>不限</string>
 		<string>福州</string>
 		<string>厦门</string>
 		<string>莆田</string>
@@ -224,7 +211,6 @@
 	</array>
 	<key>江西</key>
 	<array>
-		<string>不限</string>
 		<string>南昌</string>
 		<string>景德镇</string>
 		<string>萍乡</string>
@@ -239,7 +225,6 @@
 	</array>
 	<key>山东</key>
 	<array>
-		<string>不限</string>
 		<string>济南</string>
 		<string>青岛</string>
 		<string>淄博</string>
@@ -260,7 +245,6 @@
 	</array>
 	<key>河南</key>
 	<array>
-		<string>不限</string>
 		<string>郑州</string>
 		<string>开封</string>
 		<string>洛阳</string>
@@ -281,7 +265,6 @@
 	</array>
 	<key>湖北</key>
 	<array>
-		<string>不限</string>
 		<string>武汉</string>
 		<string>黄石</string>
 		<string>襄阳</string>
@@ -298,7 +281,6 @@
 	</array>
 	<key>湖南</key>
 	<array>
-		<string>不限</string>
 		<string>长沙</string>
 		<string>株洲</string>
 		<string>湘潭</string>
@@ -316,7 +298,6 @@
 	</array>
 	<key>广东</key>
 	<array>
-		<string>不限</string>
 		<string>广州</string>
 		<string>深圳</string>
 		<string>珠海</string>
@@ -341,7 +322,6 @@
 	</array>
 	<key>广西</key>
 	<array>
-		<string>不限</string>
 		<string>南宁</string>
 		<string>柳州</string>
 		<string>桂林</string>
@@ -359,13 +339,11 @@
 	</array>
 	<key>海南</key>
 	<array>
-		<string>不限</string>
 		<string>海口</string>
 		<string>三亚</string>
 	</array>
 	<key>重庆</key>
 	<array>
-		<string>不限</string>
 		<string>渝中区</string>
 		<string>大渡口区</string>
 		<string>江北区</string>
@@ -407,7 +385,6 @@
 	</array>
 	<key>四川</key>
 	<array>
-		<string>不限</string>
 		<string>成都</string>
 		<string>自贡</string>
 		<string>攀枝花</string>
@@ -432,7 +409,6 @@
 	</array>
 	<key>贵州</key>
 	<array>
-		<string>不限</string>
 		<string>贵阳</string>
 		<string>六盘水</string>
 		<string>遵义</string>
@@ -445,7 +421,6 @@
 	</array>
 	<key>云南</key>
 	<array>
-		<string>不限</string>
 		<string>昆明</string>
 		<string>曲靖</string>
 		<string>玉溪</string>
@@ -465,7 +440,6 @@
 	</array>
 	<key>西藏</key>
 	<array>
-		<string>不限</string>
 		<string>拉萨</string>
 		<string>昌都</string>
 		<string>山南</string>
@@ -476,7 +450,6 @@
 	</array>
 	<key>陕西</key>
 	<array>
-		<string>不限</string>
 		<string>西安</string>
 		<string>铜川</string>
 		<string>宝鸡</string>
@@ -490,7 +463,6 @@
 	</array>
 	<key>甘肃</key>
 	<array>
-		<string>不限</string>
 		<string>兰州</string>
 		<string>嘉峪关</string>
 		<string>金昌</string>
@@ -508,7 +480,6 @@
 	</array>
 	<key>青海</key>
 	<array>
-		<string>不限</string>
 		<string>西宁</string>
 		<string>海东</string>
 		<string>海北</string>
@@ -520,7 +491,6 @@
 	</array>
 	<key>宁夏</key>
 	<array>
-		<string>不限</string>
 		<string>银川</string>
 		<string>石嘴山</string>
 		<string>吴忠</string>
@@ -529,7 +499,6 @@
 	</array>
 	<key>新疆</key>
 	<array>
-		<string>不限</string>
 		<string>乌鲁木齐</string>
 		<string>克拉玛依</string>
 		<string>吐鲁番</string>
@@ -547,13 +516,11 @@
 	</array>
 	<key>台湾</key>
 	<array>
-		<string>不限</string>
 		<string>台北</string>
 		<string>高雄</string>
 	</array>
 	<key>香港</key>
 	<array>
-		<string>不限</string>
 		<string>中西区</string>
 		<string>湾仔区</string>
 		<string>东区</string>
@@ -575,7 +542,6 @@
 	</array>
 	<key>澳门</key>
 	<array>
-		<string>不限</string>
 		<string>花地玛堂区</string>
 		<string>圣安多尼堂区</string>
 		<string>大堂区</string>

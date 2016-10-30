@@ -58,7 +58,6 @@
                     NSString *accessToken = response[@"access_token"];
                     if (accessToken && accessToken.length > 0) {
                         [PGGlobal synchronizeToken:accessToken];
-                        [weakself.apiClient updateAccessToken:accessToken];
                     }
                 }
                 if (response[@"user_id"]) {

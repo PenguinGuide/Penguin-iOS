@@ -48,7 +48,7 @@
 + (CGSize)cellSize
 {
     CGFloat width = UISCREEN_WIDTH-20;
-    CGFloat height = width*252/300+60;
+    CGFloat height = width*240/290+60;
     
     return CGSizeMake(width, height);
 }
@@ -77,12 +77,18 @@
     return _bannerFrameView;
 }
 
+- (void)imageViewDidSelect:(NSInteger)index
+{
+    PGImageBanner *banner = self.dataArray[index];
+    [[PGRouter sharedInstance] openURL:banner.link];
+}
+
 - (PGPagedScrollView *)pagedScrollView
 {
     if (!_pagedScrollView) {
-        CGFloat width = self.pg_width-24-15;
+        CGFloat width = self.pg_width-15-15;
         CGFloat height = width*9/16;
-        _pagedScrollView = [[PGPagedScrollView alloc] initWithFrame:CGRectMake(24, self.pg_height-13-height-60, width, height) imageFillMode:PGPagedScrollViewImageFillModeFill iconMode:PGPagedScrollViewIconModeLight];
+        _pagedScrollView = [[PGPagedScrollView alloc] initWithFrame:CGRectMake(15, self.pg_height-13-height-60, width, height) imageFillMode:PGPagedScrollViewImageFillModeFill iconMode:PGPagedScrollViewIconModeLight];
         _pagedScrollView.delegate = self;
     }
     return _pagedScrollView;

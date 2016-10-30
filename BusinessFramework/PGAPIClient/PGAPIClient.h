@@ -25,6 +25,10 @@
                completion:(PGRKCompletionBlock)completion
                   failure:(PGRKFailureBlock)failure;
 
+- (void)pg_makePutRequest:(void(^)(PGRKRequestConfig *config))configBlock
+               completion:(PGRKCompletionBlock)completion
+                  failure:(PGRKFailureBlock)failure;
+
 - (void)pg_makePostRequest:(void(^)(PGRKRequestConfig *config))configBlock
                 completion:(PGRKCompletionBlock)completion
                    failure:(PGRKFailureBlock)failure;
@@ -32,6 +36,10 @@
 - (void)pg_makePatchRequest:(void(^)(PGRKRequestConfig *config))configBlock
                  completion:(PGRKCompletionBlock)completion
                     failure:(PGRKFailureBlock)failure;
+
+- (void)pg_makeDeleteRequest:(void(^)(PGRKRequestConfig *config))configBlock
+                  completion:(PGRKCompletionBlock)completion
+                     failure:(PGRKFailureBlock)failure;
 
 - (void)pg_uploadImage:(void(^)(PGRKRequestConfig *config))configBlock
             completion:(PGRKCompletionBlock)completion

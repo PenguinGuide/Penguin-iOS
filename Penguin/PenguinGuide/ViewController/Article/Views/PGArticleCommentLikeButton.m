@@ -21,21 +21,21 @@
 
 - (void)initialize
 {
-    [self setImage:[UIImage imageNamed:@"pg_article_comment_like"] forState:UIControlStateNormal];
+    [self setImage:[UIImage imageNamed:@"pg_article_like"] forState:UIControlStateNormal];
     [self setTitleColor:Theme.colorLightText forState:UIControlStateNormal];
-    [self setImage:[UIImage imageNamed:@"pg_article_comment_liked"] forState:UIControlStateSelected];
+    [self setImage:[UIImage imageNamed:@"pg_article_liked"] forState:UIControlStateSelected];
     [self setTitleColor:Theme.colorRed forState:UIControlStateSelected];
     [self.titleLabel setFont:Theme.fontSmallBold];
 }
 
 - (CGRect)imageRectForContentRect:(CGRect)contentRect
 {
-    return CGRectMake(15, (contentRect.size.height-22)/2, 16, 22);
+    return CGRectMake(15, (contentRect.size.height-22)/2, 22, 22);
 }
 
 - (CGRect)titleRectForContentRect:(CGRect)contentRect
 {
-    return CGRectMake(33, 0, contentRect.size.width-33, contentRect.size.height);
+    return CGRectMake(39, 0, contentRect.size.width-39, contentRect.size.height);
 }
 
 @end

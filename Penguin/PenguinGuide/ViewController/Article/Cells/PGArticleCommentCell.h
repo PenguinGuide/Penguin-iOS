@@ -14,6 +14,8 @@
 @protocol PGArticleCommentCellDelegate <NSObject>
 
 - (void)commentMoreButtonClicked:(PGArticleCommentCell *)cell;
+- (void)commentLikeButtonClicked:(PGArticleCommentCell *)cell;
+- (void)commentDislikeButtonClicked:(PGArticleCommentCell *)cell;
 
 @end
 
@@ -24,6 +26,8 @@
 - (void)setCellWithComment:(PGComment *)comment;
 - (void)selectLabel;
 - (void)unselectLabel;
+- (void)animateLikeButton:(NSInteger)count;
+- (void)animateDislikeButton:(NSInteger)count;
 
 + (CGSize)cellSize:(PGComment *)comment;
 

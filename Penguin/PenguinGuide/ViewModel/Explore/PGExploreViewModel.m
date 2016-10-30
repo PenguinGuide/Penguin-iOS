@@ -55,8 +55,8 @@
     [self.apiClient pg_makeGetRequest:^(PGRKRequestConfig *config) {
         config.route = PG_Home_Feeds;
         config.keyPath = @"items";
-        config.isMockAPI = YES;
-        config.mockFileName = @"v1_explore_banners.json";
+//        config.isMockAPI = YES;
+//        config.mockFileName = @"v1_explore_banners.json";
     } completion:^(id response) {
         NSDictionary *responseDict = [response firstObject];
         if (responseDict[@"items"] && [responseDict[@"items"] isKindOfClass:[NSArray class]]) {

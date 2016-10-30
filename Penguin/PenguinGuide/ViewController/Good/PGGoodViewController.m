@@ -287,7 +287,7 @@
         
         UIButton *buyButton = [[UIButton alloc] initWithFrame:CGRectMake(UISCREEN_WIDTH-100, 0, 100, 44)];
         [buyButton addTarget:self action:@selector(buyButtonClicked) forControlEvents:UIControlEventTouchUpInside];
-        [buyButton setBackgroundColor:[UIColor colorWithHexString:Theme.colorRed]];
+        [buyButton setBackgroundColor:Theme.colorRed];
         [buyButton setTitle:@"前往购买" forState:UIControlStateNormal];
         [buyButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
         [buyButton.titleLabel setFont:Theme.fontMediumBold];

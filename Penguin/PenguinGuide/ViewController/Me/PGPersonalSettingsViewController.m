@@ -73,7 +73,7 @@
         } else if (indexPath.item == 1) {
             [cell setCellWithDesc:@"昵 称" content:self.me.nickname isImage:NO];
         } else if (indexPath.item == 2) {
-            if (self.me.sex == 0) {
+            if ([self.me.sex isEqualToString:@"男"]) {
                 [cell setCellWithDesc:@"性 别" content:@"男" isImage:NO];
             } else {
                 [cell setCellWithDesc:@"性 别" content:@"女" isImage:NO];
@@ -163,6 +163,15 @@
         } else if (indexPath.item == 1) {
             PGSettingsUpdateViewController *settingsUpdateVC = [[PGSettingsUpdateViewController alloc] initWithType:PGSettingsTypeNickname content:self.me.nickname];
             [self.navigationController pushViewController:settingsUpdateVC animated:YES];
+        } else if (indexPath.item == 2) {
+            PGSettingsUpdateViewController *settingsUpdateVC = [[PGSettingsUpdateViewController alloc] initWithType:PGSettingsTypeSex content:self.me.sex];
+            [self.navigationController pushViewController:settingsUpdateVC animated:YES];
+        } else if (indexPath.item == 3) {
+            PGSettingsUpdateViewController *settingsUpdateVC = [[PGSettingsUpdateViewController alloc] initWithType:PGSettingsTypeLocation content:self.me.location];
+            [self.navigationController pushViewController:settingsUpdateVC animated:YES];
+        } else if (indexPath.item == 4) {
+            PGSettingsUpdateViewController *settingsUpdateVC = [[PGSettingsUpdateViewController alloc] initWithType:PGSettingsTypeBirthday content:self.me.birthday];
+            [self.navigationController pushViewController:settingsUpdateVC animated:YES];
         }
     }
 }
@@ -175,11 +184,34 @@
     if (image) {
         [self showLoading];
         PGWeakSelf(self);
+        // NOTE: upload image with base64 data http://blog.csdn.net/a645258072/article/details/51728806
         [self.apiClient pg_uploadImage:^(PGRKRequestConfig *config) {
             config.route = PG_Upload_Image;
             config.keyPath = nil;
             config.image = image;
         } completion:^(id response) {
+            if (response[@"avatar_url"]) {
+                if (PGGlobal.userId) {
+                    PGParams *params = [PGParams new];
+                    params[@"avatar_url"] = response[@"avatar_url"];
+                    [weakself showLoading];
+                    PGWeakSelf(self);
+                    [weakself.apiClient pg_makePatchRequest:^(PGRKRequestConfig *config) {
+                        config.route = PG_User;
+                        config.params = params;
+                        config.keyPath = nil;
+                        config.pattern = @{@"userId":PGGlobal.userId};
+                    } completion:^(id response) {
+                        [weakself dismissLoading];
+                        [weakself.navigationController popToRootViewControllerAnimated:YES];
+                    } failure:^(NSError *error) {
+                        [weakself showErrorMessage:error];
+                        [weakself dismissLoading];
+                    }];
+                } else {
+                    // TODO: user logout
+                }
+            }
             [weakself dismissLoading];
         } failure:^(NSError *error) {
             [weakself showErrorMessage:error];

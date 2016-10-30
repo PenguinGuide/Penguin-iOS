@@ -23,8 +23,10 @@
              @"channel": @"channel",
              @"date": @"date",
              @"shareUrl": @"share_url",
+             @"isLiked": @"is_liked",
+             @"isCollected": @"is_collected",
              @"tagsArray": @"tags",
-             @"relatedArticlesArray": @"related_articles"
+             @"relatedArticlesArray": @"recommends"
             };
 }
 

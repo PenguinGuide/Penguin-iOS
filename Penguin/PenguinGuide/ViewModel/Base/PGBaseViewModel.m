@@ -22,6 +22,7 @@
         self.apiClient = apiClient;
         self.page = 1;
         self.maxId = nil;
+        self.endFlag = NO;
     }
     
     return self;

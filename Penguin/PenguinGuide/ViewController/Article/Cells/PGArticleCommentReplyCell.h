@@ -13,6 +13,10 @@
 
 @protocol PGArticleCommentReplyCellDelegate <NSObject>
 
+- (void)commentReplyMoreButtonClicked:(PGArticleCommentReplyCell *)cell;
+- (void)commentReplyLikeButtonClicked:(PGArticleCommentReplyCell *)cell;
+- (void)commentReplyDislikeButtonClicked:(PGArticleCommentReplyCell *)cell;
+
 @end
 
 @interface PGArticleCommentReplyCell : UICollectionViewCell
@@ -22,6 +26,8 @@
 - (void)setCellWithComment:(PGComment *)comment;
 - (void)selectLabel;
 - (void)unselectLabel;
+- (void)animateLikeButton:(NSInteger)count;
+- (void)animateDislikeButton:(NSInteger)count;
 
 + (CGSize)cellSize:(PGComment *)comment;
 

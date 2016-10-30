@@ -49,8 +49,8 @@
     
     [[PGRouter sharedInstance] registerRoute:@"qiechihe://article" toHandler:^(NSDictionary *params) {
         if (PGGlobal.rootNavigationController) {
-            if (params[@"article_id"]) {
-                NSString *articleId = params[@"article_id"];
+            if (params[@"articleId"]) {
+                NSString *articleId = params[@"articleId"];
                 PGArticleViewController *articleVC = [[PGArticleViewController alloc] initWithArticleId:articleId animated:NO];
                 [PGGlobal.rootNavigationController pushViewController:articleVC animated:YES];
             }

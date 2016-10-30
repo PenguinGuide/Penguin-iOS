@@ -17,8 +17,8 @@
              @"avatar": @"avatar_url",
              @"userId": @"id",
              @"location": @"location",
-             @"sex": @"sex",
-             @"birthday": @"birthday",
+             @"sex": @"gender",
+             @"birthday": @"birth",
              @"phoneNumber": @"mobile",
              @"collectionCount": @"collection_count",
              @"messageCount": @"message_count"

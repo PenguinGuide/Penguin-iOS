@@ -14,8 +14,9 @@
 - (void)setWithImageURL:(NSString *)imageURL placeholder:(UIImage *)placeholder completion:(void (^)(UIImage *))completion
 {
     if (imageURL && imageURL.length > 0) {
+        imageURL = [imageURL stringByAppendingString:@"?imageView2/2/w/1000/h/1000"];
         [self sd_setImageWithURL:[NSURL URLWithString:imageURL]
-                placeholderImage:placeholder
+                placeholderImage:[UIImage imageNamed:@"pg_image_placeholder"]
                        completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
                            if (completion) {
                                if (!error) {

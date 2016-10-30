@@ -15,6 +15,7 @@
 @property (nonatomic, strong, readwrite) NSString *maxId;
 @property (nonatomic, assign, readwrite) NSInteger page;
 
+@property (nonatomic, assign, readwrite) BOOL endFlag;
 @property (nonatomic, strong, readwrite) NSError *error;
 
 - (id)initWithAPIClient:(PGAPIClient *)apiClient;

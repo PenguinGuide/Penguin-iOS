@@ -26,7 +26,11 @@
 - (id)init
 {
     if (self = [super init]) {
-        [self.apiClient updateAccessToken:[NSString stringWithFormat:@"Bearer %@", PGGlobal.accessToken]];
+        if (PGGlobal.accessToken) {
+            [self.apiClient updateAccessToken:[NSString stringWithFormat:@"Bearer %@", PGGlobal.accessToken]];
+        } else {
+            [self.apiClient updateAccessToken:nil];
+        }
     }
     
     return self;
@@ -36,6 +40,7 @@
 {
     [self dismissLoading];
     [self.apiClient cancelAllRequests];
+    [self.KVOController unobserve:PGGlobal];
     self.apiClient = nil;
 }
 
@@ -51,6 +56,15 @@
                                                                             action:@selector(backButtonClicked)];
     // ISSUE: fix left sliding not working, http://blog.csdn.net/meegomeego/article/details/25879605
     self.navigationController.interactivePopGestureRecognizer.delegate = (id)self;
+    
+    PGWeakSelf(self);
+    [self observe:PGGlobal keyPath:@"accessToken" block:^(id changedObject) {
+        if (PGGlobal.accessToken) {
+            [weakself.apiClient updateAccessToken:[NSString stringWithFormat:@"Bearer %@", PGGlobal.accessToken]];
+        } else {
+            [weakself.apiClient updateAccessToken:nil];
+        }
+    }];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -131,6 +145,19 @@
 - (void)unobserve
 {
     [self.KVOController unobserveAll];
+}
+
+- (void)observeCollectionView:(PGBaseCollectionView *)collectionView endOfFeeds:(PGBaseViewModel *)viewModel
+{
+    __block PGBaseCollectionView *weakCollectionView = collectionView;
+    [self observe:viewModel keyPath:@"endFlag" block:^(id changedObject) {
+        BOOL endFlag = [changedObject boolValue];
+        if (endFlag) {
+            [weakCollectionView disableInfiniteScrolling];
+        } else {
+            [weakCollectionView enableInfiniteScrolling];
+        }
+    }];
 }
 
 #pragma mark - <Toast>
@@ -241,7 +268,6 @@
     if (!_apiClient) {
         _apiClient = [PGAPIClient client];
     }
-    
     return _apiClient;
 }
 

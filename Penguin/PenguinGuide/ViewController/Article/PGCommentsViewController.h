@@ -7,6 +7,7 @@
 //
 
 #import "PGBaseViewController.h"
+#import "PGCommentsViewModel.h"
 
 @interface PGCommentsViewController : PGBaseViewController
 

@@ -99,7 +99,7 @@ static const int DefaultMaxConcurrentConnections = 5;
     if (accessToken) {
         [self.sessionManager addValue:accessToken forHTTPHeaderField:@"Authorization"];
     } else {
-        [self.sessionManager addValue:@"" forHTTPHeaderField:@"Authorization"];
+        [self.sessionManager addValue:nil forHTTPHeaderField:@"Authorization"];
     }
 }
 
@@ -125,6 +125,26 @@ static const int DefaultMaxConcurrentConnections = 5;
                                      if (completion) {
                                          completion(@[response]);
                                      }
+                                 }
+                             } failure:^(NSError *error) {
+                                 if (failure) {
+                                     failure(error);
+                                 }
+                             }];
+}
+
+- (void)pg_makePutRequest:(void (^)(PGRKRequestConfig *config))configBlock
+               completion:(PGRKCompletionBlock)completion
+                  failure:(PGRKFailureBlock)failure
+{
+    __block PGRKRequestConfig *clientConfig = [[PGRKRequestConfig alloc] init];
+    configBlock(clientConfig);
+    
+    __weak typeof(self) weakSelf = self;
+    [self.sessionManager makePutRequest:configBlock
+                             completion:^(id response) {
+                                 if (completion) {
+                                     completion(response);
                                  }
                              } failure:^(NSError *error) {
                                  if (failure) {
@@ -169,6 +189,25 @@ static const int DefaultMaxConcurrentConnections = 5;
                                        failure(error);
                                    }
                                }];
+}
+
+- (void)pg_makeDeleteRequest:(void (^)(PGRKRequestConfig *config))configBlock
+                  completion:(PGRKCompletionBlock)completion
+                     failure:(PGRKFailureBlock)failure
+{
+    __block PGRKRequestConfig *clientConfig = [[PGRKRequestConfig alloc] init];
+    configBlock(clientConfig);
+    
+    [self.sessionManager makeDeleteRequest:configBlock
+                                completion:^(id response) {
+                                    if (completion) {
+                                        completion(response);
+                                    }
+                                } failure:^(NSError *error) {
+                                    if (failure) {
+                                        failure(error);
+                                    }
+                                }];
 }
 
 - (void)pg_uploadImage:(void (^)(PGRKRequestConfig *))configBlock

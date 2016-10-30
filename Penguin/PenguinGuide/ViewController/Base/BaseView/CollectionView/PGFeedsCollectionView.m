@@ -56,7 +56,7 @@
 {
     // FIXME: if feedsArray is empty, header view will not show up
     if (self.feedsDelegate && [self.feedsDelegate respondsToSelector:@selector(feedsArray)]) {
-        return [self.feedsDelegate feedsArray].count;
+        return [self.feedsDelegate feedsArray].count == 0 ? 1 : [self.feedsDelegate feedsArray].count;
     } else {
         return 0;
     }
@@ -67,19 +67,21 @@
     if (self.feedsDelegate && [self.feedsDelegate respondsToSelector:@selector(feedsArray)]) {
         NSArray *feedsArray = [self.feedsDelegate feedsArray];
         
-        id banner = feedsArray[section];
-        if ([banner isKindOfClass:[PGCarouselBanner class]]) {
-            return 1;
-        } else if ([banner isKindOfClass:[PGArticleBanner class]]) {
-            return 1;
-        } else if ([banner isKindOfClass:[PGGoodsCollectionBanner class]]) {
-            return 1;
-        } else if ([banner isKindOfClass:[PGTopicBanner class]]) {
-            return 1;
-        } else if ([banner isKindOfClass:[PGSingleGoodBanner class]]) {
-            return 1;
-        } else if ([banner isKindOfClass:[PGFlashbuyBanner class]]) {
-            return 1;
+        if (feedsArray.count > 0) {
+            id banner = feedsArray[section];
+            if ([banner isKindOfClass:[PGCarouselBanner class]]) {
+                return 1;
+            } else if ([banner isKindOfClass:[PGArticleBanner class]]) {
+                return 1;
+            } else if ([banner isKindOfClass:[PGGoodsCollectionBanner class]]) {
+                return 1;
+            } else if ([banner isKindOfClass:[PGTopicBanner class]]) {
+                return 1;
+            } else if ([banner isKindOfClass:[PGSingleGoodBanner class]]) {
+                return 1;
+            } else if ([banner isKindOfClass:[PGFlashbuyBanner class]]) {
+                return 1;
+            }
         }
     }
     return 0;
