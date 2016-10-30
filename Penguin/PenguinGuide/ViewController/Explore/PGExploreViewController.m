@@ -20,6 +20,7 @@
 @interface PGExploreViewController () <PGFeedsCollectionViewDelegate>
 
 @property (nonatomic, strong) PGFeedsCollectionView *feedsCollectionView;
+@property (nonatomic, strong) PGNavigationView *naviView;
 
 @property (nonatomic, strong) PGExploreViewModel *viewModel;
 
@@ -31,6 +32,9 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     
+    self.automaticallyAdjustsScrollViewInsets = NO;
+    
+    [self.view addSubview:self.naviView];
     [self.view addSubview:self.feedsCollectionView];
     
     self.viewModel = [[PGExploreViewModel alloc] initWithAPIClient:self.apiClient];
@@ -49,12 +53,15 @@
 {
     [super viewWillAppear:animated];
     
-    [self.navigationController setNavigationBarHidden:NO animated:NO];
+    [self.navigationController setNavigationBarHidden:YES animated:NO];
 }
 
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
+    
+    // NOTE: put it in viewWillAppear doesn't work
+    [self setNeedsStatusBarAppearanceUpdate];
     
     if (self.viewModel.bannersArray.count == 0) {
         [self showLoading];
@@ -68,12 +75,16 @@
     
     // http://stackoverflow.com/questions/11656055/scrollviewdidscroll-delegate-is-invoking-automatically
     // NOTE: if barHidden sets to NO, scrollViewDidScroll will not be called (next page nothing to update)
-    [self.navigationController setNavigationBarHidden:YES animated:NO];
 }
 
 - (UIStatusBarStyle)preferredStatusBarStyle
 {
     return UIStatusBarStyleDefault;
+}
+
+- (BOOL)prefersStatusBarHidden
+{
+    return NO;
 }
 
 - (void)dealloc
@@ -100,14 +111,11 @@
 
 - (void)tabBarDidClicked
 {
-    //PGLogWarning(@"explore tabBarDidClicked");
-    
-    [self.navigationController setNavigationBarHidden:NO animated:NO];
-    
-    self.parentViewController.navigationItem.leftBarButtonItem = nil;
-    self.parentViewController.navigationItem.titleView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"pg_home_logo"]];
-    
-    [self setNeedsStatusBarAppearanceUpdate];
+    // NOTE: these codes in viewDidLoad && viewWillLoad will not work since self.navigationController is nil for the first time
+    [self.navigationController setNavigationBarHidden:YES animated:NO];
+//    
+//    self.parentViewController.navigationItem.leftBarButtonItem = nil;
+//    self.parentViewController.navigationItem.titleView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"pg_home_logo"]];
 }
 
 #pragma mark - <PGFeedsCollectionViewDelegate>
@@ -163,12 +171,12 @@
 
 - (PGFeedsCollectionView *)feedsCollectionView {
 	if(_feedsCollectionView == nil) {
-		_feedsCollectionView = [[PGFeedsCollectionView alloc] initWithFrame:CGRectMake(0, 0, UISCREEN_WIDTH, UISCREEN_HEIGHT-50) collectionViewLayout:[UICollectionViewFlowLayout new]];
+		_feedsCollectionView = [[PGFeedsCollectionView alloc] initWithFrame:CGRectMake(0, 64, UISCREEN_WIDTH, UISCREEN_HEIGHT-50-64) collectionViewLayout:[UICollectionViewFlowLayout new]];
         _feedsCollectionView.feedsDelegate = self;
         
         __block PGFeedsCollectionView *collectionView = _feedsCollectionView;
         PGWeakSelf(self);
-        [_feedsCollectionView enablePullToRefreshWithTopInset:64.f completion:^{
+        [_feedsCollectionView enablePullToRefreshWithTopInset:0.f completion:^{
             dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2.f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
                 [collectionView endTopRefreshing];
                 [weakself.viewModel requestData];
@@ -181,6 +189,14 @@
         }];
 	}
 	return _feedsCollectionView;
+}
+
+- (PGNavigationView *)naviView
+{
+    if (!_naviView) {
+        _naviView = [PGNavigationView defaultNavigationView];
+    }
+    return _naviView;
 }
 
 @end

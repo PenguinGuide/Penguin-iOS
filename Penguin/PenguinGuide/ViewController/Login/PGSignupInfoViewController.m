@@ -21,7 +21,6 @@
 
 @property (nonatomic, strong) UIDatePicker *dobPicker;
 @property (nonatomic, strong) UIPickerView *sexPicker;
-@property (nonatomic, strong) UIView *accessoryView;
 @property (nonatomic, strong) NSDateFormatter *df;
 
 @end
@@ -266,21 +265,6 @@
         _sexPicker.delegate = self;
     }
     return _sexPicker;
-}
-
-- (UIView *)accessoryView
-{
-    if (!_accessoryView) {
-        _accessoryView = [[UIToolbar alloc] initWithFrame:CGRectMake(0, 0, UISCREEN_WIDTH, 44)];
-        _accessoryView.backgroundColor = Theme.colorBackground;
-        UIButton *doneButton = [[UIButton alloc] initWithFrame:CGRectMake(UISCREEN_WIDTH-50, 0, 50, 44)];
-        [doneButton addTarget:self action:@selector(accessoryDoneButtonClicked) forControlEvents:UIControlEventTouchUpInside];
-        [doneButton setTitleColor:Theme.colorText forState:UIControlStateNormal];
-        [doneButton setTitle:@"完成" forState:UIControlStateNormal];
-        [doneButton.titleLabel setFont:Theme.fontMediumBold];
-        [_accessoryView addSubview:doneButton];
-    }
-    return _accessoryView;
 }
 
 - (NSDateFormatter *)df

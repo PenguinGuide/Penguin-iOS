@@ -63,6 +63,11 @@
     }
 }
 
+- (void)accessoryDoneButtonClicked
+{
+    [self.pwdSaveView.newPwdTextField resignFirstResponder];
+}
+
 - (PGPwdSaveView *)pwdSaveView
 {
     if (!_pwdSaveView) {
@@ -70,6 +75,7 @@
         _pwdSaveView.delegate = self;
         _pwdSaveView.newPwdTextField.delegate = self;
         _pwdSaveView.newPwdTextField.placeholder = @"请输入新密码";
+        _pwdSaveView.newPwdTextField.inputAccessoryView = self.accessoryView;
         [_pwdSaveView.saveButton setTitle:@"保 存 新 密 码" forState:UIControlStateNormal];
     }
     return _pwdSaveView;

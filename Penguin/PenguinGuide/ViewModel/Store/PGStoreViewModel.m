@@ -54,7 +54,7 @@
 {
     PGWeakSelf(self);
     [self.apiClient pg_makeGetRequest:^(PGRKRequestConfig *config) {
-        config.route = PG_Store_Feeds;
+        config.route = PG_Home_Feeds;
         config.keyPath = @"items";
     } completion:^(id response) {
         NSDictionary *responseDict = [response firstObject];

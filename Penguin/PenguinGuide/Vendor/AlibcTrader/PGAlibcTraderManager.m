@@ -57,9 +57,9 @@ static NSString *const AppKey = @"23465992";
                                                               taoKeParams:nil
                                                                trackParam:nil
                                               tradeProcessSuccessCallback:^(AlibcTradeResult * _Nullable result) {
-                                                  NSLog(@"open success: %@", result);
+                                                  NSLog(@"open details page success: %@", result);
                                               } tradeProcessFailedCallback:^(NSError * _Nullable error) {
-                                                  NSLog(@"open failed: %@", error);
+                                                  NSLog(@"open details page failed: %@", error);
                                               }];
         NSLog(@"open return code: %@", @(ret));
     }
@@ -67,7 +67,32 @@ static NSString *const AppKey = @"23465992";
 
 + (void)openMyOrdersPageWithNative:(BOOL)showNative
 {
+    AlibcTradeShowParams *showParams = [[AlibcTradeShowParams alloc] init];
+    if (showNative) {
+        showParams.openType = ALiOpenTypeNative;
+    } else {
+        showParams.openType = ALiOpenTypeH5;
+    }
+    showParams.backUrl = [NSString stringWithFormat:@"tbopen%@:https://h5.m.taobao.com", AppKey];
+    showParams.isNeedPush = YES;
     
+    id <AlibcTradePage> ordersPage = [AlibcTradePageFactory myOrdersPage:0 isAllOrder:NO];
+    
+    [PGGlobal.rootNavigationController setNavigationBarHidden:NO animated:NO];
+    
+    if (PGGlobal.rootNavigationController) {
+        NSInteger ret = [[AlibcTradeSDK sharedInstance].tradeService show:PGGlobal.rootNavigationController
+                                                                     page:ordersPage
+                                                               showParams:showParams
+                                                              taoKeParams:nil
+                                                               trackParam:nil
+                                              tradeProcessSuccessCallback:^(AlibcTradeResult * _Nullable result) {
+                                                  NSLog(@"open orders page success: %@", result);
+                                              } tradeProcessFailedCallback:^(NSError * _Nullable error) {
+                                                  NSLog(@"open orders page failed: %@", error);
+                                              }];
+        NSLog(@"open return code: %@", @(ret));
+    }
 }
 
 + (void)openMyShoppingCartPageWithNative:(BOOL)showNative

@@ -52,21 +52,6 @@
     [self observeError:self.viewModel];
 }
 
-- (void)viewDidAppear:(BOOL)animated
-{
-    [super viewDidAppear:animated];
-    
-    if (!PGGlobal.userId) {
-        [PGRouterManager routeToLoginPage];
-        [PGRouterManager routeToHomePage];
-    } else {
-        if (!self.viewModel.me) {
-            [self showLoading];
-            [self.viewModel requestData];
-        }
-    }
-}
-
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
@@ -74,11 +59,18 @@
     [self.navigationController setNavigationBarHidden:YES animated:NO];
 }
 
-- (void)viewWillDisappear:(BOOL)animated
+- (void)viewDidAppear:(BOOL)animated
 {
-    [super viewWillDisappear:animated];
+    [super viewDidAppear:animated];
     
-    [self.navigationController setNavigationBarHidden:NO animated:NO];
+    if (!PGGlobal.userId) {
+        [PGRouterManager routeToLoginPage];
+    } else {
+        if (!self.viewModel.me) {
+            [self showLoading];
+            [self.viewModel requestData];
+        }
+    }
 }
 
 - (UIStatusBarStyle)preferredStatusBarStyle
@@ -103,6 +95,15 @@
     return @"pg_tab_me_highlight";
 }
 
+- (BOOL)tabBarShouldClicked
+{
+    if (!PGGlobal.userId) {
+        [PGRouterManager routeToLoginPage];
+        return NO;
+    }
+    return YES;
+}
+
 - (void)tabBarDidClicked
 {
     [self.navigationController setNavigationBarHidden:YES animated:NO];
@@ -117,7 +118,10 @@
 
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView
 {
-    return 1;
+    if (self.viewModel.me) {
+        return 1;
+    }
+    return 0;
 }
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
@@ -185,7 +189,7 @@
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
     if (indexPath.item == 0) {
-        
+        [PGAlibcTraderManager openMyOrdersPageWithNative:NO];
     } else if (indexPath.item == 1) {
         PGCollectionsViewController *collectionsVC = [[PGCollectionsViewController alloc] init];
         [self.navigationController pushViewController:collectionsVC animated:YES];

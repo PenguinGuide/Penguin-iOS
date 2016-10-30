@@ -32,6 +32,11 @@
 
 + (void)registerRouters
 {
+    [[PGRouter sharedInstance] registerRoute:@"qiechihe://home" toHandler:^(NSDictionary *params) {
+        AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+        [appDelegate.tabBarController selectTab:0];
+    }];
+    
     [[PGRouter sharedInstance] registerRoute:@"qiechihe://login" toHandler:^(NSDictionary *params) {
         PGLoginViewController *loginVC = [[PGLoginViewController alloc] init];
         if (PGGlobal.rootNavigationController) {
@@ -85,11 +90,6 @@
                 [PGGlobal.rootNavigationController pushViewController:channelVC animated:YES];
             }
         }
-    }];
-    
-    [[PGRouter sharedInstance] registerRoute:@"qiechihe://home" toHandler:^(NSDictionary *params) {
-        AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
-        [appDelegate.tabBarController selectTab:0];
     }];
 }
 

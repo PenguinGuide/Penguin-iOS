@@ -82,6 +82,11 @@
     }
 }
 
+- (void)accessoryDoneButtonClicked
+{
+    [self.pwdView.newPwdTextField resignFirstResponder];
+}
+
 - (PGPwdSaveView *)pwdView
 {
     if (!_pwdView) {
@@ -89,6 +94,7 @@
         _pwdView.delegate = self;
         _pwdView.newPwdTextField.delegate = self;
         _pwdView.newPwdTextField.placeholder = @"请输入密码";
+        _pwdView.newPwdTextField.inputAccessoryView = self.accessoryView;
         [_pwdView.saveButton setTitle:@"完 成" forState:UIControlStateNormal];
     }
     return _pwdView;

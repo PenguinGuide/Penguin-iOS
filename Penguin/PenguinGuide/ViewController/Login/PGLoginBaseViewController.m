@@ -21,7 +21,7 @@
     // Do any additional setup after loading the view.
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillChangeFrame:) name:UIKeyboardWillChangeFrameNotification object:nil];
     
-    self.view.backgroundColor = [UIColor whiteColor];
+    self.view.backgroundColor = [UIColor clearColor];
     
     self.automaticallyAdjustsScrollViewInsets = NO;
     
@@ -44,7 +44,7 @@
 {
     [super viewWillDisappear:animated];
     
-    [self.navigationController setNavigationBarHidden:NO animated:NO];
+    [self.navigationController setNavigationBarHidden:YES animated:NO];
 }
 
 - (void)dealloc
@@ -89,6 +89,11 @@
 - (void)closeButtonClicked
 {
     [self dismissViewControllerAnimated:YES completion:nil];
+}
+
+- (void)accessoryDoneButtonClicked
+{
+    
 }
 
 #pragma mark - <Setters && Getters>
@@ -145,6 +150,21 @@
         [_closeButton addTarget:self action:@selector(closeButtonClicked) forControlEvents:UIControlEventTouchUpInside];
     }
     return _closeButton;
+}
+
+- (UIView *)accessoryView
+{
+    if (!_accessoryView) {
+        _accessoryView = [[UIToolbar alloc] initWithFrame:CGRectMake(0, 0, UISCREEN_WIDTH, 44)];
+        _accessoryView.backgroundColor = Theme.colorBackground;
+        UIButton *doneButton = [[UIButton alloc] initWithFrame:CGRectMake(UISCREEN_WIDTH-50, 0, 50, 44)];
+        [doneButton addTarget:self action:@selector(accessoryDoneButtonClicked) forControlEvents:UIControlEventTouchUpInside];
+        [doneButton setTitleColor:Theme.colorText forState:UIControlStateNormal];
+        [doneButton setTitle:@"完成" forState:UIControlStateNormal];
+        [doneButton.titleLabel setFont:Theme.fontMediumBold];
+        [_accessoryView addSubview:doneButton];
+    }
+    return _accessoryView;
 }
 
 - (void)didReceiveMemoryWarning {

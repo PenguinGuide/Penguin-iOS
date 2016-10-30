@@ -18,6 +18,7 @@
 
 @property (nonatomic, strong) PGStoreViewModel *viewModel;
 @property (nonatomic, strong) PGFeedsCollectionView *feedsCollectionView;
+@property (nonatomic, strong) PGNavigationView *naviView;
 
 @end
 
@@ -27,6 +28,7 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     
+    [self.view addSubview:self.naviView];
     [self.view addSubview:self.feedsCollectionView];
     
     self.viewModel = [[PGStoreViewModel alloc] initWithAPIClient:self.apiClient];
@@ -42,24 +44,18 @@
     }];
 }
 
-- (void)viewDidLayoutSubviews
-{
-    [super viewDidLayoutSubviews];
-    // http://stackoverflow.com/questions/19411442/uicollectionview-adds-top-margin
-    // ISSUE: put in setter doesn't work
-    //self.feedsCollectionView.contentInset = UIEdgeInsetsMake(64, 0, 0, 0);
-}
-
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
     
-    [self.navigationController setNavigationBarHidden:NO animated:NO];
+    [self.navigationController setNavigationBarHidden:YES animated:NO];
 }
 
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
+    
+    [self setNeedsStatusBarAppearanceUpdate];
     
     if (self.viewModel.bannersArray.count == 0) {
         [self showLoading];
@@ -70,14 +66,16 @@
 - (void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
-    
-    // ISSUE: if set to YES, scrollViewDidScroll will not be called (next page nothing to update)
-    [self.navigationController setNavigationBarHidden:YES animated:NO];
 }
 
 - (UIStatusBarStyle)preferredStatusBarStyle
 {
     return UIStatusBarStyleDefault;
+}
+
+- (BOOL)prefersStatusBarHidden
+{
+    return NO;
 }
 
 - (void)dealloc
@@ -104,14 +102,11 @@
 
 - (void)tabBarDidClicked
 {
-    //PGLogWarning(@"store tabBarDidClicked");
-    
-    [self.navigationController setNavigationBarHidden:NO animated:NO];
+    // NOTE: these codes in viewDidLoad && viewWillLoad will not work since self.navigationController is nil for the first time
+    [self.navigationController setNavigationBarHidden:YES animated:NO];
     
     self.parentViewController.navigationItem.leftBarButtonItem = nil;
     self.parentViewController.navigationItem.titleView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"pg_home_logo"]];
-    
-    [self setNeedsStatusBarAppearanceUpdate];
 }
 
 #pragma mark - <PGFeedsCollectionViewDelegate>
@@ -164,12 +159,12 @@
 
 - (PGFeedsCollectionView *)feedsCollectionView {
     if(_feedsCollectionView == nil) {
-        _feedsCollectionView = [[PGFeedsCollectionView alloc] initWithFrame:CGRectMake(0, 0, UISCREEN_WIDTH, UISCREEN_HEIGHT-50) collectionViewLayout:[UICollectionViewFlowLayout new]];
+        _feedsCollectionView = [[PGFeedsCollectionView alloc] initWithFrame:CGRectMake(0, 64, UISCREEN_WIDTH, UISCREEN_HEIGHT-50) collectionViewLayout:[UICollectionViewFlowLayout new]];
         _feedsCollectionView.feedsDelegate = self;
         
         __block PGFeedsCollectionView *collectionView = _feedsCollectionView;
         PGWeakSelf(self);
-        [_feedsCollectionView enablePullToRefreshWithTopInset:64.f completion:^{
+        [_feedsCollectionView enablePullToRefreshWithTopInset:0.f completion:^{
             dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2.f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
                 [collectionView endTopRefreshing];
                 [weakself.viewModel requestData];
@@ -182,6 +177,14 @@
         }];
     }
     return _feedsCollectionView;
+}
+
+- (PGNavigationView *)naviView
+{
+    if (!_naviView) {
+        _naviView = [PGNavigationView defaultNavigationView];
+    }
+    return _naviView;
 }
 
 @end

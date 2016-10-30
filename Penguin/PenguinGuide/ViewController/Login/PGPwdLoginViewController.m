@@ -83,6 +83,12 @@
     [self.navigationController pushViewController:pwdResetVC animated:YES];
 }
 
+- (void)accessoryDoneButtonClicked
+{
+    [self.pwdLoginView.phoneTextField resignFirstResponder];
+    [self.pwdLoginView.pwdTextField resignFirstResponder];
+}
+
 - (PGPwdLoginView *)pwdLoginView
 {
     if (!_pwdLoginView) {
@@ -90,6 +96,8 @@
         _pwdLoginView.delegate = self;
         _pwdLoginView.phoneTextField.delegate = self;
         _pwdLoginView.pwdTextField.delegate = self;
+        _pwdLoginView.phoneTextField.inputAccessoryView = self.accessoryView;
+        _pwdLoginView.pwdTextField.inputAccessoryView = self.accessoryView;
     }
     return _pwdLoginView;
 }

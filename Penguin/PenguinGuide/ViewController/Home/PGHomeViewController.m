@@ -96,12 +96,11 @@
 {
     [super viewWillAppear:animated];
     
+    [self.navigationController setNavigationBarHidden:YES animated:NO];
+    
     // http://blog.csdn.net/ws1352864983/article/details/51932388
     // http://www.appcoda.com/customize-navigation-status-bar-ios-7/
     // http://tech.glowing.com/cn/change-uinavigationbar-backgroundcolor-dynamically/
-    
-    // these codes in viewDidLoad will not work
-    [self.navigationController setNavigationBarHidden:YES animated:NO];
     
     self.weakTimer = [MSWeakTimer scheduledTimerWithTimeInterval:1.0
                                                           target:self
@@ -114,8 +113,6 @@
 - (void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
-    
-    [self.navigationController setNavigationBarHidden:NO animated:NO];
     
     [self.weakTimer invalidate];
 }
@@ -145,8 +142,6 @@
 
 - (void)tabBarDidClicked
 {
-    //PGLogWarning(@"home tabBarDidClicked");
-    
     [self.navigationController setNavigationBarHidden:YES animated:NO];
     
     self.parentViewController.navigationItem.leftBarButtonItem = nil;

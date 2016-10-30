@@ -7,7 +7,10 @@
 //
 
 #import "PGBaseViewController.h"
+#import "PGCollection.h"
 
 @interface PGCollectionsContentViewController : PGBaseViewController
+
+- (id)initWithCollection:(PGCollection *)collection;
 
 @end

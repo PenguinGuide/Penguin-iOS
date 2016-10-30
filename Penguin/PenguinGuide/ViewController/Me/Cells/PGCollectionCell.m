@@ -42,9 +42,9 @@
 
 - (void)setCellWithIcon:(NSString *)icon desc:(NSString *)desc count:(NSString *)count
 {
-    self.iconImageView.image = [UIImage imageNamed:icon];
-    self.descLabel.text = desc;
-    self.countLabel.text = count;
+    [self.iconImageView setWithImageURL:icon placeholder:nil completion:nil];
+    [self.descLabel setText:desc];
+    [self.countLabel setText:count];
 }
 
 - (UIImageView *)iconImageView

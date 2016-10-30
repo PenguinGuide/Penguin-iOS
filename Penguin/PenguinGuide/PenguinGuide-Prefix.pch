@@ -29,6 +29,7 @@
 #import "AppDelegate.h"
 #import "PGBaseNavigationController.h"
 #import "PGBaseCollectionView.h"
+#import "PGNavigationView.h"
 
 #import "PGUser.h"
 

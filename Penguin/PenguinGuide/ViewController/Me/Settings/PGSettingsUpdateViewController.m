@@ -65,6 +65,8 @@
 {
     [super viewWillAppear:animated];
     
+    [self.navigationController setNavigationBarHidden:NO animated:NO];
+    
     [self.navigationController.navigationBar pg_setBackgroundColor:[UIColor clearColor]];
     [self.navigationController.navigationBar setShadowImage:[UIImage new]];
 }

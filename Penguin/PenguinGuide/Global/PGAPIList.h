@@ -47,6 +47,8 @@
 #define PG_Me                           @"/user/:userId"
 #define PG_User                         @"/user/:userId"
 #define PG_Message                      @"message"
+#define PG_Channel_Collections          @"/article_store/count_group_by_channel"
+#define PG_Channel_Collection_Articles  @"/article_store/by_channel"
 
 #define PG_Tag                          @"/tag/:tagId"
 

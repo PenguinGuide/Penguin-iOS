@@ -73,6 +73,7 @@
     // http://www.cocoachina.com/bbs/read.php?tid=316263
     // http://blog.csdn.net/cx_wzp/article/details/47166601
     
+    [self.navigationController setNavigationBarHidden:NO animated:YES];
     [self.navigationController.navigationBar pg_setBackgroundColor:[UIColor clearColor]];
     [self.navigationController.navigationBar setShadowImage:[UIImage new]];
     [self.navigationController.navigationBar setTintColor:[UIColor whiteColor]];

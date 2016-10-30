@@ -34,4 +34,9 @@
  */
 - (void)tabBarDidClicked;
 
+/**
+ *  child view controller should be clicked
+ */
+- (BOOL)tabBarShouldClicked;
+
 @end

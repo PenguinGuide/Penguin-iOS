@@ -115,11 +115,24 @@ static const float TabBarHeight = 50.f;
 {
     if (index < self.viewControllers.count) {
         UIViewController *selectedVC = self.viewControllers[index];
-        [self setSelectedViewController:selectedVC];
-        
-        if ([selectedVC respondsToSelector:@selector(tabBarDidClicked)]) {
+        if ([selectedVC respondsToSelector:@selector(tabBarShouldClicked)]) {
             id<PGTabBarControllerDelegate> vc = selectedVC;
-            [vc tabBarDidClicked];
+            BOOL shouldClicked = [vc tabBarShouldClicked];
+            if (shouldClicked) {
+                [self setSelectedViewController:selectedVC];
+                
+                if ([selectedVC respondsToSelector:@selector(tabBarDidClicked)]) {
+                    id<PGTabBarControllerDelegate> vc = selectedVC;
+                    [vc tabBarDidClicked];
+                }
+            }
+        } else {
+            [self setSelectedViewController:selectedVC];
+            
+            if ([selectedVC respondsToSelector:@selector(tabBarDidClicked)]) {
+                id<PGTabBarControllerDelegate> vc = selectedVC;
+                [vc tabBarDidClicked];
+            }
         }
     }
 }

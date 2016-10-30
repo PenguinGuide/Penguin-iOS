@@ -9,11 +9,15 @@
 #define CollectionCell @"CollectionCell"
 
 #import "PGCollectionsViewController.h"
+#import "PGCollectionsContentViewController.h"
+#import "PGCollectionViewModel.h"
 #import "PGCollectionCell.h"
 
 @interface PGCollectionsViewController () <UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout>
 
 @property (nonatomic, strong) PGBaseCollectionView *collectionsCollectionView;
+
+@property (nonatomic, strong) PGCollectionViewModel *viewModel;
 
 @end
 
@@ -23,7 +27,33 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     
+    [self setNavigationTitle:@"我的收藏"];
+    
     [self.view addSubview:self.collectionsCollectionView];
+    
+    self.viewModel = [[PGCollectionViewModel alloc] initWithAPIClient:self.apiClient];
+    
+    PGWeakSelf(self);
+    [self observe:self.viewModel keyPath:@"collections" block:^(id changedObject) {
+        NSArray *collections = changedObject;
+        if (collections && [collections isKindOfClass:[NSArray class]]) {
+            [weakself.collectionsCollectionView reloadData];
+        }
+        [weakself dismissLoading];
+    }];
+    [self observeError:self.viewModel];
+}
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    
+    [self.navigationController setNavigationBarHidden:NO animated:NO];
+    
+    if (self.viewModel.collections.count == 0) {
+        [self showLoading];
+        [self.viewModel requestData];
+    }
 }
 
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView
@@ -33,24 +63,16 @@
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
 {
-    return 5;
+    return self.viewModel.collections.count;
 }
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
     PGCollectionCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:CollectionCell forIndexPath:indexPath];
     
-    if (indexPath.item == 0) {
-        [cell setCellWithIcon:@"pg_collection_city_wiki" desc:@"城市指南" count:@"12"];
-    } else if (indexPath.item == 1) {
-        [cell setCellWithIcon:@"pg_collection_teach" desc:@"教你做" count:@"12"];
-    } else if (indexPath.item == 2) {
-        [cell setCellWithIcon:@"pg_collection_store" desc:@"企鹅市集" count:@"12"];
-    } else if (indexPath.item == 3) {
-        [cell setCellWithIcon:@"pg_collection_test" desc:@"爱测评" count:@"12"];
-    } else if (indexPath.item == 4) {
-        [cell setCellWithIcon:@"pg_collection_knowledge" desc:@"涨知识" count:@"12"];
-    }
+    PGCollection *collection = self.viewModel.collections[indexPath.item];
+    
+    [cell setCellWithIcon:collection.icon desc:collection.name count:collection.count];
     
     return cell;
 }
@@ -68,6 +90,13 @@
 - (CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout minimumInteritemSpacingForSectionAtIndex:(NSInteger)section
 {
     return 0.f;
+}
+
+- (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    PGCollection *collection = self.viewModel.collections[indexPath.item];
+    PGCollectionsContentViewController *collectionsContentVC = [[PGCollectionsContentViewController alloc] initWithCollection:collection];
+    [self.navigationController pushViewController:collectionsContentVC animated:YES];
 }
 
 - (PGBaseCollectionView *)collectionsCollectionView

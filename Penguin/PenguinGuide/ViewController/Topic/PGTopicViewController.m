@@ -46,10 +46,11 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     
+    self.automaticallyAdjustsScrollViewInsets = NO;
+    
     [self.view addSubview:self.topicCollectionView];
     
     self.viewModel = [[PGTopicViewModel alloc] initWithAPIClient:self.apiClient];
-    [self.viewModel requestData];
     
     PGWeakSelf(self);
     [self observe:self.viewModel keyPath:@"topic" block:^(id changedObject) {
@@ -58,9 +59,27 @@
             [weakself.topicCollectionView reloadData];
             [weakself setNavigationTitle:weakself.viewModel.topic.title];
         }
+        [weakself dismissLoading];
     }];
     
     [self setNeedsStatusBarAppearanceUpdate];
+}
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    
+    if (self.viewModel.topic == nil) {
+        [self showLoading];
+        [self.viewModel requestData];
+    }
+    
+    [self.navigationController setNavigationBarHidden:YES animated:NO];
+}
+
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
 }
 
 - (void)dealloc
