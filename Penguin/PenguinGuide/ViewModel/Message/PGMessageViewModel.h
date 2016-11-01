@@ -11,9 +11,11 @@
 
 @interface PGMessageViewModel : PGBaseViewModel
 
+@property (nonatomic, strong, readonly) NSDictionary *countsDict;
 @property (nonatomic, strong, readonly) NSArray *messages;
 
 - (void)requestSystemMessages;
 - (void)requestReplyMessages;
+- (void)requestLikesMessages;
 
 @end

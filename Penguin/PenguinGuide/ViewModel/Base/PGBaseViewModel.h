@@ -12,7 +12,7 @@
 @interface PGBaseViewModel : NSObject
 
 @property (nonatomic, strong, readonly) PGAPIClient *apiClient;
-@property (nonatomic, strong, readwrite) NSString *maxId;
+@property (nonatomic, strong, readwrite) NSString *cursor;
 @property (nonatomic, assign, readwrite) NSInteger page;
 
 @property (nonatomic, assign, readwrite) BOOL endFlag;

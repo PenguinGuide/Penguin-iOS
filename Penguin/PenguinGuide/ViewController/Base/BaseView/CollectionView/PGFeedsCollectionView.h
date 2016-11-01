@@ -35,7 +35,7 @@
 @optional
 
 - (void)channelDidSelect:(NSString *)link;
-- (void)scenarioDidSelect:(NSString *)scenarioType;
+- (void)scenarioDidSelect:(PGCategoryIcon *)scenario;
 - (void)categoryDidSelect:(PGCategoryIcon *)category;
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath;

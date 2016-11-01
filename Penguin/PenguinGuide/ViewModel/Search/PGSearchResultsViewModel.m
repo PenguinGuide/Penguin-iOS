@@ -10,8 +10,8 @@
 
 @interface PGSearchResultsViewModel ()
 
-@property (nonatomic, strong, readwrite) NSArray *articlesArray;
-@property (nonatomic, strong, readwrite) NSArray *goodsArray;
+@property (nonatomic, strong, readwrite) NSArray *articles;
+@property (nonatomic, strong, readwrite) NSArray *goods;
 
 @end
 
@@ -19,35 +19,41 @@
 
 - (void)searchArticles:(NSString *)keyword
 {
+    PGParams *params = [PGParams new];
+    params[@"type"] = @"article";
+    params[@"keyword"] = keyword;
+    
     PGWeakSelf(self);
     
     [self.apiClient pg_makeGetRequest:^(PGRKRequestConfig *config) {
-        config.route = PG_Search_Articles;
+        config.route = PG_Search;
+        config.params = params;
         config.keyPath = @"items";
         config.model = [PGArticleBanner new];
-        config.isMockAPI = YES;
-        config.mockFileName = @"v1_search_articles.json";
     } completion:^(id response) {
-        weakself.articlesArray = response;
+        weakself.articles = response;
     } failure:^(NSError *error) {
-        
+        weakself.error = error;
     }];
 }
 
 - (void)searchGoods:(NSString *)keyword
 {
+    PGParams *params = [PGParams new];
+    params[@"type"] = @"product";
+    params[@"keyword"] = keyword;
+    
     PGWeakSelf(self);
     
     [self.apiClient pg_makeGetRequest:^(PGRKRequestConfig *config) {
-        config.route = PG_Search_Goods;
+        config.route = PG_Search;
+        config.params = params;
         config.keyPath = @"items";
         config.model = [PGGood new];
-        config.isMockAPI = YES;
-        config.mockFileName = @"v1_search_goods.json";
     } completion:^(id response) {
-        weakself.goodsArray = response;
+        weakself.goods = response;
     } failure:^(NSError *error) {
-        
+        weakself.error = error;
     }];
 }
 

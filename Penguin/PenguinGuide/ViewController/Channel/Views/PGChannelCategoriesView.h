@@ -12,7 +12,6 @@
 @protocol PGChannelCategoriesViewDelegate <NSObject>
 
 - (void)categoryDidSelect:(PGChannelCategory *)category;
-- (void)moreCategoryDidSelect;
 
 @end
 

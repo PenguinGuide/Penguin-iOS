@@ -10,11 +10,13 @@
 
 #import "PGMessageViewController.h"
 #import "PGMessageContentViewController.h"
+#import "PGMessageViewModel.h"
 #import "PGMessageCell.h"
 
 @interface PGMessageViewController () <UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout>
 
 @property (nonatomic, strong) PGBaseCollectionView *messagesCollectionView;
+@property (nonatomic, strong) PGMessageViewModel *viewModel;
 
 @end
 
@@ -27,6 +29,16 @@
     [self setNavigationTitle:@"我的消息"];
     
     [self.view addSubview:self.messagesCollectionView];
+    
+    self.viewModel = [[PGMessageViewModel alloc] initWithAPIClient:self.apiClient];
+    PGWeakSelf(self);
+    [self observe:self.viewModel keyPath:@"countsDict" block:^(id changedObject) {
+        NSDictionary *countsDict = changedObject;
+        if (countsDict && [countsDict isKindOfClass:[NSDictionary class]]) {
+            [weakself.messagesCollectionView reloadData];
+        }
+        [weakself dismissLoading];
+    }];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -34,6 +46,11 @@
     [super viewWillAppear:animated];
     
     [self.navigationController setNavigationBarHidden:NO animated:NO];
+    
+    if (!self.viewModel.countsDict) {
+        [self showLoading];
+        [self.viewModel requestData];
+    }
 }
 
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView
@@ -43,7 +60,7 @@
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
 {
-    return 2;
+    return 3;
 }
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
@@ -51,9 +68,23 @@
     PGMessageCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:MessageCell forIndexPath:indexPath];
     
     if (indexPath.item == 0) {
-        [cell setCellWithDesc:@"系 统 消 息" count:@"5"];
+        if (self.viewModel.countsDict[@"1"]) {
+            [cell setCellWithDesc:@"系 统 消 息" count:[NSString stringWithFormat:@"%ld", [self.viewModel.countsDict[@"1"] integerValue]]];
+        } else {
+            [cell setCellWithDesc:@"系 统 消 息" count:nil];
+        }
     } else if (indexPath.item == 1) {
-        [cell setCellWithDesc:@"收 到 的 回 复" count:@"10"];
+        if (self.viewModel.countsDict[@"2"]) {
+            [cell setCellWithDesc:@"收 到 的 回 复" count:[NSString stringWithFormat:@"%ld", [self.viewModel.countsDict[@"2"] integerValue]]];
+        } else {
+            [cell setCellWithDesc:@"收 到 的 回 复" count:nil];
+        }
+    } else if (indexPath.item == 2) {
+        if (self.viewModel.countsDict[@"3"]) {
+            [cell setCellWithDesc:@"收 到 的 赞" count:[NSString stringWithFormat:@"%ld", [self.viewModel.countsDict[@"3"] integerValue]]];
+        } else {
+            [cell setCellWithDesc:@"收 到 的 赞" count:nil];
+        }
     }
     
     return cell;
@@ -87,6 +118,9 @@
     } else if (indexPath.item == 1) {
         PGMessageContentViewController *replyMessagesVC = [[PGMessageContentViewController alloc] initWithType:PGMessageContentTypeReply];
         [self.navigationController pushViewController:replyMessagesVC animated:YES];
+    } else if (indexPath.item == 2) {
+        PGMessageContentViewController *likesMessageVC = [[PGMessageContentViewController alloc] initWithType:PGMessageContentTypeLikes];
+        [self.navigationController pushViewController:likesMessageVC animated:YES];
     }
 }
 

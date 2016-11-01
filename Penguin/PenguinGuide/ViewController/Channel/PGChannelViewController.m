@@ -48,16 +48,16 @@
     self.view.backgroundColor = Theme.colorBackground;
     
     self.viewModel = [[PGChannelViewModel alloc] initWithAPIClient:self.apiClient];
-    [self.viewModel setViewModelWithChannelId:self.channelId];
-    [self.viewModel requestData];
     
     PGWeakSelf(self);
     [self observe:self.viewModel keyPath:@"articlesArray" block:^(id changedObject) {
         NSArray *articlesArray = changedObject;
         if (articlesArray && [articlesArray isKindOfClass:[NSArray class]]) {
             [weakself.categoriesView reloadViewWithCategories:weakself.viewModel.channel.categoriesArray];
+            [weakself.navigationItem setTitleView:weakself.naviTitleView];
             [weakself.articlesCollectionView reloadData];
         }
+        [weakself dismissLoading];
     }];
     
     [self.view addSubview:self.articlesCollectionView];
@@ -70,6 +70,11 @@
     
     self.articlesCollectionView.delegate = self;
     
+    if (self.viewModel.articlesArray.count == 0) {
+        [self showLoading];
+        [self.viewModel requestChannel:self.channelId];
+    }
+    
     // http://www.cocoachina.com/bbs/read.php?tid=316263
     // http://blog.csdn.net/cx_wzp/article/details/47166601
     
@@ -77,7 +82,6 @@
     [self.navigationController.navigationBar pg_setBackgroundColor:[UIColor clearColor]];
     [self.navigationController.navigationBar setShadowImage:[UIImage new]];
     [self.navigationController.navigationBar setTintColor:[UIColor whiteColor]];
-    [self.navigationItem setTitleView:self.naviTitleView];
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -166,14 +170,13 @@
 
 - (void)categoryDidSelect:(PGChannelCategory *)category
 {
-    
-}
-
-- (void)moreCategoryDidSelect
-{
-    UIImage *screenshot = [[self.view screenshot] applyBlurEffectWithRadius:40 tintColor:[UIColor whiteColorWithAlpha:0.8f] saturationDeltaFactor:5 maskImage:nil];
-    PGChannelAllCategoriesViewController *moreCategoriesVC = [[PGChannelAllCategoriesViewController alloc] initWithBackgroundImage:screenshot channel:self.viewModel.channel];
-    [self.navigationController pushViewController:moreCategoriesVC animated:YES];
+    if (category.categoryId && category.categoryId.length > 0) {
+        [self showLoading];
+        [self.viewModel requestArticles:self.viewModel.channel.channelId categoryId:category.categoryId];
+    } else {
+        [self showLoading];
+        [self.viewModel requestArticles:self.viewModel.channel.channelId categoryId:nil];
+    }
 }
 
 - (void)channelInfoCloseButtonClicked
@@ -205,20 +208,20 @@
 
 - (UIView *)naviTitleView {
 	if(_naviTitleView == nil) {
-        NSString *naviTitleStr = @"城市指南";
+        NSString *naviTitleStr = self.viewModel.channel.name;
         CGSize size = [naviTitleStr sizeWithAttributes:@{NSFontAttributeName:Theme.fontSmallBold}];
 		_naviTitleView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 12+5+size.width+5+12, 30)];
         _naviTitleView.backgroundColor = [UIColor clearColor];
         _naviTitleView.userInteractionEnabled = YES;
         
         UIImageView *iconImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 8, 12, 14)];
-        iconImageView.image = [UIImage imageNamed:@"pg_channel_city_guide"];
+        [iconImageView setWithImageURL:self.viewModel.channel.icon placeholder:nil completion:nil];
         [_naviTitleView addSubview:iconImageView];
         
         UILabel *textLabel = [[UILabel alloc] initWithFrame:CGRectMake(12+5, 0, size.width, 30)];
         textLabel.font = Theme.fontSmallBold;
         textLabel.textColor = Theme.colorText;
-        textLabel.text = @"城市指南";
+        textLabel.text = naviTitleStr;
         [_naviTitleView addSubview:textLabel];
         
         UIImageView *arrowImageView = [[UIImageView alloc] initWithFrame:CGRectMake(12+5+size.width+5, 9, 12, 12)];
@@ -227,7 +230,9 @@
         
         PGWeakSelf(self)
         [_naviTitleView setTapAction:^{
-            [weakself showPopup:weakself.channelInfoView];
+            if (weakself.viewModel.channel.desc) {
+                [weakself showPopup:weakself.channelInfoView];
+            }
         }];
 	}
 	return _naviTitleView;
@@ -243,34 +248,34 @@
                                                                                    NSForegroundColorAttributeName:Theme.colorText,
                                                                                    NSParagraphStyleAttributeName:paragraphStyle}];
         CGSize textSize = [descStr boundingRectWithSize:CGSizeMake(width-32*2, UISCREEN_HEIGHT) options:NSStringDrawingUsesLineFragmentOrigin context:nil].size;
-        CGFloat height = 105+textSize.height+10+60;
+        CGFloat height = 105+textSize.height+10+60-24;
 		_channelInfoView = [[UIView alloc] initWithFrame:CGRectMake(45, (UISCREEN_HEIGHT-height)/2, width, height)];
         _channelInfoView.backgroundColor = Theme.colorBackground;
         _channelInfoView.clipsToBounds = YES;
         _channelInfoView.layer.cornerRadius = 10.f;
         
-        UILabel *descLabel = [[UILabel alloc] initWithFrame:CGRectMake(32, 105, width-32*2, textSize.height+10)];
+        UILabel *descLabel = [[UILabel alloc] initWithFrame:CGRectMake(32, 105-24, width-32*2, textSize.height+10)];
         descLabel.numberOfLines = 0;
         descLabel.attributedText = descStr;
         [_channelInfoView addSubview:descLabel];
         
         UIImageView *iconImageView = [[UIImageView alloc] initWithFrame:CGRectMake(width/2-17/2.f, 20, 17, 20)];
-        iconImageView.image = [UIImage imageNamed:@"pg_channel_info_city_guide"];
+        [iconImageView setWithImageURL:self.viewModel.channel.icon placeholder:nil completion:nil];
         [_channelInfoView addSubview:iconImageView];
         
         UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, iconImageView.pg_bottom+8, width, 16)];
-        titleLabel.text = @"城市指南";
+        titleLabel.text = self.viewModel.channel.desc;
         titleLabel.font = Theme.fontMediumBold;
         titleLabel.textColor = Theme.colorText;
         titleLabel.textAlignment = NSTextAlignmentCenter;
         [_channelInfoView addSubview:titleLabel];
         
-        UILabel *countLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, titleLabel.pg_bottom+12, width, 12)];
-        countLabel.text = [NSString stringWithFormat:@"-共%@篇-", self.viewModel.channel.totalArticles];
-        countLabel.font = Theme.fontExtraSmall;
-        countLabel.textColor = Theme.colorLightText;
-        countLabel.textAlignment = NSTextAlignmentCenter;
-        [_channelInfoView addSubview:countLabel];
+//        UILabel *countLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, titleLabel.pg_bottom+12, width, 12)];
+//        countLabel.text = [NSString stringWithFormat:@"-共%@篇-", self.viewModel.channel.totalArticles];
+//        countLabel.font = Theme.fontExtraSmall;
+//        countLabel.textColor = Theme.colorLightText;
+//        countLabel.textAlignment = NSTextAlignmentCenter;
+//        [_channelInfoView addSubview:countLabel];
         
         UIButton *closeButton = [[UIButton alloc] initWithFrame:CGRectMake(width/2-40, height-20-26, 80, 26)];
         closeButton.clipsToBounds = YES;

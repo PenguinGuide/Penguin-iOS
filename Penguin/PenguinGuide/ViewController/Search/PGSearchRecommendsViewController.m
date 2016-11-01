@@ -41,9 +41,17 @@
     
     self.view.backgroundColor = Theme.colorBackground;
     
-    self.viewModel = [[PGSearchRecommendsViewModel alloc] init];
-    self.viewModel.tagsArray = @[@"啤酒", @"茶", @"咖啡", @"葡萄酒", @"Hoegaarden Wit", @"衹园辻利宇治八坂小清新煎茶", @"云南松茸", @"Rochefort", @"伊藤久右卫门宇治喜撰山煎茶千花百茶"];
-    self.viewModel.historyArray = @[@"Hoegaarden Wit", @"衹园辻利宇治八坂小清新煎茶", @"Rochefort", @"云南松茸", @"Hoegaarden Wit", @"衹园辻利宇治八坂小清新煎茶", @"Rochefort", @"云南松茸", @"Hoegaarden Wit", @"衹园辻利宇治八坂小清新煎茶", @"Rochefort", @"云南松茸", @"Hoegaarden Wit", @"衹园辻利宇治八坂小清新煎茶", @"Rochefort", @"云南松茸", @"Hoegaarden Wit", @"衹园辻利宇治八坂小清新煎茶", @"Rochefort", @"云南松茸", @"Hoegaarden Wit", @"衹园辻利宇治八坂小清新煎茶", @"Rochefort", @"云南松茸"];
+    self.viewModel = [[PGSearchRecommendsViewModel alloc] initWithAPIClient:self.apiClient];
+    
+    PGWeakSelf(self);
+    [self observe:self.viewModel keyPath:@"recommends" block:^(id changedObject) {
+        NSArray *recommends = changedObject;
+        if (recommends && [recommends isKindOfClass:[NSArray class]]) {
+            weakself.viewModel.historyArray = [PGGlobal.cache objectForKey:@"search_keywords" fromTable:@"Search"];
+            [weakself.searchCollectionView reloadData];
+        }
+        [weakself dismissLoading];
+    }];
     
     [self.view addSubview:self.searchTextFieldContainerView];
     [self.searchTextFieldContainerView addSubview:self.searchTextField];
@@ -55,7 +63,7 @@
 {
     [super viewDidAppear:animated];
     
-    [self.searchTextField becomeFirstResponder];
+//    [self.searchTextField becomeFirstResponder];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -65,6 +73,11 @@
     self.searchCollectionView.delegate = self;
     
     [self.navigationController setNavigationBarHidden:YES animated:NO];
+    
+    if (self.viewModel.recommends.count == 0) {
+        [self showLoading];
+        [self.viewModel requestData];
+    }
     
     self.navigationItem.leftBarButtonItem = nil;
 }
@@ -76,8 +89,6 @@
     self.searchCollectionView.delegate = nil;
     
     [self.searchTextField resignFirstResponder];
-    
-    [self.navigationController setNavigationBarHidden:NO animated:NO];
 }
 
 - (void)viewDidDisappear:(BOOL)animated
@@ -94,13 +105,20 @@
 
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView
 {
-    return 2;
+    if (self.viewModel.recommends.count > 0) {
+        if (self.viewModel.historyArray.count == 0) {
+            return 1;
+        } else {
+            return 2;
+        }
+    }
+    return 0;
 }
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
 {
     if (section == 0) {
-        return self.viewModel.tagsArray.count;
+        return self.viewModel.recommends.count;
     } else if (section == 1) {
         return self.viewModel.historyArray.count;
     }
@@ -112,7 +130,7 @@
     if (indexPath.section == 0) {
         PGTagCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:TagCell forIndexPath:indexPath];
         
-        [cell setCellWithKeyword:self.viewModel.tagsArray[indexPath.item]];
+        [cell setCellWithKeyword:self.viewModel.recommends[indexPath.item]];
         
         return cell;
     } else if (indexPath.section == 1) {
@@ -143,7 +161,7 @@
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath
 {
     if (indexPath.section == 0) {
-        return [PGTagCell keywordCellSize:self.viewModel.tagsArray[indexPath.item]];
+        return [PGTagCell keywordCellSize:self.viewModel.recommends[indexPath.item]];
     } else if (indexPath.section == 1) {
         return [PGSearchRecommendsHistoryCell cellSize];
     }
@@ -188,10 +206,20 @@
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
     if (indexPath.section == 0) {
-        NSString *keyword = self.viewModel.tagsArray[indexPath.item];
+        NSString *keyword = self.viewModel.recommends[indexPath.item];
         
-        PGSearchResultsViewController *searchResultsVC = [[PGSearchResultsViewController alloc] initWithKeyword:keyword];
-        [self.navigationController pushViewController:searchResultsVC animated:YES];
+        if (keyword && keyword.length > 0) {
+            NSMutableArray *wordsArray = [NSMutableArray arrayWithArray:self.viewModel.historyArray];
+            if ([wordsArray containsObject:keyword]) {
+                [wordsArray removeObject:keyword];
+            }
+            [wordsArray insertObject:keyword atIndex:0];
+            self.viewModel.historyArray = [NSArray arrayWithArray:wordsArray];
+            [PGGlobal.cache putObject:self.viewModel.historyArray forKey:@"search_keywords" intoTable:@"Search"];
+            
+            PGSearchResultsViewController *searchResultsVC = [[PGSearchResultsViewController alloc] initWithKeyword:keyword];
+            [self.navigationController pushViewController:searchResultsVC animated:YES];
+        }
     } else if (indexPath.section == 1) {
         NSString *keyword = self.viewModel.historyArray[indexPath.item];
         
@@ -226,6 +254,14 @@
 - (BOOL)textFieldShouldReturn:(UITextField *)textField
 {
     if (textField.text.length > 0) {
+        NSMutableArray *wordsArray = [NSMutableArray arrayWithArray:self.viewModel.historyArray];
+        if ([wordsArray containsObject:textField.text]) {
+            [wordsArray removeObject:textField.text];
+        }
+        [wordsArray insertObject:textField.text atIndex:0];
+        self.viewModel.historyArray = [NSArray arrayWithArray:wordsArray];
+        [PGGlobal.cache putObject:self.viewModel.historyArray forKey:@"search_keywords" intoTable:@"Search"];
+        
         PGSearchResultsViewController *searchResultsVC = [[PGSearchResultsViewController alloc] initWithKeyword:textField.text];
         [self.navigationController pushViewController:searchResultsVC animated:YES];
         return YES;

@@ -17,21 +17,27 @@
              @"type" : @"type",
              @"title": @"title",
              @"channel" : @"channel",
+             @"channelIcon" : @"channel_icon",
              @"link" : @"link",
-             @"likesCount" : @"likes",
-             @"commentsCount" : @"comments",
+             @"likesCount" : @[@"likes", @"favor_count"],
+             @"commentsCount" : @[@"comments", @"comment_count"],
              @"articleId": @"id"
              };
 }
 
-+ (NSValueTransformer *)likesCountJSONTransformer
++ (NSValueTransformer *)articleIdJSONTransformer
 {
     return [NSValueTransformer valueTransformerForName:PGStringValueTransformer];
 }
 
++ (NSValueTransformer *)likesCountJSONTransformer
+{
+    return [PGArticleBanner stringTransformer:@[@"likes", @"favor_count"]];
+}
+
 + (NSValueTransformer *)commentsCountJSONTransformer
 {
-    return [NSValueTransformer valueTransformerForName:PGStringValueTransformer];
+    return [PGArticleBanner stringTransformer:@[@"comments", @"comment_count"]];
 }
 
 @end

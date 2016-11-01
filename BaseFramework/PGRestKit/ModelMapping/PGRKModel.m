@@ -41,4 +41,28 @@
     }
 }
 
++ (instancetype)stringTransformer:(NSArray *)keys
+{
+    if (keys.count == 0) {
+        return nil;
+    } else {
+        return [MTLValueTransformer transformerUsingForwardBlock:^id(id value, BOOL *success, NSError *__autoreleasing *error) {
+            id realValue = nil;
+            for (NSString *key in keys) {
+                if (value[key]) {
+                    realValue = value[key];
+                    break;
+                }
+            }
+            if ([realValue isKindOfClass:[NSNumber class]]) {
+                NSString *stringValue = [NSString stringWithFormat:@"%@", realValue];
+                return stringValue;
+            } else if ([realValue isKindOfClass:[NSString class]]) {
+                return realValue;
+            }
+            return nil;
+        }];
+    }
+}
+
 @end

@@ -12,8 +12,8 @@
 
 @interface PGSearchResultsViewModel : PGBaseViewModel
 
-@property (nonatomic, strong, readonly) NSArray *articlesArray;
-@property (nonatomic, strong, readonly) NSArray *goodsArray;
+@property (nonatomic, strong, readonly) NSArray *articles;
+@property (nonatomic, strong, readonly) NSArray *goods;
 
 - (void)searchArticles:(NSString *)keyword;
 - (void)searchGoods:(NSString *)keyword;

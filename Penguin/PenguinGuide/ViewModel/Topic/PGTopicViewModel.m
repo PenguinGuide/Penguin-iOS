@@ -16,19 +16,18 @@
 
 @implementation PGTopicViewModel
 
-- (void)requestData
+- (void)requestTopic:(NSString *)topicId
 {
     PGWeakSelf(self);
     [self.apiClient pg_makeGetRequest:^(PGRKRequestConfig *config) {
         config.route = PG_Topic;
         config.keyPath = nil;
+        config.pattern = @{@"topicId":topicId};
         config.model = [PGTopic new];
-        config.isMockAPI = YES;
-        config.mockFileName = @"v1_topic_topicid.json";
     } completion:^(id response) {
         weakself.topic = [response firstObject];
     } failure:^(NSError *error) {
-        
+        weakself.error = error;
     }];
 }
 

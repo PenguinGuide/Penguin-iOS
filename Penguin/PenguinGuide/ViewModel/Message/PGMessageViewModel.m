@@ -10,6 +10,7 @@
 
 @interface PGMessageViewModel ()
 
+@property (nonatomic, strong, readwrite) NSDictionary *countsDict;
 @property (nonatomic, strong, readwrite) NSArray *messages;
 
 @end
@@ -18,7 +19,15 @@
 
 - (void)requestData
 {
-    
+    PGWeakSelf(self);
+    [self.apiClient pg_makeGetRequest:^(PGRKRequestConfig *config) {
+        config.route = PG_Message_Counts;
+        config.keyPath = nil;
+    } completion:^(id response) {
+        weakself.countsDict = [response firstObject];
+    } failure:^(NSError *error) {
+        weakself.error = error;
+    }];
 }
 
 - (void)requestSystemMessages
@@ -43,6 +52,24 @@
 {
     PGParams *params = [PGParams new];
     params[@"type"] = @(2);
+    
+    PGWeakSelf(self);
+    [self.apiClient pg_makeGetRequest:^(PGRKRequestConfig *config) {
+        config.route = PG_Message;
+        config.params = params;
+        config.keyPath = nil;
+        config.model = [PGMessage new];
+    } completion:^(id response) {
+        weakself.messages = response;
+    } failure:^(NSError *error) {
+        weakself.error = error;
+    }];
+}
+
+- (void)requestLikesMessages
+{
+    PGParams *params = [PGParams new];
+    params[@"type"] = @(3);
     
     PGWeakSelf(self);
     [self.apiClient pg_makeGetRequest:^(PGRKRequestConfig *config) {

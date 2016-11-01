@@ -113,9 +113,7 @@
 {
     // NOTE: these codes in viewDidLoad && viewWillLoad will not work since self.navigationController is nil for the first time
     [self.navigationController setNavigationBarHidden:YES animated:NO];
-//    
-//    self.parentViewController.navigationItem.leftBarButtonItem = nil;
-//    self.parentViewController.navigationItem.titleView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"pg_home_logo"]];
+    [self.parentViewController.navigationItem setLeftBarButtonItem:nil];
 }
 
 #pragma mark - <PGFeedsCollectionViewDelegate>
@@ -145,10 +143,9 @@
     return @"explore";
 }
 
-- (void)scenarioDidSelect:(NSString *)scenarioType
+- (void)scenarioDidSelect:(PGCategoryIcon *)scenario
 {
-    PGScenarioViewController *scenarioVC = [[PGScenarioViewController alloc] init];
-    [self.navigationController pushViewController:scenarioVC animated:YES];
+    [PGRouterManager routeToScenarioPage:scenario.categoryId link:scenario.link];
 }
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath

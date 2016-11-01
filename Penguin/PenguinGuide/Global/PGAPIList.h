@@ -18,11 +18,10 @@
 #define PG_Store_Feeds                  @"/feeds/store"
 
 #define PG_Channel                      @"/channel/:channelId"
+#define PG_Channel_Category_Articles    @"/channel/:channelId/articles"
 
-#define PG_Channel_Category_Articles    @"/article/channel/:channelId/category/:categoryId"
-
-#define PG_Search_Articles              @"/search/articles"
-#define PG_Search_Goods                 @"/search/goods"
+#define PG_Search_Recommends            @"/search/hot_keywords"
+#define PG_Search                       @"/search"
 
 #define PG_Scenario                     @"/scenario/:scenarioId"
 #define PG_Scenario_Feeds               @"/scenario/feeds/scenario/:scenarioId/category/:categoryId"
@@ -46,9 +45,11 @@
 
 #define PG_Me                           @"/user/:userId"
 #define PG_User                         @"/user/:userId"
-#define PG_Message                      @"message"
+#define PG_Message                      @"/message"
+#define PG_Message_Counts               @"/message/count_group_by_type"
 #define PG_Channel_Collections          @"/article_store/count_group_by_channel"
 #define PG_Channel_Collection_Articles  @"/article_store/by_channel"
+#define PG_History                      @"/foot_print/:userId"
 
 #define PG_Tag                          @"/tag/:tagId"
 

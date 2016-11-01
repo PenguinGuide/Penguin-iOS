@@ -19,13 +19,9 @@
 
 @implementation PGChannelViewModel
 
-- (void)setViewModelWithChannelId:(NSString *)channelId
+- (void)requestChannel:(NSString *)channelId
 {
     self.channelId = channelId;
-}
-
-- (void)requestData
-{
     // FIXME: data without "result" key, completion & failure blocks will not be called
     if (self.channelId && self.channelId.length > 0) {
         PGWeakSelf(self);
@@ -34,8 +30,6 @@
             config.pattern = @{@"channelId":weakself.channelId};
             config.model = [PGChannel new];
             config.keyPath = nil;
-            config.isMockAPI = YES;
-            config.mockFileName = @"v1_channel_channelid.json";
         } completion:^(id response) {
             weakself.channel = [response firstObject];
             if (weakself.channel.categoriesArray.count > 0) {
@@ -43,25 +37,50 @@
                 [weakself requestArticles:category.categoryId];
             }
         } failure:^(NSError *error) {
-            
+            weakself.error = error;
         }];
     }
 }
 
 - (void)requestArticles:(NSString *)categoryId
 {
+    PGParams *params = [PGParams new];
+    if (categoryId && categoryId.length > 0) {
+        params[@"category_id"] = categoryId;
+    }
+    
     PGWeakSelf(self);
     [self.apiClient pg_makeGetRequest:^(PGRKRequestConfig *config) {
         config.route = PG_Channel_Category_Articles;
-        config.pattern = @{@"channelId":weakself.channelId, @"categoryId":categoryId};
+        config.params = params;
+        config.pattern = @{@"channelId":weakself.channelId};
         config.model = [PGArticleBanner new];
         config.keyPath = @"items";
-        config.isMockAPI = YES;
-        config.mockFileName = @"v1_article_channel_channelid_category_categoryid.json";
     } completion:^(id response) {
         weakself.articlesArray = response;
     } failure:^(NSError *error) {
-        
+        weakself.error = error;
+    }];
+}
+
+- (void)requestArticles:(NSString *)channelId categoryId:(NSString *)categoryId
+{
+    PGParams *params = [PGParams new];
+    if (categoryId && categoryId.length > 0) {
+        params[@"category_id"] = categoryId;
+    }
+    
+    PGWeakSelf(self);
+    [self.apiClient pg_makeGetRequest:^(PGRKRequestConfig *config) {
+        config.route = PG_Channel_Category_Articles;
+        config.params = params;
+        config.pattern = @{@"channelId":channelId};
+        config.model = [PGArticleBanner new];
+        config.keyPath = @"items";
+    } completion:^(id response) {
+        weakself.articlesArray = response;
+    } failure:^(NSError *error) {
+        weakself.error = error;
     }];
 }
 

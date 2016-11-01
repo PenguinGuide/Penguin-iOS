@@ -8,7 +8,8 @@
 
 typedef NS_ENUM(NSInteger, PGMessageContentType) {
     PGMessageContentTypeSystem,
-    PGMessageContentTypeReply
+    PGMessageContentTypeReply,
+    PGMessageContentTypeLikes
 };
 
 #import "PGBaseViewController.h"

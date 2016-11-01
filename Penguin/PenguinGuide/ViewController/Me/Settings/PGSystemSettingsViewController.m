@@ -57,7 +57,7 @@
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
 {
     if (section == 0) {
-        return 6;
+        return 5;
     }
     return 0;
 }
@@ -77,8 +77,6 @@
             [cell setCellWithDesc:@"用 户 协 议" content:nil isImage:NO];
         } else if (indexPath.item == 4) {
             [cell setCellWithDesc:@"评 分" content:nil isImage:NO];
-        } else if (indexPath.item == 5) {
-            [cell setCellWithDesc:@"邀 请 好 友" content:nil isImage:NO];
         }
         
         return cell;

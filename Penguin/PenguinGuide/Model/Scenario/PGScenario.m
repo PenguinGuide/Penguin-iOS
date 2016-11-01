@@ -13,8 +13,9 @@
 + (NSDictionary *)JSONKeyPathsByPropertyKey
 {
     return @{
-             @"image" : @"image",
+             @"image" : @"image_url",
              @"title": @"title",
+             @"scenarioId" : @"id",
              @"categoriesArray" : @"categories"
             };
 }

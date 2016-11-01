@@ -49,6 +49,7 @@
         }
         [weakself dismissLoading];
     }];
+    [self observeError:self.viewModel];
 }
 
 - (void)viewWillAppear:(BOOL)animated

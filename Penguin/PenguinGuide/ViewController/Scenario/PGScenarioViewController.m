@@ -20,6 +20,8 @@
 
 @property (nonatomic, strong) PGScenarioViewModel *viewModel;
 
+@property (nonatomic, strong) NSString *scenarioId;
+
 @property (nonatomic, strong) PGFeedsCollectionView *feedsCollectionView;
 @property (nonatomic, strong) UIButton *backButton;
 @property (nonatomic, strong) PGChannelCategoriesView *categoriesView;
@@ -29,6 +31,14 @@
 @end
 
 @implementation PGScenarioViewController
+
+- (id)initWithScenarioId:(NSString *)scenarioId
+{
+    if (self = [super init]) {
+        self.scenarioId = scenarioId;
+    }
+    return self;
+}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -41,7 +51,6 @@
     [self.view addSubview:self.backButton];
     
     self.viewModel = [[PGScenarioViewModel alloc] initWithAPIClient:self.apiClient];
-    [self.viewModel requestData];
     
     PGWeakSelf(self);
     [self observe:self.viewModel keyPath:@"feedsArray" block:^(id changedObject) {
@@ -54,6 +63,7 @@
             [weakself.imageView setWithImageURL:self.viewModel.scenario.image placeholder:nil completion:nil];
             [weakself.feedsCollectionView setHeaderView:self.imageView naviTitle:self.viewModel.scenario.title rightNaviButton:nil];
         }
+        [weakself dismissLoading];
     }];
     
     [self setNeedsStatusBarAppearanceUpdate];
@@ -64,13 +74,16 @@
     [super viewWillAppear:animated];
     
     [self.navigationController setNavigationBarHidden:YES animated:NO];
+    
+    if (self.viewModel.feedsArray.count == 0) {
+        [self showLoading];
+        [self.viewModel requestScenario:self.scenarioId];
+    }
 }
 
 - (void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
-    
-    [self.navigationController setNavigationBarHidden:NO animated:NO];
 }
 
 - (void)dealloc

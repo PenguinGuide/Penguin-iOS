@@ -104,9 +104,7 @@
 {
     // NOTE: these codes in viewDidLoad && viewWillLoad will not work since self.navigationController is nil for the first time
     [self.navigationController setNavigationBarHidden:YES animated:NO];
-    
-    self.parentViewController.navigationItem.leftBarButtonItem = nil;
-    self.parentViewController.navigationItem.titleView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"pg_home_logo"]];
+    [self.parentViewController.navigationItem setLeftBarButtonItem:nil];
 }
 
 #pragma mark - <PGFeedsCollectionViewDelegate>

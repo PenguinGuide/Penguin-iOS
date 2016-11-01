@@ -253,10 +253,10 @@
 
 #pragma mark - <PGExploreRecommendsHeaderViewDelegate>
 
-- (void)scenarioDidSelect:(NSString *)scenarioType
+- (void)scenarioDidSelect:(PGCategoryIcon *)scenario
 {
     if (self.feedsDelegate && [self.feedsDelegate respondsToSelector:@selector(scenarioDidSelect:)]) {
-        [self.feedsDelegate scenarioDidSelect:scenarioType];
+        [self.feedsDelegate scenarioDidSelect:scenario];
     }
 }
 

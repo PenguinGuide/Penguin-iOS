@@ -26,18 +26,16 @@
 
 @implementation PGScenarioViewModel
 
-- (void)requestData
+- (void)requestScenario:(NSString *)scenarioId
 {
-    self.scenarioId = @"111";
+    self.scenarioId = scenarioId;
     if (self.scenarioId && self.scenarioId.length > 0) {
         PGWeakSelf(self);
         [self.apiClient pg_makeGetRequest:^(PGRKRequestConfig *config) {
             config.route = PG_Scenario;
-            config.pattern = @{@"scenarioId":@""};
+            config.pattern = @{@"scenarioId":weakself.scenarioId};
             config.keyPath = nil;
             config.model = [PGScenario new];
-            config.isMockAPI = YES;
-            config.mockFileName = @"v1_scenario_scenarioid.json";
         } completion:^(id response) {
             weakself.scenario = [response firstObject];
             if (weakself.scenario) {
@@ -47,19 +45,21 @@
                 }
             }
         } failure:^(NSError *error) {
-            
+            weakself.error = error;
         }];
     }
 }
 
 - (void)requestFeeds:(PGScenarioCategory *)category
 {
+    PGParams *params = [PGParams new];
+    params[@"scene_id"] = self.scenarioId;
+    params[@"category_id"] = category.categoryId;
+    
     PGWeakSelf(self);
     [self.apiClient pg_makeGetRequest:^(PGRKRequestConfig *config) {
         config.route = PG_Scenario_Feeds;
         config.keyPath = @"items";
-        config.isMockAPI = YES;
-        config.mockFileName = @"v1_scenario_feeds_scenario_scenarioid_category_categoryid.json";
     } completion:^(id response) {
         NSDictionary *responseDict = [response firstObject];
         if (responseDict[@"items"] && [responseDict[@"items"] isKindOfClass:[NSArray class]]) {
@@ -107,7 +107,7 @@
             weakself.feedsArray = [NSArray arrayWithArray:models];
         }
     } failure:^(NSError *error) {
-        
+        weakself.error = error;
     }];
 }
 

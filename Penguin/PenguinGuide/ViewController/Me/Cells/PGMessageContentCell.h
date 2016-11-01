@@ -11,6 +11,6 @@
 
 @interface PGMessageContentCell : UICollectionViewCell
 
-- (void)setCellWithMessage:(PGMessage *)message;
+- (void)setCellWithMessage:(PGMessage *)message type:(NSString *)type;
 
 @end

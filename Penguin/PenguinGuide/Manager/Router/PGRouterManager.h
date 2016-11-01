@@ -19,4 +19,6 @@
 
 + (void)routeToHomePage;
 
++ (void)routeToScenarioPage:(NSString *)scenarioId link:(NSString *)link;
+
 @end

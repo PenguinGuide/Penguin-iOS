@@ -44,6 +44,11 @@
 		0F18E4991D7D64BF004377F1 /* pg_article_3.json in Resources */ = {isa = PBXBuildFile; fileRef = 0F18E4981D7D64BF004377F1 /* pg_article_3.json */; };
 		0F18E49B1D7D64C9004377F1 /* pg_article_4.json in Resources */ = {isa = PBXBuildFile; fileRef = 0F18E49A1D7D64C9004377F1 /* pg_article_4.json */; };
 		0F18E49D1D7D64D3004377F1 /* pg_article_5.json in Resources */ = {isa = PBXBuildFile; fileRef = 0F18E49C1D7D64D3004377F1 /* pg_article_5.json */; };
+		0F1C75B71DC70B980044C931 /* PGHistoryViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0F1C75B61DC70B980044C931 /* PGHistoryViewController.m */; };
+		0F1C75BA1DC70C320044C931 /* PGHistoryCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0F1C75B91DC70C320044C931 /* PGHistoryCell.m */; };
+		0F1C75BE1DC717130044C931 /* PGHistory.m in Sources */ = {isa = PBXBuildFile; fileRef = 0F1C75BD1DC717130044C931 /* PGHistory.m */; };
+		0F1C75C11DC7189B0044C931 /* PGHistoryContent.m in Sources */ = {isa = PBXBuildFile; fileRef = 0F1C75C01DC7189B0044C931 /* PGHistoryContent.m */; };
+		0F1C75C51DC71DDF0044C931 /* PGHistoryViewModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 0F1C75C41DC71DDF0044C931 /* PGHistoryViewModel.m */; };
 		0F21FEB41D9114B30036F14A /* PGArticleParagraphVideoCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0F21FEB31D9114B30036F14A /* PGArticleParagraphVideoCell.m */; };
 		0F21FEB71D9126720036F14A /* PGArticleParagraphFooterCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0F21FEB61D9126720036F14A /* PGArticleParagraphFooterCell.m */; };
 		0F21FEBA1D9140EF0036F14A /* PGArticleRelatedArticlesCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0F21FEB91D9140EF0036F14A /* PGArticleRelatedArticlesCell.m */; };
@@ -279,6 +284,16 @@
 		0F18E4981D7D64BF004377F1 /* pg_article_3.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = pg_article_3.json; sourceTree = "<group>"; };
 		0F18E49A1D7D64C9004377F1 /* pg_article_4.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = pg_article_4.json; sourceTree = "<group>"; };
 		0F18E49C1D7D64D3004377F1 /* pg_article_5.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = pg_article_5.json; sourceTree = "<group>"; };
+		0F1C75B51DC70B980044C931 /* PGHistoryViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PGHistoryViewController.h; sourceTree = "<group>"; };
+		0F1C75B61DC70B980044C931 /* PGHistoryViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PGHistoryViewController.m; sourceTree = "<group>"; };
+		0F1C75B81DC70C320044C931 /* PGHistoryCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PGHistoryCell.h; sourceTree = "<group>"; };
+		0F1C75B91DC70C320044C931 /* PGHistoryCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PGHistoryCell.m; sourceTree = "<group>"; };
+		0F1C75BC1DC717130044C931 /* PGHistory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PGHistory.h; sourceTree = "<group>"; };
+		0F1C75BD1DC717130044C931 /* PGHistory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PGHistory.m; sourceTree = "<group>"; };
+		0F1C75BF1DC7189B0044C931 /* PGHistoryContent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PGHistoryContent.h; sourceTree = "<group>"; };
+		0F1C75C01DC7189B0044C931 /* PGHistoryContent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PGHistoryContent.m; sourceTree = "<group>"; };
+		0F1C75C31DC71DDF0044C931 /* PGHistoryViewModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PGHistoryViewModel.h; sourceTree = "<group>"; };
+		0F1C75C41DC71DDF0044C931 /* PGHistoryViewModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PGHistoryViewModel.m; sourceTree = "<group>"; };
 		0F21FEB21D9114B30036F14A /* PGArticleParagraphVideoCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PGArticleParagraphVideoCell.h; sourceTree = "<group>"; };
 		0F21FEB31D9114B30036F14A /* PGArticleParagraphVideoCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PGArticleParagraphVideoCell.m; sourceTree = "<group>"; };
 		0F21FEB51D9126720036F14A /* PGArticleParagraphFooterCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PGArticleParagraphFooterCell.h; sourceTree = "<group>"; };
@@ -779,6 +794,35 @@
 			path = Article;
 			sourceTree = "<group>";
 		};
+		0F1C75B41DC70B8A0044C931 /* History */ = {
+			isa = PBXGroup;
+			children = (
+				0F1C75B51DC70B980044C931 /* PGHistoryViewController.h */,
+				0F1C75B61DC70B980044C931 /* PGHistoryViewController.m */,
+			);
+			path = History;
+			sourceTree = "<group>";
+		};
+		0F1C75BB1DC716EA0044C931 /* History */ = {
+			isa = PBXGroup;
+			children = (
+				0F1C75BC1DC717130044C931 /* PGHistory.h */,
+				0F1C75BD1DC717130044C931 /* PGHistory.m */,
+				0F1C75BF1DC7189B0044C931 /* PGHistoryContent.h */,
+				0F1C75C01DC7189B0044C931 /* PGHistoryContent.m */,
+			);
+			path = History;
+			sourceTree = "<group>";
+		};
+		0F1C75C21DC71D490044C931 /* History */ = {
+			isa = PBXGroup;
+			children = (
+				0F1C75C31DC71DDF0044C931 /* PGHistoryViewModel.h */,
+				0F1C75C41DC71DDF0044C931 /* PGHistoryViewModel.m */,
+			);
+			path = History;
+			sourceTree = "<group>";
+		};
 		0F21FEBB1D9150ED0036F14A /* Views */ = {
 			isa = PBXGroup;
 			children = (
@@ -947,6 +991,7 @@
 				0FA5F2E81D94DEE800E9242B /* Views */,
 				0F9E8E051DC5F6CF003027CF /* Collection */,
 				0F9E8E071DC5F6ED003027CF /* Message */,
+				0F1C75B41DC70B8A0044C931 /* History */,
 				0F9E8E061DC5F6CF003027CF /* Settings */,
 				0F3C7EF81D2F731B00284066 /* PGMeViewController.h */,
 				0F3C7EF91D2F731B00284066 /* PGMeViewController.m */,
@@ -1249,6 +1294,7 @@
 				0FA5F2F21D9501B800E9242B /* Me */,
 				0FA1B2A71DC203910022ECE2 /* Message */,
 				0F9E8E211DC5FD92003027CF /* Collection */,
+				0F1C75BB1DC716EA0044C931 /* History */,
 				0F59B9201D92771400DB9FCE /* User */,
 			);
 			path = Model;
@@ -1286,6 +1332,7 @@
 				0FA5F2F61D9504BA00E9242B /* Me */,
 				0FA1B2A31DC1FCC40022ECE2 /* Message */,
 				0F9E8E1D1DC5F7F6003027CF /* Collection */,
+				0F1C75C21DC71D490044C931 /* History */,
 				0F5274F51D9B72B6006A5A56 /* Good */,
 				0F55BA851D701A6D00D9D159 /* Channel */,
 				0FAADD161D767F6C00FC7933 /* Scenario */,
@@ -1564,6 +1611,8 @@
 				0FA1B29B1DC1F4F40022ECE2 /* PGMessageCell.m */,
 				0FA1B2A01DC1FA390022ECE2 /* PGMessageContentCell.h */,
 				0FA1B2A11DC1FA390022ECE2 /* PGMessageContentCell.m */,
+				0F1C75B81DC70C320044C931 /* PGHistoryCell.h */,
+				0F1C75B91DC70C320044C931 /* PGHistoryCell.m */,
 			);
 			path = Cells;
 			sourceTree = "<group>";
@@ -2087,6 +2136,7 @@
 				0FA1B2AD1DC204DF0022ECE2 /* PGMessageContent.m in Sources */,
 				0F3C7EF11D2F72E700284066 /* PGHomeViewController.m in Sources */,
 				0F51B31F1D6D87C800B4690F /* PGTopicBanner.m in Sources */,
+				0F1C75B71DC70B980044C931 /* PGHistoryViewController.m in Sources */,
 				0FEDA3BF1D8F88BF004ECDE2 /* PGArticleParagraphInfoCell.m in Sources */,
 				0F04BF171DC0A40D001E7D31 /* PGArticleParagraphSingleGoodCell.m in Sources */,
 				0FA5F2F51D9501D400E9242B /* PGMe.m in Sources */,
@@ -2145,6 +2195,8 @@
 				0FE6D8661D9BB767000B8B46 /* PGGoodInfoCell.m in Sources */,
 				0FAF64A21DAE2EC100543513 /* PGPwdLoginView.m in Sources */,
 				0FD590D61D38BB3100731962 /* PGHomeToArticleTransition.m in Sources */,
+				0F1C75C11DC7189B0044C931 /* PGHistoryContent.m in Sources */,
+				0F1C75C51DC71DDF0044C931 /* PGHistoryViewModel.m in Sources */,
 				0F37654C1D6F257F007B9481 /* PGTopicGoodCell.m in Sources */,
 				0F9E8E2B1DC64F3A003027CF /* PGNavigationView.m in Sources */,
 				0F09D0621DAC9B9800FDA3F2 /* PGCommentsViewModel.m in Sources */,
@@ -2179,6 +2231,7 @@
 				0F0F447F1D34FCFD007B90F2 /* PGImageBanner.m in Sources */,
 				0F2DC2941D32973500277C9E /* PGHomeViewModel.m in Sources */,
 				0F877A3C1D7D15D0007BDBE9 /* PGTopicViewModel.m in Sources */,
+				0F1C75BE1DC717130044C931 /* PGHistory.m in Sources */,
 				0F9308461D93C0FF00EA3D43 /* PGCommentTextView.m in Sources */,
 				0F7298711D96578F001821C9 /* PGVideoPlayerViewController.m in Sources */,
 				0F3C7EFA1D2F731B00284066 /* PGMeViewController.m in Sources */,
@@ -2219,6 +2272,7 @@
 				0F3C7EF41D2F72FA00284066 /* PGExploreViewController.m in Sources */,
 				0FED89A11DADEAED0081B999 /* PGSignupViewController.m in Sources */,
 				0FD590D31D38B71600731962 /* PGBaseViewController+TransitionAnimation.m in Sources */,
+				0F1C75BA1DC70C320044C931 /* PGHistoryCell.m in Sources */,
 				0FAF649C1DAE0E0100543513 /* PGLoginSocialView.m in Sources */,
 				0F0008C21D71724A00BED6FA /* PGChannelAllCategoriesHeaderView.m in Sources */,
 				0FC1600C1DACCDEA00EC462C /* PGLoginViewController.m in Sources */,

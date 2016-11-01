@@ -13,10 +13,10 @@
 + (NSDictionary *)JSONKeyPathsByPropertyKey
 {
     return @{
-             @"discountPrice" : @"discount_price",
+             @"discountPrice" : @[@"discount_price", @"price"],
              @"originalPrice" : @"original_price",
              @"name" : @"name",
-             @"image" : @"image",
+             @"image" : @[@"image", @"image_url"],
              @"unit" : @"unit",
              @"desc" : @"desc",
              @"time" : @"time",
@@ -32,9 +32,19 @@
             };
 }
 
-+ (NSValueTransformer *)discountPriceJSONTransformer
++ (NSValueTransformer *)imageJSONTransformer
+{
+    return [PGGood stringTransformer:@[@"image", @"image_url"]];
+}
+
++ (NSValueTransformer *)goodIdJSONTransformer
 {
     return [NSValueTransformer valueTransformerForName:PGStringValueTransformer];
+}
+
++ (NSValueTransformer *)discountPriceJSONTransformer
+{
+    return [PGGood stringTransformer:@[@"discount_price", @"price"]];
 }
 
 + (NSValueTransformer *)originalPriceJSONTransformer

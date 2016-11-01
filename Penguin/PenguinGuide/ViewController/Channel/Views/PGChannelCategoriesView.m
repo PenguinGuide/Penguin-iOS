@@ -53,18 +53,14 @@
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
 {
-    return self.categoriesArray.count+1;
+    return self.categoriesArray.count;
 }
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
     PGChannelCategoryCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:CategoryCell forIndexPath:indexPath];
     
-    if (indexPath.item == self.categoriesArray.count) {
-        [cell setMoreCategoryCell];
-    } else {
-        [cell setCellWithCategory:self.categoriesArray[indexPath.item]];
-    }
+    [cell setCellWithCategory:self.categoriesArray[indexPath.item]];
     
     if (indexPath.item == self.currentSelectedIndex) {
         [cell setSelected:YES];
@@ -87,17 +83,15 @@
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (indexPath.item == self.categoriesArray.count) {
-        if (self.delegate && [self.delegate respondsToSelector:@selector(moreCategoryDidSelect)]) {
-            [self.delegate moreCategoryDidSelect];
-        }
-    } else {
-        PGChannelCategoryCell *lastSelectedCell = (PGChannelCategoryCell *)[collectionView cellForItemAtIndexPath:[NSIndexPath indexPathForItem:self.currentSelectedIndex inSection:0]];
-        [lastSelectedCell setSelected:NO];
-        
-        self.currentSelectedIndex = indexPath.item;
-        PGChannelCategoryCell *currentSelectedCell = (PGChannelCategoryCell *)[collectionView cellForItemAtIndexPath:indexPath];
-        [currentSelectedCell setSelected:YES];
+    PGChannelCategoryCell *lastSelectedCell = (PGChannelCategoryCell *)[collectionView cellForItemAtIndexPath:[NSIndexPath indexPathForItem:self.currentSelectedIndex inSection:0]];
+    [lastSelectedCell setSelected:NO];
+    
+    self.currentSelectedIndex = indexPath.item;
+    PGChannelCategoryCell *currentSelectedCell = (PGChannelCategoryCell *)[collectionView cellForItemAtIndexPath:indexPath];
+    [currentSelectedCell setSelected:YES];
+    
+    if (self.delegate && [self.delegate respondsToSelector:@selector(categoryDidSelect:)]) {
+        [self.delegate categoryDidSelect:self.categoriesArray[self.currentSelectedIndex]];
     }
 }
 

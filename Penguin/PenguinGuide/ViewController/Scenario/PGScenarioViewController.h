@@ -10,4 +10,6 @@
 
 @interface PGScenarioViewController : PGBaseViewController
 
+- (id)initWithScenarioId:(NSString *)scenarioId;
+
 @end

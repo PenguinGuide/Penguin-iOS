@@ -71,7 +71,7 @@
     
     if (self.viewModel.topic == nil) {
         [self showLoading];
-        [self.viewModel requestData];
+        [self.viewModel requestTopic:self.topicId];
     }
     
     [self.navigationController setNavigationBarHidden:YES animated:NO];

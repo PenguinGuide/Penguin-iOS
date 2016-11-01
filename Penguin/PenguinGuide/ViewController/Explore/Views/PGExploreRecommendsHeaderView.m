@@ -133,7 +133,9 @@ static NSString *const ScenarioCell = @"ScenarioCell";
 - (void)scenarioButtonDidClicked:(id)sender
 {
     if (self.delegate && [self.delegate respondsToSelector:@selector(scenarioDidSelect:)]) {
-        [self.delegate scenarioDidSelect:nil];
+        UIButton *button = (UIButton *)sender;
+        PGCategoryIcon *scenario = self.scenariosArray[button.tag];
+        [self.delegate scenarioDidSelect:scenario];
     }
 }
 

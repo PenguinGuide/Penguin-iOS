@@ -12,6 +12,7 @@
 #import "PGLoginViewController.h"
 #import "PGHomeViewController.h"
 #import "PGChannelViewController.h"
+#import "PGScenarioViewController.h"
 #import "PGTopicViewController.h"
 #import "PGArticleViewController.h"
 #import "PGGoodViewController.h"
@@ -47,8 +48,11 @@
     
     [[PGRouter sharedInstance] registerRoute:@"qiechihe://topic" toHandler:^(NSDictionary *params) {
         if (PGGlobal.rootNavigationController) {
-            PGTopicViewController *topicVC = [[PGTopicViewController alloc] initWithTopicId:@""];
-            [PGGlobal.rootNavigationController pushViewController:topicVC animated:YES];
+            if (params[@"topicId"]) {
+                NSString *topicId = params[@"topicId"];
+                PGTopicViewController *topicVC = [[PGTopicViewController alloc] initWithTopicId:topicId];
+                [PGGlobal.rootNavigationController pushViewController:topicVC animated:YES];
+            }
         }
     }];
     
@@ -91,6 +95,16 @@
             }
         }
     }];
+    
+    [[PGRouter sharedInstance] registerRoute:@"qiechihe://scenario" toHandler:^(NSDictionary *params) {
+        if (PGGlobal.rootNavigationController) {
+            if (params[@"scenarioId"]) {
+                NSString *scenarioId = params[@"scenarioId"];
+                PGScenarioViewController *scenarioVC = [[PGScenarioViewController alloc] initWithScenarioId:scenarioId];
+                [PGGlobal.rootNavigationController pushViewController:scenarioVC animated:YES];
+            }
+        }
+    }];
 }
 
 + (void)routeToLoginPage
@@ -106,6 +120,16 @@
 + (void)routeToTopicPage
 {
     [[PGRouter sharedInstance] openURL:@"qiechihe://topic"];
+}
+
++ (void)routeToScenarioPage:(NSString *)scenarioId link:(NSString *)link
+{
+    if (link && link.length > 0) {
+        [[PGRouter sharedInstance] openURL:link];
+    } else {
+        NSString *url = [NSString stringWithFormat:@"qiechihe://scenario?scenarioId=%@", scenarioId];
+        [[PGRouter sharedInstance] openURL:url];
+    }
 }
 
 @end

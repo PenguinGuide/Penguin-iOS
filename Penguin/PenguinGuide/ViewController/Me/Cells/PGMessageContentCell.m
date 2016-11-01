@@ -33,16 +33,22 @@
     [self.contentView addSubview:self.messageLabel];
     [self.contentView addSubview:self.dotImageView];
     
-    UIView *horizontalLine = [[UIView alloc] initWithFrame:CGRectMake(0, self.pg_height-1/[UIScreen mainScreen].scale, self.pg_width, 1/[UIScreen mainScreen].scale)];
+    UIView *horizontalLine = [[UIView alloc] initWithFrame:CGRectMake(47, self.pg_height-1/[UIScreen mainScreen].scale, self.pg_width, 1/[UIScreen mainScreen].scale)];
     horizontalLine.backgroundColor = [UIColor colorWithHexString:@"F1F1F1"];
     [self.contentView addSubview:horizontalLine];
 }
 
-- (void)setCellWithMessage:(PGMessage *)message
+- (void)setCellWithMessage:(PGMessage *)message type:(NSString *)type
 {
     if (message) {
         [self.iconImageView setWithImageURL:message.content.avatar placeholder:nil completion:nil];
-        [self.messageLabel setText:[NSString stringWithFormat:@"%@回复了你：%@", message.content.nickname, message.content.content]];
+        if ([type isEqualToString:@"system"]) {
+            [self.messageLabel setText:message.content.content];
+        } else if ([type isEqualToString:@"reply"]) {
+            [self.messageLabel setText:[NSString stringWithFormat:@"%@回复了你：%@", message.content.nickname, message.content.content]];
+        } else if ([type isEqualToString:@"likes"]) {
+            [self.messageLabel setText:[NSString stringWithFormat:@"%@赞了你：%@", message.content.nickname, message.content.content]];
+        }
     }
 }
 
@@ -51,6 +57,7 @@
     if (!_iconImageView) {
         _iconImageView = [[UIImageView alloc] initWithFrame:CGRectMake(15, 14, 22, 22)];
         _iconImageView.contentMode = UIViewContentModeScaleAspectFill;
+        _iconImageView.clipsToBounds = YES;
         
         UIImageView *maskImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 22, 22)];
         maskImageView.image = [[UIImage imageNamed:@"pg_avatar_white_corner_mask"] resizableImageWithCapInsets:UIEdgeInsetsZero resizingMode:UIImageResizingModeStretch];
@@ -72,7 +79,7 @@
 - (UIImageView *)dotImageView
 {
     if (!_dotImageView) {
-        _dotImageView = [[UIImageView alloc] initWithFrame:CGRectMake(UISCREEN_WIDTH-10, 10, 6, 6)];
+        _dotImageView = [[UIImageView alloc] initWithFrame:CGRectMake(UISCREEN_WIDTH-15, 10, 6, 6)];
         _dotImageView.image = [UIImage imageNamed:@"pg_message_red_dot"];
     }
     return _dotImageView;

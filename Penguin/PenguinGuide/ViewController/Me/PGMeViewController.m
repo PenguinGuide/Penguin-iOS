@@ -14,6 +14,7 @@
 #import "PGSystemSettingsViewController.h"
 #import "PGCollectionsViewController.h"
 #import "PGMessageViewController.h"
+#import "PGHistoryViewController.h"
 
 #import "PGMeViewModel.h"
 
@@ -196,6 +197,9 @@
     } else if (indexPath.item == 2) {
         PGMessageViewController *messageVC = [[PGMessageViewController alloc] init];
         [self.navigationController pushViewController:messageVC animated:YES];
+    } else if (indexPath.item == 3) {
+        PGHistoryViewController *historyVC = [[PGHistoryViewController alloc] init];
+        [self.navigationController pushViewController:historyVC animated:YES];
     }
 }
 

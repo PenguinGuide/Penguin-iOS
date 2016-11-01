@@ -13,6 +13,7 @@
 
 @property (nonatomic, strong) NSString *image;
 @property (nonatomic, strong) NSString *title;
+@property (nonatomic, strong) NSString *scenarioId;
 @property (nonatomic, strong) NSArray *categoriesArray;
 
 @end

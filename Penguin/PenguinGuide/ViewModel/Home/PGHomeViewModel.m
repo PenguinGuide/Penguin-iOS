@@ -56,10 +56,10 @@
 
 - (void)requestFeeds
 {
-    self.maxId = nil;
+    self.cursor = nil;
     
     PGParams *params = [PGParams new];
-    params[ParamsPage] = self.maxId;
+    params[ParamsPageCursor] = self.cursor;
     params[ParamsPerPage] = @10;
     
     PGWeakSelf(self);
@@ -70,8 +70,8 @@
     } completion:^(id response) {
         NSDictionary *responseDict = [response firstObject];
         if (responseDict[@"items"] && [responseDict[@"items"] isKindOfClass:[NSArray class]]) {
-            if ([responseDict[@"items"] count] > 0 && responseDict[@"max_id"]) {
-                weakself.maxId = responseDict[@"max_id"];
+            if ([responseDict[@"items"] count] > 0 && responseDict[@"cursor"]) {
+                weakself.cursor = responseDict[@"cursor"];
             }
             NSMutableArray *models = [NSMutableArray new];
             for (NSDictionary *dict in responseDict[@"items"]) {
@@ -124,7 +124,7 @@
 - (void)loadNextPage
 {
     PGParams *params = [PGParams new];
-    params[ParamsPage] = self.maxId;
+    params[ParamsPageCursor] = self.cursor;
     params[ParamsPerPage] = @10;
     
     // NOTE: use reloadData or reloadSections http://blog.csdn.net/iosswift/article/details/50001145
@@ -137,8 +137,8 @@
     } completion:^(id response) {
         NSDictionary *responseDict = [response firstObject];
         if (responseDict[@"items"] && [responseDict[@"items"] isKindOfClass:[NSArray class]]) {
-            if ([responseDict[@"items"] count] > 0 && responseDict[@"max_id"]) {
-                weakself.maxId = responseDict[@"max_id"];
+            if ([responseDict[@"items"] count] > 0 && responseDict[@"cursor"]) {
+                weakself.cursor = responseDict[@"cursor"];
             }
             NSMutableArray *models = [NSMutableArray arrayWithArray:weakself.feedsArray];
             for (NSDictionary *dict in responseDict[@"items"]) {

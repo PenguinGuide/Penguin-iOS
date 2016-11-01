@@ -8,10 +8,11 @@
 
 #import <UIKit/UIKit.h>
 #import "PGPagedScrollView.h"
+#import "PGCategoryIcon.h"
 
 @protocol PGExploreRecommendsHeaderViewDelegate <NSObject>
 
-- (void)scenarioDidSelect:(NSString *)scenarioType;
+- (void)scenarioDidSelect:(PGCategoryIcon *)scenario;
 
 @end
 

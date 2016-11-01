@@ -35,6 +35,13 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+    if (self.type == PGMessageContentTypeSystem) {
+        [self setNavigationTitle:@"系统消息"];
+    } else if (self.type == PGMessageContentTypeReply) {
+        [self setNavigationTitle:@"收到的回复"];
+    } else if (self.type == PGMessageContentTypeLikes) {
+        [self setNavigationTitle:@"收到的赞"];
+    }
     
     [self.view addSubview:self.messagesCollectionView];
     
@@ -67,6 +74,8 @@
             [self.viewModel requestSystemMessages];
         } else if (self.type == PGMessageContentTypeReply) {
             [self.viewModel requestReplyMessages];
+        } else if (self.type == PGMessageContentTypeLikes) {
+            [self.viewModel requestLikesMessages];
         }
     }
 }
@@ -86,7 +95,13 @@
     PGMessageContentCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:MessageCell forIndexPath:indexPath];
     
     PGMessage *message = self.viewModel.messages[indexPath.item];
-    [cell setCellWithMessage:message];
+    if (self.type == PGMessageContentTypeSystem) {
+        [cell setCellWithMessage:message type:@"system"];
+    } else if (self.type == PGMessageContentTypeReply) {
+        [cell setCellWithMessage:message type:@"reply"];
+    } else if (self.type == PGMessageContentTypeLikes) {
+        [cell setCellWithMessage:message type:@"likes"];
+    }
     
     return cell;
 }
