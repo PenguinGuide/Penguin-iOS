@@ -79,7 +79,7 @@
 - (UILabel *)titleLabel {
     if(_titleLabel == nil) {
         CGFloat width = (UISCREEN_WIDTH-8-11-8)/2;
-        _titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(20, self.goodImageView.pg_bottom, width-40, 30)];
+        _titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(20, self.goodImageView.pg_bottom+5, width-40, 30)];
         _titleLabel.textColor = Theme.colorText;
         _titleLabel.font = Theme.fontSmallBold;
         _titleLabel.numberOfLines = 2;

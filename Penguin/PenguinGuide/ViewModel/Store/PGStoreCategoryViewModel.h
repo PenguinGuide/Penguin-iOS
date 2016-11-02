@@ -13,4 +13,7 @@
 
 @property (nonatomic, strong, readonly) NSArray *goodsArray;
 
+- (void)requestCategoryGoods:(NSString *)categoryId;
+- (void)requestCategoryGoods:(NSString *)categoryId sort:(NSString *)sort;
+
 @end

@@ -52,17 +52,24 @@
 
 - (void)requestFeeds:(PGScenarioCategory *)category
 {
+    self.cursor = nil;
+    
     PGParams *params = [PGParams new];
-    params[@"scene_id"] = self.scenarioId;
+    params[ParamsPageCursor] = self.cursor;
+    params[ParamsPerPage] = @10;
     params[@"category_id"] = category.categoryId;
     
     PGWeakSelf(self);
     [self.apiClient pg_makeGetRequest:^(PGRKRequestConfig *config) {
         config.route = PG_Scenario_Feeds;
+        config.pattern = @{@"scenarioId":weakself.scenarioId};
         config.keyPath = @"items";
     } completion:^(id response) {
         NSDictionary *responseDict = [response firstObject];
         if (responseDict[@"items"] && [responseDict[@"items"] isKindOfClass:[NSArray class]]) {
+            if ([responseDict[@"items"] count] > 0 && responseDict[@"cursor"]) {
+                weakself.cursor = responseDict[@"cursor"];
+            }
             NSMutableArray *models = [NSMutableArray new];
             for (NSDictionary *dict in responseDict[@"items"]) {
                 if (dict[@"type"]) {
@@ -109,6 +116,11 @@
     } failure:^(NSError *error) {
         weakself.error = error;
     }];
+}
+
+- (void)loadNextPage
+{
+    
 }
 
 @end

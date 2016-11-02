@@ -346,6 +346,7 @@ static const int DefaultMaxConcurrentConnections = 5;
     
     __block NSData *imageData = UIImageJPEGRepresentation(config.image, 0.9f);
     
+    // http://blog.csdn.net/a645258072/article/details/51728806
     NSString *mimeType = @"image/jpeg";
     NSString *finalStr = [NSString stringWithFormat:@"data:%@;base64,%@", mimeType, [imageData base64EncodedStringWithOptions:0]];
     

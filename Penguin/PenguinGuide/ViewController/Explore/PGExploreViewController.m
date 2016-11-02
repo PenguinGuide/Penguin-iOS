@@ -40,7 +40,7 @@
     self.viewModel = [[PGExploreViewModel alloc] initWithAPIClient:self.apiClient];
     
     PGWeakSelf(self);
-    [self observe:self.viewModel keyPath:@"bannersArray" block:^(id changedObject) {
+    [self observe:self.viewModel keyPath:@"feedsArray" block:^(id changedObject) {
         NSArray *bannersArray = changedObject;
         if (bannersArray && [bannersArray isKindOfClass:[NSArray class]]) {
             [weakself.feedsCollectionView reloadData];
@@ -63,7 +63,7 @@
     // NOTE: put it in viewWillAppear doesn't work
     [self setNeedsStatusBarAppearanceUpdate];
     
-    if (self.viewModel.bannersArray.count == 0) {
+    if (self.viewModel.feedsArray.count == 0) {
         [self showLoading];
         [self.viewModel requestData];
     }
@@ -130,7 +130,7 @@
 
 - (NSArray *)feedsArray
 {
-    return self.viewModel.bannersArray;
+    return self.viewModel.feedsArray;
 }
 
 - (CGSize)feedsHeaderSize
@@ -150,25 +150,24 @@
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    id banner = self.viewModel.bannersArray[indexPath.section];
+    id banner = self.viewModel.feedsArray[indexPath.section];
     
     if ([banner isKindOfClass:[PGArticleBanner class]]) {
         PGArticleBanner *articleBanner = (PGArticleBanner *)banner;
-        [[PGRouter sharedInstance] openURL:articleBanner.link];
+        PGArticleViewController *articleVC = [[PGArticleViewController alloc] initWithArticleId:articleBanner.articleId animated:NO];
+        [self.navigationController pushViewController:articleVC animated:YES];
     } else if ([banner isKindOfClass:[PGTopicBanner class]]) {
         PGTopicBanner *topicBanner = (PGTopicBanner *)banner;
         [[PGRouter sharedInstance] openURL:topicBanner.link];
+    } else if ([banner isKindOfClass:[PGSingleGoodBanner class]]) {
+        PGSingleGoodBanner *singleGoodBanner = (PGSingleGoodBanner *)banner;
+        [[PGRouter sharedInstance] openURL:singleGoodBanner.link];
     }
 }
 
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
-
 - (PGFeedsCollectionView *)feedsCollectionView {
-	if(_feedsCollectionView == nil) {
-		_feedsCollectionView = [[PGFeedsCollectionView alloc] initWithFrame:CGRectMake(0, 64, UISCREEN_WIDTH, UISCREEN_HEIGHT-50-64) collectionViewLayout:[UICollectionViewFlowLayout new]];
+    if(_feedsCollectionView == nil) {
+        _feedsCollectionView = [[PGFeedsCollectionView alloc] initWithFrame:CGRectMake(0, 64, UISCREEN_WIDTH, UISCREEN_HEIGHT-50-64) collectionViewLayout:[UICollectionViewFlowLayout new]];
         _feedsCollectionView.feedsDelegate = self;
         
         __block PGFeedsCollectionView *collectionView = _feedsCollectionView;
@@ -184,8 +183,8 @@
                 [collectionView endBottomRefreshing];
             });
         }];
-	}
-	return _feedsCollectionView;
+    }
+    return _feedsCollectionView;
 }
 
 - (PGNavigationView *)naviView
@@ -194,6 +193,11 @@
         _naviView = [PGNavigationView defaultNavigationView];
     }
     return _naviView;
+}
+
+- (void)didReceiveMemoryWarning {
+    [super didReceiveMemoryWarning];
+    // Dispose of any resources that can be recreated.
 }
 
 @end

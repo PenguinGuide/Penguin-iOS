@@ -82,6 +82,13 @@
     return UIEdgeInsetsMake(10, 8, 10, 8);
 }
 
+- (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    if (self.goodsDelegate && [self.goodsDelegate respondsToSelector:@selector(collectionView:didSelectItemAtIndexPath:)]) {
+        [self.goodsDelegate collectionView:collectionView didSelectItemAtIndexPath:indexPath];
+    }
+}
+
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
     if (self.goodsDelegate && [self.goodsDelegate respondsToSelector:@selector(scrollViewDidScroll:)]) {

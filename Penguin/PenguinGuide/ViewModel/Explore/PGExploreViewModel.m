@@ -21,7 +21,7 @@
 
 @property (nonatomic, strong, readwrite) NSArray *recommendsArray;
 @property (nonatomic, strong, readwrite) NSArray *scenariosArray;
-@property (nonatomic, strong, readwrite) NSArray *bannersArray;
+@property (nonatomic, strong, readwrite) NSArray *feedsArray;
 
 @end
 
@@ -101,7 +101,7 @@
                     }
                 }
             }
-            weakself.bannersArray = [NSArray arrayWithArray:models];
+            weakself.feedsArray = [NSArray arrayWithArray:models];
         }
     } failure:^(NSError *error) {
         

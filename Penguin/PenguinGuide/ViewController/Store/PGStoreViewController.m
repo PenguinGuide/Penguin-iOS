@@ -136,7 +136,7 @@
 
 - (void)categoryDidSelect:(PGCategoryIcon *)category
 {
-    PGStoreCategoryViewController *categoryVC = [[PGStoreCategoryViewController alloc] init];
+    PGStoreCategoryViewController *categoryVC = [[PGStoreCategoryViewController alloc] initWithCategoryId:category.categoryId];
     [self.navigationController pushViewController:categoryVC animated:YES];
 }
 

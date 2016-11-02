@@ -93,7 +93,9 @@
 
 @property (nonatomic, strong) NSArray *items;
 @property (nonatomic, strong) UITableView *popoverTableView;
+@property (nonatomic, strong) UIView *dimView;
 @property (nonatomic, strong) PGPopoverArrow *arrowView;
+@property (nonatomic, strong) PGPopoverItem *currentSelectedItem;
 @property (nonatomic, assign) CGFloat itemHeight;
 
 @end
@@ -107,6 +109,7 @@
     popover.itemHeight = itemHeight;
     
     popover.popoverTableView.frame = CGRectMake(0, 0, 160, itemHeight*items.count);
+    popover.currentSelectedItem = popover.items[0];
     
     return popover;
 }
@@ -125,15 +128,17 @@
         
         [self.popoverTableView registerClass:[PGPopoverCell class] forCellReuseIdentifier:PopoverCell];
         
+        self.dimView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, frame.size.width, frame.size.height)];
+        self.dimView.backgroundColor = [UIColor colorWithWhite:0.f alpha:0.5f];
+        self.dimView.userInteractionEnabled = YES;
+        UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(viewTapped)];
+        [self.dimView addGestureRecognizer:tapGesture];
+        [self addSubview:self.dimView];
+        
         self.arrowView = [[PGPopoverArrow alloc] initWithFrame:CGRectMake(0, 0, 12, 10)];
         self.arrowView.backgroundColor = [UIColor clearColor];
         [self addSubview:self.arrowView];
         [self insertSubview:self.popoverTableView aboveSubview:self.arrowView];
-        
-        self.backgroundColor = [UIColor colorWithWhite:0.f alpha:0.5f];
-        
-        UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(viewTapped)];
-        [self addGestureRecognizer:tapGesture];
     }
     return self;
 }
@@ -195,6 +200,11 @@
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
     if (self.delegate && [self.delegate respondsToSelector:@selector(itemDidSelect:)]) {
+        if (self.currentSelectedItem) {
+            self.currentSelectedItem.selected = NO;
+        }
+        self.currentSelectedItem = self.items[indexPath.row];
+        self.currentSelectedItem.selected = YES;
         [self.delegate itemDidSelect:indexPath.row];
     }
     

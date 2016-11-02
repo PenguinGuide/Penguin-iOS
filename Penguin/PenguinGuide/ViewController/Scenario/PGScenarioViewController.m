@@ -130,11 +130,17 @@
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    id banner = self.viewModel.feedsArray[indexPath.item];
-    
+    id banner = self.viewModel.feedsArray[indexPath.section];
     if ([banner isKindOfClass:[PGArticleBanner class]]) {
         PGArticleBanner *articleBanner = (PGArticleBanner *)banner;
-        [[PGRouter sharedInstance] openURL:articleBanner.link];
+        PGArticleViewController *articleVC = [[PGArticleViewController alloc] initWithArticleId:articleBanner.articleId animated:NO];
+        [self.navigationController pushViewController:articleVC animated:YES];
+    } else if ([banner isKindOfClass:[PGTopicBanner class]]) {
+        PGTopicBanner *topicBanner = (PGTopicBanner *)banner;
+        [[PGRouter sharedInstance] openURL:topicBanner.link];
+    } else if ([banner isKindOfClass:[PGSingleGoodBanner class]]) {
+        PGSingleGoodBanner *singleGoodBanner = (PGSingleGoodBanner *)banner;
+        [[PGRouter sharedInstance] openURL:singleGoodBanner.link];
     }
 }
 

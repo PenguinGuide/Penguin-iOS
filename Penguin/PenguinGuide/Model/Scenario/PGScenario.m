@@ -14,7 +14,7 @@
 {
     return @{
              @"image" : @"image_url",
-             @"title": @"title",
+             @"title": @"name",
              @"scenarioId" : @"id",
              @"categoriesArray" : @"categories"
             };

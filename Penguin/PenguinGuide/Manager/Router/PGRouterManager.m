@@ -132,4 +132,14 @@
     }
 }
 
++ (void)routeToGoodDetailPage:(NSString *)goodId link:(NSString *)link
+{
+    if (link && link.length > 0) {
+        [[PGRouter sharedInstance] openURL:link];
+    } else {
+        NSString *url = [NSString stringWithFormat:@"qiechihe://goods?goodsId=%@", goodId];
+        [[PGRouter sharedInstance] openURL:url];
+    }
+}
+
 @end

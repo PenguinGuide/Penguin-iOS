@@ -10,4 +10,6 @@
 
 @interface PGStoreCategoryViewController : PGBaseViewController
 
+- (id)initWithCategoryId:(NSString *)categoryId;
+
 @end

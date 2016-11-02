@@ -121,7 +121,8 @@
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
     if (self.delegate && [self.delegate respondsToSelector:@selector(categoryDidSelect:)]) {
-        [self.delegate categoryDidSelect:nil];
+        PGCategoryIcon *icon = self.categoriesArray[indexPath.item];
+        [self.delegate categoryDidSelect:icon];
     }
 }
 

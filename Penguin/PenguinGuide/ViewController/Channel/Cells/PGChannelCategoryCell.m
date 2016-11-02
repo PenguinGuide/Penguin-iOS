@@ -62,6 +62,7 @@
 - (UIImageView *)categoryImageView {
 	if(_categoryImageView == nil) {
 		_categoryImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, self.pg_width, self.pg_height)];
+        _categoryImageView.clipsToBounds = YES;
         _categoryImageView.contentMode = UIViewContentModeScaleAspectFill;
         _categoryImageView.backgroundColor = Theme.colorText;
 	}

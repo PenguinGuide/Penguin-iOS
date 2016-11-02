@@ -24,12 +24,12 @@
 #define PG_Search                       @"/search"
 
 #define PG_Scenario                     @"/scenario/:scenarioId"
-#define PG_Scenario_Feeds               @"/scenario/feeds/scenario/:scenarioId/category/:categoryId"
+#define PG_Scenario_Feeds               @"/feeds/scenario/:scenarioId"
 
 #define PG_Good                         @"/goods/:goodId"
 #define PG_Goods_Collection             @"/goods_collection/:collectionId"
 #define PG_Related_Goods                @"/goods/related/:goodId"
-#define PG_Store_Category_Goods         @"/goods/category/:categoryId"
+#define PG_Store_Category_Goods         @"/category/:categoryId/goods"
 
 #define PG_Topic                        @"/topic/:topicId"
 
