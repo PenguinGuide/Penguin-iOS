@@ -22,6 +22,7 @@
 #import "UIIMageView+PGImageView.h"
 
 #import "PGMacros.h"
+#import "PGNotificationKeys.h"
 #import "PGGlobalObject.h"
 #import "PGAPIList.h"
 #import "PGParams.h"

@@ -13,5 +13,9 @@
 @property (nonatomic, strong) NSString *tabTitle;
 @property (nonatomic, strong) NSString *tabImage;
 @property (nonatomic, strong) NSString *tabHighlightImage;
+@property (nonatomic, assign) BOOL shouldShowDotView;
+
+- (void)showDotView;
+- (void)hideDotView;
 
 @end

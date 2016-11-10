@@ -57,10 +57,12 @@
     [PGAlibcTraderManager registerAlibcTraderSDK];
     [PGAnalytics setup:launchOptions];
     
+    // Remote Notifications
+    UIUserNotificationSettings *settings = [UIUserNotificationSettings settingsForTypes:UIUserNotificationTypeBadge|UIUserNotificationTypeSound|UIUserNotificationTypeAlert
+                                                                             categories:nil];
+    [[UIApplication sharedApplication] registerUserNotificationSettings:settings];
+    
     //[PGLaunchAds sharedInstance];
-    
-    
-        
     PGHomeViewController *homeVC = [[PGHomeViewController alloc] init];
     PGExploreViewController *exploreVC = [[PGExploreViewController alloc] init];
     PGStoreViewController *storeVC = [[PGStoreViewController alloc] init];
@@ -102,6 +104,40 @@
     return YES;
 }
 
+- (void)application:(UIApplication *)application didRegisterUserNotificationSettings:(UIUserNotificationSettings *)notificationSettings
+{
+    [application registerForRemoteNotifications];
+}
+
+/*
+ * Each time your app runs on a device, it fetches this token from APNs and forwards it to your provider.
+ * Your provider stores the token and uses it when sending notifications to that particular app and device.
+ * The token itself is opaque and persistent, changing only when a device’s data and settings are erased
+ * Only APNs can decode and read a device token.
+ */
+- (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken
+{
+    NSString *token = [NSString stringWithFormat:@"%@", deviceToken];
+    token = [token stringByReplacingOccurrencesOfString:@"<" withString:@""];
+    token = [token stringByReplacingOccurrencesOfString:@">" withString:@""];
+    token = [token stringByReplacingOccurrencesOfString:@" " withString:@""];
+}
+
+- (void)application:(UIApplication *)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error
+{
+    
+}
+
+- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler
+{
+    
+}
+
+- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo
+{
+    
+}
+
 - (void)applicationWillResignActive:(UIApplication *)application {
     // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
     // Use this method to pause ongoing tasks, disable timers, and throttle down OpenGL ES frame rates. Games should use this method to pause the game.
@@ -118,6 +154,7 @@
 
 - (void)applicationDidBecomeActive:(UIApplication *)application {
     // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
+    [PGGlobal updateTimer];
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application {

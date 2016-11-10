@@ -188,6 +188,7 @@
 		0FF76F901DAF2DAE008831D8 /* PGPwdResetViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0FF76F8F1DAF2DAE008831D8 /* PGPwdResetViewController.m */; };
 		0FF76F931DAF2F2A008831D8 /* PGPwdSaveViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0FF76F921DAF2F2A008831D8 /* PGPwdSaveViewController.m */; };
 		0FF76F961DAF2F82008831D8 /* PGPwdSaveView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0FF76F951DAF2F82008831D8 /* PGPwdSaveView.m */; };
+		0FF80FF61DCAE027004D3145 /* PGArticleParagraphNewlineCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0FF80FF51DCAE027004D3145 /* PGArticleParagraphNewlineCell.m */; };
 		0FFAD0F11D780A2B009F9E27 /* PGCategoryIcon.m in Sources */ = {isa = PBXBuildFile; fileRef = 0FFAD0F01D780A2B009F9E27 /* PGCategoryIcon.m */; };
 		0FFAD0F41D780DF8009F9E27 /* PGGoodsCollectionView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0FFAD0F31D780DF8009F9E27 /* PGGoodsCollectionView.m */; };
 		0FFAD0F81D780FF1009F9E27 /* PGGoodCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0FFAD0F71D780FF1009F9E27 /* PGGoodCell.m */; };
@@ -439,6 +440,7 @@
 		0F877A3B1D7D15D0007BDBE9 /* PGTopicViewModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PGTopicViewModel.m; sourceTree = "<group>"; };
 		0F9308441D93C0FF00EA3D43 /* PGCommentTextView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PGCommentTextView.h; sourceTree = "<group>"; };
 		0F9308451D93C0FF00EA3D43 /* PGCommentTextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PGCommentTextView.m; sourceTree = "<group>"; };
+		0F95329D1DC9E5B7003FD05F /* PGNotificationKeys.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PGNotificationKeys.h; sourceTree = "<group>"; };
 		0F9761C01D9A672A00002430 /* PGGoodViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PGGoodViewController.h; sourceTree = "<group>"; };
 		0F9761C11D9A672A00002430 /* PGGoodViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PGGoodViewController.m; sourceTree = "<group>"; };
 		0F9761C41D9A70AB00002430 /* v1_good_goodid.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = v1_good_goodid.json; sourceTree = "<group>"; };
@@ -545,6 +547,7 @@
 		0FE6D8651D9BB767000B8B46 /* PGGoodInfoCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PGGoodInfoCell.m; sourceTree = "<group>"; };
 		0FE6D8671D9BB775000B8B46 /* PGGoodDescCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PGGoodDescCell.h; sourceTree = "<group>"; };
 		0FE6D8681D9BB775000B8B46 /* PGGoodDescCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PGGoodDescCell.m; sourceTree = "<group>"; };
+		0FE9CB9D1DCB26DF001C1A09 /* PenguinGuide.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = PenguinGuide.entitlements; sourceTree = "<group>"; };
 		0FED899C1DADE3A20081B999 /* PGLoginBaseViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PGLoginBaseViewController.h; sourceTree = "<group>"; };
 		0FED899D1DADE3A20081B999 /* PGLoginBaseViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PGLoginBaseViewController.m; sourceTree = "<group>"; };
 		0FED899F1DADEAED0081B999 /* PGSignupViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PGSignupViewController.h; sourceTree = "<group>"; };
@@ -558,6 +561,8 @@
 		0FF76F921DAF2F2A008831D8 /* PGPwdSaveViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PGPwdSaveViewController.m; sourceTree = "<group>"; };
 		0FF76F941DAF2F82008831D8 /* PGPwdSaveView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PGPwdSaveView.h; sourceTree = "<group>"; };
 		0FF76F951DAF2F82008831D8 /* PGPwdSaveView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PGPwdSaveView.m; sourceTree = "<group>"; };
+		0FF80FF41DCAE027004D3145 /* PGArticleParagraphNewlineCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PGArticleParagraphNewlineCell.h; sourceTree = "<group>"; };
+		0FF80FF51DCAE027004D3145 /* PGArticleParagraphNewlineCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PGArticleParagraphNewlineCell.m; sourceTree = "<group>"; };
 		0FFAD0EF1D780A2B009F9E27 /* PGCategoryIcon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PGCategoryIcon.h; sourceTree = "<group>"; };
 		0FFAD0F01D780A2B009F9E27 /* PGCategoryIcon.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PGCategoryIcon.m; sourceTree = "<group>"; };
 		0FFAD0F21D780DF8009F9E27 /* PGGoodsCollectionView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PGGoodsCollectionView.h; sourceTree = "<group>"; };
@@ -1234,6 +1239,7 @@
 		0F7EEF591D210F63008D175C /* PenguinGuide */ = {
 			isa = PBXGroup;
 			children = (
+				0FE9CB9D1DCB26DF001C1A09 /* PenguinGuide.entitlements */,
 				0F7F04781DAA1D6600CA99AD /* Vendor */,
 				0F7EEF8C1D211085008D175C /* ViewController */,
 				0F7EEF8D1D211085008D175C /* ViewModel */,
@@ -1392,6 +1398,8 @@
 				0F04BF161DC0A40D001E7D31 /* PGArticleParagraphSingleGoodCell.m */,
 				0F083BED1DC327A00021B7D9 /* PGArticleParagraphGoodsCollectionCell.h */,
 				0F083BEE1DC327A00021B7D9 /* PGArticleParagraphGoodsCollectionCell.m */,
+				0FF80FF41DCAE027004D3145 /* PGArticleParagraphNewlineCell.h */,
+				0FF80FF51DCAE027004D3145 /* PGArticleParagraphNewlineCell.m */,
 				0F21FEB51D9126720036F14A /* PGArticleParagraphFooterCell.h */,
 				0F21FEB61D9126720036F14A /* PGArticleParagraphFooterCell.m */,
 				0F21FEB81D9140EF0036F14A /* PGArticleRelatedArticlesCell.h */,
@@ -1823,6 +1831,7 @@
 				0FB306551DA4DCAF005EB3AC /* PGParams.h */,
 				0FB306561DA4DCAF005EB3AC /* PGParams.m */,
 				0FFCB5261D2CADB700D863FA /* PGMacros.h */,
+				0F95329D1DC9E5B7003FD05F /* PGNotificationKeys.h */,
 				0F0F447A1D34FBC2007B90F2 /* PGAPIList.h */,
 			);
 			path = Global;
@@ -1964,6 +1973,11 @@
 					0F7EEF571D210F63008D175C = {
 						CreatedOnToolsVersion = 7.3.1;
 						DevelopmentTeam = MS54G36RSK;
+						SystemCapabilities = {
+							com.apple.Push = {
+								enabled = 1;
+							};
+						};
 					};
 					0F7EEF6F1D210F63008D175C = {
 						CreatedOnToolsVersion = 7.3.1;
@@ -2206,6 +2220,7 @@
 				0F7A67E11DA7E65100699AA2 /* PGSettingsHeaderView.m in Sources */,
 				0FA1B2A21DC1FA390022ECE2 /* PGMessageContentCell.m in Sources */,
 				0F9E8E1C1DC5F74F003027CF /* PGSystemSettingsViewController.m in Sources */,
+				0FF80FF61DCAE027004D3145 /* PGArticleParagraphNewlineCell.m in Sources */,
 				0F41AE621D35318000E7AD71 /* PGHomeRecommendsHeaderView.m in Sources */,
 				0F141FC31D746BFD00884052 /* PGExploreRecommendsHeaderView.m in Sources */,
 				0F9BD3941DA898550063DD7E /* PGGoodTagsCell.m in Sources */,
@@ -2371,6 +2386,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CODE_SIGN_ENTITLEMENTS = PenguinGuide/PenguinGuide.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEVELOPMENT_TEAM = MS54G36RSK;
@@ -2529,6 +2545,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CODE_SIGN_ENTITLEMENTS = PenguinGuide/PenguinGuide.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
@@ -2571,6 +2588,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CODE_SIGN_ENTITLEMENTS = PenguinGuide/PenguinGuide.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEVELOPMENT_TEAM = MS54G36RSK;

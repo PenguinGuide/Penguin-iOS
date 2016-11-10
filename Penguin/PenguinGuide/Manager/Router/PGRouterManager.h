@@ -20,6 +20,7 @@
 + (void)routeToHomePage;
 
 + (void)routeToScenarioPage:(NSString *)scenarioId link:(NSString *)link;
++ (void)routeToArticlePage:(NSString *)articleId link:(NSString *)link;
 + (void)routeToGoodDetailPage:(NSString *)goodId link:(NSString *)link;
 
 @end

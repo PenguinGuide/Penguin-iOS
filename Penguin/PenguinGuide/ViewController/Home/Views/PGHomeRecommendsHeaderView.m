@@ -20,6 +20,8 @@ static NSString *const ChannelCell = @"ChannelCell";
 @property (nonatomic, strong) NSArray *channelsArray;
 @property (nonatomic, strong) UICollectionView *categoriesCollectionView;
 @property (nonatomic, strong, readwrite) PGPagedScrollView *bannersView;
+@property (nonatomic, strong) UIView *verticalLine;
+@property (nonatomic, strong) UILabel *articleLabel;
 
 @end
 
@@ -38,19 +40,20 @@ static NSString *const ChannelCell = @"ChannelCell";
 {
     [self addSubview:self.bannersView];
     [self addSubview:self.categoriesCollectionView];
-    
-    UIView *verticalLine = [[UIView alloc] initWithFrame:CGRectMake(13, self.bannersView.pg_bottom+11, 3, 16)];
-    verticalLine.backgroundColor = Theme.colorExtraHighlight;
-    UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(verticalLine.pg_right+5, self.bannersView.pg_bottom+11, 100, 16)];
-    label.font = Theme.fontMediumBold;
-    label.textColor = Theme.colorText;
-    label.text = @"文章";
-    [self addSubview:verticalLine];
-    [self addSubview:label];
 }
 
 - (void)reloadBannersWithRecommendsArray:(NSArray *)recommendsArray channelsArray:(NSArray *)channelsArray
 {
+    if (!self.articleLabel && channelsArray.count > 0) {
+        self.verticalLine = [[UIView alloc] initWithFrame:CGRectMake(13, self.bannersView.pg_bottom+11, 3, 16)];
+        self.verticalLine.backgroundColor = Theme.colorExtraHighlight;
+        self.articleLabel = [[UILabel alloc] initWithFrame:CGRectMake(self.verticalLine.pg_right+5, self.bannersView.pg_bottom+11, 100, 16)];
+        self.articleLabel.font = Theme.fontMediumBold;
+        self.articleLabel.textColor = Theme.colorText;
+        self.articleLabel.text = @"文章";
+        [self addSubview:self.verticalLine];
+        [self addSubview:self.articleLabel];
+    }
     self.recommendsArray = recommendsArray;
     self.channelsArray = channelsArray;
     [self.bannersView reloadData];

@@ -12,9 +12,10 @@
 #define ArticleParagraphGIFImageCell @"ArticleParagraphGIFImageCell"
 #define ArticleParagraphCatalogImageCell @"PGArticleParagraphCatalogImageCell"
 #define ArticleParagraphVideoCell @"ArticleParagraphVideoCell"
-#define ArticleParagraphFooterCell @"ArticleParagraphFooterCell"
 #define ArticleParagraphSingleGoodCell @"ArticleParagraphSingleGoodCell"
 #define ArticleParagraphGoodsCollectionCell @"ArticleParagraphGoodsCollectionCell"
+#define ArticleParagraphNewlineCell @"ArticleParagraphNewlineCell"
+#define ArticleParagraphFooterCell @"ArticleParagraphFooterCell"
 #define ArticleRelatedArticlesCell @"ArticleRelatedArticlesCell"
 #define ArticleCommentCell @"ArticleCommentCell"
 #define ArticleCommentReplyCell @"ArticleCommentReplyCell"
@@ -34,9 +35,10 @@
 #import "PGArticleParagraphGIFImageCell.h"
 #import "PGArticleParagraphCatalogImageCell.h"
 #import "PGArticleParagraphVideoCell.h"
-#import "PGArticleParagraphFooterCell.h"
 #import "PGArticleParagraphSingleGoodCell.h"
 #import "PGArticleParagraphGoodsCollectionCell.h"
+#import "PGArticleParagraphNewlineCell.h"
+#import "PGArticleParagraphFooterCell.h"
 #import "PGArticleRelatedArticlesCell.h"
 #import "PGArticleCommentCell.h"
 #import "PGArticleCommentReplyCell.h"
@@ -341,6 +343,10 @@
                 [cell reloadCellWithGoodsArray:goodsCollectionStorage.goodsArray];
                 
                 return cell;
+            } else if ([storage isKindOfClass:[PGParserNewlineStorage class]]) {
+                PGArticleParagraphNewlineCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:ArticleParagraphNewlineCell forIndexPath:indexPath];
+                
+                return cell;
             }
         }
     } else if (indexPath.section == 1) {
@@ -451,6 +457,8 @@
                 return CGSizeMake(UISCREEN_WIDTH-60, UISCREEN_WIDTH+30);
             } else if ([storage isKindOfClass:[PGParserGoodsCollectionStorage class]]) {
                 return CGSizeMake(UISCREEN_WIDTH-60, 250.f);
+            } else if ([storage isKindOfClass:[PGParserNewlineStorage class]]) {
+                return CGSizeMake(UISCREEN_WIDTH, 3.f);
             }
         }
     } else if (indexPath.section == 1) {
@@ -811,6 +819,7 @@
         [_articleCollectionView registerClass:[PGArticleParagraphVideoCell class] forCellWithReuseIdentifier:ArticleParagraphVideoCell];
         [_articleCollectionView registerClass:[PGArticleParagraphSingleGoodCell class] forCellWithReuseIdentifier:ArticleParagraphSingleGoodCell];
         [_articleCollectionView registerClass:[PGArticleParagraphGoodsCollectionCell class] forCellWithReuseIdentifier:ArticleParagraphGoodsCollectionCell];
+        [_articleCollectionView registerClass:[PGArticleParagraphNewlineCell class] forCellWithReuseIdentifier:ArticleParagraphNewlineCell];
         [_articleCollectionView registerClass:[PGArticleParagraphFooterCell class] forCellWithReuseIdentifier:ArticleParagraphFooterCell];
         
         [_articleCollectionView registerClass:[PGArticleRelatedArticlesCell class] forCellWithReuseIdentifier:ArticleRelatedArticlesCell];

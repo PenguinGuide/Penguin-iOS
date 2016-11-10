@@ -14,11 +14,14 @@
 #import "PGSettingsCell.h"
 #import "PGSettingsHeaderView.h"
 
+#import "PGMeViewModel.h"
+
 #import "UINavigationBar+PGTransparentNaviBar.h"
 
 @interface PGPersonalSettingsViewController () <UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, UIImagePickerControllerDelegate, UINavigationControllerDelegate>
 
 @property (nonatomic, strong) PGBaseCollectionView *settingsCollectionView;
+@property (nonatomic, strong) PGMeViewModel *viewModel;
 
 @end
 
@@ -29,6 +32,17 @@
     // Do any additional setup after loading the view.
     
     [self.view addSubview:self.settingsCollectionView];
+    
+    self.viewModel = [[PGMeViewModel alloc] initWithAPIClient:self.apiClient];
+    PGWeakSelf(self);
+    [self observe:self.viewModel keyPath:@"me" block:^(id changedObject) {
+        PGMe *me = changedObject;
+        if (me && [me isKindOfClass:[PGMe class]]) {
+            [weakself.settingsCollectionView reloadData];
+        }
+        [weakself dismissLoading];
+    }];
+    [self observeError:self.viewModel];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -39,6 +53,11 @@
     
     [self.navigationController.navigationBar pg_setBackgroundColor:[UIColor clearColor]];
     [self.navigationController.navigationBar setShadowImage:[UIImage new]];
+    
+    if (!self.viewModel.me) {
+        [self showLoading];
+        [self.viewModel requestDetails];
+    }
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -71,21 +90,25 @@
         PGSettingsCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:SettingCell forIndexPath:indexPath];
         
         if (indexPath.item == 0) {
-            [cell setCellWithDesc:@"头 像" content:self.me.avatar isImage:YES];
+            [cell setCellWithDesc:@"头 像" content:self.viewModel.me.avatar isImage:YES];
         } else if (indexPath.item == 1) {
-            [cell setCellWithDesc:@"昵 称" content:self.me.nickname isImage:NO];
+            [cell setCellWithDesc:@"昵 称" content:self.viewModel.me.nickname isImage:NO];
         } else if (indexPath.item == 2) {
-            if ([self.me.sex isEqualToString:@"男"]) {
+            if ([self.viewModel.me.sex isEqualToString:@"男"]) {
                 [cell setCellWithDesc:@"性 别" content:@"男" isImage:NO];
             } else {
                 [cell setCellWithDesc:@"性 别" content:@"女" isImage:NO];
             }
         } else if (indexPath.item == 3) {
-            [cell setCellWithDesc:@"城 市" content:self.me.location isImage:NO];
+            [cell setCellWithDesc:@"城 市" content:self.viewModel.me.location isImage:NO];
         } else if (indexPath.item == 4) {
-            [cell setCellWithDesc:@"生 日" content:self.me.birthday isImage:NO];
+            [cell setCellWithDesc:@"生 日" content:self.viewModel.me.birthday isImage:NO];
         } else if (indexPath.item == 5) {
-            [cell setCellWithDesc:@"密 码" content:@"未设置" isImage:NO];
+            if (self.viewModel.me.hasPassword) {
+                [cell setCellWithDesc:@"密 码" content:@"已设置" isImage:NO];
+            } else {
+                [cell setCellWithDesc:@"密 码" content:@"未设置" isImage:NO];
+            }
         }
         
         return cell;
@@ -93,11 +116,19 @@
         PGSettingsCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:SettingCell forIndexPath:indexPath];
         
         if (indexPath.item == 0) {
-            [cell setCellWithDesc:@"手 机 号" content:self.me.phoneNumber isImage:NO];
+            [cell setCellWithDesc:@"手 机 号" content:self.viewModel.me.phoneNumber isImage:NO];
         } else if (indexPath.item == 1) {
-            [cell setCellWithDesc:@"微 信" content:@"已绑定" isImage:NO];
+            if (self.viewModel.me.weixinBinded) {
+                [cell setCellWithDesc:@"微 信" content:@"已绑定" isImage:NO];
+            } else {
+                [cell setCellWithDesc:@"微 信" content:@"未绑定" isImage:NO];
+            }
         } else if (indexPath.item == 2) {
-            [cell setCellWithDesc:@"微 博" content:@"未绑定" isImage:NO];
+            if (self.viewModel.me.weiboBinded) {
+                [cell setCellWithDesc:@"微 博" content:@"已绑定" isImage:NO];
+            } else {
+                [cell setCellWithDesc:@"微 博" content:@"未绑定" isImage:NO];
+            }
         }
         
         return cell;
@@ -163,17 +194,68 @@
             
             [self.navigationController presentViewController:imagePickerController animated:YES completion:nil];
         } else if (indexPath.item == 1) {
-            PGSettingsUpdateViewController *settingsUpdateVC = [[PGSettingsUpdateViewController alloc] initWithType:PGSettingsTypeNickname content:self.me.nickname];
+            PGSettingsUpdateViewController *settingsUpdateVC = [[PGSettingsUpdateViewController alloc] initWithType:PGSettingsTypeNickname content:self.viewModel.me.nickname];
             [self.navigationController pushViewController:settingsUpdateVC animated:YES];
         } else if (indexPath.item == 2) {
-            PGSettingsUpdateViewController *settingsUpdateVC = [[PGSettingsUpdateViewController alloc] initWithType:PGSettingsTypeSex content:self.me.sex];
+            PGSettingsUpdateViewController *settingsUpdateVC = [[PGSettingsUpdateViewController alloc] initWithType:PGSettingsTypeSex content:self.viewModel.me.sex];
             [self.navigationController pushViewController:settingsUpdateVC animated:YES];
         } else if (indexPath.item == 3) {
-            PGSettingsUpdateViewController *settingsUpdateVC = [[PGSettingsUpdateViewController alloc] initWithType:PGSettingsTypeLocation content:self.me.location];
+            PGSettingsUpdateViewController *settingsUpdateVC = [[PGSettingsUpdateViewController alloc] initWithType:PGSettingsTypeLocation content:self.viewModel.me.location];
             [self.navigationController pushViewController:settingsUpdateVC animated:YES];
         } else if (indexPath.item == 4) {
-            PGSettingsUpdateViewController *settingsUpdateVC = [[PGSettingsUpdateViewController alloc] initWithType:PGSettingsTypeBirthday content:self.me.birthday];
+            PGSettingsUpdateViewController *settingsUpdateVC = [[PGSettingsUpdateViewController alloc] initWithType:PGSettingsTypeBirthday content:self.viewModel.me.birthday];
             [self.navigationController pushViewController:settingsUpdateVC animated:YES];
+        }
+    } else if (indexPath.section == 1) {
+        if (indexPath.item == 0) {
+            if (!self.viewModel.me.phoneNumber || self.viewModel.me.phoneNumber.length == 0) {
+                
+            }
+        } else if (indexPath.item == 1) {
+            if (!self.viewModel.me.weixinBinded) {
+                PGWeakSelf(self);
+                [PGShareManager loginWithWechatOnStateChanged:^(SSDKResponseState state, SSDKUser *user, NSError *error) {
+                    if (state == SSDKResponseStateSuccess) {
+                        PGParams *params = [PGParams new];
+                        params[@"openid"] = user.uid;
+                        params[@"access_token"] = user.credential.token;
+                        params[@"nick_name"] = user.nickname;
+                        [weakself.apiClient pg_makePostRequest:^(PGRKRequestConfig *config) {
+                            config.route = PG_User_Bind_Weixin;
+                            config.params = params;
+                            config.keyPath = nil;
+                        } completion:^(id response) {
+                            [weakself showToast:@"绑定成功"];
+                        } failure:^(NSError *error) {
+                            [weakself showErrorMessage:error];
+                        }];
+                    } else if (state == SSDKResponseStateCancel || state == SSDKResponseStateFail) {
+                        [weakself showToast:@"绑定失败"];
+                    }
+                }];
+            }
+        } else if (indexPath.item == 2) {
+            if (!self.viewModel.me.weiboBinded) {
+                PGWeakSelf(self);
+                [PGShareManager loginWithWeiboOnStateChanged:^(SSDKResponseState state, SSDKUser *user, NSError *error) {
+                    if (state == SSDKResponseStateSuccess) {
+                        PGParams *params = [PGParams new];
+                        params[@"nick_name"] = user.nickname;
+                        params[@"access_token"] = user.credential.token;
+                        [weakself.apiClient pg_makePostRequest:^(PGRKRequestConfig *config) {
+                            config.route = PG_User_Bind_Weibo;
+                            config.params = params;
+                            config.keyPath = nil;
+                        } completion:^(id response) {
+                            [weakself showToast:@"绑定成功"];
+                        } failure:^(NSError *error) {
+                            [weakself showErrorMessage:error];
+                        }];
+                    } else if (state == SSDKResponseStateCancel || state == SSDKResponseStateFail) {
+                        [weakself showToast:@"绑定失败"];
+                    }
+                }];
+            }
         }
     }
 }

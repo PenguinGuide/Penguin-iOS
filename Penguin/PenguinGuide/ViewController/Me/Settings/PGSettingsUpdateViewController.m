@@ -182,6 +182,8 @@
                 params[@"location"] = self.updateTextField.text;
             } else if (self.settingType == PGSettingsTypeBirthday) {
                 params[@"birth"] = self.updateTextField.text;
+            } else if (self.settingType == PGSettingsTypePassword) {
+                
             }
             
             [self showLoading];
@@ -195,6 +197,7 @@
                 config.pattern = @{@"userId":PGGlobal.userId};
             } completion:^(id response) {
                 [weakself dismissLoading];
+                [[NSNotificationCenter defaultCenter] postNotificationName:PG_NOTIFICATION_UPDATE_ME object:nil];
                 [weakself.navigationController popToRootViewControllerAnimated:YES];
             } failure:^(NSError *error) {
                 [weakself showErrorMessage:error];
@@ -248,7 +251,7 @@
                 _updateTextField.inputAccessoryView = self.accessoryView;
                 break;
             case PGSettingsTypePassword:
-                _updateTextField.placeholder = @"点击修改密码";
+                _updateTextField.placeholder = @"输入密码";
                 _updateTextField.secureTextEntry = YES;
                 _updateTextField.clearButtonMode = UITextFieldViewModeAlways;
                 break;

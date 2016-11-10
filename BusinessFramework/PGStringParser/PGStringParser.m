@@ -16,6 +16,7 @@
 #define HTML_Tag_Video @"video"
 #define HTML_Tag_Class @"class"
 #define HTML_Tag_Hyper_Link @"a"
+#define HTML_Tag_Newline @"br"
 
 #define HTML_Attribute_Class @"class"
 #define HTML_Attribute_Src @"src"
@@ -81,6 +82,8 @@
                             textStorage.text = attrS;
                             [storages addObject:textStorage];
                         }
+                    } else {
+                        
                     }
                 } else {
                     if ([element objectForKey:HTML_Tag_Class]) {
@@ -169,6 +172,10 @@
                                     [storages addObject:imageStorage];
                                 }
                             }
+                            *stop = YES;
+                        } else if ([childElement.tagName isEqualToString:HTML_Tag_Newline]) {
+                            PGParserNewlineStorage *newlineStorage = [PGParserNewlineStorage new];
+                            [storages addObject:newlineStorage];
                             *stop = YES;
                         } else {
                             // <p>xxx</p>

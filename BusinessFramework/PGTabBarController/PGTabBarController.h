@@ -16,5 +16,7 @@
 
 - (void)setViewControllers:(NSArray *)viewControllers;
 - (void)selectTab:(NSInteger)index;
+- (void)showTabDot:(NSInteger)index;
+- (void)hideTabDot:(NSInteger)index;
 
 @end

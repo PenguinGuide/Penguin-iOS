@@ -35,6 +35,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(meShouldReload) name:PG_NOTIFICATION_UPDATE_ME object:nil];
     
     self.view.backgroundColor = [UIColor whiteColor];
     
@@ -49,6 +50,14 @@
             [weakself.meCollectionView reloadData];
         }
         [weakself dismissLoading];
+    }];
+    [self observe:self.viewModel keyPath:@"readSuccess" block:^(id changedObject) {
+        BOOL readSuccess = changedObject;
+        if (readSuccess) {
+            PGGlobal.hasNewMessage = NO;
+            AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+            [appDelegate.tabBarController hideTabDot:3];
+        }
     }];
     [self observeError:self.viewModel];
 }
@@ -74,6 +83,12 @@
     }
 }
 
+- (void)dealloc
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+    [self unobserve];
+}
+
 - (UIStatusBarStyle)preferredStatusBarStyle
 {
     return UIStatusBarStyleDefault;
@@ -94,6 +109,11 @@
 - (NSString *)tabBarHighlightImage
 {
     return @"pg_tab_me_highlight";
+}
+
+- (BOOL)tabBarShouldShowDot
+{
+    return PGGlobal.hasNewMessage;
 }
 
 - (BOOL)tabBarShouldClicked
@@ -135,13 +155,13 @@
     PGMeCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:MeCell forIndexPath:indexPath];
     
     if (indexPath.item == 0) {
-        [cell setCellWithIcon:@"pg_me_order" name:@"订 单" count:nil highlight:NO];
+        [cell setCellWithIcon:@"pg_me_order" name:@"订 单" count:nil];
     } else if (indexPath.item == 1) {
-        [cell setCellWithIcon:@"pg_me_collection" name:@"我 的 收 藏" count:self.viewModel.me.collectionCount highlight:YES];
+        [cell setCellWithIcon:@"pg_me_collection" name:@"我 的 收 藏" count:self.viewModel.me.collectionCount];
     } else if (indexPath.item == 2) {
-        [cell setCellWithIcon:@"pg_me_message" name:@"我 的 消 息" count:self.viewModel.me.messageCount highlight:NO];
+        [cell setCellWithIcon:@"pg_me_message" name:@"我 的 消 息" highlight:self.viewModel.me.hasNewMessage];
     } else if (indexPath.item == 3) {
-        [cell setCellWithIcon:@"pg_me_history" name:@"我 的 足 迹" count:@"111" highlight:NO];
+        [cell setCellWithIcon:@"pg_me_history" name:@"我 的 足 迹" count:nil];
     }
     
     return cell;
@@ -197,6 +217,7 @@
     } else if (indexPath.item == 2) {
         PGMessageViewController *messageVC = [[PGMessageViewController alloc] init];
         [self.navigationController pushViewController:messageVC animated:YES];
+        [self.viewModel readMessages];
     } else if (indexPath.item == 3) {
         PGHistoryViewController *historyVC = [[PGHistoryViewController alloc] init];
         [self.navigationController pushViewController:historyVC animated:YES];
@@ -208,7 +229,6 @@
 - (void)avatarButtonClicked
 {
     PGPersonalSettingsViewController *personalSettingsVC = [[PGPersonalSettingsViewController alloc] init];
-    personalSettingsVC.me = self.viewModel.me;
     
     [self.navigationController pushViewController:personalSettingsVC animated:YES];
 }
@@ -219,6 +239,15 @@
     
     [self.navigationController pushViewController:systemSettingsVC animated:YES];
 }
+
+#pragma mark - <Notifications>
+
+- (void)meShouldReload
+{
+    [self.viewModel requestData];
+}
+
+#pragma mark - <Setters && Getters>
 
 - (PGBaseCollectionView *)meCollectionView
 {

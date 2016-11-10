@@ -33,7 +33,7 @@
 - (void)setCellWithImage:(NSString *)image
 {
     self.imageView.frame = CGRectMake(0, 20, self.pg_width, self.pg_height-40);
-    [self.imageView setWithImageURL:image placeholder:nil completion:nil];
+    [self.imageView setWithImageURL:image placeholder:PGImageViewPlaceholder completion:nil];
 }
 
 - (UIImageView *)imageView

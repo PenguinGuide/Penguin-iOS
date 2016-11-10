@@ -7,12 +7,16 @@
 //
 
 #import "PGGlobalObject.h"
+#import "MSWeakTimer.h"
 
 @interface PGGlobalObject ()
 
+@property (nonatomic, strong, readwrite) PGAPIClient *apiClient;
 @property (nonatomic, strong, readwrite) PGCache *cache;
 @property (nonatomic, strong, readwrite) NSString *userId;
 @property (nonatomic, strong, readwrite) NSString *accessToken;
+
+@property (nonatomic, strong, readwrite) MSWeakTimer *weakTimer;
 
 @end
 
@@ -45,6 +49,13 @@
         } else {
             self.userId = nil;
         }
+        
+        self.weakTimer = [MSWeakTimer scheduledTimerWithTimeInterval:1*60
+                                                              target:self
+                                                            selector:@selector(timerDidUpdate)
+                                                            userInfo:nil
+                                                             repeats:YES
+                                                       dispatchQueue:dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)];
     }
     return self;
 }
@@ -69,12 +80,52 @@
     }
 }
 
+- (void)timerDidUpdate
+{
+    if ([UIApplication sharedApplication].applicationState == UIApplicationStateActive && PGGlobal.userId && PGGlobal.userId.length > 0) {
+        PGWeakSelf(self);
+        [self.apiClient pg_makeGetRequest:^(PGRKRequestConfig *config) {
+            config.route = PG_Message_Has_New;
+            config.keyPath = nil;
+        } completion:^(id response) {
+            NSDictionary *responseDict = [response firstObject];
+            if (responseDict[@"has_new_message"]) {
+                weakself.hasNewMessage = [responseDict[@"has_new_message"] boolValue];
+                AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+                if (weakself.hasNewMessage) {
+                    [appDelegate.tabBarController showTabDot:3];
+                } else {
+                    [appDelegate.tabBarController hideTabDot:3];
+                }
+            }
+        } failure:^(NSError *error) {
+            
+        }];
+    }
+}
+
+- (void)updateTimer
+{
+    [self timerDidUpdate];
+}
+
+#pragma mark - <Setters && Getters>
+
 - (PGCache *)cache
 {
     if (!_cache) {
         _cache = [PGCache cacheWithDatabaseName:@"penguin.db"];
     }
     return _cache;
+}
+
+- (PGAPIClient *)apiClient
+{
+    if (!_apiClient) {
+        _apiClient = [PGAPIClient client];
+        [_apiClient updateAccessToken:[NSString stringWithFormat:@"Bearer %@", self.accessToken]];
+    }
+    return _apiClient;
 }
 
 @end

@@ -104,7 +104,7 @@
             weakself.feedsArray = [NSArray arrayWithArray:models];
         }
     } failure:^(NSError *error) {
-        
+        weakself.error = error;
     }];
     
 }

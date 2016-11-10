@@ -16,7 +16,7 @@
     if (imageURL && imageURL.length > 0) {
         imageURL = [imageURL stringByAppendingString:@"?imageView2/2/w/1000/h/1000"];
         [self sd_setImageWithURL:[NSURL URLWithString:imageURL]
-                placeholderImage:[UIImage imageNamed:@"pg_image_placeholder"]
+                placeholderImage:placeholder
                        completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
                            if (completion) {
                                if (!error) {

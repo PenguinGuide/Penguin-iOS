@@ -68,7 +68,7 @@
             NSString *fontSize = style[CSS_Style_Font_Size];
             if ([fontSize rangeOfString:@"px"].location != NSNotFound) {
                 fontSize = [fontSize stringByReplacingOccurrencesOfString:@"px" withString:@""];
-                [attrS addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:[fontSize floatValue] weight:UIFontWeightLight] range:NSMakeRange(0, attrS.length)];
+                [attrS addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:[fontSize floatValue] weight:UIFontWeightRegular] range:NSMakeRange(0, attrS.length)];
             }
         } else if ([key isEqualToString:CSS_Style_Font_Strong]) {
             [attrS addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:14.f weight:UIFontWeightBold] range:NSMakeRange(0, attrS.length)];
@@ -80,7 +80,7 @@
 - (NSAttributedString *)attributedStringWithColor:(NSString *)color font:(UIFont *)font
 {
     NSAttributedString *attrStr = [[NSAttributedString alloc] initWithString:self
-                                                                  attributes:@{NSFontAttributeName:font?font:[UIFont systemFontOfSize:16.f weight:UIFontWeightLight],
+                                                                  attributes:@{NSFontAttributeName:font?font:[UIFont systemFontOfSize:16.f weight:UIFontWeightRegular],
                                                                                NSForegroundColorAttributeName:[UIColor colorWithHexString:color],
                                                                                NSParagraphStyleAttributeName:[self defaultParagraphStyle]}];
     return attrStr;
@@ -112,7 +112,7 @@
     defaultParagraphStyle.firstLineHeadIndent = 20.f;
     defaultParagraphStyle.headIndent = 20.f;
     defaultParagraphStyle.tailIndent = -20.f;
-    defaultParagraphStyle.lineSpacing = 3.f;
+    defaultParagraphStyle.lineSpacing = 5.f;
     defaultParagraphStyle.lineBreakMode = NSLineBreakByWordWrapping;
     
     return defaultParagraphStyle;
@@ -125,7 +125,7 @@
     centerAlignedParagraphStyle.firstLineHeadIndent = 20.f;
     centerAlignedParagraphStyle.headIndent = 20.f;
     centerAlignedParagraphStyle.tailIndent = -20.f;
-    centerAlignedParagraphStyle.lineSpacing = 3.f;
+    centerAlignedParagraphStyle.lineSpacing = 5.f;
     centerAlignedParagraphStyle.lineBreakMode = NSLineBreakByWordWrapping;
     
     return centerAlignedParagraphStyle;

@@ -11,6 +11,4 @@
 
 @interface PGPersonalSettingsViewController : PGBaseViewController
 
-@property (nonatomic, strong) PGMe *me;
-
 @end

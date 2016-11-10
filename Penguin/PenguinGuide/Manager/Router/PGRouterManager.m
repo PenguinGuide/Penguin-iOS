@@ -132,6 +132,16 @@
     }
 }
 
++ (void)routeToArticlePage:(NSString *)articleId link:(NSString *)link
+{
+    if (link && link.length > 0) {
+        [[PGRouter sharedInstance] openURL:link];
+    } else {
+        NSString *url = [NSString stringWithFormat:@"qiechihe://article?articleId=%@", articleId];
+        [[PGRouter sharedInstance] openURL:url];
+    }
+}
+
 + (void)routeToGoodDetailPage:(NSString *)goodId link:(NSString *)link
 {
     if (link && link.length > 0) {

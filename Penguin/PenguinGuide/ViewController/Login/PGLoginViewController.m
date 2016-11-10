@@ -159,7 +159,7 @@
             }];
         }
         if (state == SSDKResponseStateCancel || state == SSDKResponseStateFail) {
-            [self showToast:@"登录失败"];
+            [weakself showToast:@"登录失败"];
         }
     }];
 }

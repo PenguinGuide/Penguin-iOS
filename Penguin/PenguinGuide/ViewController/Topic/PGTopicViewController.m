@@ -45,9 +45,6 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    
-    self.automaticallyAdjustsScrollViewInsets = NO;
-    
     [self.view addSubview:self.topicCollectionView];
     
     self.viewModel = [[PGTopicViewModel alloc] initWithAPIClient:self.apiClient];
@@ -69,12 +66,12 @@
 {
     [super viewWillAppear:animated];
     
+    [self.navigationController setNavigationBarHidden:NO animated:NO];
+    
     if (self.viewModel.topic == nil) {
         [self showLoading];
         [self.viewModel requestTopic:self.topicId];
     }
-    
-    [self.navigationController setNavigationBarHidden:YES animated:NO];
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -142,7 +139,7 @@
         }
     } else if (indexPath.section == 2) {
         PGGoodCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:GoodCell forIndexPath:indexPath];
-        [cell setCellWithGood:self.viewModel.topic.goodsArray[indexPath.item]];
+        [cell setGrayBackgroundCellWithGood:self.viewModel.topic.goodsArray[indexPath.item]];
         
         return cell;
     }
@@ -244,6 +241,22 @@
         }
     }
     return nil;
+}
+
+- (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    if (indexPath.section == 1) {
+        if (self.viewModel.topic.articlesArray.count > 0) {
+            PGArticleBanner *articleBanner = self.viewModel.topic.articlesArray[indexPath.item];
+            [PGRouterManager routeToArticlePage:articleBanner.articleId link:articleBanner.link];
+        } else if (self.viewModel.topic.goodsArray.count > 0) {
+            PGGood *good = self.viewModel.topic.goodsArray[indexPath.item];
+            [PGRouterManager routeToGoodDetailPage:good.goodId link:good.link];
+        }
+    } else if (indexPath.section == 2) {
+        PGGood *good = self.viewModel.topic.goodsArray[indexPath.item];
+        [PGRouterManager routeToGoodDetailPage:good.goodId link:good.link];
+    }
 }
 
 - (PGBaseCollectionView *)topicCollectionView

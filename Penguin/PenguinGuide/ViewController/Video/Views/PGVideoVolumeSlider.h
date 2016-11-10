@@ -10,6 +10,8 @@
 
 @interface PGVideoVolumeSlider : UIView
 
+@property (nonatomic, assign, readonly) float value;
+
 - (void)setValue:(float)value;
 
 @end

@@ -20,6 +20,8 @@ static NSString *const ScenarioCell = @"ScenarioCell";
 @property (nonatomic, strong) NSArray *buttonsArray;
 @property (nonatomic, strong, readwrite) PGPagedScrollView *bannersView;
 @property (nonatomic, strong) UIView *scenarioView;
+@property (nonatomic, strong) UIView *verticalLine;
+@property (nonatomic, strong) UILabel *scenarioLabel;
 
 @end
 
@@ -38,15 +40,6 @@ static NSString *const ScenarioCell = @"ScenarioCell";
 {
     [self addSubview:self.bannersView];
     [self addSubview:self.scenarioView];
-    
-    UIView *verticalLine = [[UIView alloc] initWithFrame:CGRectMake(13, 11, 3, 16)];
-    verticalLine.backgroundColor = Theme.colorExtraHighlight;
-    UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(verticalLine.pg_right+5, 11, 100, 16)];
-    label.font = Theme.fontMediumBold;
-    label.textColor = Theme.colorText;
-    label.text = @"场景";
-    [self.scenarioView addSubview:verticalLine];
-    [self.scenarioView addSubview:label];
 }
 
 - (void)reloadBannersWithRecommendsArray:(NSArray *)recommendsArray scenariosArray:(NSArray *)scenariosArray
@@ -61,14 +54,16 @@ static NSString *const ScenarioCell = @"ScenarioCell";
         [subview removeFromSuperview];
     }
     
-    UIView *verticalLine = [[UIView alloc] initWithFrame:CGRectMake(13, 11, 3, 16)];
-    verticalLine.backgroundColor = Theme.colorExtraHighlight;
-    UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(verticalLine.pg_right+5, 11, 100, 16)];
-    label.font = Theme.fontMediumBold;
-    label.textColor = Theme.colorText;
-    label.text = @"场景";
-    [self.scenarioView addSubview:verticalLine];
-    [self.scenarioView addSubview:label];
+    if (scenariosArray.count > 0) {
+        self.verticalLine = [[UIView alloc] initWithFrame:CGRectMake(13, 11, 3, 16)];
+        self.verticalLine.backgroundColor = Theme.colorExtraHighlight;
+        self.scenarioLabel = [[UILabel alloc] initWithFrame:CGRectMake(self.verticalLine.pg_right+5, 11, 100, 16)];
+        self.scenarioLabel.font = Theme.fontMediumBold;
+        self.scenarioLabel.textColor = Theme.colorText;
+        self.scenarioLabel.text = @"场景";
+        [self.scenarioView addSubview:self.verticalLine];
+        [self.scenarioView addSubview:self.scenarioLabel];
+    }
     
     CGFloat delta = (UISCREEN_WIDTH-15*2-60*4)/3;
     CGFloat leftX = 15.f;

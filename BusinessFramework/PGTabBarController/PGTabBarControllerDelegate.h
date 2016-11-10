@@ -39,4 +39,9 @@
  */
 - (BOOL)tabBarShouldClicked;
 
+/*
+ *  tab bar should show dot view
+ */
+- (BOOL)tabBarShouldShowDot;
+
 @end

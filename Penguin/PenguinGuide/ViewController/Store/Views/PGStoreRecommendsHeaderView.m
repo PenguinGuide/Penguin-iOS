@@ -20,6 +20,8 @@
 @property (nonatomic, strong) NSArray *categoriesArray;
 @property (nonatomic, strong) UICollectionView *categoriesCollectionView;
 @property (nonatomic, strong, readwrite) PGPagedScrollView *bannersView;
+@property (nonatomic, strong) UIView *verticalLine;
+@property (nonatomic, strong) UILabel *categoryLabel;
 
 @end
 
@@ -37,21 +39,21 @@
 - (void)initialize
 {
     [self addSubview:self.bannersView];
-    
-    UIView *verticalLine = [[UIView alloc] initWithFrame:CGRectMake(13, self.bannersView.pg_bottom+10, 3, 16)];
-    verticalLine.backgroundColor = Theme.colorExtraHighlight;
-    UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(verticalLine.pg_right+5, self.bannersView.pg_bottom+10, 100, 16)];
-    label.font = Theme.fontMediumBold;
-    label.textColor = Theme.colorText;
-    label.text = @"品类";
-    [self addSubview:verticalLine];
-    [self addSubview:label];
-    
     [self addSubview:self.categoriesCollectionView];
 }
 
 - (void)reloadBannersWithRecommendsArray:(NSArray *)recommendsArray categoriesArray:(NSArray *)categoriesArray
 {
+    if (!self.categoryLabel && categoriesArray.count > 0) {
+        self.verticalLine = [[UIView alloc] initWithFrame:CGRectMake(13, self.bannersView.pg_bottom+10, 3, 16)];
+        self.verticalLine.backgroundColor = Theme.colorExtraHighlight;
+        self.categoryLabel = [[UILabel alloc] initWithFrame:CGRectMake(self.verticalLine.pg_right+5, self.bannersView.pg_bottom+10, 100, 16)];
+        self.categoryLabel.font = Theme.fontMediumBold;
+        self.categoryLabel.textColor = Theme.colorText;
+        self.categoryLabel.text = @"品类";
+        [self addSubview:self.verticalLine];
+        [self addSubview:self.categoryLabel];
+    }
     self.recommendsArray = recommendsArray;
     self.categoriesArray = categoriesArray;
     [self.categoriesCollectionView reloadData];

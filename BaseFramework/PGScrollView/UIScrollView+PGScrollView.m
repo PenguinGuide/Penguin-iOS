@@ -122,6 +122,8 @@ static char ScrollViewNaviTitleLabel;
             self.headerView.frame = CGRectMake(0, contentOffsetY, self.headerView.frame.size.width, headerImageHeight+fabs(contentOffsetY));
             self.dimView.frame = CGRectMake(0, 0, self.headerView.frame.size.width, headerImageHeight+fabs(contentOffsetY));
             self.naviTitleLabel.frame = CGRectMake(70, 20, self.naviTitleLabel.frame.size.width, self.naviTitleLabel.frame.size.height);
+            self.naviTitleLabel.alpha = 0.f;
+            self.dimView.backgroundColor = [UIColor colorWithWhite:0.f alpha:0.f];
         }
     }
 }
