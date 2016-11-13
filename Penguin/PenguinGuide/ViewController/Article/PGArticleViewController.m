@@ -77,6 +77,8 @@
 @property (nonatomic, copy) void(^animationCompletion)();
 @property (nonatomic, assign) BOOL animated;
 
+@property (nonatomic, assign) BOOL statusbarIsWhiteBackground;
+
 @end
 
 @implementation PGArticleViewController
@@ -228,6 +230,18 @@
     if (self.viewModel.article == nil) {
         [self.viewModel requestData];
     }
+    
+    if (self.statusbarIsWhiteBackground) {
+        UIView *statusBar = [[[UIApplication sharedApplication] valueForKey:@"statusBarWindow"] valueForKey:@"statusBar"];
+        if ([statusBar respondsToSelector:@selector(setBackgroundColor:)]) {
+            statusBar.backgroundColor = [UIColor whiteColor];
+        }
+    } else {
+        UIView *statusBar = [[[UIApplication sharedApplication] valueForKey:@"statusBarWindow"] valueForKey:@"statusBar"];
+        if ([statusBar respondsToSelector:@selector(setBackgroundColor:)]) {
+            statusBar.backgroundColor = [UIColor clearColor];
+        }
+    }
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -256,7 +270,11 @@
 
 - (UIStatusBarStyle)preferredStatusBarStyle
 {
-    return UIStatusBarStyleLightContent;
+    if (self.statusbarIsWhiteBackground) {
+        return UIStatusBarStyleDefault;
+    } else {
+        return UIStatusBarStyleLightContent;
+    }
 }
 
 #pragma mark - <UICollectionViewDataSource>
@@ -690,6 +708,30 @@
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
     [scrollView scrollViewShouldUpdateHeaderView];
+    
+    if (scrollView.contentOffset.y >= UISCREEN_WIDTH*9/16) {
+        UIView *statusBar = [[[UIApplication sharedApplication] valueForKey:@"statusBarWindow"] valueForKey:@"statusBar"];
+        if ([statusBar respondsToSelector:@selector(setBackgroundColor:)]) {
+            statusBar.backgroundColor = [UIColor whiteColor];
+        }
+        if (!self.statusbarIsWhiteBackground) {
+            self.statusbarIsWhiteBackground = YES;
+            [self setNeedsStatusBarAppearanceUpdate];
+        } else {
+            self.statusbarIsWhiteBackground = YES;
+        }
+    } else {
+        UIView *statusBar = [[[UIApplication sharedApplication] valueForKey:@"statusBarWindow"] valueForKey:@"statusBar"];
+        if ([statusBar respondsToSelector:@selector(setBackgroundColor:)]) {
+            statusBar.backgroundColor = [UIColor clearColor];
+        }
+        if (self.statusbarIsWhiteBackground) {
+            self.statusbarIsWhiteBackground = NO;
+            [self setNeedsStatusBarAppearanceUpdate];
+        } else {
+            self.statusbarIsWhiteBackground = NO;
+        }
+    }
     
     self.selectedComment = nil;
     [self.commentInputAccessoryView.commentTextView resignFirstResponder];

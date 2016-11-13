@@ -73,6 +73,7 @@
             [weakself.goodCollectionView endBottomRefreshing];
         }
     }];
+    [self observeError:self.viewModel];
 }
 
 - (void)viewWillAppear:(BOOL)animated

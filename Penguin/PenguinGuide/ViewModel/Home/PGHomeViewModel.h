@@ -13,5 +13,7 @@
 @property (nonatomic, strong, readonly) NSArray *recommendsArray;
 @property (nonatomic, strong, readonly) NSArray *channelsArray;
 @property (nonatomic, strong, readonly) NSArray *feedsArray;
+@property (nonatomic, assign, readonly) BOOL reloadFirstPage;
+@property (nonatomic, strong, readonly) NSIndexSet *nextPageIndexSet;
 
 @end

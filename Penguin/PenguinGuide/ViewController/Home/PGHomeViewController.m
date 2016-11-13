@@ -57,10 +57,31 @@
     self.viewModel = [[PGHomeViewModel alloc] initWithAPIClient:self.apiClient];
     
     PGWeakSelf(self);
-    [self observe:self.viewModel keyPath:@"feedsArray" block:^(id changedObject) {
-        NSArray *bannersArray = changedObject;
-        if (bannersArray && [bannersArray isKindOfClass:[NSArray class]]) {
+    [self observe:self.viewModel keyPath:@"reloadFirstPage" block:^(id changedObject) {
+        BOOL reloadFirstPage = [changedObject boolValue];
+        if (reloadFirstPage)  {
             [weakself.feedsCollectionView reloadData];
+        }
+        [weakself dismissLoading];
+        [weakself.feedsCollectionView endBottomRefreshing];
+    }];
+    [self observe:self.viewModel keyPath:@"nextPageIndexSet" block:^(id changedObject) {
+        NSIndexSet *indexes = changedObject;
+        if (indexes && [indexes isKindOfClass:[NSIndexSet class]] && indexes.count > 0) {
+            @try {
+                // NOTE: using insertItemsAtIndexPaths will crash -- this should insert sections
+                /*
+                 exception: Invalid update: invalid number of sections. The number of sections contained in the collection view after the
+                 update (20) must be equal to the number of sections contained in the collection view before the update (31), 
+                 plus or minus the number of sections inserted or deleted (10 inserted, 0 deleted).
+                 */
+                // NOTE: the number of sections inserted + number of sections in previous collection view = [collectionView numberOfSections]
+                [weakself.feedsCollectionView performBatchUpdates:^{
+                    [weakself.feedsCollectionView insertSections:indexes];
+                } completion:nil];
+            } @catch (NSException *exception) {
+                NSLog(@"exception: %@", exception);
+            }
         }
         [weakself dismissLoading];
         [weakself.feedsCollectionView endBottomRefreshing];
@@ -74,6 +95,7 @@
             [weakself.feedsCollectionView endBottomRefreshing];
         }
     }];
+    [self observeCollectionView:self.feedsCollectionView endOfFeeds:self.viewModel];
 }
 
 - (void)dealloc
@@ -219,53 +241,6 @@
     }
 }
 
-#pragma mark - <UICollectionViewDelegateFlowLayout>
-
-- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath
-{
-    id banner = self.viewModel.feedsArray[indexPath.section];
-    if ([banner isKindOfClass:[PGCarouselBanner class]]) {
-        return [PGCarouselBannerCell cellSize];
-    } else if ([banner isKindOfClass:[PGArticleBanner class]]) {
-        return [PGArticleBannerCell cellSize];
-    } else if ([banner isKindOfClass:[PGGoodsCollectionBanner class]]) {
-        return [PGGoodsCollectionBannerCell cellSize];
-    } else if ([banner isKindOfClass:[PGTopicBanner class]]) {
-        return [PGTopicBannerCell cellSize];
-    } else if ([banner isKindOfClass:[PGSingleGoodBanner class]]) {
-        return [PGSingleGoodBannerCell cellSize];
-    } else if ([banner isKindOfClass:[PGFlashbuyBanner class]]) {
-        return [PGFlashbuyBannerCell cellSize];
-    }
-    
-    return CGSizeZero;
-}
-
-- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout referenceSizeForHeaderInSection:(NSInteger)section
-{
-    if (section == 0) {
-        if (self.viewModel.recommendsArray) {
-            return [PGHomeRecommendsHeaderView headerViewSize];
-        }
-    }
-    return CGSizeZero;
-}
-
-- (CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout minimumInteritemSpacingForSectionAtIndex:(NSInteger)section
-{
-    return 0.f;
-}
-
-- (CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout minimumLineSpacingForSectionAtIndex:(NSInteger)section
-{
-    return 0.f;
-}
-
-- (UIEdgeInsets)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout insetForSectionAtIndex:(NSInteger)section
-{
-    return UIEdgeInsetsMake(0, 0, 12, 0);
-}
-
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
     // NOTE: add background view to status bar http://stackoverflow.com/questions/19063365/how-to-change-the-status-bar-background-color-and-text-color-on-ios-7
@@ -294,6 +269,14 @@
         }
         self.searchButton.hidden = NO;
     }
+}
+
+- (void)shouldPreloadNextPage
+{
+    PGWeakSelf(self);
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
+        [weakself.viewModel loadNextPage];
+    });
 }
 
 #pragma mark - <Button Events>
@@ -338,7 +321,7 @@
 - (PGFeedsCollectionView *)feedsCollectionView
 {
     if (!_feedsCollectionView) {
-        _feedsCollectionView = [[PGFeedsCollectionView alloc] initWithFrame:self.view.bounds collectionViewLayout:[UICollectionViewFlowLayout new]];
+        _feedsCollectionView = [[PGFeedsCollectionView alloc] initWithFrame:CGRectMake(0, 0, UISCREEN_WIDTH, UISCREEN_HEIGHT-50) collectionViewLayout:[UICollectionViewFlowLayout new]];
         _feedsCollectionView.feedsDelegate = self;
         
         __block PGFeedsCollectionView *collectionView = _feedsCollectionView;

@@ -14,6 +14,7 @@
 @property (nonatomic, strong, readonly) PGAPIClient *apiClient;
 @property (nonatomic, strong, readwrite) NSString *cursor;
 @property (nonatomic, assign, readwrite) NSInteger page;
+@property (nonatomic, assign, readwrite) BOOL isPreloadingNextPage;
 
 @property (nonatomic, assign, readwrite) BOOL endFlag;
 @property (nonatomic, strong, readwrite) NSError *error;

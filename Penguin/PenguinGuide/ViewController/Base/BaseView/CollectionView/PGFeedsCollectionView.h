@@ -30,6 +30,7 @@
 - (NSArray *)iconsArray;
 - (NSArray *)feedsArray;
 - (CGSize)feedsHeaderSize;
+- (CGSize)feedsFooterSize;
 - (NSString *)tabType;
 
 @optional
@@ -40,6 +41,7 @@
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath;
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView;
+- (void)shouldPreloadNextPage;
 - (UIEdgeInsets)topEdgeInsets;
 
 @end

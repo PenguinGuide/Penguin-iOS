@@ -23,6 +23,7 @@
         self.page = 1;
         self.cursor = nil;
         self.endFlag = NO;
+        self.isPreloadingNextPage = NO;
     }
     
     return self;

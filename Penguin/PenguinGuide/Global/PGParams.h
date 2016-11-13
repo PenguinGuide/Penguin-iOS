@@ -7,7 +7,7 @@
 //
 
 #define ParamsPageCursor @"cursor"
-#define ParamsPerPage @"per_page"
+#define ParamsPerPage @"count"
 
 #import <PGRestKit/PGRestKit.h>
 

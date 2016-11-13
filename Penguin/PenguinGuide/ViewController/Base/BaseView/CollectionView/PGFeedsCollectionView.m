@@ -6,6 +6,8 @@
 //  Copyright © 2016 Xinglian. All rights reserved.
 //
 
+#define PreloadCount 3
+
 #define CarouselBannerCell @"CarouselBannerCell"
 #define ArticleBannerCell @"ArticleBannerCell"
 #define GoodsCollectionBannerCell @"GoodsCollectionBannerCell"
@@ -48,6 +50,7 @@
         [self registerClass:[PGHomeRecommendsHeaderView class] forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:HomeHeaderView];
         [self registerClass:[PGExploreRecommendsHeaderView class] forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:ExploreHeaderView];
         [self registerClass:[PGStoreRecommendsHeaderView class] forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:StoreHeaderView];
+        [self registerClass:[PGBaseCollectionViewFooterView class] forSupplementaryViewOfKind:UICollectionElementKindSectionFooter withReuseIdentifier:BaseCollectionViewFooterView];
     }
     return self;
 }
@@ -56,7 +59,7 @@
 {
     // FIXME: if feedsArray is empty, header view will not show up
     if (self.feedsDelegate && [self.feedsDelegate respondsToSelector:@selector(feedsArray)]) {
-        return [self.feedsDelegate feedsArray].count == 0 ? 1 : [self.feedsDelegate feedsArray].count;
+        return [self.feedsDelegate feedsArray].count == 0 ? 0 : [self.feedsDelegate feedsArray].count;
     } else {
         return 0;
     }
@@ -91,6 +94,13 @@
 {
     if (self.feedsDelegate && [self.feedsDelegate respondsToSelector:@selector(feedsArray)]) {
         NSArray *feedsArray = [self.feedsDelegate feedsArray];
+        
+        // NOTE: preloading http://www.tuicool.com/articles/qYFneuV
+        if (feedsArray.count-indexPath.section == PreloadCount) {
+            if (self.feedsDelegate && [self.feedsDelegate respondsToSelector:@selector(shouldPreloadNextPage)]) {
+                [self.feedsDelegate shouldPreloadNextPage];
+            }
+        }
         
         id banner = feedsArray[indexPath.section];
         
@@ -205,6 +215,15 @@
         }
     }
 
+    return CGSizeZero;
+}
+
+- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout referenceSizeForFooterInSection:(NSInteger)section
+{
+    if (self.feedsDelegate && [self.feedsDelegate respondsToSelector:@selector(feedsFooterSize)]) {
+        return [self.feedsDelegate feedsFooterSize];
+    }
+    
     return CGSizeZero;
 }
 
