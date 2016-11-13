@@ -46,7 +46,7 @@
 {
     CGSize size = [tagName sizeWithAttributes:@{NSFontAttributeName:Theme.fontSmall}];
     
-    return CGSizeMake(size.width+24, 20.f);
+    return CGSizeMake(size.width+30, 20.f);
 }
 
 - (void)setCellWithKeyword:(NSString *)keyword

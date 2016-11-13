@@ -12,5 +12,6 @@
 
 extern NSString * const PGStringValueTransformer;
 extern NSString * const PGCommentTimeValueTransformer;
+extern NSString * const PGTimeValueTransformer;
 
 @end

@@ -55,7 +55,7 @@ static NSString *const GoodCell = @"GoodCell";
 + (CGSize)cellSize
 {
     CGFloat width = UISCREEN_WIDTH-20;
-    return CGSizeMake(width, width*150/300+155);
+    return CGSizeMake(width, width*2/3+155);
 }
 
 #pragma mark - <UICollectionViewDataSource>
@@ -87,7 +87,7 @@ static NSString *const GoodCell = @"GoodCell";
 
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    return CGSizeMake(160, 155-10);
+    return CGSizeMake(160, 160*2/3+5+14+3+16+10);
 }
 
 #pragma mark - <Setters && Getters>
@@ -95,7 +95,7 @@ static NSString *const GoodCell = @"GoodCell";
 - (UIImageView *)bannerImageView {
 	if(_bannerImageView == nil) {
         CGFloat width = UISCREEN_WIDTH-20;
-		_bannerImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, width, width*150/300)];
+		_bannerImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, width, width*2/3)];
         _bannerImageView.backgroundColor = Theme.colorText;
         _bannerImageView.clipsToBounds = YES;
         _bannerImageView.contentMode = UIViewContentModeScaleAspectFill;

@@ -627,7 +627,8 @@
 				0F0008CA1D7187A400BED6FA /* PGSearchResultsViewController.h */,
 				0F0008CB1D7187A400BED6FA /* PGSearchResultsViewController.m */,
 			);
-			path = Search;
+			name = Search;
+			path = ../Search;
 			sourceTree = "<group>";
 		};
 		0F0008CD1D71884C00BED6FA /* Layout */ = {
@@ -1007,6 +1008,7 @@
 		0F3C7EEE1D2F72CB00284066 /* Store */ = {
 			isa = PBXGroup;
 			children = (
+				0F0008C61D71874000BED6FA /* Search */,
 				0FFEAF1F1D76B4770067C888 /* Views */,
 				0F3C7EF51D2F730F00284066 /* PGStoreViewController.h */,
 				0F3C7EF61D2F730F00284066 /* PGStoreViewController.m */,
@@ -1315,7 +1317,6 @@
 				0F3C7EEB1D2F72CB00284066 /* Explore */,
 				0F3C7EEE1D2F72CB00284066 /* Store */,
 				0F3C7EED1D2F72CB00284066 /* Me */,
-				0F0008C61D71874000BED6FA /* Search */,
 				0F2D09BB1D6F0FF200957301 /* Tag */,
 				0F6E90091D7528C400F4ED32 /* Scenario */,
 				0F79B0FF1D6FF4F20080BC4F /* Channel */,

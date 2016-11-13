@@ -395,7 +395,7 @@
     [UIView animateWithDuration:animationDuration animations:^{
         if (beginFrame.origin.y >= endFrame.origin.y) {
             // move up
-            weakself.commentInputAccessoryView.frame = CGRectMake(weakself.commentInputAccessoryView.pg_x, endFrame.origin.y-44, weakself.commentInputAccessoryView.pg_width, weakself.commentInputAccessoryView.pg_height);
+            weakself.commentInputAccessoryView.frame = CGRectMake(weakself.commentInputAccessoryView.pg_x, endFrame.origin.y-60, weakself.commentInputAccessoryView.pg_width, weakself.commentInputAccessoryView.pg_height);
         } else {
             // move down
             weakself.commentInputAccessoryView.frame = CGRectMake(weakself.commentInputAccessoryView.pg_x, endFrame.origin.y, weakself.commentInputAccessoryView.pg_width, weakself.commentInputAccessoryView.pg_height);
@@ -426,7 +426,7 @@
 - (PGCommentInputAccessoryView *)commentInputAccessoryView
 {
     if (!_commentInputAccessoryView) {
-        _commentInputAccessoryView = [[PGCommentInputAccessoryView alloc] initWithFrame:CGRectMake(0, UISCREEN_HEIGHT, UISCREEN_WIDTH, 44)];
+        _commentInputAccessoryView = [[PGCommentInputAccessoryView alloc] initWithFrame:CGRectMake(0, UISCREEN_HEIGHT, UISCREEN_WIDTH, 60)];
         _commentInputAccessoryView.delegate = self;
     }
     return _commentInputAccessoryView;

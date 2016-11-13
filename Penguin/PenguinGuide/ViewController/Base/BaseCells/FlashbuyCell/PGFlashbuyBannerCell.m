@@ -59,8 +59,9 @@
         if (i < self.viewsArray.count) {
             PGGood *good = flashbuy.goodsArray[i];
             PGFlashbuyGoodView *view = self.viewsArray[i];
-            NSDate *date = [[NSDate alloc] initWithTimeIntervalSince1970:[good.time doubleValue]];
-            [view setCountDown:[date timeIntervalSinceNow]];
+            NSDate *startDate = [[NSDate alloc] initWithTimeIntervalSince1970:[good.startTime doubleValue]];
+            NSDate *endDate = [[NSDate alloc] initWithTimeIntervalSince1970:[good.endTime doubleValue]];
+            [view setCountDown:startDate endDate:endDate];
         } else {
             break;
         }

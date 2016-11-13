@@ -34,7 +34,7 @@
     [self.contentView addSubview:self.bannerFrameView];
     [self.contentView addSubview:self.pagedScrollView];
     
-    PGDashedLineView *dashedLine = [[PGDashedLineView alloc] initWithFrame:CGRectMake(30, self.pg_height-5-2, self.pg_width-60, 2)];
+    PGDashedLineView *dashedLine = [[PGDashedLineView alloc] initWithFrame:CGRectMake(0, self.pg_height-5-2, self.pg_width, 2)];
     dashedLine.backgroundColor = [UIColor whiteColor];
     [self.contentView addSubview:dashedLine];
 }
@@ -47,7 +47,7 @@
 
 + (CGSize)cellSize
 {
-    CGFloat width = UISCREEN_WIDTH-20;
+    CGFloat width = UISCREEN_WIDTH-60;
     CGFloat height = width*240/290+60;
     
     return CGSizeMake(width, height);

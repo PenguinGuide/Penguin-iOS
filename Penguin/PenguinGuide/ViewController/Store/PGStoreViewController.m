@@ -14,11 +14,15 @@
 #import "PGFeedsCollectionView.h"
 #import "PGStoreRecommendsHeaderView.h"
 
+#import "MSWeakTimer.h"
+
 @interface PGStoreViewController () <PGFeedsCollectionViewDelegate>
 
 @property (nonatomic, strong) PGStoreViewModel *viewModel;
 @property (nonatomic, strong) PGFeedsCollectionView *feedsCollectionView;
 @property (nonatomic, strong) PGNavigationView *naviView;
+
+@property (nonatomic, strong) MSWeakTimer *weakTimer;
 
 @end
 
@@ -35,11 +39,21 @@
     [self.viewModel requestData];
     
     PGWeakSelf(self);
-    [self observe:self.viewModel keyPath:@"bannersArray" block:^(id changedObject) {
+    [self observe:self.viewModel keyPath:@"feedsArray" block:^(id changedObject) {
         NSArray *bannersArray = changedObject;
         if (bannersArray && [bannersArray isKindOfClass:[NSArray class]]) {
             [weakself.feedsCollectionView reloadData];
+        }
+        [weakself dismissLoading];
+        [weakself.feedsCollectionView endBottomRefreshing];
+    }];
+    [self observe:self.viewModel keyPath:@"error" block:^(id changedObject) {
+        NSError *error = changedObject;
+        if (error && [error isKindOfClass:[NSError class]]) {
+            [weakself showErrorMessage:error];
             [weakself dismissLoading];
+            [weakself.feedsCollectionView endTopRefreshing];
+            [weakself.feedsCollectionView endBottomRefreshing];
         }
     }];
 }
@@ -49,6 +63,13 @@
     [super viewWillAppear:animated];
     
     [self.navigationController setNavigationBarHidden:YES animated:NO];
+    
+    self.weakTimer = [MSWeakTimer scheduledTimerWithTimeInterval:1.0
+                                                          target:self
+                                                        selector:@selector(countdown)
+                                                        userInfo:nil
+                                                         repeats:YES
+                                                   dispatchQueue:dispatch_get_main_queue()];
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -57,7 +78,7 @@
     
     [self setNeedsStatusBarAppearanceUpdate];
     
-    if (self.viewModel.bannersArray.count == 0) {
+    if (self.viewModel.feedsArray.count == 0) {
         [self showLoading];
         [self.viewModel requestData];
     }
@@ -66,6 +87,8 @@
 - (void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
+    
+    [self.weakTimer invalidate];
 }
 
 - (UIStatusBarStyle)preferredStatusBarStyle
@@ -81,6 +104,7 @@
 - (void)dealloc
 {
     [self unobserve];
+    [self.weakTimer invalidate];
 }
 
 #pragma mark - <PGTabBarControllerDelegate>
@@ -121,11 +145,14 @@
 
 - (NSArray *)feedsArray
 {
-    return self.viewModel.bannersArray;
+    return self.viewModel.feedsArray;
 }
 
 - (CGSize)feedsHeaderSize
 {
+    if (!self.viewModel) {
+        return CGSizeZero;
+    }
     return [PGStoreRecommendsHeaderView headerViewSize];
 }
 
@@ -142,7 +169,7 @@
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    id banner = self.viewModel.bannersArray[indexPath.section];
+    id banner = self.viewModel.feedsArray[indexPath.section];
     
     if ([banner isKindOfClass:[PGTopicBanner class]]) {
         PGTopicBanner *topicBanner = (PGTopicBanner *)banner;
@@ -150,9 +177,20 @@
     }
 }
 
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
+- (void)countdown
+{
+    for (UICollectionViewCell *visibleCell in self.feedsCollectionView.visibleCells) {
+        if ([visibleCell isKindOfClass:[PGFlashbuyBannerCell class]]) {
+            PGFlashbuyBannerCell *cell = (PGFlashbuyBannerCell *)visibleCell;
+            NSInteger index = [[self.feedsCollectionView indexPathForCell:cell] section];
+            if (index < self.viewModel.feedsArray.count) {
+                PGFlashbuyBanner *flashbuy = self.viewModel.feedsArray[index];
+                if (flashbuy && [flashbuy isKindOfClass:[PGFlashbuyBanner class]] && cell) {
+                    [cell countdown:flashbuy];
+                }
+            }
+        }
+    }
 }
 
 - (PGFeedsCollectionView *)feedsCollectionView {
@@ -169,9 +207,7 @@
             });
         }];
         [_feedsCollectionView enableInfiniteScrolling:^{
-            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                [collectionView endBottomRefreshing];
-            });
+            [weakself.viewModel loadNextPage];
         }];
     }
     return _feedsCollectionView;
@@ -183,6 +219,11 @@
         _naviView = [PGNavigationView defaultNavigationView];
     }
     return _naviView;
+}
+
+- (void)didReceiveMemoryWarning {
+    [super didReceiveMemoryWarning];
+    // Dispose of any resources that can be recreated.
 }
 
 @end

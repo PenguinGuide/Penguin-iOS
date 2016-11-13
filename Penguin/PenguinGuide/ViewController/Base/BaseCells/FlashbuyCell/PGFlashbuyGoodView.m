@@ -48,9 +48,21 @@
     self.titleButton.pg_width = titleSize.width+25;
     
     [self.titleButton setTitle:[NSString stringWithFormat:@"￥%@  %@", good.discountPrice, good.name] forState:UIControlStateNormal];
-    [self.descLabel setText:good.desc];
     [self.goodImageView setWithImageURL:good.image placeholder:nil completion:nil];
     [self.priceLabel setText:[NSString stringWithFormat:@"原价 ￥%@", good.originalPrice]];
+}
+
+- (void)setCountDown:(NSDate *)startDate endDate:(NSDate *)endDate
+{
+    int secsLeftFromStart = [startDate timeIntervalSinceNow];
+    int secsLeftToEnd = [endDate timeIntervalSinceNow];
+    if (secsLeftFromStart > 0) {
+        self.descLabel.text = @"距离闪购开始";
+        [self setCountDown:secsLeftFromStart];
+    } else {
+        self.descLabel.text = @"距离闪购结束";
+        [self setCountDown:secsLeftToEnd];
+    }
 }
 
 - (void)setCountDown:(int)secsLeft

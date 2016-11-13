@@ -14,8 +14,15 @@
 
 - (void)setWithImageURL:(NSString *)imageURL placeholder:(UIImage *)placeholder completion:(void (^)(UIImage *))completion
 {
+    CGRect screenBounds = [[UIScreen mainScreen] bounds];
+    if (screenBounds.size.width == 375.f) {
+        imageURL = [imageURL stringByAppendingString:@"?imageView2/2/w/1000/h/1000"];
+    } else if (screenBounds.size.width > 375.f) {
+        imageURL = [imageURL stringByAppendingString:@"?imageView2/2/w/1500/h/1500"];
+    } else {
+        imageURL = [imageURL stringByAppendingString:@"?imageView2/2/w/750/h/750"];
+    }
     __weak typeof(self) weakSelf = self;
-    imageURL = [imageURL stringByAppendingString:@"?imageView2/2/w/1000/h/1000"];
     [[SDWebImageDownloader sharedDownloader] downloadImageWithURL:[NSURL URLWithString:imageURL]
                                                           options:SDWebImageDownloaderHighPriority
                                                          progress:nil
@@ -30,8 +37,15 @@
 
 - (void)setStaticImageURL:(NSString *)imageURL placeholder:(UIImage *)placeholder completion:(void (^)(UIImage *))completion
 {
+    CGRect screenBounds = [[UIScreen mainScreen] bounds];
+    if (screenBounds.size.width == 375.f) {
+        imageURL = [imageURL stringByAppendingString:@"?imageView2/2/w/1000/h/1000"];
+    } else if (screenBounds.size.width > 375.f) {
+        imageURL = [imageURL stringByAppendingString:@"?imageView2/2/w/1500/h/1500"];
+    } else {
+        imageURL = [imageURL stringByAppendingString:@"?imageView2/2/w/750/h/750"];
+    }
     __weak typeof(self) weakSelf = self;
-    imageURL = [imageURL stringByAppendingString:@"?imageView2/2/w/1000/h/1000"];
     [self sd_setImageWithURL:[NSURL URLWithString:imageURL]
             placeholderImage:placeholder
                    completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {

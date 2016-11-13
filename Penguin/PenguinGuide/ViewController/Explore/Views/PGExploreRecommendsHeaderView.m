@@ -38,6 +38,8 @@ static NSString *const ScenarioCell = @"ScenarioCell";
 
 - (void)initialize
 {
+    self.backgroundColor = [UIColor whiteColor];
+    
     [self addSubview:self.bannersView];
     [self addSubview:self.scenarioView];
 }
@@ -103,7 +105,7 @@ static NSString *const ScenarioCell = @"ScenarioCell";
 
 + (CGSize)headerViewSize
 {
-    return CGSizeMake(UISCREEN_WIDTH, UISCREEN_WIDTH*160/320+185);
+    return CGSizeMake(UISCREEN_WIDTH, UISCREEN_WIDTH*9/16+185);
 }
 
 #pragma mark - <PGPagedScrollViewDelegate>
@@ -164,7 +166,7 @@ static NSString *const ScenarioCell = @"ScenarioCell";
 - (UIView *)scenarioView {
 	if(_scenarioView == nil) {
 		_scenarioView = [[UIView alloc] initWithFrame:CGRectMake(0, self.bannersView.pg_bottom, UISCREEN_WIDTH, 185)];
-        _scenarioView.backgroundColor = Theme.colorBackground;
+        _scenarioView.backgroundColor = [UIColor whiteColor];
 	}
 	return _scenarioView;
 }

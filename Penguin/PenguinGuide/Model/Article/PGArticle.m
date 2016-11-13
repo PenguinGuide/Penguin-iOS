@@ -19,15 +19,22 @@
              @"subTitle": @"sub_title",
              @"author": @"author",
              @"designer": @"designer",
+             @"photographer": @"photographer",
              @"desc": @"desc",
              @"channel": @"channel",
-             @"date": @"date",
+             @"channelIcon": @"channel_icon",
+             @"date": @"created_at",
              @"shareUrl": @"share_url",
              @"isLiked": @"is_liked",
              @"isCollected": @"is_collected",
              @"tagsArray": @"tags",
              @"relatedArticlesArray": @"recommends"
             };
+}
+
++ (NSValueTransformer *)dateJSONTransformer
+{
+    return [NSValueTransformer valueTransformerForName:PGTimeValueTransformer];
 }
 
 + (NSValueTransformer *)tagsArrayJSONTransformer

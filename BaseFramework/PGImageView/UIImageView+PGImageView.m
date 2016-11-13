@@ -14,7 +14,14 @@
 - (void)setWithImageURL:(NSString *)imageURL placeholder:(UIImage *)placeholder completion:(void (^)(UIImage *))completion
 {
     if (imageURL && imageURL.length > 0) {
-        imageURL = [imageURL stringByAppendingString:@"?imageView2/2/w/1000/h/1000"];
+        CGRect screenBounds = [[UIScreen mainScreen] bounds];
+        if (screenBounds.size.width == 375.f) {
+            imageURL = [imageURL stringByAppendingString:@"?imageView2/2/w/1000/h/1000"];
+        } else if (screenBounds.size.width > 375.f) {
+            imageURL = [imageURL stringByAppendingString:@"?imageView2/2/w/1500/h/1500"];
+        } else {
+            imageURL = [imageURL stringByAppendingString:@"?imageView2/2/w/750/h/750"];
+        }
         [self sd_setImageWithURL:[NSURL URLWithString:imageURL]
                 placeholderImage:placeholder
                        completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {

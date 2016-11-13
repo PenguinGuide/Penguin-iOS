@@ -21,7 +21,7 @@
 
 - (void)initialize
 {
-    [self setImage:[UIImage imageNamed:@"pg_article_like"] forState:UIControlStateNormal];
+    [self setImage:[UIImage imageNamed:@"pg_article_comment_like"] forState:UIControlStateNormal];
     [self setTitleColor:Theme.colorLightText forState:UIControlStateNormal];
     [self setImage:[UIImage imageNamed:@"pg_article_liked"] forState:UIControlStateSelected];
     [self setTitleColor:Theme.colorRed forState:UIControlStateSelected];
@@ -30,7 +30,7 @@
 
 - (CGRect)imageRectForContentRect:(CGRect)contentRect
 {
-    return CGRectMake(15, (contentRect.size.height-22)/2, 22, 22);
+    return CGRectMake(15, (contentRect.size.height-30)/2, 30, 30);
 }
 
 - (CGRect)titleRectForContentRect:(CGRect)contentRect

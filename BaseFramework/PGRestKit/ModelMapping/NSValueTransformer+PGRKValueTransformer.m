@@ -11,9 +11,11 @@
 
 NSString *const PGStringValueTransformer = @"PGStringValueTransformer";
 NSString *const PGCommentTimeValueTransformer = @"PGCommentTimeValueTransformer";
+NSString *const PGTimeValueTransformer = @"PGTimeValueTransformer";
 
 static NSDateFormatter *commentTimeDateFormatter = nil;
 static NSDateFormatter *commentTimeHourFormatter = nil;
+static NSDateFormatter *timeFormatter = nil;
 
 @implementation NSValueTransformer (PGRKValueTransformer)
 
@@ -74,6 +76,20 @@ static NSDateFormatter *commentTimeHourFormatter = nil;
             }
         }];
         [NSValueTransformer setValueTransformer:commentTimeValueTransformer forName:PGCommentTimeValueTransformer];
+        
+        // time value transformer
+        MTLValueTransformer *timeValueTransformer = [MTLValueTransformer transformerUsingForwardBlock:^id(id value, BOOL *success, NSError *__autoreleasing *error) {
+            if (value == nil) return nil;
+            if ([value isKindOfClass:[NSNumber class]]) {
+                NSTimeInterval timeInterval = [value doubleValue];
+                NSDate *date = [NSDate dateWithTimeIntervalSince1970:timeInterval];
+                
+                return [[self timeFormatter] stringFromDate:date];
+            } else {
+                return nil;
+            }
+        }];
+        [NSValueTransformer setValueTransformer:timeValueTransformer forName:PGTimeValueTransformer];
     }
 }
 
@@ -97,6 +113,17 @@ static NSDateFormatter *commentTimeHourFormatter = nil;
         [commentTimeHourFormatter setDateFormat:@"HH:mm"];
     }
     return commentTimeHourFormatter;
+}
+
++ (NSDateFormatter *)timeFormatter
+{
+    if (!timeFormatter) {
+        timeFormatter = [[NSDateFormatter alloc] init];
+        timeFormatter.timeZone = [NSTimeZone timeZoneWithName:@"GMT+0000"];
+        timeFormatter.locale = [NSLocale currentLocale];
+        [timeFormatter setDateFormat:@"yyyy/M/dd"];
+    }
+    return timeFormatter;
 }
 
 @end

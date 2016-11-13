@@ -225,7 +225,33 @@
             return [self.feedsDelegate topEdgeInsets];
         }
     }
-    return UIEdgeInsetsMake(0, 0, 7, 0);
+    NSArray *feedsArray = [self.feedsDelegate feedsArray];
+    id banner = feedsArray[section];
+    if ([banner isKindOfClass:[PGArticleBanner class]]) {
+        if (section == 0) {
+            id nextBanner = feedsArray[section+1];
+            if ([nextBanner isKindOfClass:[PGArticleBanner class]]) {
+                return UIEdgeInsetsMake(7, 0, 0, 0);
+            } else {
+                return UIEdgeInsetsMake(7, 0, 7, 0);
+            }
+        } else if (section+1 < feedsArray.count) {
+            id nextBanner = feedsArray[section+1];
+            if ([nextBanner isKindOfClass:[PGArticleBanner class]]) {
+                return UIEdgeInsetsZero;
+            } else {
+                return UIEdgeInsetsMake(0, 0, 7, 0);
+            }
+        } else {
+            return UIEdgeInsetsZero;
+        }
+    } else {
+        if (section == 0) {
+            return UIEdgeInsetsMake(7, 0, 7, 0);
+        } else {
+            return UIEdgeInsetsMake(0, 0, 7, 0);
+        }
+    }
 }
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath

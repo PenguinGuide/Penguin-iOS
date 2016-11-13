@@ -21,6 +21,7 @@ static NSString *TagCell = @"TagCell";
 @property (nonatomic, strong) UILabel *subtitleLabel;
 @property (nonatomic, strong) UILabel *authorLabel;
 @property (nonatomic, strong) UILabel *designerLabel;
+@property (nonatomic, strong) UILabel *photographerLabel;
 @property (nonatomic, strong) UILabel *descLabel;
 @property (nonatomic, strong) UIView *titleHorizontalLine;
 
@@ -47,23 +48,24 @@ static NSString *TagCell = @"TagCell";
     [self.contentView addSubview:self.channelImageView];
     [self.contentView addSubview:self.channelLabel];
     
-    UIView *dateHorizontalLine = [[UIView alloc] initWithFrame:CGRectMake(30, self.dayLabel.pg_bottom, 30, 1/[UIScreen mainScreen].scale)];
+    UIView *dateHorizontalLine = [[UIView alloc] initWithFrame:CGRectMake(32, self.dayLabel.pg_bottom, 30, 2)];
     dateHorizontalLine.backgroundColor = [UIColor colorWithHexString:@"282527"];
     [self.contentView addSubview:dateHorizontalLine];
     
-    UIView *dateVerticalLine = [[UIView alloc] initWithFrame:CGRectMake(self.dayLabel.pg_right+9, 20, 2, 30)];
+    UIView *dateVerticalLine = [[UIView alloc] initWithFrame:CGRectMake(self.dayLabel.pg_right+6, 21, 2, 30)];
     dateVerticalLine.backgroundColor = Theme.colorText;
     [self.contentView addSubview:dateVerticalLine];
     
     [self.contentView addSubview:self.titleLabel];
     [self.contentView addSubview:self.subtitleLabel];
     
-    self.titleHorizontalLine = [[UIView alloc] initWithFrame:CGRectMake(30, self.subtitleLabel.pg_bottom+15, 40, 1/[UIScreen mainScreen].scale)];
+    self.titleHorizontalLine = [[UIView alloc] initWithFrame:CGRectMake(30, self.subtitleLabel.pg_bottom+15, 40, 2)];
     self.titleHorizontalLine.backgroundColor = Theme.colorText;
     [self.contentView addSubview:self.titleHorizontalLine];
     
     [self.contentView addSubview:self.authorLabel];
     [self.contentView addSubview:self.designerLabel];
+    [self.contentView addSubview:self.photographerLabel];
     [self.contentView addSubview:self.descLabel];
     [self.contentView addSubview:self.tagsCollectionView];
 }
@@ -73,12 +75,21 @@ static NSString *TagCell = @"TagCell";
     if (article) {
         self.article = article;
         
-        self.dayLabel.text = @"10";
-        self.monthLabel.text = @"2016/9";
+        if (article.date && article.date.length > 0) {
+            NSArray *datesArray = [article.date componentsSeparatedByString:@"/"];
+            if (datesArray.count == 3) {
+                NSString *year = datesArray[0];
+                NSString *month = datesArray[1];
+                NSString *day = datesArray[2];
+                
+                self.dayLabel.text = day;
+                self.monthLabel.text = [NSString stringWithFormat:@"%@/%@", year, month];
+            }
+        }
         
-        if ([article.channel isEqualToString:@"city_guide"]) {
-            self.channelImageView.image = [UIImage imageNamed:@"pg_home_article_category_city_guide"];
-            self.channelLabel.text = @"城市指南";
+        if (self.article.channel) {
+            [self.channelImageView setWithImageURL:self.article.channelIcon placeholder:nil completion:nil];
+            [self.channelLabel setText:self.article.channel];
         }
         
         CGFloat titleHeight = 0.f;
@@ -87,7 +98,7 @@ static NSString *TagCell = @"TagCell";
         if (article.title.length > 0) {
             titleHeight = [article.title boundingRectWithSize:CGSizeMake(UISCREEN_WIDTH-60, 500)
                                                       options:NSStringDrawingUsesLineFragmentOrigin
-                                                   attributes:@{NSFontAttributeName:[UIFont systemFontOfSize:26.f weight:UIFontWeightRegular]}
+                                                   attributes:@{NSFontAttributeName:[UIFont systemFontOfSize:26.f weight:UIFontWeightBold]}
                                                       context:nil].size.height;
             self.titleLabel.pg_height = titleHeight;
         }
@@ -95,25 +106,77 @@ static NSString *TagCell = @"TagCell";
         if (article.subTitle.length > 0) {
             subtitleHeight = [article.subTitle boundingRectWithSize:CGSizeMake(UISCREEN_WIDTH-60, 500)
                                                             options:NSStringDrawingUsesLineFragmentOrigin
-                                                         attributes:@{NSFontAttributeName:[UIFont systemFontOfSize:14.f weight:UIFontWeightRegular]}
+                                                         attributes:@{NSFontAttributeName:[UIFont systemFontOfSize:14.f weight:UIFontWeightBold]}
                                                             context:nil].size.height;
             self.subtitleLabel.frame = CGRectMake(self.subtitleLabel.pg_x, self.titleLabel.pg_bottom+10, self.subtitleLabel.pg_width, subtitleHeight);
         }
         
         self.titleLabel.text = article.title;
         self.subtitleLabel.text = article.subTitle;
-        self.titleHorizontalLine.frame = CGRectMake(30, self.subtitleLabel.pg_bottom+15, 40, 1/[UIScreen mainScreen].scale);
+        self.titleHorizontalLine.frame = CGRectMake(30, self.subtitleLabel.pg_bottom+15, 40, 2);
         
-        self.authorLabel.text = [NSString stringWithFormat:@"文 | %@", article.author];
-        self.designerLabel.text = [NSString stringWithFormat:@"图 | %@", article.designer];
-        self.descLabel.text = article.desc;
+        if (article.author && article.author.length > 0) {
+            self.authorLabel.text = [NSString stringWithFormat:@"文 | %@", article.author];
+            self.authorLabel.frame = CGRectMake(self.authorLabel.pg_x, self.subtitleLabel.pg_bottom+30, self.authorLabel.pg_width, self.authorLabel.pg_height);
+            self.authorLabel.hidden = NO;
+        } else {
+            self.authorLabel.hidden = YES;
+        }
         
-        self.authorLabel.frame = CGRectMake(self.authorLabel.pg_x, self.subtitleLabel.pg_bottom+30, self.authorLabel.pg_width, self.authorLabel.pg_height);
-        self.designerLabel.frame = CGRectMake(self.designerLabel.pg_x, self.authorLabel.pg_bottom+10, self.designerLabel.pg_width, self.designerLabel.pg_height);
-        self.descLabel.frame = CGRectMake(self.descLabel.pg_x, self.designerLabel.pg_bottom+10, self.descLabel.pg_width, self.descLabel.pg_height);
+        if (article.designer && article.designer.length > 0) {
+            self.designerLabel.text = [NSString stringWithFormat:@"设计 | %@", article.designer];
+            if (article.author && article.author.length > 0) {
+                self.designerLabel.frame = CGRectMake(self.designerLabel.pg_x, self.authorLabel.pg_bottom+10, self.designerLabel.pg_width, self.designerLabel.pg_height);
+            } else {
+                self.designerLabel.frame = CGRectMake(self.designerLabel.pg_x, self.subtitleLabel.pg_bottom+10, self.designerLabel.pg_width, self.designerLabel.pg_height);
+            }
+            self.designerLabel.hidden = NO;
+        } else {
+            self.designerLabel.hidden = YES;
+        }
+        
+        if (article.photographer && article.photographer.length > 0) {
+            self.photographerLabel.text = [NSString stringWithFormat:@"摄影 | %@", article.photographer];
+            if (article.author && article.author.length > 0 && article.designer && article.designer.length > 0) {
+                self.photographerLabel.frame = CGRectMake(30, self.designerLabel.pg_bottom+10, self.photographerLabel.pg_width, self.photographerLabel.pg_height);
+            } else if (article.author && article.author.length > 0) {
+                self.photographerLabel.frame = CGRectMake(30, self.authorLabel.pg_bottom+10, self.photographerLabel.pg_width, self.photographerLabel.pg_height);
+            } else if (article.designer && article.designer.length > 0) {
+                self.photographerLabel.frame = CGRectMake(30, self.designerLabel.pg_bottom+10, self.photographerLabel.pg_width, self.photographerLabel.pg_height);
+            } else {
+                self.photographerLabel.frame = CGRectMake(30, self.subtitleLabel.pg_bottom+10, self.photographerLabel.pg_width, self.photographerLabel.pg_height);
+            }
+            self.photographerLabel.hidden = NO;
+        } else {
+            self.photographerLabel.hidden = YES;
+        }
+        
+        if (article.desc && article.desc.length > 0) {
+            self.descLabel.text = article.desc;
+            if (!self.photographerLabel.hidden) {
+                self.descLabel.frame = CGRectMake(self.descLabel.pg_x, self.photographerLabel.pg_bottom+10, self.descLabel.pg_width, self.descLabel.pg_height);
+            } else if (!self.designerLabel.hidden) {
+                self.descLabel.frame = CGRectMake(self.descLabel.pg_x, self.designerLabel.pg_bottom+10, self.descLabel.pg_width, self.descLabel.pg_height);
+            } else {
+                self.descLabel.frame = CGRectMake(self.descLabel.pg_x, self.authorLabel.pg_bottom+10, self.descLabel.pg_width, self.descLabel.pg_height);
+            }
+            self.descLabel.hidden = NO;
+        } else {
+            self.descLabel.hidden = YES;
+        }
         
         if (article.tagsArray.count > 0) {
-            self.tagsCollectionView.frame = CGRectMake(self.tagsCollectionView.pg_x, self.descLabel.pg_bottom+20, self.descLabel.pg_width, 20.f);
+            if (!self.descLabel.hidden) {
+                self.tagsCollectionView.frame = CGRectMake(self.tagsCollectionView.pg_x, self.descLabel.pg_bottom+20, self.descLabel.pg_width, 20.f);
+            } else {
+                if (!self.photographerLabel.hidden) {
+                    self.tagsCollectionView.frame = CGRectMake(self.tagsCollectionView.pg_x, self.photographerLabel.pg_bottom+20, self.descLabel.pg_width, 20.f);
+                } else if (!self.designerLabel.hidden) {
+                    self.tagsCollectionView.frame = CGRectMake(self.tagsCollectionView.pg_x, self.designerLabel.pg_bottom+20, self.descLabel.pg_width, 20.f);
+                } else {
+                    self.tagsCollectionView.frame = CGRectMake(self.tagsCollectionView.pg_x, self.authorLabel.pg_bottom+20, self.descLabel.pg_width, 20.f);
+                }
+            }
         } else {
             self.tagsCollectionView.frame = CGRectMake(self.tagsCollectionView.pg_x, self.descLabel.pg_bottom+20, self.descLabel.pg_width, 0.f);
         }
@@ -130,19 +193,29 @@ static NSString *TagCell = @"TagCell";
         if (article.title.length > 0) {
             titleHeight = [article.title boundingRectWithSize:CGSizeMake(UISCREEN_WIDTH-60, 500)
                                                       options:NSStringDrawingUsesLineFragmentOrigin
-                                                   attributes:@{NSFontAttributeName:[UIFont systemFontOfSize:26.f weight:UIFontWeightRegular]}
+                                                   attributes:@{NSFontAttributeName:[UIFont systemFontOfSize:26.f weight:UIFontWeightBold]}
                                                       context:nil].size.height;
         }
         
         if (article.subTitle.length > 0) {
             subtitleHeight = [article.subTitle boundingRectWithSize:CGSizeMake(UISCREEN_WIDTH-60, 500)
                                                             options:NSStringDrawingUsesLineFragmentOrigin
-                                                         attributes:@{NSFontAttributeName:[UIFont systemFontOfSize:14.f weight:UIFontWeightRegular]}
+                                                         attributes:@{NSFontAttributeName:[UIFont systemFontOfSize:14.f weight:UIFontWeightBold]}
                                                             context:nil].size.height;
         }
-        CGFloat height = 20+28+20+titleHeight+10+subtitleHeight+30+12+10+12+10+12+20;
+        CGFloat copyrightInfoHeight = 0.f;
+        if (article.author && article.author.length > 0) {
+            copyrightInfoHeight = copyrightInfoHeight + 12;
+        }
+        if (article.designer && article.designer.length > 0) {
+            copyrightInfoHeight = copyrightInfoHeight + 10 + 12;
+        }
+        if (article.photographer && article.photographer.length > 0) {
+            copyrightInfoHeight = copyrightInfoHeight + 10 + 12;
+        }
+        CGFloat height = 21+28+12+titleHeight+10+subtitleHeight+30+copyrightInfoHeight+10+20;
         if (article.tagsArray.count > 0) {
-            return CGSizeMake(UISCREEN_WIDTH, height+30.f);
+            return CGSizeMake(UISCREEN_WIDTH, height+20.f+30.f);
         } else {
             return CGSizeMake(UISCREEN_WIDTH, height+10.f);
         }
@@ -208,10 +281,10 @@ static NSString *TagCell = @"TagCell";
 - (UILabel *)dayLabel
 {
     if (!_dayLabel) {
-        _dayLabel = [[UILabel alloc] initWithFrame:CGRectMake(30, 19, 30, 22)];
-        _dayLabel.font = [UIFont boldSystemFontOfSize:22.f];
+        _dayLabel = [[UILabel alloc] initWithFrame:CGRectMake(30, 19, 35, 22)];
+        _dayLabel.font = [UIFont boldSystemFontOfSize:26.f];
         _dayLabel.textAlignment = NSTextAlignmentCenter;
-        _dayLabel.textColor = [UIColor colorWithHexString:@"282527"];
+        _dayLabel.textColor = Theme.colorText;
     }
     return _dayLabel;
 }
@@ -219,10 +292,10 @@ static NSString *TagCell = @"TagCell";
 - (UILabel *)monthLabel
 {
     if (!_monthLabel) {
-        _monthLabel = [[UILabel alloc] initWithFrame:CGRectMake(30, self.dayLabel.pg_bottom+1/[UIScreen mainScreen].scale, 30, 8)];
+        _monthLabel = [[UILabel alloc] initWithFrame:CGRectMake(30, self.dayLabel.pg_bottom+3, 35, 8)];
         _monthLabel.font = [UIFont boldSystemFontOfSize:8.f];
         _monthLabel.textAlignment = NSTextAlignmentCenter;
-        _monthLabel.textColor = [UIColor colorWithHexString:@"282527"];
+        _monthLabel.textColor = Theme.colorText;
     }
     return _monthLabel;
 }
@@ -230,7 +303,7 @@ static NSString *TagCell = @"TagCell";
 - (UIImageView *)channelImageView
 {
     if (!_channelImageView) {
-        _channelImageView = [[UIImageView alloc] initWithFrame:CGRectMake(self.dayLabel.pg_right+20, 20, 28, 28)];
+        _channelImageView = [[UIImageView alloc] initWithFrame:CGRectMake(self.dayLabel.pg_right+20, 21, 28, 28)];
     }
     return _channelImageView;
 }
@@ -238,7 +311,7 @@ static NSString *TagCell = @"TagCell";
 - (UILabel *)channelLabel
 {
     if (!_channelLabel) {
-        _channelLabel = [[UILabel alloc] initWithFrame:CGRectMake(self.channelImageView.pg_right+5, 20, 100, 28)];
+        _channelLabel = [[UILabel alloc] initWithFrame:CGRectMake(self.channelImageView.pg_right+8, 21, 100, 28)];
         _channelLabel.font = Theme.fontLargeBold;
         _channelLabel.textColor = Theme.colorText;
     }
@@ -248,8 +321,8 @@ static NSString *TagCell = @"TagCell";
 - (UILabel *)titleLabel
 {
     if (!_titleLabel) {
-        _titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(30, self.channelImageView.pg_bottom+20, UISCREEN_WIDTH-60, 28)];
-        _titleLabel.font = [UIFont systemFontOfSize:26.f weight:UIFontWeightRegular];
+        _titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(30, self.channelImageView.pg_bottom+12, UISCREEN_WIDTH-60, 28)];
+        _titleLabel.font = [UIFont systemFontOfSize:26.f weight:UIFontWeightBold];
         _titleLabel.textColor = Theme.colorText;
         _titleLabel.numberOfLines = 0;
     }
@@ -260,7 +333,7 @@ static NSString *TagCell = @"TagCell";
 {
     if (!_subtitleLabel) {
         _subtitleLabel = [[UILabel alloc] initWithFrame:CGRectMake(30, self.titleLabel.pg_bottom+10, UISCREEN_WIDTH-60, 16)];
-        _subtitleLabel.font = [UIFont systemFontOfSize:14.f weight:UIFontWeightRegular];
+        _subtitleLabel.font = [UIFont systemFontOfSize:14.f weight:UIFontWeightBold];
         _subtitleLabel.textColor = Theme.colorLightText;
     }
     return _subtitleLabel;
@@ -284,6 +357,16 @@ static NSString *TagCell = @"TagCell";
         _designerLabel.textColor = Theme.colorText;
     }
     return _designerLabel;
+}
+
+- (UILabel *)photographerLabel
+{
+    if (!_photographerLabel) {
+        _photographerLabel = [[UILabel alloc] initWithFrame:CGRectMake(30, self.designerLabel.pg_bottom+10, UISCREEN_WIDTH-60, 12)];
+        _photographerLabel.font = Theme.fontExtraSmallBold;
+        _photographerLabel.textColor = Theme.colorText;
+    }
+    return _photographerLabel;
 }
 
 - (UILabel *)descLabel

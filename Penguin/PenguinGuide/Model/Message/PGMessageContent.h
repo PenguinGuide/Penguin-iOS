@@ -12,6 +12,8 @@
 
 @property (nonatomic, strong) NSString *avatar;
 @property (nonatomic, strong) NSString *content;
+@property (nonatomic, strong) NSString *replyContent;
+@property (nonatomic, strong) NSString *replyId;
 @property (nonatomic, strong) NSString *nickname;
 
 @end

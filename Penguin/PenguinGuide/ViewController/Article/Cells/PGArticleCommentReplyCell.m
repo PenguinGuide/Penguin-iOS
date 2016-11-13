@@ -94,14 +94,58 @@
                                                    context:nil].size;
     self.commentLabel.pg_height = textSize.height+5;
     
-    self.replyLabel.frame = CGRectMake(26, self.commentLabel.pg_bottom+10, self.replyLabel.pg_width, self.replyLabel.pg_height);
-    self.replyLabelMaskView.frame = CGRectMake(26, self.commentLabel.pg_bottom+10, self.replyLabel.pg_width, self.replyLabel.pg_height);
+    self.replyLabel.frame = CGRectMake(30, self.commentLabel.pg_bottom+10, self.replyLabel.pg_width, self.replyLabel.pg_height);
+    self.replyLabelMaskView.frame = CGRectMake(30, self.commentLabel.pg_bottom+10, self.replyLabel.pg_width, self.replyLabel.pg_height);
 
     NSString *replyContent = [NSString stringWithFormat:@"    %@: %@", comment.replyComment.user.nickname, comment.replyComment.content];
     
     NSMutableAttributedString *attrS = [[NSMutableAttributedString alloc] initWithString:replyContent];
     [attrS addAttribute:NSFontAttributeName value:Theme.fontSmallBold range:NSMakeRange(0, 4+comment.replyComment.user.nickname.length+1)];
     [attrS addAttribute:NSFontAttributeName value:Theme.fontSmall range:NSMakeRange(4+comment.replyComment.user.nickname.length+1, comment.replyComment.content.length)];
+    [attrS addAttribute:NSForegroundColorAttributeName value:Theme.colorText range:NSMakeRange(0, replyContent.length)];
+    
+    self.replyLabel.attributedText = attrS;
+}
+
+- (void)setCellWithMessage:(PGMessageContent *)message
+{
+    [self.avatarImageView setWithImageURL:message.avatar placeholder:nil completion:nil];
+    self.nameLabel.text = message.nickname;
+    self.timeLabel.text = @"刚刚";
+    
+    CGSize nameSize = [message.nickname sizeWithAttributes:@{NSFontAttributeName:Theme.fontMediumBold}];
+    self.nameLabel.pg_width = nameSize.width;
+    
+    self.likeButton.hidden = YES;
+    self.moreButton.hidden = YES;
+    
+    NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle defaultParagraphStyle] mutableCopy];
+    paragraphStyle.lineSpacing = 5.f;
+    NSString *nickname = @"你";
+    NSString *commentContent = [NSString stringWithFormat:@"回复%@: %@", nickname, message.replyContent];
+    NSMutableAttributedString *commentsStr = [[NSMutableAttributedString alloc] initWithString:commentContent];
+    [commentsStr addAttribute:NSForegroundColorAttributeName value:Theme.colorHighlight range:NSMakeRange(0, 4+nickname.length)];
+    [commentsStr addAttribute:NSForegroundColorAttributeName value:Theme.colorText range:NSMakeRange(4+nickname.length, message.replyContent.length)];
+    [commentsStr addAttribute:NSFontAttributeName value:Theme.fontSmallBold range:NSMakeRange(0, 4+nickname.length)];
+    [commentsStr addAttribute:NSFontAttributeName value:Theme.fontSmall range:NSMakeRange(4+nickname.length, message.replyContent.length)];
+    [commentsStr addAttribute:NSParagraphStyleAttributeName value:paragraphStyle range:NSMakeRange(0, commentContent.length)];
+    self.commentLabel.attributedText = commentsStr;
+    
+    CGSize textSize = [commentContent boundingRectWithSize:CGSizeMake(UISCREEN_WIDTH-69-25, 1000)
+                                                   options:NSStringDrawingUsesLineFragmentOrigin
+                                                attributes:@{NSFontAttributeName:Theme.fontSmall, NSParagraphStyleAttributeName:paragraphStyle}
+                                                   context:nil].size;
+    self.commentLabel.pg_height = textSize.height+5;
+    
+    self.replyLabel.frame = CGRectMake(30, self.commentLabel.pg_bottom+10, self.replyLabel.pg_width, self.replyLabel.pg_height);
+    self.replyLabelMaskView.frame = CGRectMake(30, self.commentLabel.pg_bottom+10, self.replyLabel.pg_width, self.replyLabel.pg_height);
+    
+    NSString *myNickname = @"我";
+    NSString *replyContent = [NSString stringWithFormat:@"    %@: %@", myNickname, message.content];
+    
+    NSMutableAttributedString *attrS = [[NSMutableAttributedString alloc] initWithString:replyContent];
+    [attrS addAttribute:NSFontAttributeName value:Theme.fontSmallBold range:NSMakeRange(0, 4+myNickname.length+1)];
+    [attrS addAttribute:NSFontAttributeName value:Theme.fontSmall range:NSMakeRange(4+myNickname.length+1, message.content.length)];
     [attrS addAttribute:NSForegroundColorAttributeName value:Theme.colorText range:NSMakeRange(0, replyContent.length)];
     
     self.replyLabel.attributedText = attrS;
@@ -120,6 +164,32 @@
         [commentsStr addAttribute:NSForegroundColorAttributeName value:Theme.colorText range:NSMakeRange(4+comment.replyComment.user.nickname.length, comment.content.length)];
         [commentsStr addAttribute:NSFontAttributeName value:Theme.fontSmallBold range:NSMakeRange(0, 4+comment.replyComment.user.nickname.length)];
         [commentsStr addAttribute:NSFontAttributeName value:Theme.fontSmall range:NSMakeRange(4+comment.replyComment.user.nickname.length, comment.content.length)];
+        [commentsStr addAttribute:NSParagraphStyleAttributeName value:paragraphStyle range:NSMakeRange(0, commentContent.length)];
+        CGSize textSize = [commentsStr boundingRectWithSize:CGSizeMake(UISCREEN_WIDTH-69-25, 1000)
+                                                    options:NSStringDrawingUsesLineFragmentOrigin
+                                                    context:nil].size;
+        
+        height = height + textSize.height+5+10+40;
+        
+        return CGSizeMake(UISCREEN_WIDTH, height);
+    }
+    return CGSizeZero;
+}
+
++ (CGSize)messageCellSize:(PGMessageContent *)message
+{
+    if (message.replyContent && message.replyContent.length > 0) {
+        CGFloat height = 42+15;
+        
+        NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle defaultParagraphStyle] mutableCopy];
+        paragraphStyle.lineSpacing = 5.f;
+        NSString *nickname = @"你";
+        NSString *commentContent = [NSString stringWithFormat:@"回复%@: %@", nickname, message.replyContent];
+        NSMutableAttributedString *commentsStr = [[NSMutableAttributedString alloc] initWithString:commentContent];
+        [commentsStr addAttribute:NSForegroundColorAttributeName value:Theme.colorHighlight range:NSMakeRange(0, 4+nickname.length)];
+        [commentsStr addAttribute:NSForegroundColorAttributeName value:Theme.colorText range:NSMakeRange(4+nickname.length, message.replyContent.length)];
+        [commentsStr addAttribute:NSFontAttributeName value:Theme.fontSmallBold range:NSMakeRange(0, 4+nickname.length)];
+        [commentsStr addAttribute:NSFontAttributeName value:Theme.fontSmall range:NSMakeRange(4+nickname.length, message.replyContent.length)];
         [commentsStr addAttribute:NSParagraphStyleAttributeName value:paragraphStyle range:NSMakeRange(0, commentContent.length)];
         CGSize textSize = [commentsStr boundingRectWithSize:CGSizeMake(UISCREEN_WIDTH-69-25, 1000)
                                                     options:NSStringDrawingUsesLineFragmentOrigin
@@ -251,7 +321,7 @@
 - (UILabel *)commentLabel
 {
     if (!_commentLabel) {
-        _commentLabel = [[UILabel alloc] initWithFrame:CGRectMake(26, self.avatarImageView.pg_bottom+15, self.pg_width-52, 0)];
+        _commentLabel = [[UILabel alloc] initWithFrame:CGRectMake(30, self.avatarImageView.pg_bottom+15, self.pg_width-60, 0)];
         _commentLabel.numberOfLines = 0;
         _commentLabel.font = Theme.fontSmall;
         _commentLabel.textColor = Theme.colorText;
@@ -263,7 +333,7 @@
 - (UILabel *)replyLabel
 {
     if (!_replyLabel) {
-        _replyLabel = [[UILabel alloc] initWithFrame:CGRectMake(26, self.commentLabel.pg_bottom+10, UISCREEN_WIDTH-26*2, 40)];
+        _replyLabel = [[UILabel alloc] initWithFrame:CGRectMake(30, self.commentLabel.pg_bottom+10, UISCREEN_WIDTH-30*2, 40)];
         _replyLabel.font = Theme.fontSmall;
         _replyLabel.backgroundColor = Theme.colorBackground;
         _replyLabel.textColor = Theme.colorText;
@@ -274,7 +344,7 @@
 - (UIImageView *)replyLabelMaskView
 {
     if (!_replyLabelMaskView) {
-        _replyLabelMaskView = [[UIImageView alloc] initWithFrame:CGRectMake(26, self.commentLabel.pg_bottom+10, UISCREEN_WIDTH-26*2, 40)];
+        _replyLabelMaskView = [[UIImageView alloc] initWithFrame:CGRectMake(30, self.commentLabel.pg_bottom+10, UISCREEN_WIDTH-30*2, 40)];
         _replyLabelMaskView.image = [[UIImage imageNamed:@"pg_bg_corner_mask"] resizableImageWithCapInsets:UIEdgeInsetsMake(6, 6, 6, 6) resizingMode:UIImageResizingModeStretch];
     }
     return _replyLabelMaskView;

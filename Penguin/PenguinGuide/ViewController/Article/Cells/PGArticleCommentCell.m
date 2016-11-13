@@ -79,7 +79,7 @@
                                                                                                               NSParagraphStyleAttributeName:paragraphStyle}];
     self.commentLabel.attributedText = commentsStr;
     
-    CGSize textSize = [comment.content boundingRectWithSize:CGSizeMake(UISCREEN_WIDTH-26*2, 1000)
+    CGSize textSize = [comment.content boundingRectWithSize:CGSizeMake(UISCREEN_WIDTH-30*2, 1000)
                                                     options:NSStringDrawingUsesLineFragmentOrigin
                                                  attributes:@{NSFontAttributeName:Theme.fontSmall, NSParagraphStyleAttributeName:paragraphStyle}
                                                     context:nil].size;
@@ -103,7 +103,7 @@
         
         NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle defaultParagraphStyle] mutableCopy];
         paragraphStyle.lineSpacing = 5.f;
-        CGSize textSize = [comment.content boundingRectWithSize:CGSizeMake(UISCREEN_WIDTH-26*2, 1000)
+        CGSize textSize = [comment.content boundingRectWithSize:CGSizeMake(UISCREEN_WIDTH-30*2, 1000)
                                                         options:NSStringDrawingUsesLineFragmentOrigin
                                                      attributes:@{NSFontAttributeName:Theme.fontSmall, NSParagraphStyleAttributeName:paragraphStyle}
                                                         context:nil].size;
@@ -223,7 +223,7 @@
 - (UILabel *)commentLabel
 {
     if (!_commentLabel) {
-        _commentLabel = [[UILabel alloc] initWithFrame:CGRectMake(26, self.avatarImageView.pg_bottom+15, self.pg_width-52, 0)];
+        _commentLabel = [[UILabel alloc] initWithFrame:CGRectMake(30, self.avatarImageView.pg_bottom+15, self.pg_width-60, 0)];
         _commentLabel.numberOfLines = 0;
         _commentLabel.font = Theme.fontSmall;
         _commentLabel.textColor = Theme.colorText;

@@ -14,9 +14,21 @@
 {
     return @{
              @"avatar" : @"avatar_url",
-             @"content" : @"comment",
+             @"content" : @[@"comment_content", @"comment"],
+             @"replyContent": @"reply_content",
+             @"replyId": @"reply_id",
              @"nickname" : @"nick_name"
              };
+}
+
++ (NSValueTransformer *)contentJSONTransformer
+{
+    return [self stringTransformer:@[@"comment_content", @"comment"]];
+}
+
++ (NSValueTransformer *)replyIdJSONTransformer
+{
+    return [NSValueTransformer valueTransformerForName:PGStringValueTransformer];
 }
 
 @end

@@ -38,6 +38,8 @@
 
 - (void)initialize
 {
+    self.backgroundColor = [UIColor whiteColor];
+    
     [self addSubview:self.bannersView];
     [self addSubview:self.categoriesCollectionView];
 }
@@ -62,7 +64,7 @@
 
 + (CGSize)headerViewSize
 {
-    return CGSizeMake(UISCREEN_WIDTH, UISCREEN_WIDTH*160/320+10+16+80);
+    return CGSizeMake(UISCREEN_WIDTH, UISCREEN_WIDTH*9/16+10+16+80);
 }
 
 - (void)imageViewDidSelect:(NSInteger)index
@@ -88,7 +90,7 @@
 
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView
 {
-    return 1;
+    return self.categoriesArray.count == 0 ? 0 : 1;
 }
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
@@ -149,7 +151,7 @@
 - (PGPagedScrollView *)bannersView
 {
     if (!_bannersView) {
-        _bannersView = [[PGPagedScrollView alloc] initWithFrame:CGRectMake(0, 0, UISCREEN_WIDTH, UISCREEN_WIDTH*160/320) imageFillMode:PGPagedScrollViewImageFillModeFill iconMode:PGPagedScrollViewIconModeDefault];
+        _bannersView = [[PGPagedScrollView alloc] initWithFrame:CGRectMake(0, 0, self.pg_width, self.pg_height-80-11-16) imageFillMode:PGPagedScrollViewImageFillModeFill iconMode:PGPagedScrollViewIconModeDefault];
         _bannersView.delegate = self;
     }
     return _bannersView;
@@ -163,7 +165,7 @@
         layout.minimumLineSpacing = 15.f;
         layout.minimumInteritemSpacing = 0.f;
         _categoriesCollectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(0, self.bannersView.pg_bottom+10+16, self.pg_width, 80) collectionViewLayout:layout];
-        _categoriesCollectionView.backgroundColor = Theme.colorBackground;
+        _categoriesCollectionView.backgroundColor = [UIColor whiteColor];
         _categoriesCollectionView.showsVerticalScrollIndicator = NO;
         _categoriesCollectionView.showsHorizontalScrollIndicator = NO;
         _categoriesCollectionView.dataSource = self;

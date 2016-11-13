@@ -63,7 +63,7 @@
 
 - (UIImageView *)goodImageView {
     if(_goodImageView == nil) {
-        _goodImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 160, 95)];
+        _goodImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 160, 160*2/3)];
         _goodImageView.clipsToBounds = YES;
         _goodImageView.backgroundColor = Theme.colorBackground;
         _goodImageView.contentMode = UIViewContentModeScaleAspectFill;

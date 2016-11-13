@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "PGComment.h"
+#import "PGMessageContent.h"
 
 @class PGArticleCommentReplyCell;
 
@@ -24,11 +25,13 @@
 @property (nonatomic, weak) id<PGArticleCommentReplyCellDelegate> delegate;
 
 - (void)setCellWithComment:(PGComment *)comment;
+- (void)setCellWithMessage:(PGMessageContent *)message;
 - (void)selectLabel;
 - (void)unselectLabel;
 - (void)animateLikeButton:(NSInteger)count;
 - (void)animateDislikeButton:(NSInteger)count;
 
 + (CGSize)cellSize:(PGComment *)comment;
++ (CGSize)messageCellSize:(PGMessageContent *)message;
 
 @end

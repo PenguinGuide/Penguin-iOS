@@ -15,6 +15,8 @@
 #import "PGSettingsHeaderView.h"
 #import "PGSettingsLogoutFooterView.h"
 
+#import "SDImageCache.h"
+
 @interface PGSystemSettingsViewController () <UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout>
 
 @property (nonatomic, strong) PGBaseCollectionView *settingsCollectionView;
@@ -134,6 +136,26 @@
     }
     
     return nil;
+}
+
+- (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    if (indexPath.item == 0) {
+        PGAlertAction *cancelAction = [PGAlertAction actionWithTitle:@"取消" style:^(PGAlertActionStyle *style) {
+            
+        } handler:^{
+            
+        }];
+        PGAlertAction *doneAction = [PGAlertAction actionWithTitle:@"确定" style:^(PGAlertActionStyle *style) {
+            style.type = PGAlertActionTypeDestructive;
+        } handler:^{
+            [[SDImageCache sharedImageCache] clearDisk];
+            [[SDImageCache sharedImageCache] clearMemory];
+        }];
+        [self showAlert:@"清除缓存" message:@"确定清除缓存？" actions:@[cancelAction, doneAction] style:^(PGAlertStyle *style) {
+            style.alertType = PGAlertTypeAlert;
+        }];
+    }
 }
 
 #pragma mark - <Button Events>

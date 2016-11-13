@@ -19,7 +19,8 @@
              @"image" : @[@"image", @"image_url"],
              @"unit" : @"unit",
              @"desc" : @"desc",
-             @"time" : @"time",
+             @"startTime" : @"begin_at",
+             @"endTime" : @"end_at",
              @"link" : @"link",
              @"isNew" : @"is_new",
              @"isCollected": @"collected",
@@ -52,7 +53,12 @@
     return [NSValueTransformer valueTransformerForName:PGStringValueTransformer];
 }
 
-+ (NSValueTransformer *)timeJSONTransformer
++ (NSValueTransformer *)startTimeJSONTransformer
+{
+    return [NSValueTransformer valueTransformerForName:PGStringValueTransformer];
+}
+
++ (NSValueTransformer *)endTimeJSONTransformer
 {
     return [NSValueTransformer valueTransformerForName:PGStringValueTransformer];
 }

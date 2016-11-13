@@ -38,6 +38,8 @@ static NSString *const ChannelCell = @"ChannelCell";
 
 - (void)initialize
 {
+    self.backgroundColor = [UIColor whiteColor];
+    
     [self addSubview:self.bannersView];
     [self addSubview:self.categoriesCollectionView];
 }
@@ -62,7 +64,7 @@ static NSString *const ChannelCell = @"ChannelCell";
 
 + (CGSize)headerViewSize
 {
-    return CGSizeMake(UISCREEN_WIDTH, UISCREEN_WIDTH*160/320+80+11+16);
+    return CGSizeMake(UISCREEN_WIDTH, UISCREEN_WIDTH*9/16+80+11+16);
 }
 
 #pragma mark - <PGPagedScrollViewDelegate>
@@ -163,7 +165,7 @@ static NSString *const ChannelCell = @"ChannelCell";
         layout.minimumLineSpacing = 15.f;
         layout.minimumInteritemSpacing = 0.f;
         _categoriesCollectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(0, self.bannersView.pg_bottom+11+16, self.pg_width, 80) collectionViewLayout:layout];
-        _categoriesCollectionView.backgroundColor = Theme.colorBackground;
+        _categoriesCollectionView.backgroundColor = [UIColor whiteColor];
         _categoriesCollectionView.showsVerticalScrollIndicator = NO;
         _categoriesCollectionView.showsHorizontalScrollIndicator = NO;
         _categoriesCollectionView.dataSource = self;

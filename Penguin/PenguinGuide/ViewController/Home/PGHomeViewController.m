@@ -37,6 +37,8 @@
 
 @property (nonatomic, strong) MSWeakTimer *weakTimer;
 
+@property (nonatomic, assign) BOOL statusbarIsWhiteBackground;
+
 @end
 
 @implementation PGHomeViewController
@@ -90,6 +92,18 @@
         [self showLoading];
         [self.viewModel requestData];
     }
+    
+    if (self.statusbarIsWhiteBackground) {
+        UIView *statusBar = [[[UIApplication sharedApplication] valueForKey:@"statusBarWindow"] valueForKey:@"statusBar"];
+        if ([statusBar respondsToSelector:@selector(setBackgroundColor:)]) {
+            statusBar.backgroundColor = [UIColor whiteColor];
+        }
+    } else {
+        UIView *statusBar = [[[UIApplication sharedApplication] valueForKey:@"statusBarWindow"] valueForKey:@"statusBar"];
+        if ([statusBar respondsToSelector:@selector(setBackgroundColor:)]) {
+            statusBar.backgroundColor = [UIColor clearColor];
+        }
+    }
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -120,7 +134,11 @@
 - (UIStatusBarStyle)preferredStatusBarStyle
 {
     // http://www.th7.cn/Program/IOS/201606/881633.shtml fix this method didn't called
-    return UIStatusBarStyleLightContent;
+    if (self.statusbarIsWhiteBackground) {
+        return UIStatusBarStyleDefault;
+    } else {
+        return UIStatusBarStyleLightContent;
+    }
 }
 
 #pragma mark - <PGTabBarControllerDelegate>
@@ -169,6 +187,9 @@
 
 - (CGSize)feedsHeaderSize
 {
+    if (!self.viewModel) {
+        return CGSizeZero;
+    }
     return [PGHomeRecommendsHeaderView headerViewSize];
 }
 
@@ -243,6 +264,36 @@
 - (UIEdgeInsets)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout insetForSectionAtIndex:(NSInteger)section
 {
     return UIEdgeInsetsMake(0, 0, 12, 0);
+}
+
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView
+{
+    // NOTE: add background view to status bar http://stackoverflow.com/questions/19063365/how-to-change-the-status-bar-background-color-and-text-color-on-ios-7
+    if (scrollView.contentOffset.y >= UISCREEN_WIDTH*9/16) {
+        UIView *statusBar = [[[UIApplication sharedApplication] valueForKey:@"statusBarWindow"] valueForKey:@"statusBar"];
+        if ([statusBar respondsToSelector:@selector(setBackgroundColor:)]) {
+            statusBar.backgroundColor = [UIColor whiteColor];
+        }
+        if (!self.statusbarIsWhiteBackground) {
+            self.statusbarIsWhiteBackground = YES;
+            [self setNeedsStatusBarAppearanceUpdate];
+        } else {
+            self.statusbarIsWhiteBackground = YES;
+        }
+        self.searchButton.hidden = YES;
+    } else {
+        UIView *statusBar = [[[UIApplication sharedApplication] valueForKey:@"statusBarWindow"] valueForKey:@"statusBar"];
+        if ([statusBar respondsToSelector:@selector(setBackgroundColor:)]) {
+            statusBar.backgroundColor = [UIColor clearColor];
+        }
+        if (self.statusbarIsWhiteBackground) {
+            self.statusbarIsWhiteBackground = NO;
+            [self setNeedsStatusBarAppearanceUpdate];
+        } else {
+            self.statusbarIsWhiteBackground = NO;
+        }
+        self.searchButton.hidden = NO;
+    }
 }
 
 #pragma mark - <Button Events>

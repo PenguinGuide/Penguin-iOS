@@ -14,7 +14,7 @@
 #define PG_Store_Recommends             @"/recommends/store"
 
 #define PG_Home_Feeds                   @"/feeds/home"
-#define PG_Explore_Feeds                @"feeds/explore"
+#define PG_Explore_Feeds                @"/feeds/explore"
 #define PG_Store_Feeds                  @"/feeds/store"
 
 #define PG_Channel                      @"/channel/:channelId"

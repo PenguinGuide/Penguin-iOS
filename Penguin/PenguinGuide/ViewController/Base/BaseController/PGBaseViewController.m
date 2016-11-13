@@ -81,6 +81,11 @@
     
     // http://benscheirman.com/2011/08/when-viewwillappear-isnt-called/
     self.navigationController.delegate = self;
+    
+    UIView *statusBar = [[[UIApplication sharedApplication] valueForKey:@"statusBarWindow"] valueForKey:@"statusBar"];
+    if ([statusBar respondsToSelector:@selector(setBackgroundColor:)]) {
+        statusBar.backgroundColor = [UIColor clearColor];
+    }
 }
 
 - (void)viewDidDisappear:(BOOL)animated

@@ -18,4 +18,6 @@
 - (void)requestReplyMessages;
 - (void)requestLikesMessages;
 
+- (void)sendReplyComment:(NSString *)content commentId:(NSString *)commentId completion:(void(^)(BOOL success))completion;
+
 @end

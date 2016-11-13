@@ -25,9 +25,13 @@
 
 - (void)initialize
 {
-    self.backgroundColor = Theme.colorLightBackground;
+    self.backgroundColor = [UIColor whiteColor];
     
     [self addSubview:self.commentTextView];
+    
+    UIView *horizontalLine = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.pg_width, 1/[UIScreen mainScreen].scale)];
+    horizontalLine.backgroundColor = Theme.colorLightBorder;
+    [self addSubview:horizontalLine];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(textViewDidChange) name:UITextViewTextDidChangeNotification object:nil];
 }
@@ -37,7 +41,7 @@
 - (void)textViewDidChange
 {
     // NOTE: boundingRectWithSize doesn't work. use sizeThatFits instead.
-    CGSize textSize = [self.commentTextView sizeThatFits:CGSizeMake(self.pg_width-30, MAXFLOAT)];
+    CGSize textSize = [self.commentTextView sizeThatFits:CGSizeMake(self.pg_width-54, MAXFLOAT)];
     
     if (textSize.height > 100) {
         self.commentTextView.scrollEnabled = YES;
@@ -47,7 +51,7 @@
     if (self.commentTextView.pg_height != textSize.height) {
         
         self.frame = CGRectMake(0, self.pg_y+self.pg_height-(textSize.height+14), UISCREEN_WIDTH, textSize.height+14);
-        self.commentTextView.frame = CGRectMake(15, (self.pg_height-textSize.height)/2, self.pg_width-30, textSize.height);
+        self.commentTextView.frame = CGRectMake(27, (self.pg_height-textSize.height)/2, self.pg_width-54, textSize.height);
     }
     
     NSLog(@"%@", NSStringFromCGSize(textSize));
@@ -68,16 +72,16 @@
 - (UITextView *)commentTextView
 {
     if (!_commentTextView) {
-        _commentTextView = [[PGCommentTextView alloc] initWithFrame:CGRectMake(15, 7, self.pg_width-30, 30)];
+        _commentTextView = [[PGCommentTextView alloc] initWithFrame:CGRectMake(27, 7, self.pg_width-54, 30)];
         _commentTextView.textColor = Theme.colorText;
-        _commentTextView.font = Theme.fontSmall;
-        _commentTextView.backgroundColor = Theme.colorLightBackground;
+        _commentTextView.font = Theme.fontMedium;
+        _commentTextView.backgroundColor = [UIColor whiteColor];
         _commentTextView.returnKeyType = UIReturnKeySend;
         _commentTextView.delegate = self;
         _commentTextView.placeholder = @"输 入 你 的 回 复";
         
-        CGSize textSize = [_commentTextView sizeThatFits:CGSizeMake(self.pg_width-30, MAXFLOAT)];
-        _commentTextView.frame = CGRectMake(15, (self.pg_height-textSize.height)/2, self.pg_width-30, textSize.height);
+        CGSize textSize = [_commentTextView sizeThatFits:CGSizeMake(self.pg_width-27, MAXFLOAT)];
+        _commentTextView.frame = CGRectMake(27, (self.pg_height-textSize.height)/2, self.pg_width-54, textSize.height);
     }
     return _commentTextView;
 }

@@ -35,7 +35,7 @@
 
 - (UILabel *)channelLabel {
     if(_channelLabel == nil) {
-        _channelLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, self.pg_height-22, self.pg_width, 16)];
+        _channelLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, self.pg_height-26, self.pg_width, 16)];
         _channelLabel.font = Theme.fontExtraSmallBold;
         _channelLabel.textColor = Theme.colorText;
         _channelLabel.textAlignment = NSTextAlignmentCenter;

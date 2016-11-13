@@ -101,8 +101,8 @@
     self.automaticallyAdjustsScrollViewInsets = NO;
     
     [self.view addSubview:self.articleCollectionView];
-    [self.view addSubview:self.commentInputAccessoryView];
     [self.view addSubview:self.toolbar];
+    [self.view addSubview:self.commentInputAccessoryView];
     
     if (self.animated) {
         self.articleCollectionView.alpha = 0.f;
@@ -697,13 +697,20 @@
 
 - (void)keyboardWillChangeFrame:(NSNotification *)notification
 {
+    CGRect beginFrame = [notification.userInfo[UIKeyboardFrameBeginUserInfoKey] CGRectValue];
     CGRect endFrame = [notification.userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue];
     
     CGFloat animationDuration = [notification.userInfo[UIKeyboardAnimationDurationUserInfoKey] floatValue];
     
     PGWeakSelf(self);
     [UIView animateWithDuration:animationDuration animations:^{
-        weakself.commentInputAccessoryView.frame = CGRectMake(weakself.commentInputAccessoryView.pg_x, endFrame.origin.y-44, weakself.commentInputAccessoryView.pg_width, weakself.commentInputAccessoryView.pg_height);
+        if (beginFrame.origin.y >= endFrame.origin.y) {
+            // move up
+            weakself.commentInputAccessoryView.frame = CGRectMake(weakself.commentInputAccessoryView.pg_x, endFrame.origin.y-60, weakself.commentInputAccessoryView.pg_width, weakself.commentInputAccessoryView.pg_height);
+        } else {
+            // move down
+            weakself.commentInputAccessoryView.frame = CGRectMake(weakself.commentInputAccessoryView.pg_x, endFrame.origin.y, weakself.commentInputAccessoryView.pg_width, weakself.commentInputAccessoryView.pg_height);
+        }
     }];
 }
 
@@ -839,32 +846,32 @@
 - (UIView *)toolbar
 {
     if (!_toolbar) {
-        _toolbar = [[UIView alloc] initWithFrame:CGRectMake(0, UISCREEN_HEIGHT-44, UISCREEN_WIDTH, 44)];
+        _toolbar = [[UIView alloc] initWithFrame:CGRectMake(0, UISCREEN_HEIGHT-50, UISCREEN_WIDTH, 50)];
         _toolbar.backgroundColor = [UIColor whiteColor];
         
-        self.backButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 44, 44)];
+        self.backButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 44, 50)];
         [self.backButton setImage:[UIImage imageNamed:@"pg_navigation_back_button"] forState:UIControlStateNormal];
         [self.backButton addTarget:self action:@selector(backButtonClicked) forControlEvents:UIControlEventTouchUpInside];
         [_toolbar addSubview:self.backButton];
         
-        self.likeButton = [[UIButton alloc] initWithFrame:CGRectMake(UISCREEN_WIDTH-44, 0, 44, 44)];
+        self.likeButton = [[UIButton alloc] initWithFrame:CGRectMake(UISCREEN_WIDTH-44, 0, 50, 50)];
         [self.likeButton setImage:[UIImage imageNamed:@"pg_article_like"] forState:UIControlStateNormal];
         [self.likeButton addTarget:self action:@selector(likeButtonClicked) forControlEvents:UIControlEventTouchUpInside];
         [self.likeButton setTag:0];
         [_toolbar addSubview:self.likeButton];
         
-        self.commentButton = [[UIButton alloc] initWithFrame:CGRectMake(self.likeButton.pg_left-44, 0, 44, 44)];
+        self.commentButton = [[UIButton alloc] initWithFrame:CGRectMake(self.likeButton.pg_left-44, 0, 50, 50)];
         [self.commentButton setImage:[UIImage imageNamed:@"pg_article_comment"] forState:UIControlStateNormal];
         [self.commentButton addTarget:self action:@selector(commentButtonClicked) forControlEvents:UIControlEventTouchUpInside];
         [_toolbar addSubview:self.commentButton];
         
-        self.collectButton = [[UIButton alloc] initWithFrame:CGRectMake(self.commentButton.pg_left-44, 0, 44, 44)];
+        self.collectButton = [[UIButton alloc] initWithFrame:CGRectMake(self.commentButton.pg_left-44, 0, 50, 50)];
         [self.collectButton setImage:[UIImage imageNamed:@"pg_article_collect"] forState:UIControlStateNormal];
         [self.collectButton addTarget:self action:@selector(collectButtonClicked) forControlEvents:UIControlEventTouchUpInside];
         [self.collectButton setTag:0];
         [_toolbar addSubview:self.collectButton];
         
-        self.shareButton = [[UIButton alloc] initWithFrame:CGRectMake(self.collectButton.pg_left-44, 0, 44, 44)];
+        self.shareButton = [[UIButton alloc] initWithFrame:CGRectMake(self.collectButton.pg_left-44, 0, 50, 50)];
         [self.shareButton setImage:[UIImage imageNamed:@"pg_article_share"] forState:UIControlStateNormal];
         [_toolbar addSubview:self.shareButton];
         
@@ -878,7 +885,7 @@
 - (PGCommentInputAccessoryView *)commentInputAccessoryView
 {
     if (!_commentInputAccessoryView) {
-        _commentInputAccessoryView = [[PGCommentInputAccessoryView alloc] initWithFrame:CGRectMake(0, UISCREEN_HEIGHT-44, UISCREEN_WIDTH, 44)];
+        _commentInputAccessoryView = [[PGCommentInputAccessoryView alloc] initWithFrame:CGRectMake(0, UISCREEN_HEIGHT, UISCREEN_WIDTH, 60)];
         _commentInputAccessoryView.delegate = self;
     }
     return _commentInputAccessoryView;

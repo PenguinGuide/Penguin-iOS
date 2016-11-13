@@ -18,9 +18,8 @@
 @property (nonatomic, strong) UIPanGestureRecognizer *panGesture;
 @property (nonatomic, strong) UIImageView *collectImageView;
 @property (nonatomic, strong) UILabel *collectLabel;
-@property (nonatomic, strong) UIImageView *categoryImageView;
-@property (nonatomic, strong) UIButton *readsCountButton;
-@property (nonatomic, strong) UIButton *commentsCountButton;
+@property (nonatomic, strong) UILabel *titleLabel;
+@property (nonatomic, strong) UILabel *subtitleLabel;
 
 @end
 
@@ -37,16 +36,18 @@
 
 - (void)initialize
 {
-    self.backgroundColor = [UIColor colorWithHexString:@"f19572"];
+    self.backgroundColor = Theme.colorHighlight;
     
     [self.contentView addSubview:self.collectImageView];
     [self.contentView addSubview:self.collectLabel];
     [self.contentView addSubview:self.bannerImageScrollView];
-    [self.contentView addSubview:self.categoryImageView];
     [self.bannerImageScrollView addSubview:self.bannerImageView];
     
-    [self.bannerImageView addSubview:self.commentsCountButton];
-    [self.bannerImageView addSubview:self.readsCountButton];
+    UIView *dimView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.bannerImageView.pg_width, self.bannerImageView.pg_height)];
+    dimView.backgroundColor = [UIColor blackColorWithAlpha:0.3];
+    [self.bannerImageView addSubview:dimView];
+    [dimView addSubview:self.titleLabel];
+    [dimView addSubview:self.subtitleLabel];
     
     // http://stackoverflow.com/questions/14298650/uicollectionviewcell-with-uiscrollview-cancels-didselectitematindexpath
     [self.contentView addGestureRecognizer:self.bannerImageScrollView.panGestureRecognizer];
@@ -61,27 +62,10 @@
     }
     self.bannerImageView.backgroundColor = Theme.colorText;
     
-    self.commentsCountButton.frame = CGRectMake(UISCREEN_WIDTH-18-(12+16+[self labelWidth:article.commentsCount]), self.frame.size.height-15-26, 12+16+[self labelWidth:article.commentsCount], 26);
-    [self.commentsCountButton setTitle:article.commentsCount forState:UIControlStateNormal];
+    self.backgroundColor = Theme.colorHighlight;
     
-    self.readsCountButton.frame = CGRectMake(self.commentsCountButton.pg_left-18-(12+16+[self labelWidth:article.likesCount]), self.pg_height-15-26, 12+16+[self labelWidth:article.likesCount], 26);
-    [self.readsCountButton setTitle:article.likesCount forState:UIControlStateNormal];
-    
-    self.backgroundColor = [UIColor colorWithHexString:@"f19572"];
-    self.collectLabel.text = @"收藏";
-    
-    if ([article.channel isEqualToString:@"city_guide"]) {
-        self.categoryImageView.hidden = NO;
-        [self.categoryImageView setImage:[UIImage imageNamed:@"pg_home_article_category_city_guide"]];
-    } else if ([article.channel isEqualToString:@"shop"]) {
-        self.categoryImageView.hidden = NO;
-        [self.categoryImageView setImage:[UIImage imageNamed:@"pg_home_article_category_shop"]];
-    } else if ([article.channel isEqualToString:@"test"]) {
-        self.categoryImageView.hidden = NO;
-        [self.categoryImageView setImage:[UIImage imageNamed:@"pg_home_article_category_test"]];
-    } else {
-        self.categoryImageView.hidden = YES;
-    }
+    self.titleLabel.text = article.title;
+    self.subtitleLabel.text = @"日 料 | 夜 宵 | 放 毒";
 }
 
 + (CGSize)cellSize
@@ -95,7 +79,7 @@
         scrollView.contentOffset = CGPointZero;
     } else {
         if (scrollView.contentOffset.x >= CollectButtonWidth) {
-            self.backgroundColor = Theme.colorHighlight;
+            self.backgroundColor = Theme.colorExtraHighlight;
             self.collectImageView.image = [UIImage imageNamed:@"pg_home_article_collected"];
             self.collectLabel.text = @"已收藏";
         }
@@ -130,7 +114,7 @@
 - (UIImageView *)collectImageView
 {
     if (!_collectImageView) {
-        _collectImageView = [[UIImageView alloc] initWithFrame:CGRectMake(self.pg_width-32-24, self.pg_height/2-14-18, 24, 28)];
+        _collectImageView = [[UIImageView alloc] initWithFrame:CGRectMake(self.pg_width-32-26, self.pg_height/2-14-18, 26, 24)];
         _collectImageView.image = [UIImage imageNamed:@"pg_home_article_collect"];
     }
     return _collectImageView;
@@ -139,7 +123,7 @@
 - (UILabel *)collectLabel
 {
     if (!_collectLabel) {
-        _collectLabel = [[UILabel alloc] initWithFrame:CGRectMake(self.pg_width-90, self.collectImageView.pg_bottom+6, 85, 14)];
+        _collectLabel = [[UILabel alloc] initWithFrame:CGRectMake(self.pg_width-88, self.collectImageView.pg_bottom+6, 85, 14)];
         _collectLabel.font = Theme.fontSmall;
         _collectLabel.textColor = [UIColor whiteColor];
         _collectLabel.textAlignment = NSTextAlignmentCenter;
@@ -148,48 +132,26 @@
     return _collectLabel;
 }
 
-- (UIImageView *)categoryImageView {
-	if(_categoryImageView == nil) {
-		_categoryImageView = [[UIImageView alloc] initWithFrame:CGRectMake(16, 16, 28, 28)];
-        _categoryImageView.image = [UIImage imageNamed:@"pg_home_article_category_city_guide"];
-	}
-	return _categoryImageView;
+- (UILabel *)titleLabel
+{
+    if (!_titleLabel) {
+        _titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, (self.pg_height-16)/2-10, UISCREEN_WIDTH, 16)];
+        _titleLabel.font = Theme.fontLargeBold;
+        _titleLabel.textColor = [UIColor whiteColor];
+        _titleLabel.textAlignment = NSTextAlignmentCenter;
+    }
+    return _titleLabel;
 }
 
-- (UIView *)readsCountButton {
-	if(_readsCountButton == nil) {
-		_readsCountButton = [[UIButton alloc] initWithFrame:CGRectMake(self.commentsCountButton.pg_left-18-(12+16+[self labelWidth:@"0"]), self.pg_height-15-26, 12+16+[self labelWidth:@"0"], 26)];
-        _readsCountButton.backgroundColor = [UIColor colorWithRed:241.f/256.f green:241.f/256.f blue:241.f/256.f alpha:0.9f];
-        _readsCountButton.clipsToBounds = YES;
-        _readsCountButton.layer.cornerRadius = 13;
-        [_readsCountButton.titleLabel setFont:Theme.fontExtraSmallBold];
-        [_readsCountButton setTitleColor:Theme.colorHighlight forState:UIControlStateNormal];
-        [_readsCountButton setTitle:@"0" forState:UIControlStateNormal];
-        [_readsCountButton setTitleEdgeInsets:UIEdgeInsetsMake(0, 15, 0, 0)];
-        
-        UIImageView *readsIcon = [[UIImageView alloc] initWithFrame:CGRectMake(8, 8, 12, 10)];
-        readsIcon.image = [UIImage imageNamed:@"pg_home_article_likes"];
-        [_readsCountButton addSubview:readsIcon];
-	}
-	return _readsCountButton;
-}
-
-- (UIView *)commentsCountButton {
-	if(_commentsCountButton == nil) {
-		_commentsCountButton = [[UIButton alloc] initWithFrame:CGRectMake(UISCREEN_WIDTH-18-(12+16+[self labelWidth:@"0"]), self.pg_height-15-26, 12+16+[self labelWidth:@"0"], 26)];
-        _commentsCountButton.backgroundColor = [UIColor colorWithRed:241.f/256.f green:241.f/256.f blue:241.f/256.f alpha:0.9f];
-        _commentsCountButton.clipsToBounds = YES;
-        _commentsCountButton.layer.cornerRadius = 13;
-        [_commentsCountButton.titleLabel setFont:Theme.fontExtraSmallBold];
-        [_commentsCountButton setTitleColor:Theme.colorHighlight forState:UIControlStateNormal];
-        [_commentsCountButton setTitle:@"0" forState:UIControlStateNormal];
-        [_commentsCountButton setTitleEdgeInsets:UIEdgeInsetsMake(0, 15, 0, 0)];
-        
-        UIImageView *commentsIcon = [[UIImageView alloc] initWithFrame:CGRectMake(8, 6.5, 12, 12)];
-        commentsIcon.image = [UIImage imageNamed:@"pg_home_article_comments"];
-        [_commentsCountButton addSubview:commentsIcon];
-	}
-	return _commentsCountButton;
+- (UILabel *)subtitleLabel
+{
+    if (!_subtitleLabel) {
+        _subtitleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, self.titleLabel.pg_bottom+10, UISCREEN_WIDTH, 14)];
+        _subtitleLabel.font = Theme.fontSmall;
+        _subtitleLabel.textColor = [UIColor whiteColor];
+        _subtitleLabel.textAlignment = NSTextAlignmentCenter;
+    }
+    return _subtitleLabel;
 }
 
 - (CGFloat)labelWidth:(NSString *)str

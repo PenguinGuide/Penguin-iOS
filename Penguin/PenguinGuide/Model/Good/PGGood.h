@@ -18,7 +18,8 @@
 @property (nonatomic, strong) NSString *image;
 @property (nonatomic, strong) NSString *unit;
 @property (nonatomic, strong) NSString *desc;
-@property (nonatomic, strong) NSString *time;
+@property (nonatomic, strong) NSString *startTime;
+@property (nonatomic, strong) NSString *endTime;
 @property (nonatomic, strong) NSString *link;
 @property (nonatomic, strong) NSString *goodId;
 @property (nonatomic, strong) NSString *goodTaobaoId;

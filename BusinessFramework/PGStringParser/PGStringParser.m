@@ -17,6 +17,7 @@
 #define HTML_Tag_Class @"class"
 #define HTML_Tag_Hyper_Link @"a"
 #define HTML_Tag_Newline @"br"
+#define HTML_Tag_Goods_Collection @"product-group"
 
 #define HTML_Attribute_Class @"class"
 #define HTML_Attribute_Src @"src"
@@ -24,7 +25,7 @@
 #define HTML_Attribute_Image_Ratio @"data-width-height-ratio"
 #define HTML_Attribute_Hyper_Ref @"href"
 #define HTML_Attribute_Single_Good @"data-product-id"
-#define HTML_Attribute_Goods_Collection @"data-product-group-id"
+#define HTML_Attribute_Goods_Collection @"data-id"
 
 #define CSS_Style_Color @"color"
 #define CSS_Style_Text_Font @"text-font"
@@ -128,31 +129,29 @@
                                     *stop = YES;
                                 }
                             }
+                        } else if ([childElement.tagName isEqualToString:HTML_Tag_Goods_Collection]) {
+                            // <product-group data-id="65">xxx</product-group>
+                            PGParserGoodsCollectionStorage *goodsCollectionStorage = [PGParserGoodsCollectionStorage new];
+                            goodsCollectionStorage.collectionId = [childElement objectForKey:HTML_Attribute_Goods_Collection];
+                            [storages addObject:goodsCollectionStorage];
                         } else if ([childElement.tagName isEqualToString:HTML_Tag_Image]) {
                             // <p><img class="xxx" /></p>
                             if ([childElement objectForKey:HTML_Attribute_Src]) {
-                                if ([[childElement objectForKey:HTML_Attribute_Class] isEqualToString:@"pg-image-content"]) {
-                                    if ([childElement objectForKey:HTML_Attribute_Single_Good]) {
-                                        // <p><img data-product-id="137" class="pg-image-content" /></p>
-                                        PGParserSingleGoodStorage *singleGoodStorage = [PGParserSingleGoodStorage new];
-                                        singleGoodStorage.image = [childElement objectForKey:HTML_Attribute_Src];
-                                        singleGoodStorage.goodId = [childElement objectForKey:HTML_Attribute_Single_Good];
-                                        [storages addObject:singleGoodStorage];
-                                    } else if ([childElement objectForKey:HTML_Attribute_Goods_Collection]) {
-                                        // <p><img data-product-group-id="64" class="pg-image-content" /></p>
-                                        PGParserGoodsCollectionStorage *goodsCollectionStorage = [PGParserGoodsCollectionStorage new];
-                                        goodsCollectionStorage.collectionId = [childElement objectForKey:HTML_Attribute_Goods_Collection];
-                                        [storages addObject:goodsCollectionStorage];
-                                    } else {
-                                        // <p><img class="pg-image-content" /></p>
-                                        PGParserImageStorage *imageStorage = [PGParserImageStorage new];
-                                        imageStorage.isGIF = NO;
-                                        imageStorage.image = [childElement objectForKey:HTML_Attribute_Src];
-                                        if ([childElement objectForKey:HTML_Attribute_Image_Ratio]) {
-                                            imageStorage.ratio = [[childElement objectForKey:HTML_Attribute_Image_Ratio] floatValue];
-                                        }
-                                        [storages addObject:imageStorage];
+                                if ([childElement objectForKey:HTML_Attribute_Single_Good]) {
+                                    // <p><img data-product-id="137" /></p>
+                                    PGParserSingleGoodStorage *singleGoodStorage = [PGParserSingleGoodStorage new];
+                                    singleGoodStorage.image = [childElement objectForKey:HTML_Attribute_Src];
+                                    singleGoodStorage.goodId = [childElement objectForKey:HTML_Attribute_Single_Good];
+                                    [storages addObject:singleGoodStorage];
+                                } else if ([[childElement objectForKey:HTML_Attribute_Class] isEqualToString:@"pg-image-content"]) {
+                                    // <p><img class="pg-image-content" /></p>
+                                    PGParserImageStorage *imageStorage = [PGParserImageStorage new];
+                                    imageStorage.isGIF = NO;
+                                    imageStorage.image = [childElement objectForKey:HTML_Attribute_Src];
+                                    if ([childElement objectForKey:HTML_Attribute_Image_Ratio]) {
+                                        imageStorage.ratio = [[childElement objectForKey:HTML_Attribute_Image_Ratio] floatValue];
                                     }
+                                    [storages addObject:imageStorage];
                                 } else if ([[childElement objectForKey:HTML_Attribute_Class] isEqualToString:@"pg-image-gif"]) {
                                     // <p><img class="pg-image-gif" /></p>
                                     PGParserImageStorage *imageStorage = [PGParserImageStorage new];
@@ -211,30 +210,27 @@
                                         [childElement.children enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
                                             if ([obj isKindOfClass:[TFHppleElement class]]) {
                                                 TFHppleElement *childElement = (TFHppleElement *)obj;
-                                                if ([childElement.tagName isEqualToString:HTML_Tag_Image]) {
+                                                if ([childElement.tagName isEqualToString:HTML_Tag_Goods_Collection]) {
+                                                    // <product-group data-id="65">xxx</product-group>
+                                                    PGParserGoodsCollectionStorage *goodsCollectionStorage = [PGParserGoodsCollectionStorage new];
+                                                    goodsCollectionStorage.collectionId = [childElement objectForKey:HTML_Attribute_Goods_Collection];
+                                                    [storages addObject:goodsCollectionStorage];
+                                                } else if ([childElement.tagName isEqualToString:HTML_Tag_Image]) {
                                                     // <p><img class="xxx" /></p>
                                                     if ([childElement objectForKey:HTML_Attribute_Src]) {
-                                                        if ([[childElement objectForKey:HTML_Attribute_Class] isEqualToString:@"pg-image-content"]) {
+                                                        if ([childElement objectForKey:HTML_Attribute_Single_Good]) {
+                                                            // <p><img data-product-id="137" class="pg-image-content" /></p>
+                                                            PGParserSingleGoodStorage *singleGoodStorage = [PGParserSingleGoodStorage new];
+                                                            singleGoodStorage.image = [childElement objectForKey:HTML_Attribute_Src];
+                                                            singleGoodStorage.goodId = [childElement objectForKey:HTML_Attribute_Single_Good];
+                                                            [storages addObject:singleGoodStorage];
+                                                        } else if ([[childElement objectForKey:HTML_Attribute_Class] isEqualToString:@"pg-image-content"]) {
                                                             if ([childElement objectForKey:HTML_Attribute_Single_Good]) {
                                                                 // <p><img data-product-id="137" class="pg-image-content" /></p>
                                                                 PGParserSingleGoodStorage *singleGoodStorage = [PGParserSingleGoodStorage new];
                                                                 singleGoodStorage.image = [childElement objectForKey:HTML_Attribute_Src];
                                                                 singleGoodStorage.goodId = [childElement objectForKey:HTML_Attribute_Single_Good];
                                                                 [storages addObject:singleGoodStorage];
-                                                            } else if ([childElement objectForKey:HTML_Attribute_Goods_Collection]) {
-                                                                // <p><img data-product-group-id="64" class="pg-image-content" /></p>
-                                                                PGParserGoodsCollectionStorage *goodsCollectionStorage = [PGParserGoodsCollectionStorage new];
-                                                                goodsCollectionStorage.collectionId = [childElement objectForKey:HTML_Attribute_Goods_Collection];
-                                                                [storages addObject:goodsCollectionStorage];
-                                                            }else {
-                                                                // <p><img class="pg-image-content" /></p>
-                                                                PGParserImageStorage *imageStorage = [PGParserImageStorage new];
-                                                                imageStorage.isGIF = NO;
-                                                                imageStorage.image = [childElement objectForKey:HTML_Attribute_Src];
-                                                                if ([childElement objectForKey:HTML_Attribute_Image_Ratio]) {
-                                                                    imageStorage.ratio = [[childElement objectForKey:HTML_Attribute_Image_Ratio] floatValue];
-                                                                }
-                                                                [storages addObject:imageStorage];
                                                             }
                                                         } else if ([[childElement objectForKey:HTML_Attribute_Class] isEqualToString:@"pg-image-gif"]) {
                                                             // <p><img class="pg-image-gif" /></p>

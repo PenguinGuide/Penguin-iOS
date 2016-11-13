@@ -63,7 +63,7 @@
 + (CGSize)cellSize
 {
     CGFloat width = UISCREEN_WIDTH-20;
-    return CGSizeMake(width, (width/2)*9/16);
+    return CGSizeMake(width, (width/2)*2/3);
 }
 
 #pragma mark - <Setters && Getters>
@@ -71,7 +71,7 @@
 - (UIImageView *)goodImageView {
 	if(_goodImageView == nil) {
         CGFloat width = (UISCREEN_WIDTH-20)/2;
-		_goodImageView = [[UIImageView alloc] initWithFrame:CGRectMake(width, 0, width, width*9/16)];
+		_goodImageView = [[UIImageView alloc] initWithFrame:CGRectMake(width, 0, width, width*2/3)];
         _goodImageView.contentMode = UIViewContentModeScaleAspectFill;
         _goodImageView.clipsToBounds = YES;
         _goodImageView.backgroundColor = Theme.colorText;
@@ -101,7 +101,7 @@
 - (UILabel *)descLabel {
 	if(_descLabel == nil) {
         CGFloat width = UISCREEN_WIDTH-20;
-		_descLabel = [[UILabel alloc] initWithFrame:CGRectMake(15, (width/2)*9/16-15-12, width/2-30, 12)];
+		_descLabel = [[UILabel alloc] initWithFrame:CGRectMake(15, (width/2)*2/3-15-12, width/2-30, 12)];
         _descLabel.font = Theme.fontExtraSmallBold;
         _descLabel.textColor = Theme.colorLightText;
 	}

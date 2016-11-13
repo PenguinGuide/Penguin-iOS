@@ -179,7 +179,7 @@
 {
     if (section == 1) {
         if (self.viewModel.topic.articlesArray.count > 0) {
-            return 10.f;
+            return 0.f;
         } else if (self.viewModel.topic.goodsArray.count > 0) {
             return 10.f;
         }
@@ -193,7 +193,7 @@
 {
     if (section == 1) {
         if (self.viewModel.topic.goodsArray.count > 0) {
-            return 10.f;
+            return 0.f;
         }
     } else if (section == 2) {
         return 10.f;
