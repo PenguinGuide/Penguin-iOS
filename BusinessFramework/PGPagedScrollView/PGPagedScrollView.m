@@ -239,7 +239,11 @@
     UIView *tappedView = [recognizer view];
     if (tappedView) {
         if (self.delegate && [self.delegate respondsToSelector:@selector(imageViewDidSelect:)]) {
-            [self.delegate imageViewDidSelect:tappedView.tag];
+            if (self.circularMode) {
+                [self.delegate imageViewDidSelect:tappedView.tag-1];
+            } else {
+                [self.delegate imageViewDidSelect:tappedView.tag];
+            }
         }
     }
 }
