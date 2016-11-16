@@ -16,6 +16,7 @@
              @"image" : @"image",
              @"type" : @"type",
              @"title": @"title",
+             @"coverTitle": @"cover_title",
              @"channel" : @"channel",
              @"channelIcon" : @"channel_icon",
              @"link" : @"link",

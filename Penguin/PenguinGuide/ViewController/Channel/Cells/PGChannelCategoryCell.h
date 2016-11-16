@@ -8,10 +8,12 @@
 
 #import <UIKit/UIKit.h>
 #import "PGChannelCategory.h"
+#import "PGScenarioCategory.h"
 
 @interface PGChannelCategoryCell : UICollectionViewCell
 
-- (void)setCellWithCategory:(PGChannelCategory *)category;
+- (void)setCellWithChannelCategory:(PGChannelCategory *)category;
+- (void)setCellWithScenarioCategory:(PGScenarioCategory *)category;
 - (void)setMoreCategoryCell;
 
 @end

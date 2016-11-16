@@ -16,7 +16,7 @@
 #import "PGFeedsCollectionView.h"
 #import "PGChannelCategoriesView.h"
 
-@interface PGScenarioViewController () <PGFeedsCollectionViewDelegate>
+@interface PGScenarioViewController () <PGFeedsCollectionViewDelegate, PGChannelCategoriesViewDelegate>
 
 @property (nonatomic, strong) PGScenarioViewModel *viewModel;
 
@@ -125,7 +125,7 @@
 
 - (UIEdgeInsets)topEdgeInsets
 {
-    return UIEdgeInsetsMake(UISCREEN_WIDTH*9/16+54, 0, 7, 0);
+    return UIEdgeInsetsMake(UISCREEN_WIDTH*9/16+61, 0, 7, 0);
 }
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
@@ -148,13 +148,26 @@
 {
     [scrollView scrollViewShouldUpdate];
     if (UISCREEN_WIDTH*9/16-scrollView.contentOffset.y <= 64) {
-        self.categoriesView.frame = CGRectMake(0, 64, UISCREEN_WIDTH, 54);
+        self.categoriesView.frame = CGRectMake(0, 64, UISCREEN_WIDTH, 61);
     } else {
-        self.categoriesView.frame = CGRectMake(0, UISCREEN_WIDTH*9/16+(self.lastContentOffsetY-scrollView.contentOffset.y), UISCREEN_WIDTH, 54);
+        self.categoriesView.frame = CGRectMake(0, UISCREEN_WIDTH*9/16+(self.lastContentOffsetY-scrollView.contentOffset.y), UISCREEN_WIDTH, 61);
     }
 }
 
-#pragma mark - <Setters && Getters>
+#pragma mark - <PGChannelCategoriesViewDelegate>
+
+- (void)scenarioCategoryDidSelect:(PGScenarioCategory *)category
+{
+    if (category.categoryId && category.categoryId.length > 0) {
+        [self showLoading];
+        [self.viewModel requestFeeds:self.viewModel.scenario.scenarioId categoryId:category.categoryId];
+    } else {
+        [self showLoading];
+        [self.viewModel requestFeeds:self.viewModel.scenario.scenarioId categoryId:nil];
+    }
+}
+
+#pragma mark - <Lazy Init>
 
 - (PGFeedsCollectionView *)feedsCollectionView {
 	if(_feedsCollectionView == nil) {
@@ -177,7 +190,8 @@
 
 - (PGChannelCategoriesView *)categoriesView {
 	if(_categoriesView == nil) {
-		_categoriesView = [[PGChannelCategoriesView alloc] initWithFrame:CGRectMake(0, UISCREEN_WIDTH*9/16, UISCREEN_WIDTH, 54)];
+		_categoriesView = [[PGChannelCategoriesView alloc] initWithFrame:CGRectMake(0, UISCREEN_WIDTH*9/16, UISCREEN_WIDTH, 61)];
+        _categoriesView.delegate = self;
 	}
 	return _categoriesView;
 }

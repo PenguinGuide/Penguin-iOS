@@ -13,6 +13,8 @@
 
 @interface PGArticleViewModel ()
 
+@property (nonatomic, strong, readwrite) NSError *commentError;
+
 @end
 
 @implementation PGArticleViewModel
@@ -163,7 +165,7 @@
     } completion:^(id response) {
         weakself.commentsArray = response;
     } failure:^(NSError *error) {
-        weakself.error = error;
+        weakself.commentError = error;
     }];
 }
 
@@ -258,6 +260,13 @@
             }
             weakself.error = error;
         }];
+    }
+}
+
+- (void)reportComment:(NSString *)commentId completion:(void (^)(BOOL))completion
+{
+    if (commentId && commentId.length > 0) {
+        
     }
 }
 

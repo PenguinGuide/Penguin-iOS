@@ -11,9 +11,12 @@ Pod::Spec.new do |s|
 s.name         = "PGRestKit"
 s.version      = "1.0"
 s.summary      = "PenguinGuide network request mapping framework"
-s.license      = ""
+s.description  = "PenguinGuide network request mapping framework"
+s.homepage     = "http://EXAMPLE/PGRestKit"
+s.license      = "MIT"
 s.author       = { "Kobe Dai" => "kobe.dai@penguinguide.com" }
 s.platform     = :ios, "8.0"
+s.source       = { :git => "https://github.com/PenguinGuide/Penguin-iOS.git", :tag => "#{s.version}" }
 
 s.public_header_files = "*.h", "Network/*.h", "ModelMapping/*.h", "Support/*.h"
 s.source_files = "*.{h,m}", 'Network/*.{h,m}', "ModelMapping/*.{h,m}", "Support/*.{h,m}"

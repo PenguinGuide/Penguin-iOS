@@ -101,11 +101,6 @@
     [self unobserve];
 }
 
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
-
 #pragma mark - <UICollectionViewDataSource>
 
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView
@@ -131,7 +126,7 @@
 
 - (UIEdgeInsets)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout insetForSectionAtIndex:(NSInteger)section
 {
-    return UIEdgeInsetsMake(54, 0, 0, 0);
+    return UIEdgeInsetsMake(61, 0, 0, 0);
 }
 
 - (CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout minimumLineSpacingForSectionAtIndex:(NSInteger)section
@@ -159,7 +154,7 @@
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
-    if (scrollView.contentOffset.y >= -64+54) {
+    if (scrollView.contentOffset.y >= -64+61) {
         [self.navigationController.navigationBar pg_setBackgroundColor:Theme.colorBackground];
     } else {
         [self.navigationController.navigationBar pg_setBackgroundColor:[UIColor clearColor]];
@@ -168,7 +163,7 @@
 
 #pragma mark - <PGChannelCategoriesViewDelegate>
 
-- (void)categoryDidSelect:(PGChannelCategory *)category
+- (void)channelCategoryDidSelect:(PGChannelCategory *)category
 {
     if (category.categoryId && category.categoryId.length > 0) {
         [self showLoading];
@@ -184,7 +179,7 @@
     [self dismissPopup];
 }
 
-#pragma mark - <Setters && Getters>
+#pragma mark - <Lazy Init>
 
 - (UICollectionView *)articlesCollectionView {
 	if(_articlesCollectionView == nil) {
@@ -200,7 +195,7 @@
 
 - (PGChannelCategoriesView *)categoriesView {
 	if(_categoriesView == nil) {
-		_categoriesView = [[PGChannelCategoriesView alloc] initWithFrame:CGRectMake(0, 64, UISCREEN_WIDTH, 54)];
+		_categoriesView = [[PGChannelCategoriesView alloc] initWithFrame:CGRectMake(0, 64, UISCREEN_WIDTH, 61)];    // 8+45+8
         _categoriesView.delegate = self;
 	}
 	return _categoriesView;
@@ -287,6 +282,11 @@
         [_channelInfoView addSubview:closeButton];
 	}
 	return _channelInfoView;
+}
+
+- (void)didReceiveMemoryWarning {
+    [super didReceiveMemoryWarning];
+    // Dispose of any resources that can be recreated.
 }
 
 @end

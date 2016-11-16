@@ -8,6 +8,7 @@
 
 typedef void(^PGRKCompletionBlock)(id response);
 typedef void(^PGRKFailureBlock)(NSError *error);
+typedef void(^PGRKPaginationCompletionBlock)(NSArray *responses, NSArray *nextPageIndexes);
 
 #import <AFNetworking/AFNetworking.h>
 #import "PGRKJSONResponseSerializer.h"

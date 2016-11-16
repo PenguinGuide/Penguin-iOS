@@ -42,6 +42,13 @@
 @property (nonatomic, strong) PGRKModel *model;
 
 /**
+ *  @property dataArray
+ *
+ *  @brief current data array (not including next page)
+ */
+@property (nonatomic, strong) NSArray *dataArray;
+
+/**
  *  @property pattern
  *
  *  @brief path patterns

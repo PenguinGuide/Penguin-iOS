@@ -176,6 +176,16 @@
             
             return headerView;
         }
+    } else if (kind == UICollectionElementKindSectionFooter) {
+        if (self.feedsDelegate && [self.feedsDelegate respondsToSelector:@selector(feedsArray)]) {
+            NSArray *feedsArray = [self.feedsDelegate feedsArray];
+            if (indexPath.section == feedsArray.count-1) {
+                PGBaseCollectionViewFooterView *footerView = [collectionView dequeueReusableSupplementaryViewOfKind:kind withReuseIdentifier:BaseCollectionViewFooterView forIndexPath:indexPath];
+                footerView.backgroundColor = Theme.colorBackground;
+                
+                return footerView;
+            }
+        }
     }
     
     return nil;
@@ -220,8 +230,13 @@
 
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout referenceSizeForFooterInSection:(NSInteger)section
 {
-    if (self.feedsDelegate && [self.feedsDelegate respondsToSelector:@selector(feedsFooterSize)]) {
-        return [self.feedsDelegate feedsFooterSize];
+    if (self.feedsDelegate && [self.feedsDelegate respondsToSelector:@selector(feedsArray)]) {
+        NSArray *feedsArray = [self.feedsDelegate feedsArray];
+        if (section == feedsArray.count-1) {
+            if (self.feedsDelegate && [self.feedsDelegate respondsToSelector:@selector(feedsFooterSize)]) {
+                return [self.feedsDelegate feedsFooterSize];
+            }
+        }
     }
     
     return CGSizeZero;

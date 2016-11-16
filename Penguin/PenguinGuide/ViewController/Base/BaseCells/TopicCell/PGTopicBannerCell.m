@@ -87,7 +87,13 @@ static NSString *const GoodCell = @"GoodCell";
 
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    return CGSizeMake(160, 160*2/3+5+14+3+16+10);
+    return CGSizeMake(160, 155-10);
+}
+
+- (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    PGGood *good = self.goodsArray[indexPath.item];
+    [PGRouterManager routeToGoodDetailPage:good.goodId link:good.link];
 }
 
 #pragma mark - <Setters && Getters>

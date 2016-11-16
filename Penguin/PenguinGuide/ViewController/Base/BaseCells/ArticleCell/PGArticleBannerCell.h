@@ -13,6 +13,8 @@
 @interface PGArticleBannerCell : UICollectionViewCell
 
 @property (nonatomic, strong, readonly) FLAnimatedImageView *bannerImageView;
+@property (nonatomic, strong, readonly) UILabel *titleLabel;
+@property (nonatomic, strong, readonly) UILabel *subtitleLabel;
 
 - (void)setCellWithArticle:(PGArticleBanner *)article;
 

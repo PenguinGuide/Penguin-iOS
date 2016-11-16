@@ -15,6 +15,7 @@
 @property (nonatomic, strong, readwrite) PGCache *cache;
 @property (nonatomic, strong, readwrite) NSString *userId;
 @property (nonatomic, strong, readwrite) NSString *accessToken;
+@property (nonatomic, strong, readwrite) NSString *hostUrl;
 
 @property (nonatomic, strong, readwrite) MSWeakTimer *weakTimer;
 
@@ -50,6 +51,13 @@
             self.userId = nil;
         }
         
+        NSArray *hostUrlObject = [self.cache objectForKey:@"host_url" fromTable:@"Session"];
+        if (hostUrlObject && [hostUrlObject isKindOfClass:[NSArray class]]) {
+            self.hostUrl = [hostUrlObject firstObject];
+        } else {
+            [self synchronizeHostUrl:@"https://api.penguinguide.cn"];
+        }
+        
         self.weakTimer = [MSWeakTimer scheduledTimerWithTimeInterval:1*60
                                                               target:self
                                                             selector:@selector(timerDidUpdate)
@@ -77,6 +85,14 @@
         [self.cache putObject:@[self.accessToken] forKey:@"access_token" intoTable:@"Session"];
     } else {
         [self.cache deleteObjectForKey:@"access_token" fromTable:@"Session"];
+    }
+}
+
+- (void)synchronizeHostUrl:(NSString *)hostUrl
+{
+    self.hostUrl = hostUrl;
+    if (hostUrl) {
+        [self.cache putObject:@[self.hostUrl] forKey:@"host_url" intoTable:@"Session"];
     }
 }
 
@@ -109,7 +125,7 @@
     [self timerDidUpdate];
 }
 
-#pragma mark - <Setters && Getters>
+#pragma mark - <Lazy Init>
 
 - (PGCache *)cache
 {

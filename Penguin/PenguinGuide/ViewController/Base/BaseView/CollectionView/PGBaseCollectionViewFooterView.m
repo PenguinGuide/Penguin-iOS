@@ -15,7 +15,7 @@
     self = [super initWithFrame:frame];
     if (self) {
         self.backgroundColor = [UIColor whiteColor];
-        UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake((self.pg_width-98)/2, 30, 98, 42)];
+        UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake((self.pg_width-98)/2, 15, 98, 42)];
         imageView.image = [UIImage imageNamed:@"pg_collection_view_footer_view"];
         [self addSubview:imageView];
     }
@@ -24,7 +24,7 @@
 
 + (CGSize)footerViewSize
 {
-    return CGSizeMake(UISCREEN_WIDTH, 30+42+32);
+    return CGSizeMake(UISCREEN_WIDTH, 15+42+15);
 }
 
 @end

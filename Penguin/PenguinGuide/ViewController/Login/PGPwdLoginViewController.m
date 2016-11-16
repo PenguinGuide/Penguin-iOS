@@ -68,6 +68,7 @@
                     }
                 }
             }
+            [[NSNotificationCenter defaultCenter] postNotificationName:PG_NOTIFICATION_LOGIN object:nil];
             [weakself dismissLoading];
             [weakself dismissViewControllerAnimated:YES completion:nil];
         } failure:^(NSError *error) {

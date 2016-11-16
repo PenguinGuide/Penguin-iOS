@@ -60,6 +60,14 @@
     [self observeCollectionView:self.commentsCollectionView endOfFeeds:self.viewModel];
 }
 
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    
+    self.commentInputAccessoryView.commentTextView.text = @"";
+    self.commentInputAccessoryView.frame = CGRectMake(0, UISCREEN_HEIGHT, UISCREEN_WIDTH, 60);
+}
+
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
@@ -68,6 +76,13 @@
         [self showLoading];
         [self.viewModel requestComments:self.articleId];
     }
+}
+
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    
+    [self.commentInputAccessoryView.commentTextView resignFirstResponder];
 }
 
 - (void)dealloc
@@ -91,15 +106,15 @@
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
     PGComment *comment = self.viewModel.commentsArray[indexPath.item];
-    if (!comment.replyComment) {
-        PGArticleCommentCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:ArticleCommentCell forIndexPath:indexPath];
+    if (comment.replyComment || comment.replyDeleted) {
+        PGArticleCommentReplyCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:ArticleCommentReplyCell forIndexPath:indexPath];
         cell.delegate = self;
         
         [cell setCellWithComment:comment];
         
         return cell;
     } else {
-        PGArticleCommentReplyCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:ArticleCommentReplyCell forIndexPath:indexPath];
+        PGArticleCommentCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:ArticleCommentCell forIndexPath:indexPath];
         cell.delegate = self;
         
         [cell setCellWithComment:comment];
@@ -113,10 +128,10 @@
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath
 {
     PGComment *comment = self.viewModel.commentsArray[indexPath.item];
-    if (!comment.replyComment) {
-        return [PGArticleCommentCell cellSize:comment];
-    } else {
+    if (comment.replyComment || comment.replyDeleted) {
         return [PGArticleCommentReplyCell cellSize:comment];
+    } else {
+        return [PGArticleCommentCell cellSize:comment];
     }
 }
 
@@ -159,33 +174,37 @@
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    PGWeakSelf(self);
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        UICollectionViewCell *cell = [collectionView cellForItemAtIndexPath:indexPath];
-        if ([cell isKindOfClass:[PGArticleCommentCell class]]) {
-            PGArticleCommentCell *commentCell = (PGArticleCommentCell *)cell;
-            [commentCell unselectLabel];
-            
-            if (indexPath.item < weakself.viewModel.commentsArray.count) {
-                weakself.selectedComment = weakself.viewModel.commentsArray[indexPath.item];
-                weakself.commentInputAccessoryView.commentTextView.text = @"";
-                weakself.commentInputAccessoryView.commentTextView.placeholder = [NSString stringWithFormat:@"回复%@", weakself.selectedComment.user.nickname];
+    if (PGGlobal.userId && PGGlobal.userId.length > 0) {
+        PGWeakSelf(self);
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            UICollectionViewCell *cell = [collectionView cellForItemAtIndexPath:indexPath];
+            if ([cell isKindOfClass:[PGArticleCommentCell class]]) {
+                PGArticleCommentCell *commentCell = (PGArticleCommentCell *)cell;
+                [commentCell unselectLabel];
                 
-                [weakself.commentInputAccessoryView.commentTextView becomeFirstResponder];
-            }
-        } else if ([cell isKindOfClass:[PGArticleCommentReplyCell class]]) {
-            PGArticleCommentReplyCell *replyCell = (PGArticleCommentReplyCell *)cell;
-            [replyCell unselectLabel];
-            
-            if (indexPath.item < weakself.viewModel.commentsArray.count) {
-                weakself.selectedComment = self.viewModel.commentsArray[indexPath.item];
-                weakself.commentInputAccessoryView.commentTextView.text = @"";
-                weakself.commentInputAccessoryView.commentTextView.placeholder = [NSString stringWithFormat:@"回复%@", weakself.selectedComment.user.nickname];
+                if (indexPath.item < weakself.viewModel.commentsArray.count) {
+                    weakself.selectedComment = weakself.viewModel.commentsArray[indexPath.item];
+                    weakself.commentInputAccessoryView.commentTextView.text = @"";
+                    weakself.commentInputAccessoryView.commentTextView.placeholder = [NSString stringWithFormat:@"回复%@", weakself.selectedComment.user.nickname];
+                    
+                    [weakself.commentInputAccessoryView.commentTextView becomeFirstResponder];
+                }
+            } else if ([cell isKindOfClass:[PGArticleCommentReplyCell class]]) {
+                PGArticleCommentReplyCell *replyCell = (PGArticleCommentReplyCell *)cell;
+                [replyCell unselectLabel];
                 
-                [weakself.commentInputAccessoryView.commentTextView becomeFirstResponder];
+                if (indexPath.item < weakself.viewModel.commentsArray.count) {
+                    weakself.selectedComment = self.viewModel.commentsArray[indexPath.item];
+                    weakself.commentInputAccessoryView.commentTextView.text = @"";
+                    weakself.commentInputAccessoryView.commentTextView.placeholder = [NSString stringWithFormat:@"回复%@", weakself.selectedComment.user.nickname];
+                    
+                    [weakself.commentInputAccessoryView.commentTextView becomeFirstResponder];
+                }
             }
-        }
-    });
+        });
+    } else {
+        [PGRouterManager routeToLoginPage];
+    }
 }
 
 - (BOOL)collectionView:(UICollectionView *)collectionView shouldHighlightItemAtIndexPath:(NSIndexPath *)indexPath
@@ -219,6 +238,7 @@
 
 - (void)commentMoreButtonClicked:(PGArticleCommentCell *)cell
 {
+    PGWeakSelf(self);
     PGAlertAction *reportAction = [PGAlertAction actionWithTitle:@"举报"
                                                            style:^(PGAlertActionStyle *style) {
                                                                
@@ -229,7 +249,15 @@
                                                            style:^(PGAlertActionStyle *style) {
                                                                style.type = PGAlertActionTypeDestructive;
                                                            } handler:^{
-                                                               
+                                                               NSIndexPath *indexPath = [self.commentsCollectionView indexPathForCell:cell];
+                                                               PGComment *comment = self.viewModel.commentsArray[indexPath.item];
+                                                               [weakself showLoading];
+                                                               [weakself.viewModel deleteComment:comment.commentId completion:^(BOOL success) {
+                                                                   if (success) {
+                                                                       [weakself showToast:@"删除成功"];
+                                                                   }
+                                                                   [weakself dismissLoading];
+                                                               }];
                                                            }];
     PGAlertController *alertController = [PGAlertController alertControllerWithTitle:nil message:nil style:^(PGAlertStyle *style) {
         style.alertType = PGAlertTypeActionSheet;
@@ -284,6 +312,7 @@
 
 - (void)commentReplyMoreButtonClicked:(PGArticleCommentReplyCell *)cell
 {
+    PGWeakSelf(self);
     PGAlertAction *reportAction = [PGAlertAction actionWithTitle:@"举报"
                                                            style:^(PGAlertActionStyle *style) {
                                                                
@@ -294,20 +323,30 @@
                                                            style:^(PGAlertActionStyle *style) {
                                                                style.type = PGAlertActionTypeDestructive;
                                                            } handler:^{
-                                                               
+                                                               NSIndexPath *indexPath = [self.commentsCollectionView indexPathForCell:cell];
+                                                               if (indexPath.item < self.viewModel.commentsArray.count) {
+                                                                   PGComment *comment = self.viewModel.commentsArray[indexPath.item];
+                                                                   [weakself showLoading];
+                                                                   [weakself.viewModel deleteComment:comment.commentId completion:^(BOOL success) {
+                                                                       if (success) {
+                                                                           [weakself showToast:@"删除成功"];
+                                                                       }
+                                                                       [weakself dismissLoading];
+                                                                   }];
+                                                               }
                                                            }];
-    PGAlertController *alertController = [PGAlertController alertControllerWithTitle:nil message:nil style:^(PGAlertStyle *style) {
-        style.alertType = PGAlertTypeActionSheet;
-    }];
     NSIndexPath *indexPath = [self.commentsCollectionView indexPathForCell:cell];
     if (indexPath.item < self.viewModel.commentsArray.count) {
         PGComment *comment = self.viewModel.commentsArray[indexPath.item];
         if ([comment.user.userId isEqualToString:PGGlobal.userId]) {
-            [alertController addActions:@[reportAction, deleteAction]];
+            [self showAlert:nil message:nil actions:@[reportAction, deleteAction] style:^(PGAlertStyle *style) {
+                style.alertType = PGAlertTypeActionSheet;
+            }];
         } else {
-            [alertController addActions:@[reportAction]];
+            [self showAlert:nil message:nil actions:@[reportAction] style:^(PGAlertStyle *style) {
+                style.alertType = PGAlertTypeActionSheet;
+            }];
         }
-        [self presentViewController:alertController animated:YES completion:nil];
     }
 }
 

@@ -13,6 +13,7 @@
 
 @property (nonatomic, assign) NSInteger likesCount;
 @property (nonatomic, assign) BOOL liked;
+@property (nonatomic, assign) BOOL replyDeleted;
 @property (nonatomic, strong) NSString *content;
 @property (nonatomic, strong) NSString *time;
 @property (nonatomic, strong) NSString *commentId;

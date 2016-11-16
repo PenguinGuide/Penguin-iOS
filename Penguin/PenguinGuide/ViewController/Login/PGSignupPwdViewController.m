@@ -66,13 +66,9 @@
                         [PGGlobal synchronizeUserId:userId];
                     }
                 }
-                if (response[@"is_new_user"] && [response[@"is_new_user"] boolValue] && PGGlobal.userId) {
-                    PGSignupInfoViewController *signupInfoVC = [[PGSignupInfoViewController alloc] init];
-                    signupInfoVC.userId = PGGlobal.userId;
-                    [weakself.navigationController pushViewController:signupInfoVC animated:YES];
-                } else {
-                    [weakself dismissViewControllerAnimated:YES completion:nil];
-                }
+                PGSignupInfoViewController *signupInfoVC = [[PGSignupInfoViewController alloc] init];
+                signupInfoVC.userId = PGGlobal.userId;
+                [weakself.navigationController pushViewController:signupInfoVC animated:YES];
             }
             [weakself dismissLoading];
         } failure:^(NSError *error) {

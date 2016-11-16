@@ -38,6 +38,7 @@
 #define PG_Article_Collect              @"/article_store/:articleId"
 #define PG_Article_Comments             @"/article/:articleId/comments"
 #define PG_Article_Hot_Comments         @"/article/:articleId/hot_comments"
+#define PG_Article_Comment              @"/article_comment/:commentId"
 #define PG_Article_Comment_Reply        @"/article_comment/:commentId/reply"
 #define PG_Article_Comment_Like         @"/comment_favor/:commentId"
 

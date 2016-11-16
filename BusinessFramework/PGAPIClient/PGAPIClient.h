@@ -12,6 +12,7 @@
 @interface PGAPIClient : NSObject
 
 + (id)client;
++ (id)clientWithBaseUrl:(NSString *)baseUrl;
 + (id)clientWithTimeout:(NSTimeInterval)timeout;
 + (id)clientWithOperationCount:(NSInteger)operationCount;
 + (id)clientWithTimeout:(NSTimeInterval)timeout operationCount:(NSInteger)operationCount;
@@ -19,10 +20,15 @@
 + (void)enableLogging;
 + (void)disableLogging;
 
+- (void)updateHostUrl:(NSString *)hostUrl;
 - (void)updateAccessToken:(NSString *)accessToken;
 
 - (void)pg_makeGetRequest:(void(^)(PGRKRequestConfig *config))configBlock
                completion:(PGRKCompletionBlock)completion
+                  failure:(PGRKFailureBlock)failure;
+
+- (void)pg_makeGetRequest:(void(^)(PGRKRequestConfig *config))configBlock
+     paginationCompletion:(PGRKPaginationCompletionBlock)completion
                   failure:(PGRKFailureBlock)failure;
 
 - (void)pg_makePutRequest:(void(^)(PGRKRequestConfig *config))configBlock

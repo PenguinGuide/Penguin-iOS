@@ -52,6 +52,29 @@
     }
 }
 
+- (void)smsCodeButtonClicked:(UIView *)view
+{
+    if ([view isKindOfClass:[PGLoginView class]]) {
+        PGParams *params = [PGParams new];
+        params[@"mobile"] = self.loginView.phoneTextField.text;
+        
+        [self showLoading];
+        
+        PGWeakSelf(self);
+        [self.apiClient pg_makePostRequest:^(PGRKRequestConfig *config) {
+            config.route = PG_Send_SMS_Code;
+            config.params = params;
+            config.keyPath = nil;
+        } completion:^(id response) {
+            [weakself dismissLoading];
+            [weakself showToast:@"发送成功"];
+        } failure:^(NSError *error) {
+            [weakself showErrorMessage:error];
+            [weakself dismissLoading];
+        }];
+    }
+}
+
 - (void)accessoryDoneButtonClicked
 {
     [self.loginView.phoneTextField resignFirstResponder];

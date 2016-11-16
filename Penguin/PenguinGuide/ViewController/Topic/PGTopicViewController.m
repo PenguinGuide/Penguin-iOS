@@ -99,7 +99,7 @@
     if (self.viewModel.topic.articlesArray.count > 0 && self.viewModel.topic.goodsArray.count > 0) {
         return 3;
     } else if (self.viewModel.topic.articlesArray.count == 0 && self.viewModel.topic.goodsArray.count == 0) {
-        return 2;
+        return 1;
     } else if (self.viewModel.topic) {
         return 1;
     } else {
@@ -116,6 +116,8 @@
             return self.viewModel.topic.articlesArray.count;
         } else if (self.viewModel.topic.goodsArray.count > 0) {
             return self.viewModel.topic.goodsArray.count;
+        } else {
+            return 0;
         }
     } else if (section == 2) {
         return self.viewModel.topic.goodsArray.count;

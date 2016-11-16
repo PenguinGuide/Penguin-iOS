@@ -204,9 +204,10 @@
 - (UIButton *)moreButton
 {
     if (!_moreButton) {
-        _moreButton = [[UIButton alloc] initWithFrame:CGRectMake(self.pg_width-30-20, 10, 20, 20)];
+        _moreButton = [[UIButton alloc] initWithFrame:CGRectMake(self.pg_width-49, 0, 49, 40)];
         [_moreButton setImage:[UIImage imageNamed:@"pg_article_comment_more"] forState:UIControlStateNormal];
         [_moreButton addTarget:self action:@selector(moreButtonClicked) forControlEvents:UIControlEventTouchUpInside];
+        [_moreButton setContentHorizontalAlignment:UIControlContentHorizontalAlignmentLeft];
     }
     return _moreButton;
 }
@@ -214,7 +215,7 @@
 - (UIButton *)likeButton
 {
     if (!_likeButton) {
-        _likeButton = [[PGArticleCommentLikeButton alloc] initWithFrame:CGRectMake(self.moreButton.pg_left-46, 0, 46, 40)];
+        _likeButton = [[PGArticleCommentLikeButton alloc] initWithFrame:CGRectMake(self.moreButton.pg_left-56, 0, 56, 40)];
         [_likeButton addTarget:self action:@selector(likeButtonClicked) forControlEvents:UIControlEventTouchUpInside];
     }
     return _likeButton;

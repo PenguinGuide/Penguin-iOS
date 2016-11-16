@@ -79,13 +79,28 @@
     
     NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle defaultParagraphStyle] mutableCopy];
     paragraphStyle.lineSpacing = 5.f;
-    NSString *commentContent = [NSString stringWithFormat:@"回复%@: %@", comment.replyComment.user.nickname, comment.content];
+    
+    NSString *commentContent = @"";
+    if (comment.replyDeleted) {
+        commentContent = [NSString stringWithFormat:@"回复: %@", comment.content];
+    } else {
+        commentContent = [NSString stringWithFormat:@"回复%@: %@", comment.replyComment.user.nickname, comment.content];
+    }
     NSMutableAttributedString *commentsStr = [[NSMutableAttributedString alloc] initWithString:commentContent];
-    [commentsStr addAttribute:NSForegroundColorAttributeName value:Theme.colorHighlight range:NSMakeRange(0, 4+comment.replyComment.user.nickname.length)];
-    [commentsStr addAttribute:NSForegroundColorAttributeName value:Theme.colorText range:NSMakeRange(4+comment.replyComment.user.nickname.length, comment.content.length)];
-    [commentsStr addAttribute:NSFontAttributeName value:Theme.fontSmallBold range:NSMakeRange(0, 4+comment.replyComment.user.nickname.length)];
-    [commentsStr addAttribute:NSFontAttributeName value:Theme.fontSmall range:NSMakeRange(4+comment.replyComment.user.nickname.length, comment.content.length)];
-    [commentsStr addAttribute:NSParagraphStyleAttributeName value:paragraphStyle range:NSMakeRange(0, commentContent.length)];
+    
+    if (comment.replyDeleted) {
+        [commentsStr addAttribute:NSForegroundColorAttributeName value:Theme.colorHighlight range:NSMakeRange(0, 4)];
+        [commentsStr addAttribute:NSForegroundColorAttributeName value:Theme.colorText range:NSMakeRange(4, comment.content.length)];
+        [commentsStr addAttribute:NSFontAttributeName value:Theme.fontSmallBold range:NSMakeRange(0, 4)];
+        [commentsStr addAttribute:NSFontAttributeName value:Theme.fontSmall range:NSMakeRange(4, comment.content.length)];
+        [commentsStr addAttribute:NSParagraphStyleAttributeName value:paragraphStyle range:NSMakeRange(0, commentContent.length)];
+    } else {
+        [commentsStr addAttribute:NSForegroundColorAttributeName value:Theme.colorHighlight range:NSMakeRange(0, 4+comment.replyComment.user.nickname.length)];
+        [commentsStr addAttribute:NSForegroundColorAttributeName value:Theme.colorText range:NSMakeRange(4+comment.replyComment.user.nickname.length, comment.content.length)];
+        [commentsStr addAttribute:NSFontAttributeName value:Theme.fontSmallBold range:NSMakeRange(0, 4+comment.replyComment.user.nickname.length)];
+        [commentsStr addAttribute:NSFontAttributeName value:Theme.fontSmall range:NSMakeRange(4+comment.replyComment.user.nickname.length, comment.content.length)];
+        [commentsStr addAttribute:NSParagraphStyleAttributeName value:paragraphStyle range:NSMakeRange(0, commentContent.length)];
+    }
     self.commentLabel.attributedText = commentsStr;
     
     CGSize textSize = [commentContent boundingRectWithSize:CGSizeMake(UISCREEN_WIDTH-69-25, 1000)
@@ -96,14 +111,22 @@
     
     self.replyLabel.frame = CGRectMake(30, self.commentLabel.pg_bottom+10, self.replyLabel.pg_width, self.replyLabel.pg_height);
     self.replyLabelMaskView.frame = CGRectMake(30, self.commentLabel.pg_bottom+10, self.replyLabel.pg_width, self.replyLabel.pg_height);
-
-    NSString *replyContent = [NSString stringWithFormat:@"    %@: %@", comment.replyComment.user.nickname, comment.replyComment.content];
     
+    NSString *replyContent = @"";
+    if (comment.replyDeleted) {
+        replyContent = @"    原评论已删除";
+    } else {
+        replyContent = [NSString stringWithFormat:@"    %@: %@", comment.replyComment.user.nickname, comment.replyComment.content];
+    }
     NSMutableAttributedString *attrS = [[NSMutableAttributedString alloc] initWithString:replyContent];
-    [attrS addAttribute:NSFontAttributeName value:Theme.fontSmallBold range:NSMakeRange(0, 4+comment.replyComment.user.nickname.length+1)];
-    [attrS addAttribute:NSFontAttributeName value:Theme.fontSmall range:NSMakeRange(4+comment.replyComment.user.nickname.length+1, comment.replyComment.content.length)];
-    [attrS addAttribute:NSForegroundColorAttributeName value:Theme.colorText range:NSMakeRange(0, replyContent.length)];
-    
+    if (comment.replyDeleted) {
+        [attrS addAttribute:NSFontAttributeName value:Theme.fontSmall range:NSMakeRange(0, replyContent.length)];
+        [attrS addAttribute:NSForegroundColorAttributeName value:Theme.colorText range:NSMakeRange(0, replyContent.length)];
+    } else {
+        [attrS addAttribute:NSFontAttributeName value:Theme.fontSmallBold range:NSMakeRange(0, 4+comment.replyComment.user.nickname.length+1)];
+        [attrS addAttribute:NSFontAttributeName value:Theme.fontSmall range:NSMakeRange(4+comment.replyComment.user.nickname.length+1, comment.replyComment.content.length)];
+        [attrS addAttribute:NSForegroundColorAttributeName value:Theme.colorText range:NSMakeRange(0, replyContent.length)];
+    }
     self.replyLabel.attributedText = attrS;
 }
 
@@ -121,6 +144,7 @@
     
     NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle defaultParagraphStyle] mutableCopy];
     paragraphStyle.lineSpacing = 5.f;
+    
     NSString *nickname = @"你";
     NSString *commentContent = [NSString stringWithFormat:@"回复%@: %@", nickname, message.replyContent];
     NSMutableAttributedString *commentsStr = [[NSMutableAttributedString alloc] initWithString:commentContent];
@@ -158,13 +182,29 @@
         
         NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle defaultParagraphStyle] mutableCopy];
         paragraphStyle.lineSpacing = 5.f;
-        NSString *commentContent = [NSString stringWithFormat:@"回复%@: %@", comment.replyComment.user.nickname, comment.content];
+        
+        NSString *commentContent = @"";
+        if (comment.replyDeleted) {
+            commentContent = [NSString stringWithFormat:@"回复: %@", comment.content];
+        } else {
+            commentContent = [NSString stringWithFormat:@"回复%@: %@", comment.replyComment.user.nickname, comment.content];
+        }
         NSMutableAttributedString *commentsStr = [[NSMutableAttributedString alloc] initWithString:commentContent];
-        [commentsStr addAttribute:NSForegroundColorAttributeName value:Theme.colorHighlight range:NSMakeRange(0, 4+comment.replyComment.user.nickname.length)];
-        [commentsStr addAttribute:NSForegroundColorAttributeName value:Theme.colorText range:NSMakeRange(4+comment.replyComment.user.nickname.length, comment.content.length)];
-        [commentsStr addAttribute:NSFontAttributeName value:Theme.fontSmallBold range:NSMakeRange(0, 4+comment.replyComment.user.nickname.length)];
-        [commentsStr addAttribute:NSFontAttributeName value:Theme.fontSmall range:NSMakeRange(4+comment.replyComment.user.nickname.length, comment.content.length)];
-        [commentsStr addAttribute:NSParagraphStyleAttributeName value:paragraphStyle range:NSMakeRange(0, commentContent.length)];
+        
+        if (comment.replyDeleted) {
+            [commentsStr addAttribute:NSForegroundColorAttributeName value:Theme.colorHighlight range:NSMakeRange(0, 4)];
+            [commentsStr addAttribute:NSForegroundColorAttributeName value:Theme.colorText range:NSMakeRange(4, comment.content.length)];
+            [commentsStr addAttribute:NSFontAttributeName value:Theme.fontSmallBold range:NSMakeRange(0, 4)];
+            [commentsStr addAttribute:NSFontAttributeName value:Theme.fontSmall range:NSMakeRange(4, comment.content.length)];
+            [commentsStr addAttribute:NSParagraphStyleAttributeName value:paragraphStyle range:NSMakeRange(0, commentContent.length)];
+        } else {
+            [commentsStr addAttribute:NSForegroundColorAttributeName value:Theme.colorHighlight range:NSMakeRange(0, 4+comment.replyComment.user.nickname.length)];
+            [commentsStr addAttribute:NSForegroundColorAttributeName value:Theme.colorText range:NSMakeRange(4+comment.replyComment.user.nickname.length, comment.content.length)];
+            [commentsStr addAttribute:NSFontAttributeName value:Theme.fontSmallBold range:NSMakeRange(0, 4+comment.replyComment.user.nickname.length)];
+            [commentsStr addAttribute:NSFontAttributeName value:Theme.fontSmall range:NSMakeRange(4+comment.replyComment.user.nickname.length, comment.content.length)];
+            [commentsStr addAttribute:NSParagraphStyleAttributeName value:paragraphStyle range:NSMakeRange(0, commentContent.length)];
+        }
+
         CGSize textSize = [commentsStr boundingRectWithSize:CGSizeMake(UISCREEN_WIDTH-69-25, 1000)
                                                     options:NSStringDrawingUsesLineFragmentOrigin
                                                     context:nil].size;
@@ -302,9 +342,10 @@
 - (UIButton *)moreButton
 {
     if (!_moreButton) {
-        _moreButton = [[UIButton alloc] initWithFrame:CGRectMake(self.pg_width-30-20, 10, 20, 20)];
+        _moreButton = [[UIButton alloc] initWithFrame:CGRectMake(self.pg_width-49, 0, 49, 40)];
         [_moreButton setImage:[UIImage imageNamed:@"pg_article_comment_more"] forState:UIControlStateNormal];
         [_moreButton addTarget:self action:@selector(moreButtonClicked) forControlEvents:UIControlEventTouchUpInside];
+        [_moreButton setContentHorizontalAlignment:UIControlContentHorizontalAlignmentLeft];
     }
     return _moreButton;
 }
@@ -312,7 +353,7 @@
 - (UIButton *)likeButton
 {
     if (!_likeButton) {
-        _likeButton = [[PGArticleCommentLikeButton alloc] initWithFrame:CGRectMake(self.moreButton.pg_left-46, 0, 46, 40)];
+        _likeButton = [[PGArticleCommentLikeButton alloc] initWithFrame:CGRectMake(self.moreButton.pg_left-56, 0, 56, 40)];
         [_likeButton addTarget:self action:@selector(likeButtonClicked) forControlEvents:UIControlEventTouchUpInside];
     }
     return _likeButton;

@@ -14,6 +14,7 @@
 @property (nonatomic, strong) NSString *image;
 @property (nonatomic, strong) NSString *type;
 @property (nonatomic, strong) NSString *title;
+@property (nonatomic, strong) NSString *coverTitle;
 @property (nonatomic, strong) NSString *channel;
 @property (nonatomic, strong) NSString *channelIcon;
 @property (nonatomic, strong) NSString *link;

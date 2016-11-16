@@ -15,7 +15,12 @@
 @property (nonatomic, strong, readonly) NSArray *articles;
 @property (nonatomic, strong, readonly) NSArray *goods;
 
+@property (nonatomic, assign, readonly) NSInteger articlesPage;
+@property (nonatomic, assign, readonly) NSInteger goodsPage;
+
 - (void)searchArticles:(NSString *)keyword;
 - (void)searchGoods:(NSString *)keyword;
+- (void)loadArticlesNextPage:(NSString *)keyword;
+- (void)loadGoodsNextPage:(NSString *)keyword;
 
 @end

@@ -172,9 +172,25 @@
     }
 }
 
-- (void)deleteComment:(NSString *)commentId
+- (void)deleteComment:(NSString *)commentId completion:(void (^)(BOOL))completion
 {
-    
+    if (commentId && commentId.length > 0) {
+        PGWeakSelf(self);
+        [self.apiClient pg_makeDeleteRequest:^(PGRKRequestConfig *config) {
+            config.route = PG_Article_Comment;
+            config.keyPath = nil;
+            config.pattern = @{@"commentId":commentId};
+        } completion:^(id response) {
+            if (completion) {
+                completion(YES);
+            }
+        } failure:^(NSError *error) {
+            if (completion) {
+                completion(NO);
+            }
+            weakself.error = error;
+        }];
+    }
 }
 
 @end

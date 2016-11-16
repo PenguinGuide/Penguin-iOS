@@ -97,7 +97,7 @@
             
             self.countdownLabel.attributedText = attrS;
         } else {
-            NSString *countdownStr = @"00 h 00 min 00 s";
+            NSString *countdownStr = @"99 h 59 min 59 s";
             NSMutableAttributedString *attrS = [[NSMutableAttributedString alloc] initWithString:countdownStr];
             [attrS addAttribute:NSForegroundColorAttributeName value:Theme.colorHighlight range:NSMakeRange(0, 2)];
             [attrS addAttribute:NSFontAttributeName value:Theme.fontExtraLargeBold range:NSMakeRange(0, 2)];

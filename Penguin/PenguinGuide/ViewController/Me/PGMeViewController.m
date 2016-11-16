@@ -36,6 +36,8 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(meShouldReload) name:PG_NOTIFICATION_UPDATE_ME object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(userLogout) name:PG_NOTIFICATION_LOGOUT object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(userLogin) name:PG_NOTIFICATION_LOGIN object:nil];
     
     self.view.backgroundColor = [UIColor whiteColor];
     
@@ -73,13 +75,9 @@
 {
     [super viewDidAppear:animated];
     
-    if (!PGGlobal.userId) {
-        [PGRouterManager routeToLoginPage];
-    } else {
-        if (!self.viewModel.me) {
-            [self showLoading];
-            [self.viewModel requestData];
-        }
+    if (!self.viewModel.me) {
+        [self showLoading];
+        [self.viewModel requestData];
     }
 }
 
@@ -244,7 +242,22 @@
 
 - (void)meShouldReload
 {
-    [self.viewModel requestData];
+    if (self.viewModel) {
+        [self.viewModel requestData];
+    }
+}
+
+- (void)userLogin
+{
+    if (self.viewModel) {
+        [self.viewModel requestData];
+    }
+}
+
+- (void)userLogout
+{
+    AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+    [appDelegate.tabBarController selectTab:0];
 }
 
 #pragma mark - <Setters && Getters>

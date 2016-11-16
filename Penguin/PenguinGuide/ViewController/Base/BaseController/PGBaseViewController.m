@@ -40,7 +40,6 @@
 {
     [self dismissLoading];
     [self.apiClient cancelAllRequests];
-    [self.KVOController unobserve:PGGlobal];
     self.apiClient = nil;
 }
 
@@ -63,6 +62,12 @@
             [weakself.apiClient updateAccessToken:[NSString stringWithFormat:@"Bearer %@", PGGlobal.accessToken]];
         } else {
             [weakself.apiClient updateAccessToken:nil];
+        }
+    }];
+    [self observe:PGGlobal keyPath:@"hostUrl" block:^(id changedObject) {
+        NSString *hostUrl = changedObject;
+        if (hostUrl && [hostUrl isKindOfClass:[NSString class]] && hostUrl.length > 0) {
+            [weakself.apiClient updateHostUrl:hostUrl];
         }
     }];
 }
@@ -159,6 +164,7 @@
         BOOL endFlag = [changedObject boolValue];
         if (endFlag) {
             [weakCollectionView disableInfiniteScrolling];
+            [[weakCollectionView collectionViewLayout] invalidateLayout];
         } else {
             [weakCollectionView enableInfiniteScrolling];
         }
@@ -228,8 +234,34 @@
     }
 }
 
+- (void)showOccupiedLoading
+{
+    if (!self.hud.superview) {
+        self.view.userInteractionEnabled = NO;
+        self.hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+        self.hud.frame = CGRectMake(0, 0, 100, 100);
+        self.hud.center = CGPointMake(UISCREEN_WIDTH/2, UISCREEN_HEIGHT/2);
+        self.hud.margin = 15.f;
+        self.hud.mode = MBProgressHUDModeCustomView;
+        self.hud.bezelView.style = MBProgressHUDBackgroundStyleSolidColor;
+        // http://stackoverflow.com/questions/10384207/uiview-shadow-not-working
+        self.hud.bezelView.backgroundColor = [UIColor whiteColor];
+        self.hud.bezelView.layer.shadowColor = Theme.colorText.CGColor;
+        self.hud.bezelView.layer.shadowOffset = CGSizeMake(1.f, 1.f);
+        self.hud.bezelView.layer.shadowOpacity = 0.5f;
+        self.hud.bezelView.layer.masksToBounds = NO;
+        self.hud.userInteractionEnabled = NO;
+        
+        FLAnimatedImage *animatedImage = [FLAnimatedImage animatedImageWithGIFData:[NSData dataWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"loading" ofType:@"gif"]]];
+        FLAnimatedImageView *animatedImageView = [[FLAnimatedImageView alloc] init];
+        animatedImageView.animatedImage = animatedImage;
+        self.hud.customView = animatedImageView;
+    }
+}
+
 - (void)dismissLoading
 {
+    self.view.userInteractionEnabled = YES;
     [self.hud hideAnimated:YES];
 }
 
@@ -271,7 +303,7 @@
 - (PGAPIClient *)apiClient
 {
     if (!_apiClient) {
-        _apiClient = [PGAPIClient client];
+        _apiClient = [PGAPIClient clientWithBaseUrl:PGGlobal.hostUrl];
     }
     return _apiClient;
 }

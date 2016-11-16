@@ -112,6 +112,7 @@
 {
     if (!_bgImageView) {
         _bgImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, UISCREEN_WIDTH, UISCREEN_HEIGHT)];
+        _bgImageView.contentMode = UIViewContentModeScaleAspectFill;
         _bgImageView.image = [UIImage imageNamed:@"pg_login_bg"];
     }
     return _bgImageView;
@@ -129,11 +130,9 @@
 - (UIButton *)backButton
 {
     if (!_backButton) {
-        _backButton = [[UIButton alloc] initWithFrame:CGRectMake(24, 25, 50, 50)];
+        _backButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 80, 80)];
         _backButton.hidden = YES;
         [_backButton setImage:[UIImage imageNamed:@"pg_login_back"] forState:UIControlStateNormal];
-        [_backButton setContentVerticalAlignment:UIControlContentVerticalAlignmentTop];
-        [_backButton setContentHorizontalAlignment:UIControlContentHorizontalAlignmentLeft];
         [_backButton addTarget:self action:@selector(backButtonClicked) forControlEvents:UIControlEventTouchUpInside];
     }
     return _backButton;
@@ -142,11 +141,9 @@
 - (UIButton *)closeButton
 {
     if (!_closeButton) {
-        _closeButton = [[UIButton alloc] initWithFrame:CGRectMake(UISCREEN_WIDTH-24-50, 25, 50, 50)];
+        _closeButton = [[UIButton alloc] initWithFrame:CGRectMake(UISCREEN_WIDTH-80, 0, 80, 80)];
         _closeButton.hidden = YES;
         [_closeButton setImage:[UIImage imageNamed:@"pg_login_close"] forState:UIControlStateNormal];
-        [_closeButton setContentVerticalAlignment:UIControlContentVerticalAlignmentTop];
-        [_closeButton setContentHorizontalAlignment:UIControlContentHorizontalAlignmentRight];
         [_closeButton addTarget:self action:@selector(closeButtonClicked) forControlEvents:UIControlEventTouchUpInside];
     }
     return _closeButton;

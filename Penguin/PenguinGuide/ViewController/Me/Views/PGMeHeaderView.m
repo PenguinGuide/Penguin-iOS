@@ -48,12 +48,12 @@
     if (me) {
         [self.avatarButton sd_setImageWithURL:[NSURL URLWithString:me.avatar]
                                      forState:UIControlStateNormal
-                             placeholderImage:nil];
+                             placeholderImage:[UIImage imageNamed:@"pg_me_avatar_placeholder"]];
         if (me.nickname) {
             self.nameLabel.text = me.nickname;
         }
         if (me.location) {
-            self.locationLabel.text = [NSString stringWithFormat:@"来自%@", me.location];
+            self.locationLabel.text = [NSString stringWithFormat:@"%@", me.location];
         }
         if ([me.sex isEqualToString:@"男"]) {
             self.sexImageView.image = [UIImage imageNamed:@"pg_me_sex_male"];

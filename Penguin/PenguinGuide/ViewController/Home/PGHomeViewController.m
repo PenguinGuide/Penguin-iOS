@@ -61,9 +61,9 @@
         BOOL reloadFirstPage = [changedObject boolValue];
         if (reloadFirstPage)  {
             [weakself.feedsCollectionView reloadData];
+            [weakself dismissLoading];
+            [weakself.feedsCollectionView endBottomRefreshing];
         }
-        [weakself dismissLoading];
-        [weakself.feedsCollectionView endBottomRefreshing];
     }];
     [self observe:self.viewModel keyPath:@"nextPageIndexSet" block:^(id changedObject) {
         NSIndexSet *indexes = changedObject;
@@ -215,6 +215,17 @@
     return [PGHomeRecommendsHeaderView headerViewSize];
 }
 
+- (CGSize)feedsFooterSize
+{
+    if (!self.viewModel) {
+        return CGSizeZero;
+    }
+    if (self.viewModel.endFlag) {
+        return [PGBaseCollectionViewFooterView footerViewSize];
+    }
+    return CGSizeZero;
+}
+
 - (NSString *)tabType
 {
     return @"home";
@@ -229,6 +240,10 @@
 {
     id banner = self.viewModel.feedsArray[indexPath.section];
     if ([banner isKindOfClass:[PGArticleBanner class]]) {
+        UIView *statusBar = [[[UIApplication sharedApplication] valueForKey:@"statusBarWindow"] valueForKey:@"statusBar"];
+        if ([statusBar respondsToSelector:@selector(setBackgroundColor:)]) {
+            statusBar.backgroundColor = [UIColor clearColor];
+        }
         PGArticleBanner *articleBanner = (PGArticleBanner *)banner;
         PGArticleViewController *articleVC = [[PGArticleViewController alloc] initWithArticleId:articleBanner.articleId animated:YES];
         [self.navigationController pushViewController:articleVC animated:YES];

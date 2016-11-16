@@ -278,15 +278,15 @@
 - (UIView *)bottomToolBar
 {
     if (!_bottomToolBar) {
-        _bottomToolBar = [[UIView alloc] initWithFrame:CGRectMake(0, UISCREEN_HEIGHT-44, UISCREEN_WIDTH, 44)];
+        _bottomToolBar = [[UIView alloc] initWithFrame:CGRectMake(0, UISCREEN_HEIGHT-50, UISCREEN_WIDTH, 50)];
         _bottomToolBar.backgroundColor = [UIColor whiteColor];
         
-        UIButton *backButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 44, 44)];
+        UIButton *backButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 50, 50)];
         [backButton setImage:[UIImage imageNamed:@"pg_navigation_back_button"] forState:UIControlStateNormal];
         [backButton addTarget:self action:@selector(backButtonClicked) forControlEvents:UIControlEventTouchUpInside];
         [_bottomToolBar addSubview:backButton];
         
-        UIButton *buyButton = [[UIButton alloc] initWithFrame:CGRectMake(UISCREEN_WIDTH-100, 0, 100, 44)];
+        UIButton *buyButton = [[UIButton alloc] initWithFrame:CGRectMake(UISCREEN_WIDTH-100, 0, 100, 50)];
         [buyButton addTarget:self action:@selector(buyButtonClicked) forControlEvents:UIControlEventTouchUpInside];
         [buyButton setBackgroundColor:Theme.colorExtraHighlight];
         [buyButton setTitle:@"前往购买" forState:UIControlStateNormal];
@@ -294,11 +294,7 @@
         [buyButton.titleLabel setFont:Theme.fontMediumBold];
         [_bottomToolBar addSubview:buyButton];
         
-        UIButton *collectButton = [[UIButton alloc] initWithFrame:CGRectMake(buyButton.pg_left-60, 0, 44, 44)];
-        [collectButton setImage:[UIImage imageNamed:@"pg_article_collect"] forState:UIControlStateNormal];
-        [_bottomToolBar addSubview:collectButton];
-        
-        UIButton *shareButton = [[UIButton alloc] initWithFrame:CGRectMake(collectButton.pg_left-44, 0, 44, 44)];
+        UIButton *shareButton = [[UIButton alloc] initWithFrame:CGRectMake(buyButton.pg_left-60, 0, 50, 50)];
         [shareButton setImage:[UIImage imageNamed:@"pg_article_share"] forState:UIControlStateNormal];
         [_bottomToolBar addSubview:shareButton];
         

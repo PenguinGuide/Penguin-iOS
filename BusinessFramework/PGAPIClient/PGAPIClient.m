@@ -20,6 +20,7 @@ static const int DefaultMaxConcurrentConnections = 5;
 
 @property (nonatomic, strong) PGRKHTTPSessionManager *sessionManager;
 @property (nonatomic, strong) NSString *accessToken;
+@property (nonatomic, strong) NSString *hostUrl;
 
 @end
 
@@ -28,6 +29,11 @@ static const int DefaultMaxConcurrentConnections = 5;
 + (id)client
 {
     return [[PGAPIClient alloc] initWithTimeout:DefaultRequestTimeout operationCount:DefaultMaxConcurrentConnections];
+}
+
++ (id)clientWithBaseUrl:(NSString *)baseUrl
+{
+    return [[PGAPIClient alloc] initWithBaseUrl:baseUrl withTimeout:DefaultRequestTimeout operationCount:DefaultMaxConcurrentConnections];
 }
 
 + (id)clientWithTimeout:(NSTimeInterval)timeout
@@ -45,6 +51,16 @@ static const int DefaultMaxConcurrentConnections = 5;
     return [[PGAPIClient alloc] initWithTimeout:timeout operationCount:operationCount];
 }
 
+- (id)initWithBaseUrl:(NSString *)baseUrl withTimeout:(NSTimeInterval)timeout operationCount:(NSInteger)operationCount
+{
+    if (self = [super init]) {
+        self.hostUrl = baseUrl;
+        [self initSessionManager:timeout operationCount:operationCount];
+    }
+    
+    return self;
+}
+
 - (id)initWithTimeout:(NSTimeInterval)timeout operationCount:(NSInteger)operationCount
 {
     if (self = [super init]) {
@@ -56,7 +72,11 @@ static const int DefaultMaxConcurrentConnections = 5;
 
 - (void)initSessionManager:(NSTimeInterval)timeout operationCount:(NSInteger)operationCount
 {
-    self.sessionManager = [PGRKHTTPSessionManager sessionManagerWithBaseURL:@"https://api.penguin.guide" timeout:timeout operationCount:operationCount];
+    if (self.hostUrl && self.hostUrl.length > 0) {
+        self.sessionManager = [PGRKHTTPSessionManager sessionManagerWithBaseURL:self.hostUrl timeout:timeout operationCount:operationCount];
+    } else {
+        self.sessionManager = [PGRKHTTPSessionManager sessionManagerWithBaseURL:@"https://api.penguinguide.cn" timeout:timeout operationCount:operationCount];
+    }
     
     // content-type
     [self.sessionManager addAcceptableContentTypes:[NSSet setWithObjects:@"application/json", @"text/json", @"text/javascript", @"text/html", @"text/css", @"text/plain", nil]];
@@ -80,6 +100,12 @@ static const int DefaultMaxConcurrentConnections = 5;
     [self.sessionManager addValue:userAgent forHTTPHeaderField:@"User-Agent"];
     // accept
     [self.sessionManager addValue:@"application/json" forHTTPHeaderField:@"Accept"];
+    
+    if (self.accessToken) {
+        [self.sessionManager addValue:self.accessToken forHTTPHeaderField:@"Authorization"];
+    } else {
+        [self.sessionManager addValue:nil forHTTPHeaderField:@"Authorization"];
+    }
 }
 
 + (void)enableLogging
@@ -90,6 +116,14 @@ static const int DefaultMaxConcurrentConnections = 5;
 + (void)disableLogging
 {
     [PGRKHTTPSessionManager disableLogging];
+}
+
+- (void)updateHostUrl:(NSString *)hostUrl
+{
+    self.hostUrl = hostUrl;
+    
+    [self cancelAllRequests];
+    [self initSessionManager:DefaultRequestTimeout operationCount:DefaultRequestTimeout];
 }
 
 - (void)updateAccessToken:(NSString *)accessToken
@@ -131,6 +165,16 @@ static const int DefaultMaxConcurrentConnections = 5;
                                      failure(error);
                                  }
                              }];
+}
+
+- (void)pg_makeGetRequest:(void (^)(PGRKRequestConfig *config))configBlock
+     paginationCompletion:(PGRKPaginationCompletionBlock)completion
+                  failure:(PGRKFailureBlock)failure
+{
+    __block PGRKRequestConfig *clientConfig = [[PGRKRequestConfig alloc] init];
+    configBlock(clientConfig);
+    
+    
 }
 
 - (void)pg_makePutRequest:(void (^)(PGRKRequestConfig *config))configBlock

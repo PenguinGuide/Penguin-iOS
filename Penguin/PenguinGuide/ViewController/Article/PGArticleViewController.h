@@ -14,6 +14,7 @@
 
 @property (nonatomic, strong, readonly) PGBaseCollectionView *articleCollectionView;
 @property (nonatomic, strong) UIImageView *headerImageView;
+@property (nonatomic, assign) BOOL disableTransition;
 
 - (id)initWithArticleId:(NSString *)articleId animated:(BOOL)animated;
 - (void)animateCollectionView:(void(^)())completion;

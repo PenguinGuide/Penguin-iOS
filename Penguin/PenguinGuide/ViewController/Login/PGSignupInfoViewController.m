@@ -21,7 +21,14 @@
 
 @property (nonatomic, strong) UIDatePicker *dobPicker;
 @property (nonatomic, strong) UIPickerView *sexPicker;
+@property (nonatomic, strong) UIPickerView *cityPicker;
 @property (nonatomic, strong) NSDateFormatter *df;
+
+@property (nonatomic, strong) NSArray *provincesArray;
+@property (nonatomic, strong) NSArray *districtsArray;
+@property (nonatomic, assign) NSInteger currentIndex;
+
+@property (nonatomic, strong) NSString *avatarUrl;
 
 @end
 
@@ -42,6 +49,15 @@
     [self.loginScrollView addSubview:self.locationTextField];
     [self.loginScrollView addSubview:self.doneButton];
     [self.loginScrollView addSubview:self.skipButton];
+    
+    NSDictionary *citiesDict = [[NSDictionary alloc] initWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"pg_cities_list" ofType:@"plist"]];
+    self.provincesArray = citiesDict.allKeys;
+    NSMutableArray *citiesArray = [NSMutableArray new];
+    for (NSString *province in self.provincesArray) {
+        NSArray *cities = citiesDict[province];
+        [citiesArray addObject:cities];
+    }
+    self.districtsArray = [NSArray arrayWithArray:citiesArray];
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -58,32 +74,69 @@
 
 - (NSInteger)numberOfComponentsInPickerView:(UIPickerView *)pickerView
 {
-    return 1;
+    if (pickerView.tag == 0) {
+        return 1;
+    } else if (pickerView.tag == 1) {
+        return 2;
+    }
+    return 0;
 }
 
 - (NSInteger)pickerView:(UIPickerView *)pickerView numberOfRowsInComponent:(NSInteger)component
 {
-    return 2;
+    if (pickerView.tag == 0) {
+        return 2;
+    } else if (pickerView.tag == 1) {
+        if (component == 0) {
+            return self.provincesArray.count;
+        } else if (component == 1) {
+            return [self.districtsArray[self.currentIndex] count];
+        }
+    }
+    return 0;
 }
 
 - (NSString *)pickerView:(UIPickerView *)pickerView titleForRow:(NSInteger)row forComponent:(NSInteger)component
 {
-    if (row == 0) {
-        return @"男";
-    } else {
-        return @"女";
+    if (pickerView.tag == 0) {
+        if (row == 0) {
+            return @"男";
+        } else {
+            return @"女";
+        }
+    } else if (pickerView.tag == 1) {
+        if (component == 0) {
+            return self.provincesArray[row];
+        } else if (component == 1) {
+            return self.districtsArray[self.currentIndex][row];
+        }
     }
+    return nil;
 }
 
 #pragma mark - <UIPickerViewDelegate>
 
 - (void)pickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row inComponent:(NSInteger)component
 {
-    if (row == 0) {
-        self.sexTextField.text = @"男";
-    } else {
-        self.sexTextField.text = @"女";
+    if (pickerView.tag == 0) {
+        if (row == 0) {
+            self.sexTextField.text = @"男";
+        } else {
+            self.sexTextField.text = @"女";
+        }
+    } else if (pickerView.tag == 1) {
+        if (component == 0) {
+            self.currentIndex = row;
+            [self.cityPicker reloadComponent:1];
+            [self.cityPicker selectRow:0 inComponent:1 animated:YES];
+        }
+        NSInteger selectedProvinceRow = [pickerView selectedRowInComponent:0];
+        NSInteger selectedCityRow = [pickerView selectedRowInComponent:1];
+        NSString *province = self.provincesArray[selectedProvinceRow];
+        NSString *city = self.districtsArray[selectedProvinceRow][selectedCityRow];
+        self.locationTextField.text = [NSString stringWithFormat:@"%@ %@", province, city];
     }
+
 }
 
 - (void)datePickerValueChanged:(UIDatePicker *)datePicker
@@ -112,6 +165,7 @@
         params[@"gender"] = self.sexTextField.text;
         params[@"birth"] = self.dobTextField.text;
         params[@"location"] = self.locationTextField.text;
+        params[@"avatar_url"] = self.avatarUrl;
         
         [self showLoading];
         
@@ -123,6 +177,7 @@
             config.keyPath = nil;
             config.pattern = @{@"userId":weakself.userId};
         } completion:^(id response) {
+            [[NSNotificationCenter defaultCenter] postNotificationName:PG_NOTIFICATION_LOGIN object:nil];
             [weakself dismissLoading];
             [weakself dismissViewControllerAnimated:YES completion:nil];
         } failure:^(NSError *error) {
@@ -149,18 +204,26 @@
 
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary<NSString *,id> *)info
 {
-//    __block UIImage *image = [info objectForKey:UIImagePickerControllerOriginalImage];
-//    if (image) {
-//        [self.apiClient pg_uploadImage:^(PGRKRequestConfig *config) {
-//            config.route = PG_Upload_Image;
-//            config.keyPath = nil;
-//            config.image = image;
-//        } completion:^(id response) {
-//            
-//        } failure:^(NSError *error) {
-//            
-//        }];
-//    }
+    __block UIImage *image = [info objectForKey:UIImagePickerControllerOriginalImage];
+    if (image) {
+        [self showLoading];
+        PGWeakSelf(self);
+        // NOTE: upload image with base64 data http://blog.csdn.net/a645258072/article/details/51728806
+        [self.apiClient pg_uploadImage:^(PGRKRequestConfig *config) {
+            config.route = PG_Upload_Image;
+            config.keyPath = nil;
+            config.image = image;
+        } completion:^(id response) {
+            if (response[@"avatar_url"]) {
+                weakself.avatarUrl = response[@"avatar_url"];
+                [weakself.cameraButton setImage:image forState:UIControlStateNormal];
+            }
+            [weakself dismissLoading];
+        } failure:^(NSError *error) {
+            [weakself showErrorMessage:error];
+            [weakself dismissLoading];
+        }];
+    }
     [picker dismissViewControllerAnimated:YES completion:nil];
 }
 
@@ -170,6 +233,8 @@
 {
     if (!_cameraButton) {
         _cameraButton = [[UIButton alloc] initWithFrame:CGRectMake((UISCREEN_WIDTH-92)/2, 50, 92, 92)];
+        _cameraButton.clipsToBounds = YES;
+        _cameraButton.layer.cornerRadius = 46;
         [_cameraButton addTarget:self action:@selector(cameraButtonClicked) forControlEvents:UIControlEventTouchUpInside];
         [_cameraButton setImage:[UIImage imageNamed:@"pg_login_camera"] forState:UIControlStateNormal];
     }
@@ -214,6 +279,8 @@
 {
     if (!_locationTextField) {
         _locationTextField = [[PGLoginTextField alloc] initWithFrame:CGRectMake(45, self.sexTextField.pg_bottom+15, UISCREEN_WIDTH-90, 40)];
+        _locationTextField.inputView = self.cityPicker;
+        _locationTextField.inputAccessoryView = self.accessoryView;
         _locationTextField.placeholder = @"选择你的地区";
         _locationTextField.delegate = self;
     }
@@ -263,15 +330,27 @@
         _sexPicker = [[UIPickerView alloc] init];
         _sexPicker.dataSource = self;
         _sexPicker.delegate = self;
+        _sexPicker.tag = 0;
     }
     return _sexPicker;
+}
+
+- (UIPickerView *)cityPicker
+{
+    if (!_cityPicker) {
+        _cityPicker = [[UIPickerView alloc] init];
+        _cityPicker.dataSource = self;
+        _cityPicker.delegate = self;
+        _cityPicker.tag = 1;
+    }
+    return _cityPicker;
 }
 
 - (NSDateFormatter *)df
 {
     if (!_df) {
         _df = [[NSDateFormatter alloc] init];
-        [_df setDateFormat:@"yyyy/MM/dd"];
+        [_df setDateFormat:@"yyyy-MM-dd"];
     }
     return _df;
 }

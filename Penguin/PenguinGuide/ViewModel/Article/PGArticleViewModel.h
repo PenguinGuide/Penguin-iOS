@@ -16,6 +16,7 @@
 @property (nonatomic, strong) PGArticle *article;
 @property (nonatomic, strong) NSArray *commentsArray;
 @property (nonatomic, strong) NSArray *paragraphsArray;
+@property (nonatomic, strong, readonly) NSError *commentError;
 
 @property (nonatomic, assign) BOOL likeSuccess;
 @property (nonatomic, assign) BOOL dislikeSuccess;
@@ -34,5 +35,6 @@
 - (void)sendReplyComment:(NSString *)content commentId:(NSString *)commentId completion:(void(^)(BOOL success))completion;
 - (void)likeComment:(NSString *)commentId completion:(void(^)(BOOL success))completion;
 - (void)dislikeComment:(NSString *)commentId completion:(void(^)(BOOL success))completion;
+- (void)reportComment:(NSString *)commentId completion:(void(^)(BOOL success))completion;
 
 @end

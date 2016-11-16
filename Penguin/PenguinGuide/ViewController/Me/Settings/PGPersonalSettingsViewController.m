@@ -55,7 +55,7 @@
     [self.navigationController.navigationBar setShadowImage:[UIImage new]];
     
     if (!self.viewModel.me) {
-        [self showLoading];
+        [self showOccupiedLoading];
         [self.viewModel requestDetails];
     }
 }

@@ -40,6 +40,7 @@
 - (void)showToast:(NSString *)message position:(PGToastPosition)position;
 - (void)showAlert:(NSString *)title message:(NSString *)message actions:(NSArray *)actions style:(void (^)(PGAlertStyle *))styleConfig;
 - (void)showLoading;
+- (void)showOccupiedLoading;
 - (void)dismissLoading;
 
 - (void)showPopup:(UIView *)popupView;

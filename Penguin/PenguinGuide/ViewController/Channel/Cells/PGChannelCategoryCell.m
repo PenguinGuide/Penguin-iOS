@@ -12,6 +12,7 @@
 
 @property (nonatomic, strong) UIImageView *categoryImageView;
 @property (nonatomic, strong) UIView *dimView;
+@property (nonatomic, strong) UIView *horizontalLine;
 
 @end
 
@@ -28,17 +29,23 @@
 
 - (void)initialize
 {
-    self.backgroundColor = Theme.colorText;
+    self.backgroundColor = [UIColor clearColor];
     
     [self.contentView addSubview:self.categoryImageView];
     [self.contentView addSubview:self.dimView];
+    [self.contentView addSubview:self.horizontalLine];
     
-    UIImageView *maskImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, self.pg_width, self.pg_height)];
-    maskImageView.image = [[UIImage imageNamed:@"pg_bg_corner_mask"] resizableImageWithCapInsets:UIEdgeInsetsMake(4, 4, 4, 4) resizingMode:UIImageResizingModeStretch];
+    UIImageView *maskImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, self.pg_width, self.pg_height-8)];
+    maskImageView.image = [[UIImage imageNamed:@"pg_white_corner_mask"] resizableImageWithCapInsets:UIEdgeInsetsMake(4, 4, 4, 4) resizingMode:UIImageResizingModeStretch];
     [self.contentView addSubview:maskImageView];
 }
 
-- (void)setCellWithCategory:(PGChannelCategory *)category
+- (void)setCellWithChannelCategory:(PGChannelCategory *)category
+{
+    [self.categoryImageView setWithImageURL:category.image placeholder:nil completion:nil];
+}
+
+- (void)setCellWithScenarioCategory:(PGScenarioCategory *)category
 {
     [self.categoryImageView setWithImageURL:category.image placeholder:nil completion:nil];
 }
@@ -52,16 +59,18 @@
 {
     [super setSelected:selected];
     
-//    if (selected) {
-//        self.dimView.hidden = NO;
-//    } else {
-//        self.dimView.hidden = YES;
-//    }
+    if (selected) {
+        self.dimView.hidden = YES;
+        self.horizontalLine.hidden = NO;
+    } else {
+        self.dimView.hidden = NO;
+        self.horizontalLine.hidden = YES;
+    }
 }
 
 - (UIImageView *)categoryImageView {
 	if(_categoryImageView == nil) {
-		_categoryImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, self.pg_width, self.pg_height)];
+		_categoryImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, self.pg_width, self.pg_height-8)];
         _categoryImageView.clipsToBounds = YES;
         _categoryImageView.contentMode = UIViewContentModeScaleAspectFill;
         _categoryImageView.backgroundColor = Theme.colorText;
@@ -71,11 +80,21 @@
 
 - (UIView *)dimView {
 	if(_dimView == nil) {
-        _dimView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.pg_width, self.pg_height)];
+        _dimView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.pg_width, self.pg_height-8)];
         _dimView.backgroundColor = [UIColor whiteColorWithAlpha:0.5f];
-        _dimView.hidden = YES;
+        _dimView.hidden = NO;
 	}
 	return _dimView;
+}
+
+- (UIView *)horizontalLine
+{
+    if (!_horizontalLine) {
+        _horizontalLine = [[UIView alloc] initWithFrame:CGRectMake(0, self.pg_height-3, self.pg_width, 3)];
+        _horizontalLine.backgroundColor = Theme.colorExtraHighlight;
+        _horizontalLine.hidden = YES;
+    }
+    return _horizontalLine;
 }
 
 @end

@@ -11,6 +11,7 @@
 #define LogoutFooterView @"LogoutFooterView"
 
 #import "PGSystemSettingsViewController.h"
+#import "PGDeveloperViewController.h"
 #import "PGSettingsCell.h"
 #import "PGSettingsHeaderView.h"
 #import "PGSettingsLogoutFooterView.h"
@@ -59,7 +60,11 @@
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
 {
     if (section == 0) {
+#if (defined DEBUG)
+        return 6;
+#else
         return 5;
+#endif
     }
     return 0;
 }
@@ -79,6 +84,8 @@
             [cell setCellWithDesc:@"用 户 协 议" content:nil isImage:NO];
         } else if (indexPath.item == 4) {
             [cell setCellWithDesc:@"评 分" content:nil isImage:NO];
+        } else if (indexPath.item == 5) {
+            [cell setCellWithDesc:@"开 发 者 页 面" content:nil isImage:NO];
         }
         
         return cell;
@@ -155,6 +162,11 @@
         [self showAlert:@"清除缓存" message:@"确定清除缓存？" actions:@[cancelAction, doneAction] style:^(PGAlertStyle *style) {
             style.alertType = PGAlertTypeAlert;
         }];
+    } else if (indexPath.item == 5) {
+#if (defined DEBUG)
+        PGDeveloperViewController *developerVC = [[PGDeveloperViewController alloc] init];
+        [self.navigationController pushViewController:developerVC animated:YES];
+#endif
     }
 }
 
@@ -163,6 +175,8 @@
 - (void)logoutButtonClicked
 {
     [self.navigationController popToRootViewControllerAnimated:YES];
+    
+    [[NSNotificationCenter defaultCenter] postNotificationName:PG_NOTIFICATION_LOGOUT object:nil];
     
     [PGGlobal synchronizeUserId:nil];
     [PGGlobal synchronizeToken:nil];

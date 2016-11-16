@@ -23,8 +23,8 @@
 @property (nonatomic, strong, readwrite) NSArray *recommendsArray;
 @property (nonatomic, strong, readwrite) NSArray *channelsArray;
 @property (nonatomic, strong, readwrite) NSArray *feedsArray;
-@property (nonatomic, assign, readwrite) BOOL reloadFirstPage;
 @property (nonatomic, strong, readwrite) NSIndexSet *nextPageIndexSet;
+@property (nonatomic, assign, readwrite) BOOL reloadFirstPage;
 
 @property (nonatomic, strong, readwrite) NSError *recommendsError;
 @property (nonatomic, strong, readwrite) NSError *feedsError;
@@ -190,7 +190,7 @@
                                 itemsCount++;
                             }
                         }
-                        if ([dict[@"type"] isEqualToString:@"good"]) {
+                        if ([dict[@"type"] isEqualToString:@"goods"]) {
                             PGSingleGoodBanner *singleGoodBanner = [PGSingleGoodBanner modelFromDictionary:dict];
                             if (singleGoodBanner) {
                                 [models addObject:singleGoodBanner];

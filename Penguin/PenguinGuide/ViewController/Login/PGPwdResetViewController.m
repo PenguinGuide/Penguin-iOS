@@ -53,6 +53,7 @@
             config.keyPath = nil;
         } completion:^(id response) {
             [weakself dismissLoading];
+            [weakself showToast:@"发送成功"];
         } failure:^(NSError *error) {
             [weakself showErrorMessage:error];
             [weakself dismissLoading];

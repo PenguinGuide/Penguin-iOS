@@ -15,6 +15,7 @@
     return @{
              @"likesCount": @"favor_count",
              @"liked": @"is_favored",
+             @"replyDeleted": @"reply_deleted",
              @"content": @"content",
              @"time": @"created_at",
              @"user": @"user",

@@ -54,7 +54,7 @@
 - (UILabel *)descLabel
 {
     if (!_descLabel) {
-        _descLabel = [[UILabel alloc] initWithFrame:CGRectMake(36, 0, 70, self.pg_height)];
+        _descLabel = [[UILabel alloc] initWithFrame:CGRectMake(36, 0, 90, self.pg_height)];
         _descLabel.font = Theme.fontMediumBold;
         _descLabel.textColor = Theme.colorText;
     }

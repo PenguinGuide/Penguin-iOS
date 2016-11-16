@@ -48,7 +48,7 @@
 + (CGSize)cellSize
 {
     CGFloat width = UISCREEN_WIDTH-60;
-    CGFloat height = width*240/290+60;
+    CGFloat height = width*279/290+60;
     
     return CGSizeMake(width, height);
 }

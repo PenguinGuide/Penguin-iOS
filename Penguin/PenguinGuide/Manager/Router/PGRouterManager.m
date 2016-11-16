@@ -17,6 +17,7 @@
 #import "PGArticleViewController.h"
 #import "PGGoodViewController.h"
 #import "PGTagViewController.h"
+#import "PGWebViewController.h"
 
 @implementation PGRouterManager
 
@@ -61,6 +62,7 @@
             if (params[@"articleId"]) {
                 NSString *articleId = params[@"articleId"];
                 PGArticleViewController *articleVC = [[PGArticleViewController alloc] initWithArticleId:articleId animated:NO];
+                articleVC.disableTransition = NO;
                 [PGGlobal.rootNavigationController pushViewController:articleVC animated:YES];
             }
         }
@@ -102,6 +104,16 @@
                 NSString *scenarioId = params[@"scenarioId"];
                 PGScenarioViewController *scenarioVC = [[PGScenarioViewController alloc] initWithScenarioId:scenarioId];
                 [PGGlobal.rootNavigationController pushViewController:scenarioVC animated:YES];
+            }
+        }
+    }];
+    
+    [[PGRouter sharedInstance] registerRoute:@"http://" toHandler:^(NSDictionary *params) {
+        if (PGGlobal.rootNavigationController) {
+            if (params[@"web_url"]) {
+                NSString *webUrl = params[@"web_url"];
+                PGWebViewController *webVC = [[PGWebViewController alloc] initWithURL:webUrl];
+                [PGGlobal.rootNavigationController pushViewController:webVC animated:YES];
             }
         }
     }];

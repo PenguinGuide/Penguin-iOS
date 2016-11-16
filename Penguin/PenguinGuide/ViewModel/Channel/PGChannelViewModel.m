@@ -35,6 +35,8 @@
             if (weakself.channel.categoriesArray.count > 0) {
                 PGChannelCategory *category = weakself.channel.categoriesArray.firstObject;
                 [weakself requestArticles:category.categoryId];
+            } else {
+                weakself.articlesArray = [NSArray new];
             }
         } failure:^(NSError *error) {
             weakself.error = error;

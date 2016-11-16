@@ -26,14 +26,19 @@
         if ([fromVC isKindOfClass:[PGTabBarController class]]) {
             PGTabBarController *tabbarController = (PGTabBarController *)fromVC;
             if ([toVC isKindOfClass:[PGArticleViewController class]]) {
-                if ([tabbarController.selectedViewController isKindOfClass:[PGHomeViewController class]]) {
-                    PGHomeViewController *homeVC = (PGHomeViewController *)tabbarController.selectedViewController;
-                    PGArticleBannerCell *cell = (PGArticleBannerCell *)[homeVC.feedsCollectionView cellForItemAtIndexPath:[[homeVC.feedsCollectionView indexPathsForSelectedItems] firstObject]];
-                    if (cell) {
-                        return [[PGHomeToArticleTransition alloc] init];
-                    } else {
-                        return nil;
+                PGArticleViewController *articleVC = (PGArticleViewController *)toVC;
+                if (!articleVC.disableTransition) {
+                    if ([tabbarController.selectedViewController isKindOfClass:[PGHomeViewController class]]) {
+                        PGHomeViewController *homeVC = (PGHomeViewController *)tabbarController.selectedViewController;
+                        PGArticleBannerCell *cell = (PGArticleBannerCell *)[homeVC.feedsCollectionView cellForItemAtIndexPath:[[homeVC.feedsCollectionView indexPathsForSelectedItems] firstObject]];
+                        if (cell) {
+                            return [[PGHomeToArticleTransition alloc] init];
+                        } else {
+                            return nil;
+                        }
                     }
+                } else {
+                    return nil;
                 }
             }
         } else {

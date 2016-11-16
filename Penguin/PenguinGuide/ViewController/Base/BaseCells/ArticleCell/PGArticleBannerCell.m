@@ -9,17 +9,18 @@
 #define CollectButtonWidth 90.f
 
 #import "PGArticleBannerCell.h"
+#import "PGBannerImageScrollView.h"
 #import "FLAnimatedImageView+PGAnimatedImageView.h"
 
-@interface PGArticleBannerCell () <UIScrollViewDelegate>
+@interface PGArticleBannerCell () <UIScrollViewDelegate, UIGestureRecognizerDelegate>
 
-@property (nonatomic, strong) UIScrollView *bannerImageScrollView;
+@property (nonatomic, strong) PGBannerImageScrollView *bannerImageScrollView;
 @property (nonatomic, strong, readwrite) FLAnimatedImageView *bannerImageView;
 @property (nonatomic, strong) UIPanGestureRecognizer *panGesture;
 @property (nonatomic, strong) UIImageView *collectImageView;
 @property (nonatomic, strong) UILabel *collectLabel;
-@property (nonatomic, strong) UILabel *titleLabel;
-@property (nonatomic, strong) UILabel *subtitleLabel;
+@property (nonatomic, strong, readwrite) UILabel *titleLabel;
+@property (nonatomic, strong, readwrite) UILabel *subtitleLabel;
 
 @end
 
@@ -65,7 +66,7 @@
     self.backgroundColor = Theme.colorHighlight;
     
     self.titleLabel.text = article.title;
-    self.subtitleLabel.text = @"日 料 | 夜 宵 | 放 毒";
+    self.subtitleLabel.text = article.coverTitle;
 }
 
 + (CGSize)cellSize
@@ -86,10 +87,10 @@
     }
 }
 
-- (UIScrollView *)bannerImageScrollView
+- (PGBannerImageScrollView *)bannerImageScrollView
 {
     if (!_bannerImageScrollView) {
-        _bannerImageScrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, self.pg_width, self.pg_height)];
+        _bannerImageScrollView = [[PGBannerImageScrollView alloc] initWithFrame:CGRectMake(0, 0, self.pg_width, self.pg_height)];
         _bannerImageScrollView.delegate = self;
         _bannerImageScrollView.showsHorizontalScrollIndicator = NO;
         _bannerImageScrollView.showsVerticalScrollIndicator = NO;

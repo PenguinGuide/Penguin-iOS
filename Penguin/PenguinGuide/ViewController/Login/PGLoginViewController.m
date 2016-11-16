@@ -81,6 +81,7 @@
                         [PGGlobal synchronizeUserId:userId];
                     }
                 }
+                [[NSNotificationCenter defaultCenter] postNotificationName:PG_NOTIFICATION_LOGIN object:nil];
                 [weakself dismissLoading];
                 [weakself dismissViewControllerAnimated:YES completion:nil];
             }
@@ -106,6 +107,7 @@
             config.keyPath = nil;
         } completion:^(id response) {
             [weakself dismissLoading];
+            [weakself showToast:@"发送成功"];
         } failure:^(NSError *error) {
             [weakself showErrorMessage:error];
             [weakself dismissLoading];
@@ -149,6 +151,7 @@
                         signupInfoVC.userId = PGGlobal.userId;
                         [weakself.navigationController pushViewController:signupInfoVC animated:YES];
                     } else {
+                        [[NSNotificationCenter defaultCenter] postNotificationName:PG_NOTIFICATION_LOGIN object:nil];
                         [weakself dismissViewControllerAnimated:YES completion:nil];
                     }
                 }
@@ -201,6 +204,7 @@
                         signupInfoVC.userId = PGGlobal.userId;
                         [weakself.navigationController pushViewController:signupInfoVC animated:YES];
                     } else {
+                        [[NSNotificationCenter defaultCenter] postNotificationName:PG_NOTIFICATION_LOGIN object:nil];
                         [weakself dismissViewControllerAnimated:YES completion:nil];
                     }
                 }
@@ -265,7 +269,7 @@
 - (UIButton *)registerButton
 {
     if (!_registerButton) {
-        _registerButton = [[UIButton alloc] initWithFrame:CGRectMake(50, self.loginView.pg_bottom+10, 50, 20)];
+        _registerButton = [[UIButton alloc] initWithFrame:CGRectMake(50, self.loginView.pg_bottom, 50, 50)];
         [_registerButton setTitle:@"立即注册" forState:UIControlStateNormal];
         [_registerButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
         [_registerButton.titleLabel setFont:Theme.fontExtraSmallBold];
@@ -277,7 +281,7 @@
 - (UIButton *)pwdLoginButton
 {
     if (!_pwdLoginButton) {
-        _pwdLoginButton = [[UIButton alloc] initWithFrame:CGRectMake(UISCREEN_WIDTH-50-70, self.loginView.pg_bottom+10, 70, 20)];
+        _pwdLoginButton = [[UIButton alloc] initWithFrame:CGRectMake(UISCREEN_WIDTH-50-70, self.loginView.pg_bottom, 70, 50)];
         [_pwdLoginButton setTitle:@"使用密码登录" forState:UIControlStateNormal];
         [_pwdLoginButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
         [_pwdLoginButton.titleLabel setFont:Theme.fontExtraSmallBold];

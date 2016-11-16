@@ -15,5 +15,6 @@
 @property (nonatomic, strong, readonly) NSArray *feedsArray;
 
 - (void)requestScenario:(NSString *)scenarioId;
+- (void)requestFeeds:(NSString *)scenarioId categoryId:(NSString *)categoryId;
 
 @end

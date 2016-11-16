@@ -39,10 +39,24 @@
     [self.viewModel requestData];
     
     PGWeakSelf(self);
-    [self observe:self.viewModel keyPath:@"feedsArray" block:^(id changedObject) {
-        NSArray *bannersArray = changedObject;
-        if (bannersArray && [bannersArray isKindOfClass:[NSArray class]]) {
+    [self observe:self.viewModel keyPath:@"reloadFirstPage" block:^(id changedObject) {
+        BOOL reloadFirstPage = [changedObject boolValue];
+        if (reloadFirstPage)  {
             [weakself.feedsCollectionView reloadData];
+            [weakself dismissLoading];
+            [weakself.feedsCollectionView endBottomRefreshing];
+        }
+    }];
+    [self observe:self.viewModel keyPath:@"nextPageIndexSet" block:^(id changedObject) {
+        NSIndexSet *indexes = changedObject;
+        if (indexes && [indexes isKindOfClass:[NSIndexSet class]] && indexes.count > 0) {
+            @try {
+                [weakself.feedsCollectionView performBatchUpdates:^{
+                    [weakself.feedsCollectionView insertSections:indexes];
+                } completion:nil];
+            } @catch (NSException *exception) {
+                NSLog(@"exception: %@", exception);
+            }
         }
         [weakself dismissLoading];
         [weakself.feedsCollectionView endBottomRefreshing];
@@ -56,6 +70,7 @@
             [weakself.feedsCollectionView endBottomRefreshing];
         }
     }];
+    [self observeCollectionView:self.feedsCollectionView endOfFeeds:self.viewModel];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -156,6 +171,17 @@
     return [PGStoreRecommendsHeaderView headerViewSize];
 }
 
+- (CGSize)feedsFooterSize
+{
+    if (!self.viewModel) {
+        return CGSizeZero;
+    }
+    if (self.viewModel.endFlag) {
+        return [PGBaseCollectionViewFooterView footerViewSize];
+    }
+    return CGSizeZero;
+}
+
 - (NSString *)tabType
 {
     return @"store";
@@ -177,6 +203,14 @@
     }
 }
 
+- (void)shouldPreloadNextPage
+{
+    PGWeakSelf(self);
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
+        [weakself.viewModel loadNextPage];
+    });
+}
+
 - (void)countdown
 {
     for (UICollectionViewCell *visibleCell in self.feedsCollectionView.visibleCells) {
@@ -193,9 +227,11 @@
     }
 }
 
+#pragma mark - <Lazy Init>
+
 - (PGFeedsCollectionView *)feedsCollectionView {
     if(_feedsCollectionView == nil) {
-        _feedsCollectionView = [[PGFeedsCollectionView alloc] initWithFrame:CGRectMake(0, 64, UISCREEN_WIDTH, UISCREEN_HEIGHT-50) collectionViewLayout:[UICollectionViewFlowLayout new]];
+        _feedsCollectionView = [[PGFeedsCollectionView alloc] initWithFrame:CGRectMake(0, 64, UISCREEN_WIDTH, UISCREEN_HEIGHT-50-64) collectionViewLayout:[UICollectionViewFlowLayout new]];
         _feedsCollectionView.feedsDelegate = self;
         
         __block PGFeedsCollectionView *collectionView = _feedsCollectionView;
