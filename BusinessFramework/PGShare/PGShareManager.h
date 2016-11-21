@@ -26,7 +26,7 @@
 
 //+ (void)shareItem:(PGShareItem *)shareItem toPlatform:(SSDKPlatformType)platformType;
 
-+ (void)shareItem:(void(^)(PGShareItem *shareItem))itemBlock toPlatform:(SSDKPlatformType)platformType completion:(void(^)(BOOL success))completion;
++ (void)shareItem:(void(^)(PGShareItem *shareItem))itemBlock toPlatform:(SSDKPlatformType)platformType completion:(void(^)(SSDKResponseState state))completion;
 
 + (void)loginWithWechatOnStateChanged:(SSDKGetUserStateChangedHandler)stateChangedHandler;
 + (void)loginWithWeiboOnStateChanged:(SSDKGetUserStateChangedHandler)stateChangedHandler;

@@ -7,11 +7,8 @@
 //
 
 #import "PGLoginView.h"
-#import "PGSMSCodeButton.h"
 
 @interface PGLoginView ()
-
-@property (nonatomic, strong) PGSMSCodeButton *smsCodeButton;
 
 @end
 

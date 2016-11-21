@@ -18,6 +18,7 @@
 @property (nonatomic, strong, readwrite) NSString *hostUrl;
 
 @property (nonatomic, strong, readwrite) MSWeakTimer *weakTimer;
+@property (nonatomic, strong, readwrite) MSWeakTimer *smsCodeTimer;
 
 @end
 
@@ -123,6 +124,30 @@
 - (void)updateTimer
 {
     [self timerDidUpdate];
+}
+
+- (void)resetSMSCodeTimer
+{
+    [self.smsCodeTimer invalidate];
+    
+    self.smsCodeCountDown = 60;
+    self.smsCodeTimer = [MSWeakTimer scheduledTimerWithTimeInterval:1.f
+                                                             target:self
+                                                           selector:@selector(smsCodeTimerUpdate)
+                                                           userInfo:nil
+                                                            repeats:YES
+                                                      dispatchQueue:dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)];
+}
+
+- (void)smsCodeTimerUpdate
+{
+    if (self.smsCodeCountDown <= 0) {
+        [self.smsCodeTimer invalidate];
+        self.smsCodeCountDown = 0;
+    } else {
+        self.smsCodeCountDown--;
+    }
+    [[NSNotificationCenter defaultCenter] postNotificationName:PG_NOTIFICATION_SMS_CODE_COUNT_DOWN object:@(self.smsCodeCountDown)];
 }
 
 #pragma mark - <Lazy Init>

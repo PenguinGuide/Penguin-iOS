@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "PGLoginDelegate.h"
 #import "PGLoginTextField.h"
+#import "PGSMSCodeButton.h"
 
 @interface PGLoginView : UIView
 
@@ -16,6 +17,7 @@
 
 @property (nonatomic, strong) PGLoginTextField *phoneTextField;
 @property (nonatomic, strong) PGLoginTextField *smsCodeTextField;
+@property (nonatomic, strong) PGSMSCodeButton *smsCodeButton;
 @property (nonatomic, strong) UIButton *loginButton;
 
 @end

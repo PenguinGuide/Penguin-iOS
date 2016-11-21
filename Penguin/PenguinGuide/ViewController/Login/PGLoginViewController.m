@@ -28,6 +28,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(smsCodeTimerUpdate:) name:PG_NOTIFICATION_SMS_CODE_COUNT_DOWN object:nil];
     
     self.closeButton.hidden = NO;
     self.backButton.hidden = YES;
@@ -36,6 +37,11 @@
     [self.loginScrollView addSubview:self.registerButton];
     [self.loginScrollView addSubview:self.pwdLoginButton];
     [self.loginScrollView addSubview:self.loginSocialView];
+    
+    if (PGGlobal.smsCodeCountDown > 0) {
+        self.loginView.smsCodeButton.userInteractionEnabled = NO;
+        [self.loginView.smsCodeButton setTitle:[NSString stringWithFormat:@"重新获取 %@s", @(PGGlobal.smsCodeCountDown)] forState:UIControlStateNormal];
+    }
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -49,6 +55,11 @@
     
     [self.loginView.phoneTextField resignFirstResponder];
     [self.loginView.smsCodeTextField resignFirstResponder];
+}
+
+- (void)dealloc
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 #pragma mark - <PGLoginDelegate>
@@ -108,6 +119,10 @@
         } completion:^(id response) {
             [weakself dismissLoading];
             [weakself showToast:@"发送成功"];
+            weakself.loginView.smsCodeButton.userInteractionEnabled = NO;
+            PGGlobal.smsCodeCountDown = 60;
+            [weakself.loginView.smsCodeButton setTitle:[NSString stringWithFormat:@"重新获取 %@s", @(PGGlobal.smsCodeCountDown)] forState:UIControlStateNormal];
+            [PGGlobal resetSMSCodeTimer];
         } failure:^(NSError *error) {
             [weakself showErrorMessage:error];
             [weakself dismissLoading];
@@ -238,6 +253,26 @@
 {
     [self.loginView.phoneTextField resignFirstResponder];
     [self.loginView.smsCodeTextField resignFirstResponder];
+}
+
+#pragma mark - <Notification>
+
+- (void)smsCodeTimerUpdate:(NSNotification *)notification
+{
+    NSInteger countdown = [notification.object integerValue];
+    if (countdown > 0) {
+        PGWeakSelf(self);
+        dispatch_async(dispatch_get_main_queue(), ^{
+            weakself.loginView.smsCodeButton.userInteractionEnabled = NO;
+            [weakself.loginView.smsCodeButton setTitle:[NSString stringWithFormat:@"重新获取 %@s", @(PGGlobal.smsCodeCountDown)] forState:UIControlStateNormal];
+        });
+    } else {
+        PGWeakSelf(self);
+        dispatch_async(dispatch_get_main_queue(), ^{
+            weakself.loginView.smsCodeButton.userInteractionEnabled = YES;
+            [weakself.loginView.smsCodeButton setTitle:@"获取验证码" forState:UIControlStateNormal];
+        });
+    }
 }
 
 #pragma mark - <Setters && Getters>
