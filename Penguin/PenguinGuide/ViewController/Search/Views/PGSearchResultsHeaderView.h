@@ -13,6 +13,7 @@
 - (void)segmentDidClicked:(NSInteger)index;
 - (void)cancelButtonClicked;
 - (void)backButtonClicked;
+- (void)searchButtonClicked:(NSString *)keyword;
 
 @end
 

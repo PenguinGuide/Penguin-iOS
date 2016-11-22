@@ -12,6 +12,7 @@
 @interface PGCommentsViewModel : PGBaseViewModel
 
 @property (nonatomic, strong, readonly) NSArray *commentsArray;
+@property (nonatomic, strong, readonly) NSArray *nextPageIndexes;
 
 - (void)requestComments:(NSString *)articleId;
 - (void)sendComment:(NSString *)content completion:(void(^)(BOOL success))completion;

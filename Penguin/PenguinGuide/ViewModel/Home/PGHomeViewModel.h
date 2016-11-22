@@ -14,6 +14,7 @@
 @property (nonatomic, strong, readonly) NSArray *channelsArray;
 @property (nonatomic, strong, readonly) NSArray *feedsArray;
 @property (nonatomic, strong, readonly) NSIndexSet *nextPageIndexSet;
-@property (nonatomic, assign, readonly) BOOL reloadFirstPage;
+
+- (void)requestFeeds;
 
 @end

@@ -19,6 +19,8 @@
 @property (nonatomic, assign, readwrite) BOOL endFlag;
 @property (nonatomic, strong, readwrite) NSError *error;
 
+@property (nonatomic, strong, readwrite) PGRKResponse *response;
+
 - (id)initWithAPIClient:(PGAPIClient *)apiClient;
 
 - (void)requestData;

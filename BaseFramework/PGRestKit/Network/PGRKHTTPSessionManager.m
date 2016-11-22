@@ -13,6 +13,7 @@ static const int DefaultMaxConcurrentConnections = 5;
 #import "SOCKit.h"
 #import "PGRKMockAPIManager.h"
 #import "PGRKNetworkLogger.h"
+#import "PGRKPagination.h"
 
 @interface NSString (PGRKValidate)
 
@@ -207,6 +208,77 @@ static const int DefaultMaxConcurrentConnections = 5;
         }
     }
 #endif
+}
+
+- (void)makeGetRequest:(void (^)(PGRKRequestConfig *config))configBlock
+  paginationCompletion:(PGRKPaginationCompletionBlock)completion
+               failure:(PGRKFailureBlock)failure
+{
+    __block PGRKRequestConfig *config = [[PGRKRequestConfig alloc] init];
+    configBlock(config);
+    
+    if (config.route.isValid) {
+        NSString *finalRoute;
+        if ([config.response.pagination.cursor containsString:@"http://"] || [config.response.pagination.cursor containsString:@"https://"]) {
+            config.route = config.response.pagination.cursor;
+            config.params = nil;
+            finalRoute = config.response.pagination.cursor;
+        } else {
+            finalRoute = config.route;
+            if (config.pattern) {
+                NSString *route = SOCStringFromStringWithDictionary(config.route, config.pattern);
+                finalRoute = route ? route : config.route;
+            }
+        }
+        if (config.model || config.models) {
+            NSURLSessionDataTask *task = [self GET:finalRoute
+                                        parameters:config.params
+                                          progress:nil
+                                           success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+                                               if (completion) {
+                                                   if ([responseObject isKindOfClass:[PGRKResponse class]]) {
+                                                       completion(responseObject);
+                                                   } else {
+                                                       completion(nil);
+                                                   }
+                                               }
+                                           } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+                                               if (failure) {
+                                                   failure(error);
+                                               }
+                                           }];
+            
+            PGRKJSONResponseSerializer *serializer = self.responseSerializer;
+            if (config.response) {
+                if (config.model) {
+                    [serializer registerKeyPath:config.keyPath modelClass:config.model.class toTask:task response:config.response];
+                } else if (config.models) {
+                    [serializer registerKeyPath:config.keyPath modelClasses:config.models typeKey:config.typeKey toTask:task response:config.response];
+                } else {
+                    if (failure) {
+                        failure(nil);
+                    }
+                }
+            } else {
+                if (failure) {
+                    failure(nil);
+                }
+            }
+        } else {
+            [self GET:finalRoute
+           parameters:config.params
+             progress:nil
+              success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+                  if (completion) {
+                      completion(responseObject);
+                  }
+              } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+                  if (failure) {
+                      failure(error);
+                  }
+              }];
+        }
+    }
 }
 
 - (void)makePutRequest:(void (^)(PGRKRequestConfig *config))configBlock

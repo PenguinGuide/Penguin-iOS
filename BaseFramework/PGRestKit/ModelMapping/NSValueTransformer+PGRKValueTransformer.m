@@ -29,6 +29,8 @@ static NSDateFormatter *timeFormatter = nil;
             if ([value isKindOfClass:[NSNumber class]]) {
                 NSString *stringValue = [NSString stringWithFormat:@"%@", value];
                 return stringValue;
+            } else if ([value isKindOfClass:[NSNull class]]) {
+                return nil;
             } else if ([value isKindOfClass:[NSString class]]) {
                 return value;
             } else{

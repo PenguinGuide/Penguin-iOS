@@ -11,6 +11,7 @@
 @interface PGCommentsViewModel ()
 
 @property (nonatomic, strong, readwrite) NSArray *commentsArray;
+@property (nonatomic, strong, readwrite) NSArray *nextPageIndexes;
 @property (nonatomic, strong, readwrite) NSString *articleId;
 
 @end
@@ -19,61 +20,40 @@
 
 - (void)requestComments:(NSString *)articleId
 {
+    if (self.isPreloadingNextPage || self.endFlag) {
+        return;
+    }
     if (articleId && articleId.length > 0) {
+        
+        self.isPreloadingNextPage = YES;
+        
+        if (!self.response) {
+            self.response = [[PGRKResponse alloc] init];
+            self.response.pagination.paginationKey = @"next";
+            self.response.pagination.paginateSections = NO;
+        }
+        
         PGWeakSelf(self);
         
         self.articleId = articleId;
-        self.page = 1;
-        
-        PGParams *params = [PGParams new];
-        params[@"page"] = @(self.page);
         
         [self.apiClient pg_makeGetRequest:^(PGRKRequestConfig *config) {
             config.route = PG_Article_Comments;
-            config.params = params;
             config.keyPath = @"items";
             config.model = [PGComment new];
             config.pattern = @{@"articleId":articleId};
-        } completion:^(id response) {
-            if ([response count] > 0) {
-                weakself.page++;
-                weakself.endFlag = NO;
-            } else {
-                weakself.endFlag = YES;
-            }
-            weakself.commentsArray = response;
+            config.response = weakself.response;
+        } paginationCompletion:^(PGRKResponse *response) {
+            weakself.response = response;
+            weakself.nextPageIndexes = response.pagination.nextPageIndexesArray;
+            weakself.commentsArray = response.dataArray;
+            weakself.endFlag = response.pagination.endFlag;
+            
+            weakself.isPreloadingNextPage = NO;
         } failure:^(NSError *error) {
             weakself.error = error;
-        }];
-    }
-}
-
-- (void)loadNextPage
-{
-    if (self.articleId && self.articleId.length > 0) {
-        PGWeakSelf(self);
-        
-        PGParams *params = [PGParams new];
-        params[@"page"] = @(self.page);
-        
-        [self.apiClient pg_makeGetRequest:^(PGRKRequestConfig *config) {
-            config.route = PG_Article_Comments;
-            config.params = params;
-            config.keyPath = @"items";
-            config.model = [PGComment new];
-            config.pattern = @{@"articleId":weakself.articleId};
-        } completion:^(id response) {
-            NSMutableArray *comments = [NSMutableArray arrayWithArray:weakself.commentsArray];
-            if ([response count] > 0) {
-                weakself.page++;
-                [comments addObjectsFromArray:response];
-                weakself.endFlag = NO;
-            } else {
-                weakself.endFlag = YES;
-            }
-            weakself.commentsArray = [NSArray arrayWithArray:comments];
-        } failure:^(NSError *error) {
-            weakself.error = error;
+            
+            weakself.isPreloadingNextPage = NO;
         }];
     }
 }

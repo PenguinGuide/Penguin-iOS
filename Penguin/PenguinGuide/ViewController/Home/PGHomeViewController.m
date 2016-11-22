@@ -57,30 +57,24 @@
     self.viewModel = [[PGHomeViewModel alloc] initWithAPIClient:self.apiClient];
     
     PGWeakSelf(self);
-    [self observe:self.viewModel keyPath:@"reloadFirstPage" block:^(id changedObject) {
-        BOOL reloadFirstPage = [changedObject boolValue];
-        if (reloadFirstPage)  {
-            [weakself.feedsCollectionView reloadData];
-            [weakself dismissLoading];
-            [weakself.feedsCollectionView endBottomRefreshing];
-        }
-    }];
-    [self observe:self.viewModel keyPath:@"nextPageIndexSet" block:^(id changedObject) {
-        NSIndexSet *indexes = changedObject;
-        if (indexes && [indexes isKindOfClass:[NSIndexSet class]] && indexes.count > 0) {
+    [self observe:self.viewModel keyPath:@"feedsArray" block:^(id changedObject) {
+        if (weakself.viewModel.nextPageIndexSet || weakself.viewModel.nextPageIndexSet.count > 0) {
             @try {
                 // NOTE: using insertItemsAtIndexPaths will crash -- this should insert sections
                 /*
                  exception: Invalid update: invalid number of sections. The number of sections contained in the collection view after the
-                 update (20) must be equal to the number of sections contained in the collection view before the update (31), 
+                 update (20) must be equal to the number of sections contained in the collection view before the update (31),
                  plus or minus the number of sections inserted or deleted (10 inserted, 0 deleted).
                  */
                 // NOTE: the number of sections inserted + number of sections in previous collection view = [collectionView numberOfSections]
-                [weakself.feedsCollectionView performBatchUpdates:^{
-                    [weakself.feedsCollectionView insertSections:indexes];
-                } completion:nil];
+                [weakself.feedsCollectionView insertSections:weakself.viewModel.nextPageIndexSet];
             } @catch (NSException *exception) {
                 NSLog(@"exception: %@", exception);
+            }
+        } else {
+            NSArray *feedsArray = changedObject;
+            if (feedsArray && [feedsArray isKindOfClass:[NSArray class]]) {
+                [weakself.feedsCollectionView reloadData];
             }
         }
         [weakself dismissLoading];
@@ -290,7 +284,7 @@
 {
     PGWeakSelf(self);
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
-        [weakself.viewModel loadNextPage];
+        [weakself.viewModel requestFeeds];
     });
 }
 
@@ -348,7 +342,7 @@
             });
         }];
         [_feedsCollectionView enableInfiniteScrolling:^{
-            [weakself.viewModel loadNextPage];
+            [weakself.viewModel requestFeeds];
         }];
     }
     return _feedsCollectionView;

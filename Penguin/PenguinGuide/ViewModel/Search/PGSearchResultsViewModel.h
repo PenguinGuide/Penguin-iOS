@@ -15,12 +15,18 @@
 @property (nonatomic, strong, readonly) NSArray *articles;
 @property (nonatomic, strong, readonly) NSArray *goods;
 
-@property (nonatomic, assign, readonly) NSInteger articlesPage;
-@property (nonatomic, assign, readonly) NSInteger goodsPage;
+@property (nonatomic, strong, readwrite) PGRKResponse *articlesResponse;
+@property (nonatomic, strong, readwrite) PGRKResponse *goodsResponse;
+
+@property (nonatomic, strong, readonly) NSArray *articlesNextPageIndexes;
+@property (nonatomic, strong, readonly) NSArray *goodsNextPageIndexes;
+
+@property (nonatomic, assign, readonly) BOOL articlesEndFlag;
+@property (nonatomic, assign, readonly) BOOL goodsEndFlag;
 
 - (void)searchArticles:(NSString *)keyword;
 - (void)searchGoods:(NSString *)keyword;
-- (void)loadArticlesNextPage:(NSString *)keyword;
-- (void)loadGoodsNextPage:(NSString *)keyword;
+
+- (void)clearViewModel;
 
 @end

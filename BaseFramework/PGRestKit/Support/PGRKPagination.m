@@ -10,4 +10,14 @@
 
 @implementation PGRKPagination
 
+- (instancetype)init
+{
+    self = [super init];
+    if (self) {
+        self.paginationKey = nil;
+        self.cursor = nil;
+    }
+    return self;
+}
+
 @end

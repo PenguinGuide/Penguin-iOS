@@ -42,9 +42,17 @@
     
     PGWeakSelf(self);
     [self observe:self.viewModel keyPath:@"commentsArray" block:^(id changedObject) {
-        NSArray *commentsArray = changedObject;
-        if (commentsArray && [commentsArray isKindOfClass:[NSArray class]]) {
-            [weakself.commentsCollectionView reloadData];
+        if (weakself.viewModel.nextPageIndexes || weakself.viewModel.nextPageIndexes.count > 0) {
+            @try {
+                [weakself.commentsCollectionView insertItemsAtIndexPaths:weakself.viewModel.nextPageIndexes];
+            } @catch (NSException *exception) {
+                NSLog(@"exception: %@", exception);
+            }
+        } else {
+            NSArray *commentsArray = changedObject;
+            if (commentsArray && [commentsArray isKindOfClass:[NSArray class]]) {
+                [weakself.commentsCollectionView reloadData];
+            }
         }
         [weakself dismissLoading];
         [weakself.commentsCollectionView endBottomRefreshing];
@@ -456,7 +464,9 @@
         
         PGWeakSelf(self);
         [_commentsCollectionView enableInfiniteScrolling:^{
-            [weakself.viewModel loadNextPage];
+            if (!weakself.viewModel.endFlag) {
+                [weakself.viewModel requestComments:weakself.articleId];
+            }
         }];
     }
     return _commentsCollectionView;

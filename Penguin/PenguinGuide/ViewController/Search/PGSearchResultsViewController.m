@@ -29,8 +29,8 @@
 @property (nonatomic, strong) PGSearchResultsViewModel *viewModel;
 
 @property (nonatomic, strong) PGSearchResultsHeaderView *headerView;
-@property (nonatomic, strong) UICollectionView *articlesCollectionView;
-@property (nonatomic, strong) UICollectionView *goodsCollectionView;
+@property (nonatomic, strong) PGBaseCollectionView *articlesCollectionView;
+@property (nonatomic, strong) PGBaseCollectionView *goodsCollectionView;
 
 @end
 
@@ -59,18 +59,54 @@
     
     PGWeakSelf(self);
     [self observe:self.viewModel keyPath:@"articles" block:^(id changedObject) {
-        NSArray *bannersArray = changedObject;
-        if (bannersArray && [bannersArray isKindOfClass:[NSArray class]]) {
-            [weakself.articlesCollectionView reloadData];
+        if (weakself.viewModel.articlesNextPageIndexes || weakself.viewModel.articlesNextPageIndexes.count > 0) {
+            @try {
+                [weakself.articlesCollectionView insertItemsAtIndexPaths:weakself.viewModel.articlesNextPageIndexes];
+            } @catch (NSException *exception) {
+                NSLog(@"exception: %@", exception);
+            }
+        } else {
+            NSArray *bannersArray = changedObject;
+            if (bannersArray && [bannersArray isKindOfClass:[NSArray class]]) {
+                [weakself.articlesCollectionView reloadData];
+            }
         }
         [weakself dismissLoading];
+        [weakself.articlesCollectionView endBottomRefreshing];
     }];
     [self observe:self.viewModel keyPath:@"goods" block:^(id changedObject) {
-        NSArray *bannersArray = changedObject;
-        if (bannersArray && [bannersArray isKindOfClass:[NSArray class]]) {
-            [weakself.goodsCollectionView reloadData];
+        if (weakself.viewModel.goodsNextPageIndexes || weakself.viewModel.goodsNextPageIndexes.count > 0) {
+            @try {
+                [weakself.goodsCollectionView insertItemsAtIndexPaths:weakself.viewModel.goodsNextPageIndexes];
+            } @catch (NSException *exception) {
+                NSLog(@"exception: %@", exception);
+            }
+        } else {
+            NSArray *bannersArray = changedObject;
+            if (bannersArray && [bannersArray isKindOfClass:[NSArray class]]) {
+                [weakself.goodsCollectionView reloadData];
+            }
         }
         [weakself dismissLoading];
+        [weakself.goodsCollectionView endBottomRefreshing];
+    }];
+    [self observe:self.viewModel keyPath:@"articlesEndFlag" block:^(id changedObject) {
+        BOOL endFlag = [changedObject boolValue];
+        if (endFlag) {
+            [weakself.articlesCollectionView disableInfiniteScrolling];
+            [[weakself.articlesCollectionView collectionViewLayout] invalidateLayout];
+        } else {
+            [weakself.articlesCollectionView enableInfiniteScrolling];
+        }
+    }];
+    [self observe:self.viewModel keyPath:@"goodsEndFlag" block:^(id changedObject) {
+        BOOL endFlag = [changedObject boolValue];
+        if (endFlag) {
+            [weakself.goodsCollectionView disableInfiniteScrolling];
+            [[weakself.goodsCollectionView collectionViewLayout] invalidateLayout];
+        } else {
+            [weakself.goodsCollectionView enableInfiniteScrolling];
+        }
     }];
 }
 
@@ -108,7 +144,7 @@
     // Dispose of any resources that can be recreated.
 }
 
-#pragma mark - <UICollectionViewDataSource>
+#pragma mark - <UICollectionView>
 
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView
 {
@@ -127,19 +163,29 @@
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
     if (collectionView.tag == ArticlesCollectionViewTag) {
+        if (self.viewModel.articles.count-indexPath.item == 2) {
+            PGWeakSelf(self);
+            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
+                [weakself.viewModel searchArticles:self.keyword];
+            });
+        }
         PGSearchResultsArticleCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:ArticleCell forIndexPath:indexPath];
         [cell setCellWithArticle:self.viewModel.articles[indexPath.item]];
         
         return cell;
     } else {
+        if (self.viewModel.goods.count-indexPath.item == 2) {
+            PGWeakSelf(self);
+            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
+                [weakself.viewModel searchGoods:self.keyword];
+            });
+        }
         PGSingleGoodBannerCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:GoodCell forIndexPath:indexPath];
         [cell setCellWithSingleGood:self.viewModel.goods[indexPath.item]];
         
         return cell;
     }
 }
-
-#pragma mark - <UICollectionViewDelegate>
 
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -148,6 +194,28 @@
     } else {
         return [PGSingleGoodBannerCell cellSize];
     }
+}
+
+- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout referenceSizeForFooterInSection:(NSInteger)section
+{
+    if (collectionView.tag == ArticlesCollectionViewTag) {
+        if (self.viewModel.articlesEndFlag) {
+            return [PGBaseCollectionViewFooterView footerViewSize];
+        }
+    } else {
+        if (self.viewModel.goodsEndFlag) {
+            return [PGBaseCollectionViewFooterView footerViewSize];
+        }
+    }
+    return CGSizeZero;
+}
+
+- (UICollectionReusableView *)collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath
+{
+    PGBaseCollectionViewFooterView *footerView = [collectionView dequeueReusableSupplementaryViewOfKind:kind withReuseIdentifier:BaseCollectionViewFooterView forIndexPath:indexPath];
+    footerView.backgroundColor = Theme.colorBackground;
+    
+    return footerView;
 }
 
 - (CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout minimumLineSpacingForSectionAtIndex:(NSInteger)section
@@ -219,28 +287,56 @@
     [self.navigationController popViewControllerAnimated:YES];
 }
 
-- (UICollectionView *)articlesCollectionView {
+- (void)searchButtonClicked:(NSString *)keyword
+{
+    self.keyword = keyword;
+    [self.viewModel clearViewModel];
+    
+    if (!self.articlesCollectionView.hidden) {
+        [self.viewModel searchArticles:self.keyword];
+    } else {
+        [self.viewModel searchGoods:self.keyword];
+    }
+}
+
+#pragma mark - <Lazy Init>
+
+- (PGBaseCollectionView *)articlesCollectionView {
 	if(_articlesCollectionView == nil) {
-		_articlesCollectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(0, 94, UISCREEN_WIDTH, UISCREEN_HEIGHT-94) collectionViewLayout:[UICollectionViewFlowLayout new]];
+		_articlesCollectionView = [[PGBaseCollectionView alloc] initWithFrame:CGRectMake(0, 94, UISCREEN_WIDTH, UISCREEN_HEIGHT-94) collectionViewLayout:[UICollectionViewFlowLayout new]];
         _articlesCollectionView.backgroundColor = Theme.colorBackground;
         _articlesCollectionView.tag = ArticlesCollectionViewTag;
         _articlesCollectionView.dataSource = self;
         _articlesCollectionView.delegate = self;
+        _articlesCollectionView.showsHorizontalScrollIndicator = NO;
+        _articlesCollectionView.showsVerticalScrollIndicator = NO;
         
         [_articlesCollectionView registerClass:[PGSearchResultsArticleCell class] forCellWithReuseIdentifier:ArticleCell];
+        
+        PGWeakSelf(self);
+        [_articlesCollectionView enableInfiniteScrolling:^{
+            [weakself.viewModel searchArticles:weakself.keyword];
+        }];
 	}
 	return _articlesCollectionView;
 }
 
-- (UICollectionView *)goodsCollectionView {
+- (PGBaseCollectionView *)goodsCollectionView {
 	if(_goodsCollectionView == nil) {
-		_goodsCollectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(0, 94, UISCREEN_WIDTH, UISCREEN_HEIGHT-94) collectionViewLayout:[UICollectionViewFlowLayout new]];
+		_goodsCollectionView = [[PGBaseCollectionView alloc] initWithFrame:CGRectMake(0, 94, UISCREEN_WIDTH, UISCREEN_HEIGHT-94) collectionViewLayout:[UICollectionViewFlowLayout new]];
         _goodsCollectionView.backgroundColor = Theme.colorBackground;
         _goodsCollectionView.tag = GoodsCollectionViewTag;
         _goodsCollectionView.dataSource = self;
         _goodsCollectionView.delegate = self;
+        _goodsCollectionView.showsHorizontalScrollIndicator = NO;
+        _goodsCollectionView.showsVerticalScrollIndicator = NO;
         
         [_goodsCollectionView registerClass:[PGSingleGoodBannerCell class] forCellWithReuseIdentifier:GoodCell];
+        
+        PGWeakSelf(self);
+        [_goodsCollectionView enableInfiniteScrolling:^{
+            [weakself.viewModel searchGoods:weakself.keyword];
+        }];
 	}
 	return _goodsCollectionView;
 }

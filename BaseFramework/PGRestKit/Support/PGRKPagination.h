@@ -10,4 +10,13 @@
 
 @interface PGRKPagination : NSObject
 
+@property (nonatomic, strong) NSString *paginationKey;
+@property (nonatomic, strong) NSString *cursor;
+
+@property (nonatomic, strong) NSArray *nextPageIndexesArray;
+@property (nonatomic, strong) NSIndexSet *nextPageIndexesSet;
+
+@property (nonatomic, assign) BOOL paginateSections;
+@property (nonatomic, assign) BOOL endFlag;
+
 @end

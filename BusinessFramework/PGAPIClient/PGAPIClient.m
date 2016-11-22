@@ -174,7 +174,17 @@ static const int DefaultMaxConcurrentConnections = 5;
     __block PGRKRequestConfig *clientConfig = [[PGRKRequestConfig alloc] init];
     configBlock(clientConfig);
     
-    
+    __weak typeof(self) weakSelf = self;
+    [self.sessionManager makeGetRequest:configBlock
+                   paginationCompletion:^(PGRKResponse *response) {
+                       if (completion) {
+                           completion(response);
+                       }
+                   } failure:^(NSError *error) {
+                       if (failure) {
+                           failure(error);
+                       }
+                   }];
 }
 
 - (void)pg_makePutRequest:(void (^)(PGRKRequestConfig *config))configBlock

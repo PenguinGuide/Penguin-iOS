@@ -27,6 +27,7 @@
 #import "PGVideoPlayerViewController.h"
 #import "PGCommentsViewController.h"
 #import "PGGoodViewController.h"
+#import "PGShareViewController.h"
 
 // views
 #import "PGArticleParagraphInfoCell.h"
@@ -852,24 +853,42 @@
 
 - (void)likeButtonClicked
 {
-    if (self.likeButton.tag == 0) {
-        [self showLoading];
-        [self.viewModel likeArticle];
+    if (PGGlobal.userId && PGGlobal.userId.length > 0) {
+        if (self.likeButton.tag == 0) {
+            [self showLoading];
+            [self.viewModel likeArticle];
+        } else {
+            [self showLoading];
+            [self.viewModel dislikeArticle];
+        }
     } else {
-        [self showLoading];
-        [self.viewModel dislikeArticle];
+        [PGRouterManager routeToLoginPage];
     }
 }
 
 - (void)collectButtonClicked
 {
-    if (self.collectButton.tag == 0) {
-        [self showLoading];
-        [self.viewModel collectArticle];
+    if (PGGlobal.userId && PGGlobal.userId.length > 0) {
+        if (self.collectButton.tag == 0) {
+            [self showLoading];
+            [self.viewModel collectArticle];
+        } else {
+            [self showLoading];
+            [self.viewModel discollectArticle];
+        }
     } else {
-        [self showLoading];
-        [self.viewModel discollectArticle];
+        [PGRouterManager routeToLoginPage];
     }
+}
+
+- (void)shareButtonClicked
+{
+    PGShareViewController *shareVC = [[PGShareViewController alloc] initWithShareLink:self.viewModel.article.shareUrl
+                                                                                 text:@"测试分享"
+                                                                                title:self.viewModel.article.title
+                                                                                image:self.viewModel.article.image
+                                                                            thumbnail:self.viewModel.article.image];
+    [self presentViewController:shareVC animated:YES completion:nil];
 }
 
 - (void)commentButtonClicked
@@ -999,6 +1018,7 @@
         
         self.shareButton = [[UIButton alloc] initWithFrame:CGRectMake(self.collectButton.pg_left-50, 0, 50, 50)];
         [self.shareButton setImage:[UIImage imageNamed:@"pg_article_share"] forState:UIControlStateNormal];
+        [self.shareButton addTarget:self action:@selector(shareButtonClicked) forControlEvents:UIControlEventTouchUpInside];
         [_toolbar addSubview:self.shareButton];
         
         UIView *horizontalLine = [[UIView alloc] initWithFrame:CGRectMake(0, 0, UISCREEN_WIDTH, 1/[UIScreen mainScreen].scale)];

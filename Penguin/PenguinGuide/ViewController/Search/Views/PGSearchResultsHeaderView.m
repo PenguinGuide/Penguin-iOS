@@ -10,7 +10,7 @@
 #import "PGSearchTextField.h"
 #import "PGSegmentView.h"
 
-@interface PGSearchResultsHeaderView () <PGSegmentViewDelegate>
+@interface PGSearchResultsHeaderView () <PGSegmentViewDelegate, UITextFieldDelegate>
 
 @property (nonatomic, strong) PGSearchTextField *searchTextField;
 @property (nonatomic, strong) PGSegmentView *segmentView;
@@ -72,11 +72,27 @@
     }
 }
 
+#pragma mark - <UITextFieldDelegate>
+
+- (BOOL)textFieldShouldReturn:(UITextField *)textField
+{
+    if (textField.text.length == 0) {
+        return NO;
+    }
+    
+    if (self.delegate && [self.delegate respondsToSelector:@selector(searchButtonClicked:)]) {
+        [textField resignFirstResponder];
+        [self.delegate searchButtonClicked:textField.text];
+    }
+    return YES;
+}
+
 - (UITextField *)searchTextField {
     if(_searchTextField == nil) {
         _searchTextField = [[PGSearchTextField alloc] initWithFrame:CGRectMake(35, 25, UISCREEN_WIDTH-30-50, 30)];
         _searchTextField.placeholder = @"请输入关键词";
         _searchTextField.returnKeyType = UIReturnKeySearch;
+        _searchTextField.delegate = self;
     }
     return _searchTextField;
 }

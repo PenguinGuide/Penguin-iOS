@@ -13,8 +13,13 @@
 @property (nonatomic, strong, readwrite) NSArray *articles;
 @property (nonatomic, strong, readwrite) NSArray *goods;
 
-@property (nonatomic, assign, readwrite) NSInteger articlesPage;
-@property (nonatomic, assign, readwrite) NSInteger goodsPage;
+@property (nonatomic, strong, readwrite) NSArray *articlesNextPageIndexes;
+@property (nonatomic, strong, readwrite) NSArray *goodsNextPageIndexes;
+
+@property (nonatomic, assign, readwrite) BOOL isPreloadingArticlesNextPage;
+@property (nonatomic, assign, readwrite) BOOL isPreloadingGoodsNextPage;
+@property (nonatomic, assign, readwrite) BOOL articlesEndFlag;
+@property (nonatomic, assign, readwrite) BOOL goodsEndFlag;
 
 @end
 
@@ -22,12 +27,22 @@
 
 - (void)searchArticles:(NSString *)keyword
 {
-    self.articlesPage = 1;
+    if (self.isPreloadingArticlesNextPage || self.articlesEndFlag) {
+        return;
+    }
+    
+    self.isPreloadingArticlesNextPage = YES;
+    
+    if (!self.articlesResponse) {
+        self.articlesResponse = [[PGRKResponse alloc] init];
+        self.articlesResponse.pagination.paginateSections = NO;
+        self.articlesResponse.pagination.paginationKey = @"next";
+    }
     
     PGParams *params = [PGParams new];
     params[@"type"] = @"article";
     params[@"keyword"] = keyword;
-    params[@"page"] = @(self.articlesPage);
+    params[@"per_page"] = @(10);
     
     PGWeakSelf(self);
     
@@ -36,21 +51,39 @@
         config.params = params;
         config.keyPath = @"items";
         config.model = [PGArticleBanner new];
-    } completion:^(id response) {
-        weakself.articles = response;
-        if ([response count] > 0) {
-            weakself.articlesPage++;
-        }
+        config.response = weakself.articlesResponse;
+    } paginationCompletion:^(PGRKResponse *response) {
+        weakself.articlesResponse = response;
+        weakself.articlesNextPageIndexes = response.pagination.nextPageIndexesArray;
+        weakself.articles = response.dataArray;
+        weakself.articlesEndFlag = response.pagination.endFlag;
+        
+        weakself.isPreloadingArticlesNextPage = NO;
     } failure:^(NSError *error) {
         weakself.error = error;
+        
+        weakself.isPreloadingArticlesNextPage = NO;
     }];
 }
 
 - (void)searchGoods:(NSString *)keyword
 {
+    if (self.isPreloadingGoodsNextPage || self.goodsEndFlag) {
+        return;
+    }
+    
+    self.isPreloadingGoodsNextPage = YES;
+    
+    if (!self.goodsResponse) {
+        self.goodsResponse = [[PGRKResponse alloc] init];
+        self.goodsResponse.pagination.paginateSections = NO;
+        self.goodsResponse.pagination.paginationKey = @"next";
+    }
+    
     PGParams *params = [PGParams new];
     params[@"type"] = @"product";
     params[@"keyword"] = keyword;
+    params[@"per_page"] = @(10);
     
     PGWeakSelf(self);
     
@@ -59,37 +92,35 @@
         config.params = params;
         config.keyPath = @"items";
         config.model = [PGGood new];
-    } completion:^(id response) {
-        weakself.goods = response;
+        config.response = weakself.goodsResponse;
+    } paginationCompletion:^(PGRKResponse *response) {
+        weakself.goodsResponse = response;
+        weakself.goodsNextPageIndexes = response.pagination.nextPageIndexesArray;
+        weakself.goods = response.dataArray;
+        weakself.goodsEndFlag = response.pagination.endFlag;
+        
+        weakself.isPreloadingGoodsNextPage = NO;
     } failure:^(NSError *error) {
         weakself.error = error;
+        
+        weakself.isPreloadingGoodsNextPage = NO;
     }];
 }
 
-- (void)loadArticlesNextPage:(NSString *)keyword
+- (void)clearViewModel
 {
-    PGParams *params = [PGParams new];
-    params[@"type"] = @"article";
-    params[@"keyword"] = keyword;
-    params[@"page"] = @(self.articlesPage);
+    self.articlesNextPageIndexes = nil;
+    self.goodsNextPageIndexes = nil;
     
-    PGWeakSelf(self);
+    self.articlesResponse = nil;
+    self.goodsResponse = nil;
+    self.articles = nil;
+    self.goods = nil;
     
-    [self.apiClient pg_makeGetRequest:^(PGRKRequestConfig *config) {
-        config.route = PG_Search;
-        config.params = params;
-        config.keyPath = @"items";
-        config.model = [PGArticleBanner new];
-    } completion:^(id response) {
-        
-    } failure:^(NSError *error) {
-        
-    }];
-}
-
-- (void)loadGoodsNextPage:(NSString *)keyword
-{
-    
+    self.isPreloadingArticlesNextPage = NO;
+    self.isPreloadingGoodsNextPage = NO;
+    self.articlesEndFlag = NO;
+    self.goodsEndFlag = NO;
 }
 
 @end
