@@ -36,6 +36,7 @@ pod 'PGCache', :path => '../BaseFramework/PGCache'
 pod 'PGTransparentNaviBar', :path => '../BaseFramework/PGTransparentNaviBar'
 pod 'PGPopupViewController', :path => '../BaseFramework/PGPopupViewController'
 pod 'PGPopover', :path => '../BaseFramework/PGPopover'
+pod 'PGPullRefreshControl', :path => '../BaseFramework/PGPullRefreshControl'
 
 #vendor
 pod 'KVOController', :inhibit_warnings => true

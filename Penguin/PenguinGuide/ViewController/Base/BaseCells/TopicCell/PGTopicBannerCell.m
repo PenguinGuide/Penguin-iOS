@@ -39,9 +39,15 @@ static NSString *const GoodCell = @"GoodCell";
     [self.contentView addSubview:self.bannerImageView];
     [self.contentView addSubview:self.goodsCollectionView];
     
-    UIImageView *maskImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, self.pg_width, self.pg_height)];
-    maskImageView.image = [[UIImage imageNamed:@"pg_white_corner_mask"] resizableImageWithCapInsets:UIEdgeInsetsMake(4, 4, 4, 4) resizingMode:UIImageResizingModeStretch];
+    CGFloat width = UISCREEN_WIDTH-40;
+    UIImageView *maskImageView = [[UIImageView alloc] initWithFrame:CGRectMake(20, 0, width, width*9/16)];
+    maskImageView.image = [[UIImage imageNamed:@"pg_bg_corner_mask"] resizableImageWithCapInsets:UIEdgeInsetsMake(4, 4, 4, 4) resizingMode:UIImageResizingModeStretch];
     [self.contentView addSubview:maskImageView];
+    
+    UIImageView *indicatorView = [[UIImageView alloc] initWithFrame:CGRectMake(self.bannerImageView.pg_width/2-7, self.bannerImageView.pg_height-10, 14, 10)];
+    indicatorView.image = [UIImage imageNamed:@"pg_topic_indicator"];
+    [self.bannerImageView addSubview:indicatorView];
+    
 }
 
 - (void)setCellWithTopic:(PGTopicBanner *)topic
@@ -54,8 +60,8 @@ static NSString *const GoodCell = @"GoodCell";
 
 + (CGSize)cellSize
 {
-    CGFloat width = UISCREEN_WIDTH-20;
-    return CGSizeMake(width, width*2/3+155);
+    CGFloat width = UISCREEN_WIDTH;
+    return CGSizeMake(width, width*9/16+115);
 }
 
 #pragma mark - <UICollectionViewDataSource>
@@ -82,12 +88,12 @@ static NSString *const GoodCell = @"GoodCell";
 
 - (UIEdgeInsets)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout insetForSectionAtIndex:(NSInteger)section
 {
-    return UIEdgeInsetsMake(0, 10, 0, 10);
+    return UIEdgeInsetsMake(0, 20, 0, 20);
 }
 
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    return CGSizeMake(160, 155-10);
+    return CGSizeMake(120, 115-10);
 }
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
@@ -100,8 +106,8 @@ static NSString *const GoodCell = @"GoodCell";
 
 - (UIImageView *)bannerImageView {
 	if(_bannerImageView == nil) {
-        CGFloat width = UISCREEN_WIDTH-20;
-		_bannerImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, width, width*2/3)];
+        CGFloat width = UISCREEN_WIDTH-40;
+		_bannerImageView = [[UIImageView alloc] initWithFrame:CGRectMake(20, 0, width, width*9/16)];
         _bannerImageView.backgroundColor = Theme.colorText;
         _bannerImageView.clipsToBounds = YES;
         _bannerImageView.contentMode = UIViewContentModeScaleAspectFill;
@@ -115,7 +121,7 @@ static NSString *const GoodCell = @"GoodCell";
         layout.scrollDirection = UICollectionViewScrollDirectionHorizontal;
         layout.minimumInteritemSpacing = 0.f;
         layout.minimumLineSpacing = 10.f;
-        _goodsCollectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(0, self.bannerImageView.pg_bottom+10, UISCREEN_WIDTH-20, 155-10) collectionViewLayout:layout];
+        _goodsCollectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(0, self.bannerImageView.pg_bottom+10, UISCREEN_WIDTH, 115-10) collectionViewLayout:layout];
         _goodsCollectionView.dataSource = self;
         _goodsCollectionView.delegate = self;
         _goodsCollectionView.showsVerticalScrollIndicator = NO;

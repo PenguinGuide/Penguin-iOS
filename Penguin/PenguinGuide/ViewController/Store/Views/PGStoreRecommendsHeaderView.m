@@ -6,10 +6,10 @@
 //  Copyright © 2016 Xinglian. All rights reserved.
 //
 
-#define ChannelCell @"ChannelCell"
+#define CategoryCell @"CategoryCell"
 
 #import "PGStoreRecommendsHeaderView.h"
-#import "PGHomeChannelCell.h"
+#import "PGCategoryCell.h"
 #import "PGImageBanner.h"
 
 #import "UIButton+WebCache.h"
@@ -20,7 +20,6 @@
 @property (nonatomic, strong) NSArray *categoriesArray;
 @property (nonatomic, strong) UICollectionView *categoriesCollectionView;
 @property (nonatomic, strong, readwrite) PGPagedScrollView *bannersView;
-@property (nonatomic, strong) UIView *verticalLine;
 @property (nonatomic, strong) UILabel *categoryLabel;
 
 @end
@@ -42,18 +41,19 @@
     
     [self addSubview:self.bannersView];
     [self addSubview:self.categoriesCollectionView];
+    
+//    UIView *horizontalLineView = [[UIView alloc] initWithFrame:CGRectMake(20, self.pg_height-1/[UIScreen mainScreen].scale, self.pg_width-40, 1/[UIScreen mainScreen].scale)];
+//    horizontalLineView.backgroundColor = [UIColor colorWithHexString:@"F1F1F1"];
+//    [self addSubview:horizontalLineView];
 }
 
 - (void)reloadBannersWithRecommendsArray:(NSArray *)recommendsArray categoriesArray:(NSArray *)categoriesArray
 {
     if (!self.categoryLabel && categoriesArray.count > 0) {
-        self.verticalLine = [[UIView alloc] initWithFrame:CGRectMake(13, self.bannersView.pg_bottom+10, 3, 16)];
-        self.verticalLine.backgroundColor = Theme.colorExtraHighlight;
-        self.categoryLabel = [[UILabel alloc] initWithFrame:CGRectMake(self.verticalLine.pg_right+5, self.bannersView.pg_bottom+10, 100, 16)];
-        self.categoryLabel.font = Theme.fontMediumBold;
+        self.categoryLabel = [[UILabel alloc] initWithFrame:CGRectMake(20, self.bannersView.pg_bottom+15, 150, 20)];
+        self.categoryLabel.font = Theme.fontExtraLargeBold;
         self.categoryLabel.textColor = Theme.colorText;
-        self.categoryLabel.text = @"品类";
-        [self addSubview:self.verticalLine];
+        self.categoryLabel.text = @"企 鹅 精 选";
         [self addSubview:self.categoryLabel];
     }
     self.recommendsArray = recommendsArray;
@@ -64,7 +64,7 @@
 
 + (CGSize)headerViewSize
 {
-    return CGSizeMake(UISCREEN_WIDTH, UISCREEN_WIDTH*9/16+10+16+80);
+    return CGSizeMake(UISCREEN_WIDTH, UISCREEN_WIDTH*9/16+15+18+20+115+10);
 }
 
 - (void)imageViewDidSelect:(NSInteger)index
@@ -100,12 +100,10 @@
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    PGHomeChannelCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:ChannelCell forIndexPath:indexPath];
+    PGCategoryCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:CategoryCell forIndexPath:indexPath];
     
     PGCategoryIcon *icon = self.categoriesArray[indexPath.item];
-    
-    [cell.channelButton sd_setImageWithURL:[NSURL URLWithString:icon.image] forState:UIControlStateNormal placeholderImage:nil];
-    [cell.channelLabel setText:icon.title];
+    [cell setCellWithCategoryIcon:icon];
     
     return cell;
 }
@@ -114,12 +112,12 @@
 
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    return CGSizeMake(60, 80);
+    return [PGCategoryCell cellSize];
 }
 
 - (UIEdgeInsets)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout insetForSectionAtIndex:(NSInteger)section
 {
-    return UIEdgeInsetsMake(0, 10, 0, 10);
+    return UIEdgeInsetsMake(0, 20, 0, 20);
 }
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
@@ -151,7 +149,7 @@
 - (PGPagedScrollView *)bannersView
 {
     if (!_bannersView) {
-        _bannersView = [[PGPagedScrollView alloc] initWithFrame:CGRectMake(0, 0, self.pg_width, self.pg_height-80-11-16) imageFillMode:PGPagedScrollViewImageFillModeFill iconMode:PGPagedScrollViewIconModeDefault];
+        _bannersView = [[PGPagedScrollView alloc] initWithFrame:CGRectMake(0, 0, self.pg_width, UISCREEN_WIDTH*9/16) imageFillMode:PGPagedScrollViewImageFillModeFill iconMode:PGPagedScrollViewIconModeDefault];
         _bannersView.delegate = self;
     }
     return _bannersView;
@@ -164,13 +162,13 @@
         layout.scrollDirection = UICollectionViewScrollDirectionHorizontal;
         layout.minimumLineSpacing = 15.f;
         layout.minimumInteritemSpacing = 0.f;
-        _categoriesCollectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(0, self.bannersView.pg_bottom+10+16, self.pg_width, 80) collectionViewLayout:layout];
+        _categoriesCollectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(0, self.bannersView.pg_bottom+15+18+20, self.pg_width, 115) collectionViewLayout:layout];
         _categoriesCollectionView.backgroundColor = [UIColor whiteColor];
         _categoriesCollectionView.showsVerticalScrollIndicator = NO;
         _categoriesCollectionView.showsHorizontalScrollIndicator = NO;
         _categoriesCollectionView.dataSource = self;
         _categoriesCollectionView.delegate = self;
-        [_categoriesCollectionView registerClass:[PGHomeChannelCell class] forCellWithReuseIdentifier:ChannelCell];
+        [_categoriesCollectionView registerClass:[PGCategoryCell class] forCellWithReuseIdentifier:CategoryCell];
     }
     return _categoriesCollectionView;
 }

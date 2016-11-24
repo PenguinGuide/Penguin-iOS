@@ -20,9 +20,11 @@
 
 @property (nonatomic, strong) PGStoreViewModel *viewModel;
 @property (nonatomic, strong) PGFeedsCollectionView *feedsCollectionView;
-@property (nonatomic, strong) PGNavigationView *naviView;
+//@property (nonatomic, strong) PGNavigationView *naviView;
 
 @property (nonatomic, strong) MSWeakTimer *weakTimer;
+
+@property (nonatomic, assign) BOOL statusbarIsWhiteBackground;
 
 @end
 
@@ -32,7 +34,7 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     
-    [self.view addSubview:self.naviView];
+//    [self.view addSubview:self.naviView];
     [self.view addSubview:self.feedsCollectionView];
     
     self.viewModel = [[PGStoreViewModel alloc] initWithAPIClient:self.apiClient];
@@ -97,6 +99,18 @@
         [self showLoading];
         [self.viewModel requestData];
     }
+    
+    if (self.statusbarIsWhiteBackground) {
+        UIView *statusBar = [[[UIApplication sharedApplication] valueForKey:@"statusBarWindow"] valueForKey:@"statusBar"];
+        if ([statusBar respondsToSelector:@selector(setBackgroundColor:)]) {
+            statusBar.backgroundColor = [UIColor whiteColor];
+        }
+    } else {
+        UIView *statusBar = [[[UIApplication sharedApplication] valueForKey:@"statusBarWindow"] valueForKey:@"statusBar"];
+        if ([statusBar respondsToSelector:@selector(setBackgroundColor:)]) {
+            statusBar.backgroundColor = [UIColor clearColor];
+        }
+    }
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -108,12 +122,12 @@
 
 - (UIStatusBarStyle)preferredStatusBarStyle
 {
-    return UIStatusBarStyleDefault;
-}
-
-- (BOOL)prefersStatusBarHidden
-{
-    return NO;
+    // http://www.th7.cn/Program/IOS/201606/881633.shtml fix this method didn't called
+    if (self.statusbarIsWhiteBackground) {
+        return UIStatusBarStyleDefault;
+    } else {
+        return UIStatusBarStyleLightContent;
+    }
 }
 
 - (void)dealloc
@@ -143,7 +157,11 @@
 {
     // NOTE: these codes in viewDidLoad && viewWillLoad will not work since self.navigationController is nil for the first time
     [self.navigationController setNavigationBarHidden:YES animated:NO];
-    [self.parentViewController.navigationItem setLeftBarButtonItem:nil];
+    
+    self.parentViewController.navigationItem.leftBarButtonItem = nil;
+    self.parentViewController.navigationItem.titleView = nil;
+    
+    [self setNeedsStatusBarAppearanceUpdate];
 }
 
 #pragma mark - <PGFeedsCollectionViewDelegate>
@@ -227,11 +245,40 @@
     }
 }
 
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView
+{
+    // NOTE: add background view to status bar http://stackoverflow.com/questions/19063365/how-to-change-the-status-bar-background-color-and-text-color-on-ios-7
+    if (scrollView.contentOffset.y >= UISCREEN_WIDTH*9/16) {
+        UIView *statusBar = [[[UIApplication sharedApplication] valueForKey:@"statusBarWindow"] valueForKey:@"statusBar"];
+        if ([statusBar respondsToSelector:@selector(setBackgroundColor:)]) {
+            statusBar.backgroundColor = [UIColor whiteColor];
+        }
+        if (!self.statusbarIsWhiteBackground) {
+            self.statusbarIsWhiteBackground = YES;
+            [self setNeedsStatusBarAppearanceUpdate];
+        } else {
+            self.statusbarIsWhiteBackground = YES;
+        }
+    } else {
+        UIView *statusBar = [[[UIApplication sharedApplication] valueForKey:@"statusBarWindow"] valueForKey:@"statusBar"];
+        if ([statusBar respondsToSelector:@selector(setBackgroundColor:)]) {
+            statusBar.backgroundColor = [UIColor clearColor];
+        }
+        if (self.statusbarIsWhiteBackground) {
+            self.statusbarIsWhiteBackground = NO;
+            [self setNeedsStatusBarAppearanceUpdate];
+        } else {
+            self.statusbarIsWhiteBackground = NO;
+        }
+    }
+}
+
 #pragma mark - <Lazy Init>
 
 - (PGFeedsCollectionView *)feedsCollectionView {
     if(_feedsCollectionView == nil) {
-        _feedsCollectionView = [[PGFeedsCollectionView alloc] initWithFrame:CGRectMake(0, 64, UISCREEN_WIDTH, UISCREEN_HEIGHT-50-64) collectionViewLayout:[UICollectionViewFlowLayout new]];
+        _feedsCollectionView = [[PGFeedsCollectionView alloc] initWithFrame:CGRectMake(0, 0, UISCREEN_WIDTH, UISCREEN_HEIGHT-50) collectionViewLayout:[UICollectionViewFlowLayout new]];
+        _feedsCollectionView.contentInset = UIEdgeInsetsMake(-20, 0, 0, 0);
         _feedsCollectionView.feedsDelegate = self;
         
         __block PGFeedsCollectionView *collectionView = _feedsCollectionView;
@@ -249,13 +296,13 @@
     return _feedsCollectionView;
 }
 
-- (PGNavigationView *)naviView
-{
-    if (!_naviView) {
-        _naviView = [PGNavigationView defaultNavigationView];
-    }
-    return _naviView;
-}
+//- (PGNavigationView *)naviView
+//{
+//    if (!_naviView) {
+//        _naviView = [PGNavigationView defaultNavigationView];
+//    }
+//    return _naviView;
+//}
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];

@@ -31,7 +31,7 @@
 
 - (void)initialize
 {
-    self.backgroundColor = [UIColor whiteColor];
+    self.backgroundColor = Theme.colorLightBackground;
     self.clipsToBounds = YES;
     
     [self addSubview:self.goodImageView];

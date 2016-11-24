@@ -44,7 +44,7 @@ static UIColor *colorBorder, *colorLightBorder;
         
         colorHighlight = [UIColor colorWithRed:241.f/256.f green:149.f/256.f blue:114.f/256.f alpha:1.f];
         colorExtraHighlight = [UIColor colorWithRed:239.f/256.f green:103.f/256.f blue:51.f/256.f alpha:1.f];
-        colorText = [UIColor colorWithRed:69.f/256.f green:69.f/256.f blue:69.f/256.f alpha:1.f];
+        colorText = [UIColor colorWithRed:0.f/256.f green:0.f/256.f blue:0.f/256.f alpha:1.f];
         colorLightText = [UIColor colorWithRed:175.f/256.f green:175.f/256.f blue:175.f/256.f alpha:1.f];
         colorBackground = [UIColor colorWithRed:241.f/256.f green:241.f/256.f blue:241.f/256.f alpha:1.f];
         colorLightBackground = [UIColor colorWithRed:248.f/256.f green:248.f/256.f blue:248.f/256.f alpha:1.f];

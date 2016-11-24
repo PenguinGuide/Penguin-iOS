@@ -28,6 +28,8 @@
 // views
 #import "PGHomeRecommendsHeaderView.h"
 
+#import "UIScrollView+PGPullToRefresh.h"
+
 @interface PGHomeViewController () <PGFeedsCollectionViewDelegate>
 
 @property (nonatomic, strong) PGHomeViewModel *viewModel;
@@ -78,6 +80,8 @@
             }
         }
         [weakself dismissLoading];
+//        [weakself.feedsCollectionView endPullToRefresh];
+        [weakself.feedsCollectionView endTopRefreshing];
         [weakself.feedsCollectionView endBottomRefreshing];
     }];
     [self observe:self.viewModel keyPath:@"error" block:^(id changedObject) {
@@ -161,17 +165,17 @@
 
 - (NSString *)tabBarTitle
 {
-    return @"首页";
+    return @"城市指南";
 }
 
 - (NSString *)tabBarImage
 {
-    return @"pg_tab_home";
+    return @"pg_tab_city_guide";
 }
 
 - (NSString *)tabBarHighlightImage
 {
-    return @"pg_tab_home_highlight";
+    return @"pg_tab_city_guide_highlight";
 }
 
 - (void)tabBarDidClicked
@@ -330,8 +334,19 @@
 - (PGFeedsCollectionView *)feedsCollectionView
 {
     if (!_feedsCollectionView) {
-        _feedsCollectionView = [[PGFeedsCollectionView alloc] initWithFrame:CGRectMake(0, 0, UISCREEN_WIDTH, UISCREEN_HEIGHT-50) collectionViewLayout:[UICollectionViewFlowLayout new]];
+        // NOTE: remove UICollectionView top inset http://stackoverflow.com/questions/23786198/uicollectionview-how-can-i-remove-the-space-on-top-first-cells-row
+        _feedsCollectionView = [[PGFeedsCollectionView alloc] initWithFrame:CGRectMake(0, 0, UISCREEN_WIDTH, UISCREEN_HEIGHT-50+20) collectionViewLayout:[UICollectionViewFlowLayout new]];
+        _feedsCollectionView.contentInset = UIEdgeInsetsMake(-20, 0, 0, 0);
         _feedsCollectionView.feedsDelegate = self;
+        
+//        PGWeakSelf(self);
+//        [_feedsCollectionView addPullToRefresh:Theme.loadingImages
+//                                      topInset:0.f
+//                                        height:70.f
+//                                          rate:0.f
+//                                       handler:^{
+//                                           [weakself.viewModel requestData];
+//                                       }];
         
         __block PGFeedsCollectionView *collectionView = _feedsCollectionView;
         PGWeakSelf(self);

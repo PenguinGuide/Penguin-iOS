@@ -63,7 +63,7 @@
 
 - (UIImageView *)goodImageView {
     if(_goodImageView == nil) {
-        _goodImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 160, 160*2/3)];
+        _goodImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 120, 120*2/3)];
         _goodImageView.clipsToBounds = YES;
         _goodImageView.backgroundColor = Theme.colorBackground;
         _goodImageView.contentMode = UIViewContentModeScaleAspectFill;
@@ -77,7 +77,7 @@
 
 - (UILabel *)titleLabel {
     if(_titleLabel == nil) {
-        _titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(3, self.goodImageView.pg_bottom+5, 160-6, 14)];
+        _titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(3, self.goodImageView.pg_bottom+5, 120-6, 14)];
         _titleLabel.textColor = Theme.colorText;
         _titleLabel.font = Theme.fontSmallBold;
     }
@@ -86,7 +86,7 @@
 
 - (UILabel *)priceLabel {
     if(_priceLabel == nil) {
-        _priceLabel = [[UILabel alloc] initWithFrame:CGRectMake(3, self.titleLabel.pg_bottom+3, 160-6, 16)];
+        _priceLabel = [[UILabel alloc] initWithFrame:CGRectMake(3, self.titleLabel.pg_bottom+3, 120-6, 16)];
     }
     return _priceLabel;
 }

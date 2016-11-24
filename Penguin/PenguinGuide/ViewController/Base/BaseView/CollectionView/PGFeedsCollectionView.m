@@ -38,7 +38,7 @@
         self.delegate = self;
         self.showsHorizontalScrollIndicator = NO;
         self.showsVerticalScrollIndicator = NO;
-        self.backgroundColor = Theme.colorBackground;
+        self.backgroundColor = [UIColor whiteColor];
         
         [self registerClass:[PGCarouselBannerCell class] forCellWithReuseIdentifier:CarouselBannerCell];
         [self registerClass:[PGArticleBannerCell class] forCellWithReuseIdentifier:ArticleBannerCell];
@@ -181,7 +181,6 @@
             NSArray *feedsArray = [self.feedsDelegate feedsArray];
             if (indexPath.section == feedsArray.count-1) {
                 PGBaseCollectionViewFooterView *footerView = [collectionView dequeueReusableSupplementaryViewOfKind:kind withReuseIdentifier:BaseCollectionViewFooterView forIndexPath:indexPath];
-                footerView.backgroundColor = Theme.colorBackground;
                 
                 return footerView;
             }
@@ -261,29 +260,31 @@
     }
     NSArray *feedsArray = [self.feedsDelegate feedsArray];
     id banner = feedsArray[section];
-    if ([banner isKindOfClass:[PGArticleBanner class]]) {
+    if (section == feedsArray.count-1) {
+        return UIEdgeInsetsMake(15, 0, 0, 0);
+    } else if ([banner isKindOfClass:[PGArticleBanner class]]) {
         if (section == 0) {
             id nextBanner = feedsArray[section+1];
             if ([nextBanner isKindOfClass:[PGArticleBanner class]]) {
-                return UIEdgeInsetsMake(7, 0, 0, 0);
+                return UIEdgeInsetsMake(15, 0, 0, 0);
             } else {
-                return UIEdgeInsetsMake(7, 0, 7, 0);
+                return UIEdgeInsetsMake(15, 0, 15, 0);
             }
         } else if (section+1 < feedsArray.count) {
             id nextBanner = feedsArray[section+1];
             if ([nextBanner isKindOfClass:[PGArticleBanner class]]) {
                 return UIEdgeInsetsZero;
             } else {
-                return UIEdgeInsetsMake(0, 0, 7, 0);
+                return UIEdgeInsetsMake(0, 0, 15, 0);
             }
         } else {
             return UIEdgeInsetsZero;
         }
     } else {
         if (section == 0) {
-            return UIEdgeInsetsMake(7, 0, 7, 0);
+            return UIEdgeInsetsMake(15, 0, 15, 0);
         } else {
-            return UIEdgeInsetsMake(0, 0, 7, 0);
+            return UIEdgeInsetsMake(0, 0, 15, 0);
         }
     }
 }

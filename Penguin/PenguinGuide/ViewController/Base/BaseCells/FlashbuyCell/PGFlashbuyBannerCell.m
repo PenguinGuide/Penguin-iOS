@@ -36,7 +36,7 @@
     [self.contentView addSubview:self.bannersView];
     
     UIImageView *maskImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, self.pg_width, self.pg_height)];
-    maskImageView.image = [[UIImage imageNamed:@"pg_white_corner_mask"] resizableImageWithCapInsets:UIEdgeInsetsMake(4, 4, 4, 4) resizingMode:UIImageResizingModeStretch];
+    maskImageView.image = [[UIImage imageNamed:@"pg_bg_corner_mask"] resizableImageWithCapInsets:UIEdgeInsetsMake(4, 4, 4, 4) resizingMode:UIImageResizingModeStretch];
     [self.contentView addSubview:maskImageView];
 }
 
@@ -70,7 +70,7 @@
 
 + (CGSize)cellSize
 {
-    return CGSizeMake(UISCREEN_WIDTH-20, (UISCREEN_WIDTH-20)*150/300);
+    return CGSizeMake(UISCREEN_WIDTH-40, (UISCREEN_WIDTH-40)*150/300);
 }
 
 #pragma mark - <PGPagedScrollViewDelegate>

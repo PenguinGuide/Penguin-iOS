@@ -163,6 +163,7 @@
 		0FAF64A21DAE2EC100543513 /* PGPwdLoginView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0FAF64A11DAE2EC100543513 /* PGPwdLoginView.m */; };
 		0FB306571DA4DCAF005EB3AC /* PGParams.m in Sources */ = {isa = PBXBuildFile; fileRef = 0FB306561DA4DCAF005EB3AC /* PGParams.m */; };
 		0FB4FE451D38939900A1EAAA /* PGArticleViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0FB4FE441D38939900A1EAAA /* PGArticleViewController.m */; };
+		0FB562651DE59461006F8C90 /* PGCategoryCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0FB562641DE59461006F8C90 /* PGCategoryCell.m */; };
 		0FB8F96F1D339CD0005E6C56 /* PGRouterManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 0FB8F96E1D339CD0005E6C56 /* PGRouterManager.m */; };
 		0FB8F9721D339EBA005E6C56 /* PGGlobalObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 0FB8F9711D339EBA005E6C56 /* PGGlobalObject.m */; };
 		0FBBB0DA1DB4C8A900BA33AF /* PGSignupPwdViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0FBBB0D91DB4C8A900BA33AF /* PGSignupPwdViewController.m */; };
@@ -521,6 +522,8 @@
 		0FB306561DA4DCAF005EB3AC /* PGParams.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PGParams.m; sourceTree = "<group>"; };
 		0FB4FE431D38939900A1EAAA /* PGArticleViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PGArticleViewController.h; sourceTree = "<group>"; };
 		0FB4FE441D38939900A1EAAA /* PGArticleViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PGArticleViewController.m; sourceTree = "<group>"; };
+		0FB562631DE59461006F8C90 /* PGCategoryCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PGCategoryCell.h; sourceTree = "<group>"; };
+		0FB562641DE59461006F8C90 /* PGCategoryCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PGCategoryCell.m; sourceTree = "<group>"; };
 		0FB8F96D1D339CD0005E6C56 /* PGRouterManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PGRouterManager.h; sourceTree = "<group>"; };
 		0FB8F96E1D339CD0005E6C56 /* PGRouterManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PGRouterManager.m; sourceTree = "<group>"; };
 		0FB8F9701D339EBA005E6C56 /* PGGlobalObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PGGlobalObject.h; sourceTree = "<group>"; };
@@ -903,6 +906,7 @@
 		0F2DC2961D32995500277C9E /* BaseCells */ = {
 			isa = PBXGroup;
 			children = (
+				0FB562621DE59444006F8C90 /* CategoryCell */,
 				0F37652C1D6F2519007B9481 /* ArticleCell */,
 				0F37652D1D6F2519007B9481 /* CarouselCell */,
 				0F37652E1D6F2519007B9481 /* FlashbuyCell */,
@@ -1343,9 +1347,9 @@
 			children = (
 				0FF816231D2BAD1E00C78E3A /* Base */,
 				0F90942F1D2A6997004513CE /* Login */,
+				0F3C7EEE1D2F72CB00284066 /* Store */,
 				0F3C7EEC1D2F72CB00284066 /* Home */,
 				0F3C7EEB1D2F72CB00284066 /* Explore */,
-				0F3C7EEE1D2F72CB00284066 /* Store */,
 				0F3C7EED1D2F72CB00284066 /* Me */,
 				0F0008C61D71874000BED6FA /* Search */,
 				0F2D09BB1D6F0FF200957301 /* Tag */,
@@ -1365,9 +1369,9 @@
 			children = (
 				0F0F44761D34F589007B90F2 /* Base */,
 				0FFCB53E1D2D03D000D863FA /* Login */,
+				0FFEAF1B1D76B30A0067C888 /* Store */,
 				0F2DC2911D32958C00277C9E /* Home */,
 				0F141FC91D74751000884052 /* Explore */,
-				0FFEAF1B1D76B30A0067C888 /* Store */,
 				0FA5F2F61D9504BA00E9242B /* Me */,
 				0FA1B2A31DC1FCC40022ECE2 /* Message */,
 				0F9E8E1D1DC5F7F6003027CF /* Collection */,
@@ -1732,6 +1736,15 @@
 				0F09D05E1DAC9B0300FDA3F2 /* PGCommentsViewController.m */,
 			);
 			path = Article;
+			sourceTree = "<group>";
+		};
+		0FB562621DE59444006F8C90 /* CategoryCell */ = {
+			isa = PBXGroup;
+			children = (
+				0FB562631DE59461006F8C90 /* PGCategoryCell.h */,
+				0FB562641DE59461006F8C90 /* PGCategoryCell.m */,
+			);
+			path = CategoryCell;
 			sourceTree = "<group>";
 		};
 		0FB8F96B1D339CAE005E6C56 /* Manager */ = {
@@ -2433,6 +2446,7 @@
 				0F2DC2A01D32995500277C9E /* PGBaseViewController.m in Sources */,
 				0F5274F81D9B72D5006A5A56 /* PGGoodViewModel.m in Sources */,
 				0F3765421D6F256B007B9481 /* PGGoodsCollectionBannerCell.m in Sources */,
+				0FB562651DE59461006F8C90 /* PGCategoryCell.m in Sources */,
 				0F1392C71D3CD15800EF4CC8 /* PGArticleToHomeTransition.m in Sources */,
 				0F0008E51D71987600BED6FA /* PGSearchRecommendsHistoryCell.m in Sources */,
 				0FB4FE451D38939900A1EAAA /* PGArticleViewController.m in Sources */,
