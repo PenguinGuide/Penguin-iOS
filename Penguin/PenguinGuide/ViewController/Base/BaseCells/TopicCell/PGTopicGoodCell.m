@@ -35,7 +35,7 @@
     [self.contentView addSubview:self.goodImageView];
     [self.contentView addSubview:self.titleLabel];
     [self.contentView addSubview:self.priceLabel];
-    [self.contentView addSubview:self.stockImageView];
+//    [self.contentView addSubview:self.stockImageView];
 }
 
 - (void)setCellWithGood:(PGGood *)good
@@ -63,6 +63,7 @@
 
 - (UIImageView *)goodImageView {
     if(_goodImageView == nil) {
+        // 120*2/3 + 5 + 14 + 3+ 16
         _goodImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 120, 120*2/3)];
         _goodImageView.clipsToBounds = YES;
         _goodImageView.backgroundColor = Theme.colorBackground;

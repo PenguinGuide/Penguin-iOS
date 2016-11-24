@@ -93,7 +93,7 @@ static NSString *const GoodCell = @"GoodCell";
 
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    return CGSizeMake(120, 115-10);
+    return CGSizeMake(120, 120*2/3+5+14+3+16);
 }
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
@@ -121,7 +121,7 @@ static NSString *const GoodCell = @"GoodCell";
         layout.scrollDirection = UICollectionViewScrollDirectionHorizontal;
         layout.minimumInteritemSpacing = 0.f;
         layout.minimumLineSpacing = 10.f;
-        _goodsCollectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(0, self.bannerImageView.pg_bottom+10, UISCREEN_WIDTH, 115-10) collectionViewLayout:layout];
+        _goodsCollectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(0, self.bannerImageView.pg_bottom+10, UISCREEN_WIDTH, 120*2/3+5+14+3+16) collectionViewLayout:layout];
         _goodsCollectionView.dataSource = self;
         _goodsCollectionView.delegate = self;
         _goodsCollectionView.showsVerticalScrollIndicator = NO;
