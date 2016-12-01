@@ -16,6 +16,7 @@
     if (self) {
         self.paginationKey = nil;
         self.cursor = nil;
+        self.paginatedSection = 0;
     }
     return self;
 }

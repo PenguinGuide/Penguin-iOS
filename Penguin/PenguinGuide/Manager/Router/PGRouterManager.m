@@ -17,6 +17,7 @@
 #import "PGArticleViewController.h"
 #import "PGGoodViewController.h"
 #import "PGTagViewController.h"
+#import "PGAllScenariosViewController.h"
 #import "PGWebViewController.h"
 
 @implementation PGRouterManager
@@ -108,6 +109,16 @@
         }
     }];
     
+    [[PGRouter sharedInstance] registerRoute:@"qiechihe://all_scenarios" toHandler:^(NSDictionary *params) {
+        if (PGGlobal.rootNavigationController) {
+            if (params[@"scenarioType"]) {
+                NSString *scenarioType = params[@"scenarioType"];
+                PGAllScenariosViewController *allScenariosVC = [[PGAllScenariosViewController alloc] initWithScenarioType:scenarioType];
+                [PGGlobal.rootNavigationController pushViewController:allScenariosVC animated:YES];
+            }
+        }
+    }];
+    
     [[PGRouter sharedInstance] registerRoute:@"http://" toHandler:^(NSDictionary *params) {
         if (PGGlobal.rootNavigationController) {
             if (params[@"web_url"]) {
@@ -160,6 +171,14 @@
         [[PGRouter sharedInstance] openURL:link];
     } else {
         NSString *url = [NSString stringWithFormat:@"qiechihe://goods?goodsId=%@", goodId];
+        [[PGRouter sharedInstance] openURL:url];
+    }
+}
+
++ (void)routeToAllScenariosPage:(NSString *)scenarioType
+{
+    if (scenarioType && scenarioType.length > 0) {
+        NSString *url = [NSString stringWithFormat:@"qiechihe://all_scenarios?scenarioType=%@", scenarioType];
         [[PGRouter sharedInstance] openURL:url];
     }
 }

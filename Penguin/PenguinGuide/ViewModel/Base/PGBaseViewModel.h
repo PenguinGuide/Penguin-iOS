@@ -25,5 +25,6 @@
 
 - (void)requestData;
 - (void)loadNextPage;
+- (void)clearPagination;
 
 @end

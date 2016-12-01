@@ -16,7 +16,7 @@
 @property (nonatomic, strong, readonly) UILabel *titleLabel;
 @property (nonatomic, strong, readonly) UILabel *subtitleLabel;
 
-- (void)setCellWithArticle:(PGArticleBanner *)article;
+- (void)setCellWithArticle:(PGArticleBanner *)article allowGesture:(BOOL)allowGesture;
 
 + (CGSize)cellSize;
 

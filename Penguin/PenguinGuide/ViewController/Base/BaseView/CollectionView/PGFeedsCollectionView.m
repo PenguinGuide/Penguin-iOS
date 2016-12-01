@@ -24,7 +24,7 @@
 #import "PGExploreRecommendsHeaderView.h"
 #import "PGStoreRecommendsHeaderView.h"
 
-@interface PGFeedsCollectionView () <UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, PGExploreRecommendsHeaderViewDelegate, PGHomeRecommendsHeaderViewDelegate, PGStoreRecommendsHeaderViewDelegate>
+@interface PGFeedsCollectionView () <UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, PGHomeRecommendsHeaderViewDelegate, PGStoreRecommendsHeaderViewDelegate>
 
 @end
 
@@ -115,7 +115,7 @@
             PGArticleBannerCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:ArticleBannerCell forIndexPath:indexPath];
             
             PGArticleBanner *articleBanner = (PGArticleBanner *)banner;
-            [cell setCellWithArticle:articleBanner];
+            [cell setCellWithArticle:articleBanner allowGesture:YES];
             
             return cell;
         } else if ([banner isKindOfClass:[PGGoodsCollectionBanner class]]) {
@@ -165,8 +165,7 @@
             return headerView;
         } else if ([tabType isEqualToString:@"explore"]) {
             PGExploreRecommendsHeaderView *headerView = [collectionView dequeueReusableSupplementaryViewOfKind:kind withReuseIdentifier:ExploreHeaderView forIndexPath:indexPath];
-            headerView.delegate = self;
-            [headerView reloadBannersWithRecommendsArray:[self.feedsDelegate recommendsArray] scenariosArray:[self.feedsDelegate iconsArray]];
+            [headerView reloadBannersWithRecommendsArray:[self.feedsDelegate recommendsArray]];
             
             return headerView;
         } else if ([tabType isEqualToString:@"store"]) {
@@ -312,18 +311,9 @@
     }
 }
 
-#pragma mark - <PGExploreRecommendsHeaderViewDelegate>
-
-- (void)scenarioDidSelect:(PGCategoryIcon *)scenario
-{
-    if (self.feedsDelegate && [self.feedsDelegate respondsToSelector:@selector(scenarioDidSelect:)]) {
-        [self.feedsDelegate scenarioDidSelect:scenario];
-    }
-}
-
 #pragma mark - <PGStoreRecommendsHeaderViewDelegate>
 
-- (void)categoryDidSelect:(PGCategoryIcon *)categoryIcon
+- (void)categoryDidSelect:(PGScenarioBanner *)categoryIcon
 {
     if (self.feedsDelegate && [self.feedsDelegate respondsToSelector:@selector(categoryDidSelect:)]) {
         [self.feedsDelegate categoryDidSelect:categoryIcon];

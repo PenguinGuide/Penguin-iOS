@@ -7,6 +7,11 @@
 //
 
 #define ExploreHeaderView @"ExploreHeaderView"
+#define ArticleHeaderView @"ArticleHeaderView"
+#define CategoryCell @"CategoryCell"
+#define LevelCell @"LevelCell"
+#define GroupCell @"GroupCell"
+#define ArticleCell @"ArticleCell"
 
 #import "PGExploreViewController.h"
 #import "PGScenarioViewController.h"
@@ -14,19 +19,18 @@
 
 #import "PGFeedsCollectionView.h"
 #import "PGExploreRecommendsHeaderView.h"
+#import "PGScenarioCell.h"
+#import "PGArticleBannerCell.h"
 
 #import "PGExploreViewModel.h"
 
-#import "MSWeakTimer.h"
+@interface PGExploreViewController () <UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout>
 
-@interface PGExploreViewController () <PGFeedsCollectionViewDelegate>
-
-@property (nonatomic, strong) PGFeedsCollectionView *feedsCollectionView;
-@property (nonatomic, strong) PGNavigationView *naviView;
+@property (nonatomic, strong) PGBaseCollectionView *feedsCollectionView;
 
 @property (nonatomic, strong) PGExploreViewModel *viewModel;
 
-@property (nonatomic, strong) MSWeakTimer *weakTimer;
+@property (nonatomic, assign) BOOL statusbarIsWhiteBackground;
 
 @end
 
@@ -38,32 +42,23 @@
     
     self.automaticallyAdjustsScrollViewInsets = NO;
     
-    [self.view addSubview:self.naviView];
     [self.view addSubview:self.feedsCollectionView];
     
     self.viewModel = [[PGExploreViewModel alloc] initWithAPIClient:self.apiClient];
     
     PGWeakSelf(self);
-    [self observe:self.viewModel keyPath:@"reloadFirstPage" block:^(id changedObject) {
-        BOOL reloadFirstPage = [changedObject boolValue];
-        if (reloadFirstPage)  {
+    [self observe:self.viewModel keyPath:@"articlesArray" block:^(id changedObject) {
+        NSArray *articlesArray = changedObject;
+        if (articlesArray && [articlesArray isKindOfClass:[NSArray class]]) {
+            // NOTE: fix reloadData flash http://www.cnblogs.com/Rinpe/p/5850238.html
+            [UIView setAnimationsEnabled:NO];
             [weakself.feedsCollectionView reloadData];
-            [weakself dismissLoading];
-            [weakself.feedsCollectionView endBottomRefreshing];
-        }
-    }];
-    [self observe:self.viewModel keyPath:@"nextPageIndexSet" block:^(id changedObject) {
-        NSIndexSet *indexes = changedObject;
-        if (indexes && [indexes isKindOfClass:[NSIndexSet class]] && indexes.count > 0) {
-            @try {
-                [weakself.feedsCollectionView performBatchUpdates:^{
-                    [weakself.feedsCollectionView insertSections:indexes];
-                } completion:nil];
-            } @catch (NSException *exception) {
-                NSLog(@"exception: %@", exception);
-            }
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.25f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                [UIView setAnimationsEnabled:YES];
+            });
         }
         [weakself dismissLoading];
+        [weakself.feedsCollectionView endTopRefreshing];
         [weakself.feedsCollectionView endBottomRefreshing];
     }];
     [self observe:self.viewModel keyPath:@"error" block:^(id changedObject) {
@@ -83,13 +78,6 @@
     [super viewWillAppear:animated];
     
     [self.navigationController setNavigationBarHidden:YES animated:NO];
-    
-    self.weakTimer = [MSWeakTimer scheduledTimerWithTimeInterval:1.0
-                                                          target:self
-                                                        selector:@selector(countdown)
-                                                        userInfo:nil
-                                                         repeats:YES
-                                                   dispatchQueue:dispatch_get_main_queue()];
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -99,9 +87,21 @@
     // NOTE: put it in viewWillAppear doesn't work
     [self setNeedsStatusBarAppearanceUpdate];
     
-    if (self.viewModel.feedsArray.count == 0) {
+    if (self.viewModel.articlesArray.count == 0) {
         [self showLoading];
         [self.viewModel requestData];
+    }
+    
+    if (self.statusbarIsWhiteBackground) {
+        UIView *statusBar = [[[UIApplication sharedApplication] valueForKey:@"statusBarWindow"] valueForKey:@"statusBar"];
+        if ([statusBar respondsToSelector:@selector(setBackgroundColor:)]) {
+            statusBar.backgroundColor = [UIColor whiteColor];
+        }
+    } else {
+        UIView *statusBar = [[[UIApplication sharedApplication] valueForKey:@"statusBarWindow"] valueForKey:@"statusBar"];
+        if ([statusBar respondsToSelector:@selector(setBackgroundColor:)]) {
+            statusBar.backgroundColor = [UIColor clearColor];
+        }
     }
 }
 
@@ -111,13 +111,16 @@
     
     // http://stackoverflow.com/questions/11656055/scrollviewdidscroll-delegate-is-invoking-automatically
     // NOTE: if barHidden sets to NO, scrollViewDidScroll will not be called (next page nothing to update)
-    
-    [self.weakTimer invalidate];
 }
 
 - (UIStatusBarStyle)preferredStatusBarStyle
 {
-    return UIStatusBarStyleDefault;
+    // http://www.th7.cn/Program/IOS/201606/881633.shtml fix this method didn't called
+    if (self.statusbarIsWhiteBackground) {
+        return UIStatusBarStyleDefault;
+    } else {
+        return UIStatusBarStyleLightContent;
+    }
 }
 
 - (BOOL)prefersStatusBarHidden
@@ -128,7 +131,6 @@
 - (void)dealloc
 {
     [self unobserve];
-    [self.weakTimer invalidate];
 }
 
 #pragma mark - <PGTabBarControllerDelegate>
@@ -155,121 +157,213 @@
     [self.parentViewController.navigationItem setLeftBarButtonItem:nil];
 }
 
-#pragma mark - <PGFeedsCollectionViewDelegate>
+#pragma mark - <UICollectionView>
 
-- (NSArray *)recommendsArray
+- (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView
 {
-    return self.viewModel.recommendsArray;
+    return 4;
 }
 
-- (NSArray *)iconsArray
+- (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
 {
-    return self.viewModel.scenariosArray;
-}
-
-- (NSArray *)feedsArray
-{
-    return self.viewModel.feedsArray;
-}
-
-- (CGSize)feedsHeaderSize
-{
-    if (!self.viewModel) {
-        return CGSizeZero;
+    if (section == 0) {
+        return self.viewModel.categoriesArray.count > 0 ? 1 : 0;
+    } else if (section == 1) {
+        return self.viewModel.levelsArray.count > 0 ? 1 : 0;
+    } else if (section == 2) {
+        return self.viewModel.groupsArray.count > 0 ? 1 : 0;
+    } else if (section == 3) {
+        return self.viewModel.articlesArray.count;
     }
-    return [PGExploreRecommendsHeaderView headerViewSize];
+    return 0;
 }
 
-- (CGSize)feedsFooterSize
+- (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (!self.viewModel) {
-        return CGSizeZero;
+    if (indexPath.section == 0) {
+        PGScenarioCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:CategoryCell forIndexPath:indexPath];
+        
+        [cell reloadWithBanners:self.viewModel.categoriesArray title:@"品 类" scenarioType:@"4"];
+        
+        return cell;
+    } else if (indexPath.section == 1) {
+        PGScenarioCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:LevelCell forIndexPath:indexPath];
+        
+        [cell reloadWithBanners:self.viewModel.levelsArray title:@"难 易" scenarioType:@"3"];
+        
+        return cell;
+    } else if (indexPath.section == 2) {
+        PGScenarioCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:GroupCell forIndexPath:indexPath];
+        
+        [cell reloadWithBanners:self.viewModel.groupsArray title:@"人 群" scenarioType:@"2"];
+        
+        return cell;
+    } else if (indexPath.section == 3) {
+        if (self.viewModel.articlesArray.count-indexPath.item == 3) {
+            PGWeakSelf(self);
+            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
+                [weakself.viewModel requestArticles];
+            });
+        }
+        
+        PGArticleBannerCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:ArticleCell forIndexPath:indexPath];
+        
+        PGArticleBanner *articleBanner = self.viewModel.articlesArray[indexPath.item];
+        [cell setCellWithArticle:articleBanner allowGesture:YES];
+        
+        return cell;
     }
-    if (self.viewModel.endFlag) {
-        return [PGBaseCollectionViewFooterView footerViewSize];
+    
+    return nil;
+}
+
+- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    if (indexPath.section == 0 || indexPath.section == 1 || indexPath.section == 2) {
+        return [PGScenarioCell cellSize];
+    } else if (indexPath.section == 3) {
+        id banner = self.viewModel.articlesArray[indexPath.item];
+        if ([banner isKindOfClass:[PGArticleBanner class]]) {
+            return [PGArticleBannerCell cellSize];
+        } else {
+            return CGSizeZero;
+        }
     }
     return CGSizeZero;
 }
 
-- (NSString *)tabType
+- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout referenceSizeForHeaderInSection:(NSInteger)section
 {
-    return @"explore";
+    if (!self.viewModel) {
+        return CGSizeZero;
+    }
+    if (section == 0) {
+        return [PGExploreRecommendsHeaderView headerViewSize];
+    }
+    if (section == 3) {
+        return CGSizeMake(UISCREEN_WIDTH, 60);
+    }
+    return CGSizeZero;
 }
 
-- (void)scenarioDidSelect:(PGCategoryIcon *)scenario
+- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout referenceSizeForFooterInSection:(NSInteger)section
 {
-    [PGRouterManager routeToScenarioPage:scenario.categoryId link:scenario.link];
+    if (section == 3) {
+        if (!self.viewModel) {
+            return CGSizeZero;
+        }
+        if (self.viewModel.endFlag) {
+            return [PGBaseCollectionViewFooterView footerViewSize];
+        }
+    }
+    return CGSizeZero;
+}
+
+- (CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout minimumLineSpacingForSectionAtIndex:(NSInteger)section
+{
+    return 0.f;
+}
+
+- (CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout minimumInteritemSpacingForSectionAtIndex:(NSInteger)section
+{
+    return 0.f;
+}
+
+- (UICollectionReusableView *)collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath
+{
+    if (kind == UICollectionElementKindSectionHeader) {
+        if (indexPath.section == 0) {
+            PGExploreRecommendsHeaderView *headerView = [collectionView dequeueReusableSupplementaryViewOfKind:kind withReuseIdentifier:ExploreHeaderView forIndexPath:indexPath];
+            [headerView reloadBannersWithRecommendsArray:self.viewModel.recommendsArray];
+            
+            return headerView;
+        } else if (indexPath.section == 3) {
+            UICollectionReusableView *headerView = [collectionView dequeueReusableSupplementaryViewOfKind:kind withReuseIdentifier:ArticleHeaderView forIndexPath:indexPath];
+            
+            UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(20, 20, 200, 20)];
+            label.font = Theme.fontExtraLargeBold;
+            label.textColor = Theme.colorText;
+            label.text = @"热 门 推 文";
+            [headerView addSubview:label];
+            
+            return headerView;
+        }
+
+    } else if (kind == UICollectionElementKindSectionFooter) {
+        if (indexPath.section == 3) {
+            PGBaseCollectionViewFooterView *footerView = [collectionView dequeueReusableSupplementaryViewOfKind:kind withReuseIdentifier:BaseCollectionViewFooterView forIndexPath:indexPath];
+            
+            return footerView;
+        }
+    }
+    
+    return nil;
 }
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    id banner = self.viewModel.feedsArray[indexPath.section];
-    
-    if ([banner isKindOfClass:[PGArticleBanner class]]) {
-        PGArticleBanner *articleBanner = (PGArticleBanner *)banner;
-        PGArticleViewController *articleVC = [[PGArticleViewController alloc] initWithArticleId:articleBanner.articleId animated:NO];
-        [self.navigationController pushViewController:articleVC animated:YES];
-    } else if ([banner isKindOfClass:[PGTopicBanner class]]) {
-        PGTopicBanner *topicBanner = (PGTopicBanner *)banner;
-        [[PGRouter sharedInstance] openURL:topicBanner.link];
-    } else if ([banner isKindOfClass:[PGSingleGoodBanner class]]) {
-        PGSingleGoodBanner *singleGoodBanner = (PGSingleGoodBanner *)banner;
-        [[PGRouter sharedInstance] openURL:singleGoodBanner.link];
+    if (indexPath.section == 3) {
+        PGArticleBanner *articleBanner = self.viewModel.articlesArray[indexPath.item];
+        [PGRouterManager routeToArticlePage:articleBanner.articleId link:articleBanner.link];
     }
 }
 
-- (void)shouldPreloadNextPage
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
-    PGWeakSelf(self);
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
-        [weakself.viewModel loadNextPage];
-    });
-}
-
-- (void)countdown
-{
-    for (UICollectionViewCell *visibleCell in self.feedsCollectionView.visibleCells) {
-        if ([visibleCell isKindOfClass:[PGFlashbuyBannerCell class]]) {
-            PGFlashbuyBannerCell *cell = (PGFlashbuyBannerCell *)visibleCell;
-            NSInteger index = [[self.feedsCollectionView indexPathForCell:cell] section];
-            if (index < self.viewModel.feedsArray.count) {
-                PGFlashbuyBanner *flashbuy = self.viewModel.feedsArray[index];
-                if (flashbuy && [flashbuy isKindOfClass:[PGFlashbuyBanner class]] && cell) {
-                    [cell countdown:flashbuy];
-                }
-            }
+    // NOTE: add background view to status bar http://stackoverflow.com/questions/19063365/how-to-change-the-status-bar-background-color-and-text-color-on-ios-7
+    if (scrollView.contentOffset.y >= UISCREEN_WIDTH*9/16) {
+        UIView *statusBar = [[[UIApplication sharedApplication] valueForKey:@"statusBarWindow"] valueForKey:@"statusBar"];
+        if ([statusBar respondsToSelector:@selector(setBackgroundColor:)]) {
+            statusBar.backgroundColor = [UIColor whiteColor];
+        }
+        if (!self.statusbarIsWhiteBackground) {
+            self.statusbarIsWhiteBackground = YES;
+            [self setNeedsStatusBarAppearanceUpdate];
+        } else {
+            self.statusbarIsWhiteBackground = YES;
+        }
+    } else {
+        UIView *statusBar = [[[UIApplication sharedApplication] valueForKey:@"statusBarWindow"] valueForKey:@"statusBar"];
+        if ([statusBar respondsToSelector:@selector(setBackgroundColor:)]) {
+            statusBar.backgroundColor = [UIColor clearColor];
+        }
+        if (self.statusbarIsWhiteBackground) {
+            self.statusbarIsWhiteBackground = NO;
+            [self setNeedsStatusBarAppearanceUpdate];
+        } else {
+            self.statusbarIsWhiteBackground = NO;
         }
     }
 }
 
 #pragma mark - <Lazy Init>
 
-- (PGFeedsCollectionView *)feedsCollectionView {
+- (PGBaseCollectionView *)feedsCollectionView {
     if(_feedsCollectionView == nil) {
-        _feedsCollectionView = [[PGFeedsCollectionView alloc] initWithFrame:CGRectMake(0, 64, UISCREEN_WIDTH, UISCREEN_HEIGHT-50-64) collectionViewLayout:[UICollectionViewFlowLayout new]];
-        _feedsCollectionView.feedsDelegate = self;
+        _feedsCollectionView = [[PGBaseCollectionView alloc] initWithFrame:CGRectMake(0, 0, UISCREEN_WIDTH, UISCREEN_HEIGHT-50) collectionViewLayout:[UICollectionViewFlowLayout new]];
+        _feedsCollectionView.dataSource = self;
+        _feedsCollectionView.delegate = self;
         
-        __block PGFeedsCollectionView *collectionView = _feedsCollectionView;
+        [_feedsCollectionView registerClass:[PGScenarioCell class] forCellWithReuseIdentifier:CategoryCell];
+        [_feedsCollectionView registerClass:[PGScenarioCell class] forCellWithReuseIdentifier:LevelCell];
+        [_feedsCollectionView registerClass:[PGScenarioCell class] forCellWithReuseIdentifier:GroupCell];
+        [_feedsCollectionView registerClass:[PGArticleBannerCell class] forCellWithReuseIdentifier:ArticleCell];
+        [_feedsCollectionView registerClass:[PGExploreRecommendsHeaderView class] forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:ExploreHeaderView];
+        [_feedsCollectionView registerClass:[UICollectionReusableView class] forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:ArticleHeaderView];
+        [_feedsCollectionView registerClass:[PGBaseCollectionViewFooterView class] forSupplementaryViewOfKind:UICollectionElementKindSectionFooter withReuseIdentifier:BaseCollectionViewFooterView];
+        
         PGWeakSelf(self);
         [_feedsCollectionView enablePullToRefreshWithTopInset:0.f completion:^{
-            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2.f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                [collectionView endTopRefreshing];
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.4 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                [weakself.viewModel clearPagination];
                 [weakself.viewModel requestData];
             });
         }];
         [_feedsCollectionView enableInfiniteScrolling:^{
-            [weakself.viewModel loadNextPage];
+            [weakself.viewModel requestArticles];
         }];
     }
     return _feedsCollectionView;
-}
-
-- (PGNavigationView *)naviView
-{
-    if (!_naviView) {
-        _naviView = [PGNavigationView defaultNavigationView];
-    }
-    return _naviView;
 }
 
 - (void)didReceiveMemoryWarning {

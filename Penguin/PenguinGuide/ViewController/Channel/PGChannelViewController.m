@@ -117,7 +117,7 @@
 {
     PGArticleBannerCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:ArticleBannerCell forIndexPath:indexPath];
     
-    [cell setCellWithArticle:self.viewModel.articlesArray[indexPath.item]];
+    [cell setCellWithArticle:self.viewModel.articlesArray[indexPath.item] allowGesture:YES];
     
     return cell;
 }

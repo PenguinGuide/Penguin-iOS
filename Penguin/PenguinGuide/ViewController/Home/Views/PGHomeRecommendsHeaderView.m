@@ -11,7 +11,7 @@ static NSString *const ChannelCell = @"ChannelCell";
 #import "PGHomeRecommendsHeaderView.h"
 #import "PGHomeChannelCell.h"
 #import "PGImageBanner.h"
-#import "PGCategoryIcon.h"
+#import "PGScenarioBanner.h"
 #import "UIButton+WebCache.h"
 
 @interface PGHomeRecommendsHeaderView () <PGPagedScrollViewDelegate, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout>
@@ -102,7 +102,7 @@ static NSString *const ChannelCell = @"ChannelCell";
 {
     PGHomeChannelCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:ChannelCell forIndexPath:indexPath];
     
-    PGCategoryIcon *icon = self.channelsArray[indexPath.item];
+    PGScenarioBanner *icon = self.channelsArray[indexPath.item];
     
     [cell.channelButton sd_setImageWithURL:[NSURL URLWithString:icon.image] forState:UIControlStateNormal placeholderImage:nil];
     [cell.channelLabel setText:icon.title];
@@ -125,7 +125,7 @@ static NSString *const ChannelCell = @"ChannelCell";
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
     if (self.delegate && [self.delegate respondsToSelector:@selector(channelDidSelect:)]) {
-        PGCategoryIcon *icon = self.channelsArray[indexPath.item];
+        PGScenarioBanner *icon = self.channelsArray[indexPath.item];
         [self.delegate channelDidSelect:icon.link];
     }
 }

@@ -54,8 +54,11 @@
     [self.contentView addGestureRecognizer:self.bannerImageScrollView.panGestureRecognizer];
 }
 
-- (void)setCellWithArticle:(PGArticleBanner *)article
+- (void)setCellWithArticle:(PGArticleBanner *)article allowGesture:(BOOL)allowGesture
 {
+    if (!allowGesture) {
+        [self.contentView removeGestureRecognizer:self.bannerImageScrollView.panGestureRecognizer];
+    }
     if ([article.type isEqualToString:@"video"]) {
         [self.bannerImageView setWithImageURL:article.image placeholder:nil completion:nil];
     } else {

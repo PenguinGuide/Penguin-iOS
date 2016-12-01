@@ -130,7 +130,7 @@
     if (indexPath.section == 1) {
         if (self.viewModel.topic.articlesArray > 0) {
             PGArticleBannerCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:ArticleCell forIndexPath:indexPath];
-            [cell setCellWithArticle:self.viewModel.topic.articlesArray[indexPath.item]];
+            [cell setCellWithArticle:self.viewModel.topic.articlesArray[indexPath.item] allowGesture:YES];
             
             return cell;
         } else if (self.viewModel.topic.goodsArray > 0) {

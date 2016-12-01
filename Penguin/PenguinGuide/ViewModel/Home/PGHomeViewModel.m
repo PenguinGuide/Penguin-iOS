@@ -9,7 +9,7 @@
 #import "PGHomeViewModel.h"
 
 #import "PGImageBanner.h"
-#import "PGCategoryIcon.h"
+#import "PGScenarioBanner.h"
 
 #import "PGCarouselBanner.h"
 #import "PGArticleBanner.h"
@@ -45,7 +45,7 @@
                 weakself.recommendsArray = [PGImageBanner modelsFromArray:responseDict[@"banners"]];
             }
             if (responseDict[@"channels"]) {
-                weakself.channelsArray = [PGCategoryIcon modelsFromArray:responseDict[@"channels"]];
+                weakself.channelsArray = [PGScenarioBanner modelsFromArray:responseDict[@"channels"]];
             }
         }
         [weakself requestFeeds];
@@ -65,6 +65,7 @@
     
     if (!self.response) {
         self.response = [[PGRKResponse alloc] init];
+        self.response.pagination.needPerformingBatchUpdate = YES;
         self.response.pagination.paginationKey = @"cursor";
         self.response.pagination.paginateSections = YES;
     }

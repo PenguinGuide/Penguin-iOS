@@ -8,11 +8,11 @@
 
 #import <UIKit/UIKit.h>
 #import "PGPagedScrollView.h"
-#import "PGCategoryIcon.h"
+#import "PGScenarioBanner.h"
 
 @protocol PGStoreRecommendsHeaderViewDelegate <NSObject>
 
-- (void)categoryDidSelect:(PGCategoryIcon *)categoryIcon;
+- (void)categoryDidSelect:(PGScenarioBanner *)categoryIcon;
 
 @end
 

@@ -36,7 +36,7 @@
     [self.contentView addSubview:maskImageView];
 }
 
-- (void)setCellWithCategoryIcon:(PGCategoryIcon *)icon
+- (void)setCellWithCategoryIcon:(PGScenarioBanner *)icon
 {
     [self.categoryImageView setWithImageURL:icon.image placeholder:nil completion:nil];
     [self.categoryTitleLabel setText:icon.title];

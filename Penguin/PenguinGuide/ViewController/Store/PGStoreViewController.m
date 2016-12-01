@@ -8,6 +8,8 @@
 
 #import "PGStoreViewController.h"
 #import "PGStoreCategoryViewController.h"
+#import "PGSearchRecommendsViewController.h"
+#import "PGArticleViewController.h"
 
 #import "PGStoreViewModel.h"
 
@@ -20,7 +22,8 @@
 
 @property (nonatomic, strong) PGStoreViewModel *viewModel;
 @property (nonatomic, strong) PGFeedsCollectionView *feedsCollectionView;
-//@property (nonatomic, strong) PGNavigationView *naviView;
+
+@property (nonatomic, strong) UIButton *searchButton;
 
 @property (nonatomic, strong) MSWeakTimer *weakTimer;
 
@@ -34,31 +37,21 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     
-//    [self.view addSubview:self.naviView];
     [self.view addSubview:self.feedsCollectionView];
+    [self.view addSubview:self.searchButton];
     
     self.viewModel = [[PGStoreViewModel alloc] initWithAPIClient:self.apiClient];
     [self.viewModel requestData];
     
     PGWeakSelf(self);
-    [self observe:self.viewModel keyPath:@"reloadFirstPage" block:^(id changedObject) {
-        BOOL reloadFirstPage = [changedObject boolValue];
-        if (reloadFirstPage)  {
+    [self observe:self.viewModel keyPath:@"feedsArray" block:^(id changedObject) {
+        NSArray *feedsArray = changedObject;
+        if (feedsArray && [feedsArray isKindOfClass:[NSArray class]]) {
+            [UIView setAnimationsEnabled:NO];
             [weakself.feedsCollectionView reloadData];
-            [weakself dismissLoading];
-            [weakself.feedsCollectionView endBottomRefreshing];
-        }
-    }];
-    [self observe:self.viewModel keyPath:@"nextPageIndexSet" block:^(id changedObject) {
-        NSIndexSet *indexes = changedObject;
-        if (indexes && [indexes isKindOfClass:[NSIndexSet class]] && indexes.count > 0) {
-            @try {
-                [weakself.feedsCollectionView performBatchUpdates:^{
-                    [weakself.feedsCollectionView insertSections:indexes];
-                } completion:nil];
-            } @catch (NSException *exception) {
-                NSLog(@"exception: %@", exception);
-            }
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.25 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                [UIView setAnimationsEnabled:YES];
+            });
         }
         [weakself dismissLoading];
         [weakself.feedsCollectionView endBottomRefreshing];
@@ -134,6 +127,7 @@
 {
     [self unobserve];
     [self.weakTimer invalidate];
+    self.weakTimer = nil;
 }
 
 #pragma mark - <PGTabBarControllerDelegate>
@@ -205,19 +199,29 @@
     return @"store";
 }
 
-- (void)categoryDidSelect:(PGCategoryIcon *)category
+- (void)categoryDidSelect:(PGScenarioBanner *)category
 {
-    PGStoreCategoryViewController *categoryVC = [[PGStoreCategoryViewController alloc] initWithCategoryId:category.categoryId];
+    PGStoreCategoryViewController *categoryVC = [[PGStoreCategoryViewController alloc] initWithCategoryId:category.scenarioId];
     [self.navigationController pushViewController:categoryVC animated:YES];
 }
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
     id banner = self.viewModel.feedsArray[indexPath.section];
-    
-    if ([banner isKindOfClass:[PGTopicBanner class]]) {
+    if ([banner isKindOfClass:[PGArticleBanner class]]) {
+        UIView *statusBar = [[[UIApplication sharedApplication] valueForKey:@"statusBarWindow"] valueForKey:@"statusBar"];
+        if ([statusBar respondsToSelector:@selector(setBackgroundColor:)]) {
+            statusBar.backgroundColor = [UIColor clearColor];
+        }
+        PGArticleBanner *articleBanner = (PGArticleBanner *)banner;
+        PGArticleViewController *articleVC = [[PGArticleViewController alloc] initWithArticleId:articleBanner.articleId animated:YES];
+        [self.navigationController pushViewController:articleVC animated:YES];
+    } else if ([banner isKindOfClass:[PGTopicBanner class]]) {
         PGTopicBanner *topicBanner = (PGTopicBanner *)banner;
         [[PGRouter sharedInstance] openURL:topicBanner.link];
+    } else if ([banner isKindOfClass:[PGSingleGoodBanner class]]) {
+        PGSingleGoodBanner *singleGoodBanner = (PGSingleGoodBanner *)banner;
+        [[PGRouter sharedInstance] openURL:singleGoodBanner.link];
     }
 }
 
@@ -225,7 +229,7 @@
 {
     PGWeakSelf(self);
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
-        [weakself.viewModel loadNextPage];
+        [weakself.viewModel requestFeeds];
     });
 }
 
@@ -259,6 +263,7 @@
         } else {
             self.statusbarIsWhiteBackground = YES;
         }
+        self.searchButton.hidden = YES;
     } else {
         UIView *statusBar = [[[UIApplication sharedApplication] valueForKey:@"statusBarWindow"] valueForKey:@"statusBar"];
         if ([statusBar respondsToSelector:@selector(setBackgroundColor:)]) {
@@ -270,7 +275,17 @@
         } else {
             self.statusbarIsWhiteBackground = NO;
         }
+        self.searchButton.hidden = NO;
     }
+}
+
+#pragma mark - <Button Events>
+
+- (void)searchButtonClicked
+{
+    PGSearchRecommendsViewController *searchRecommendsVC = [[PGSearchRecommendsViewController alloc] init];
+    PGBaseNavigationController *naviController = [[PGBaseNavigationController alloc] initWithRootViewController:searchRecommendsVC];
+    [self presentViewController:naviController animated:NO completion:nil];
 }
 
 #pragma mark - <Lazy Init>
@@ -290,19 +305,23 @@
             });
         }];
         [_feedsCollectionView enableInfiniteScrolling:^{
-            [weakself.viewModel loadNextPage];
+            [weakself.viewModel requestFeeds];
         }];
     }
     return _feedsCollectionView;
 }
 
-//- (PGNavigationView *)naviView
-//{
-//    if (!_naviView) {
-//        _naviView = [PGNavigationView defaultNavigationView];
-//    }
-//    return _naviView;
-//}
+- (UIButton *)searchButton
+{
+    if (!_searchButton) {
+        _searchButton = [[UIButton alloc] initWithFrame:CGRectMake(24, 35, 50, 50)];
+        [_searchButton setImage:[UIImage imageNamed:@"pg_home_search_button"] forState:UIControlStateNormal];
+        [_searchButton setContentVerticalAlignment:UIControlContentVerticalAlignmentTop];
+        [_searchButton setContentHorizontalAlignment:UIControlContentHorizontalAlignmentLeft];
+        [_searchButton addTarget:self action:@selector(searchButtonClicked) forControlEvents:UIControlEventTouchUpInside];
+    }
+    return _searchButton;
+}
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];

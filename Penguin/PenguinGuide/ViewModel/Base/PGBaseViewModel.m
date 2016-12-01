@@ -39,4 +39,9 @@
     
 }
 
+- (void)clearPagination
+{
+    
+}
+
 @end

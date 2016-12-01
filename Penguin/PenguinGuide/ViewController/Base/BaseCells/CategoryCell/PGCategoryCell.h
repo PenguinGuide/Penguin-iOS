@@ -7,11 +7,11 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "PGCategoryIcon.h"
+#import "PGScenarioBanner.h"
 
 @interface PGCategoryCell : UICollectionViewCell
 
-- (void)setCellWithCategoryIcon:(PGCategoryIcon *)icon;
+- (void)setCellWithCategoryIcon:(PGScenarioBanner *)icon;
 
 + (CGSize)cellSize;
 

@@ -35,6 +35,7 @@
     
     if (!self.articlesResponse) {
         self.articlesResponse = [[PGRKResponse alloc] init];
+        self.articlesResponse.pagination.needPerformingBatchUpdate = YES;
         self.articlesResponse.pagination.paginateSections = NO;
         self.articlesResponse.pagination.paginationKey = @"next";
     }
@@ -76,6 +77,7 @@
     
     if (!self.goodsResponse) {
         self.goodsResponse = [[PGRKResponse alloc] init];
+        self.goodsResponse.pagination.needPerformingBatchUpdate = YES;
         self.goodsResponse.pagination.paginateSections = NO;
         self.goodsResponse.pagination.paginationKey = @"next";
     }

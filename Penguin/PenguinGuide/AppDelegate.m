@@ -19,9 +19,9 @@
 
 #import "PGBaseNavigationController.h"
 
-#import "PGHomeViewController.h"
-#import "PGExploreViewController.h"
 #import "PGStoreViewController.h"
+#import "PGExploreViewController.h"
+#import "PGCityGuideViewController.h"
 #import "PGMeViewController.h"
 
 #import "PGAnalytics.h"
@@ -63,13 +63,13 @@
     [[UIApplication sharedApplication] registerUserNotificationSettings:settings];
     
     //[PGLaunchAds sharedInstance];
-    PGHomeViewController *homeVC = [[PGHomeViewController alloc] init];
+    PGCityGuideViewController *cityGuideVC = [[PGCityGuideViewController alloc] init];
     PGExploreViewController *exploreVC = [[PGExploreViewController alloc] init];
     PGStoreViewController *storeVC = [[PGStoreViewController alloc] init];
     PGMeViewController *meVC = [[PGMeViewController alloc] init];
     
     self.tabBarController = [[PGTabBarController alloc] init];
-    [self.tabBarController setViewControllers:@[storeVC, exploreVC, homeVC, meVC]];
+    [self.tabBarController setViewControllers:@[storeVC, exploreVC, cityGuideVC, meVC]];
     
     PGBaseNavigationController *navigationController = [[PGBaseNavigationController alloc] initWithRootViewController:self.tabBarController];
     PGGlobal.rootNavigationController = navigationController;

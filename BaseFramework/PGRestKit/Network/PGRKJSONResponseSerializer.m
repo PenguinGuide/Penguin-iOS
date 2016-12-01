@@ -111,20 +111,25 @@ static const NSString *kResponseKey = @"kResponseKey";
         }
         if (responseObject && [responseObject isKindOfClass:[NSArray class]] && paginationResponse) {
             if ([responseObject count] > 0) {
-                if (paginationResponse.dataArray.count > 0) {
-                    if (paginationResponse.pagination.paginateSections) {
-                        NSMutableIndexSet *indexes = [NSMutableIndexSet new];
-                        for (int i = paginationResponse.dataArray.count; i < paginationResponse.dataArray.count+[responseObject count]; i++) {
-                            [indexes addIndex:i];
+                if (paginationResponse.pagination.needPerformingBatchUpdate) {
+                    if (paginationResponse.dataArray.count > 0) {
+                        if (paginationResponse.pagination.paginateSections) {
+                            NSMutableIndexSet *indexes = [NSMutableIndexSet new];
+                            for (int i = paginationResponse.dataArray.count; i < paginationResponse.dataArray.count+[responseObject count]; i++) {
+                                [indexes addIndex:i];
+                            }
+                            paginationResponse.pagination.nextPageIndexesSet = [[NSIndexSet alloc] initWithIndexSet:indexes];
+                        } else {
+                            NSMutableArray *indexes = [NSMutableArray new];
+                            for (int i = paginationResponse.dataArray.count; i < paginationResponse.dataArray.count+[responseObject count]; i++) {
+                                NSIndexPath *indexPath = [NSIndexPath indexPathForItem:i inSection:paginationResponse.pagination.paginatedSection];
+                                [indexes addObject:indexPath];
+                            }
+                            paginationResponse.pagination.nextPageIndexesArray = [NSArray arrayWithArray:indexes];
                         }
-                        paginationResponse.pagination.nextPageIndexesSet = [[NSIndexSet alloc] initWithIndexSet:indexes];
                     } else {
-                        NSMutableArray *indexes = [NSMutableArray new];
-                        for (int i = paginationResponse.dataArray.count; i < paginationResponse.dataArray.count+[responseObject count]; i++) {
-                            NSIndexPath *indexPath = [NSIndexPath indexPathForItem:i inSection:0];
-                            [indexes addObject:indexPath];
-                        }
-                        paginationResponse.pagination.nextPageIndexesArray = [NSArray arrayWithArray:indexes];
+                        paginationResponse.pagination.nextPageIndexesSet = nil;
+                        paginationResponse.pagination.nextPageIndexesArray = nil;
                     }
                 } else {
                     paginationResponse.pagination.nextPageIndexesSet = nil;

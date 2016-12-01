@@ -9,13 +9,16 @@
 #ifndef PGAPIList_h
 #define PGAPIList_h
 
-#define PG_Home_Recommends              @"/recommends/home"
+#define PG_Home_Recommends              @"/v2/recommends/home"
 #define PG_Explore_Recommends           @"/recommends/explore"
 #define PG_Store_Recommends             @"/recommends/store"
+#define PG_City_Guide_Cities            @"/city_guide/cities"
 
 #define PG_Home_Feeds                   @"/feeds/home"
 #define PG_Explore_Feeds                @"/feeds/explore"
 #define PG_Store_Feeds                  @"/feeds/store"
+
+#define PG_City_Guide_City_Articles     @"/city_guide"
 
 #define PG_Channel                      @"/channel/:channelId"
 #define PG_Channel_Category_Articles    @"/channel/:channelId/articles"
@@ -23,8 +26,10 @@
 #define PG_Search_Recommends            @"/search/hot_keywords"
 #define PG_Search                       @"/search"
 
+#define PG_Scenarios                    @"/scenario"
 #define PG_Scenario                     @"/scenario/:scenarioId"
 #define PG_Scenario_Feeds               @"/feeds/scenario/:scenarioId"
+#define PG_Scenario_Goods               @"/scenario/:scenarioId/products"
 
 #define PG_Good                         @"/goods/:goodId"
 #define PG_Goods_Collection             @"/goods_collection/:collectionId"

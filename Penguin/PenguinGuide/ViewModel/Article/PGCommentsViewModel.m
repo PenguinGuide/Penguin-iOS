@@ -29,6 +29,7 @@
         
         if (!self.response) {
             self.response = [[PGRKResponse alloc] init];
+            self.response.pagination.needPerformingBatchUpdate = YES;
             self.response.pagination.paginationKey = @"next";
             self.response.pagination.paginateSections = NO;
         }

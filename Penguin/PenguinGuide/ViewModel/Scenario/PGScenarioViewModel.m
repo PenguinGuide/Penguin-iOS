@@ -15,11 +15,21 @@
 #import "PGTopicBanner.h"
 #import "PGSingleGoodBanner.h"
 #import "PGImageBanner.h"
+#import "PGGood.h"
 
 @interface PGScenarioViewModel ()
 
 @property (nonatomic, strong, readwrite) PGScenario *scenario;
 @property (nonatomic, strong, readwrite) NSArray *feedsArray;
+@property (nonatomic, strong, readwrite) NSArray *goodsArray;
+
+@property (nonatomic, strong, readwrite) PGRKResponse *feedsResponse;
+@property (nonatomic, strong, readwrite) PGRKResponse *goodsResponse;
+@property (nonatomic, assign, readwrite) BOOL isPreloadingFeedsNextPage;
+@property (nonatomic, assign, readwrite) BOOL isPreloadingGoodsNextPage;
+@property (nonatomic, assign, readwrite) BOOL feedsEndFlag;
+@property (nonatomic, assign, readwrite) BOOL goodsEndFlag;
+
 @property (nonatomic, strong, readwrite) NSString *scenarioId;
 
 @end
@@ -39,12 +49,7 @@
         } completion:^(id response) {
             weakself.scenario = [response firstObject];
             if (weakself.scenario) {
-                PGScenarioCategory *category = weakself.scenario.categoriesArray.firstObject;
-                if (category) {
-                    [weakself requestFeeds:category];
-                } else {
-                    weakself.feedsArray = [NSArray new];
-                }
+                [weakself requestFeeds];
             }
         } failure:^(NSError *error) {
             weakself.error = error;
@@ -52,147 +57,74 @@
     }
 }
 
-- (void)requestFeeds:(PGScenarioCategory *)category
+- (void)requestFeeds
 {
-    self.cursor = nil;
+    if (self.isPreloadingFeedsNextPage || self.feedsEndFlag) {
+        return;
+    }
     
-    PGParams *params = [PGParams new];
-    params[ParamsPageCursor] = self.cursor;
-    params[ParamsPerPage] = @10;
-    params[@"category_id"] = category.categoryId;
-    
+    if (self.scenarioId && self.scenarioId.length > 0) {
+        self.isPreloadingFeedsNextPage = YES;
+        
+        if (!self.feedsResponse) {
+            self.feedsResponse = [[PGRKResponse alloc] init];
+            self.feedsResponse.pagination.needPerformingBatchUpdate = NO;
+            self.feedsResponse.pagination.paginationKey = @"cursor";
+        }
+        
+        PGWeakSelf(self);
+        
+        PGParams *params = [PGParams new];
+        params[ParamsPerPage] = @10;
+        params[ParamsPageCursor] = self.feedsResponse.pagination.cursor;
+        
+        [self.apiClient pg_makeGetRequest:^(PGRKRequestConfig *config) {
+            config.route = PG_Scenario_Feeds;
+            config.keyPath = @"items";
+            config.params = params;
+            config.pattern = @{@"scenarioId":weakself.scenarioId};
+            config.typeKey = @"type";
+            config.response = weakself.feedsResponse;
+            config.models = @[@{@"type":@"carousel", @"class":[PGCarouselBanner new]},
+                              @{@"type":@"article", @"class":[PGArticleBanner new]},
+                              @{@"type":@"flashbuy", @"class":[PGFlashbuyBanner new]},
+                              @{@"type":@"goods_collection", @"class":[PGGoodsCollectionBanner new]},
+                              @{@"type":@"topic", @"class":[PGTopicBanner new]},
+                              @{@"type":@"goods", @"class":[PGSingleGoodBanner new]}];
+        } paginationCompletion:^(PGRKResponse *response) {
+            weakself.feedsResponse = response;
+            weakself.feedsArray = response.dataArray;
+            weakself.feedsEndFlag = response.pagination.endFlag;
+            
+            weakself.isPreloadingFeedsNextPage = NO;
+        } failure:^(NSError *error) {
+            weakself.error = error;
+            
+            weakself.isPreloadingFeedsNextPage = NO;
+        }];
+    }
+}
+
+- (void)requestGoods
+{
+    if (!self.goodsResponse) {
+        self.goodsResponse = [[PGRKResponse alloc] init];
+        self.goodsResponse.pagination.needPerformingBatchUpdate = NO;
+        self.goodsResponse.pagination.paginationKey = @"next";
+    }
     PGWeakSelf(self);
     [self.apiClient pg_makeGetRequest:^(PGRKRequestConfig *config) {
-        config.route = PG_Scenario_Feeds;
+        config.route = PG_Scenario_Goods;
+        config.keyPath = @"items";
+        config.model = [PGGood new];
         config.pattern = @{@"scenarioId":weakself.scenarioId};
-        config.keyPath = @"items";
-        config.params = params;
-    } completion:^(id response) {
-        NSDictionary *responseDict = [response firstObject];
-        if (responseDict[@"items"] && [responseDict[@"items"] isKindOfClass:[NSArray class]]) {
-            if ([responseDict[@"items"] count] > 0 && responseDict[@"cursor"]) {
-                weakself.cursor = responseDict[@"cursor"];
-            }
-            NSMutableArray *models = [NSMutableArray new];
-            for (NSDictionary *dict in responseDict[@"items"]) {
-                if (dict[@"type"]) {
-                    if ([dict[@"type"] isEqualToString:@"carousel"]) {
-                        PGCarouselBanner *carouseBanner = [PGCarouselBanner modelFromDictionary:dict];
-                        if (carouseBanner) {
-                            [models addObject:carouseBanner];
-                        }
-                    }
-                    if ([dict[@"type"] isEqualToString:@"article"]) {
-                        PGArticleBanner *articleBanner = [PGArticleBanner modelFromDictionary:dict];
-                        if (articleBanner) {
-                            [models addObject:articleBanner];
-                        }
-                    }
-                    if ([dict[@"type"] isEqualToString:@"flashbuy"]) {
-                        PGFlashbuyBanner *flashbuyBanner = [PGFlashbuyBanner modelFromDictionary:dict];
-                        if (flashbuyBanner) {
-                            [models addObject:flashbuyBanner];
-                        }
-                    }
-                    if ([dict[@"type"] isEqualToString:@"goods_collection"]) {
-                        PGGoodsCollectionBanner *goodsCollectionBanner = [PGGoodsCollectionBanner modelFromDictionary:dict];
-                        if (goodsCollectionBanner) {
-                            [models addObject:goodsCollectionBanner];
-                        }
-                    }
-                    if ([dict[@"type"] isEqualToString:@"topic"]) {
-                        PGTopicBanner *topicBanner = [PGTopicBanner modelFromDictionary:dict];
-                        if (topicBanner) {
-                            [models addObject:topicBanner];
-                        }
-                    }
-                    if ([dict[@"type"] isEqualToString:@"good"]) {
-                        PGSingleGoodBanner *singleGoodBanner = [PGSingleGoodBanner modelFromDictionary:dict];
-                        if (singleGoodBanner) {
-                            [models addObject:singleGoodBanner];
-                        }
-                    }
-                }
-            }
-            weakself.feedsArray = [NSArray arrayWithArray:models];
-        }
+        config.response = weakself.goodsResponse;
+    } paginationCompletion:^(PGRKResponse *response) {
+        weakself.goodsResponse = response;
+        weakself.goodsArray = response.dataArray;
     } failure:^(NSError *error) {
         weakself.error = error;
     }];
-}
-
-- (void)requestFeeds:(NSString *)scenarioId categoryId:(NSString *)categoryId
-{
-    self.cursor = nil;
-    
-    PGParams *params = [PGParams new];
-    params[ParamsPageCursor] = self.cursor;
-    params[ParamsPerPage] = @10;
-    params[@"category_id"] = categoryId;
-    
-    PGWeakSelf(self);
-    [self.apiClient pg_makeGetRequest:^(PGRKRequestConfig *config) {
-        config.route = PG_Scenario_Feeds;
-        config.pattern = @{@"scenarioId":scenarioId};
-        config.keyPath = @"items";
-        config.params = params;
-    } completion:^(id response) {
-        NSDictionary *responseDict = [response firstObject];
-        if (responseDict[@"items"] && [responseDict[@"items"] isKindOfClass:[NSArray class]]) {
-            if ([responseDict[@"items"] count] > 0 && responseDict[@"cursor"]) {
-                weakself.cursor = responseDict[@"cursor"];
-            }
-            NSMutableArray *models = [NSMutableArray new];
-            for (NSDictionary *dict in responseDict[@"items"]) {
-                if (dict[@"type"]) {
-                    if ([dict[@"type"] isEqualToString:@"carousel"]) {
-                        PGCarouselBanner *carouseBanner = [PGCarouselBanner modelFromDictionary:dict];
-                        if (carouseBanner) {
-                            [models addObject:carouseBanner];
-                        }
-                    }
-                    if ([dict[@"type"] isEqualToString:@"article"]) {
-                        PGArticleBanner *articleBanner = [PGArticleBanner modelFromDictionary:dict];
-                        if (articleBanner) {
-                            [models addObject:articleBanner];
-                        }
-                    }
-                    if ([dict[@"type"] isEqualToString:@"flashbuy"]) {
-                        PGFlashbuyBanner *flashbuyBanner = [PGFlashbuyBanner modelFromDictionary:dict];
-                        if (flashbuyBanner) {
-                            [models addObject:flashbuyBanner];
-                        }
-                    }
-                    if ([dict[@"type"] isEqualToString:@"goods_collection"]) {
-                        PGGoodsCollectionBanner *goodsCollectionBanner = [PGGoodsCollectionBanner modelFromDictionary:dict];
-                        if (goodsCollectionBanner) {
-                            [models addObject:goodsCollectionBanner];
-                        }
-                    }
-                    if ([dict[@"type"] isEqualToString:@"topic"]) {
-                        PGTopicBanner *topicBanner = [PGTopicBanner modelFromDictionary:dict];
-                        if (topicBanner) {
-                            [models addObject:topicBanner];
-                        }
-                    }
-                    if ([dict[@"type"] isEqualToString:@"good"]) {
-                        PGSingleGoodBanner *singleGoodBanner = [PGSingleGoodBanner modelFromDictionary:dict];
-                        if (singleGoodBanner) {
-                            [models addObject:singleGoodBanner];
-                        }
-                    }
-                }
-            }
-            weakself.feedsArray = [NSArray arrayWithArray:models];
-        }
-    } failure:^(NSError *error) {
-        weakself.error = error;
-    }];
-}
-
-- (void)loadNextPage
-{
-    
 }
 
 @end

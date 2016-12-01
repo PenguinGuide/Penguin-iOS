@@ -7,7 +7,7 @@
 //
 
 #import "PGBaseCollectionView.h"
-#import "PGCategoryIcon.h"
+#import "PGScenarioBanner.h"
 
 // models
 #import "PGCarouselBanner.h"
@@ -38,8 +38,8 @@
 - (UIEdgeInsets)topEdgeInsets;
 
 - (void)channelDidSelect:(NSString *)link;
-- (void)scenarioDidSelect:(PGCategoryIcon *)scenario;
-- (void)categoryDidSelect:(PGCategoryIcon *)category;
+- (void)scenarioDidSelect:(PGScenarioBanner *)scenario;
+- (void)categoryDidSelect:(PGScenarioBanner *)category;
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath;
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView;

@@ -16,7 +16,9 @@
 @property (nonatomic, strong) NSArray *nextPageIndexesArray;
 @property (nonatomic, strong) NSIndexSet *nextPageIndexesSet;
 
+@property (nonatomic, assign) BOOL needPerformingBatchUpdate;
 @property (nonatomic, assign) BOOL paginateSections;
+@property (nonatomic, assign) NSInteger paginatedSection;
 @property (nonatomic, assign) BOOL endFlag;
 
 @end

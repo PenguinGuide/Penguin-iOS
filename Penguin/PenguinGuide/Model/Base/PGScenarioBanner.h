@@ -1,5 +1,5 @@
 //
-//  PGCategoryIcon.h
+//  PGScenarioBanner.h
 //  Penguin
 //
 //  Created by Jing Dai on 9/1/16.
@@ -8,11 +8,12 @@
 
 #import <PGRestKit/PGRestKit.h>
 
-@interface PGCategoryIcon : PGRKModel
+@interface PGScenarioBanner : PGRKModel
 
 @property (nonatomic, strong) NSString *image;
 @property (nonatomic, strong) NSString *title;
-@property (nonatomic, strong) NSString *categoryId;
+@property (nonatomic, strong) NSString *scenarioId;
 @property (nonatomic, strong) NSString *link;
+@property (nonatomic, strong) NSString *type;
 
 @end

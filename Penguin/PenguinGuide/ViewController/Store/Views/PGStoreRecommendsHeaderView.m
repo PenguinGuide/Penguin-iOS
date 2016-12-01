@@ -102,7 +102,7 @@
 {
     PGCategoryCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:CategoryCell forIndexPath:indexPath];
     
-    PGCategoryIcon *icon = self.categoriesArray[indexPath.item];
+    PGScenarioBanner *icon = self.categoriesArray[indexPath.item];
     [cell setCellWithCategoryIcon:icon];
     
     return cell;
@@ -123,7 +123,7 @@
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
     if (self.delegate && [self.delegate respondsToSelector:@selector(categoryDidSelect:)]) {
-        PGCategoryIcon *icon = self.categoriesArray[indexPath.item];
+        PGScenarioBanner *icon = self.categoriesArray[indexPath.item];
         [self.delegate categoryDidSelect:icon];
     }
 }
