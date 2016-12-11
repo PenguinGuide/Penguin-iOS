@@ -77,6 +77,8 @@
     self.window.rootViewController = navigationController;
     [self.window makeKeyAndVisible];
     
+    [NSThread sleepForTimeInterval:1.5f];
+    
     return YES;
 }
 
@@ -121,6 +123,12 @@
     token = [token stringByReplacingOccurrencesOfString:@"<" withString:@""];
     token = [token stringByReplacingOccurrencesOfString:@">" withString:@""];
     token = [token stringByReplacingOccurrencesOfString:@" " withString:@""];
+    
+    if (token && token.length > 0) {
+        [PGGlobal.cache putObject:@[token] forKey:@"apns_token" intoTable:@"Session"];
+    }
+    
+    [PGGlobal registerAPNSToken:token];
 }
 
 - (void)application:(UIApplication *)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error
@@ -130,12 +138,103 @@
 
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler
 {
+    if (userInfo[@"type"]) {
+        NSString *notificationType = [NSString stringWithFormat:@"%@", userInfo[@"type"]];
+        if ([notificationType isEqualToString:@"1"]) {
+            // h5
+        } else if ([notificationType isEqualToString:@"2"]) {
+            // good detail
+            if (userInfo[@"id"]) {
+                NSString *goodId = [NSString stringWithFormat:@"%@", userInfo[@"id"]];
+                if (goodId && goodId.length > 0) {
+                    [PGRouterManager routeToGoodDetailPage:goodId link:nil];
+                }
+            }
+        } else if ([notificationType isEqualToString:@"3"]) {
+            // article
+            if (userInfo[@"id"]) {
+                NSString *articleId = [NSString stringWithFormat:@"%@", userInfo[@"id"]];
+                if (articleId && articleId.length > 0) {
+                    [PGRouterManager routeToArticlePage:articleId link:nil];
+                }
+            }
+        } else if ([notificationType isEqualToString:@"4"]) {
+            // topic
+            if (userInfo[@"id"]) {
+                NSString *topicId = [NSString stringWithFormat:@"%@", userInfo[@"id"]];
+                if (topicId && topicId.length > 0) {
+                    [PGRouterManager routeToTopicPage:topicId link:nil];
+                }
+            }
+        } else if ([notificationType isEqualToString:@"5"]) {
+            // scenario
+            if (userInfo[@"id"]) {
+                NSString *scenarioId = [NSString stringWithFormat:@"%@", userInfo[@"id"]];
+                if (scenarioId && scenarioId.length > 0) {
+                    [PGRouterManager routeToScenarioPage:scenarioId link:nil fromStorePage:NO];
+                }
+            }
+        } else if ([notificationType isEqualToString:@"6"]) {
+            // system message
+        } else if ([notificationType isEqualToString:@"7"]) {
+            // version update
+        } else if ([notificationType isEqualToString:@"8"]) {
+            // rate app
+        }
+    }
     
+    completionHandler(UIBackgroundFetchResultNewData);
+    [UIApplication sharedApplication].applicationIconBadgeNumber = 0;
 }
 
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo
 {
+    if (userInfo[@"type"]) {
+        NSString *notificationType = [NSString stringWithFormat:@"%@", userInfo[@"type"]];
+        if ([notificationType isEqualToString:@"1"]) {
+            // h5
+        } else if ([notificationType isEqualToString:@"2"]) {
+            // good detail
+            if (userInfo[@"id"]) {
+                NSString *goodId = [NSString stringWithFormat:@"%@", userInfo[@"id"]];
+                if (goodId && goodId.length > 0) {
+                    [PGRouterManager routeToGoodDetailPage:goodId link:nil];
+                }
+            }
+        } else if ([notificationType isEqualToString:@"3"]) {
+            // article
+            if (userInfo[@"id"]) {
+                NSString *articleId = [NSString stringWithFormat:@"%@", userInfo[@"id"]];
+                if (articleId && articleId.length > 0) {
+                    [PGRouterManager routeToArticlePage:articleId link:nil];
+                }
+            }
+        } else if ([notificationType isEqualToString:@"4"]) {
+            // topic
+            if (userInfo[@"id"]) {
+                NSString *topicId = [NSString stringWithFormat:@"%@", userInfo[@"id"]];
+                if (topicId && topicId.length > 0) {
+                    [PGRouterManager routeToTopicPage:topicId link:nil];
+                }
+            }
+        } else if ([notificationType isEqualToString:@"5"]) {
+            // scenario
+            if (userInfo[@"id"]) {
+                NSString *scenarioId = [NSString stringWithFormat:@"%@", userInfo[@"id"]];
+                if (scenarioId && scenarioId.length > 0) {
+                    [PGRouterManager routeToScenarioPage:scenarioId link:nil fromStorePage:NO];
+                }
+            }
+        } else if ([notificationType isEqualToString:@"6"]) {
+            // system message
+        } else if ([notificationType isEqualToString:@"7"]) {
+            // version update
+        } else if ([notificationType isEqualToString:@"8"]) {
+            // rate app
+        }
+    }
     
+    [UIApplication sharedApplication].applicationIconBadgeNumber = 0;
 }
 
 - (void)applicationWillResignActive:(UIApplication *)application {
@@ -155,6 +254,18 @@
 - (void)applicationDidBecomeActive:(UIApplication *)application {
     // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
     [PGGlobal updateTimer];
+    
+    if ([PGGlobal.cache objectForKey:@"apns_token" fromTable:@"Session"]) {
+        NSArray *tokenObject = [PGGlobal.cache objectForKey:@"apns_token" fromTable:@"Session"];
+        if (tokenObject && [tokenObject isKindOfClass:[NSArray class]]) {
+            NSString *token = [tokenObject firstObject];
+            if (token && token.length > 0) {
+                [PGGlobal registerAPNSToken:token];
+            }
+        }
+    }
+    
+    [UIApplication sharedApplication].applicationIconBadgeNumber = 0;
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application {

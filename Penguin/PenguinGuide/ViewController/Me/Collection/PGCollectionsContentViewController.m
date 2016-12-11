@@ -60,7 +60,7 @@
     
     if (self.viewModel.articles.count == 0) {
         [self showLoading];
-        [self.viewModel requestArticles:self.collection.channelId];
+        //[self.viewModel requestArticles:self.collection.channelId];
     }
 }
 

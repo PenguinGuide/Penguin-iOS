@@ -102,7 +102,7 @@
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
     PGScenarioBanner *scenarioBanner = self.banners[indexPath.item];
-    [PGRouterManager routeToScenarioPage:scenarioBanner.scenarioId link:scenarioBanner.link];
+    [PGRouterManager routeToScenarioPage:scenarioBanner.scenarioId link:scenarioBanner.link fromStorePage:NO];
 }
 
 - (UILabel *)titleLabel

@@ -10,6 +10,8 @@
 
 @interface PGScenarioViewController : PGBaseViewController
 
+@property (nonatomic, assign) BOOL isFromStorePage;
+
 - (id)initWithScenarioId:(NSString *)scenarioId;
 
 @end

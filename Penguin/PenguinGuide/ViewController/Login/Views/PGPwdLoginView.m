@@ -63,6 +63,7 @@
     if (!_pwdTextField) {
         _pwdTextField = [[PGLoginTextField alloc] initWithFrame:CGRectMake(45, self.phoneTextField.pg_bottom+10, self.pg_width-90, 40)];
         _pwdTextField.placeholder = @"请输入密码";
+        _pwdTextField.secureTextEntry = YES;
     }
     return _pwdTextField;
 }

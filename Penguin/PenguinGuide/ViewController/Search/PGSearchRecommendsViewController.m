@@ -96,6 +96,11 @@
     [super viewDidDisappear:animated];
 }
 
+- (void)dealloc
+{
+    [self unobserve];
+}
+
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
@@ -246,6 +251,8 @@
 
 - (void)cancelButtonClicked
 {
+    PGGlobal.tempNavigationController = nil;
+    NSLog(@"temp navi set to nil");
     [self.navigationController dismissViewControllerAnimated:NO completion:nil];
 }
 
@@ -274,7 +281,7 @@
 - (UICollectionView *)searchCollectionView {
 	if(_searchCollectionView == nil) {
         UICollectionViewLeftAlignedLayout *layout = [UICollectionViewLeftAlignedLayout new];
-		_searchCollectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(0, 64, UISCREEN_WIDTH, UISCREEN_HEIGHT) collectionViewLayout:layout];
+		_searchCollectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(0, 64, UISCREEN_WIDTH, UISCREEN_HEIGHT-64) collectionViewLayout:layout];
         _searchCollectionView.backgroundColor = Theme.colorBackground;
         _searchCollectionView.dataSource = self;
         _searchCollectionView.delegate = self;

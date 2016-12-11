@@ -18,6 +18,8 @@
 
 #import "UINavigationBar+PGTransparentNaviBar.h"
 
+#import "PGQiniuUploadImageManager.h"
+
 @interface PGPersonalSettingsViewController () <UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, UIImagePickerControllerDelegate, UINavigationControllerDelegate>
 
 @property (nonatomic, strong) PGBaseCollectionView *settingsCollectionView;
@@ -264,20 +266,16 @@
 
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary<NSString *,id> *)info
 {
-    __block UIImage *image = [info objectForKey:UIImagePickerControllerOriginalImage];
+    __block UIImage *image = [info objectForKey:UIImagePickerControllerEditedImage];
     if (image) {
         [self showLoading];
         PGWeakSelf(self);
         // NOTE: upload image with base64 data http://blog.csdn.net/a645258072/article/details/51728806
-        [self.apiClient pg_uploadImage:^(PGRKRequestConfig *config) {
-            config.route = PG_Upload_Image;
-            config.keyPath = nil;
-            config.image = image;
-        } completion:^(id response) {
-            if (response[@"avatar_url"]) {
+        [[PGQiniuUploadImageManager sharedManager] uploadImage:image completion:^(NSString *url) {
+            if (url && url.length > 0) {
                 if (PGGlobal.userId) {
                     PGParams *params = [PGParams new];
-                    params[@"avatar_url"] = response[@"avatar_url"];
+                    params[@"avatar_url"] = url;
                     [weakself showLoading];
                     PGWeakSelf(self);
                     [weakself.apiClient pg_makePatchRequest:^(PGRKRequestConfig *config) {
@@ -287,6 +285,7 @@
                         config.pattern = @{@"userId":PGGlobal.userId};
                     } completion:^(id response) {
                         [weakself dismissLoading];
+                        [[NSNotificationCenter defaultCenter] postNotificationName:PG_NOTIFICATION_UPDATE_ME object:nil];
                         [weakself.navigationController popToRootViewControllerAnimated:YES];
                     } failure:^(NSError *error) {
                         [weakself showErrorMessage:error];
@@ -295,10 +294,9 @@
                 } else {
                     // TODO: user logout
                 }
+            } else {
+                [weakself showToast:@"上传失败"];
             }
-            [weakself dismissLoading];
-        } failure:^(NSError *error) {
-            [weakself showErrorMessage:error];
             [weakself dismissLoading];
         }];
     }

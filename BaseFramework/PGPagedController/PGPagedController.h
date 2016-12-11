@@ -21,6 +21,8 @@
 @property (nonatomic, assign) CGFloat margin;
 
 @property (nonatomic, assign) CGFloat segmentHeight;
+@property (nonatomic, assign) BOOL equalWidth;
+@property (nonatomic, assign) BOOL disableScrolling;
 
 - (void)reloadWithViewControllers:(NSArray *)viewControllers titles:(NSArray *)titles selectedViewClass:(Class)SelectedViewClass;
 

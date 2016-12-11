@@ -279,6 +279,8 @@
 
 - (void)cancelButtonClicked
 {
+    PGGlobal.tempNavigationController = nil;
+    NSLog(@"temp navi set to nil");
     [self.navigationController dismissViewControllerAnimated:NO completion:nil];
 }
 

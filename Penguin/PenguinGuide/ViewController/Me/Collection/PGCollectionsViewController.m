@@ -6,18 +6,18 @@
 //  Copyright © 2016 Xinglian. All rights reserved.
 //
 
-#define CollectionCell @"CollectionCell"
+#define ArticleBannerCell @"ArticleBannerCell"
 
 #import "PGCollectionsViewController.h"
 #import "PGCollectionsContentViewController.h"
-#import "PGCollectionViewModel.h"
-#import "PGCollectionCell.h"
+#import "PGCollectionContentViewModel.h"
+#import "PGArticleBannerCell.h"
 
 @interface PGCollectionsViewController () <UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout>
 
-@property (nonatomic, strong) PGBaseCollectionView *collectionsCollectionView;
+@property (nonatomic, strong) PGBaseCollectionView *articlesCollectionView;
 
-@property (nonatomic, strong) PGCollectionViewModel *viewModel;
+@property (nonatomic, strong) PGCollectionContentViewModel *viewModel;
 
 @end
 
@@ -29,19 +29,25 @@
     
     [self setNavigationTitle:@"我的收藏"];
     
-    [self.view addSubview:self.collectionsCollectionView];
+    [self.view addSubview:self.articlesCollectionView];
     
-    self.viewModel = [[PGCollectionViewModel alloc] initWithAPIClient:self.apiClient];
+    self.viewModel = [[PGCollectionContentViewModel alloc] initWithAPIClient:self.apiClient];
     
     PGWeakSelf(self);
-    [self observe:self.viewModel keyPath:@"collections" block:^(id changedObject) {
-        NSArray *collections = changedObject;
-        if (collections && [collections isKindOfClass:[NSArray class]]) {
-            [weakself.collectionsCollectionView reloadData];
+    [self observe:self.viewModel keyPath:@"articles" block:^(id changedObject) {
+        NSArray *articles = changedObject;
+        if (articles && [articles isKindOfClass:[NSArray class]]) {
+            [UIView setAnimationsEnabled:NO];
+            [weakself.articlesCollectionView reloadData];
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.25 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                [UIView setAnimationsEnabled:YES];
+            });
         }
         [weakself dismissLoading];
+        [weakself.articlesCollectionView endBottomRefreshing];
     }];
     [self observeError:self.viewModel];
+    [self observeCollectionView:self.articlesCollectionView endOfFeeds:self.viewModel];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -49,12 +55,19 @@
     [super viewWillAppear:animated];
     
     [self.navigationController setNavigationBarHidden:NO animated:NO];
+}
+
+- (void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
     
-    if (self.viewModel.collections.count == 0) {
+    if (self.viewModel.articles.count == 0) {
         [self showLoading];
         [self.viewModel requestData];
     }
 }
+
+#pragma mark - <UICollectionViewDataSource>
 
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView
 {
@@ -63,23 +76,33 @@
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
 {
-    return self.viewModel.collections.count;
+    return self.viewModel.articles.count;
 }
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    PGCollectionCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:CollectionCell forIndexPath:indexPath];
+    PGArticleBannerCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:ArticleBannerCell forIndexPath:indexPath];
     
-    PGCollection *collection = self.viewModel.collections[indexPath.item];
-    
-    [cell setCellWithIcon:collection.icon desc:collection.name count:collection.count];
+    PGArticleBanner *articleBanner = self.viewModel.articles[indexPath.item];
+    [cell setCellWithArticle:articleBanner allowGesture:YES];
     
     return cell;
 }
 
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    return CGSizeMake(UISCREEN_WIDTH, 50);
+    return [PGArticleBannerCell cellSize];
+}
+
+- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout referenceSizeForFooterInSection:(NSInteger)section
+{
+    if (!self.viewModel) {
+        return CGSizeZero;
+    }
+    if (self.viewModel.endFlag) {
+        return [PGBaseCollectionViewFooterView footerViewSize];
+    }
+    return CGSizeZero;
 }
 
 - (CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout minimumLineSpacingForSectionAtIndex:(NSInteger)section
@@ -92,23 +115,42 @@
     return 0.f;
 }
 
-- (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
+- (UIEdgeInsets)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout insetForSectionAtIndex:(NSInteger)section
 {
-    PGCollection *collection = self.viewModel.collections[indexPath.item];
-    PGCollectionsContentViewController *collectionsContentVC = [[PGCollectionsContentViewController alloc] initWithCollection:collection];
-    [self.navigationController pushViewController:collectionsContentVC animated:YES];
+    return UIEdgeInsetsZero;
 }
 
-- (PGBaseCollectionView *)collectionsCollectionView
+- (UICollectionReusableView *)collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath
 {
-    if (!_collectionsCollectionView) {
-        _collectionsCollectionView = [[PGBaseCollectionView alloc] initWithFrame:self.view.bounds collectionViewLayout:[UICollectionViewFlowLayout new]];
-        _collectionsCollectionView.dataSource = self;
-        _collectionsCollectionView.delegate = self;
-        
-        [_collectionsCollectionView registerClass:[PGCollectionCell class] forCellWithReuseIdentifier:CollectionCell];
+    if (kind == UICollectionElementKindSectionFooter) {
+        PGBaseCollectionViewFooterView *footerView = [collectionView dequeueReusableSupplementaryViewOfKind:kind withReuseIdentifier:BaseCollectionViewFooterView forIndexPath:indexPath];
+        return footerView;
     }
-    return _collectionsCollectionView;
+    
+    return nil;
+}
+
+- (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    PGArticleBanner *articleBanner = self.viewModel.articles[indexPath.item];
+    [[PGRouter sharedInstance] openURL:articleBanner.link];
+}
+
+- (PGBaseCollectionView *)articlesCollectionView
+{
+    if (!_articlesCollectionView) {
+        _articlesCollectionView = [[PGBaseCollectionView alloc] initWithFrame:self.view.bounds collectionViewLayout:[UICollectionViewFlowLayout new]];
+        _articlesCollectionView.dataSource = self;
+        _articlesCollectionView.delegate = self;
+        
+        [_articlesCollectionView registerClass:[PGArticleBannerCell class] forCellWithReuseIdentifier:ArticleBannerCell];
+        
+        PGWeakSelf(self);
+        [_articlesCollectionView enableInfiniteScrolling:^{
+            [weakself.viewModel requestData];
+        }];
+    }
+    return _articlesCollectionView;
 }
 
 - (void)didReceiveMemoryWarning {

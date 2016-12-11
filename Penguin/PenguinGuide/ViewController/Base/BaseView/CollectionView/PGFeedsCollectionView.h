@@ -26,18 +26,17 @@
 
 @protocol PGFeedsCollectionViewDelegate <NSObject>
 
-- (NSArray *)recommendsArray;
+@optional
+
 - (NSArray *)feedsArray;
+- (NSArray *)recommendsArray;
 - (CGSize)feedsHeaderSize;
 - (CGSize)feedsFooterSize;
 - (NSString *)tabType;
 
-@optional
-
 - (NSArray *)iconsArray;
 - (UIEdgeInsets)topEdgeInsets;
 
-- (void)channelDidSelect:(NSString *)link;
 - (void)scenarioDidSelect:(PGScenarioBanner *)scenario;
 - (void)categoryDidSelect:(PGScenarioBanner *)category;
 
@@ -50,5 +49,7 @@
 @interface PGFeedsCollectionView : PGBaseCollectionView
 
 @property (nonatomic, weak) id<PGFeedsCollectionViewDelegate> feedsDelegate;
+
+@property (nonatomic, assign) BOOL allowGesture;
 
 @end

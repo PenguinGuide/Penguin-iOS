@@ -40,8 +40,6 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     
-    self.automaticallyAdjustsScrollViewInsets = NO;
-    
     [self.view addSubview:self.feedsCollectionView];
     
     self.viewModel = [[PGExploreViewModel alloc] initWithAPIClient:self.apiClient];
@@ -103,6 +101,8 @@
             statusBar.backgroundColor = [UIColor clearColor];
         }
     }
+    
+    self.feedsCollectionView.contentInset = UIEdgeInsetsZero;
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -268,8 +268,7 @@
 {
     return 0.f;
 }
-
-- (UICollectionReusableView *)collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath
+ - (UICollectionReusableView *)collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath
 {
     if (kind == UICollectionElementKindSectionHeader) {
         if (indexPath.section == 0) {
@@ -341,6 +340,7 @@
 - (PGBaseCollectionView *)feedsCollectionView {
     if(_feedsCollectionView == nil) {
         _feedsCollectionView = [[PGBaseCollectionView alloc] initWithFrame:CGRectMake(0, 0, UISCREEN_WIDTH, UISCREEN_HEIGHT-50) collectionViewLayout:[UICollectionViewFlowLayout new]];
+        _feedsCollectionView.contentInset = UIEdgeInsetsMake(-20, 0, 0, 0);
         _feedsCollectionView.dataSource = self;
         _feedsCollectionView.delegate = self;
         

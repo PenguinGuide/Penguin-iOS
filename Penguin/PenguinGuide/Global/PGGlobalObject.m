@@ -150,6 +150,24 @@
     [[NSNotificationCenter defaultCenter] postNotificationName:PG_NOTIFICATION_SMS_CODE_COUNT_DOWN object:@(self.smsCodeCountDown)];
 }
 
+- (void)registerAPNSToken:(NSString *)token
+{
+    if (token && token.length > 0) {
+        PGParams *params = [PGParams new];
+        params[@"device_token"] = token;
+        
+        [self.apiClient pg_makePostRequest:^(PGRKRequestConfig *config) {
+            config.route = PG_Register_APNS_Token;
+            config.params = params;
+            config.keyPath = nil;
+        } completion:^(id response) {
+            NSLog(@"APNS register successfully");
+        } failure:^(NSError *error) {
+            NSLog(@"APNS register failed");
+        }];
+    }
+}
+
 #pragma mark - <Lazy Init>
 
 - (PGCache *)cache
@@ -164,7 +182,12 @@
 {
     if (!_apiClient) {
         _apiClient = [PGAPIClient client];
-        [_apiClient updateAccessToken:[NSString stringWithFormat:@"Bearer %@", self.accessToken]];
+        if (self.accessToken) {
+            [_apiClient updateAccessToken:[NSString stringWithFormat:@"Bearer %@", self.accessToken]];
+        } else {
+            [_apiClient updateAccessToken:nil];
+        }
+        
     }
     return _apiClient;
 }

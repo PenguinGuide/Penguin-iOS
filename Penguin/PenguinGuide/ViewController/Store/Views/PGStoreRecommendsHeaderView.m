@@ -122,9 +122,9 @@
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (self.delegate && [self.delegate respondsToSelector:@selector(categoryDidSelect:)]) {
-        PGScenarioBanner *icon = self.categoriesArray[indexPath.item];
-        [self.delegate categoryDidSelect:icon];
+    if (self.delegate && [self.delegate respondsToSelector:@selector(scenarioDidSelect:)]) {
+        PGScenarioBanner *scenario = self.categoriesArray[indexPath.item];
+        [self.delegate scenarioDidSelect:scenario];
     }
 }
 

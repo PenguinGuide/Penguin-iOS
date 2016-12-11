@@ -13,6 +13,6 @@
 
 @property (nonatomic, strong, readonly) NSArray *articles;
 
-- (void)requestArticles:(NSString *)channelId;
+- (void)requestData;
 
 @end

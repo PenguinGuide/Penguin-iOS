@@ -59,7 +59,7 @@
 #define PG_Message_Read                 @"/message/reset_status"
 #define PG_Message_Counts               @"/message/count_unread_group_by_type"
 #define PG_Channel_Collections          @"/article_store/count_group_by_channel"
-#define PG_Channel_Collection_Articles  @"/article_store/by_channel"
+#define PG_Collection_Articles          @"/article_store"
 #define PG_History                      @"/foot_print/:userId"
 
 #define PG_Tag                          @"/tag/:tagId"
@@ -73,5 +73,8 @@
 #define PG_Reset_Pwd                    @"/reset_password"
 
 #define PG_Upload_Image                 @"/upload_avatar"
+
+#define PG_Register_APNS_Token          @"/push/device_token"
+#define PG_Qiniu_Token                  @"/qiniu_uptoken/avatar"
 
 #endif /* PGAPIList_h */

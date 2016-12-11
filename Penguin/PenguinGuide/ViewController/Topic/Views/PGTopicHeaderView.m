@@ -29,10 +29,6 @@
 {
     self.backgroundColor = [UIColor whiteColor];
     
-    UIView *verticalLine = [[UIView alloc] initWithFrame:CGRectMake(13, 15, 3, 20)];
-    verticalLine.backgroundColor = Theme.colorExtraHighlight;
-    
-    [self addSubview:verticalLine];
     [self addSubview:self.titleLabel];
 }
 
@@ -44,7 +40,7 @@
 - (UILabel *)titleLabel {
     if(_titleLabel == nil) {
         _titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(22, 15, UISCREEN_WIDTH-25, 20)];
-        _titleLabel.font = Theme.fontMediumBold;
+        _titleLabel.font = Theme.fontLargeBold;
         _titleLabel.textColor = Theme.colorText;
     }
     return _titleLabel;

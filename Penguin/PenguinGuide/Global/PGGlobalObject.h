@@ -19,6 +19,7 @@
 + (PGGlobalObject *)sharedInstance;
 
 @property (nonatomic, strong) PGBaseNavigationController *rootNavigationController;
+@property (nonatomic, strong) PGBaseNavigationController *tempNavigationController;
 
 @property (nonatomic, strong, readonly) PGAPIClient *apiClient;
 @property (nonatomic, strong, readonly) PGCache *cache;
@@ -31,6 +32,7 @@
 - (void)synchronizeUserId:(NSString *)userId;
 - (void)synchronizeToken:(NSString *)accessToken;
 - (void)synchronizeHostUrl:(NSString *)hostUrl;
+- (void)registerAPNSToken:(NSString *)token;
 - (void)updateTimer;
 
 - (void)resetSMSCodeTimer;

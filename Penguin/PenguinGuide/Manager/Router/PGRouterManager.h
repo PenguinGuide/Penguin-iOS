@@ -15,11 +15,10 @@
 
 + (void)routeToLoginPage;
 
-+ (void)routeToTopicPage;
-
 + (void)routeToHomePage;
 
-+ (void)routeToScenarioPage:(NSString *)scenarioId link:(NSString *)link;
++ (void)routeToTopicPage:(NSString *)topicId link:(NSString *)link;
++ (void)routeToScenarioPage:(NSString *)scenarioId link:(NSString *)link fromStorePage:(BOOL)fromStorePage;
 + (void)routeToArticlePage:(NSString *)articleId link:(NSString *)link;
 + (void)routeToGoodDetailPage:(NSString *)goodId link:(NSString *)link;
 + (void)routeToAllScenariosPage:(NSString *)scenarioType;

@@ -124,9 +124,9 @@ static NSString *const ChannelCell = @"ChannelCell";
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (self.delegate && [self.delegate respondsToSelector:@selector(channelDidSelect:)]) {
-        PGScenarioBanner *icon = self.channelsArray[indexPath.item];
-        [self.delegate channelDidSelect:icon.link];
+    if (self.delegate && [self.delegate respondsToSelector:@selector(scenarioDidSelect:)]) {
+        PGScenarioBanner *scenario = self.channelsArray[indexPath.item];
+        [self.delegate scenarioDidSelect:scenario];
     }
 }
 

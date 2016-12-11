@@ -66,6 +66,14 @@
 
 - (void)loginButtonClicked:(UIView *)view
 {
+    if (!self.loginView.phoneTextField.text || self.loginView.phoneTextField.text.length == 0) {
+        [self showToast:@"请输入手机号"];
+        return;
+    }
+    if (!self.loginView.smsCodeTextField.text || self.loginView.smsCodeTextField.text.length == 0) {
+        [self showToast:@"请输入验证码"];
+        return;
+    }
     if ([view isKindOfClass:[PGLoginView class]]) {
         PGParams *params = [PGParams new];
         params[@"mobile"] = self.loginView.phoneTextField.text;
@@ -105,6 +113,10 @@
 
 - (void)smsCodeButtonClicked:(UIView *)view
 {
+    if (!self.loginView.phoneTextField.text || self.loginView.phoneTextField.text.length == 0) {
+        [self showToast:@"请输入手机号"];
+        return;
+    }
     if ([view isKindOfClass:[PGLoginView class]]) {
         PGParams *params = [PGParams new];
         params[@"mobile"] = self.loginView.phoneTextField.text;

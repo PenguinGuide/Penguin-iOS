@@ -51,7 +51,7 @@ static NSString *const AppKey = @"23465992";
     id <AlibcTradePage> goodDetailPage = [AlibcTradePageFactory itemDetailPage:goodId];
     
     if (PGGlobal.rootNavigationController) {
-        NSInteger ret = [[AlibcTradeSDK sharedInstance].tradeService show:PGGlobal.rootNavigationController
+        NSInteger ret = [[AlibcTradeSDK sharedInstance].tradeService show:PGGlobal.tempNavigationController?PGGlobal.tempNavigationController:PGGlobal.rootNavigationController
                                                                      page:goodDetailPage
                                                                showParams:showParams
                                                               taoKeParams:nil

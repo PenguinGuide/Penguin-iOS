@@ -14,14 +14,31 @@
 - (void)setWithImageURL:(NSString *)imageURL placeholder:(UIImage *)placeholder completion:(void (^)(UIImage *))completion
 {
     if (imageURL && imageURL.length > 0) {
-        CGRect screenBounds = [[UIScreen mainScreen] bounds];
-        if (screenBounds.size.width == 375.f) {
-            imageURL = [imageURL stringByAppendingString:@"?imageView2/2/w/1000/h/1000"];
-        } else if (screenBounds.size.width > 375.f) {
-            imageURL = [imageURL stringByAppendingString:@"?imageView2/2/w/1500/h/1500"];
+        CGSize imageSize = self.frame.size;
+        NSString *cropQuery = @"";
+        
+        if ([self isSmallScreen]) {
+            if (CGSizeEqualToSize(imageSize, CGSizeZero)) {
+                cropQuery = @"?imageView2/0/w/750/h/750";
+            } else {
+                cropQuery = [NSString stringWithFormat:@"?imageView2/0/w/%@/h/%@", @((int)imageSize.width), @((int)imageSize.height)];
+            }
+        } else if ([self isMediumScreen]) {
+            if (CGSizeEqualToSize(imageSize, CGSizeZero)) {
+                cropQuery = @"?imageView2/0/w/1000/h/1000";
+            } else {
+                cropQuery = [NSString stringWithFormat:@"?imageView2/0/w/%@/h/%@", @((int)(imageSize.width*2.5)), @((int)(imageSize.width*2.5))];
+            }
         } else {
-            imageURL = [imageURL stringByAppendingString:@"?imageView2/2/w/750/h/750"];
+            if (CGSizeEqualToSize(imageSize, CGSizeZero)) {
+                cropQuery = @"?imageView2/0/w/1500/h/1500";
+            } else {
+                cropQuery = [NSString stringWithFormat:@"?imageView2/0/w/%@/h/%@", @((int)(imageSize.width*3)), @((int)(imageSize.height*3))];
+            }
         }
+        
+        imageURL = [imageURL stringByAppendingString:cropQuery];
+        
         [self sd_setImageWithURL:[NSURL URLWithString:imageURL]
                 placeholderImage:placeholder
                        completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
@@ -29,6 +46,7 @@
                                if (!error) {
                                    completion(image);
                                } else {
+                                   NSLog(@"image: [%@] download failed, error: [%@]", imageURL.absoluteString, error);
                                    completion(nil);
                                }
                            }
@@ -71,6 +89,39 @@
     effectView.alpha = alpha;
     
     [self addSubview:effectView];
+}
+
+- (BOOL)isSmallScreen
+{
+    // 3.5 & 4.0 inches
+    CGRect screenBounds = [[UIScreen mainScreen] bounds];
+    if (screenBounds.size.width < 375.f) {
+        return YES;
+    } else {
+        return NO;
+    }
+}
+
+- (BOOL)isMediumScreen
+{
+    // 4.7 inches
+    CGRect screenBounds = [[UIScreen mainScreen] bounds];
+    if (screenBounds.size.width == 375.f) {
+        return YES;
+    } else {
+        return NO;
+    }
+}
+
+- (BOOL)isLargeScreen
+{
+    // 5.5 inces & iPad
+    CGRect screenBounds = [[UIScreen mainScreen] bounds];
+    if (screenBounds.size.width > 375.f) {
+        return YES;
+    } else {
+        return NO;
+    }
 }
 
 @end

@@ -12,7 +12,7 @@
 
 @protocol PGStoreRecommendsHeaderViewDelegate <NSObject>
 
-- (void)categoryDidSelect:(PGScenarioBanner *)categoryIcon;
+- (void)scenarioDidSelect:(PGScenarioBanner *)scenario;
 
 @end
 

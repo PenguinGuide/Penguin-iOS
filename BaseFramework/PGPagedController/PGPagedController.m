@@ -55,6 +55,7 @@
     self.segmentedControl.textFont = self.textFont;
     self.segmentedControl.padding = self.padding;
     self.segmentedControl.margin = self.margin;
+    self.segmentedControl.equalWidth = self.equalWidth;
 }
 
 - (void)viewDidLayoutSubviews
@@ -122,7 +123,7 @@
     }
     
     UIViewController *vc = self.viewControllers[indexPath.item];
-    vc.view.frame = CGRectMake(0, 0, collectionView.frame.size.width, collectionView.frame.size.height);
+    vc.view.frame = CGRectMake(0, 0, collectionView.frame.size.width, self.view.frame.size.height-self.segmentHeight);
     vc.view.tag = PagerTag;
     [cell.contentView addSubview:vc.view];
     
@@ -172,6 +173,9 @@
         _pagerCollectionView.delegate = self;
         _pagerCollectionView.showsVerticalScrollIndicator = NO;
         _pagerCollectionView.showsHorizontalScrollIndicator = NO;
+        if (self.disableScrolling) {
+            _pagerCollectionView.scrollEnabled = NO;
+        }
         
         [_pagerCollectionView registerClass:[UICollectionViewCell class] forCellWithReuseIdentifier:PagerCell];
     }

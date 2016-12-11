@@ -23,6 +23,8 @@
 @property (nonatomic, assign) CGFloat padding;
 @property (nonatomic, assign) CGFloat margin;
 
+@property (nonatomic, assign) BOOL equalWidth;
+
 - (void)reloadWithTitles:(NSArray *)titles Class:(Class)SelectedViewClass;
 - (void)scrollToPage:(NSInteger)page;
 

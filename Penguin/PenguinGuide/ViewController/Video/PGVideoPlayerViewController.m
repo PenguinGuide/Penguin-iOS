@@ -63,7 +63,7 @@ typedef NS_ENUM(NSInteger, GestureDirection) {
 - (id)initWithVideoURL:(NSString *)url
 {
     if (self = [super init]) {
-        self.videoURL = url;
+        self.videoURL = @"http://cdn-images-1.penguinguide.cn/王宝和螃蟹做法%20有码%201080p%20zoe.mp4";
     }
     
     return self;
@@ -168,6 +168,8 @@ typedef NS_ENUM(NSInteger, GestureDirection) {
     } else if ([keyPath isEqualToString:@"loadedTimeRanges"]) {
         [self handlePlayerItemLoadedTimeRangesChanged];
     }
+    
+    NSLog(@"changed: %@", change);
 }
 
 - (void)handlePlayerItemStatusChanged:(NSDictionary<NSKeyValueChangeKey,id> *)change
@@ -272,7 +274,7 @@ typedef NS_ENUM(NSInteger, GestureDirection) {
 
 - (void)pausePlaying
 {
-    [self showLoading];
+    //[self showLoading];
     [self.player pause];
     [self.playButton setTag:0];
     [self.playButton setImage:[UIImage imageNamed:@"pg_video_play"] forState:UIControlStateNormal];
@@ -287,18 +289,18 @@ typedef NS_ENUM(NSInteger, GestureDirection) {
     PGWeakSelf(self);
     [self.playerItem seekToTime:CMTimeMakeWithSeconds(self.playerSlider.value*CMTimeGetSeconds(self.playerItem.duration), self.playerItem.duration.timescale)
               completionHandler:^(BOOL finished) {
-                  [weakself showLoading];
+                  //[weakself showLoading];
               }];
 }
 
 #pragma mark - <Gesture>
 
-- (void)playerPanGestureRecognized:(UIPanGestureRecognizer *)gesutre
+- (void)playerPanGestureRecognized:(UIPanGestureRecognizer *)gesture
 {
     if (self.player.status == AVPlayerStatusReadyToPlay) {
-        UIGestureRecognizerState state = gesutre.state;
+        UIGestureRecognizerState state = gesture.state;
         if (state == UIGestureRecognizerStateBegan) {
-            CGPoint velocity = [gesutre velocityInView:self.view];
+            CGPoint velocity = [gesture velocityInView:self.view];
             self.gestureIsProcessing = YES;
             self.currentPlayerSliderValue = self.playerSlider.value;
             self.currentVolumeSliderValue = self.volumeSlider.value;
@@ -317,7 +319,7 @@ typedef NS_ENUM(NSInteger, GestureDirection) {
                 }
             }
         } else if (state == UIGestureRecognizerStateChanged) {
-            CGPoint translation = [gesutre translationInView:self.view];
+            CGPoint translation = [gesture translationInView:self.view];
             if (self.currentGestureDirection == GestureDirectionUp || self.currentGestureDirection == GestureDirectionDown) {
                 if (translation.y <= 0) {
                     // increase volume

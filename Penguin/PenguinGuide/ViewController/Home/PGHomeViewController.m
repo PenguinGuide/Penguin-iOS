@@ -229,9 +229,9 @@
     return @"home";
 }
 
-- (void)channelDidSelect:(NSString *)link
+- (void)scenarioDidSelect:(PGScenarioBanner *)scenario
 {
-    [[PGRouter sharedInstance] openURL:link];
+    [PGRouterManager routeToScenarioPage:scenario.scenarioId link:scenario.link fromStorePage:NO];
 }
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath

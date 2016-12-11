@@ -16,24 +16,43 @@
 
 @implementation PGCollectionContentViewModel
 
-- (void)requestArticles:(NSString *)channelId
+- (void)requestData
 {
-    if (channelId && channelId.length > 0) {
-        PGParams *params = [PGParams new];
-        params[@"channel_id"] = channelId;
-        
-        PGWeakSelf(self);
-        [self.apiClient pg_makeGetRequest:^(PGRKRequestConfig *config) {
-            config.route = PG_Channel_Collection_Articles;
-            config.params = params;
-            config.keyPath = nil;
-            config.model = [PGArticleBanner new];
-        } completion:^(id response) {
-            weakself.articles = response;
-        } failure:^(NSError *error) {
-            weakself.error = error;
-        }];
+    if (self.isPreloadingNextPage || self.endFlag) {
+        return;
     }
+    
+    self.isPreloadingNextPage = YES;
+    
+    if (!self.response) {
+        self.response = [[PGRKResponse alloc] init];
+        self.response.pagination.needPerformingBatchUpdate = NO;
+        self.response.pagination.paginationKey = @"cursor";
+    }
+    
+    PGParams *params = [PGParams new];
+    params[ParamsPerPage] = @10;
+    params[ParamsPageCursor] = self.response.pagination.cursor;
+    
+    PGWeakSelf(self);
+    
+    [self.apiClient pg_makeGetRequest:^(PGRKRequestConfig *config) {
+        config.route = PG_Collection_Articles;
+        config.keyPath = @"items";
+        config.params = params;
+        config.model = [PGArticleBanner new];
+        config.response = weakself.response;
+    } paginationCompletion:^(PGRKResponse *response) {
+        weakself.articles = response.dataArray;
+        weakself.response = response;
+        weakself.endFlag = weakself.response.pagination.endFlag;
+        
+        weakself.isPreloadingNextPage = NO;
+    } failure:^(NSError *error) {
+        weakself.error = error;
+        
+        weakself.isPreloadingNextPage = NO;
+    }];
 }
 
 @end

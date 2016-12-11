@@ -149,6 +149,12 @@
     return nil;
 }
 
+- (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    PGScenarioBanner *scenario = self.viewModel.scenariosArray[indexPath.item];
+    [PGRouterManager routeToScenarioPage:scenario.scenarioId link:scenario.link fromStorePage:NO];
+}
+
 #pragma mark - <Lazy Init>
 
 - (PGBaseCollectionView *)scenariosCollectionView

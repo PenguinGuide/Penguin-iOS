@@ -14,7 +14,7 @@
 {
     return @{
              @"avatar" : @"avatar_url",
-             @"content" : @[@"comment_content", @"comment"],
+             @"content" : @[@"comment_content", @"comment", @"body"],
              @"replyContent": @"reply_content",
              @"replyId": @"reply_id",
              @"nickname" : @"nick_name"
@@ -23,7 +23,7 @@
 
 + (NSValueTransformer *)contentJSONTransformer
 {
-    return [self stringTransformer:@[@"comment_content", @"comment"]];
+    return [self stringTransformer:@[@"comment_content", @"comment", @"body"]];
 }
 
 + (NSValueTransformer *)replyIdJSONTransformer

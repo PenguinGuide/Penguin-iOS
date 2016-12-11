@@ -41,6 +41,14 @@
 
 - (void)loginButtonClicked:(UIView *)view
 {
+    if (!self.pwdLoginView.phoneTextField.text || self.pwdLoginView.phoneTextField.text.length == 0) {
+        [self showToast:@"请输入手机号"];
+        return;
+    }
+    if (!self.pwdLoginView.pwdTextField.text || self.pwdLoginView.pwdTextField.text.length == 0) {
+        [self showToast:@"请输入密码"];
+        return;
+    }
     if ([view isKindOfClass:[PGPwdLoginView class]]) {
         PGParams *params = [PGParams new];
         params[@"mobile"] = self.pwdLoginView.phoneTextField.text;

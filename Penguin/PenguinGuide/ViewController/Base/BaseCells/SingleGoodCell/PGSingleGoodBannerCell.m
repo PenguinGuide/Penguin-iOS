@@ -38,21 +38,28 @@
     [self.contentView addSubview:self.descLabel];
     [self.contentView addSubview:self.goodImageView];
     
-    UIImageView *maskImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, self.pg_width, self.pg_height)];
-    maskImageView.image = [[UIImage imageNamed:@"pg_white_corner_mask"] resizableImageWithCapInsets:UIEdgeInsetsMake(4, 4, 4, 4) resizingMode:UIImageResizingModeStretch];
-    [self.contentView addSubview:maskImageView];
+    UIImageView *maskImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, self.goodImageView.pg_width, self.goodImageView.pg_height)];
+    maskImageView.image = [[UIImage imageNamed:@"pg_bg_corner_mask"] resizableImageWithCapInsets:UIEdgeInsetsMake(4, 4, 4, 4) resizingMode:UIImageResizingModeStretch];
+    [self.goodImageView addSubview:maskImageView];
 }
 
 - (void)setCellWithSingleGood:(PGSingleGoodBanner *)singleGood
 {
-    NSMutableAttributedString *attrS = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"￥%@ %@", singleGood.discountPrice, singleGood.originalPrice]];
-    [attrS addAttribute:NSForegroundColorAttributeName value:Theme.colorHighlight range:NSMakeRange(0, singleGood.discountPrice.length+1)];
-    [attrS addAttribute:NSFontAttributeName value:Theme.fontMediumBold range:NSMakeRange(0, singleGood.discountPrice.length+1)];
-    [attrS addAttribute:NSStrikethroughStyleAttributeName value:[NSNumber numberWithInt:0] range:NSMakeRange(0, singleGood.discountPrice.length+1)];
-    [attrS addAttribute:NSForegroundColorAttributeName value:Theme.colorLightText range:NSMakeRange(singleGood.discountPrice.length+2, singleGood.originalPrice.length)];
-    [attrS addAttribute:NSFontAttributeName value:Theme.fontSmallBold range:NSMakeRange(singleGood.discountPrice.length+2, singleGood.originalPrice.length)];
-    [attrS addAttribute:NSStrikethroughStyleAttributeName value:[NSNumber numberWithInt:1] range:NSMakeRange(singleGood.discountPrice.length+2, singleGood.originalPrice.length)];
-    self.priceLabel.attributedText = attrS;
+    if (singleGood.originalPrice && ![singleGood.originalPrice isEqualToString:@"0"]) {
+        NSMutableAttributedString *attrS = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"￥%@ %@", singleGood.discountPrice, singleGood.originalPrice]];
+        [attrS addAttribute:NSForegroundColorAttributeName value:Theme.colorHighlight range:NSMakeRange(0, singleGood.discountPrice.length+1)];
+        [attrS addAttribute:NSFontAttributeName value:Theme.fontMediumBold range:NSMakeRange(0, singleGood.discountPrice.length+1)];
+        [attrS addAttribute:NSStrikethroughStyleAttributeName value:[NSNumber numberWithInt:0] range:NSMakeRange(0, singleGood.discountPrice.length+1)];
+        [attrS addAttribute:NSForegroundColorAttributeName value:Theme.colorLightText range:NSMakeRange(singleGood.discountPrice.length+2, singleGood.originalPrice.length)];
+        [attrS addAttribute:NSFontAttributeName value:Theme.fontSmallBold range:NSMakeRange(singleGood.discountPrice.length+2, singleGood.originalPrice.length)];
+        [attrS addAttribute:NSStrikethroughStyleAttributeName value:[NSNumber numberWithInt:1] range:NSMakeRange(singleGood.discountPrice.length+2, singleGood.originalPrice.length)];
+        self.priceLabel.attributedText = attrS;
+    } else {
+        NSMutableAttributedString *attrS = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"￥%@", singleGood.discountPrice]];
+        [attrS addAttribute:NSForegroundColorAttributeName value:Theme.colorHighlight range:NSMakeRange(0, singleGood.discountPrice.length+1)];
+        [attrS addAttribute:NSFontAttributeName value:Theme.fontMediumBold range:NSMakeRange(0, singleGood.discountPrice.length+1)];
+        self.priceLabel.attributedText = attrS;
+    }
     
     self.titleLabel.text = singleGood.name;
     self.descLabel.text = singleGood.desc;

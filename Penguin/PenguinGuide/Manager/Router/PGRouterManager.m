@@ -44,7 +44,11 @@
         PGLoginViewController *loginVC = [[PGLoginViewController alloc] init];
         if (PGGlobal.rootNavigationController) {
             PGBaseNavigationController *navi = [[PGBaseNavigationController alloc] initWithRootViewController:loginVC];
-            [PGGlobal.rootNavigationController presentViewController:navi animated:YES completion:nil];
+            if (PGGlobal.tempNavigationController) {
+                [PGGlobal.tempNavigationController presentViewController:navi animated:YES completion:nil];
+            } else {
+                [PGGlobal.rootNavigationController presentViewController:navi animated:YES completion:nil];
+            }
         }
     }];
     
@@ -53,7 +57,11 @@
             if (params[@"topicId"]) {
                 NSString *topicId = params[@"topicId"];
                 PGTopicViewController *topicVC = [[PGTopicViewController alloc] initWithTopicId:topicId];
-                [PGGlobal.rootNavigationController pushViewController:topicVC animated:YES];
+                if (PGGlobal.tempNavigationController) {
+                    [PGGlobal.tempNavigationController pushViewController:topicVC animated:YES];
+                } else {
+                    [PGGlobal.rootNavigationController pushViewController:topicVC animated:YES];
+                }
             }
         }
     }];
@@ -64,7 +72,11 @@
                 NSString *articleId = params[@"articleId"];
                 PGArticleViewController *articleVC = [[PGArticleViewController alloc] initWithArticleId:articleId animated:NO];
                 articleVC.disableTransition = NO;
-                [PGGlobal.rootNavigationController pushViewController:articleVC animated:YES];
+                if (PGGlobal.tempNavigationController) {
+                    [PGGlobal.tempNavigationController pushViewController:articleVC animated:YES];
+                } else {
+                    [PGGlobal.rootNavigationController pushViewController:articleVC animated:YES];
+                }
             }
         }
     }];
@@ -74,7 +86,11 @@
             if (params[@"goodsId"]) {
                 NSString *goodId = params[@"goodsId"];
                 PGGoodViewController *goodVC = [[PGGoodViewController alloc] initWithGoodId:goodId];
-                [PGGlobal.rootNavigationController pushViewController:goodVC animated:YES];
+                if (PGGlobal.tempNavigationController) {
+                    [PGGlobal.tempNavigationController pushViewController:goodVC animated:YES];
+                } else {
+                    [PGGlobal.rootNavigationController pushViewController:goodVC animated:YES];
+                }
             }
         }
     }];
@@ -84,7 +100,11 @@
             if (params[@"tagId"]) {
                 NSString *tagId = params[@"tagId"];
                 PGTagViewController *tagVC = [[PGTagViewController alloc] initWithTagId:tagId];
-                [PGGlobal.rootNavigationController pushViewController:tagVC animated:YES];
+                if (PGGlobal.tempNavigationController) {
+                    [PGGlobal.tempNavigationController pushViewController:tagVC animated:YES];
+                } else {
+                    [PGGlobal.rootNavigationController pushViewController:tagVC animated:YES];
+                }
             }
         }
     }];
@@ -94,7 +114,11 @@
             if (params[@"channelId"]) {
                 NSString *categoryId = params[@"channelId"];
                 PGChannelViewController *channelVC = [[PGChannelViewController alloc] initWithChannelId:categoryId];
-                [PGGlobal.rootNavigationController pushViewController:channelVC animated:YES];
+                if (PGGlobal.tempNavigationController) {
+                    [PGGlobal.tempNavigationController pushViewController:channelVC animated:YES];
+                } else {
+                    [PGGlobal.rootNavigationController pushViewController:channelVC animated:YES];
+                }
             }
         }
     }];
@@ -103,8 +127,23 @@
         if (PGGlobal.rootNavigationController) {
             if (params[@"scenarioId"]) {
                 NSString *scenarioId = params[@"scenarioId"];
-                PGScenarioViewController *scenarioVC = [[PGScenarioViewController alloc] initWithScenarioId:scenarioId];
-                [PGGlobal.rootNavigationController pushViewController:scenarioVC animated:YES];
+                if (params[@"fromStorePage"] && [params[@"fromStorePage"] isEqualToString:@"1"]) {
+                    PGScenarioViewController *scenarioVC = [[PGScenarioViewController alloc] initWithScenarioId:scenarioId];
+                    scenarioVC.isFromStorePage = YES;
+                    if (PGGlobal.tempNavigationController) {
+                        [PGGlobal.tempNavigationController pushViewController:scenarioVC animated:YES];
+                    } else {
+                        [PGGlobal.rootNavigationController pushViewController:scenarioVC animated:YES];
+                    }
+                } else {
+                    PGScenarioViewController *scenarioVC = [[PGScenarioViewController alloc] initWithScenarioId:scenarioId];
+                    scenarioVC.isFromStorePage = NO;
+                    if (PGGlobal.tempNavigationController) {
+                        [PGGlobal.tempNavigationController pushViewController:scenarioVC animated:YES];
+                    } else {
+                        [PGGlobal.rootNavigationController pushViewController:scenarioVC animated:YES];
+                    }
+                }
             }
         }
     }];
@@ -114,7 +153,11 @@
             if (params[@"scenarioType"]) {
                 NSString *scenarioType = params[@"scenarioType"];
                 PGAllScenariosViewController *allScenariosVC = [[PGAllScenariosViewController alloc] initWithScenarioType:scenarioType];
-                [PGGlobal.rootNavigationController pushViewController:allScenariosVC animated:YES];
+                if (PGGlobal.tempNavigationController) {
+                    [PGGlobal.tempNavigationController pushViewController:allScenariosVC animated:YES];
+                } else {
+                    [PGGlobal.rootNavigationController pushViewController:allScenariosVC animated:YES];
+                }
             }
         }
     }];
@@ -124,7 +167,11 @@
             if (params[@"web_url"]) {
                 NSString *webUrl = params[@"web_url"];
                 PGWebViewController *webVC = [[PGWebViewController alloc] initWithURL:webUrl];
-                [PGGlobal.rootNavigationController pushViewController:webVC animated:YES];
+                if (PGGlobal.tempNavigationController) {
+                    [PGGlobal.tempNavigationController pushViewController:webVC animated:YES];
+                } else {
+                    [PGGlobal.rootNavigationController pushViewController:webVC animated:YES];
+                }
             }
         }
     }];
@@ -140,18 +187,32 @@
     [[PGRouter sharedInstance] openURL:@"qiechihe://home"];
 }
 
-+ (void)routeToTopicPage
-{
-    [[PGRouter sharedInstance] openURL:@"qiechihe://topic"];
-}
-
-+ (void)routeToScenarioPage:(NSString *)scenarioId link:(NSString *)link
++ (void)routeToTopicPage:(NSString *)topicId link:(NSString *)link
 {
     if (link && link.length > 0) {
         [[PGRouter sharedInstance] openURL:link];
     } else {
-        NSString *url = [NSString stringWithFormat:@"qiechihe://scenario?scenarioId=%@", scenarioId];
+        NSString *url = [NSString stringWithFormat:@"qiechihe://topic?topicId=%@", topicId];
         [[PGRouter sharedInstance] openURL:url];
+    }
+}
+
++ (void)routeToScenarioPage:(NSString *)scenarioId link:(NSString *)link fromStorePage:(BOOL)fromStorePage
+{
+    if (link && link.length > 0) {
+        if (fromStorePage) {
+            [[PGRouter sharedInstance] openURL:[NSString stringWithFormat:@"%@&fromStorePage=1", link]];
+        } else {
+            [[PGRouter sharedInstance] openURL:link];
+        }
+    } else {
+        if (fromStorePage) {
+            NSString *url = [NSString stringWithFormat:@"qiechihe://scenario?scenarioId=%@&fromStorePage=1", scenarioId];
+            [[PGRouter sharedInstance] openURL:url];
+        } else {
+            NSString *url = [NSString stringWithFormat:@"qiechihe://scenario?scenarioId=%@", scenarioId];
+            [[PGRouter sharedInstance] openURL:url];
+        }
     }
 }
 

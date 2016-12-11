@@ -275,7 +275,11 @@
     [self.navigationController setNavigationBarHidden:YES animated:NO];
     
     self.commentInputAccessoryView.commentTextView.text = @"";
-    self.commentInputAccessoryView.frame = CGRectMake(0, UISCREEN_HEIGHT, UISCREEN_WIDTH, 60);
+    if (UISCREEN_WIDTH < UISCREEN_HEIGHT) {
+        self.commentInputAccessoryView.frame = CGRectMake(0, UISCREEN_HEIGHT, UISCREEN_WIDTH, 60);
+    } else {
+        self.commentInputAccessoryView.frame = CGRectMake(0, UISCREEN_WIDTH, UISCREEN_HEIGHT, 60);
+    }
 }
 
 - (void)viewWillDisappear:(BOOL)animated

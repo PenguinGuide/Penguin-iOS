@@ -13,8 +13,7 @@ static NSString *TagCell = @"TagCell";
 
 @interface PGArticleParagraphInfoCell () <UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout>
 
-@property (nonatomic, strong) UILabel *dayLabel;
-@property (nonatomic, strong) UILabel *monthLabel;
+@property (nonatomic, strong) UILabel *dateLabel;
 @property (nonatomic, strong) UIImageView *channelImageView;
 @property (nonatomic, strong) UILabel *channelLabel;
 @property (nonatomic, strong) UILabel *titleLabel;
@@ -23,7 +22,6 @@ static NSString *TagCell = @"TagCell";
 @property (nonatomic, strong) UILabel *designerLabel;
 @property (nonatomic, strong) UILabel *photographerLabel;
 @property (nonatomic, strong) UILabel *descLabel;
-@property (nonatomic, strong) UIView *titleHorizontalLine;
 
 @property (nonatomic, strong) UICollectionView *tagsCollectionView;
 @property (nonatomic, strong) PGArticle *article;
@@ -43,25 +41,12 @@ static NSString *TagCell = @"TagCell";
 
 - (void)initialize
 {
-    [self.contentView addSubview:self.dayLabel];
-    [self.contentView addSubview:self.monthLabel];
+    [self.contentView addSubview:self.dateLabel];
     [self.contentView addSubview:self.channelImageView];
     [self.contentView addSubview:self.channelLabel];
     
-    UIView *dateHorizontalLine = [[UIView alloc] initWithFrame:CGRectMake(32, self.dayLabel.pg_bottom, 30, 2)];
-    dateHorizontalLine.backgroundColor = [UIColor colorWithHexString:@"282527"];
-    [self.contentView addSubview:dateHorizontalLine];
-    
-    UIView *dateVerticalLine = [[UIView alloc] initWithFrame:CGRectMake(self.dayLabel.pg_right+6, 21, 2, 30)];
-    dateVerticalLine.backgroundColor = Theme.colorText;
-    [self.contentView addSubview:dateVerticalLine];
-    
     [self.contentView addSubview:self.titleLabel];
     [self.contentView addSubview:self.subtitleLabel];
-    
-    self.titleHorizontalLine = [[UIView alloc] initWithFrame:CGRectMake(30, self.subtitleLabel.pg_bottom+15, 40, 2)];
-    self.titleHorizontalLine.backgroundColor = Theme.colorText;
-    [self.contentView addSubview:self.titleHorizontalLine];
     
     [self.contentView addSubview:self.authorLabel];
     [self.contentView addSubview:self.designerLabel];
@@ -82,8 +67,7 @@ static NSString *TagCell = @"TagCell";
                 NSString *month = datesArray[1];
                 NSString *day = datesArray[2];
                 
-                self.dayLabel.text = day;
-                self.monthLabel.text = [NSString stringWithFormat:@"%@/%@", year, month];
+                self.dateLabel.text = [NSString stringWithFormat:@"%@.%@.%@", day, month, year];
             }
         }
         
@@ -109,15 +93,16 @@ static NSString *TagCell = @"TagCell";
                                                          attributes:@{NSFontAttributeName:[UIFont systemFontOfSize:14.f weight:UIFontWeightBold]}
                                                             context:nil].size.height;
             self.subtitleLabel.frame = CGRectMake(self.subtitleLabel.pg_x, self.titleLabel.pg_bottom+10, self.subtitleLabel.pg_width, subtitleHeight);
+        } else {
+            self.subtitleLabel.frame = CGRectMake(self.subtitleLabel.pg_x, self.titleLabel.pg_bottom+10, self.subtitleLabel.pg_width, 0);
         }
         
         self.titleLabel.text = article.title;
         self.subtitleLabel.text = article.subTitle;
-        self.titleHorizontalLine.frame = CGRectMake(30, self.subtitleLabel.pg_bottom+15, 40, 2);
         
         if (article.author && article.author.length > 0) {
             self.authorLabel.text = [NSString stringWithFormat:@"文 | %@", article.author];
-            self.authorLabel.frame = CGRectMake(self.authorLabel.pg_x, self.subtitleLabel.pg_bottom+30, self.authorLabel.pg_width, self.authorLabel.pg_height);
+            self.authorLabel.frame = CGRectMake(self.authorLabel.pg_x, self.subtitleLabel.pg_bottom+15, self.authorLabel.pg_width, self.authorLabel.pg_height);
             self.authorLabel.hidden = NO;
         } else {
             self.authorLabel.hidden = YES;
@@ -213,7 +198,7 @@ static NSString *TagCell = @"TagCell";
         if (article.photographer && article.photographer.length > 0) {
             copyrightInfoHeight = copyrightInfoHeight + 10 + 12;
         }
-        CGFloat height = 21+28+12+titleHeight+10+subtitleHeight+30+copyrightInfoHeight+10+20;
+        CGFloat height = 21+28+12+titleHeight+10+subtitleHeight+15+copyrightInfoHeight+10+20;
         if (article.tagsArray.count > 0) {
             return CGSizeMake(UISCREEN_WIDTH, height+20.f+30.f);
         } else {
@@ -278,32 +263,20 @@ static NSString *TagCell = @"TagCell";
 
 #pragma mark - <Setters && Getters>
 
-- (UILabel *)dayLabel
+- (UILabel *)dateLabel
 {
-    if (!_dayLabel) {
-        _dayLabel = [[UILabel alloc] initWithFrame:CGRectMake(30, 19, 35, 22)];
-        _dayLabel.font = [UIFont boldSystemFontOfSize:26.f];
-        _dayLabel.textAlignment = NSTextAlignmentCenter;
-        _dayLabel.textColor = Theme.colorText;
+    if (!_dateLabel) {
+        _dateLabel = [[UILabel alloc] initWithFrame:CGRectMake(30, 19, 150, 22)];
+        _dateLabel.font = Theme.fontLargeBold;
+        _dateLabel.textColor = Theme.colorText;
     }
-    return _dayLabel;
-}
-
-- (UILabel *)monthLabel
-{
-    if (!_monthLabel) {
-        _monthLabel = [[UILabel alloc] initWithFrame:CGRectMake(30, self.dayLabel.pg_bottom+3, 35, 8)];
-        _monthLabel.font = [UIFont boldSystemFontOfSize:8.f];
-        _monthLabel.textAlignment = NSTextAlignmentCenter;
-        _monthLabel.textColor = Theme.colorText;
-    }
-    return _monthLabel;
+    return _dateLabel;
 }
 
 - (UIImageView *)channelImageView
 {
     if (!_channelImageView) {
-        _channelImageView = [[UIImageView alloc] initWithFrame:CGRectMake(self.dayLabel.pg_right+20, 21, 28, 28)];
+        _channelImageView = [[UIImageView alloc] initWithFrame:CGRectMake(self.dateLabel.pg_right+20, 21, 28, 28)];
     }
     return _channelImageView;
 }
@@ -321,7 +294,7 @@ static NSString *TagCell = @"TagCell";
 - (UILabel *)titleLabel
 {
     if (!_titleLabel) {
-        _titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(30, self.channelImageView.pg_bottom+12, UISCREEN_WIDTH-60, 28)];
+        _titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(30, self.channelImageView.pg_bottom+8, UISCREEN_WIDTH-60, 28)];
         _titleLabel.font = [UIFont systemFontOfSize:26.f weight:UIFontWeightBold];
         _titleLabel.textColor = Theme.colorText;
         _titleLabel.numberOfLines = 0;
@@ -342,7 +315,7 @@ static NSString *TagCell = @"TagCell";
 - (UILabel *)authorLabel
 {
     if (!_authorLabel) {
-        _authorLabel = [[UILabel alloc] initWithFrame:CGRectMake(30, self.subtitleLabel.pg_bottom+30, UISCREEN_WIDTH-60, 12)];
+        _authorLabel = [[UILabel alloc] initWithFrame:CGRectMake(30, self.subtitleLabel.pg_bottom+15, UISCREEN_WIDTH-60, 12)];
         _authorLabel.font = Theme.fontExtraSmallBold;
         _authorLabel.textColor = Theme.colorText;
     }

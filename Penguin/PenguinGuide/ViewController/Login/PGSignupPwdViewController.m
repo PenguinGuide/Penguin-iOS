@@ -39,6 +39,10 @@
 
 - (void)setPwdButtonClicked:(UIView *)view
 {
+    if (!self.pwdView.newPwdTextField.text || self.pwdView.newPwdTextField.text.length == 0) {
+        [self showToast:@"请输入新密码"];
+        return;
+    }
     if ([view isKindOfClass:[PGPwdSaveView class]]) {
         PGParams *params = [PGParams new];
         params[@"mobile"] = self.phoneNumber;

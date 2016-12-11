@@ -54,6 +54,7 @@
             });
         }
         [weakself dismissLoading];
+        [weakself.feedsCollectionView endTopRefreshing];
         [weakself.feedsCollectionView endBottomRefreshing];
     }];
     [self observe:self.viewModel keyPath:@"error" block:^(id changedObject) {
@@ -104,6 +105,8 @@
             statusBar.backgroundColor = [UIColor clearColor];
         }
     }
+    
+    self.feedsCollectionView.contentInset = UIEdgeInsetsZero;
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -199,10 +202,9 @@
     return @"store";
 }
 
-- (void)categoryDidSelect:(PGScenarioBanner *)category
+- (void)scenarioDidSelect:(PGScenarioBanner *)scenario
 {
-    PGStoreCategoryViewController *categoryVC = [[PGStoreCategoryViewController alloc] initWithCategoryId:category.scenarioId];
-    [self.navigationController pushViewController:categoryVC animated:YES];
+    [PGRouterManager routeToScenarioPage:scenario.scenarioId link:scenario.link fromStorePage:YES];
 }
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
@@ -214,7 +216,7 @@
             statusBar.backgroundColor = [UIColor clearColor];
         }
         PGArticleBanner *articleBanner = (PGArticleBanner *)banner;
-        PGArticleViewController *articleVC = [[PGArticleViewController alloc] initWithArticleId:articleBanner.articleId animated:YES];
+        PGArticleViewController *articleVC = [[PGArticleViewController alloc] initWithArticleId:articleBanner.articleId animated:NO];
         [self.navigationController pushViewController:articleVC animated:YES];
     } else if ([banner isKindOfClass:[PGTopicBanner class]]) {
         PGTopicBanner *topicBanner = (PGTopicBanner *)banner;
@@ -285,6 +287,7 @@
 {
     PGSearchRecommendsViewController *searchRecommendsVC = [[PGSearchRecommendsViewController alloc] init];
     PGBaseNavigationController *naviController = [[PGBaseNavigationController alloc] initWithRootViewController:searchRecommendsVC];
+    PGGlobal.tempNavigationController = naviController;
     [self presentViewController:naviController animated:NO completion:nil];
 }
 
@@ -296,11 +299,10 @@
         _feedsCollectionView.contentInset = UIEdgeInsetsMake(-20, 0, 0, 0);
         _feedsCollectionView.feedsDelegate = self;
         
-        __block PGFeedsCollectionView *collectionView = _feedsCollectionView;
         PGWeakSelf(self);
         [_feedsCollectionView enablePullToRefreshWithTopInset:0.f completion:^{
-            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2.f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                [collectionView endTopRefreshing];
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.4 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                [weakself.viewModel clearPagination];
                 [weakself.viewModel requestData];
             });
         }];

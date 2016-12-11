@@ -95,4 +95,11 @@
     }];
 }
 
+- (void)clearPagination
+{
+    self.endFlag = NO;
+    self.isPreloadingNextPage = NO;
+    self.response = nil;
+}
+
 @end

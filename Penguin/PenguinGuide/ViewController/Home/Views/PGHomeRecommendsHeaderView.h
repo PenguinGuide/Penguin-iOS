@@ -9,9 +9,11 @@
 #import <UIKit/UIKit.h>
 #import "PGPagedScrollView.h"
 
+@class PGScenarioBanner;
+
 @protocol PGHomeRecommendsHeaderViewDelegate <NSObject>
 
-- (void)channelDidSelect:(NSString *)channelType;
+- (void)scenarioDidSelect:(PGScenarioBanner *)scenario;
 
 @end
 

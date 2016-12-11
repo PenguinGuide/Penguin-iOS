@@ -39,6 +39,7 @@
         self.showsHorizontalScrollIndicator = NO;
         self.showsVerticalScrollIndicator = NO;
         self.backgroundColor = [UIColor whiteColor];
+        self.allowGesture = YES;
         
         [self registerClass:[PGCarouselBannerCell class] forCellWithReuseIdentifier:CarouselBannerCell];
         [self registerClass:[PGArticleBannerCell class] forCellWithReuseIdentifier:ArticleBannerCell];
@@ -115,7 +116,7 @@
             PGArticleBannerCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:ArticleBannerCell forIndexPath:indexPath];
             
             PGArticleBanner *articleBanner = (PGArticleBanner *)banner;
-            [cell setCellWithArticle:articleBanner allowGesture:YES];
+            [cell setCellWithArticle:articleBanner allowGesture:self.allowGesture];
             
             return cell;
         } else if ([banner isKindOfClass:[PGGoodsCollectionBanner class]]) {
@@ -304,10 +305,10 @@
 
 #pragma mark - <PGHomeRecommendsHeaderViewDelegate>
 
-- (void)channelDidSelect:(NSString *)channelType
+- (void)scenarioDidSelect:(PGScenarioBanner *)scenario
 {
-    if (self.feedsDelegate && [self.feedsDelegate respondsToSelector:@selector(channelDidSelect:)]) {
-        [self.feedsDelegate channelDidSelect:channelType];
+    if (self.feedsDelegate && [self.feedsDelegate respondsToSelector:@selector(scenarioDidSelect:)]) {
+        [self.feedsDelegate scenarioDidSelect:scenario];
     }
 }
 

@@ -47,6 +47,7 @@ pod 'MBProgressHUD', :inhibit_warnings => true
 pod 'MSWeakTimer', :inhibit_warnings => true
 
 pod 'AlibcTradeSDK'
+pod 'Qiniu','~> 7.1'
 
 #fabric
 pod 'Fabric'

@@ -41,7 +41,11 @@
 - (void)setCellWithMessage:(PGMessage *)message type:(NSString *)type
 {
     if (message) {
-        [self.iconImageView setWithImageURL:message.content.avatar placeholder:nil completion:nil];
+        if ([type isEqualToString:@"system"]) {
+            self.iconImageView.image = [UIImage imageNamed:@"pg_me_avatar_placeholder"];
+        } else {
+            [self.iconImageView setWithImageURL:message.content.avatar placeholder:nil completion:nil];
+        }
         if ([type isEqualToString:@"system"]) {
             [self.messageLabel setText:message.content.content];
         } else if ([type isEqualToString:@"reply"]) {

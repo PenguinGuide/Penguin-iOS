@@ -71,9 +71,13 @@
     if (titles.count > 0) {
         float totalWidth = self.margin;
         for (int i = 0; i < titles.count; i++) {
+            float titleWidth;
             NSString *title = titles[i];
-            float titleWidth = [title sizeWithAttributes:@{NSFontAttributeName:self.textFont}].width+15;
-            
+            if (self.equalWidth) {
+                titleWidth = (self.frame.size.width-self.margin*2-(self.titles.count-1)*self.padding)/self.titles.count;
+            } else {
+                titleWidth = [title sizeWithAttributes:@{NSFontAttributeName:self.textFont}].width+15;
+            }
             UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(totalWidth, 0, titleWidth, self.frame.size.height)];
             label.textAlignment = NSTextAlignmentCenter;
             label.text = title;
@@ -105,7 +109,11 @@
                 if (firstLabel) {
                     NSString *firstTitle = titles[0];
                     CGSize titleSize = [firstTitle sizeWithAttributes:@{NSFontAttributeName:self.textFont}];
-                    self.indicatorView.frame = CGRectMake(firstLabel.frame.origin.x, (firstLabel.frame.size.height-titleSize.height)/2, firstLabel.frame.size.width, titleSize.height);
+                    if (self.equalWidth) {
+                        self.indicatorView.frame = CGRectMake(firstLabel.frame.origin.x+(firstLabel.frame.size.width-(titleSize.width+20))/2, (firstLabel.frame.size.height-titleSize.height)/2, titleSize.width+20, titleSize.height);
+                    } else {
+                        self.indicatorView.frame = CGRectMake(firstLabel.frame.origin.x, (firstLabel.frame.size.height-titleSize.height)/2, firstLabel.frame.size.width, titleSize.height);
+                    }
                     [self.scrollView addSubview:self.indicatorView];
                 }
             }
@@ -191,7 +199,11 @@
                               delay:0.f
                             options:UIViewAnimationOptionCurveEaseInOut
                          animations:^{
-                             weakSelf.indicatorView.frame = CGRectMake(selectedLabel.frame.origin.x, (selectedLabel.frame.size.height-titleSize.height)/2, selectedLabel.frame.size.width, titleSize.height);
+                             if (weakSelf.equalWidth) {
+                                 weakSelf.indicatorView.frame = CGRectMake(selectedLabel.frame.origin.x+(selectedLabel.frame.size.width-(titleSize.width+20))/2, (selectedLabel.frame.size.height-titleSize.height)/2, titleSize.width+20, titleSize.height);
+                             } else {
+                                 weakSelf.indicatorView.frame = CGRectMake(selectedLabel.frame.origin.x, (selectedLabel.frame.size.height-titleSize.height)/2, selectedLabel.frame.size.width, titleSize.height);
+                             }
                          } completion:nil];
         
         [self.pagedController scrollToPage:selectedPage];

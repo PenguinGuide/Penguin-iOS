@@ -42,7 +42,7 @@
     
     CGSize textSize = [desc boundingRectWithSize:CGSizeMake(UISCREEN_WIDTH-26, 1000)
                                          options:NSStringDrawingUsesLineFragmentOrigin
-                                      attributes:@{NSFontAttributeName:Theme.fontSmallBold}
+                                      attributes:@{NSFontAttributeName:Theme.fontMediumBold}
                                          context:nil].size;
     self.descLabel.pg_height = textSize.height;
     self.descLabel.text = desc;
@@ -52,7 +52,7 @@
 {
     CGSize textSize = [desc boundingRectWithSize:CGSizeMake(UISCREEN_WIDTH-26, 1000)
                                          options:NSStringDrawingUsesLineFragmentOrigin
-                                      attributes:@{NSFontAttributeName:Theme.fontSmallBold}
+                                      attributes:@{NSFontAttributeName:Theme.fontMediumBold}
                                          context:nil].size;
     return CGSizeMake(UISCREEN_WIDTH, UISCREEN_WIDTH*9/16+15+textSize.height+15+1/[UIScreen mainScreen].scale);
 }
@@ -73,7 +73,7 @@
         _descLabel = [[UILabel alloc] initWithFrame:CGRectMake(13, self.pg_width*9/16+15, self.pg_width-26, 0)];
         _descLabel.numberOfLines = 0;
         _descLabel.textColor = Theme.colorLightText;
-        _descLabel.font = Theme.fontSmallBold;
+        _descLabel.font = Theme.fontMediumBold;
     }
     return _descLabel;
 }
