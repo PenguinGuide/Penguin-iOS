@@ -26,7 +26,7 @@
 
 @property (nonatomic, strong) NSArray *bannersArray;
 @property (nonatomic, strong) NSArray *tagsArray;
-@property (nonatomic, strong) NSArray *relatedArticlesArray;
+@property (nonatomic, strong) NSArray *relatedGoods;
 
 @property (nonatomic, assign) BOOL isNew;
 @property (nonatomic, assign) BOOL isCollected;

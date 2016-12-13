@@ -110,6 +110,12 @@
     if (self.delegate && [self.delegate respondsToSelector:@selector(imagesForScrollView)]) {
         NSArray *fixedBanners = [self.delegate imagesForScrollView];
         
+        if (fixedBanners.count <= 1) {
+            self.pageControl.hidden = YES;
+        } else {
+            self.pageControl.hidden = NO;
+        }
+        
         if (fixedBanners.count > 0) {
             self.banners = [NSMutableArray arrayWithArray:fixedBanners];
             if (fixedBanners.count > 1) {
@@ -166,6 +172,11 @@
     } else if (self.delegate && [self.delegate respondsToSelector:@selector(viewsForScrollView)]) {
         self.circularMode = NO;
         NSArray *banners = [self.delegate viewsForScrollView];
+        if (banners.count <= 1) {
+            self.pageControl.hidden = YES;
+        } else {
+            self.pageControl.hidden = NO;
+        }
         if (banners.count > 0) {
             self.banners = [NSArray arrayWithArray:banners];
             self.pagedScrollView.contentSize = CGSizeMake(self.frame.size.width*self.banners.count, self.pagedScrollView.frame.size.height);

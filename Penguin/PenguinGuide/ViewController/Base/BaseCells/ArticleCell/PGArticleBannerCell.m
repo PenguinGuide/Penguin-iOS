@@ -64,7 +64,7 @@
     } else {
         [self.bannerImageView setStaticImageURL:article.image placeholder:nil completion:nil];
     }
-    self.bannerImageView.backgroundColor = Theme.colorText;
+    self.bannerImageView.backgroundColor = Theme.colorBackground;
     
     self.backgroundColor = Theme.colorHighlight;
     

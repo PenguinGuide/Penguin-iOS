@@ -108,7 +108,7 @@
 - (NSMutableParagraphStyle *)defaultParagraphStyle
 {
     NSMutableParagraphStyle *defaultParagraphStyle = [[NSMutableParagraphStyle alloc] init];
-    defaultParagraphStyle.alignment = NSTextAlignmentJustified;
+    defaultParagraphStyle.alignment = NSTextAlignmentLeft;
     defaultParagraphStyle.firstLineHeadIndent = 20.f;
     defaultParagraphStyle.headIndent = 20.f;
     defaultParagraphStyle.tailIndent = -20.f;

@@ -42,7 +42,9 @@
     [self sd_setImageWithURL:[NSURL URLWithString:imageURL]
             placeholderImage:placeholder
                    completed:^(UIImage * _Nullable image, NSError * _Nullable error, SDImageCacheType cacheType, NSURL * _Nullable imageURL) {
-                       
+                       if (completion) {
+                           completion(nil);
+                       }
                    }];
 }
 

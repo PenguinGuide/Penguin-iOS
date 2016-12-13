@@ -29,7 +29,7 @@
              
              @"bannersArray": @"images",
              @"tagsArray": @"tags",
-             @"relatedArticlesArray": @"related_articles"
+             @"relatedGoods": @"recommends"
             };
 }
 
@@ -68,9 +68,9 @@
     return [MTLJSONAdapter arrayTransformerWithModelClass:[PGTag class]];
 }
 
-+ (NSValueTransformer *)relatedArticlesArrayJSONTransformer
++ (NSValueTransformer *)relatedGoodsJSONTransformer
 {
-    return [MTLJSONAdapter arrayTransformerWithModelClass:[PGImageBanner class]];
+    return [MTLJSONAdapter arrayTransformerWithModelClass:[PGGood class]];
 }
 
 @end

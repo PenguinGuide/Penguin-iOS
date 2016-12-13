@@ -935,27 +935,10 @@
         if (attrS) {
             NSTextStorage *storage = [[NSTextStorage alloc] initWithAttributedString:attrS];
             [storage addLayoutManager:self.layoutManager];
-            [self.layoutManager glyphRangeForTextContainer:self.textContainer];
+            (void) [self.layoutManager glyphRangeForTextContainer:self.textContainer];
             
-            NSUInteger numberOfLines, index;
-            NSUInteger numberOfGlyphs = [self.layoutManager numberOfGlyphs];
-            NSRange lineRange;
-            for (numberOfLines = 0, index = 0; index < numberOfGlyphs; numberOfLines++) {
-                if (numberOfLines > 1) {
-                    break;
-                } else {
-                    (void) [self.layoutManager lineFragmentRectForGlyphAtIndex:index
-                                                                effectiveRange:&lineRange];
-                    index = NSMaxRange(lineRange);
-                }
-            }
-            if (numberOfLines == 1) {
-                CGSize textSize = CGSizeMake(UISCREEN_WIDTH, ceilf([self.layoutManager usedRectForTextContainer:self.textContainer].size.height));
-                return CGSizeMake(UISCREEN_WIDTH, textSize.height+15);
-            } else {
-                CGSize textSize = CGSizeMake(UISCREEN_WIDTH, ceilf([self.layoutManager usedRectForTextContainer:self.textContainer].size.height));
-                return CGSizeMake(UISCREEN_WIDTH, textSize.height);
-            }
+            CGSize textSize = CGSizeMake(UISCREEN_WIDTH, ceilf([self.layoutManager usedRectForTextContainer:self.textContainer].size.height));
+            return CGSizeMake(UISCREEN_WIDTH, textSize.height);
         }
         return CGSizeZero;
     }
@@ -1044,7 +1027,8 @@
 - (NSLayoutManager *)layoutManager
 {
     if (!_layoutManager) {
-        self.textContainer = [[NSTextContainer alloc] initWithSize:CGSizeMake(UISCREEN_WIDTH-60, CGFLOAT_MAX)];
+        self.textContainer = [[NSTextContainer alloc] initWithSize:CGSizeMake(UISCREEN_WIDTH-40, CGFLOAT_MAX)];
+        [self.textContainer setLineFragmentPadding:0.f];
         _layoutManager = [[NSLayoutManager alloc] init];
         [_layoutManager addTextContainer:self.textContainer];
     }

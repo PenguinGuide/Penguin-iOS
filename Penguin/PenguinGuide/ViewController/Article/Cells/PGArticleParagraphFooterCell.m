@@ -33,7 +33,7 @@
     bottomLabel.font = Theme.fontSmallBold;
     bottomLabel.textColor = Theme.colorText;
     bottomLabel.textAlignment = NSTextAlignmentCenter;
-    bottomLabel.text = @"更多精彩阅读，请滑动下方［猜你喜欢］";
+    bottomLabel.text = @"更多精彩阅读，请滑动下方";
     
     [self.contentView addSubview:topLabel];
     [self.contentView addSubview:bottomLabel];

@@ -66,23 +66,12 @@
         [weakself dismissLoading];
     }];
     
-    [self observe:self.viewModel keyPath:@"relatedGoods" block:^(id changedObject) {
-        NSArray *relatedGoods = changedObject;
-        if (relatedGoods && [relatedGoods isKindOfClass:[NSArray class]]) {
-            [weakself.goodCollectionView reloadData];
-            [weakself.goodCollectionView endBottomRefreshing];
-        }
-    }];
     [self observeError:self.viewModel];
 }
 
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    
-    if (self.viewModel.good == nil) {
-        [self showLoading];
-    }
     
     [self setNeedsStatusBarAppearanceUpdate];
     
@@ -94,6 +83,7 @@
     [super viewDidAppear:animated];
     
     if (!self.viewModel.good) {
+        [self showLoading];
         [self.viewModel requestGood:self.goodId];
     }
 }
@@ -119,15 +109,15 @@
 
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView
 {
-    return self.viewModel.relatedGoods.count > 0 ? 2 : 1;
+    return self.viewModel.good.relatedGoods.count > 0 ? 2 : 1;
 }
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
 {
     if (section == 0) {
-        return 5;
+        return 4;
     } else if (section == 1) {
-        return self.viewModel.relatedGoods.count;
+        return self.viewModel.good.relatedGoods.count;
     }
     return 0;
 }
@@ -159,17 +149,11 @@
             [cell reloadWithTagsArray:self.viewModel.good.tagsArray];
             
             return cell;
-        } else if (indexPath.item == 4) {
-            PGArticleRelatedArticlesCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:GoodRelatedArticlesCell forIndexPath:indexPath];
-            
-            [cell setCellWithDataArray:self.viewModel.good.relatedArticlesArray];
-            
-            return cell;
         }
     } else if (indexPath.section == 1) {
         PGGoodCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:GoodRelatedGoodCell forIndexPath:indexPath];
         
-        [cell setCellWithGood:self.viewModel.relatedGoods[indexPath.item]];
+        [cell setCellWithGood:self.viewModel.good.relatedGoods[indexPath.item]];
         
         return cell;
     }
@@ -180,10 +164,16 @@
 
 - (UICollectionReusableView *)collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath
 {
-    if (indexPath.section == 1 && kind == UICollectionElementKindSectionHeader) {
-        PGGoodRelatedGoodsHeaderView *headerView = [collectionView dequeueReusableSupplementaryViewOfKind:kind withReuseIdentifier:GoodRelatedGoodHeaderView forIndexPath:indexPath];
-        
-        return headerView;
+    if (indexPath.section == 1) {
+        if (kind == UICollectionElementKindSectionHeader) {
+            PGGoodRelatedGoodsHeaderView *headerView = [collectionView dequeueReusableSupplementaryViewOfKind:kind withReuseIdentifier:GoodRelatedGoodHeaderView forIndexPath:indexPath];
+            
+            return headerView;
+        } else if (kind == UICollectionElementKindSectionFooter) {
+            PGBaseCollectionViewFooterView *footerView = [collectionView dequeueReusableSupplementaryViewOfKind:kind withReuseIdentifier:BaseCollectionViewFooterView forIndexPath:indexPath];
+            
+            return footerView;
+        }
     }
     return nil;
 }
@@ -209,8 +199,6 @@
             return [PGGoodDescCell cellSize:self.viewModel.good.desc];
         } else if (indexPath.item == 3) {
             return self.viewModel.good.tagsArray.count > 0 ? CGSizeMake(UISCREEN_WIDTH, 45) : CGSizeZero;
-        } else if (indexPath.item == 4) {
-            return self.viewModel.good.relatedArticlesArray.count > 0 ? [PGArticleRelatedArticlesCell cellSize] : CGSizeZero;
         }
     } else if (indexPath.section == 1) {
         return [PGGoodCell cellSize];
@@ -222,6 +210,14 @@
 {
     if (section == 1) {
         return CGSizeMake(UISCREEN_WIDTH, 40);
+    }
+    return CGSizeZero;
+}
+
+- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout referenceSizeForFooterInSection:(NSInteger)section
+{
+    if (section == 1) {
+        return [PGBaseCollectionViewFooterView footerViewSize];
     }
     return CGSizeZero;
 }
@@ -242,6 +238,12 @@
     return 0.f;
 }
 
+- (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    PGGood *good = self.viewModel.good.relatedGoods[indexPath.item];
+    [PGRouterManager routeToGoodDetailPage:good.goodId link:good.link];
+}
+
 #pragma mark - <Button Events>
 
 - (void)buyButtonClicked
@@ -254,7 +256,7 @@
 - (PGBaseCollectionView *)goodCollectionView
 {
     if (!_goodCollectionView) {
-        _goodCollectionView = [[PGBaseCollectionView alloc] initWithFrame:CGRectMake(0, 0, UISCREEN_WIDTH, UISCREEN_HEIGHT) collectionViewLayout:[UICollectionViewFlowLayout new]];
+        _goodCollectionView = [[PGBaseCollectionView alloc] initWithFrame:CGRectMake(0, 0, UISCREEN_WIDTH, UISCREEN_HEIGHT-50) collectionViewLayout:[UICollectionViewFlowLayout new]];
         _goodCollectionView.dataSource = self;
         _goodCollectionView.delegate = self;
         
@@ -266,11 +268,6 @@
         [_goodCollectionView registerClass:[PGGoodCell class] forCellWithReuseIdentifier:GoodRelatedGoodCell];
         
         [_goodCollectionView registerClass:[PGGoodRelatedGoodsHeaderView class] forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:GoodRelatedGoodHeaderView];
-        
-        PGWeakSelf(self);
-        [_goodCollectionView enableInfiniteScrolling:^{
-            [weakself.viewModel requestRelatedGoods];
-        }];
     }
     return _goodCollectionView;
 }
