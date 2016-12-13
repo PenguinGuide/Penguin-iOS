@@ -1,1 +1,0 @@
-../../../../mtop/OpenMtopSDK.framework/Headers/TBSDKErrorRule.h

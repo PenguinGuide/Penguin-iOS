@@ -1,1 +1,0 @@
-../../../../SGNoCaptcha/SGNoCaptcha.framework/Headers/ISecurityGuardOpenNoCaptcha.h
