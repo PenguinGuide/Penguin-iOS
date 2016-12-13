@@ -1,0 +1,28 @@
+{
+  "name": "PGAnalytics",
+  "version": "1.0",
+  "summary": "PenguinGuide Automated Analytics Framework",
+  "description": "PenguinGuide Automated Analytics Framework",
+  "homepage": "http://EXAMPLE/PGAlertController",
+  "license": "MIT",
+  "authors": {
+    "Kobe Dai": "kobe.dai@penguinguide.com"
+  },
+  "platforms": {
+    "ios": "8.0"
+  },
+  "source": {
+    "git": "https://github.com/PenguinGuide/Penguin-iOS.git",
+    "tag": "1.0"
+  },
+  "public_header_files": "*.h",
+  "source_files": "*.{h,m}",
+  "dependencies": {
+    "Zhugeio": [
+
+    ],
+    "UMengAnalytics": [
+
+    ]
+  }
+}

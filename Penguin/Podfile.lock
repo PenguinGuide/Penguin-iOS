@@ -1,0 +1,318 @@
+PODS:
+  - AFNetworking (3.1.0):
+    - AFNetworking/NSURLSession (= 3.1.0)
+    - AFNetworking/Reachability (= 3.1.0)
+    - AFNetworking/Security (= 3.1.0)
+    - AFNetworking/Serialization (= 3.1.0)
+    - AFNetworking/UIKit (= 3.1.0)
+  - AFNetworking/NSURLSession (3.1.0):
+    - AFNetworking/Reachability
+    - AFNetworking/Security
+    - AFNetworking/Serialization
+  - AFNetworking/Reachability (3.1.0)
+  - AFNetworking/Security (3.1.0)
+  - AFNetworking/Serialization (3.1.0)
+  - AFNetworking/UIKit (3.1.0):
+    - AFNetworking/NSURLSession
+  - AlibabaAuthSDK (1.1.0.16):
+    - BCUserTrack
+    - mtop
+    - SecurityGuardSDK
+    - SGMain
+    - SGSecurityBody
+  - AlibcTradeSDK (3.1.1.14):
+    - AlibabaAuthSDK
+    - AlipaySDK (= 2.0.0-bc)
+    - BCUserTrack
+    - mtop
+    - SecurityGuardSDK
+    - SGMain
+  - AlipaySDK (2.0.0-bc)
+  - AnimatedGIFImageSerialization (0.2.0)
+  - BCUserTrack (5.1.0.9):
+    - UTDID
+  - CocoaLumberjack (3.0.0):
+    - CocoaLumberjack/Default (= 3.0.0)
+    - CocoaLumberjack/Extensions (= 3.0.0)
+  - CocoaLumberjack/Core (3.0.0)
+  - CocoaLumberjack/Default (3.0.0):
+    - CocoaLumberjack/Core
+  - CocoaLumberjack/Extensions (3.0.0):
+    - CocoaLumberjack/Default
+  - Crashlytics (3.8.3):
+    - Fabric (~> 1.6.3)
+  - Fabric (1.6.11)
+  - FLAnimatedImage (1.0.12)
+  - FMDB (2.6.2):
+    - FMDB/standard (= 2.6.2)
+  - FMDB/standard (2.6.2)
+  - FXPageControl (1.4)
+  - HappyDNS (0.3.10)
+  - hpple (0.2.0)
+  - KVOController (1.2.0)
+  - Mantle (2.0.7):
+    - Mantle/extobjc (= 2.0.7)
+  - Mantle/extobjc (2.0.7)
+  - MBProgressHUD (1.0.0)
+  - MOBFoundation (2.2.10)
+  - MSWeakTimer (1.1.0)
+  - mtop (2.0.2):
+    - SecurityGuardSDK
+    - SGMain
+    - SGNoCaptcha
+    - SGSecurityBody
+  - OHHTTPStubs (5.1.0):
+    - OHHTTPStubs/Default (= 5.1.0)
+  - OHHTTPStubs/Core (5.1.0)
+  - OHHTTPStubs/Default (5.1.0):
+    - OHHTTPStubs/Core
+    - OHHTTPStubs/JSON
+    - OHHTTPStubs/NSURLSession
+    - OHHTTPStubs/OHPathHelpers
+  - OHHTTPStubs/JSON (5.1.0):
+    - OHHTTPStubs/Core
+  - OHHTTPStubs/NSURLSession (5.1.0):
+    - OHHTTPStubs/Core
+  - OHHTTPStubs/OHPathHelpers (5.1.0)
+  - PGAlertController (1.0)
+  - PGAnalytics (1.0):
+    - UMengAnalytics
+    - Zhugeio
+  - PGAPIClient (1.0):
+    - PGRestKit
+  - PGCache (1.0):
+    - FMDB
+  - PGColor (1.0)
+  - PGImage (1.0)
+  - PGImageView (1.0):
+    - FLAnimatedImage
+    - SDWebImage (~> 4.0.0-beta2)
+  - PGLaunchAds (1.0)
+  - PGLog (1.0):
+    - CocoaLumberjack
+  - PGPagedController (1.0)
+  - PGPagedScrollView (1.0):
+    - FLAnimatedImage
+    - FXPageControl
+    - PGImageView
+  - PGPopover (1.0)
+  - PGPopupViewController (1.0)
+  - PGPullRefreshControl (1.0)
+  - PGRestKit (1.0):
+    - AFNetworking (= 3.1.0)
+    - Mantle (= 2.0.7)
+    - OHHTTPStubs (= 5.1.0)
+    - PGRestKit/Support (= 1.0)
+  - PGRestKit/Support (1.0):
+    - AFNetworking (= 3.1.0)
+    - Mantle (= 2.0.7)
+    - OHHTTPStubs (= 5.1.0)
+  - PGRouter (1.0)
+  - PGScrollNavigationBar (1.0)
+  - PGScrollView (1.0)
+  - PGShare (1.0):
+    - MOBFoundation
+    - ShareSDK3
+    - ShareSDK3/ShareSDKPlatforms/QQ
+    - ShareSDK3/ShareSDKPlatforms/SinaWeibo
+    - ShareSDK3/ShareSDKPlatforms/WeChat
+  - PGString (1.0)
+  - PGStringParser (1.0):
+    - hpple
+    - PGColor
+  - PGTabBarController (1.0)
+  - PGTheme (1.0)
+  - PGTimer (1.0)
+  - PGToast (1.0)
+  - PGTransparentNaviBar (1.0)
+  - PGView (1.0)
+  - Qiniu (7.1.4):
+    - AFNetworking (~> 3)
+    - HappyDNS (~> 0.3)
+  - SDWebImage (4.0.0-beta2):
+    - SDWebImage/Core (= 4.0.0-beta2)
+  - SDWebImage/Core (4.0.0-beta2)
+  - SecurityGuardSDK (5.1.94)
+  - SGMain (5.1.94):
+    - SecurityGuardSDK (= 5.1.94)
+  - SGNoCaptcha (5.1.23):
+    - SecurityGuardSDK (>= 5.1.83)
+    - SGMain (>= 5.1.83)
+    - SGSecurityBody (>= 5.1.27)
+  - SGSecurityBody (5.1.29):
+    - SecurityGuardSDK (>= 5.1.94)
+    - SGMain (>= 5.1.94)
+  - ShareSDK3 (3.5.2):
+    - ShareSDK3/ShareSDK (= 3.5.2)
+  - ShareSDK3/ShareSDK (3.5.2)
+  - ShareSDK3/ShareSDKPlatforms/QQ (3.5.2)
+  - ShareSDK3/ShareSDKPlatforms/SinaWeibo (3.5.2)
+  - ShareSDK3/ShareSDKPlatforms/WeChat (3.5.2)
+  - SVPullToRefresh (0.4.1)
+  - UMengAnalytics (4.1.4)
+  - UTDID (1.0.0)
+  - UzysAnimatedGifPullToRefresh (0.9.8):
+    - AnimatedGIFImageSerialization (~> 0.2.0)
+  - Zhugeio (2.0.6):
+    - Zhugeio/Zhugeio (= 2.0.6)
+  - Zhugeio/Zhugeio (2.0.6)
+
+DEPENDENCIES:
+  - AlibcTradeSDK
+  - Crashlytics
+  - Fabric
+  - KVOController
+  - MBProgressHUD
+  - MSWeakTimer
+  - PGAlertController (from `../BaseFramework/PGAlertController`)
+  - PGAnalytics (from `../BusinessFramework/PGAnalytics`)
+  - PGAPIClient (from `../BusinessFramework/PGAPIClient`)
+  - PGCache (from `../BaseFramework/PGCache`)
+  - PGColor (from `../BaseFramework/PGColor`)
+  - PGImage (from `../BaseFramework/PGImage`)
+  - PGImageView (from `../BaseFramework/PGImageView`)
+  - PGLaunchAds (from `../BaseFramework/PGLaunchAds`)
+  - PGLog (from `../BaseFramework/PGLog`)
+  - PGPagedController (from `../BaseFramework/PGPagedController`)
+  - PGPagedScrollView (from `../BusinessFramework/PGPagedScrollView`)
+  - PGPopover (from `../BaseFramework/PGPopover`)
+  - PGPopupViewController (from `../BaseFramework/PGPopupViewController`)
+  - PGPullRefreshControl (from `../BaseFramework/PGPullRefreshControl`)
+  - PGRestKit (from `../BaseFramework/PGRestKit`)
+  - PGRouter (from `../BaseFramework/PGRouter`)
+  - PGScrollNavigationBar (from `../BaseFramework/PGScrollNavigationBar`)
+  - PGScrollView (from `../BaseFramework/PGScrollView`)
+  - PGShare (from `../BusinessFramework/PGShare`)
+  - PGString (from `../BaseFramework/PGString`)
+  - PGStringParser (from `../BusinessFramework/PGStringParser`)
+  - PGTabBarController (from `../BusinessFramework/PGTabBarController`)
+  - PGTheme (from `../BusinessFramework/PGTheme`)
+  - PGTimer (from `../BaseFramework/PGTimer`)
+  - PGToast (from `../BaseFramework/PGToast`)
+  - PGTransparentNaviBar (from `../BaseFramework/PGTransparentNaviBar`)
+  - PGView (from `../BaseFramework/PGView`)
+  - Qiniu (~> 7.1)
+  - SVPullToRefresh
+  - UzysAnimatedGifPullToRefresh
+
+EXTERNAL SOURCES:
+  PGAlertController:
+    :path: ../BaseFramework/PGAlertController
+  PGAnalytics:
+    :path: ../BusinessFramework/PGAnalytics
+  PGAPIClient:
+    :path: ../BusinessFramework/PGAPIClient
+  PGCache:
+    :path: ../BaseFramework/PGCache
+  PGColor:
+    :path: ../BaseFramework/PGColor
+  PGImage:
+    :path: ../BaseFramework/PGImage
+  PGImageView:
+    :path: ../BaseFramework/PGImageView
+  PGLaunchAds:
+    :path: ../BaseFramework/PGLaunchAds
+  PGLog:
+    :path: ../BaseFramework/PGLog
+  PGPagedController:
+    :path: ../BaseFramework/PGPagedController
+  PGPagedScrollView:
+    :path: ../BusinessFramework/PGPagedScrollView
+  PGPopover:
+    :path: ../BaseFramework/PGPopover
+  PGPopupViewController:
+    :path: ../BaseFramework/PGPopupViewController
+  PGPullRefreshControl:
+    :path: ../BaseFramework/PGPullRefreshControl
+  PGRestKit:
+    :path: ../BaseFramework/PGRestKit
+  PGRouter:
+    :path: ../BaseFramework/PGRouter
+  PGScrollNavigationBar:
+    :path: ../BaseFramework/PGScrollNavigationBar
+  PGScrollView:
+    :path: ../BaseFramework/PGScrollView
+  PGShare:
+    :path: ../BusinessFramework/PGShare
+  PGString:
+    :path: ../BaseFramework/PGString
+  PGStringParser:
+    :path: ../BusinessFramework/PGStringParser
+  PGTabBarController:
+    :path: ../BusinessFramework/PGTabBarController
+  PGTheme:
+    :path: ../BusinessFramework/PGTheme
+  PGTimer:
+    :path: ../BaseFramework/PGTimer
+  PGToast:
+    :path: ../BaseFramework/PGToast
+  PGTransparentNaviBar:
+    :path: ../BaseFramework/PGTransparentNaviBar
+  PGView:
+    :path: ../BaseFramework/PGView
+
+SPEC CHECKSUMS:
+  AFNetworking: 5e0e199f73d8626b11e79750991f5d173d1f8b67
+  AlibabaAuthSDK: 1b83b43b6da31b83186496b756f30ebccb73ddbe
+  AlibcTradeSDK: b41456e5e5cb9742b723fdcd63688c5a68af219a
+  AlipaySDK: a40a4099b24328d90d7ba4fb67f6ce753d7fa2c7
+  AnimatedGIFImageSerialization: b0f0cfe71eac1ee45a3d57ae533c23b8e6f29501
+  BCUserTrack: 684f468b8143be7a2ed10a8c449fd959b2a3a099
+  CocoaLumberjack: c823149bccc5519a9447aeb433be7b1212a7d6a5
+  Crashlytics: 2b6dbe138a42395577cfa73dfa1aa7248cadf39e
+  Fabric: 5911403591946b8228ab1c51d98f1d7137e863c6
+  FLAnimatedImage: 4a0b56255d9b05f18b6dd7ee06871be5d3b89e31
+  FMDB: 854a0341b4726e53276f2a8996f06f1b80f9259a
+  FXPageControl: 5057bf21537579b40ff30e119cd425d16d8ef90a
+  HappyDNS: 06a9fed2796663fd87626dbf02552933265bf059
+  hpple: 3b765f96fc2cd56ad1a49aef6f7be5cb2aa64b57
+  KVOController: d72ace34afea42468329623b3379ab3cd1d286b6
+  Mantle: bc40bb061d8c2c6fb48d5083e04d928c3b7f73d9
+  MBProgressHUD: 4890f671c94e8a0f3cf959aa731e9de2f036d71a
+  MOBFoundation: 3cca6f267be8ea7643be0d27ec871b66b64e32fd
+  MSWeakTimer: 9426150f933b80ed3acf3f6d228e4b61f0e303c8
+  mtop: 80e94a1db90f23c5c5e8f1892a7b3c8ff9c6cbae
+  OHHTTPStubs: 592f74439d2d72615115cf99a954237a3fbe26e5
+  PGAlertController: 3ca3f51050a56ef7ac7f6c2b395392417d706c2f
+  PGAnalytics: e8b7fbc493b11da6d98062aca8bf464c0d074e7b
+  PGAPIClient: a5b2d1a9be888ac28a8c5a42b27bca6f0c16917d
+  PGCache: fad899cd6f2905844ec3325b7d756774e9fc6881
+  PGColor: 3285c9afd2606889ffa197cd5dc388ea3c588946
+  PGImage: 73fee3c1d024bc2890f28db170150e28d9ed24e7
+  PGImageView: fbb648fb6e4e7a5a5437e8064a9b0f59c5901d74
+  PGLaunchAds: c2b973e55fbdd9e4870a12f651d1a01638610c57
+  PGLog: b7720846f4fc8b43345303cdad1a12557b8da4c0
+  PGPagedController: 0a29807c3cb411f8ec9c6ee49e93fe90d8db3433
+  PGPagedScrollView: 9c39d58b9d7dd2a764f6ef7f4741d268718ae4f3
+  PGPopover: c170017fc4da8704364e463eb2260cec1089da06
+  PGPopupViewController: decb625f9bcb200d86838bdb2dee8c743f0b2813
+  PGPullRefreshControl: f33b59fdcd8006d8a83b010c2d2b8be6a47bb0bd
+  PGRestKit: 864a516ac72809449308c60f9074ad9c7681686e
+  PGRouter: 11c76b6b0bcb40e65d23e4361cf6173442b1e0d8
+  PGScrollNavigationBar: b34d76d2bc0e05244ce4e7d7f4077af23297ef31
+  PGScrollView: 256c090d101530daba3ad2a062dcdf316140e120
+  PGShare: 3f2af1ce43f0bdc4720e95a88782b56f0ba4c824
+  PGString: 8a6d375aaf43b5e92d2cb651746c9e9712c47aef
+  PGStringParser: 0962337baee1fef167771770aeef25bd9f2b234a
+  PGTabBarController: feed45a75eae3b12fd73f3d0f5fe13ce7f82dbfd
+  PGTheme: 46982485a9cbde115e7f3b2cadc9b4d6ac44c6c6
+  PGTimer: 46626a1603664ad282ad3e5f71f7476597866267
+  PGToast: 1af2d32d8407d35c8909d764151725d210dfb22b
+  PGTransparentNaviBar: 3b24e84c0c611268c3168297ade32dcd88515ae8
+  PGView: 53147bcd076ea5584c2a6879425bc88d369be5e3
+  Qiniu: a4c962782035ee25b9da3e195181d8c384bb75be
+  SDWebImage: e379f33106cf8d6766f970c0ef1c3fb609c94d78
+  SecurityGuardSDK: 05f6d782189160f2b23b731eed5cb314ce584855
+  SGMain: 8a3008d8a709259d4868f78ae3265659e58e4416
+  SGNoCaptcha: faaa0d84ec26329680a8a1486417c91caab06a85
+  SGSecurityBody: 098c981416d0f04faa605642e2da3bb556419f73
+  ShareSDK3: 08ed714e2bbdcd97ab60f58cb398227341dfc20a
+  SVPullToRefresh: ba2e718695a43253d8bea6852d2960097dc15d8c
+  UMengAnalytics: 0bde5737767dfc18afb03a4cd6ba9d57bb2ad10d
+  UTDID: 05c4737c8cf5c210e86d0235570816ed00e023e8
+  UzysAnimatedGifPullToRefresh: ca441a89a0cbf704c0c9dd2f1320fb91ffc7f86b
+  Zhugeio: 0db34ba66ee32594662df0abdc57cd863cf105b0
+
+PODFILE CHECKSUM: 32427628ff0e94d556256ec5e25c3517bd2a8d0c
+
+COCOAPODS: 1.1.1
