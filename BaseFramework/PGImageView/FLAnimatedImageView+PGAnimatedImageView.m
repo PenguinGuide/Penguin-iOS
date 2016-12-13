@@ -7,8 +7,7 @@
 //
 
 #import "FLAnimatedImageView+PGAnimatedImageView.h"
-#import <SDWebImage/SDWebImageDownloader.h>
-//#import "FLAnimatedImageView+WebCache.h"
+#import "FLAnimatedImageView+WebCache.h"
 
 @implementation FLAnimatedImageView (PGAnimatedImageView)
 
@@ -40,53 +39,11 @@
     imageURL = [imageURL stringByAppendingString:cropQuery];
     
     __weak typeof(self) weakSelf = self;
-//    [self sd_setImageWithURL:[NSURL URLWithString:imageURL]
-//            placeholderImage:placeholder
-//                   completed:^(UIImage * _Nullable image, NSError * _Nullable error, SDImageCacheType cacheType, NSURL * _Nullable imageURL) {
-//                       
-//                   }];
-    
-//    [self sd_setImageWithURL:[NSURL URLWithString:imageURL]
-//            placeholderImage:placeholder
-//                   completed:^(UIImage * _Nullable image, NSError * _Nullable error, SDImageCacheType cacheType, NSURL * _Nullable imageURL) {
-//                       [[SDImageCache sharedImageCache] queryCacheOperationForKey:imageURL
-//                                                                             done:^(UIImage * _Nullable image, NSData * _Nullable data, SDImageCacheType cacheType) {
-//                                                                                 FLAnimatedImage *animatedImage = [FLAnimatedImage animatedImageWithGIFData:data];
-//                                                                                 weakSelf.animatedImage = animatedImage;
-//                                                                             }];
-//                   }];
-    
-//    __weak typeof(self) weakSelf = self;
-//    
-//    // https://yq.aliyun.com/articles/28145
-//    
-//    NSString *path = [[[SDWebImageManager sharedManager] imageCache] defaultCachePathForKey:imageURL];
-//    NSData *gifData = [NSData dataWithContentsOfFile:path];
-//    
-//    if (gifData) {
-//        FLAnimatedImage *animatedImage = [FLAnimatedImage animatedImageWithGIFData:gifData];
-//        self.animatedImage = animatedImage;
-//    } else {
-//        
-//
-//        
-//        
-////        [[SDWebImageDownloader sharedDownloader] downloadImageWithURL:[NSURL URLWithString:imageURL]
-////                                                              options:SDWebImageDownloaderHighPriority
-////                                                             progress:nil
-////                                                            completed:^(UIImage *image, NSData *data, NSError *error, BOOL finished) {
-////                                                                [[[SDWebImageManager sharedManager] imageCache] storeImage:image
-////                                                                                                      recalculateFromImage:NO
-////                                                                                                                 imageData:data
-////                                                                                                                    forKey:imageURL
-////                                                                                                                    toDisk:YES];
-////                                                                dispatch_async(dispatch_get_main_queue(), ^{
-//                                                                    FLAnimatedImage *animatedImage = [FLAnimatedImage animatedImageWithGIFData:data];
-//                                                                    weakSelf.animatedImage = animatedImage;
-////                                                                });
-////                                                            }];
-//    }
-
+    [self sd_setImageWithURL:[NSURL URLWithString:imageURL]
+            placeholderImage:placeholder
+                   completed:^(UIImage * _Nullable image, NSError * _Nullable error, SDImageCacheType cacheType, NSURL * _Nullable imageURL) {
+                       
+                   }];
 }
 
 - (void)setStaticImageURL:(NSString *)imageURL placeholder:(UIImage *)placeholder completion:(void (^)(UIImage *image))completion
@@ -116,14 +73,14 @@
     
     imageURL = [imageURL stringByAppendingString:cropQuery];
     __weak typeof(self) weakSelf = self;
-//    [self sd_setImageWithURL:[NSURL URLWithString:imageURL]
-//            placeholderImage:placeholder
-//                   completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
-//                       weakSelf.image = image;
-//                       if (completion) {
-//                           completion(nil);
-//                       }
-//                   }];
+    [self sd_setImageWithURL:[NSURL URLWithString:imageURL]
+            placeholderImage:placeholder
+                   completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
+                       weakSelf.image = image;
+                       if (completion) {
+                           completion(nil);
+                       }
+                   }];
 }
 
 - (BOOL)isSmallScreen

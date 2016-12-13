@@ -156,7 +156,7 @@
         PGAlertAction *doneAction = [PGAlertAction actionWithTitle:@"确定" style:^(PGAlertActionStyle *style) {
             style.type = PGAlertActionTypeDestructive;
         } handler:^{
-            [[SDImageCache sharedImageCache] clearDisk];
+            //[[SDImageCache sharedImageCache] clearDisk];
             [[SDImageCache sharedImageCache] clearMemory];
         }];
         [self showAlert:@"清除缓存" message:@"确定清除缓存？" actions:@[cancelAction, doneAction] style:^(PGAlertStyle *style) {
