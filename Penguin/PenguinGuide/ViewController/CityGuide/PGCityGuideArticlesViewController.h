@@ -10,6 +10,8 @@
 
 @interface PGCityGuideArticlesViewController : PGBaseViewController
 
+@property (nonatomic, strong, readonly) PGBaseCollectionView *articlesCollectionView;
+
 - (id)initWithCityId:(NSString *)cityId;
 
 @end

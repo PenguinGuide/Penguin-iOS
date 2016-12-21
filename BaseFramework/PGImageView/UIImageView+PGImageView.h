@@ -11,7 +11,6 @@
 @interface UIImageView (PGImageView)
 
 - (void)setWithImageURL:(NSString *)imageURL placeholder:(UIImage *)placeholder completion:(void(^)(UIImage *image))completion;
-- (void)setWithImageURL:(NSString *)imageURL size:(CGSize)size placeholder:(UIImage *)placeholder completion:(void (^)(UIImage *))completion;
 
 - (void)setBlurEffect;
 - (void)setLightBlurEffectWithAlpha:(CGFloat)alpha;

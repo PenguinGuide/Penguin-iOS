@@ -14,13 +14,13 @@
 
 @interface PGPagedController () <UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout>
 
-@property (nonatomic, strong) NSArray *viewControllers;
+@property (nonatomic, strong, readwrite) NSArray *viewControllers;
 @property (nonatomic, strong) NSArray *titles;
 
 @property (nonatomic, strong) PGSegmentedControl *segmentedControl;
 @property (nonatomic, strong) UICollectionView *pagerCollectionView;
 
-@property (nonatomic, assign) NSInteger currentPage;
+@property (nonatomic, assign, readwrite) NSInteger currentPage;
 
 @end
 

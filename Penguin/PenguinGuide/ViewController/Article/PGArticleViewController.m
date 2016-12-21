@@ -45,6 +45,7 @@
 #import "PGArticleCommentReplyCell.h"
 #import "PGCommentInputAccessoryView.h"
 #import "PGArticleCommentsFooterView.h"
+#import "PGArticleParagraphTextLabel.h"
 
 // view models
 #import "PGArticleViewModel.h"
@@ -63,10 +64,6 @@
 @property (nonatomic, strong) UIButton *collectButton;
 @property (nonatomic, strong) UIButton *commentButton;
 @property (nonatomic, strong) UIButton *likeButton;
-
-@property (nonatomic, strong) NSTextContainer *textContainer;
-@property (nonatomic, strong) NSLayoutManager *layoutManager;
-@property (nonatomic, strong) UITextView *calculatedTextHeightTextView;
 
 @property (nonatomic, strong) PGCommentInputAccessoryView *commentInputAccessoryView;
 
@@ -158,7 +155,7 @@
                 weakself.articleCollectionView.alpha = 0.f;
                 [UIView animateWithDuration:0.3f
                                       delay:0.f
-                                    options:UIViewAnimationOptionCurveEaseOut
+                                    options:UIViewAnimationOptionCurveEaseInOut
                                  animations:^{
                                      weakself.articleCollectionView.frame = CGRectMake(0, 0, weakself.articleCollectionView.pg_width, weakself.articleCollectionView.pg_height);
                                      weakself.articleCollectionView.alpha = 0.4f;
@@ -180,7 +177,7 @@
                 weakself.articleCollectionView.alpha = 0.f;
                 [UIView animateWithDuration:0.3f
                                       delay:0.f
-                                    options:UIViewAnimationOptionCurveEaseOut
+                                    options:UIViewAnimationOptionCurveEaseInOut
                                  animations:^{
                                      weakself.articleCollectionView.frame = CGRectMake(0, 0, weakself.articleCollectionView.pg_width, weakself.articleCollectionView.pg_height);
                                      weakself.articleCollectionView.alpha = 0.4f;
@@ -930,15 +927,11 @@
 {
     @autoreleasepool {
         // NOTE: calculate NSAttributedString size http://stackoverflow.com/questions/13621084/boundingrectwithsize-for-nsattributedstring-returning-wrong-size, https://developer.apple.com/library/content/documentation/Cocoa/Conceptual/TextLayout/Tasks/StringHeight.html
-        
         // NOTE: counting NSAttributedString number of lines https://developer.apple.com/library/content/documentation/Cocoa/Conceptual/TextLayout/Tasks/CountLines.html
         if (attrS) {
-            NSTextStorage *storage = [[NSTextStorage alloc] initWithAttributedString:attrS];
-            [storage addLayoutManager:self.layoutManager];
-            (void) [self.layoutManager glyphRangeForTextContainer:self.textContainer];
+            CGSize textSize = [PGArticleParagraphTextLabel sizeWithWidth:UISCREEN_WIDTH attriStr:attrS];
             
-            CGSize textSize = CGSizeMake(UISCREEN_WIDTH, ceilf([self.layoutManager usedRectForTextContainer:self.textContainer].size.height));
-            return CGSizeMake(UISCREEN_WIDTH, textSize.height);
+            return CGSizeMake(UISCREEN_WIDTH, ceil(textSize.height+15));
         }
         return CGSizeZero;
     }
@@ -1022,17 +1015,6 @@
         _commentInputAccessoryView.delegate = self;
     }
     return _commentInputAccessoryView;
-}
-
-- (NSLayoutManager *)layoutManager
-{
-    if (!_layoutManager) {
-        self.textContainer = [[NSTextContainer alloc] initWithSize:CGSizeMake(UISCREEN_WIDTH-40, CGFLOAT_MAX)];
-        [self.textContainer setLineFragmentPadding:0.f];
-        _layoutManager = [[NSLayoutManager alloc] init];
-        [_layoutManager addTextContainer:self.textContainer];
-    }
-    return _layoutManager;
 }
 
 - (void)didReceiveMemoryWarning {

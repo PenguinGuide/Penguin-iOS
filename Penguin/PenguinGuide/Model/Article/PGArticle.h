@@ -8,7 +8,7 @@
 
 #import <PGRestKit/PGRestKit.h>
 #import "PGTag.h"
-#import "PGImageBanner.h"
+#import "PGArticleBanner.h"
 
 @interface PGArticle : PGRKModel
 

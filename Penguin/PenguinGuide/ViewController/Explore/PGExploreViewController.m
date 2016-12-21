@@ -24,9 +24,9 @@
 
 #import "PGExploreViewModel.h"
 
-@interface PGExploreViewController () <UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout>
+@interface PGExploreViewController () <UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, PGArticleBannerCellDelegate>
 
-@property (nonatomic, strong) PGBaseCollectionView *feedsCollectionView;
+@property (nonatomic, strong, readwrite) PGBaseCollectionView *feedsCollectionView;
 
 @property (nonatomic, strong) PGExploreViewModel *viewModel;
 
@@ -209,6 +209,7 @@
         PGArticleBannerCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:ArticleCell forIndexPath:indexPath];
         
         PGArticleBanner *articleBanner = self.viewModel.articlesArray[indexPath.item];
+        [cell setDelegate:self];
         [cell setCellWithArticle:articleBanner allowGesture:YES];
         
         return cell;
@@ -303,7 +304,7 @@
 {
     if (indexPath.section == 3) {
         PGArticleBanner *articleBanner = self.viewModel.articlesArray[indexPath.item];
-        [PGRouterManager routeToArticlePage:articleBanner.articleId link:articleBanner.link];
+        [PGRouterManager routeToArticlePage:articleBanner.articleId link:articleBanner.link animated:YES];
     }
 }
 
@@ -333,6 +334,34 @@
             self.statusbarIsWhiteBackground = NO;
         }
     }
+}
+
+#pragma mark - <PGArticleBannerCellDelegate>
+
+- (void)collectArticle:(PGArticleBanner *)article
+{
+    PGWeakSelf(self);
+    __weak PGArticleBanner *weakArticle = article;
+    [self.viewModel collectArticle:article.articleId completion:^(BOOL success) {
+        if (success) {
+            weakArticle.isCollected = YES;
+            [weakself showToast:@"收藏成功"];
+            [[NSNotificationCenter defaultCenter] postNotificationName:PG_NOTIFICATION_UPDATE_ME object:nil];
+        }
+    }];
+}
+
+- (void)disCollectArticle:(PGArticleBanner *)article
+{
+    PGWeakSelf(self);
+    __weak PGArticleBanner *weakArticle = article;
+    [self.viewModel disCollectArticle:article.articleId completion:^(BOOL success) {
+        if (success) {
+            weakArticle.isCollected = NO;
+            [weakself showToast:@"取消成功"];
+            [[NSNotificationCenter defaultCenter] postNotificationName:PG_NOTIFICATION_UPDATE_ME object:nil];
+        }
+    }];
 }
 
 #pragma mark - <Lazy Init>

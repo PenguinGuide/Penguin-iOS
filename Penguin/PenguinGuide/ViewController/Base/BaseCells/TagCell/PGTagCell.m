@@ -53,7 +53,7 @@
 {
     CGSize size = [keyword sizeWithAttributes:@{NSFontAttributeName:Theme.fontMediumBold}];
     
-    self.nameLabel.backgroundColor = [UIColor colorWithHexString:@"E1E1E1"];
+    self.nameLabel.backgroundColor = [UIColor colorWithHexString:@"F1F1F1"];
     self.nameLabel.font = Theme.fontMediumBold;
     self.nameLabel.textColor = Theme.colorExtraHighlight;
     self.nameLabel.text = keyword;
@@ -65,7 +65,7 @@
 {
     CGSize size = [keyword sizeWithAttributes:@{NSFontAttributeName:Theme.fontMediumBold}];
     
-    return CGSizeMake(size.width+24, 24.f);
+    return CGSizeMake(size.width+24, 30.f);
 }
 
 - (UILabel *)nameLabel {

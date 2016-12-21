@@ -8,13 +8,10 @@
 
 #import "PGSearchResultsHeaderView.h"
 #import "PGSearchTextField.h"
-#import "PGSegmentView.h"
 
-@interface PGSearchResultsHeaderView () <PGSegmentViewDelegate, UITextFieldDelegate>
+@interface PGSearchResultsHeaderView () <UITextFieldDelegate>
 
 @property (nonatomic, strong) PGSearchTextField *searchTextField;
-@property (nonatomic, strong) PGSegmentView *segmentView;
-@property (nonatomic, strong) NSArray *segments;
 @property (nonatomic, strong) UIButton *cancelButton;
 @property (nonatomic, strong) UIButton *backButton;
 
@@ -33,20 +30,16 @@
 
 - (void)initialize
 {
-    self.backgroundColor = Theme.colorBackground;
+    self.backgroundColor = [UIColor whiteColor];
     
     [self addSubview:self.searchTextField];
     [self addSubview:self.backButton];
     [self addSubview:self.cancelButton];
-    [self addSubview:self.segmentView];
 }
 
-- (void)setHeaderViewWithKeyword:(NSString *)keyword segments:(NSArray *)segments
+- (void)setHeaderViewWithKeyword:(NSString *)keyword
 {
     self.searchTextField.text = keyword;
-    self.segments = segments;
-    
-    [self.segmentView setViewWithSegments:self.segments];
 }
 
 - (void)cancelButtonClicked
@@ -60,15 +53,6 @@
 {
     if (self.delegate && [self.delegate respondsToSelector:@selector(backButtonClicked)]) {
         [self.delegate backButtonClicked];
-    }
-}
-
-#pragma mark - <PGSegmentViewDelegate>
-
-- (void)segmentDidClicked:(NSInteger)index
-{
-    if (self.delegate && [self.delegate respondsToSelector:@selector(segmentDidClicked:)]) {
-        [self.delegate segmentDidClicked:index];
     }
 }
 
@@ -106,14 +90,6 @@
         [_cancelButton addTarget:self action:@selector(cancelButtonClicked) forControlEvents:UIControlEventTouchUpInside];
     }
     return _cancelButton;
-}
-
-- (PGSegmentView *)segmentView {
-	if(_segmentView == nil) {
-		_segmentView = [[PGSegmentView alloc] initWithFrame:CGRectMake(0, self.searchTextField.pg_bottom, UISCREEN_WIDTH, self.pg_height-self.searchTextField.pg_bottom)];
-        _segmentView.delegate = self;
-	}
-	return _segmentView;
 }
 
 - (UIButton *)backButton {

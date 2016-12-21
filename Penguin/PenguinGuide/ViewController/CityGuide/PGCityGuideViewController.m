@@ -7,7 +7,6 @@
 //
 
 #import "PGCityGuideViewController.h"
-#import "PGPagedController.h"
 #import "PGCityGuideArticlesViewController.h"
 #import "PGCityGuideSegmentIndicator.h"
 
@@ -15,7 +14,7 @@
 
 @interface PGCityGuideViewController ()
 
-@property (nonatomic, strong) PGPagedController *pagedController;
+@property (nonatomic, strong, readwrite) PGPagedController *pagedController;
 @property (nonatomic, strong) PGCityGuideViewModel *viewModel;
 
 @end
@@ -72,6 +71,11 @@
 - (UIStatusBarStyle)preferredStatusBarStyle
 {
     return UIStatusBarStyleDefault;
+}
+
+- (void)dealloc
+{
+    [self unobserve];
 }
 
 #pragma mark - <PGTabBarControllerDelegate>

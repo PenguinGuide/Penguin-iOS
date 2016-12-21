@@ -10,9 +10,14 @@
 // view controllers
 #import "PGTabBarController.h"
 #import "PGHomeViewController.h"
+#import "PGExploreViewController.h"
+#import "PGCityGuideViewController.h"
+#import "PGCityGuideArticlesViewController.h"
 #import "PGArticleViewController.h"
 // transitions
 #import "PGHomeToArticleTransition.h"
+#import "PGExploreToArticleTransition.h"
+#import "PGCityGuideToArticleTransition.h"
 #import "PGArticleToHomeTransition.h"
 
 @implementation PGBaseViewController (TransitionAnimation)
@@ -36,6 +41,25 @@
                         } else {
                             return nil;
                         }
+                    } else if ([tabbarController.selectedViewController isKindOfClass:[PGExploreViewController class]]) {
+                        PGExploreViewController *exploreVC = (PGExploreViewController *)tabbarController.selectedViewController;
+                        NSIndexPath *selectedIndexPath = [exploreVC.feedsCollectionView indexPathsForSelectedItems].firstObject;
+                        PGArticleBannerCell *cell = (PGArticleBannerCell *)[exploreVC.feedsCollectionView cellForItemAtIndexPath:selectedIndexPath];
+                        if (cell) {
+                            return [[PGExploreToArticleTransition alloc] init];
+                        } else {
+                            return nil;
+                        }
+                    } else if ([tabbarController.selectedViewController isKindOfClass:[PGCityGuideViewController class]]) {
+//                        PGCityGuideViewController *cityGuideVC = (PGCityGuideViewController *)tabbarController.selectedViewController;
+//                        PGCityGuideArticlesViewController *cityGuideArticlesVC = cityGuideVC.pagedController.viewControllers[cityGuideVC.pagedController.currentPage];
+//                        NSIndexPath *selectedIndexPath = [cityGuideArticlesVC.articlesCollectionView indexPathsForSelectedItems].firstObject;
+//                        PGArticleBannerCell *cell = (PGArticleBannerCell *)[cityGuideArticlesVC.articlesCollectionView cellForItemAtIndexPath:selectedIndexPath];
+//                        if (cell) {
+//                            return [[PGCityGuideToArticleTransition alloc] init];
+//                        } else {
+//                            return nil;
+//                        }
                     }
                 } else {
                     return nil;

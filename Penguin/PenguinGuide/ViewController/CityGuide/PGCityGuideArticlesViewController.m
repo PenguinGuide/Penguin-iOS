@@ -14,7 +14,7 @@
 
 @interface PGCityGuideArticlesViewController () <UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout>
 
-@property (nonatomic, strong) PGBaseCollectionView *articlesCollectionView;
+@property (nonatomic, strong, readwrite) PGBaseCollectionView *articlesCollectionView;
 @property (nonatomic, strong) PGCityGuideArticlesViewModel *viewModel;
 
 @property (nonatomic, strong) NSString *cityId;
@@ -152,7 +152,7 @@
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
     PGArticleBanner *articleBanner = self.viewModel.articlesArray[indexPath.item];
-    [PGRouterManager routeToArticlePage:articleBanner.articleId link:articleBanner.link];
+    [PGRouterManager routeToArticlePage:articleBanner.articleId link:articleBanner.link animated:NO];
 }
 
 #pragma mark - <Lazy Init>

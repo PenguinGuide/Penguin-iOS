@@ -24,6 +24,9 @@
 @property (nonatomic, assign) BOOL equalWidth;
 @property (nonatomic, assign) BOOL disableScrolling;
 
+@property (nonatomic, strong, readonly) NSArray *viewControllers;
+@property (nonatomic, assign, readonly) NSInteger currentPage;
+
 - (void)reloadWithViewControllers:(NSArray *)viewControllers titles:(NSArray *)titles selectedViewClass:(Class)SelectedViewClass;
 
 - (void)scrollToPage:(NSInteger)page;

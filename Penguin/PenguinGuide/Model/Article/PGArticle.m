@@ -44,7 +44,7 @@
 
 + (NSValueTransformer *)relatedArticlesArrayJSONTransformer
 {
-    return [MTLJSONAdapter arrayTransformerWithModelClass:[PGImageBanner class]];
+    return [MTLJSONAdapter arrayTransformerWithModelClass:[PGArticleBanner class]];
 }
 
 @end

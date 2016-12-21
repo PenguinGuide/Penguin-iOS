@@ -7,7 +7,10 @@
 //
 
 #import "PGBaseViewController.h"
+#import "PGPagedController.h"
 
 @interface PGCityGuideViewController : PGBaseViewController <PGTabBarControllerDelegate>
+
+@property (nonatomic, strong, readonly) PGPagedController *pagedController;
 
 @end

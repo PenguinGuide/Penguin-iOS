@@ -1,66 +1,22 @@
 //
-//  PGExploreViewModel.m
+//  PGSearchResultsArticlesViewModel.m
 //  Penguin
 //
-//  Created by Jing Dai on 8/29/16.
+//  Created by Kobe Dai on 15/12/2016.
 //  Copyright © 2016 Xinglian. All rights reserved.
 //
 
-static NSString *ScenarioTypeCategory = @"4";
-static NSString *ScenarioTypeLevel = @"3";
-static NSString *ScenarioTypeGroup = @"2";
+#import "PGSearchResultsArticlesViewModel.h"
 
-#import "PGExploreViewModel.h"
-
-#import "PGArticleBanner.h"
-#import "PGScenarioBanner.h"
-
-@interface PGExploreViewModel ()
-
-@property (nonatomic, strong, readwrite) NSArray *recommendsArray;
-
-@property (nonatomic, strong, readwrite) NSArray *scenariosArray;
-@property (nonatomic, strong, readwrite) NSArray *categoriesArray;
-@property (nonatomic, strong, readwrite) NSArray *levelsArray;
-@property (nonatomic, strong, readwrite) NSArray *groupsArray;
+@interface PGSearchResultsArticlesViewModel ()
 
 @property (nonatomic, strong, readwrite) NSArray *articlesArray;
 
 @end
 
-@implementation PGExploreViewModel
+@implementation PGSearchResultsArticlesViewModel
 
-- (void)requestData
-{
-    PGWeakSelf(self);
-    [self.apiClient pg_makeGetRequest:^(PGRKRequestConfig *config) {
-        config.route = PG_Explore_Recommends;
-        config.keyPath = nil;
-    } completion:^(id response) {
-        NSDictionary *responseDict = [response firstObject];
-        if (responseDict && [responseDict isKindOfClass:[NSDictionary class]]) {
-            if (responseDict[@"banners"]) {
-                weakself.recommendsArray = [PGImageBanner modelsFromArray:responseDict[@"banners"]];
-            }
-            if (responseDict[@"scenarios"]) {
-                weakself.scenariosArray = [PGScenarioBanner modelsFromArray:responseDict[@"scenarios"]];
-                
-                NSPredicate *categoryPredicate = [NSPredicate predicateWithFormat:@"type == %@", ScenarioTypeCategory];
-                NSPredicate *levelPredicate = [NSPredicate predicateWithFormat:@"type == %@", ScenarioTypeLevel];
-                NSPredicate *groupPredicate = [NSPredicate predicateWithFormat:@"type == %@", ScenarioTypeGroup];
-                
-                weakself.categoriesArray = [weakself.scenariosArray filteredArrayUsingPredicate:categoryPredicate];
-                weakself.levelsArray = [weakself.scenariosArray filteredArrayUsingPredicate:levelPredicate];
-                weakself.groupsArray = [weakself.scenariosArray filteredArrayUsingPredicate:groupPredicate];
-            }
-        }
-        [weakself requestArticles];
-    } failure:^(NSError *error) {
-        [weakself requestArticles];
-    }];
-}
-
-- (void)requestArticles
+- (void)requestArticles:(NSString *)keyword
 {
     if (self.isPreloadingNextPage || self.endFlag) {
         return;
@@ -70,16 +26,20 @@ static NSString *ScenarioTypeGroup = @"2";
     
     if (!self.response) {
         self.response = [[PGRKResponse alloc] init];
-        self.response.pagination.paginationKey = @"cursor";
+        self.response.pagination.needPerformingBatchUpdate = NO;
+        self.response.pagination.paginateSections = NO;
+        self.response.pagination.paginationKey = @"next";
     }
     
     PGParams *params = [PGParams new];
-    params[ParamsPerPage] = @10;
-    params[ParamsPageCursor] = self.response.pagination.cursor;
+    params[@"type"] = @"article";
+    params[@"keyword"] = keyword;
+    params[@"per_page"] = @(10);
     
     PGWeakSelf(self);
+    
     [self.apiClient pg_makeGetRequest:^(PGRKRequestConfig *config) {
-        config.route = PG_Explore_Feeds;
+        config.route = PG_Search;
         config.params = params;
         config.keyPath = @"items";
         config.model = [PGArticleBanner new];
@@ -149,9 +109,9 @@ static NSString *ScenarioTypeGroup = @"2";
 
 - (void)clearPagination
 {
+    self.response = nil;
     self.endFlag = NO;
     self.isPreloadingNextPage = NO;
-    self.response = nil;
 }
 
 @end

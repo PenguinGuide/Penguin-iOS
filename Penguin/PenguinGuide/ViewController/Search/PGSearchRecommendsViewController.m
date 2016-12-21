@@ -39,7 +39,7 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     
-    self.view.backgroundColor = Theme.colorBackground;
+    self.view.backgroundColor = [UIColor whiteColor];
     
     self.viewModel = [[PGSearchRecommendsViewModel alloc] initWithAPIClient:self.apiClient];
     
@@ -62,8 +62,6 @@
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
-    
-//    [self.searchTextField becomeFirstResponder];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -176,7 +174,7 @@
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout referenceSizeForHeaderInSection:(NSInteger)section
 {
     if (section == 1) {
-        return CGSizeMake(UISCREEN_WIDTH, 40);
+        return CGSizeMake(UISCREEN_WIDTH, 60);
     }
     return CGSizeZero;
 }
@@ -238,7 +236,7 @@
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
     if (scrollView.contentOffset.y >= -64) {
-        [self.navigationController.navigationBar pg_setBackgroundColor:Theme.colorBackground];
+        [self.navigationController.navigationBar pg_setBackgroundColor:[UIColor whiteColor]];
     } else {
         [self.navigationController.navigationBar pg_setBackgroundColor:[UIColor clearColor]];
     }
@@ -252,7 +250,6 @@
 - (void)cancelButtonClicked
 {
     PGGlobal.tempNavigationController = nil;
-    NSLog(@"temp navi set to nil");
     [self.navigationController dismissViewControllerAnimated:NO completion:nil];
 }
 
@@ -282,7 +279,7 @@
 	if(_searchCollectionView == nil) {
         UICollectionViewLeftAlignedLayout *layout = [UICollectionViewLeftAlignedLayout new];
 		_searchCollectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(0, 64, UISCREEN_WIDTH, UISCREEN_HEIGHT-64) collectionViewLayout:layout];
-        _searchCollectionView.backgroundColor = Theme.colorBackground;
+        _searchCollectionView.backgroundColor = [UIColor whiteColor];
         _searchCollectionView.dataSource = self;
         _searchCollectionView.delegate = self;
         
@@ -296,7 +293,7 @@
 - (UIView *)searchTextFieldContainerView {
 	if(_searchTextFieldContainerView == nil) {
 		_searchTextFieldContainerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, UISCREEN_WIDTH, 64)];
-        _searchTextFieldContainerView.backgroundColor = Theme.colorBackground;
+        _searchTextFieldContainerView.backgroundColor = [UIColor whiteColor];
 	}
 	return _searchTextFieldContainerView;
 }

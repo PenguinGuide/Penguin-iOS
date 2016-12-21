@@ -29,7 +29,7 @@
     static PGGlobalObject *sharedInstance = nil;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-        sharedInstance = [[PGGlobalObject alloc] init];
+        sharedInstance = [[self alloc] init];
     });
     
     return sharedInstance;

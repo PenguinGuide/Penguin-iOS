@@ -230,6 +230,14 @@
 		4BD01CB6C1E9C581FF15B7C3 /* libPods-PenguinGuideUITests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 154BB784023749113FEC3760 /* libPods-PenguinGuideUITests.a */; };
 		9D4A0C0A718990CD7428E6E8 /* libPods-PenguinGuide.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2781A6FFECE60736EAE2C13D /* libPods-PenguinGuide.a */; };
 		C7AED6BA0A3F2EAAA994C062 /* libPods-PenguinGuideTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = ECDB672886290E17696F19CC /* libPods-PenguinGuideTests.a */; };
+		FF24DF6A1E02745200A17486 /* PGSearchResultsArticlesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FF24DF691E02745200A17486 /* PGSearchResultsArticlesViewController.m */; };
+		FF24DF6D1E02770800A17486 /* PGSearchResultsGoodsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FF24DF6C1E02770800A17486 /* PGSearchResultsGoodsViewController.m */; };
+		FF24DF701E027A7800A17486 /* PGSearchResultsArticlesViewModel.m in Sources */ = {isa = PBXBuildFile; fileRef = FF24DF6F1E027A7800A17486 /* PGSearchResultsArticlesViewModel.m */; };
+		FF24DF731E027A8800A17486 /* PGSearchResultsGoodsViewModel.m in Sources */ = {isa = PBXBuildFile; fileRef = FF24DF721E027A8800A17486 /* PGSearchResultsGoodsViewModel.m */; };
+		FF2F8ECC1E0127ED00A29377 /* PGArticleParagraphTextLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = FF2F8ECB1E0127ED00A29377 /* PGArticleParagraphTextLabel.m */; };
+		FF2F8ECF1E013FAE00A29377 /* PGArticleRelatedArticleView.m in Sources */ = {isa = PBXBuildFile; fileRef = FF2F8ECE1E013FAE00A29377 /* PGArticleRelatedArticleView.m */; };
+		FFF8164C1E07ACC80001FDFE /* PGExploreToArticleTransition.m in Sources */ = {isa = PBXBuildFile; fileRef = FFF8164B1E07ACC80001FDFE /* PGExploreToArticleTransition.m */; };
+		FFF8164F1E07BFC70001FDFE /* PGCityGuideToArticleTransition.m in Sources */ = {isa = PBXBuildFile; fileRef = FFF8164E1E07BFC70001FDFE /* PGCityGuideToArticleTransition.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -684,6 +692,22 @@
 		DCFE72ABD6C7737387832668 /* Pods-PenguinGuideUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PenguinGuideUITests.release.xcconfig"; path = "Pods/Target Support Files/Pods-PenguinGuideUITests/Pods-PenguinGuideUITests.release.xcconfig"; sourceTree = "<group>"; };
 		ECDB672886290E17696F19CC /* libPods-PenguinGuideTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-PenguinGuideTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		FC37FF962E7BA5F15850D8D2 /* Pods-PenguinGuide.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PenguinGuide.release.xcconfig"; path = "Pods/Target Support Files/Pods-PenguinGuide/Pods-PenguinGuide.release.xcconfig"; sourceTree = "<group>"; };
+		FF24DF681E02745200A17486 /* PGSearchResultsArticlesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PGSearchResultsArticlesViewController.h; sourceTree = "<group>"; };
+		FF24DF691E02745200A17486 /* PGSearchResultsArticlesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PGSearchResultsArticlesViewController.m; sourceTree = "<group>"; };
+		FF24DF6B1E02770800A17486 /* PGSearchResultsGoodsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PGSearchResultsGoodsViewController.h; sourceTree = "<group>"; };
+		FF24DF6C1E02770800A17486 /* PGSearchResultsGoodsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PGSearchResultsGoodsViewController.m; sourceTree = "<group>"; };
+		FF24DF6E1E027A7800A17486 /* PGSearchResultsArticlesViewModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PGSearchResultsArticlesViewModel.h; sourceTree = "<group>"; };
+		FF24DF6F1E027A7800A17486 /* PGSearchResultsArticlesViewModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PGSearchResultsArticlesViewModel.m; sourceTree = "<group>"; };
+		FF24DF711E027A8800A17486 /* PGSearchResultsGoodsViewModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PGSearchResultsGoodsViewModel.h; sourceTree = "<group>"; };
+		FF24DF721E027A8800A17486 /* PGSearchResultsGoodsViewModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PGSearchResultsGoodsViewModel.m; sourceTree = "<group>"; };
+		FF2F8ECA1E0127ED00A29377 /* PGArticleParagraphTextLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PGArticleParagraphTextLabel.h; sourceTree = "<group>"; };
+		FF2F8ECB1E0127ED00A29377 /* PGArticleParagraphTextLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PGArticleParagraphTextLabel.m; sourceTree = "<group>"; };
+		FF2F8ECD1E013FAE00A29377 /* PGArticleRelatedArticleView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PGArticleRelatedArticleView.h; sourceTree = "<group>"; };
+		FF2F8ECE1E013FAE00A29377 /* PGArticleRelatedArticleView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PGArticleRelatedArticleView.m; sourceTree = "<group>"; };
+		FFF8164A1E07ACC80001FDFE /* PGExploreToArticleTransition.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PGExploreToArticleTransition.h; sourceTree = "<group>"; };
+		FFF8164B1E07ACC80001FDFE /* PGExploreToArticleTransition.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PGExploreToArticleTransition.m; sourceTree = "<group>"; };
+		FFF8164D1E07BFC70001FDFE /* PGCityGuideToArticleTransition.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PGCityGuideToArticleTransition.h; sourceTree = "<group>"; };
+		FFF8164E1E07BFC70001FDFE /* PGCityGuideToArticleTransition.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PGCityGuideToArticleTransition.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -725,6 +749,10 @@
 				0F0008C81D71879400BED6FA /* PGSearchRecommendsViewController.m */,
 				0F0008CA1D7187A400BED6FA /* PGSearchResultsViewController.h */,
 				0F0008CB1D7187A400BED6FA /* PGSearchResultsViewController.m */,
+				FF24DF681E02745200A17486 /* PGSearchResultsArticlesViewController.h */,
+				FF24DF691E02745200A17486 /* PGSearchResultsArticlesViewController.m */,
+				FF24DF6B1E02770800A17486 /* PGSearchResultsGoodsViewController.h */,
+				FF24DF6C1E02770800A17486 /* PGSearchResultsGoodsViewController.m */,
 			);
 			path = Search;
 			sourceTree = "<group>";
@@ -754,6 +782,10 @@
 				0F0008D81D718F3500BED6FA /* PGSearchRecommendsViewModel.m */,
 				0FBBEDE91D742C12001E75BA /* PGSearchResultsViewModel.h */,
 				0FBBEDEA1D742C12001E75BA /* PGSearchResultsViewModel.m */,
+				FF24DF6E1E027A7800A17486 /* PGSearchResultsArticlesViewModel.h */,
+				FF24DF6F1E027A7800A17486 /* PGSearchResultsArticlesViewModel.m */,
+				FF24DF711E027A8800A17486 /* PGSearchResultsGoodsViewModel.h */,
+				FF24DF721E027A8800A17486 /* PGSearchResultsGoodsViewModel.m */,
 			);
 			path = Search;
 			sourceTree = "<group>";
@@ -977,6 +1009,10 @@
 				0F09D05B1DAC909B00FDA3F2 /* PGArticleCommentsFooterView.m */,
 				0F02E1AC1DBDE1D700AA0428 /* PGArticleCommentLikeButton.h */,
 				0F02E1AD1DBDE1D700AA0428 /* PGArticleCommentLikeButton.m */,
+				FF2F8ECA1E0127ED00A29377 /* PGArticleParagraphTextLabel.h */,
+				FF2F8ECB1E0127ED00A29377 /* PGArticleParagraphTextLabel.m */,
+				FF2F8ECD1E013FAE00A29377 /* PGArticleRelatedArticleView.h */,
+				FF2F8ECE1E013FAE00A29377 /* PGArticleRelatedArticleView.m */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -2025,6 +2061,10 @@
 				0FD590D51D38BB3100731962 /* PGHomeToArticleTransition.m */,
 				0F1392C51D3CD15800EF4CC8 /* PGArticleToHomeTransition.h */,
 				0F1392C61D3CD15800EF4CC8 /* PGArticleToHomeTransition.m */,
+				FFF8164A1E07ACC80001FDFE /* PGExploreToArticleTransition.h */,
+				FFF8164B1E07ACC80001FDFE /* PGExploreToArticleTransition.m */,
+				FFF8164D1E07BFC70001FDFE /* PGCityGuideToArticleTransition.h */,
+				FFF8164E1E07BFC70001FDFE /* PGCityGuideToArticleTransition.m */,
 			);
 			path = TransitionAnimation;
 			sourceTree = "<group>";
@@ -2493,11 +2533,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				0FA1B2AA1DC203A30022ECE2 /* PGMessage.m in Sources */,
+				FF24DF701E027A7800A17486 /* PGSearchResultsArticlesViewModel.m in Sources */,
 				0FC9E6B81DB08E5C007069D5 /* PGTopicHeaderView.m in Sources */,
 				0F9E8E1B1DC5F74F003027CF /* PGSettingsUpdateViewController.m in Sources */,
 				0F79B10A1D6FF9740080BC4F /* PGChannelCategoryCell.m in Sources */,
 				0FB8F96F1D339CD0005E6C56 /* PGRouterManager.m in Sources */,
 				0FA1B2AD1DC204DF0022ECE2 /* PGMessageContent.m in Sources */,
+				FF2F8ECC1E0127ED00A29377 /* PGArticleParagraphTextLabel.m in Sources */,
 				0F3C7EF11D2F72E700284066 /* PGHomeViewController.m in Sources */,
 				0F51B31F1D6D87C800B4690F /* PGTopicBanner.m in Sources */,
 				0F1C75B71DC70B980044C931 /* PGHistoryViewController.m in Sources */,
@@ -2514,6 +2556,7 @@
 				0F21FEB71D9126720036F14A /* PGArticleParagraphFooterCell.m in Sources */,
 				0F877A311D7D0F1F007BDBE9 /* PGTopicViewController.m in Sources */,
 				0F5F76921DED3150002EF527 /* PGCityGuideCity.m in Sources */,
+				FF24DF6A1E02745200A17486 /* PGSearchResultsArticlesViewController.m in Sources */,
 				0F51B3191D6D853C00B4690F /* PGFlashbuyBanner.m in Sources */,
 				0FC160131DACD8B600EC462C /* PGLoginTextField.m in Sources */,
 				0F141FCC1D74752500884052 /* PGExploreViewModel.m in Sources */,
@@ -2539,6 +2582,7 @@
 				0FB306571DA4DCAF005EB3AC /* PGParams.m in Sources */,
 				0F1456481DEEE3A500533396 /* PGAllScenariosViewController.m in Sources */,
 				0FAADD191D767F8C00FC7933 /* PGScenarioViewModel.m in Sources */,
+				FFF8164F1E07BFC70001FDFE /* PGCityGuideToArticleTransition.m in Sources */,
 				0F9E8E201DC5F806003027CF /* PGCollectionViewModel.m in Sources */,
 				0FBBEDE11D73E08C001E75BA /* PGSearchResultsArticleCell.m in Sources */,
 				0FB8F9721D339EBA005E6C56 /* PGGlobalObject.m in Sources */,
@@ -2584,6 +2628,7 @@
 				0F7A67E11DA7E65100699AA2 /* PGSettingsHeaderView.m in Sources */,
 				0FA1B2A21DC1FA390022ECE2 /* PGMessageContentCell.m in Sources */,
 				0F9E8E1C1DC5F74F003027CF /* PGSystemSettingsViewController.m in Sources */,
+				FF24DF731E027A8800A17486 /* PGSearchResultsGoodsViewModel.m in Sources */,
 				0FF80FF61DCAE027004D3145 /* PGArticleParagraphNewlineCell.m in Sources */,
 				0FA965D51DEBF9F000EC3CE8 /* PGCityGuideSegmentIndicator.m in Sources */,
 				0F41AE621D35318000E7AD71 /* PGHomeRecommendsHeaderView.m in Sources */,
@@ -2595,6 +2640,7 @@
 				0F6281BD1D8FE61E004E0596 /* PGArticleParagraphCatalogImageCell.m in Sources */,
 				0F141FBC1D74684000884052 /* PGBaseCollectionView.m in Sources */,
 				0FA1B2A61DC1FCD70022ECE2 /* PGMessageViewModel.m in Sources */,
+				FF2F8ECF1E013FAE00A29377 /* PGArticleRelatedArticleView.m in Sources */,
 				0F84FE251D485ECE0054F2D7 /* PGArticleParagraphImageCell.m in Sources */,
 				0F7F047E1DAA1E3000CA99AD /* PGAlibcTraderManager.m in Sources */,
 				0F37654B1D6F257F007B9481 /* PGTopicBannerCell.m in Sources */,
@@ -2608,10 +2654,12 @@
 				0F2871F01DBE511D006E0264 /* PGBaseCollectionViewFooterView.m in Sources */,
 				0F877A381D7D1433007BDBE9 /* PGTopic.m in Sources */,
 				0F21FEBA1D9140EF0036F14A /* PGArticleRelatedArticlesCell.m in Sources */,
+				FFF8164C1E07ACC80001FDFE /* PGExploreToArticleTransition.m in Sources */,
 				0F9E8E131DC5F746003027CF /* PGMessageViewController.m in Sources */,
 				0F8A799B1DF15E4D00711A16 /* PGScenarioFeedsCollectionView.m in Sources */,
 				0F0F447F1D34FCFD007B90F2 /* PGImageBanner.m in Sources */,
 				0F2DC2941D32973500277C9E /* PGHomeViewModel.m in Sources */,
+				FF24DF6D1E02770800A17486 /* PGSearchResultsGoodsViewController.m in Sources */,
 				0F877A3C1D7D15D0007BDBE9 /* PGTopicViewModel.m in Sources */,
 				0F1C75BE1DC717130044C931 /* PGHistory.m in Sources */,
 				0FD736F91DF12BA700E0058E /* PGScenarioGoodsViewController.m in Sources */,

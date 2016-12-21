@@ -11,7 +11,6 @@
 @interface PGMeViewModel ()
 
 @property (nonatomic, strong, readwrite) PGMe *me;
-@property (nonatomic, assign, readwrite) BOOL readSuccess;
 
 @end
 
@@ -50,17 +49,21 @@
     }
 }
 
-- (void)readMessages
+- (void)readMessages:(void (^)(BOOL success))completion
 {
     if (PGGlobal.userId && PGGlobal.userId.length > 0) {
-        PGWeakSelf(self);
         [self.apiClient pg_makePostRequest:^(PGRKRequestConfig *config) {
             config.route = PG_Message_Read;
             config.keyPath = nil;
         } completion:^(id response) {
-            weakself.readSuccess = YES;
+            if (completion) {
+                completion(YES);
+            }
+            [[NSNotificationCenter defaultCenter] postNotificationName:PG_NOTIFICATION_UPDATE_ME object:nil];
         } failure:^(NSError *error) {
-            weakself.readSuccess = NO;
+            if (completion) {
+                completion(NO);
+            }
         }];
     }
 }

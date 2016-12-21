@@ -70,7 +70,12 @@
         if (PGGlobal.rootNavigationController) {
             if (params[@"articleId"]) {
                 NSString *articleId = params[@"articleId"];
-                PGArticleViewController *articleVC = [[PGArticleViewController alloc] initWithArticleId:articleId animated:NO];
+                PGArticleViewController *articleVC;
+                if (params[@"animated"] && [params[@"animated"] isEqualToString:@"1"]) {
+                    articleVC = [[PGArticleViewController alloc] initWithArticleId:articleId animated:YES];
+                } else {
+                    articleVC = [[PGArticleViewController alloc] initWithArticleId:articleId animated:NO];
+                }
                 articleVC.disableTransition = NO;
                 if (PGGlobal.tempNavigationController) {
                     [PGGlobal.tempNavigationController pushViewController:articleVC animated:YES];
@@ -218,11 +223,28 @@
 
 + (void)routeToArticlePage:(NSString *)articleId link:(NSString *)link
 {
+    [PGRouterManager routeToArticlePage:articleId link:link animated:NO];
+}
+
++ (void)routeToArticlePage:(NSString *)articleId link:(NSString *)link animated:(BOOL)animated
+{
     if (link && link.length > 0) {
+        if (animated) {
+            if ([link containsString:@"?"]) {
+                link = [link stringByAppendingString:@"&animated=1"];
+            } else {
+                link = [link stringByAppendingString:@"?animated=1"];
+            }
+        }
         [[PGRouter sharedInstance] openURL:link];
     } else {
-        NSString *url = [NSString stringWithFormat:@"qiechihe://article?articleId=%@", articleId];
-        [[PGRouter sharedInstance] openURL:url];
+        if (animated) {
+            NSString *url = [NSString stringWithFormat:@"qiechihe://article?articleId=%@&animated=1", articleId];
+            [[PGRouter sharedInstance] openURL:url];
+        } else {
+            NSString *url = [NSString stringWithFormat:@"qiechihe://article?articleId=%@", articleId];
+            [[PGRouter sharedInstance] openURL:url];
+        }
     }
 }
 

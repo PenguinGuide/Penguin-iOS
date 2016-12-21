@@ -22,7 +22,8 @@
              @"link" : @"link",
              @"likesCount" : @[@"likes", @"favor_count"],
              @"commentsCount" : @[@"comments", @"comment_count"],
-             @"articleId": @"id"
+             @"articleId": @"id",
+             @"isCollected": @"is_collected"
              };
 }
 

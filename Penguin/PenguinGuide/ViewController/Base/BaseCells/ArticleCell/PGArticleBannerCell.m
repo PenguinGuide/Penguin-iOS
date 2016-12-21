@@ -14,6 +14,8 @@
 
 @interface PGArticleBannerCell () <UIScrollViewDelegate, UIGestureRecognizerDelegate>
 
+@property (nonatomic, strong) PGArticleBanner *article;
+
 @property (nonatomic, strong) PGBannerImageScrollView *bannerImageScrollView;
 @property (nonatomic, strong, readwrite) FLAnimatedImageView *bannerImageView;
 @property (nonatomic, strong) UIPanGestureRecognizer *panGesture;
@@ -21,6 +23,8 @@
 @property (nonatomic, strong) UILabel *collectLabel;
 @property (nonatomic, strong, readwrite) UILabel *titleLabel;
 @property (nonatomic, strong, readwrite) UILabel *subtitleLabel;
+
+@property (nonatomic, assign) BOOL isScrollling;
 
 @end
 
@@ -56,6 +60,8 @@
 
 - (void)setCellWithArticle:(PGArticleBanner *)article allowGesture:(BOOL)allowGesture
 {
+    self.article = article;
+    
     if (!allowGesture) {
         [self.contentView removeGestureRecognizer:self.bannerImageScrollView.panGestureRecognizer];
     }
@@ -66,10 +72,18 @@
     }
     self.bannerImageView.backgroundColor = Theme.colorBackground;
     
-    self.backgroundColor = Theme.colorHighlight;
-    
     self.titleLabel.text = article.title;
     self.subtitleLabel.text = article.coverTitle;
+    
+    if (self.article.isCollected) {
+        self.backgroundColor = Theme.colorExtraHighlight;
+        self.collectLabel.text = @"已收藏";
+        self.collectImageView.image = [UIImage imageNamed:@"pg_home_article_collected"];
+    } else {
+        self.backgroundColor = Theme.colorHighlight;
+        self.collectLabel.text = @"收藏";
+        self.collectImageView.image = [UIImage imageNamed:@"pg_home_article_collect"];
+    }
 }
 
 + (CGSize)cellSize
@@ -82,12 +96,38 @@
     if (scrollView.contentOffset.x <= 0) {
         scrollView.contentOffset = CGPointZero;
     } else {
+        if (self.isScrollling) {
+            return;
+        }
         if (scrollView.contentOffset.x >= CollectButtonWidth) {
-            self.backgroundColor = Theme.colorExtraHighlight;
-            self.collectImageView.image = [UIImage imageNamed:@"pg_home_article_collected"];
-            self.collectLabel.text = @"已收藏";
+            if (PGGlobal.userId && PGGlobal.userId.length > 0) {
+                if (self.article.isCollected) {
+                    self.backgroundColor = Theme.colorHighlight;
+                    self.collectImageView.image = [UIImage imageNamed:@"pg_home_article_collect"];
+                    self.collectLabel.text = @"收藏";
+                    if (self.delegate && [self.delegate respondsToSelector:@selector(disCollectArticle:)]) {
+                        [self.delegate disCollectArticle:self.article];
+                    }
+                } else {
+                    self.backgroundColor = Theme.colorExtraHighlight;
+                    self.collectImageView.image = [UIImage imageNamed:@"pg_home_article_collected"];
+                    self.collectLabel.text = @"已收藏";
+                    if (self.delegate && [self.delegate respondsToSelector:@selector(collectArticle:)]) {
+                        [self.delegate collectArticle:self.article];
+                    }
+                }
+                self.isScrollling = YES;
+            } else {
+                [PGRouterManager routeToLoginPage];
+                return;
+            }
         }
     }
+}
+
+- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
+{
+    self.isScrollling = NO;
 }
 
 - (PGBannerImageScrollView *)bannerImageScrollView
@@ -119,7 +159,6 @@
 {
     if (!_collectImageView) {
         _collectImageView = [[UIImageView alloc] initWithFrame:CGRectMake(self.pg_width-32-26, self.pg_height/2-14-18, 26, 24)];
-        _collectImageView.image = [UIImage imageNamed:@"pg_home_article_collect"];
     }
     return _collectImageView;
 }
@@ -131,7 +170,6 @@
         _collectLabel.font = Theme.fontSmall;
         _collectLabel.textColor = [UIColor whiteColor];
         _collectLabel.textAlignment = NSTextAlignmentCenter;
-        _collectLabel.text = @"收藏";
     }
     return _collectLabel;
 }

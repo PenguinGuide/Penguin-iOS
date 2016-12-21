@@ -12,9 +12,8 @@
 @interface PGMeViewModel : PGBaseViewModel
 
 @property (nonatomic, strong, readonly) PGMe *me;
-@property (nonatomic, assign, readonly) BOOL readSuccess;
 
 - (void)requestDetails;
-- (void)readMessages;
+- (void)readMessages:(void(^)(BOOL success))completion;
 
 @end

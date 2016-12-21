@@ -53,14 +53,6 @@
         }
         [weakself dismissLoading];
     }];
-    [self observe:self.viewModel keyPath:@"readSuccess" block:^(id changedObject) {
-        BOOL readSuccess = changedObject;
-        if (readSuccess) {
-            PGGlobal.hasNewMessage = NO;
-            AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
-            [appDelegate.tabBarController hideTabDot:3];
-        }
-    }];
     [self observeError:self.viewModel];
 }
 
@@ -215,7 +207,13 @@
     } else if (indexPath.item == 2) {
         PGMessageViewController *messageVC = [[PGMessageViewController alloc] init];
         [self.navigationController pushViewController:messageVC animated:YES];
-        [self.viewModel readMessages];
+        [self.viewModel readMessages:^(BOOL success) {
+            if (success) {
+                PGGlobal.hasNewMessage = NO;
+                AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+                [appDelegate.tabBarController hideTabDot:3];
+            }
+        }];
     } else if (indexPath.item == 3) {
         PGHistoryViewController *historyVC = [[PGHistoryViewController alloc] init];
         [self.navigationController pushViewController:historyVC animated:YES];

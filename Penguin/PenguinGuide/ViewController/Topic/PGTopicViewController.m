@@ -100,8 +100,10 @@
         return 3;
     } else if (self.viewModel.topic.articlesArray.count == 0 && self.viewModel.topic.goodsArray.count == 0) {
         return 1;
-    } else if (self.viewModel.topic) {
-        return 1;
+    } else if (self.viewModel.topic.articlesArray.count == 0 && self.viewModel.topic.goodsArray.count > 0) {
+        return 2;
+    } else if (self.viewModel.topic.articlesArray.count > 0 && self.viewModel.topic.goodsArray.count == 0) {
+        return 2;
     } else {
         return 0;
     }
@@ -128,12 +130,12 @@
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
     if (indexPath.section == 1) {
-        if (self.viewModel.topic.articlesArray > 0) {
+        if (self.viewModel.topic.articlesArray.count > 0) {
             PGArticleBannerCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:ArticleCell forIndexPath:indexPath];
             [cell setCellWithArticle:self.viewModel.topic.articlesArray[indexPath.item] allowGesture:YES];
             
             return cell;
-        } else if (self.viewModel.topic.goodsArray > 0) {
+        } else if (self.viewModel.topic.goodsArray.count > 0) {
             PGGoodCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:GoodCell forIndexPath:indexPath];
             [cell setCellWithGood:self.viewModel.topic.goodsArray[indexPath.item]];
             

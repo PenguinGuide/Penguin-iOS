@@ -7,14 +7,16 @@
 //
 
 #import "PGArticleRelatedArticlesCell.h"
-#import "PGImageBanner.h"
+#import "PGArticleBanner.h"
 #import "PGDashedLineView.h"
+#import "PGArticleRelatedArticleView.h"
 
 @interface PGArticleRelatedArticlesCell () <PGPagedScrollViewDelegate>
 
 @property (nonatomic, strong) UIImageView *bannerFrameView;
 @property (nonatomic, strong) PGPagedScrollView *pagedScrollView;
 @property (nonatomic, strong) NSArray *dataArray;
+@property (nonatomic, strong) NSArray *viewsArray;
 
 @end
 
@@ -42,6 +44,18 @@
 - (void)setCellWithDataArray:(NSArray *)dataArray
 {
     self.dataArray = dataArray;
+    
+    NSMutableArray *views = [NSMutableArray new];
+    for (PGArticleBanner *banner in dataArray) {
+        CGFloat width = self.pg_width-15-15;
+        CGFloat height = width*9/16+10+18+10+15;
+        
+        PGArticleRelatedArticleView *articleView = [[PGArticleRelatedArticleView alloc] initWithFrame:CGRectMake(0, 0, width, height)];
+        [articleView setViewWithImage:banner.image title:banner.title];
+        [views addObject:articleView];
+    }
+    self.viewsArray = [NSArray arrayWithArray:views];
+    
     [self.pagedScrollView reloadData];
 }
 
@@ -55,15 +69,9 @@
 
 #pragma mark - <PGPagedScrollViewDelegate>
 
-- (NSArray *)imagesForScrollView
+- (NSArray *)viewsForScrollView
 {
-    NSMutableArray *banners = [NSMutableArray new];
-    for (PGImageBanner *banner in self.dataArray) {
-        if (banner.image) {
-            [banners addObject:banner.image];
-        }
-    }
-    return [NSArray arrayWithArray:banners];
+    return self.viewsArray;
 }
 
 - (UIImageView *)bannerFrameView
@@ -87,8 +95,8 @@
 {
     if (!_pagedScrollView) {
         CGFloat width = self.pg_width-15-15;
-        CGFloat height = width*9/16;
-        _pagedScrollView = [[PGPagedScrollView alloc] initWithFrame:CGRectMake(15, self.pg_height-13-height-60, width, height) imageFillMode:PGPagedScrollViewImageFillModeFill iconMode:PGPagedScrollViewIconModeLight];
+        CGFloat height = self.pg_height-60-80-3;
+        _pagedScrollView = [[PGPagedScrollView alloc] initWithFrame:CGRectMake(15, 80, width, height) imageFillMode:PGPagedScrollViewImageFillModeFill iconMode:PGPagedScrollViewIconModeLight];
         _pagedScrollView.delegate = self;
     }
     return _pagedScrollView;

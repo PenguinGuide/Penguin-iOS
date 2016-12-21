@@ -21,5 +21,6 @@
 @property (nonatomic, strong) NSString *likesCount;
 @property (nonatomic, strong) NSString *commentsCount;
 @property (nonatomic, strong) NSString *articleId;
+@property (nonatomic, assign) BOOL isCollected;
 
 @end

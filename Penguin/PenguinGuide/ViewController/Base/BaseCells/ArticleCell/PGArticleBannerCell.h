@@ -10,7 +10,18 @@
 #import "PGArticleBanner.h"
 #import "FLAnimatedImage.h"
 
+@protocol PGArticleBannerCellDelegate <NSObject>
+
+@optional
+
+- (void)collectArticle:(PGArticleBanner *)article;
+- (void)disCollectArticle:(PGArticleBanner *)article;
+
+@end
+
 @interface PGArticleBannerCell : UICollectionViewCell
+
+@property (nonatomic, weak) id<PGArticleBannerCellDelegate> delegate;
 
 @property (nonatomic, strong, readonly) FLAnimatedImageView *bannerImageView;
 @property (nonatomic, strong, readonly) UILabel *titleLabel;

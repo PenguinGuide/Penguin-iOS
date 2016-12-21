@@ -21,18 +21,14 @@
 
 - (void)initialize
 {
-    UIView *horizontalView = [[UIView alloc] initWithFrame:CGRectMake(20, 0, UISCREEN_WIDTH-40, 1/[UIScreen mainScreen].scale)];
+    UIView *horizontalView = [[UIView alloc] initWithFrame:CGRectMake(20, 10, UISCREEN_WIDTH-40, 1/[UIScreen mainScreen].scale)];
     horizontalView.backgroundColor = [UIColor colorWithHexString:@"E1E1E1"];
     [self addSubview:horizontalView];
     
-    UIView *verticalView = [[UIView alloc] initWithFrame:CGRectMake(20, horizontalView.pg_bottom+10, 3, 20)];
-    verticalView.backgroundColor = Theme.colorExtraHighlight;
-    [self addSubview:verticalView];
-    
-    UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(verticalView.pg_right+5, horizontalView.pg_bottom+10, 100, 20)];
+    UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(20, horizontalView.pg_bottom+10, 100, 30)];
     label.text = @"历史记录";
     label.textColor = Theme.colorText;
-    label.font = Theme.fontMediumBold;
+    label.font = Theme.fontExtraLargeBold;
     [self addSubview:label];
 }
 

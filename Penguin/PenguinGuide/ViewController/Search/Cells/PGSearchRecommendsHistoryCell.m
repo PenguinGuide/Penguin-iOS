@@ -44,7 +44,7 @@
 	if(_historyLabel == nil) {
 		_historyLabel = [[UILabel alloc] initWithFrame:CGRectMake(20, 0, UISCREEN_WIDTH-40, self.pg_height)];
         _historyLabel.font = Theme.fontExtraLargeBold;
-        _historyLabel.textColor = Theme.colorText;
+        _historyLabel.textColor = [UIColor colorWithHexString:@"6c6c6c"];
 	}
 	return _historyLabel;
 }

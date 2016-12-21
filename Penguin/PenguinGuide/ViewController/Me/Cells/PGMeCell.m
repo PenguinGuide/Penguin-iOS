@@ -57,6 +57,7 @@
 {
     self.iconImageView.image = [UIImage imageNamed:icon];
     self.nameLabel.text = name;
+    self.numberLabel.text = nil;
     if (highlight) {
         self.dotView.hidden = NO;
     } else {
