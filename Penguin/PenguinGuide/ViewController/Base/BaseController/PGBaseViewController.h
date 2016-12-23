@@ -46,6 +46,9 @@
 - (void)showPopup:(UIView *)popupView;
 - (void)dismissPopup;
 
+- (void)showPlaceholder:(NSString *)image desc:(NSString *)desc;
+- (void)showNetworkLostPlaceholder;
+
 - (void)observeError:(PGBaseViewModel *)viewModel;
 - (void)showErrorMessage:(NSError *)error;
 

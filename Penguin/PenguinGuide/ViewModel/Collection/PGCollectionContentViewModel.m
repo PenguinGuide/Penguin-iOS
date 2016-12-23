@@ -55,4 +55,54 @@
     }];
 }
 
+- (void)collectArticle:(NSString *)articleId completion:(void (^)(BOOL success))completion
+{
+    if (articleId && articleId.length > 0) {
+        PGWeakSelf(self);
+        [self.apiClient pg_makePutRequest:^(PGRKRequestConfig *config) {
+            config.route = PG_Article_Collect;
+            config.keyPath = nil;
+            config.pattern = @{@"articleId":articleId};
+        } completion:^(id response) {
+            if (completion) {
+                completion(YES);
+            }
+        } failure:^(NSError *error) {
+            if (completion) {
+                completion(NO);
+            }
+            weakself.error = error;
+        }];
+    } else {
+        if (completion) {
+            completion(NO);
+        }
+    }
+}
+
+- (void)disCollectArticle:(NSString *)articleId completion:(void (^)(BOOL success))completion
+{
+    if (articleId && articleId.length > 0) {
+        PGWeakSelf(self);
+        [self.apiClient pg_makeDeleteRequest:^(PGRKRequestConfig *config) {
+            config.route = PG_Article_Collect;
+            config.keyPath = nil;
+            config.pattern = @{@"articleId":articleId};
+        } completion:^(id response) {
+            if (completion) {
+                completion(YES);
+            }
+        } failure:^(NSError *error) {
+            if (completion) {
+                completion(NO);
+            }
+            weakself.error = error;
+        }];
+    } else {
+        if (completion) {
+            completion(NO);
+        }
+    }
+}
+
 @end

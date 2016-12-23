@@ -13,7 +13,7 @@
 #import "PGCollectionContentViewModel.h"
 #import "PGArticleBannerCell.h"
 
-@interface PGCollectionsViewController () <UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout>
+@interface PGCollectionsViewController () <UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, PGArticleBannerCellDelegate>
 
 @property (nonatomic, strong) PGBaseCollectionView *articlesCollectionView;
 
@@ -42,6 +42,12 @@
             dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.25 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
                 [UIView setAnimationsEnabled:YES];
             });
+            
+            if (articles.count == 0 && !weakself.viewModel.endFlag) {
+                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.4 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                    [weakself showPlaceholder:@"pg_collections_placeholder" desc:@"还没有喜欢的内容呢"];
+                });
+            }
         }
         [weakself dismissLoading];
         [weakself.articlesCollectionView endBottomRefreshing];
@@ -84,6 +90,8 @@
     PGArticleBannerCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:ArticleBannerCell forIndexPath:indexPath];
     
     PGArticleBanner *articleBanner = self.viewModel.articles[indexPath.item];
+    articleBanner.isCollected = YES;
+    [cell setDelegate:self];
     [cell setCellWithArticle:articleBanner allowGesture:YES];
     
     return cell;
@@ -135,6 +143,26 @@
     PGArticleBanner *articleBanner = self.viewModel.articles[indexPath.item];
     [[PGRouter sharedInstance] openURL:articleBanner.link];
 }
+
+#pragma mark - <PGArticleBannerCellDelegate>
+
+- (void)disCollectArticle:(PGArticleBanner *)article
+{
+    PGWeakSelf(self);
+    __weak PGArticleBanner *weakArticle = article;
+    [self.viewModel disCollectArticle:article.articleId completion:^(BOOL success) {
+        if (success) {
+            NSInteger index = [weakself.viewModel.articles indexOfObject:weakArticle];
+            [weakself.articlesCollectionView deleteItemsAtIndexPaths:@[[NSIndexPath indexPathForItem:index inSection:0]]];
+            [weakself showToast:@"取消成功"];
+            [[NSNotificationCenter defaultCenter] postNotificationName:PG_NOTIFICATION_UPDATE_ME object:nil];
+        } else {
+            [weakself showToast:@"取消失败"];
+        }
+    }];
+}
+
+#pragma mark - <Lazy Init>
 
 - (PGBaseCollectionView *)articlesCollectionView
 {

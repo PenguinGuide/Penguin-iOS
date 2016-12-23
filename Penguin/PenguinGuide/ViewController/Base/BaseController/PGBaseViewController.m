@@ -6,11 +6,15 @@
 //  Copyright © 2016 Xinglian. All rights reserved.
 //
 
+#define PlaceholderTag 899
+
 #import "PGBaseViewController.h"
 #import "PGBaseViewController+TransitionAnimation.h"
 
 #import "MBProgressHUD.h"
 #import "FLAnimatedImage.h"
+
+#import "PGPageBasePlaceholder.h"
 
 @interface PGBaseViewController () <UINavigationControllerDelegate>
 
@@ -263,6 +267,25 @@
 {
     self.view.userInteractionEnabled = YES;
     [self.hud hideAnimated:YES];
+}
+
+#pragma mark - <Page Placeholder>
+
+- (void)showPlaceholder:(NSString *)image desc:(NSString *)desc
+{
+    PGPageBasePlaceholder *placeholderView = [self.view viewWithTag:PlaceholderTag];
+    if (placeholderView) {
+        [placeholderView removeFromSuperview];
+    }
+    placeholderView = [[PGPageBasePlaceholder alloc] initWithImage:image desc:desc top:64.f height:self.view.pg_height-64.f];
+    placeholderView.tag = PlaceholderTag;
+    
+    [self.view addSubview:placeholderView];
+}
+
+- (void)showNetworkLostPlaceholder
+{
+    
 }
 
 #pragma mark - <Error Handling>

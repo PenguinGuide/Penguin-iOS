@@ -14,5 +14,7 @@
 @property (nonatomic, strong, readonly) NSArray *articles;
 
 - (void)requestData;
+- (void)collectArticle:(NSString *)articleId completion:(void(^)(BOOL success))completion;
+- (void)disCollectArticle:(NSString *)articleId completion:(void(^)(BOOL success))completion;
 
 @end

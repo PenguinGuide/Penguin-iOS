@@ -28,6 +28,7 @@
 
 - (void)uploadImage:(UIImage *)image completion:(void (^)(NSString *url))completion
 {
+    // https://github.com/qiniu/objc-sdk/issues/218
     if (!image) {
         if (completion) {
             completion(nil);
