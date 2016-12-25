@@ -35,9 +35,21 @@
     [self observe:self.viewModel keyPath:@"histories" block:^(id changedObject) {
         NSArray *histories = changedObject;
         if (histories && [histories isKindOfClass:[NSArray class]]) {
+            [UIView setAnimationsEnabled:NO];
             [weakself.historyCollectionView reloadData];
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.25f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                [UIView setAnimationsEnabled:YES];
+            });
+        }
+        if (histories && [histories isKindOfClass:[NSArray class]]) {
+            if (histories.count == 0 && !weakself.viewModel.endFlag) {
+                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.3f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                    [weakself showPlaceholder:@"pg_history_placeholder" desc:@"还没有给文章评论，赶紧去吧"];
+                });
+            }
         }
         [weakself dismissLoading];
+        [weakself.historyCollectionView endBottomRefreshing];
     }];
 }
 
@@ -46,11 +58,21 @@
     [super viewWillAppear:animated];
     
     [self.navigationController setNavigationBarHidden:NO animated:NO];
+}
+
+- (void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
     
-    if (self.viewModel.histories.count == 0) {
+    if (self.viewModel.histories.count == 0 && !self.viewModel.endFlag) {
         [self showLoading];
         [self.viewModel requestData];
     }
+}
+
+- (void)dealloc
+{
+    [self unobserve];
 }
 
 #pragma mark - <UICollectionViewDataSource>
@@ -81,6 +103,17 @@
     return [PGHistoryCell cellSize:history];
 }
 
+- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout referenceSizeForFooterInSection:(NSInteger)section
+{
+    if (!self.viewModel) {
+        return CGSizeZero;
+    }
+    if (self.viewModel.endFlag && self.viewModel.histories.count != 0) {
+        return [PGBaseCollectionViewFooterView footerViewSize];
+    }
+    return CGSizeZero;
+}
+
 - (CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout minimumLineSpacingForSectionAtIndex:(NSInteger)section
 {
     return 0.f;
@@ -96,6 +129,16 @@
     return UIEdgeInsetsZero;
 }
 
+- (UICollectionReusableView *)collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath
+{
+    if (kind == UICollectionElementKindSectionFooter) {
+        PGBaseCollectionViewFooterView *footerView = [collectionView dequeueReusableSupplementaryViewOfKind:kind withReuseIdentifier:BaseCollectionViewFooterView forIndexPath:indexPath];
+        return footerView;
+    }
+    
+    return nil;
+}
+
 - (PGBaseCollectionView *)historyCollectionView
 {
     if (!_historyCollectionView) {
@@ -104,6 +147,11 @@
         _historyCollectionView.delegate = self;
         
         [_historyCollectionView registerClass:[PGHistoryCell class] forCellWithReuseIdentifier:HistoryCell];
+        
+        PGWeakSelf(self);
+        [_historyCollectionView enableInfiniteScrolling:^{
+            [weakself.viewModel requestData];
+        }];
     }
     return _historyCollectionView;
 }

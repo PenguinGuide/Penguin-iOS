@@ -58,10 +58,21 @@
     [self observe:self.viewModel keyPath:@"messages" block:^(id changedObject) {
         NSArray *messages = changedObject;
         if (messages && [messages isKindOfClass:[NSArray class]]) {
+            [UIView setAnimationsEnabled:NO];
             [weakself.messagesCollectionView reloadData];
-            [weakself dismissLoading];
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.25f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                [UIView setAnimationsEnabled:YES];
+            });
         }
+        if (messages && [messages isKindOfClass:[NSArray class]]) {
+            if (messages.count == 0 && !weakself.viewModel.endFlag) {
+                [weakself showPlaceholder:@"pg_message_placeholder" desc:@"还没有收到任何消息"];
+            }
+        }
+        [weakself dismissLoading];
+        [weakself.messagesCollectionView endBottomRefreshing];
     }];
+    [self observeCollectionView:self.messagesCollectionView endOfFeeds:self.viewModel];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -140,6 +151,17 @@
     return CGSizeMake(UISCREEN_WIDTH, 50);
 }
 
+- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout referenceSizeForFooterInSection:(NSInteger)section
+{
+    if (!self.viewModel) {
+        return CGSizeZero;
+    }
+    if (self.viewModel.endFlag && self.viewModel.messages.count != 0) {
+        return [PGBaseCollectionViewFooterView footerViewSize];
+    }
+    return CGSizeZero;
+}
+
 - (CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout minimumLineSpacingForSectionAtIndex:(NSInteger)section
 {
     if (self.type == PGMessageContentTypeReply) {
@@ -162,6 +184,16 @@
         }
     }
     return UIEdgeInsetsZero;
+}
+
+- (UICollectionReusableView *)collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath
+{
+    if (kind == UICollectionElementKindSectionFooter) {
+        PGBaseCollectionViewFooterView *footerView = [collectionView dequeueReusableSupplementaryViewOfKind:kind withReuseIdentifier:BaseCollectionViewFooterView forIndexPath:indexPath];
+        return footerView;
+    }
+    
+    return nil;
 }
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath

@@ -67,7 +67,7 @@
 {
     [super viewDidAppear:animated];
     
-    if (self.viewModel.articles.count == 0) {
+    if (self.viewModel.articles.count == 0 && !self.viewModel.endFlag) {
         [self showLoading];
         [self.viewModel requestData];
     }
@@ -107,7 +107,7 @@
     if (!self.viewModel) {
         return CGSizeZero;
     }
-    if (self.viewModel.endFlag) {
+    if (self.viewModel.endFlag && self.viewModel.articles.count != 0) {
         return [PGBaseCollectionViewFooterView footerViewSize];
     }
     return CGSizeZero;

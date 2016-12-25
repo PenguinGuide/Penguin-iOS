@@ -20,4 +20,15 @@
     return self;
 }
 
++ (PGRKResponse *)responseWithNextPagination
+{
+    PGRKResponse *response = [[PGRKResponse alloc] init];
+    
+    response.pagination.needPerformingBatchUpdate = NO;
+    response.pagination.paginationKey = @"next";
+    response.pagination.paginatedSection = NO;
+    
+    return response;
+}
+
 @end

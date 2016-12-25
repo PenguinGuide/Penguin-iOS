@@ -93,7 +93,7 @@ static char ToastTimer;
             }
         }
         
-        CGFloat labelWidth = [message sizeWithAttributes:@{NSFontAttributeName:self.toastLabel.font}].width + 25;
+        CGFloat labelWidth = MIN([UIScreen mainScreen].bounds.size.width-40, [message sizeWithAttributes:@{NSFontAttributeName:self.toastLabel.font}].width + 25);
         CGFloat labelHeight = 35.f;
         CGFloat labelX = ([UIScreen mainScreen].bounds.size.width-labelWidth)/2;
         

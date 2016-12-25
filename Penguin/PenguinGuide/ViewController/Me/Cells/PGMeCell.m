@@ -49,7 +49,11 @@
 {
     self.iconImageView.image = [UIImage imageNamed:icon];
     self.nameLabel.text = name;
-    self.numberLabel.text = count;
+    if (!count && ![count isEqualToString:@"0"]) {
+        self.numberLabel.text = count;
+    } else {
+        self.numberLabel.text = nil;
+    }
     self.dotView.hidden = YES;
 }
 

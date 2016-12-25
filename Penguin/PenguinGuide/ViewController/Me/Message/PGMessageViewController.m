@@ -46,11 +46,21 @@
     [super viewWillAppear:animated];
     
     [self.navigationController setNavigationBarHidden:NO animated:NO];
+}
+
+- (void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
     
     if (!self.viewModel.countsDict) {
         [self showLoading];
         [self.viewModel requestData];
     }
+}
+
+- (void)dealloc
+{
+    [self unobserve];
 }
 
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView

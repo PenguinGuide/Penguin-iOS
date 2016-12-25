@@ -32,55 +32,109 @@
 
 - (void)requestSystemMessages
 {
+    if (self.isPreloadingNextPage || self.endFlag) {
+        return;
+    }
+    
+    self.isPreloadingNextPage = YES;
+    
+    if (!self.response) {
+        self.response = [PGRKResponse responseWithNextPagination];
+    }
+    
     PGParams *params = [PGParams new];
     params[@"type"] = @(1);
     
     PGWeakSelf(self);
+    
     [self.apiClient pg_makeGetRequest:^(PGRKRequestConfig *config) {
         config.route = PG_Message;
         config.params = params;
         config.keyPath = @"items";
         config.model = [PGMessage new];
-    } completion:^(id response) {
-        weakself.messages = response;
+        config.response = weakself.response;
+    } paginationCompletion:^(PGRKResponse *response) {
+        weakself.response = response;
+        weakself.messages = response.dataArray;
+        weakself.endFlag = response.pagination.endFlag;
+        
+        weakself.isPreloadingNextPage = NO;
     } failure:^(NSError *error) {
         weakself.error = error;
+        
+        weakself.isPreloadingNextPage = NO;
     }];
 }
 
 - (void)requestReplyMessages
 {
+    if (self.isPreloadingNextPage || self.endFlag) {
+        return;
+    }
+    
+    self.isPreloadingNextPage = YES;
+    
+    if (!self.response) {
+        self.response = [PGRKResponse responseWithNextPagination];
+    }
+    
     PGParams *params = [PGParams new];
     params[@"type"] = @(2);
     
     PGWeakSelf(self);
+    
     [self.apiClient pg_makeGetRequest:^(PGRKRequestConfig *config) {
         config.route = PG_Message;
         config.params = params;
         config.keyPath = @"items";
         config.model = [PGMessage new];
-    } completion:^(id response) {
-        weakself.messages = response;
+        config.response = weakself.response;
+    } paginationCompletion:^(PGRKResponse *response) {
+        weakself.response = response;
+        weakself.messages = response.dataArray;
+        weakself.endFlag = response.pagination.endFlag;
+        
+        weakself.isPreloadingNextPage = NO;
     } failure:^(NSError *error) {
         weakself.error = error;
+        
+        weakself.isPreloadingNextPage = NO;
     }];
 }
 
 - (void)requestLikesMessages
 {
+    if (self.isPreloadingNextPage || self.endFlag) {
+        return;
+    }
+    
+    self.isPreloadingNextPage = YES;
+    
+    if (!self.response) {
+        self.response = [PGRKResponse responseWithNextPagination];
+    }
+    
     PGParams *params = [PGParams new];
     params[@"type"] = @(3);
     
     PGWeakSelf(self);
+    
     [self.apiClient pg_makeGetRequest:^(PGRKRequestConfig *config) {
         config.route = PG_Message;
         config.params = params;
         config.keyPath = @"items";
         config.model = [PGMessage new];
-    } completion:^(id response) {
-        weakself.messages = response;
+        config.response = weakself.response;
+    } paginationCompletion:^(PGRKResponse *response) {
+        weakself.response = response;
+        weakself.messages = response.dataArray;
+        weakself.endFlag = response.pagination.endFlag;
+        
+        weakself.isPreloadingNextPage = NO;
     } failure:^(NSError *error) {
         weakself.error = error;
+        
+        weakself.isPreloadingNextPage = NO;
     }];
 }
 
