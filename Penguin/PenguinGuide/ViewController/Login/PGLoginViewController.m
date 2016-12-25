@@ -28,6 +28,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(smsCodeTimerUpdate:) name:PG_NOTIFICATION_SMS_CODE_COUNT_DOWN object:nil];
     
     self.closeButton.hidden = NO;
     self.backButton.hidden = YES;
@@ -36,6 +37,11 @@
     [self.loginScrollView addSubview:self.registerButton];
     [self.loginScrollView addSubview:self.pwdLoginButton];
     [self.loginScrollView addSubview:self.loginSocialView];
+    
+    if (PGGlobal.smsCodeCountDown > 0) {
+        self.loginView.smsCodeButton.userInteractionEnabled = NO;
+        [self.loginView.smsCodeButton setTitle:[NSString stringWithFormat:@"重新获取 %@s", @(PGGlobal.smsCodeCountDown)] forState:UIControlStateNormal];
+    }
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -46,12 +52,28 @@
 - (void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
+    
+    [self.loginView.phoneTextField resignFirstResponder];
+    [self.loginView.smsCodeTextField resignFirstResponder];
+}
+
+- (void)dealloc
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 #pragma mark - <PGLoginDelegate>
 
 - (void)loginButtonClicked:(UIView *)view
 {
+    if (!self.loginView.phoneTextField.text || self.loginView.phoneTextField.text.length == 0) {
+        [self showToast:@"请输入手机号"];
+        return;
+    }
+    if (!self.loginView.smsCodeTextField.text || self.loginView.smsCodeTextField.text.length == 0) {
+        [self showToast:@"请输入验证码"];
+        return;
+    }
     if ([view isKindOfClass:[PGLoginView class]]) {
         PGParams *params = [PGParams new];
         params[@"mobile"] = self.loginView.phoneTextField.text;
@@ -70,7 +92,6 @@
                     NSString *accessToken = response[@"access_token"];
                     if (accessToken && accessToken.length > 0) {
                         [PGGlobal synchronizeToken:accessToken];
-                        [weakself.apiClient updateAccessToken:accessToken];
                     }
                 }
                 if (response[@"user_id"]) {
@@ -79,6 +100,7 @@
                         [PGGlobal synchronizeUserId:userId];
                     }
                 }
+                [[NSNotificationCenter defaultCenter] postNotificationName:PG_NOTIFICATION_LOGIN object:nil];
                 [weakself dismissLoading];
                 [weakself dismissViewControllerAnimated:YES completion:nil];
             }
@@ -91,6 +113,10 @@
 
 - (void)smsCodeButtonClicked:(UIView *)view
 {
+    if (!self.loginView.phoneTextField.text || self.loginView.phoneTextField.text.length == 0) {
+        [self showToast:@"请输入手机号"];
+        return;
+    }
     if ([view isKindOfClass:[PGLoginView class]]) {
         PGParams *params = [PGParams new];
         params[@"mobile"] = self.loginView.phoneTextField.text;
@@ -104,6 +130,11 @@
             config.keyPath = nil;
         } completion:^(id response) {
             [weakself dismissLoading];
+            [weakself showToast:@"发送成功"];
+            weakself.loginView.smsCodeButton.userInteractionEnabled = NO;
+            PGGlobal.smsCodeCountDown = 60;
+            [weakself.loginView.smsCodeButton setTitle:[NSString stringWithFormat:@"重新获取 %@s", @(PGGlobal.smsCodeCountDown)] forState:UIControlStateNormal];
+            [PGGlobal resetSMSCodeTimer];
         } failure:^(NSError *error) {
             [weakself showErrorMessage:error];
             [weakself dismissLoading];
@@ -134,7 +165,6 @@
                         NSString *accessToken = response[@"access_token"];
                         if (accessToken && accessToken.length > 0) {
                             [PGGlobal synchronizeToken:accessToken];
-                            [weakself.apiClient updateAccessToken:accessToken];
                         }
                     }
                     if (response[@"user_id"]) {
@@ -148,6 +178,7 @@
                         signupInfoVC.userId = PGGlobal.userId;
                         [weakself.navigationController pushViewController:signupInfoVC animated:YES];
                     } else {
+                        [[NSNotificationCenter defaultCenter] postNotificationName:PG_NOTIFICATION_LOGIN object:nil];
                         [weakself dismissViewControllerAnimated:YES completion:nil];
                     }
                 }
@@ -158,7 +189,7 @@
             }];
         }
         if (state == SSDKResponseStateCancel || state == SSDKResponseStateFail) {
-            [self showToast:@"登录失败"];
+            [weakself showToast:@"登录失败"];
         }
     }];
 }
@@ -187,7 +218,6 @@
                         NSString *accessToken = response[@"access_token"];
                         if (accessToken && accessToken.length > 0) {
                             [PGGlobal synchronizeToken:accessToken];
-                            [weakself.apiClient updateAccessToken:accessToken];
                         }
                     }
                     if (response[@"user_id"]) {
@@ -201,6 +231,7 @@
                         signupInfoVC.userId = PGGlobal.userId;
                         [weakself.navigationController pushViewController:signupInfoVC animated:YES];
                     } else {
+                        [[NSNotificationCenter defaultCenter] postNotificationName:PG_NOTIFICATION_LOGIN object:nil];
                         [weakself dismissViewControllerAnimated:YES completion:nil];
                     }
                 }
@@ -230,6 +261,32 @@
     [self.navigationController pushViewController:pwdLoginVC animated:YES];
 }
 
+- (void)accessoryDoneButtonClicked
+{
+    [self.loginView.phoneTextField resignFirstResponder];
+    [self.loginView.smsCodeTextField resignFirstResponder];
+}
+
+#pragma mark - <Notification>
+
+- (void)smsCodeTimerUpdate:(NSNotification *)notification
+{
+    NSInteger countdown = [notification.object integerValue];
+    if (countdown > 0) {
+        PGWeakSelf(self);
+        dispatch_async(dispatch_get_main_queue(), ^{
+            weakself.loginView.smsCodeButton.userInteractionEnabled = NO;
+            [weakself.loginView.smsCodeButton setTitle:[NSString stringWithFormat:@"重新获取 %@s", @(PGGlobal.smsCodeCountDown)] forState:UIControlStateNormal];
+        });
+    } else {
+        PGWeakSelf(self);
+        dispatch_async(dispatch_get_main_queue(), ^{
+            weakself.loginView.smsCodeButton.userInteractionEnabled = YES;
+            [weakself.loginView.smsCodeButton setTitle:@"获取验证码" forState:UIControlStateNormal];
+        });
+    }
+}
+
 #pragma mark - <Setters && Getters>
 
 - (PGLoginView *)loginView
@@ -239,6 +296,8 @@
         _loginView.delegate = self;
         _loginView.phoneTextField.delegate = self;
         _loginView.smsCodeTextField.delegate = self;
+        _loginView.phoneTextField.inputAccessoryView = self.accessoryView;
+        _loginView.smsCodeTextField.inputAccessoryView = self.accessoryView;
         [_loginView.loginButton setTitle:@"登 录" forState:UIControlStateNormal];
     }
     return _loginView;
@@ -257,7 +316,7 @@
 - (UIButton *)registerButton
 {
     if (!_registerButton) {
-        _registerButton = [[UIButton alloc] initWithFrame:CGRectMake(50, self.loginView.pg_bottom+10, 50, 20)];
+        _registerButton = [[UIButton alloc] initWithFrame:CGRectMake(50, self.loginView.pg_bottom, 50, 50)];
         [_registerButton setTitle:@"立即注册" forState:UIControlStateNormal];
         [_registerButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
         [_registerButton.titleLabel setFont:Theme.fontExtraSmallBold];
@@ -269,7 +328,7 @@
 - (UIButton *)pwdLoginButton
 {
     if (!_pwdLoginButton) {
-        _pwdLoginButton = [[UIButton alloc] initWithFrame:CGRectMake(UISCREEN_WIDTH-50-70, self.loginView.pg_bottom+10, 70, 20)];
+        _pwdLoginButton = [[UIButton alloc] initWithFrame:CGRectMake(UISCREEN_WIDTH-50-70, self.loginView.pg_bottom, 70, 50)];
         [_pwdLoginButton setTitle:@"使用密码登录" forState:UIControlStateNormal];
         [_pwdLoginButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
         [_pwdLoginButton.titleLabel setFont:Theme.fontExtraSmallBold];

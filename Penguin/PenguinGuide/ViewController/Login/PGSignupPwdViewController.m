@@ -28,10 +28,21 @@
     [self.loginScrollView addSubview:self.pwdView];
 }
 
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    
+    [self.pwdView.newPwdTextField resignFirstResponder];
+}
+
 #pragma mark - <PGLoginDelegate>
 
 - (void)setPwdButtonClicked:(UIView *)view
 {
+    if (!self.pwdView.newPwdTextField.text || self.pwdView.newPwdTextField.text.length == 0) {
+        [self showToast:@"请输入新密码"];
+        return;
+    }
     if ([view isKindOfClass:[PGPwdSaveView class]]) {
         PGParams *params = [PGParams new];
         params[@"mobile"] = self.phoneNumber;
@@ -51,7 +62,6 @@
                     NSString *accessToken = response[@"access_token"];
                     if (accessToken && accessToken.length > 0) {
                         [PGGlobal synchronizeToken:accessToken];
-                        [weakself.apiClient updateAccessToken:accessToken];
                     }
                 }
                 if (response[@"user_id"]) {
@@ -60,13 +70,9 @@
                         [PGGlobal synchronizeUserId:userId];
                     }
                 }
-                if (response[@"is_new_user"] && [response[@"is_new_user"] boolValue] && PGGlobal.userId) {
-                    PGSignupInfoViewController *signupInfoVC = [[PGSignupInfoViewController alloc] init];
-                    signupInfoVC.userId = PGGlobal.userId;
-                    [weakself.navigationController pushViewController:signupInfoVC animated:YES];
-                } else {
-                    [weakself dismissViewControllerAnimated:YES completion:nil];
-                }
+                PGSignupInfoViewController *signupInfoVC = [[PGSignupInfoViewController alloc] init];
+                signupInfoVC.userId = PGGlobal.userId;
+                [weakself.navigationController pushViewController:signupInfoVC animated:YES];
             }
             [weakself dismissLoading];
         } failure:^(NSError *error) {
@@ -76,6 +82,11 @@
     }
 }
 
+- (void)accessoryDoneButtonClicked
+{
+    [self.pwdView.newPwdTextField resignFirstResponder];
+}
+
 - (PGPwdSaveView *)pwdView
 {
     if (!_pwdView) {
@@ -83,6 +94,7 @@
         _pwdView.delegate = self;
         _pwdView.newPwdTextField.delegate = self;
         _pwdView.newPwdTextField.placeholder = @"请输入密码";
+        _pwdView.newPwdTextField.inputAccessoryView = self.accessoryView;
         [_pwdView.saveButton setTitle:@"完 成" forState:UIControlStateNormal];
     }
     return _pwdView;

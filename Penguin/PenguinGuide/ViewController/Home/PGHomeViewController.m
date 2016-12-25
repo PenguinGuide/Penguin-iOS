@@ -28,6 +28,8 @@
 // views
 #import "PGHomeRecommendsHeaderView.h"
 
+#import "UIScrollView+PGPullToRefresh.h"
+
 @interface PGHomeViewController () <PGFeedsCollectionViewDelegate>
 
 @property (nonatomic, strong) PGHomeViewModel *viewModel;
@@ -36,6 +38,8 @@
 @property (nonatomic, strong) UIButton *searchButton;
 
 @property (nonatomic, strong) MSWeakTimer *weakTimer;
+
+@property (nonatomic, assign) BOOL statusbarIsWhiteBackground;
 
 @end
 
@@ -56,14 +60,40 @@
     
     PGWeakSelf(self);
     [self observe:self.viewModel keyPath:@"feedsArray" block:^(id changedObject) {
-        NSArray *bannersArray = changedObject;
-        if (bannersArray && [bannersArray isKindOfClass:[NSArray class]]) {
-            [weakself.feedsCollectionView reloadData];
+        if (weakself.viewModel.nextPageIndexSet || weakself.viewModel.nextPageIndexSet.count > 0) {
+            @try {
+                // NOTE: using insertItemsAtIndexPaths will crash -- this should insert sections
+                /*
+                 exception: Invalid update: invalid number of sections. The number of sections contained in the collection view after the
+                 update (20) must be equal to the number of sections contained in the collection view before the update (31),
+                 plus or minus the number of sections inserted or deleted (10 inserted, 0 deleted).
+                 */
+                // NOTE: the number of sections inserted + number of sections in previous collection view = [collectionView numberOfSections]
+                [weakself.feedsCollectionView insertSections:weakself.viewModel.nextPageIndexSet];
+            } @catch (NSException *exception) {
+                NSLog(@"exception: %@", exception);
+            }
+        } else {
+            NSArray *feedsArray = changedObject;
+            if (feedsArray && [feedsArray isKindOfClass:[NSArray class]]) {
+                [weakself.feedsCollectionView reloadData];
+            }
         }
         [weakself dismissLoading];
+//        [weakself.feedsCollectionView endPullToRefresh];
+        [weakself.feedsCollectionView endTopRefreshing];
         [weakself.feedsCollectionView endBottomRefreshing];
     }];
-    [self observeError:self.viewModel];
+    [self observe:self.viewModel keyPath:@"error" block:^(id changedObject) {
+        NSError *error = changedObject;
+        if (error && [error isKindOfClass:[NSError class]]) {
+            [weakself showErrorMessage:error];
+            [weakself dismissLoading];
+            [weakself.feedsCollectionView endTopRefreshing];
+            [weakself.feedsCollectionView endBottomRefreshing];
+        }
+    }];
+    [self observeCollectionView:self.feedsCollectionView endOfFeeds:self.viewModel];
 }
 
 - (void)dealloc
@@ -82,18 +112,29 @@
         [self showLoading];
         [self.viewModel requestData];
     }
+    
+    if (self.statusbarIsWhiteBackground) {
+        UIView *statusBar = [[[UIApplication sharedApplication] valueForKey:@"statusBarWindow"] valueForKey:@"statusBar"];
+        if ([statusBar respondsToSelector:@selector(setBackgroundColor:)]) {
+            statusBar.backgroundColor = [UIColor whiteColor];
+        }
+    } else {
+        UIView *statusBar = [[[UIApplication sharedApplication] valueForKey:@"statusBarWindow"] valueForKey:@"statusBar"];
+        if ([statusBar respondsToSelector:@selector(setBackgroundColor:)]) {
+            statusBar.backgroundColor = [UIColor clearColor];
+        }
+    }
 }
 
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
     
+    [self.navigationController setNavigationBarHidden:YES animated:NO];
+    
     // http://blog.csdn.net/ws1352864983/article/details/51932388
     // http://www.appcoda.com/customize-navigation-status-bar-ios-7/
     // http://tech.glowing.com/cn/change-uinavigationbar-backgroundcolor-dynamically/
-    
-    // these codes in viewDidLoad will not work
-    [self.navigationController setNavigationBarHidden:YES animated:NO];
     
     self.weakTimer = [MSWeakTimer scheduledTimerWithTimeInterval:1.0
                                                           target:self
@@ -107,38 +148,38 @@
 {
     [super viewWillDisappear:animated];
     
-    [self.navigationController setNavigationBarHidden:NO animated:NO];
-    
     [self.weakTimer invalidate];
 }
 
 - (UIStatusBarStyle)preferredStatusBarStyle
 {
     // http://www.th7.cn/Program/IOS/201606/881633.shtml fix this method didn't called
-    return UIStatusBarStyleLightContent;
+    if (self.statusbarIsWhiteBackground) {
+        return UIStatusBarStyleDefault;
+    } else {
+        return UIStatusBarStyleLightContent;
+    }
 }
 
 #pragma mark - <PGTabBarControllerDelegate>
 
 - (NSString *)tabBarTitle
 {
-    return @"首页";
+    return @"城市指南";
 }
 
 - (NSString *)tabBarImage
 {
-    return @"pg_tab_home";
+    return @"pg_tab_city_guide";
 }
 
 - (NSString *)tabBarHighlightImage
 {
-    return @"pg_tab_home_highlight";
+    return @"pg_tab_city_guide_highlight";
 }
 
 - (void)tabBarDidClicked
 {
-    //PGLogWarning(@"home tabBarDidClicked");
-    
     [self.navigationController setNavigationBarHidden:YES animated:NO];
     
     self.parentViewController.navigationItem.leftBarButtonItem = nil;
@@ -166,7 +207,21 @@
 
 - (CGSize)feedsHeaderSize
 {
+    if (!self.viewModel) {
+        return CGSizeZero;
+    }
     return [PGHomeRecommendsHeaderView headerViewSize];
+}
+
+- (CGSize)feedsFooterSize
+{
+    if (!self.viewModel) {
+        return CGSizeZero;
+    }
+    if (self.viewModel.endFlag) {
+        return [PGBaseCollectionViewFooterView footerViewSize];
+    }
+    return CGSizeZero;
 }
 
 - (NSString *)tabType
@@ -174,15 +229,19 @@
     return @"home";
 }
 
-- (void)channelDidSelect:(NSString *)link
+- (void)scenarioDidSelect:(PGScenarioBanner *)scenario
 {
-    [[PGRouter sharedInstance] openURL:link];
+    [PGRouterManager routeToScenarioPage:scenario.scenarioId link:scenario.link fromStorePage:NO];
 }
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
     id banner = self.viewModel.feedsArray[indexPath.section];
     if ([banner isKindOfClass:[PGArticleBanner class]]) {
+        UIView *statusBar = [[[UIApplication sharedApplication] valueForKey:@"statusBarWindow"] valueForKey:@"statusBar"];
+        if ([statusBar respondsToSelector:@selector(setBackgroundColor:)]) {
+            statusBar.backgroundColor = [UIColor clearColor];
+        }
         PGArticleBanner *articleBanner = (PGArticleBanner *)banner;
         PGArticleViewController *articleVC = [[PGArticleViewController alloc] initWithArticleId:articleBanner.articleId animated:YES];
         [self.navigationController pushViewController:articleVC animated:YES];
@@ -195,51 +254,42 @@
     }
 }
 
-#pragma mark - <UICollectionViewDelegateFlowLayout>
-
-- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
-    id banner = self.viewModel.feedsArray[indexPath.section];
-    if ([banner isKindOfClass:[PGCarouselBanner class]]) {
-        return [PGCarouselBannerCell cellSize];
-    } else if ([banner isKindOfClass:[PGArticleBanner class]]) {
-        return [PGArticleBannerCell cellSize];
-    } else if ([banner isKindOfClass:[PGGoodsCollectionBanner class]]) {
-        return [PGGoodsCollectionBannerCell cellSize];
-    } else if ([banner isKindOfClass:[PGTopicBanner class]]) {
-        return [PGTopicBannerCell cellSize];
-    } else if ([banner isKindOfClass:[PGSingleGoodBanner class]]) {
-        return [PGSingleGoodBannerCell cellSize];
-    } else if ([banner isKindOfClass:[PGFlashbuyBanner class]]) {
-        return [PGFlashbuyBannerCell cellSize];
-    }
-    
-    return CGSizeZero;
-}
-
-- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout referenceSizeForHeaderInSection:(NSInteger)section
-{
-    if (section == 0) {
-        if (self.viewModel.recommendsArray) {
-            return [PGHomeRecommendsHeaderView headerViewSize];
+    // NOTE: add background view to status bar http://stackoverflow.com/questions/19063365/how-to-change-the-status-bar-background-color-and-text-color-on-ios-7
+    if (scrollView.contentOffset.y >= UISCREEN_WIDTH*9/16) {
+        UIView *statusBar = [[[UIApplication sharedApplication] valueForKey:@"statusBarWindow"] valueForKey:@"statusBar"];
+        if ([statusBar respondsToSelector:@selector(setBackgroundColor:)]) {
+            statusBar.backgroundColor = [UIColor whiteColor];
         }
+        if (!self.statusbarIsWhiteBackground) {
+            self.statusbarIsWhiteBackground = YES;
+            [self setNeedsStatusBarAppearanceUpdate];
+        } else {
+            self.statusbarIsWhiteBackground = YES;
+        }
+        self.searchButton.hidden = YES;
+    } else {
+        UIView *statusBar = [[[UIApplication sharedApplication] valueForKey:@"statusBarWindow"] valueForKey:@"statusBar"];
+        if ([statusBar respondsToSelector:@selector(setBackgroundColor:)]) {
+            statusBar.backgroundColor = [UIColor clearColor];
+        }
+        if (self.statusbarIsWhiteBackground) {
+            self.statusbarIsWhiteBackground = NO;
+            [self setNeedsStatusBarAppearanceUpdate];
+        } else {
+            self.statusbarIsWhiteBackground = NO;
+        }
+        self.searchButton.hidden = NO;
     }
-    return CGSizeZero;
 }
 
-- (CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout minimumInteritemSpacingForSectionAtIndex:(NSInteger)section
+- (void)shouldPreloadNextPage
 {
-    return 0.f;
-}
-
-- (CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout minimumLineSpacingForSectionAtIndex:(NSInteger)section
-{
-    return 0.f;
-}
-
-- (UIEdgeInsets)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout insetForSectionAtIndex:(NSInteger)section
-{
-    return UIEdgeInsetsMake(0, 0, 12, 0);
+    PGWeakSelf(self);
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
+        [weakself.viewModel requestFeeds];
+    });
 }
 
 #pragma mark - <Button Events>
@@ -284,8 +334,19 @@
 - (PGFeedsCollectionView *)feedsCollectionView
 {
     if (!_feedsCollectionView) {
-        _feedsCollectionView = [[PGFeedsCollectionView alloc] initWithFrame:self.view.bounds collectionViewLayout:[UICollectionViewFlowLayout new]];
+        // NOTE: remove UICollectionView top inset http://stackoverflow.com/questions/23786198/uicollectionview-how-can-i-remove-the-space-on-top-first-cells-row
+        _feedsCollectionView = [[PGFeedsCollectionView alloc] initWithFrame:CGRectMake(0, 0, UISCREEN_WIDTH, UISCREEN_HEIGHT-50+20) collectionViewLayout:[UICollectionViewFlowLayout new]];
+        _feedsCollectionView.contentInset = UIEdgeInsetsMake(-20, 0, 0, 0);
         _feedsCollectionView.feedsDelegate = self;
+        
+//        PGWeakSelf(self);
+//        [_feedsCollectionView addPullToRefresh:Theme.loadingImages
+//                                      topInset:0.f
+//                                        height:70.f
+//                                          rate:0.f
+//                                       handler:^{
+//                                           [weakself.viewModel requestData];
+//                                       }];
         
         __block PGFeedsCollectionView *collectionView = _feedsCollectionView;
         PGWeakSelf(self);
@@ -296,7 +357,7 @@
             });
         }];
         [_feedsCollectionView enableInfiniteScrolling:^{
-            [weakself.viewModel loadNextPage];
+            [weakself.viewModel requestFeeds];
         }];
     }
     return _feedsCollectionView;

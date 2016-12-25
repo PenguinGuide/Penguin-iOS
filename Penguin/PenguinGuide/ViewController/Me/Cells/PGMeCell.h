@@ -10,7 +10,8 @@
 
 @interface PGMeCell : UICollectionViewCell
 
-- (void)setCellWithIcon:(NSString *)icon name:(NSString *)name count:(NSString *)count highlight:(BOOL)highlight;
+- (void)setCellWithIcon:(NSString *)icon name:(NSString *)name count:(NSString *)count;
+- (void)setCellWithIcon:(NSString *)icon name:(NSString *)name highlight:(BOOL)highlight;
 
 + (CGSize)cellSize;
 

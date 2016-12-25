@@ -11,7 +11,7 @@ static NSString *const ChannelCell = @"ChannelCell";
 #import "PGHomeRecommendsHeaderView.h"
 #import "PGHomeChannelCell.h"
 #import "PGImageBanner.h"
-#import "PGCategoryIcon.h"
+#import "PGScenarioBanner.h"
 #import "UIButton+WebCache.h"
 
 @interface PGHomeRecommendsHeaderView () <PGPagedScrollViewDelegate, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout>
@@ -20,6 +20,8 @@ static NSString *const ChannelCell = @"ChannelCell";
 @property (nonatomic, strong) NSArray *channelsArray;
 @property (nonatomic, strong) UICollectionView *categoriesCollectionView;
 @property (nonatomic, strong, readwrite) PGPagedScrollView *bannersView;
+@property (nonatomic, strong) UIView *verticalLine;
+@property (nonatomic, strong) UILabel *articleLabel;
 
 @end
 
@@ -36,29 +38,33 @@ static NSString *const ChannelCell = @"ChannelCell";
 
 - (void)initialize
 {
+    self.backgroundColor = [UIColor whiteColor];
+    
     [self addSubview:self.bannersView];
     [self addSubview:self.categoriesCollectionView];
-    
-    UIView *verticalLine = [[UIView alloc] initWithFrame:CGRectMake(13, self.bannersView.pg_bottom+11, 3, 16)];
-    verticalLine.backgroundColor = Theme.colorExtraHighlight;
-    UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(verticalLine.pg_right+5, self.bannersView.pg_bottom+11, 100, 16)];
-    label.font = Theme.fontMediumBold;
-    label.textColor = Theme.colorText;
-    label.text = @"文章";
-    [self addSubview:verticalLine];
-    [self addSubview:label];
 }
 
 - (void)reloadBannersWithRecommendsArray:(NSArray *)recommendsArray channelsArray:(NSArray *)channelsArray
 {
+    if (!self.articleLabel && channelsArray.count > 0) {
+        self.verticalLine = [[UIView alloc] initWithFrame:CGRectMake(13, self.bannersView.pg_bottom+11, 3, 16)];
+        self.verticalLine.backgroundColor = Theme.colorExtraHighlight;
+        self.articleLabel = [[UILabel alloc] initWithFrame:CGRectMake(self.verticalLine.pg_right+5, self.bannersView.pg_bottom+11, 100, 16)];
+        self.articleLabel.font = Theme.fontMediumBold;
+        self.articleLabel.textColor = Theme.colorText;
+        self.articleLabel.text = @"文章";
+        [self addSubview:self.verticalLine];
+        [self addSubview:self.articleLabel];
+    }
     self.recommendsArray = recommendsArray;
     self.channelsArray = channelsArray;
     [self.bannersView reloadData];
+    [self.categoriesCollectionView reloadData];
 }
 
 + (CGSize)headerViewSize
 {
-    return CGSizeMake(UISCREEN_WIDTH, UISCREEN_WIDTH*160/320+80+11+16);
+    return CGSizeMake(UISCREEN_WIDTH, UISCREEN_WIDTH*9/16+80+11+16);
 }
 
 #pragma mark - <PGPagedScrollViewDelegate>
@@ -96,7 +102,7 @@ static NSString *const ChannelCell = @"ChannelCell";
 {
     PGHomeChannelCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:ChannelCell forIndexPath:indexPath];
     
-    PGCategoryIcon *icon = self.channelsArray[indexPath.item];
+    PGScenarioBanner *icon = self.channelsArray[indexPath.item];
     
     [cell.channelButton sd_setImageWithURL:[NSURL URLWithString:icon.image] forState:UIControlStateNormal placeholderImage:nil];
     [cell.channelLabel setText:icon.title];
@@ -118,9 +124,9 @@ static NSString *const ChannelCell = @"ChannelCell";
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (self.delegate && [self.delegate respondsToSelector:@selector(channelDidSelect:)]) {
-        PGCategoryIcon *icon = self.channelsArray[indexPath.item];
-        [self.delegate channelDidSelect:icon.link];
+    if (self.delegate && [self.delegate respondsToSelector:@selector(scenarioDidSelect:)]) {
+        PGScenarioBanner *scenario = self.channelsArray[indexPath.item];
+        [self.delegate scenarioDidSelect:scenario];
     }
 }
 
@@ -159,7 +165,7 @@ static NSString *const ChannelCell = @"ChannelCell";
         layout.minimumLineSpacing = 15.f;
         layout.minimumInteritemSpacing = 0.f;
         _categoriesCollectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(0, self.bannersView.pg_bottom+11+16, self.pg_width, 80) collectionViewLayout:layout];
-        _categoriesCollectionView.backgroundColor = Theme.colorBackground;
+        _categoriesCollectionView.backgroundColor = [UIColor whiteColor];
         _categoriesCollectionView.showsVerticalScrollIndicator = NO;
         _categoriesCollectionView.showsHorizontalScrollIndicator = NO;
         _categoriesCollectionView.dataSource = self;

@@ -11,14 +11,18 @@ Pod::Spec.new do |s|
 s.name         = "PGImageView"
 s.version      = "1.0"
 s.summary      = "PenguinGuide UIImageView category"
-s.license      = ""
+s.description  = "PenguinGuide UIImageView category"
+s.homepage     = "http://EXAMPLE/PGAlertController"
+s.license      = "MIT"
 s.author       = { "Kobe Dai" => "kobe.dai@penguinguide.com" }
 s.platform     = :ios, "8.0"
+s.source       = { :git => "https://github.com/PenguinGuide/Penguin-iOS.git", :tag => "#{s.version}" }
 
 s.public_header_files = "*.h"
 s.source_files = "*.{h,m}"
 
-s.dependency "SDWebImage", "~>3.8"
+s.dependency "SDWebImage", '~>4.0.0-beta2'
+#s.dependency 'SDWebImage/GIF', '~>4.0.0-beta2'
 s.dependency "FLAnimatedImage"
 
 s.requires_arc = true

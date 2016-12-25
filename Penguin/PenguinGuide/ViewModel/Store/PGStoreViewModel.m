@@ -9,7 +9,7 @@
 #import "PGStoreViewModel.h"
 
 #import "PGImageBanner.h"
-#import "PGCategoryIcon.h"
+#import "PGScenarioBanner.h"
 
 #import "PGCarouselBanner.h"
 #import "PGArticleBanner.h"
@@ -22,7 +22,7 @@
 
 @property (nonatomic, strong, readwrite) NSArray *recommendsArray;
 @property (nonatomic, strong, readwrite) NSArray *categoriesArray;
-@property (nonatomic, strong, readwrite) NSArray *bannersArray;
+@property (nonatomic, strong, readwrite) NSArray *feedsArray;
 
 @end
 
@@ -32,7 +32,7 @@
 {
     PGWeakSelf(self);
     [self.apiClient pg_makeGetRequest:^(PGRKRequestConfig *config) {
-        config.route = PG_Store_Recommends;
+        config.route = PG_Home_Recommends;
         config.keyPath = nil;
     } completion:^(id response) {
         NSDictionary *responseDict = [response firstObject];
@@ -40,8 +40,8 @@
             if (responseDict[@"banners"]) {
                 weakself.recommendsArray = [PGImageBanner modelsFromArray:responseDict[@"banners"]];
             }
-            if (responseDict[@"categories"]) {
-                weakself.categoriesArray = [PGCategoryIcon modelsFromArray:responseDict[@"categories"]];
+            if (responseDict[@"scenarios"]) {
+                weakself.categoriesArray = [PGScenarioBanner modelsFromArray:responseDict[@"scenarios"]];
             }
         }
         [weakself requestFeeds];
@@ -52,59 +52,54 @@
 
 - (void)requestFeeds
 {
+    if (self.isPreloadingNextPage || self.endFlag) {
+        return;
+    }
+    
+    self.isPreloadingNextPage = YES;
+    
+    if (!self.response) {
+        self.response = [[PGRKResponse alloc] init];
+        self.response.pagination.needPerformingBatchUpdate = NO;
+        self.response.pagination.paginationKey = @"cursor";
+    }
+    
     PGWeakSelf(self);
+    
+    PGParams *params = [PGParams new];
+    params[ParamsPerPage] = @10;
+    params[ParamsPageCursor] = self.response.pagination.cursor;
+    
     [self.apiClient pg_makeGetRequest:^(PGRKRequestConfig *config) {
-        config.route = PG_Store_Feeds;
+        config.route = PG_Home_Feeds;
         config.keyPath = @"items";
-    } completion:^(id response) {
-        NSDictionary *responseDict = [response firstObject];
-        if (responseDict[@"items"] && [responseDict[@"items"] isKindOfClass:[NSArray class]]) {
-            NSMutableArray *models = [NSMutableArray new];
-            for (NSDictionary *dict in responseDict[@"items"]) {
-                if (dict[@"type"]) {
-                    if ([dict[@"type"] isEqualToString:@"carousel"]) {
-                        PGCarouselBanner *carouseBanner = [PGCarouselBanner modelFromDictionary:dict];
-                        if (carouseBanner) {
-                            [models addObject:carouseBanner];
-                        }
-                    }
-                    if ([dict[@"type"] isEqualToString:@"article"]) {
-                        PGArticleBanner *articleBanner = [PGArticleBanner modelFromDictionary:dict];
-                        if (articleBanner) {
-                            [models addObject:articleBanner];
-                        }
-                    }
-                    if ([dict[@"type"] isEqualToString:@"flashbuy"]) {
-                        PGFlashbuyBanner *flashbuyBanner = [PGFlashbuyBanner modelFromDictionary:dict];
-                        if (flashbuyBanner) {
-                            [models addObject:flashbuyBanner];
-                        }
-                    }
-                    if ([dict[@"type"] isEqualToString:@"goods_collection"]) {
-                        PGGoodsCollectionBanner *goodsCollectionBanner = [PGGoodsCollectionBanner modelFromDictionary:dict];
-                        if (goodsCollectionBanner) {
-                            [models addObject:goodsCollectionBanner];
-                        }
-                    }
-                    if ([dict[@"type"] isEqualToString:@"topic"]) {
-                        PGTopicBanner *topicBanner = [PGTopicBanner modelFromDictionary:dict];
-                        if (topicBanner) {
-                            [models addObject:topicBanner];
-                        }
-                    }
-                    if ([dict[@"type"] isEqualToString:@"good"]) {
-                        PGSingleGoodBanner *singleGoodBanner = [PGSingleGoodBanner modelFromDictionary:dict];
-                        if (singleGoodBanner) {
-                            [models addObject:singleGoodBanner];
-                        }
-                    }
-                }
-            }
-            weakself.bannersArray = [NSArray arrayWithArray:models];
-        }
-    } failure:^(NSError *error) {
+        config.params = params;
+        config.typeKey = @"type";
+        config.response = weakself.response;
+        config.models = @[@{@"type":@"carousel", @"class":[PGCarouselBanner new]},
+                          @{@"type":@"article", @"class":[PGArticleBanner new]},
+                          @{@"type":@"flashbuy", @"class":[PGFlashbuyBanner new]},
+                          @{@"type":@"goods_collection", @"class":[PGGoodsCollectionBanner new]},
+                          @{@"type":@"topic", @"class":[PGTopicBanner new]},
+                          @{@"type":@"goods", @"class":[PGSingleGoodBanner new]}];
+    } paginationCompletion:^(PGRKResponse *response) {
+        weakself.response = response;
+        weakself.feedsArray = response.dataArray;
+        weakself.endFlag = response.pagination.endFlag;
         
+        weakself.isPreloadingNextPage = NO;
+    } failure:^(NSError *error) {
+        weakself.error = error;
+        
+        weakself.isPreloadingNextPage = NO;
     }];
+}
+
+- (void)clearPagination
+{
+    self.endFlag = NO;
+    self.isPreloadingNextPage = NO;
+    self.response = nil;
 }
 
 @end

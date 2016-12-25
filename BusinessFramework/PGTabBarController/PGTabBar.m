@@ -23,6 +23,10 @@
         self.backgroundColor = [UIColor colorWithWhite:1.0 alpha:0.95];
         self.userInteractionEnabled = YES;
         self.selectedIndex = 0;
+        
+        UIView *horizontalLine = [[UIView alloc] initWithFrame:CGRectMake(0, 0, frame.size.width, 1/[UIScreen mainScreen].scale)];
+        horizontalLine.backgroundColor = [UIColor colorWithRed:225.f/256.f green:225.f/256.f blue:225.f/256.f alpha:1.f];
+        [self addSubview:horizontalLine];
     }
     
     return self;

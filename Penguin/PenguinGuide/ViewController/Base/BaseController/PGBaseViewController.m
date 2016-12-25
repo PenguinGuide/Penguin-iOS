@@ -6,11 +6,15 @@
 //  Copyright © 2016 Xinglian. All rights reserved.
 //
 
+#define PlaceholderTag 899
+
 #import "PGBaseViewController.h"
 #import "PGBaseViewController+TransitionAnimation.h"
 
 #import "MBProgressHUD.h"
 #import "FLAnimatedImage.h"
+
+#import "PGPageBasePlaceholder.h"
 
 @interface PGBaseViewController () <UINavigationControllerDelegate>
 
@@ -26,7 +30,11 @@
 - (id)init
 {
     if (self = [super init]) {
-        [self.apiClient updateAccessToken:[NSString stringWithFormat:@"Bearer %@", PGGlobal.accessToken]];
+        if (PGGlobal.accessToken) {
+            [self.apiClient updateAccessToken:[NSString stringWithFormat:@"Bearer %@", PGGlobal.accessToken]];
+        } else {
+            [self.apiClient updateAccessToken:nil];
+        }
     }
     
     return self;
@@ -51,6 +59,21 @@
                                                                             action:@selector(backButtonClicked)];
     // ISSUE: fix left sliding not working, http://blog.csdn.net/meegomeego/article/details/25879605
     self.navigationController.interactivePopGestureRecognizer.delegate = (id)self;
+    
+    PGWeakSelf(self);
+    [self observe:PGGlobal keyPath:@"accessToken" block:^(id changedObject) {
+        if (PGGlobal.accessToken) {
+            [weakself.apiClient updateAccessToken:[NSString stringWithFormat:@"Bearer %@", PGGlobal.accessToken]];
+        } else {
+            [weakself.apiClient updateAccessToken:nil];
+        }
+    }];
+    [self observe:PGGlobal keyPath:@"hostUrl" block:^(id changedObject) {
+        NSString *hostUrl = changedObject;
+        if (hostUrl && [hostUrl isKindOfClass:[NSString class]] && hostUrl.length > 0) {
+            [weakself.apiClient updateHostUrl:hostUrl];
+        }
+    }];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -67,6 +90,11 @@
     
     // http://benscheirman.com/2011/08/when-viewwillappear-isnt-called/
     self.navigationController.delegate = self;
+    
+    UIView *statusBar = [[[UIApplication sharedApplication] valueForKey:@"statusBarWindow"] valueForKey:@"statusBar"];
+    if ([statusBar respondsToSelector:@selector(setBackgroundColor:)]) {
+        statusBar.backgroundColor = [UIColor clearColor];
+    }
 }
 
 - (void)viewDidDisappear:(BOOL)animated
@@ -133,6 +161,20 @@
     [self.KVOController unobserveAll];
 }
 
+- (void)observeCollectionView:(PGBaseCollectionView *)collectionView endOfFeeds:(PGBaseViewModel *)viewModel
+{
+    __block PGBaseCollectionView *weakCollectionView = collectionView;
+    [self observe:viewModel keyPath:@"endFlag" block:^(id changedObject) {
+        BOOL endFlag = [changedObject boolValue];
+        if (endFlag) {
+            [weakCollectionView disableInfiniteScrolling];
+            [[weakCollectionView collectionViewLayout] invalidateLayout];
+        } else {
+            [weakCollectionView enableInfiniteScrolling];
+        }
+    }];
+}
+
 #pragma mark - <Toast>
 
 - (void)showToast:(NSString *)message
@@ -196,9 +238,54 @@
     }
 }
 
+- (void)showOccupiedLoading
+{
+    if (!self.hud.superview) {
+        self.view.userInteractionEnabled = NO;
+        self.hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+        self.hud.frame = CGRectMake(0, 0, 100, 100);
+        self.hud.center = CGPointMake(UISCREEN_WIDTH/2, UISCREEN_HEIGHT/2);
+        self.hud.margin = 15.f;
+        self.hud.mode = MBProgressHUDModeCustomView;
+        self.hud.bezelView.style = MBProgressHUDBackgroundStyleSolidColor;
+        // http://stackoverflow.com/questions/10384207/uiview-shadow-not-working
+        self.hud.bezelView.backgroundColor = [UIColor whiteColor];
+        self.hud.bezelView.layer.shadowColor = Theme.colorText.CGColor;
+        self.hud.bezelView.layer.shadowOffset = CGSizeMake(1.f, 1.f);
+        self.hud.bezelView.layer.shadowOpacity = 0.5f;
+        self.hud.bezelView.layer.masksToBounds = NO;
+        self.hud.userInteractionEnabled = NO;
+        
+        FLAnimatedImage *animatedImage = [FLAnimatedImage animatedImageWithGIFData:[NSData dataWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"loading" ofType:@"gif"]]];
+        FLAnimatedImageView *animatedImageView = [[FLAnimatedImageView alloc] init];
+        animatedImageView.animatedImage = animatedImage;
+        self.hud.customView = animatedImageView;
+    }
+}
+
 - (void)dismissLoading
 {
+    self.view.userInteractionEnabled = YES;
     [self.hud hideAnimated:YES];
+}
+
+#pragma mark - <Page Placeholder>
+
+- (void)showPlaceholder:(NSString *)image desc:(NSString *)desc
+{
+    PGPageBasePlaceholder *placeholderView = [self.view viewWithTag:PlaceholderTag];
+    if (placeholderView) {
+        [placeholderView removeFromSuperview];
+    }
+    placeholderView = [[PGPageBasePlaceholder alloc] initWithImage:image desc:desc top:64.f height:self.view.pg_height-64.f];
+    placeholderView.tag = PlaceholderTag;
+    
+    [self.view addSubview:placeholderView];
+}
+
+- (void)showNetworkLostPlaceholder
+{
+    
 }
 
 #pragma mark - <Error Handling>
@@ -210,6 +297,7 @@
         NSError *error = changedObject;
         if (error && [error isKindOfClass:[NSError class]]) {
             [weakself showErrorMessage:error];
+            [weakself dismissLoading];
         }
     }];
 }
@@ -223,6 +311,8 @@
             if (errorMsg && errorMsg.length > 0) {
                 [self showToast:errorMsg position:PGToastPositionTop];
             }
+        } else if (userInfo[NSLocalizedDescriptionKey]) {
+            [self showToast:userInfo[NSLocalizedDescriptionKey] position:PGToastPositionTop];
         }
     }
     NSInteger errorCode = error.code;
@@ -236,9 +326,8 @@
 - (PGAPIClient *)apiClient
 {
     if (!_apiClient) {
-        _apiClient = [PGAPIClient client];
+        _apiClient = [PGAPIClient clientWithBaseUrl:PGGlobal.hostUrl];
     }
-    
     return _apiClient;
 }
 

@@ -13,9 +13,14 @@
 @property (nonatomic, strong) NSString *nickname;
 @property (nonatomic, strong) NSString *avatar;
 @property (nonatomic, strong) NSString *userId;
-@property (nonatomic, assign) NSInteger sex;
+@property (nonatomic, strong) NSString *sex;
+@property (nonatomic, strong) NSString *birthday;
+@property (nonatomic, strong) NSString *phoneNumber;
 @property (nonatomic, strong) NSString *location;
 @property (nonatomic, strong) NSString *collectionCount;
-@property (nonatomic, strong) NSString *messageCount;
+@property (nonatomic, assign) BOOL hasNewMessage;
+@property (nonatomic, assign) BOOL weixinBinded;
+@property (nonatomic, assign) BOOL weiboBinded;
+@property (nonatomic, assign) BOOL hasPassword;
 
 @end

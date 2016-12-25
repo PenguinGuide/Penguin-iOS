@@ -31,4 +31,6 @@
  */
 + (NSArray *)modelsFromArray:(NSArray *)array;
 
++ (MTLValueTransformer *)stringTransformer:(NSArray *)keys;
+
 @end

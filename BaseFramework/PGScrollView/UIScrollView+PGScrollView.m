@@ -40,7 +40,7 @@ static char ScrollViewNaviTitleLabel;
 {
     UIView *dimView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, headerView.frame.size.width, headerView.frame.size.height)];
     dimView.contentMode = UIViewContentModeScaleAspectFill;
-    dimView.backgroundColor = [UIColor colorWithWhite:0.f alpha:0.0f];
+    dimView.backgroundColor = [UIColor colorWithWhite:1.f alpha:0.0f];
     [headerView addSubview:dimView];
     
     headerView.contentMode = UIViewContentModeScaleAspectFill;
@@ -52,7 +52,7 @@ static char ScrollViewNaviTitleLabel;
         UILabel *naviTitleLabel = [[UILabel alloc] initWithFrame:CGRectMake(70, 20, [UIScreen mainScreen].bounds.size.width-140, 44)];
         naviTitleLabel.font = [UIFont systemFontOfSize:16.f weight:UIFontWeightBold];
         naviTitleLabel.textAlignment = NSTextAlignmentCenter;
-        naviTitleLabel.textColor = [UIColor whiteColor];
+        naviTitleLabel.textColor = [UIColor blackColor];
         naviTitleLabel.text = naviTitle;
         naviTitleLabel.alpha = 0.f;
         [self addSubview:naviTitleLabel];
@@ -102,12 +102,12 @@ static char ScrollViewNaviTitleLabel;
             float scale = contentOffsetY/(self.headerView.frame.size.height-64);
             if (headerImageHeight-contentOffsetY <= 64) {
                 self.headerView.frame = CGRectMake(0, contentOffsetY-headerImageHeight+64, self.headerView.frame.size.width, self.headerView.frame.size.height);
-                self.dimView.backgroundColor = [UIColor colorWithWhite:0.f alpha:0.6f];
+                self.dimView.backgroundColor = [UIColor colorWithWhite:1.f alpha:1.f];
                 [self bringSubviewToFront:self.headerView];
                 [self bringSubviewToFront:self.naviTitleLabel];
             } else {
                 self.headerView.frame = CGRectMake(0, 0, self.headerView.frame.size.width, self.headerView.frame.size.height);
-                self.dimView.backgroundColor = [UIColor colorWithWhite:0.f alpha:0.6f*scale];
+                self.dimView.backgroundColor = [UIColor colorWithWhite:1.f alpha:1.f*scale];
             }
             self.naviTitleLabel.frame = CGRectMake(70, 20+contentOffsetY, self.naviTitleLabel.frame.size.width, self.naviTitleLabel.frame.size.height);
             if (scale >= 1.f) {
@@ -122,6 +122,8 @@ static char ScrollViewNaviTitleLabel;
             self.headerView.frame = CGRectMake(0, contentOffsetY, self.headerView.frame.size.width, headerImageHeight+fabs(contentOffsetY));
             self.dimView.frame = CGRectMake(0, 0, self.headerView.frame.size.width, headerImageHeight+fabs(contentOffsetY));
             self.naviTitleLabel.frame = CGRectMake(70, 20, self.naviTitleLabel.frame.size.width, self.naviTitleLabel.frame.size.height);
+            self.naviTitleLabel.alpha = 0.f;
+            self.dimView.backgroundColor = [UIColor colorWithWhite:0.f alpha:0.f];
         }
     }
 }

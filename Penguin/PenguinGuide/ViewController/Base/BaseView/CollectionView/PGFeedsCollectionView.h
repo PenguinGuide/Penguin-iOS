@@ -7,7 +7,7 @@
 //
 
 #import "PGBaseCollectionView.h"
-#import "PGCategoryIcon.h"
+#import "PGScenarioBanner.h"
 
 // models
 #import "PGCarouselBanner.h"
@@ -26,26 +26,30 @@
 
 @protocol PGFeedsCollectionViewDelegate <NSObject>
 
-- (NSArray *)recommendsArray;
-- (NSArray *)iconsArray;
-- (NSArray *)feedsArray;
-- (CGSize)feedsHeaderSize;
-- (NSString *)tabType;
-
 @optional
 
-- (void)channelDidSelect:(NSString *)link;
-- (void)scenarioDidSelect:(NSString *)scenarioType;
-- (void)categoryDidSelect:(PGCategoryIcon *)category;
+- (NSArray *)feedsArray;
+- (NSArray *)recommendsArray;
+- (CGSize)feedsHeaderSize;
+- (CGSize)feedsFooterSize;
+- (NSString *)tabType;
+
+- (NSArray *)iconsArray;
+- (UIEdgeInsets)topEdgeInsets;
+
+- (void)scenarioDidSelect:(PGScenarioBanner *)scenario;
+- (void)categoryDidSelect:(PGScenarioBanner *)category;
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath;
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView;
-- (UIEdgeInsets)topEdgeInsets;
+- (void)shouldPreloadNextPage;
 
 @end
 
 @interface PGFeedsCollectionView : PGBaseCollectionView
 
 @property (nonatomic, weak) id<PGFeedsCollectionViewDelegate> feedsDelegate;
+
+@property (nonatomic, assign) BOOL allowGesture;
 
 @end

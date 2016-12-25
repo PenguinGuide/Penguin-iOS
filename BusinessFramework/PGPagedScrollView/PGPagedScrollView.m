@@ -71,9 +71,12 @@
 @property (nonatomic, strong) UIScrollView *pagedScrollView;
 @property (nonatomic, strong) FXPageControl *pageControl;
 @property (nonatomic, strong) NSMutableArray *banners;
+@property (nonatomic, strong) NSMutableArray *fixedBanners;
 @property (nonatomic) PGPagedScrollViewImageFillMode fillMode;
 @property (nonatomic) PGPagedScrollViewIconMode iconMode;
 @property (nonatomic, assign) NSInteger currentPage;
+@property (nonatomic, assign) NSInteger currentIndex;
+@property (nonatomic, assign) BOOL circularMode;
 
 @end
 
@@ -107,20 +110,35 @@
     if (self.delegate && [self.delegate respondsToSelector:@selector(imagesForScrollView)]) {
         NSArray *fixedBanners = [self.delegate imagesForScrollView];
         
+        if (fixedBanners.count <= 1) {
+            self.pageControl.hidden = YES;
+        } else {
+            self.pageControl.hidden = NO;
+        }
+        
         if (fixedBanners.count > 0) {
             self.banners = [NSMutableArray arrayWithArray:fixedBanners];
-//            [self.banners insertObject:fixedBanners.firstObject atIndex:0];
-//            [self.banners addObject:fixedBanners.lastObject];
+            if (fixedBanners.count > 1) {
+                self.circularMode = YES;
+                self.currentPage = 1;
+                
+                [self.banners insertObject:fixedBanners.lastObject atIndex:0];
+                [self.banners addObject:fixedBanners.firstObject];
+            } else {
+                self.circularMode = NO;
+            }
             
-            self.pagedScrollView.contentSize = CGSizeMake(self.frame.size.width*fixedBanners.count, self.pagedScrollView.frame.size.height);
+            self.currentIndex = 0;
+            
+            self.pagedScrollView.contentSize = CGSizeMake(self.frame.size.width*self.banners.count, self.pagedScrollView.frame.size.height);
             for (UIView *subview in self.pagedScrollView.subviews) {
                 for (UIGestureRecognizer *gesture in subview.gestureRecognizers) {
                     [subview removeGestureRecognizer:gesture];
                 }
                 [subview removeFromSuperview];
             }
-            for (int i = 0; i < fixedBanners.count; i++) {
-                NSString *imageName = fixedBanners[i];
+            for (int i = 0; i < self.banners.count; i++) {
+                NSString *imageName = self.banners[i];
                 if ([imageName containsString:@".gif"]) {
                     FLAnimatedImageView *gifImageView = [[FLAnimatedImageView alloc] initWithFrame:CGRectMake(i*self.frame.size.width, 0, self.frame.size.width, self.frame.size.height-15-30)];
                     gifImageView.backgroundColor = [UIColor colorWithHexString:@"454545"];
@@ -147,10 +165,18 @@
                 }
             }
             _pageControl.numberOfPages = fixedBanners.count;
-            _pageControl.currentPage = self.currentPage;
+            _pageControl.currentPage = self.currentIndex;
+            
+            [self.pagedScrollView setContentOffset:CGPointMake(self.currentPage*self.frame.size.width, 0) animated:NO];
         }
     } else if (self.delegate && [self.delegate respondsToSelector:@selector(viewsForScrollView)]) {
+        self.circularMode = NO;
         NSArray *banners = [self.delegate viewsForScrollView];
+        if (banners.count <= 1) {
+            self.pageControl.hidden = YES;
+        } else {
+            self.pageControl.hidden = NO;
+        }
         if (banners.count > 0) {
             self.banners = [NSArray arrayWithArray:banners];
             self.pagedScrollView.contentSize = CGSizeMake(self.frame.size.width*self.banners.count, self.pagedScrollView.frame.size.height);
@@ -182,6 +208,18 @@
     CGRect visibleBounds = self.pagedScrollView.bounds;
     NSInteger currentPage = (NSInteger)(floorf(CGRectGetMidX(visibleBounds) / CGRectGetWidth(visibleBounds)));
     
+    if (self.circularMode) {
+        self.currentIndex = currentPage;
+        
+        if (currentPage == 0) {
+            currentPage = self.banners.count-2;
+        } else if (currentPage == self.banners.count-1) {
+            currentPage = 0;
+        } else {
+            currentPage = currentPage - 1;
+        }
+    }
+    
     if (currentPage < 0) {
         currentPage = 0;
     }
@@ -195,12 +233,28 @@
     self.currentPage = currentPage;
 }
 
+- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
+{
+    if (self.circularMode) {
+        if (self.currentIndex == 0) {
+            [scrollView setContentOffset:CGPointMake((self.banners.count-2)*self.frame.size.width, 0) animated:NO];
+        } else if (self.currentIndex == self.banners.count-1) {
+            [scrollView setContentOffset:CGPointMake(self.frame.size.width, 0) animated:NO];
+        }
+        self.currentIndex = self.currentPage;
+    }
+}
+
 - (void)imageViewDidTapped:(UIGestureRecognizer *)recognizer
 {
     UIView *tappedView = [recognizer view];
     if (tappedView) {
         if (self.delegate && [self.delegate respondsToSelector:@selector(imageViewDidSelect:)]) {
-            [self.delegate imageViewDidSelect:tappedView.tag];
+            if (self.circularMode) {
+                [self.delegate imageViewDidSelect:tappedView.tag-1];
+            } else {
+                [self.delegate imageViewDidSelect:tappedView.tag];
+            }
         }
     }
 }

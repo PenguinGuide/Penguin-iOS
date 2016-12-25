@@ -7,10 +7,11 @@
 //
 
 #import "PGArticleParagraphTextCell.h"
+#import "PGArticleParagraphTextLabel.h"
 
 @interface PGArticleParagraphTextCell ()
 
-@property (nonatomic, strong) UILabel *textLabel;
+@property (nonatomic, strong) PGArticleParagraphTextLabel *textLabel;
 
 @end
 
@@ -39,7 +40,7 @@
 - (UILabel *)textLabel
 {
     if (!_textLabel) {
-        _textLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.pg_width, self.pg_height)];
+        _textLabel = [[PGArticleParagraphTextLabel alloc] initWithFrame:CGRectMake(0, 0, self.pg_width, self.pg_height)];
         _textLabel.numberOfLines = 0;
     }
     return _textLabel;

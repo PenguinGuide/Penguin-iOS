@@ -12,4 +12,5 @@
 #import "PGRKParams.h"
 #import "PGRKNetworkLogger.h"
 #import "PGRKRequestConfig.h"
+#import "PGRKResponse.h"
 #import "NSValueTransformer+PGRKValueTransformer.h"

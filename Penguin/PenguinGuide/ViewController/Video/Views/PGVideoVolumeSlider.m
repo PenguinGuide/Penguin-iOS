@@ -12,11 +12,11 @@
 
 @interface PGVideoVolumeSlider ()
 
-
 @property (nonatomic, strong) UIImageView *maximumTrackImageView;
 @property (nonatomic, strong) UIView *maximumTrackLine;
 @property (nonatomic, strong) UIImageView *minimumTrackImageView;
 @property (nonatomic, strong) UIView *minimumTrackLine;
+@property (nonatomic, assign, readwrite) float value;
 
 @end
 
@@ -38,6 +38,8 @@
 {
     self.maximumTrackLine.frame = CGRectMake(10, self.maximumTrackImageView.pg_bottom+7, LineWidth, 88*(1-value));
     self.minimumTrackLine.frame = CGRectMake(10, self.maximumTrackLine.pg_bottom, LineWidth, 88*value);
+    
+    _value = value;
 }
 
 #pragma mark - <Setters && Getters>

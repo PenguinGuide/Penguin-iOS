@@ -10,7 +10,7 @@
 
 @interface PGSearchRecommendsViewModel : PGBaseViewModel
 
-@property (nonatomic, strong) NSArray *tagsArray;
+@property (nonatomic, strong, readonly) NSArray *recommends;
 @property (nonatomic, strong) NSArray *historyArray;
 
 @end

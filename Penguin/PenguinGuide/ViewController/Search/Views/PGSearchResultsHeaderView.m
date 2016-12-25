@@ -8,13 +8,10 @@
 
 #import "PGSearchResultsHeaderView.h"
 #import "PGSearchTextField.h"
-#import "PGSegmentView.h"
 
-@interface PGSearchResultsHeaderView () <PGSegmentViewDelegate>
+@interface PGSearchResultsHeaderView () <UITextFieldDelegate>
 
 @property (nonatomic, strong) PGSearchTextField *searchTextField;
-@property (nonatomic, strong) PGSegmentView *segmentView;
-@property (nonatomic, strong) NSArray *segments;
 @property (nonatomic, strong) UIButton *cancelButton;
 @property (nonatomic, strong) UIButton *backButton;
 
@@ -33,20 +30,16 @@
 
 - (void)initialize
 {
-    self.backgroundColor = Theme.colorBackground;
+    self.backgroundColor = [UIColor whiteColor];
     
     [self addSubview:self.searchTextField];
     [self addSubview:self.backButton];
     [self addSubview:self.cancelButton];
-    [self addSubview:self.segmentView];
 }
 
-- (void)setHeaderViewWithKeyword:(NSString *)keyword segments:(NSArray *)segments
+- (void)setHeaderViewWithKeyword:(NSString *)keyword
 {
     self.searchTextField.text = keyword;
-    self.segments = segments;
-    
-    [self.segmentView setViewWithSegments:self.segments];
 }
 
 - (void)cancelButtonClicked
@@ -63,13 +56,19 @@
     }
 }
 
-#pragma mark - <PGSegmentViewDelegate>
+#pragma mark - <UITextFieldDelegate>
 
-- (void)segmentDidClicked:(NSInteger)index
+- (BOOL)textFieldShouldReturn:(UITextField *)textField
 {
-    if (self.delegate && [self.delegate respondsToSelector:@selector(segmentDidClicked:)]) {
-        [self.delegate segmentDidClicked:index];
+    if (textField.text.length == 0) {
+        return NO;
     }
+    
+    if (self.delegate && [self.delegate respondsToSelector:@selector(searchButtonClicked:)]) {
+        [textField resignFirstResponder];
+        [self.delegate searchButtonClicked:textField.text];
+    }
+    return YES;
 }
 
 - (UITextField *)searchTextField {
@@ -77,6 +76,7 @@
         _searchTextField = [[PGSearchTextField alloc] initWithFrame:CGRectMake(35, 25, UISCREEN_WIDTH-30-50, 30)];
         _searchTextField.placeholder = @"请输入关键词";
         _searchTextField.returnKeyType = UIReturnKeySearch;
+        _searchTextField.delegate = self;
     }
     return _searchTextField;
 }
@@ -90,14 +90,6 @@
         [_cancelButton addTarget:self action:@selector(cancelButtonClicked) forControlEvents:UIControlEventTouchUpInside];
     }
     return _cancelButton;
-}
-
-- (PGSegmentView *)segmentView {
-	if(_segmentView == nil) {
-		_segmentView = [[PGSegmentView alloc] initWithFrame:CGRectMake(0, self.searchTextField.pg_bottom, UISCREEN_WIDTH, self.pg_height-self.searchTextField.pg_bottom)];
-        _segmentView.delegate = self;
-	}
-	return _segmentView;
 }
 
 - (UIButton *)backButton {

@@ -11,6 +11,16 @@
 @interface PGExploreViewModel : PGBaseViewModel
 
 @property (nonatomic, strong, readonly) NSArray *recommendsArray;
-@property (nonatomic, strong, readonly) NSArray *bannersArray;
+
+@property (nonatomic, strong, readonly) NSArray *scenariosArray;
+@property (nonatomic, strong, readonly) NSArray *categoriesArray;
+@property (nonatomic, strong, readonly) NSArray *levelsArray;
+@property (nonatomic, strong, readonly) NSArray *groupsArray;
+
+@property (nonatomic, strong, readonly) NSArray *articlesArray;
+
+- (void)requestArticles;
+- (void)collectArticle:(NSString *)articleId completion:(void(^)(BOOL success))completion;
+- (void)disCollectArticle:(NSString *)articleId completion:(void(^)(BOOL success))completion;
 
 @end

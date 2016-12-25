@@ -36,7 +36,7 @@
     [self.contentView addSubview:self.bannersView];
     
     UIImageView *maskImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, self.pg_width, self.pg_height)];
-    maskImageView.image = [[UIImage imageNamed:@"pg_white_corner_mask"] resizableImageWithCapInsets:UIEdgeInsetsMake(4, 4, 4, 4) resizingMode:UIImageResizingModeStretch];
+    maskImageView.image = [[UIImage imageNamed:@"pg_bg_corner_mask"] resizableImageWithCapInsets:UIEdgeInsetsMake(4, 4, 4, 4) resizingMode:UIImageResizingModeStretch];
     [self.contentView addSubview:maskImageView];
 }
 
@@ -59,8 +59,9 @@
         if (i < self.viewsArray.count) {
             PGGood *good = flashbuy.goodsArray[i];
             PGFlashbuyGoodView *view = self.viewsArray[i];
-            NSDate *date = [[NSDate alloc] initWithTimeIntervalSince1970:[good.time doubleValue]];
-            [view setCountDown:[date timeIntervalSinceNow]];
+            NSDate *startDate = [[NSDate alloc] initWithTimeIntervalSince1970:[good.startTime doubleValue]];
+            NSDate *endDate = [[NSDate alloc] initWithTimeIntervalSince1970:[good.endTime doubleValue]];
+            [view setCountDown:startDate endDate:endDate];
         } else {
             break;
         }
@@ -69,7 +70,7 @@
 
 + (CGSize)cellSize
 {
-    return CGSizeMake(UISCREEN_WIDTH-20, (UISCREEN_WIDTH-20)*150/300);
+    return CGSizeMake(UISCREEN_WIDTH-40, (UISCREEN_WIDTH-40)*150/300);
 }
 
 #pragma mark - <PGPagedScrollViewDelegate>

@@ -11,4 +11,6 @@
 
 @interface PGExploreViewController : PGBaseViewController <PGTabBarControllerDelegate>
 
+@property (nonatomic, strong, readonly) PGBaseCollectionView *feedsCollectionView;
+
 @end

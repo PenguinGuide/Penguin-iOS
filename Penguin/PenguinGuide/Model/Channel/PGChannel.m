@@ -14,7 +14,10 @@
 {
     return @{
              @"totalArticles" : @"total_articles",
-             @"desc" : @"desc",
+             @"desc" : @"description",
+             @"channelId" : @"id",
+             @"icon" : @"icon_url",
+             @"name" : @"name",
              @"categoriesArray" : @"categories"
             };
 }

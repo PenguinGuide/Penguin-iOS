@@ -12,6 +12,9 @@
 #import "PGMeViewController.h"
 #import "PGPersonalSettingsViewController.h"
 #import "PGSystemSettingsViewController.h"
+#import "PGCollectionsViewController.h"
+#import "PGMessageViewController.h"
+#import "PGHistoryViewController.h"
 
 #import "PGMeViewModel.h"
 
@@ -32,6 +35,9 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(meShouldReload) name:PG_NOTIFICATION_UPDATE_ME object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(userLogout) name:PG_NOTIFICATION_LOGOUT object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(userLogin) name:PG_NOTIFICATION_LOGIN object:nil];
     
     self.view.backgroundColor = [UIColor whiteColor];
     
@@ -45,22 +51,9 @@
         if (me && [me isKindOfClass:[PGMe class]]) {
             [weakself.meCollectionView reloadData];
         }
+        [weakself dismissLoading];
     }];
     [self observeError:self.viewModel];
-}
-
-- (void)viewDidAppear:(BOOL)animated
-{
-    [super viewDidAppear:animated];
-    
-    if (!PGGlobal.userId) {
-        [PGRouterManager routeToLoginPage];
-        [PGRouterManager routeToHomePage];
-    } else {
-        if (!self.viewModel.me) {
-            [self.viewModel requestData];
-        }
-    }
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -70,11 +63,20 @@
     [self.navigationController setNavigationBarHidden:YES animated:NO];
 }
 
-- (void)viewWillDisappear:(BOOL)animated
+- (void)viewDidAppear:(BOOL)animated
 {
-    [super viewWillDisappear:animated];
+    [super viewDidAppear:animated];
     
-    [self.navigationController setNavigationBarHidden:NO animated:NO];
+    if (!self.viewModel.me) {
+        [self showLoading];
+        [self.viewModel requestData];
+    }
+}
+
+- (void)dealloc
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+    [self unobserve];
 }
 
 - (UIStatusBarStyle)preferredStatusBarStyle
@@ -99,6 +101,20 @@
     return @"pg_tab_me_highlight";
 }
 
+- (BOOL)tabBarShouldShowDot
+{
+    return PGGlobal.hasNewMessage;
+}
+
+- (BOOL)tabBarShouldClicked
+{
+    if (!PGGlobal.userId) {
+        [PGRouterManager routeToLoginPage];
+        return NO;
+    }
+    return YES;
+}
+
 - (void)tabBarDidClicked
 {
     [self.navigationController setNavigationBarHidden:YES animated:NO];
@@ -113,7 +129,10 @@
 
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView
 {
-    return 1;
+    if (self.viewModel.me) {
+        return 1;
+    }
+    return 0;
 }
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
@@ -126,13 +145,13 @@
     PGMeCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:MeCell forIndexPath:indexPath];
     
     if (indexPath.item == 0) {
-        [cell setCellWithIcon:@"pg_me_order" name:@"订 单" count:nil highlight:NO];
+        [cell setCellWithIcon:@"pg_me_order" name:@"订 单" count:nil];
     } else if (indexPath.item == 1) {
-        [cell setCellWithIcon:@"pg_me_collection" name:@"我 的 收 藏" count:self.viewModel.me.collectionCount highlight:YES];
+        [cell setCellWithIcon:@"pg_me_collection" name:@"我 的 收 藏" count:self.viewModel.me.collectionCount];
     } else if (indexPath.item == 2) {
-        [cell setCellWithIcon:@"pg_me_message" name:@"我 的 消 息" count:self.viewModel.me.messageCount highlight:NO];
+        [cell setCellWithIcon:@"pg_me_message" name:@"我 的 消 息" highlight:self.viewModel.me.hasNewMessage];
     } else if (indexPath.item == 3) {
-        [cell setCellWithIcon:@"pg_me_history" name:@"我 的 足 迹" count:@"111" highlight:NO];
+        [cell setCellWithIcon:@"pg_me_history" name:@"我 的 足 迹" count:nil];
     }
     
     return cell;
@@ -178,6 +197,31 @@
     return nil;
 }
 
+- (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    if (indexPath.item == 0) {
+        [PGAlibcTraderManager openMyOrdersPageWithNative:NO];
+    } else if (indexPath.item == 1) {
+        PGCollectionsViewController *collectionsVC = [[PGCollectionsViewController alloc] init];
+        [self.navigationController pushViewController:collectionsVC animated:YES];
+    } else if (indexPath.item == 2) {
+        PGMessageViewController *messageVC = [[PGMessageViewController alloc] init];
+        [self.navigationController pushViewController:messageVC animated:YES];
+        [self.viewModel readMessages:^(BOOL success) {
+            if (success) {
+                PGGlobal.hasNewMessage = NO;
+                AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+                [appDelegate.tabBarController hideTabDot:3];
+            }
+        }];
+    } else if (indexPath.item == 3) {
+        PGHistoryViewController *historyVC = [[PGHistoryViewController alloc] init];
+        [self.navigationController pushViewController:historyVC animated:YES];
+    }
+}
+
+#pragma mark - <Button Events>
+
 - (void)avatarButtonClicked
 {
     PGPersonalSettingsViewController *personalSettingsVC = [[PGPersonalSettingsViewController alloc] init];
@@ -191,6 +235,30 @@
     
     [self.navigationController pushViewController:systemSettingsVC animated:YES];
 }
+
+#pragma mark - <Notifications>
+
+- (void)meShouldReload
+{
+    if (self.viewModel) {
+        [self.viewModel requestData];
+    }
+}
+
+- (void)userLogin
+{
+    if (self.viewModel) {
+        [self.viewModel requestData];
+    }
+}
+
+- (void)userLogout
+{
+    AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+    [appDelegate.tabBarController selectTab:0];
+}
+
+#pragma mark - <Setters && Getters>
 
 - (PGBaseCollectionView *)meCollectionView
 {

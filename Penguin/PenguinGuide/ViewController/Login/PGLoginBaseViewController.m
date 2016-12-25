@@ -21,7 +21,7 @@
     // Do any additional setup after loading the view.
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillChangeFrame:) name:UIKeyboardWillChangeFrameNotification object:nil];
     
-    self.view.backgroundColor = [UIColor whiteColor];
+    self.view.backgroundColor = [UIColor clearColor];
     
     self.automaticallyAdjustsScrollViewInsets = NO;
     
@@ -44,7 +44,7 @@
 {
     [super viewWillDisappear:animated];
     
-    [self.navigationController setNavigationBarHidden:NO animated:NO];
+    [self.navigationController setNavigationBarHidden:YES animated:NO];
 }
 
 - (void)dealloc
@@ -91,6 +91,11 @@
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
+- (void)accessoryDoneButtonClicked
+{
+    
+}
+
 #pragma mark - <Setters && Getters>
 
 - (UIScrollView *)loginScrollView
@@ -107,6 +112,7 @@
 {
     if (!_bgImageView) {
         _bgImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, UISCREEN_WIDTH, UISCREEN_HEIGHT)];
+        _bgImageView.contentMode = UIViewContentModeScaleAspectFill;
         _bgImageView.image = [UIImage imageNamed:@"pg_login_bg"];
     }
     return _bgImageView;
@@ -124,11 +130,9 @@
 - (UIButton *)backButton
 {
     if (!_backButton) {
-        _backButton = [[UIButton alloc] initWithFrame:CGRectMake(24, 25, 50, 50)];
+        _backButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 80, 80)];
         _backButton.hidden = YES;
         [_backButton setImage:[UIImage imageNamed:@"pg_login_back"] forState:UIControlStateNormal];
-        [_backButton setContentVerticalAlignment:UIControlContentVerticalAlignmentTop];
-        [_backButton setContentHorizontalAlignment:UIControlContentHorizontalAlignmentLeft];
         [_backButton addTarget:self action:@selector(backButtonClicked) forControlEvents:UIControlEventTouchUpInside];
     }
     return _backButton;
@@ -137,14 +141,27 @@
 - (UIButton *)closeButton
 {
     if (!_closeButton) {
-        _closeButton = [[UIButton alloc] initWithFrame:CGRectMake(UISCREEN_WIDTH-24-50, 25, 50, 50)];
+        _closeButton = [[UIButton alloc] initWithFrame:CGRectMake(UISCREEN_WIDTH-80, 0, 80, 80)];
         _closeButton.hidden = YES;
         [_closeButton setImage:[UIImage imageNamed:@"pg_login_close"] forState:UIControlStateNormal];
-        [_closeButton setContentVerticalAlignment:UIControlContentVerticalAlignmentTop];
-        [_closeButton setContentHorizontalAlignment:UIControlContentHorizontalAlignmentRight];
         [_closeButton addTarget:self action:@selector(closeButtonClicked) forControlEvents:UIControlEventTouchUpInside];
     }
     return _closeButton;
+}
+
+- (UIView *)accessoryView
+{
+    if (!_accessoryView) {
+        _accessoryView = [[UIToolbar alloc] initWithFrame:CGRectMake(0, 0, UISCREEN_WIDTH, 44)];
+        _accessoryView.backgroundColor = Theme.colorBackground;
+        UIButton *doneButton = [[UIButton alloc] initWithFrame:CGRectMake(UISCREEN_WIDTH-50, 0, 50, 44)];
+        [doneButton addTarget:self action:@selector(accessoryDoneButtonClicked) forControlEvents:UIControlEventTouchUpInside];
+        [doneButton setTitleColor:Theme.colorText forState:UIControlStateNormal];
+        [doneButton setTitle:@"完成" forState:UIControlStateNormal];
+        [doneButton.titleLabel setFont:Theme.fontMediumBold];
+        [_accessoryView addSubview:doneButton];
+    }
+    return _accessoryView;
 }
 
 - (void)didReceiveMemoryWarning {

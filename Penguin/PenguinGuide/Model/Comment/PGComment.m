@@ -13,19 +13,16 @@
 + (NSDictionary *)JSONKeyPathsByPropertyKey
 {
     return @{
-             @"likes": @"favor_count",
-             @"liked": @"liked",
+             @"likesCount": @"favor_count",
+             @"liked": @"is_favored",
+             @"replyDeleted": @"reply_deleted",
              @"content": @"content",
              @"time": @"created_at",
              @"user": @"user",
+             @"commentId": @"id",
              
              @"replyComment": @"reply"
             };
-}
-
-+ (NSValueTransformer *)likesJSONTransformer
-{
-    return [NSValueTransformer valueTransformerForName:PGStringValueTransformer];
 }
 
 + (NSValueTransformer *)timeJSONTransformer

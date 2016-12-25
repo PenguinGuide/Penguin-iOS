@@ -12,6 +12,8 @@
 
 @property (nonatomic, strong, readonly) NSArray *recommendsArray;
 @property (nonatomic, strong, readonly) NSArray *categoriesArray;
-@property (nonatomic, strong, readonly) NSArray *bannersArray;
+@property (nonatomic, strong, readonly) NSArray *feedsArray;
+
+- (void)requestFeeds;
 
 @end

@@ -20,7 +20,10 @@
 {
     if (self = [super init]) {
         self.apiClient = apiClient;
-        self.maxId = nil;
+        self.page = 1;
+        self.cursor = nil;
+        self.endFlag = NO;
+        self.isPreloadingNextPage = NO;
     }
     
     return self;
@@ -32,6 +35,11 @@
 }
 
 - (void)loadNextPage
+{
+    
+}
+
+- (void)clearPagination
 {
     
 }

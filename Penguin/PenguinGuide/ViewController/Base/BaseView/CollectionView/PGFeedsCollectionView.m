@@ -6,6 +6,8 @@
 //  Copyright © 2016 Xinglian. All rights reserved.
 //
 
+#define PreloadCount 3
+
 #define CarouselBannerCell @"CarouselBannerCell"
 #define ArticleBannerCell @"ArticleBannerCell"
 #define GoodsCollectionBannerCell @"GoodsCollectionBannerCell"
@@ -22,7 +24,7 @@
 #import "PGExploreRecommendsHeaderView.h"
 #import "PGStoreRecommendsHeaderView.h"
 
-@interface PGFeedsCollectionView () <UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, PGExploreRecommendsHeaderViewDelegate, PGHomeRecommendsHeaderViewDelegate, PGStoreRecommendsHeaderViewDelegate>
+@interface PGFeedsCollectionView () <UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, PGHomeRecommendsHeaderViewDelegate, PGStoreRecommendsHeaderViewDelegate>
 
 @end
 
@@ -36,7 +38,8 @@
         self.delegate = self;
         self.showsHorizontalScrollIndicator = NO;
         self.showsVerticalScrollIndicator = NO;
-        self.backgroundColor = Theme.colorBackground;
+        self.backgroundColor = [UIColor whiteColor];
+        self.allowGesture = YES;
         
         [self registerClass:[PGCarouselBannerCell class] forCellWithReuseIdentifier:CarouselBannerCell];
         [self registerClass:[PGArticleBannerCell class] forCellWithReuseIdentifier:ArticleBannerCell];
@@ -48,6 +51,7 @@
         [self registerClass:[PGHomeRecommendsHeaderView class] forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:HomeHeaderView];
         [self registerClass:[PGExploreRecommendsHeaderView class] forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:ExploreHeaderView];
         [self registerClass:[PGStoreRecommendsHeaderView class] forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:StoreHeaderView];
+        [self registerClass:[PGBaseCollectionViewFooterView class] forSupplementaryViewOfKind:UICollectionElementKindSectionFooter withReuseIdentifier:BaseCollectionViewFooterView];
     }
     return self;
 }
@@ -56,7 +60,7 @@
 {
     // FIXME: if feedsArray is empty, header view will not show up
     if (self.feedsDelegate && [self.feedsDelegate respondsToSelector:@selector(feedsArray)]) {
-        return [self.feedsDelegate feedsArray].count;
+        return [self.feedsDelegate feedsArray].count == 0 ? 0 : [self.feedsDelegate feedsArray].count;
     } else {
         return 0;
     }
@@ -67,19 +71,21 @@
     if (self.feedsDelegate && [self.feedsDelegate respondsToSelector:@selector(feedsArray)]) {
         NSArray *feedsArray = [self.feedsDelegate feedsArray];
         
-        id banner = feedsArray[section];
-        if ([banner isKindOfClass:[PGCarouselBanner class]]) {
-            return 1;
-        } else if ([banner isKindOfClass:[PGArticleBanner class]]) {
-            return 1;
-        } else if ([banner isKindOfClass:[PGGoodsCollectionBanner class]]) {
-            return 1;
-        } else if ([banner isKindOfClass:[PGTopicBanner class]]) {
-            return 1;
-        } else if ([banner isKindOfClass:[PGSingleGoodBanner class]]) {
-            return 1;
-        } else if ([banner isKindOfClass:[PGFlashbuyBanner class]]) {
-            return 1;
+        if (feedsArray.count > 0) {
+            id banner = feedsArray[section];
+            if ([banner isKindOfClass:[PGCarouselBanner class]]) {
+                return 1;
+            } else if ([banner isKindOfClass:[PGArticleBanner class]]) {
+                return 1;
+            } else if ([banner isKindOfClass:[PGGoodsCollectionBanner class]]) {
+                return 1;
+            } else if ([banner isKindOfClass:[PGTopicBanner class]]) {
+                return 1;
+            } else if ([banner isKindOfClass:[PGSingleGoodBanner class]]) {
+                return 1;
+            } else if ([banner isKindOfClass:[PGFlashbuyBanner class]]) {
+                return 1;
+            }
         }
     }
     return 0;
@@ -89,6 +95,13 @@
 {
     if (self.feedsDelegate && [self.feedsDelegate respondsToSelector:@selector(feedsArray)]) {
         NSArray *feedsArray = [self.feedsDelegate feedsArray];
+        
+        // NOTE: preloading http://www.tuicool.com/articles/qYFneuV
+        if (feedsArray.count-indexPath.section == PreloadCount) {
+            if (self.feedsDelegate && [self.feedsDelegate respondsToSelector:@selector(shouldPreloadNextPage)]) {
+                [self.feedsDelegate shouldPreloadNextPage];
+            }
+        }
         
         id banner = feedsArray[indexPath.section];
         
@@ -103,7 +116,7 @@
             PGArticleBannerCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:ArticleBannerCell forIndexPath:indexPath];
             
             PGArticleBanner *articleBanner = (PGArticleBanner *)banner;
-            [cell setCellWithArticle:articleBanner];
+            [cell setCellWithArticle:articleBanner allowGesture:self.allowGesture];
             
             return cell;
         } else if ([banner isKindOfClass:[PGGoodsCollectionBanner class]]) {
@@ -153,8 +166,7 @@
             return headerView;
         } else if ([tabType isEqualToString:@"explore"]) {
             PGExploreRecommendsHeaderView *headerView = [collectionView dequeueReusableSupplementaryViewOfKind:kind withReuseIdentifier:ExploreHeaderView forIndexPath:indexPath];
-            headerView.delegate = self;
-            [headerView reloadBannersWithData:[self.feedsDelegate recommendsArray]];
+            [headerView reloadBannersWithRecommendsArray:[self.feedsDelegate recommendsArray]];
             
             return headerView;
         } else if ([tabType isEqualToString:@"store"]) {
@@ -163,6 +175,15 @@
             [headerView reloadBannersWithRecommendsArray:[self.feedsDelegate recommendsArray] categoriesArray:[self.feedsDelegate iconsArray]];
             
             return headerView;
+        }
+    } else if (kind == UICollectionElementKindSectionFooter) {
+        if (self.feedsDelegate && [self.feedsDelegate respondsToSelector:@selector(feedsArray)]) {
+            NSArray *feedsArray = [self.feedsDelegate feedsArray];
+            if (indexPath.section == feedsArray.count-1) {
+                PGBaseCollectionViewFooterView *footerView = [collectionView dequeueReusableSupplementaryViewOfKind:kind withReuseIdentifier:BaseCollectionViewFooterView forIndexPath:indexPath];
+                
+                return footerView;
+            }
         }
     }
     
@@ -206,6 +227,20 @@
     return CGSizeZero;
 }
 
+- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout referenceSizeForFooterInSection:(NSInteger)section
+{
+    if (self.feedsDelegate && [self.feedsDelegate respondsToSelector:@selector(feedsArray)]) {
+        NSArray *feedsArray = [self.feedsDelegate feedsArray];
+        if (section == feedsArray.count-1) {
+            if (self.feedsDelegate && [self.feedsDelegate respondsToSelector:@selector(feedsFooterSize)]) {
+                return [self.feedsDelegate feedsFooterSize];
+            }
+        }
+    }
+    
+    return CGSizeZero;
+}
+
 - (CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout minimumInteritemSpacingForSectionAtIndex:(NSInteger)section
 {
     return 0.f;
@@ -223,7 +258,35 @@
             return [self.feedsDelegate topEdgeInsets];
         }
     }
-    return UIEdgeInsetsMake(0, 0, 7, 0);
+    NSArray *feedsArray = [self.feedsDelegate feedsArray];
+    id banner = feedsArray[section];
+    if (section == feedsArray.count-1) {
+        return UIEdgeInsetsMake(15, 0, 0, 0);
+    } else if ([banner isKindOfClass:[PGArticleBanner class]]) {
+        if (section == 0) {
+            id nextBanner = feedsArray[section+1];
+            if ([nextBanner isKindOfClass:[PGArticleBanner class]]) {
+                return UIEdgeInsetsMake(15, 0, 0, 0);
+            } else {
+                return UIEdgeInsetsMake(15, 0, 15, 0);
+            }
+        } else if (section+1 < feedsArray.count) {
+            id nextBanner = feedsArray[section+1];
+            if ([nextBanner isKindOfClass:[PGArticleBanner class]]) {
+                return UIEdgeInsetsZero;
+            } else {
+                return UIEdgeInsetsMake(0, 0, 15, 0);
+            }
+        } else {
+            return UIEdgeInsetsZero;
+        }
+    } else {
+        if (section == 0) {
+            return UIEdgeInsetsMake(15, 0, 15, 0);
+        } else {
+            return UIEdgeInsetsMake(0, 0, 15, 0);
+        }
+    }
 }
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
@@ -242,25 +305,16 @@
 
 #pragma mark - <PGHomeRecommendsHeaderViewDelegate>
 
-- (void)channelDidSelect:(NSString *)channelType
-{
-    if (self.feedsDelegate && [self.feedsDelegate respondsToSelector:@selector(channelDidSelect:)]) {
-        [self.feedsDelegate channelDidSelect:channelType];
-    }
-}
-
-#pragma mark - <PGExploreRecommendsHeaderViewDelegate>
-
-- (void)scenarioDidSelect:(NSString *)scenarioType
+- (void)scenarioDidSelect:(PGScenarioBanner *)scenario
 {
     if (self.feedsDelegate && [self.feedsDelegate respondsToSelector:@selector(scenarioDidSelect:)]) {
-        [self.feedsDelegate scenarioDidSelect:scenarioType];
+        [self.feedsDelegate scenarioDidSelect:scenario];
     }
 }
 
 #pragma mark - <PGStoreRecommendsHeaderViewDelegate>
 
-- (void)categoryDidSelect:(PGCategoryIcon *)categoryIcon
+- (void)categoryDidSelect:(PGScenarioBanner *)categoryIcon
 {
     if (self.feedsDelegate && [self.feedsDelegate respondsToSelector:@selector(categoryDidSelect:)]) {
         [self.feedsDelegate categoryDidSelect:categoryIcon];

@@ -12,16 +12,27 @@
 
 #import "PGStoreCategoryViewModel.h"
 
-@interface PGStoreCategoryViewController () <PGGoodsCollectionViewDelegate>
+@interface PGStoreCategoryViewController () <PGGoodsCollectionViewDelegate, PGPopoverDelegate>
 
+@property (nonatomic, strong) NSString *categoryId;
 @property (nonatomic, strong) PGStoreCategoryViewModel *viewModel;
 
 @property (nonatomic, strong) UIBarButtonItem *filterBarButton;
 @property (nonatomic, strong) PGGoodsCollectionView *goodsCollectionView;
 
+@property (nonatomic, strong) PGPopover *popover;
+
 @end
 
 @implementation PGStoreCategoryViewController
+
+- (id)initWithCategoryId:(NSString *)categoryId
+{
+    if (self = [super init]) {
+        self.categoryId = categoryId;
+    }
+    return self;
+}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -40,7 +51,6 @@
     [self.view addSubview:self.goodsCollectionView];
     
     self.viewModel = [[PGStoreCategoryViewModel alloc] initWithAPIClient:self.apiClient];
-    [self.viewModel requestData];
     
     PGWeakSelf(self);
     [self observe:self.viewModel keyPath:@"goodsArray" block:^(id changedObject) {
@@ -48,6 +58,7 @@
         if (goodsArray && [goodsArray isKindOfClass:[NSArray class]]) {
             [weakself.goodsCollectionView reloadData];
         }
+        [weakself dismissLoading];
     }];
 }
 
@@ -56,13 +67,16 @@
     [super viewWillAppear:animated];
     
     [self.navigationController setNavigationBarHidden:NO animated:NO];
+    
+    if (self.viewModel.goodsArray.count == 0 && self.categoryId.length > 0) {
+        [self showLoading];
+        [self.viewModel requestCategoryGoods:self.categoryId];
+    }
 }
 
 - (void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
-    
-    [self.navigationController setNavigationBarHidden:YES animated:NO];
 }
 
 - (void)dealloc
@@ -79,44 +93,63 @@
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    
+    PGGood *good = self.viewModel.goodsArray[indexPath.item];
+    [PGRouterManager routeToGoodDetailPage:good.goodId link:good.link];
+}
+
+#pragma mark - <PGPopoverDelegate>
+
+- (void)itemDidSelect:(NSInteger)index
+{
+    if (index == 0) {
+        [self showLoading];
+        [self.viewModel requestCategoryGoods:self.categoryId];
+    } else if (index == 1) {
+        [self showLoading];
+        [self.viewModel requestCategoryGoods:self.categoryId sort:@"price-asc"];
+    } else if (index == 2) {
+        [self showLoading];
+        [self.viewModel requestCategoryGoods:self.categoryId sort:@"price-desc"];
+    }
 }
 
 - (void)filterButtonClicked:(id)sender
 {
     UIButton *button = (UIButton *)sender;
-    
-    PGPopoverItem *defaultItem = [[PGPopoverItem alloc] init];
-    defaultItem.title = @"综合排序";
-    defaultItem.icon = @"pg_store_filter_default";
-    defaultItem.highlightIcon = @"pg_store_filter_default_highlight";
-    defaultItem.selected = YES;
-    
-    PGPopoverItem *lowestItem = [[PGPopoverItem alloc] init];
-    lowestItem.title = @"价格由低到高";
-    lowestItem.icon = @"pg_store_filter_lowest";
-    lowestItem.highlightIcon = @"pg_store_filter_lowest_highlight";
-    
-    PGPopoverItem *highestItem = [[PGPopoverItem alloc] init];
-    highestItem.title = @"价格由高到低";
-    highestItem.icon = @"pg_store_filter_highest";
-    highestItem.highlightIcon = @"pg_store_filter_highest_highlight";
-    
-    PGPopover *popover = [PGPopover popoverWithItems:@[defaultItem, lowestItem, highestItem] itemHeight:50];
-    [popover showPopoverFromView:button];
+    if (!self.popover) {
+        PGPopoverItem *defaultItem = [[PGPopoverItem alloc] init];
+        defaultItem.title = @"综合排序";
+        defaultItem.icon = @"pg_store_filter_default";
+        defaultItem.highlightIcon = @"pg_store_filter_default_highlight";
+        defaultItem.selected = YES;
+        
+        PGPopoverItem *lowestItem = [[PGPopoverItem alloc] init];
+        lowestItem.title = @"价格由低到高";
+        lowestItem.icon = @"pg_store_filter_lowest";
+        lowestItem.highlightIcon = @"pg_store_filter_lowest_highlight";
+        
+        PGPopoverItem *highestItem = [[PGPopoverItem alloc] init];
+        highestItem.title = @"价格由高到低";
+        highestItem.icon = @"pg_store_filter_highest";
+        highestItem.highlightIcon = @"pg_store_filter_highest_highlight";
+        
+        self.popover = [PGPopover popoverWithItems:@[defaultItem, lowestItem, highestItem] itemHeight:50];
+        self.popover.delegate = self;
+    }
+    [self.popover showPopoverFromView:button];
+}
+
+- (PGGoodsCollectionView *)goodsCollectionView {
+    if(_goodsCollectionView == nil) {
+        _goodsCollectionView = [[PGGoodsCollectionView alloc] initWithFrame:self.view.bounds collectionViewLayout:[UICollectionViewFlowLayout new]];
+        _goodsCollectionView.goodsDelegate = self;
+    }
+    return _goodsCollectionView;
 }
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
-}
-
-- (PGGoodsCollectionView *)goodsCollectionView {
-	if(_goodsCollectionView == nil) {
-		_goodsCollectionView = [[PGGoodsCollectionView alloc] initWithFrame:self.view.bounds collectionViewLayout:[UICollectionViewFlowLayout new]];
-        _goodsCollectionView.goodsDelegate = self;
-	}
-	return _goodsCollectionView;
 }
 
 @end

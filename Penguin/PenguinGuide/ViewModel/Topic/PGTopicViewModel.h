@@ -13,4 +13,6 @@
 
 @property (nonatomic, strong, readonly) PGTopic *topic;
 
+- (void)requestTopic:(NSString *)topicId;
+
 @end

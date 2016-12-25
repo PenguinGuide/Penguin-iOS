@@ -43,14 +43,14 @@ static const NSString *WeiboAppSecret = @"fcb5a4ca57d16b1462997c4441935e38";
                              [appInfo SSDKSetupSinaWeiboByAppKey:WeiboAppKey
                                                        appSecret:WeiboAppSecret
                                                      redirectUri:@"http://penguinguide.cn/mobile"
-                                                        authType:SSDKAuthTypeWeb];
+                                                        authType:SSDKAuthTypeBoth];
                          default:
                              break;
                      }
                  }];
 }
 
-+ (void)shareItem:(void (^)(PGShareItem *shareItem))itemBlock toPlatform:(SSDKPlatformType)platformType completion:(void (^)(BOOL))completion
++ (void)shareItem:(void (^)(PGShareItem *shareItem))itemBlock toPlatform:(SSDKPlatformType)platformType completion:(void (^)(SSDKResponseState state))completion
 {
     PGShareItem *shareItem = [[PGShareItem alloc] init];
     itemBlock(shareItem);
@@ -73,7 +73,6 @@ static const NSString *WeiboAppSecret = @"fcb5a4ca57d16b1462997c4441935e38";
 + (void)loginWithWechatOnStateChanged:(SSDKGetUserStateChangedHandler)stateChangedHandler
 {
     // NOTE: LSApplicationQueriesSchemes need configured for iOS 9+
-    [ShareSDK cancelAuthorize:SSDKPlatformTypeWechat];
     [ShareSDK getUserInfo:SSDKPlatformTypeWechat
            onStateChanged:^(SSDKResponseState state, SSDKUser *user, NSError *error) {
                if (stateChangedHandler) {
@@ -84,7 +83,6 @@ static const NSString *WeiboAppSecret = @"fcb5a4ca57d16b1462997c4441935e38";
 
 + (void)loginWithWeiboOnStateChanged:(SSDKGetUserStateChangedHandler)stateChangedHandler
 {
-    [ShareSDK cancelAuthorize:SSDKPlatformTypeSinaWeibo];
     [ShareSDK getUserInfo:SSDKPlatformTypeSinaWeibo
            onStateChanged:^(SSDKResponseState state, SSDKUser *user, NSError *error) {
                if (stateChangedHandler) {
@@ -93,9 +91,15 @@ static const NSString *WeiboAppSecret = @"fcb5a4ca57d16b1462997c4441935e38";
            }];
 }
 
++ (void)logout
+{
+    [ShareSDK cancelAuthorize:SSDKPlatformTypeWechat];
+    [ShareSDK cancelAuthorize:SSDKPlatformTypeSinaWeibo];
+}
+
 #pragma mark - <Private Methods>
 
-+ (void)shareToWechatTimeline:(PGShareItem *)shareItem completion:(void (^)(BOOL))completion
++ (void)shareToWechatTimeline:(PGShareItem *)shareItem completion:(void (^)(SSDKResponseState state))completion
 {
     NSMutableDictionary *shareParams = [NSMutableDictionary dictionary];
     
@@ -114,11 +118,13 @@ static const NSString *WeiboAppSecret = @"fcb5a4ca57d16b1462997c4441935e38";
     [ShareSDK share:SSDKPlatformSubTypeWechatTimeline
          parameters:shareParams
      onStateChanged:^(SSDKResponseState state, NSDictionary *userData, SSDKContentEntity *contentEntity, NSError *error) {
-         
+         if (completion) {
+             completion(state);
+         }
      }];
 }
 
-+ (void)shareToWechatSession:(PGShareItem *)shareItem completion:(void (^)(BOOL))completion
++ (void)shareToWechatSession:(PGShareItem *)shareItem completion:(void (^)(SSDKResponseState state))completion
 {
     NSMutableDictionary *shareParams = [NSMutableDictionary dictionary];
     
@@ -137,11 +143,13 @@ static const NSString *WeiboAppSecret = @"fcb5a4ca57d16b1462997c4441935e38";
     [ShareSDK share:SSDKPlatformSubTypeWechatSession
          parameters:shareParams
      onStateChanged:^(SSDKResponseState state, NSDictionary *userData, SSDKContentEntity *contentEntity, NSError *error) {
-         
+         if (completion) {
+             completion(state);
+         }
      }];
 }
 
-+ (void)shareToWeibo:(PGShareItem *)shareItem completion:(void (^)(BOOL))completion
++ (void)shareToWeibo:(PGShareItem *)shareItem completion:(void (^)(SSDKResponseState state))completion
 {
     NSMutableDictionary *shareParams = [NSMutableDictionary dictionary];
     
@@ -152,12 +160,14 @@ static const NSString *WeiboAppSecret = @"fcb5a4ca57d16b1462997c4441935e38";
                                             latitude:0.f
                                            longitude:0.f
                                             objectID:nil
-                                                type:SSDKContentTypeWebPage];
+                                                type:SSDKContentTypeText];
     
     [ShareSDK share:SSDKPlatformTypeSinaWeibo
          parameters:shareParams
      onStateChanged:^(SSDKResponseState state, NSDictionary *userData, SSDKContentEntity *contentEntity, NSError *error) {
-         
+         if (completion) {
+             completion(state);
+         }
      }];
 }
 

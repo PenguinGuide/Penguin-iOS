@@ -12,6 +12,7 @@
 @interface PGGoodCell : UICollectionViewCell
 
 - (void)setCellWithGood:(PGGood *)good;
+- (void)setGrayBackgroundCellWithGood:(PGGood *)good;
 
 + (CGSize)cellSize;
 

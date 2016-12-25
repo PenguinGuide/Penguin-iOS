@@ -9,18 +9,11 @@
 #import <UIKit/UIKit.h>
 #import "PGPagedScrollView.h"
 
-@protocol PGExploreRecommendsHeaderViewDelegate <NSObject>
-
-- (void)scenarioDidSelect:(NSString *)scenarioType;
-
-@end
-
 @interface PGExploreRecommendsHeaderView : UICollectionReusableView
 
 @property (nonatomic, strong, readonly) PGPagedScrollView *bannersView;
-@property (nonatomic, weak) id<PGExploreRecommendsHeaderViewDelegate> delegate;
 
 + (CGSize)headerViewSize;
-- (void)reloadBannersWithData:(NSArray *)dataArray;
+- (void)reloadBannersWithRecommendsArray:(NSArray *)recommendsArray;
 
 @end

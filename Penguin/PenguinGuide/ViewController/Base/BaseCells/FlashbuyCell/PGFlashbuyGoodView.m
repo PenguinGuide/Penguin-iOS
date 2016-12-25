@@ -31,7 +31,7 @@
 
 - (void)initialize
 {
-    self.backgroundColor = [UIColor whiteColor];
+    self.backgroundColor = Theme.colorLightBackground;
     self.clipsToBounds = YES;
     
     [self addSubview:self.goodImageView];
@@ -48,9 +48,21 @@
     self.titleButton.pg_width = titleSize.width+25;
     
     [self.titleButton setTitle:[NSString stringWithFormat:@"￥%@  %@", good.discountPrice, good.name] forState:UIControlStateNormal];
-    [self.descLabel setText:good.desc];
     [self.goodImageView setWithImageURL:good.image placeholder:nil completion:nil];
     [self.priceLabel setText:[NSString stringWithFormat:@"原价 ￥%@", good.originalPrice]];
+}
+
+- (void)setCountDown:(NSDate *)startDate endDate:(NSDate *)endDate
+{
+    int secsLeftFromStart = [startDate timeIntervalSinceNow];
+    int secsLeftToEnd = [endDate timeIntervalSinceNow];
+    if (secsLeftFromStart > 0) {
+        self.descLabel.text = @"距离闪购开始";
+        [self setCountDown:secsLeftFromStart];
+    } else {
+        self.descLabel.text = @"距离闪购结束";
+        [self setCountDown:secsLeftToEnd];
+    }
 }
 
 - (void)setCountDown:(int)secsLeft
@@ -85,7 +97,7 @@
             
             self.countdownLabel.attributedText = attrS;
         } else {
-            NSString *countdownStr = @"00 h 00 min 00 s";
+            NSString *countdownStr = @"99 h 59 min 59 s";
             NSMutableAttributedString *attrS = [[NSMutableAttributedString alloc] initWithString:countdownStr];
             [attrS addAttribute:NSForegroundColorAttributeName value:Theme.colorHighlight range:NSMakeRange(0, 2)];
             [attrS addAttribute:NSFontAttributeName value:Theme.fontExtraLargeBold range:NSMakeRange(0, 2)];

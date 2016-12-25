@@ -10,4 +10,7 @@
 
 @interface PGParserGoodsCollectionStorage : NSObject
 
+@property (nonatomic, strong) NSString *collectionId;
+@property (nonatomic, strong) NSArray *goodsArray;
+
 @end

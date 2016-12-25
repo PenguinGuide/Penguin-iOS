@@ -6,6 +6,13 @@
 //  Copyright © 2016 Xinglian. All rights reserved.
 //
 
+typedef NS_ENUM(NSInteger, GestureDirection) {
+    GestureDirectionUp,
+    GestureDirectionDown,
+    GestureDirectionLeft,
+    GestureDirectionRight
+};
+
 #import "PGVideoPlayerViewController.h"
 #import <AVFoundation/AVFoundation.h>
 #import <MediaPlayer/MediaPlayer.h>
@@ -43,8 +50,11 @@
 @property (nonatomic, strong) UIPanGestureRecognizer *playerPanGesture;
 @property (nonatomic, strong) UITapGestureRecognizer *playerTapGesture;
 
-@property (nonatomic, assign) int currentVolumeTranslationScale;
-@property (nonatomic, assign) float currentPlayerTranslationScale;
+@property (nonatomic, assign) GestureDirection currentGestureDirection;
+@property (nonatomic, assign) BOOL gestureIsProcessing;
+@property (nonatomic, assign) float currentPlayerSliderValue;
+@property (nonatomic, assign) float currentVolumeSliderValue;
+@property (nonatomic, assign) float currentSystemVolumeSliderValue;
 
 @end
 
@@ -53,7 +63,7 @@
 - (id)initWithVideoURL:(NSString *)url
 {
     if (self = [super init]) {
-        self.videoURL = url;
+        self.videoURL = @"http://cdn-images-1.penguinguide.cn/王宝和螃蟹做法%20有码%201080p%20zoe.mp4";
     }
     
     return self;
@@ -64,6 +74,7 @@
     // Do any additional setup after loading the view.
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(systemVolumeChanged:) name:@"AVSystemController_SystemVolumeDidChangeNotification" object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(playerItemPlaybackStalled:) name:AVPlayerItemPlaybackStalledNotification object:nil];
     
     // http://blog.csdn.net/jeffasd/article/details/50718284
     
@@ -126,6 +137,8 @@
 - (void)dealloc
 {
     [self.playerItem removeObserver:self forKeyPath:@"status" context:nil];
+    [self.playerItem removeObserver:self forKeyPath:@"loadedTimeRanges" context:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
     self.player = nil;
     self.playerItem = nil;
     self.playerLayer = nil;
@@ -146,79 +159,125 @@
     return YES;
 }
 
+#pragma mark - <Player KVO>
+
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSKeyValueChangeKey,id> *)change context:(void *)context
 {
     if ([keyPath isEqualToString:@"status"]) {
-        AVPlayerStatus status = [[change objectForKey:@"new"] intValue];
-        if (status == AVPlayerStatusReadyToPlay) {
-            // time label
-            NSTimeInterval duration = CMTimeGetSeconds(self.playerItem.duration);
-            int mins = duration/60;
-            int secs = duration-mins*60;
-            if (mins < 10) {
-                if (secs < 10) {
-                    self.durationLabel.text = [NSString stringWithFormat:@"0%d:0%d", mins, secs];
-                } else {
-                    self.durationLabel.text = [NSString stringWithFormat:@"0%d:%d", mins, secs];
-                }
+        [self handlePlayerItemStatusChanged:change];
+    } else if ([keyPath isEqualToString:@"loadedTimeRanges"]) {
+        [self handlePlayerItemLoadedTimeRangesChanged];
+    }
+    
+    NSLog(@"changed: %@", change);
+}
+
+- (void)handlePlayerItemStatusChanged:(NSDictionary<NSKeyValueChangeKey,id> *)change
+{
+    AVPlayerStatus status = [[change objectForKey:@"new"] intValue];
+    if (status == AVPlayerStatusReadyToPlay) {
+        [self pausePlaying];
+        // time label
+        NSTimeInterval duration = CMTimeGetSeconds(self.playerItem.duration);
+        int mins = duration/60;
+        int secs = duration-mins*60;
+        if (mins < 10) {
+            if (secs < 10) {
+                self.durationLabel.text = [NSString stringWithFormat:@"0%d:0%d", mins, secs];
             } else {
-                if (secs < 10) {
-                    self.durationLabel.text = [NSString stringWithFormat:@"%d:0%d", mins, secs];
-                } else {
-                    self.durationLabel.text = [NSString stringWithFormat:@"%d:%d", mins, secs];
-                }
+                self.durationLabel.text = [NSString stringWithFormat:@"0%d:%d", mins, secs];
             }
-            self.elapsedLabel.text = @"00:00";
-            
-            // NOTE: get system volume http://www.jianshu.com/p/5016b72c52bd
-            for (UIView *view in self.systemVolumeView.subviews) {
-                if ([view isKindOfClass:[UISlider class]]) {
-                    self.systemVolumeSlider = (UISlider *)view;
-                    [self.volumeSlider setValue:self.systemVolumeSlider.value];
-                }
-            }
-            
-            // NOTE: time observer http://blog.csdn.net/reylen/article/details/46982809
-            PGWeakSelf(self);
-            self.playTimeObserver = [self.player addPeriodicTimeObserverForInterval:CMTimeMakeWithSeconds(1.0, NSEC_PER_SEC)
-                                                                              queue:dispatch_get_main_queue()
-                                                                         usingBlock:^(CMTime time) {
-                                                                             NSTimeInterval currentTime = CMTimeGetSeconds(time);
-                                                                             NSTimeInterval currentDuration = CMTimeGetSeconds(weakself.playerItem.duration);
-                                                                             
-                                                                             weakself.playerSlider.value = currentTime/currentDuration;
-                                                                             
-                                                                             int currentMins = currentTime/60;
-                                                                             int currentSecs = currentTime-currentMins*60;
-                                                                             
-                                                                             if (currentMins < 10) {
-                                                                                 if (currentSecs < 10) {
-                                                                                     weakself.elapsedLabel.text = [NSString stringWithFormat:@"0%d:0%d", currentMins, currentSecs];
-                                                                                 } else {
-                                                                                     weakself.elapsedLabel.text = [NSString stringWithFormat:@"0%d:%d", currentMins, currentSecs];
-                                                                                 }
-                                                                             } else {
-                                                                                 if (currentSecs < 10) {
-                                                                                     weakself.elapsedLabel.text = [NSString stringWithFormat:@"%d:0%d", currentMins, currentSecs];
-                                                                                 } else {
-                                                                                     weakself.elapsedLabel.text = [NSString stringWithFormat:@"%d:%d", currentMins, currentSecs];
-                                                                                 }
-                                                                             }
-                                                                         }];
-            self.playerEndObserver = [[NSNotificationCenter defaultCenter] addObserverForName:AVPlayerItemDidPlayToEndTimeNotification
-                                                                                       object:weakself.playerItem
-                                                                                        queue:[NSOperationQueue mainQueue]
-                                                                                   usingBlock:^(NSNotification * _Nonnull note) {
-                                                                                       [weakself.playerItem seekToTime:kCMTimeZero];
-                                                                                       [weakself.playButton setTag:0];
-                                                                                       [weakself.playButton setImage:[UIImage imageNamed:@"pg_video_play"] forState:UIControlStateNormal];
-                                                                                   }];
-            
         } else {
-            self.durationLabel.text = @"00:00";
-            self.elapsedLabel.text = @"00:00";
+            if (secs < 10) {
+                self.durationLabel.text = [NSString stringWithFormat:@"%d:0%d", mins, secs];
+            } else {
+                self.durationLabel.text = [NSString stringWithFormat:@"%d:%d", mins, secs];
+            }
+        }
+        self.elapsedLabel.text = @"00:00";
+        
+        // NOTE: get system volume http://www.jianshu.com/p/5016b72c52bd
+        for (UIView *view in self.systemVolumeView.subviews) {
+            if ([view isKindOfClass:[UISlider class]]) {
+                self.systemVolumeSlider = (UISlider *)view;
+                [self.volumeSlider setValue:self.systemVolumeSlider.value];
+            }
+        }
+        
+        // NOTE: time observer http://blog.csdn.net/reylen/article/details/46982809
+        PGWeakSelf(self);
+        self.playTimeObserver = [self.player addPeriodicTimeObserverForInterval:CMTimeMakeWithSeconds(1.0, NSEC_PER_SEC)
+                                                                          queue:dispatch_get_main_queue()
+                                                                     usingBlock:^(CMTime time) {
+                                                                         NSTimeInterval currentTime = CMTimeGetSeconds(time);
+                                                                         NSTimeInterval currentDuration = CMTimeGetSeconds(weakself.playerItem.duration);
+                                                                         
+                                                                         if (!weakself.gestureIsProcessing) {
+                                                                             weakself.playerSlider.value = currentTime/currentDuration;
+                                                                         }
+                                                                         
+                                                                         int currentMins = currentTime/60;
+                                                                         int currentSecs = currentTime-currentMins*60;
+                                                                         
+                                                                         if (currentMins < 10) {
+                                                                             if (currentSecs < 10) {
+                                                                                 weakself.elapsedLabel.text = [NSString stringWithFormat:@"0%d:0%d", currentMins, currentSecs];
+                                                                             } else {
+                                                                                 weakself.elapsedLabel.text = [NSString stringWithFormat:@"0%d:%d", currentMins, currentSecs];
+                                                                             }
+                                                                         } else {
+                                                                             if (currentSecs < 10) {
+                                                                                 weakself.elapsedLabel.text = [NSString stringWithFormat:@"%d:0%d", currentMins, currentSecs];
+                                                                             } else {
+                                                                                 weakself.elapsedLabel.text = [NSString stringWithFormat:@"%d:%d", currentMins, currentSecs];
+                                                                             }
+                                                                         }
+                                                                     }];
+        self.playerEndObserver = [[NSNotificationCenter defaultCenter] addObserverForName:AVPlayerItemDidPlayToEndTimeNotification
+                                                                                   object:weakself.playerItem
+                                                                                    queue:[NSOperationQueue mainQueue]
+                                                                               usingBlock:^(NSNotification * _Nonnull note) {
+                                                                                   [weakself.playerItem seekToTime:kCMTimeZero];
+                                                                                   [weakself.playButton setTag:0];
+                                                                                   [weakself.playButton setImage:[UIImage imageNamed:@"pg_video_play"] forState:UIControlStateNormal];
+                                                                               }];
+    } else {
+        self.durationLabel.text = @"00:00";
+        self.elapsedLabel.text = @"00:00";
+    }
+}
+
+- (void)handlePlayerItemLoadedTimeRangesChanged
+{
+    NSArray *loadedTimeRanges = self.playerItem.loadedTimeRanges;
+    CMTimeRange timeRange = [loadedTimeRanges.firstObject CMTimeRangeValue];
+    float startTime = CMTimeGetSeconds(timeRange.start);
+    float duration = CMTimeGetSeconds(timeRange.duration);
+    NSTimeInterval totalBuffer = startTime + duration;
+    
+    NSLog(@"total buffer: %@", @(totalBuffer));
+    
+    if (self.player.rate == 0) {
+        if (CMTimeGetSeconds(self.playerItem.currentTime) < totalBuffer-2) {
+            [self continuePlaying];
         }
     }
+}
+
+- (void)continuePlaying
+{
+    [self dismissLoading];
+    [self.player play];
+    [self.playButton setTag:1];
+    [self.playButton setImage:[UIImage imageNamed:@"pg_video_pause"] forState:UIControlStateNormal];
+}
+
+- (void)pausePlaying
+{
+    //[self showLoading];
+    [self.player pause];
+    [self.playButton setTag:0];
+    [self.playButton setImage:[UIImage imageNamed:@"pg_video_play"] forState:UIControlStateNormal];
 }
 
 #pragma mark - <PGVideoPlayerSliderDelegate>
@@ -228,76 +287,98 @@
     [self.player pause];
     
     PGWeakSelf(self);
-    [self.playerItem seekToTime:CMTimeMakeWithSeconds(self.playerSlider.value*CMTimeGetSeconds(self.playerItem.duration), self.playerItem.duration.timescale) completionHandler:^(BOOL finished) {
-        [weakself.player play];
-        [weakself.playButton setTag:0];
-        [weakself.playButton setImage:[UIImage imageNamed:@"pg_video_play"] forState:UIControlStateNormal];
-    }];
+    [self.playerItem seekToTime:CMTimeMakeWithSeconds(self.playerSlider.value*CMTimeGetSeconds(self.playerItem.duration), self.playerItem.duration.timescale)
+              completionHandler:^(BOOL finished) {
+                  //[weakself showLoading];
+              }];
 }
 
 #pragma mark - <Gesture>
 
-- (void)playerPanGestureRecognized:(UIPanGestureRecognizer *)gesutre
+- (void)playerPanGestureRecognized:(UIPanGestureRecognizer *)gesture
 {
-    CGPoint translation = [gesutre translationInView:self.view];
-    
-    if (fabs(translation.x) <= fabs(translation.y)) {
-        // vertical direction
-        if (translation.y <= 0) {
-            // increase volume
-            int scale = (int)fabs(translation.y)/10;
-            if (scale != self.currentVolumeTranslationScale) {
-                self.currentVolumeTranslationScale = scale;
-                if (self.systemVolumeSlider.value < 1.f) {
-                    self.systemVolumeSlider.value = self.systemVolumeSlider.value+0.1;
-                    
-                    [self.volumeSlider setValue:self.systemVolumeSlider.value];
+    if (self.player.status == AVPlayerStatusReadyToPlay) {
+        UIGestureRecognizerState state = gesture.state;
+        if (state == UIGestureRecognizerStateBegan) {
+            CGPoint velocity = [gesture velocityInView:self.view];
+            self.gestureIsProcessing = YES;
+            self.currentPlayerSliderValue = self.playerSlider.value;
+            self.currentVolumeSliderValue = self.volumeSlider.value;
+            self.currentSystemVolumeSliderValue = self.systemVolumeSlider.value;
+            if (fabs(velocity.x) >= fabs(velocity.y)) {
+                if (velocity.x >= 0) {
+                    self.currentGestureDirection = GestureDirectionRight;
+                } else {
+                    self.currentGestureDirection = GestureDirectionLeft;
+                }
+            } else {
+                if (velocity.y >= 0) {
+                    self.currentGestureDirection = GestureDirectionDown;
+                } else {
+                    self.currentGestureDirection = GestureDirectionUp;
+                }
+            }
+        } else if (state == UIGestureRecognizerStateChanged) {
+            CGPoint translation = [gesture translationInView:self.view];
+            if (self.currentGestureDirection == GestureDirectionUp || self.currentGestureDirection == GestureDirectionDown) {
+                if (translation.y <= 0) {
+                    // increase volume
+                    float scale = fabs(translation.y)/self.volumeSlider.pg_height;
+                    if (self.currentGestureDirection == GestureDirectionDown) {
+                        self.currentVolumeSliderValue = self.volumeSlider.value;
+                        self.currentSystemVolumeSliderValue = self.systemVolumeSlider.value;
+                    }
+                    [self.volumeSlider setValue:MIN(1.f, self.currentVolumeSliderValue+scale)];
+                    if (self.systemVolumeSlider.value < 1.f) {
+                        self.systemVolumeSlider.value = self.currentSystemVolumeSliderValue+scale;
+                    }
+                    self.currentGestureDirection = GestureDirectionUp;
+                } else {
+                    // decrease volume
+                    float scale = fabs(translation.y)/self.volumeSlider.pg_height;
+                    if (self.currentGestureDirection == GestureDirectionUp) {
+                        self.currentVolumeSliderValue = self.volumeSlider.value;
+                        self.currentSystemVolumeSliderValue = self.systemVolumeSlider.value;
+                    }
+                    [self.volumeSlider setValue:MAX(0.f, self.currentVolumeSliderValue-scale)];
+                    if (self.systemVolumeSlider.value > 0.f) {
+                        self.systemVolumeSlider.value = self.currentSystemVolumeSliderValue-scale;
+                    }
+                    self.currentGestureDirection = GestureDirectionDown;
+                }
+            } else if (self.currentGestureDirection == GestureDirectionRight || self.currentGestureDirection == GestureDirectionLeft) {
+                if (translation.x >= 0) {
+                    // forward
+                    self.forwardButton.hidden = NO;
+                    self.backwardButton.hidden = YES;
+                    float scale = fabs(translation.x)/self.playerSlider.pg_width;
+                    if (self.currentGestureDirection == GestureDirectionLeft) {
+                        self.currentPlayerSliderValue = self.playerSlider.value;
+                    }
+                    self.playerSlider.value = MIN(1.f, self.currentPlayerSliderValue+scale);
+                    self.currentGestureDirection = GestureDirectionRight;
+                } else {
+                    // backward
+                    self.backwardButton.hidden = NO;
+                    self.forwardButton.hidden = YES;
+                    float scale = fabs(translation.x)/self.playerSlider.pg_width;
+                    if (self.currentGestureDirection == GestureDirectionRight) {
+                        self.currentPlayerSliderValue = self.playerSlider.value;
+                    }
+                    self.playerSlider.value = MAX(0.f, self.currentPlayerSliderValue-scale);
+                    self.currentGestureDirection = GestureDirectionLeft;
                 }
             }
         } else {
-            // decrease volume
-            int scale = (int)fabs(translation.y)/10;
-            if (scale != self.currentVolumeTranslationScale) {
-                self.currentVolumeTranslationScale = scale;
-                if (self.systemVolumeSlider.value > 0.f) {
-                    self.systemVolumeSlider.value = self.systemVolumeSlider.value-0.1;
-                    
-                    [self.volumeSlider setValue:self.systemVolumeSlider.value];
-                }
+            self.gestureIsProcessing = NO;
+            self.currentPlayerSliderValue = self.playerSlider.value;
+            self.currentPlayerSliderValue = self.volumeSlider.value;
+            self.currentSystemVolumeSliderValue = self.systemVolumeSlider.value;
+            if (self.currentGestureDirection == GestureDirectionLeft || self.currentGestureDirection == GestureDirectionRight) {
+                [self playerSliderValueChanged];
             }
         }
-    } else {
-        // horizontal direction
-        if ([gesutre velocityInView:self.view].x >= 0) {
-            // forward
-            self.forwardButton.hidden = NO;
-            self.backwardButton.hidden = YES;
-            float scale = fabs(translation.x)/self.playerSlider.pg_width;
-            self.playerSlider.value = self.playerSlider.value+(scale-self.currentPlayerTranslationScale);
-            self.currentPlayerTranslationScale = scale;
-            
-            [self playerSliderValueChanged];
-        } else {
-            // backward
-            self.backwardButton.hidden = NO;
-            self.forwardButton.hidden = YES;
-            float scale = fabs(translation.x)/self.playerSlider.pg_width;
-            self.playerSlider.value = self.playerSlider.value-(scale-self.currentPlayerTranslationScale);
-            self.currentPlayerTranslationScale = scale;
-            
-            [self playerSliderValueChanged];
-        }
     }
-    
-    if (gesutre.state == UIGestureRecognizerStateEnded || gesutre.state == UIGestureRecognizerStateFailed || gesutre.state == UIGestureRecognizerStateCancelled) {
-        self.forwardButton.hidden = YES;
-        self.backwardButton.hidden = YES;
-        self.currentPlayerTranslationScale = 0.f;
-    } else if (gesutre.state == UIGestureRecognizerStateBegan) {
-        self.videoDimView.hidden = NO;
-    }
-    
-    NSLog(@"velocity: %@", NSStringFromCGPoint([gesutre velocityInView:self.view]));
 }
 
 - (void)playerTapGestureRecognized:(UITapGestureRecognizer *)gesture
@@ -314,6 +395,11 @@
 - (void)systemVolumeChanged:(NSNotification *)notification
 {
     [self.volumeSlider setValue:[[notification.userInfo objectForKey:@"AVSystemController_AudioVolumeNotificationParameter"] floatValue]];
+}
+
+- (void)playerItemPlaybackStalled:(NSNotification *)notification
+{
+    [self pausePlaying];
 }
 
 #pragma mark - <Events>
@@ -342,6 +428,11 @@
 {
     if (!_player) {
         _player = [AVPlayer playerWithPlayerItem:self.playerItem];
+        
+        // NOTE: fucking 10.0 issue!!! player not playing http://www.jianshu.com/p/17df68e8f4ca
+        if (SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"10.0")) {
+            self.player.automaticallyWaitsToMinimizeStalling = NO;
+        }
     }
     return _player;
 }
@@ -349,11 +440,9 @@
 - (AVPlayerItem *)playerItem
 {
     if (!_playerItem) {
-//        NSURL *url = [NSURL URLWithString:@"http://222.73.3.97/vhot2.qqvideo.tc.qq.com/g0328tr4ibr.mp4?vkey=D1A814BF316E2BCC33A722E71BE64AD720B5916AABCD0AAFE1B13436DC3458B3AB1B0A4CF4110DE6A999A6D22BF33256B6C0FE24DB81CECD8C44810B4C4331503DFF51A86C561589FECE1E0C4C6A1EE9CE5B9838ABB2110B&br=60&platform=2&fmt=auto&level=0&sdtfrom=v3010&locid=a1ea72b8-dc52-4fb0-8c8b-c675fb1fc509&size=6713441&ocid=3390775212"];
-        //NSURL *url = [NSURL fileURLWithPath:[[NSBundle mainBundle] pathForResource:@"video" ofType:@"mp4"]];
         _playerItem = [AVPlayerItem playerItemWithURL:[NSURL URLWithString:self.videoURL]];
-        
         [_playerItem addObserver:self forKeyPath:@"status" options:NSKeyValueObservingOptionNew context:nil];
+        [_playerItem addObserver:self forKeyPath:@"loadedTimeRanges" options:NSKeyValueObservingOptionNew context:nil];
     }
     return _playerItem;
 }
@@ -421,7 +510,7 @@
 - (PGVideoVolumeSlider *)volumeSlider
 {
     if (!_volumeSlider) {
-        _volumeSlider = [[PGVideoVolumeSlider alloc] initWithFrame:CGRectMake(15, UISCREEN_WIDTH/2-133.f/2, 30, 133)];
+        _volumeSlider = [[PGVideoVolumeSlider alloc] initWithFrame:CGRectMake(30, UISCREEN_WIDTH/2-133.f/2, 30, 133)];
     }
     return _volumeSlider;
 }

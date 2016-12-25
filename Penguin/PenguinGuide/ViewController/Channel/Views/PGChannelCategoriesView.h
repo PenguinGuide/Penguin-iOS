@@ -8,11 +8,12 @@
 
 #import <UIKit/UIKit.h>
 #import "PGChannelCategory.h"
+#import "PGScenarioCategory.h"
 
 @protocol PGChannelCategoriesViewDelegate <NSObject>
 
-- (void)categoryDidSelect:(PGChannelCategory *)category;
-- (void)moreCategoryDidSelect;
+- (void)channelCategoryDidSelect:(PGChannelCategory *)category;
+- (void)scenarioCategoryDidSelect:(PGScenarioCategory *)category;
 
 @end
 

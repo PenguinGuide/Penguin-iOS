@@ -7,11 +7,8 @@
 //
 
 #import "PGLoginView.h"
-#import "PGSMSCodeButton.h"
 
 @interface PGLoginView ()
-
-@property (nonatomic, strong) PGSMSCodeButton *smsCodeButton;
 
 @end
 
@@ -64,6 +61,7 @@
     if (!_phoneTextField) {
         _phoneTextField = [[PGLoginTextField alloc] initWithFrame:CGRectMake(45, 0, self.pg_width-90-100-10, 40)];
         _phoneTextField.placeholder = @"请输入手机号";
+        _phoneTextField.keyboardType = UIKeyboardTypePhonePad;
     }
     return _phoneTextField;
 }
@@ -73,6 +71,7 @@
     if (!_smsCodeTextField) {
         _smsCodeTextField = [[PGLoginTextField alloc] initWithFrame:CGRectMake(45, self.phoneTextField.pg_bottom+10, self.pg_width-90, 40)];
         _smsCodeTextField.placeholder = @"请输入验证码";
+        _smsCodeTextField.keyboardType = UIKeyboardTypeNumberPad;
     }
     return _smsCodeTextField;
 }

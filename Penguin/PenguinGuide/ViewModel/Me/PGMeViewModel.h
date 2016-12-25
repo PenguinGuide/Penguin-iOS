@@ -13,4 +13,7 @@
 
 @property (nonatomic, strong, readonly) PGMe *me;
 
+- (void)requestDetails;
+- (void)readMessages:(void(^)(BOOL success))completion;
+
 @end

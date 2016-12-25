@@ -17,6 +17,8 @@
     if (self = [super initWithFrame:frame collectionViewLayout:layout]) {
         self.backgroundColor = [UIColor whiteColor];
         self.alwaysBounceVertical = YES;
+        
+        [self registerClass:[PGBaseCollectionViewFooterView class] forSupplementaryViewOfKind:UICollectionElementKindSectionFooter withReuseIdentifier:BaseCollectionViewFooterView];
     }
     
     return self;
@@ -40,6 +42,16 @@
             completion();
         }
     }];
+}
+
+- (void)enableInfiniteScrolling
+{
+    self.showsInfiniteScrolling = YES;
+}
+
+- (void)disableInfiniteScrolling
+{
+    self.showsInfiniteScrolling = NO;
 }
 
 - (void)endTopRefreshing

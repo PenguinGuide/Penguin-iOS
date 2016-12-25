@@ -16,12 +16,16 @@
 #define HTML_Tag_Video @"video"
 #define HTML_Tag_Class @"class"
 #define HTML_Tag_Hyper_Link @"a"
+#define HTML_Tag_Newline @"br"
+#define HTML_Tag_Goods_Collection @"product-group"
 
 #define HTML_Attribute_Class @"class"
 #define HTML_Attribute_Src @"src"
 #define HTML_Attribute_Poster @"poster"
-#define HTML_Attribute_Image_Ratio @"data-width-height-radio"
+#define HTML_Attribute_Image_Ratio @"data-width-height-ratio"
 #define HTML_Attribute_Hyper_Ref @"href"
+#define HTML_Attribute_Single_Good @"data-product-id"
+#define HTML_Attribute_Goods_Collection @"data-id"
 
 #define CSS_Style_Color @"color"
 #define CSS_Style_Text_Font @"text-font"
@@ -79,6 +83,8 @@
                             textStorage.text = attrS;
                             [storages addObject:textStorage];
                         }
+                    } else {
+                        
                     }
                 } else {
                     if ([element objectForKey:HTML_Tag_Class]) {
@@ -123,10 +129,21 @@
                                     *stop = YES;
                                 }
                             }
+                        } else if ([childElement.tagName isEqualToString:HTML_Tag_Goods_Collection]) {
+                            // <product-group data-id="65">xxx</product-group>
+                            PGParserGoodsCollectionStorage *goodsCollectionStorage = [PGParserGoodsCollectionStorage new];
+                            goodsCollectionStorage.collectionId = [childElement objectForKey:HTML_Attribute_Goods_Collection];
+                            [storages addObject:goodsCollectionStorage];
                         } else if ([childElement.tagName isEqualToString:HTML_Tag_Image]) {
                             // <p><img class="xxx" /></p>
                             if ([childElement objectForKey:HTML_Attribute_Src]) {
-                                if ([[childElement objectForKey:HTML_Attribute_Class] isEqualToString:@"pg-image-content"]) {
+                                if ([childElement objectForKey:HTML_Attribute_Single_Good]) {
+                                    // <p><img data-product-id="137" /></p>
+                                    PGParserSingleGoodStorage *singleGoodStorage = [PGParserSingleGoodStorage new];
+                                    singleGoodStorage.image = [childElement objectForKey:HTML_Attribute_Src];
+                                    singleGoodStorage.goodId = [childElement objectForKey:HTML_Attribute_Single_Good];
+                                    [storages addObject:singleGoodStorage];
+                                } else if ([[childElement objectForKey:HTML_Attribute_Class] isEqualToString:@"pg-image-content"]) {
                                     // <p><img class="pg-image-content" /></p>
                                     PGParserImageStorage *imageStorage = [PGParserImageStorage new];
                                     imageStorage.isGIF = NO;
@@ -154,6 +171,10 @@
                                     [storages addObject:imageStorage];
                                 }
                             }
+                            *stop = YES;
+                        } else if ([childElement.tagName isEqualToString:HTML_Tag_Newline]) {
+                            PGParserNewlineStorage *newlineStorage = [PGParserNewlineStorage new];
+                            [storages addObject:newlineStorage];
                             *stop = YES;
                         } else {
                             // <p>xxx</p>
@@ -183,6 +204,58 @@
                                                 textStorage.text = attrS;
                                             }
                                         }
+                                    }
+                                } else {
+                                    if (childElement.children.count > 0) {
+                                        [childElement.children enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+                                            if ([obj isKindOfClass:[TFHppleElement class]]) {
+                                                TFHppleElement *childElement = (TFHppleElement *)obj;
+                                                if ([childElement.tagName isEqualToString:HTML_Tag_Goods_Collection]) {
+                                                    // <product-group data-id="65">xxx</product-group>
+                                                    PGParserGoodsCollectionStorage *goodsCollectionStorage = [PGParserGoodsCollectionStorage new];
+                                                    goodsCollectionStorage.collectionId = [childElement objectForKey:HTML_Attribute_Goods_Collection];
+                                                    [storages addObject:goodsCollectionStorage];
+                                                } else if ([childElement.tagName isEqualToString:HTML_Tag_Image]) {
+                                                    // <p><img class="xxx" /></p>
+                                                    if ([childElement objectForKey:HTML_Attribute_Src]) {
+                                                        if ([childElement objectForKey:HTML_Attribute_Single_Good]) {
+                                                            // <p><img data-product-id="137" class="pg-image-content" /></p>
+                                                            PGParserSingleGoodStorage *singleGoodStorage = [PGParserSingleGoodStorage new];
+                                                            singleGoodStorage.image = [childElement objectForKey:HTML_Attribute_Src];
+                                                            singleGoodStorage.goodId = [childElement objectForKey:HTML_Attribute_Single_Good];
+                                                            [storages addObject:singleGoodStorage];
+                                                        } else if ([[childElement objectForKey:HTML_Attribute_Class] isEqualToString:@"pg-image-content"]) {
+                                                            if ([childElement objectForKey:HTML_Attribute_Single_Good]) {
+                                                                // <p><img data-product-id="137" class="pg-image-content" /></p>
+                                                                PGParserSingleGoodStorage *singleGoodStorage = [PGParserSingleGoodStorage new];
+                                                                singleGoodStorage.image = [childElement objectForKey:HTML_Attribute_Src];
+                                                                singleGoodStorage.goodId = [childElement objectForKey:HTML_Attribute_Single_Good];
+                                                                [storages addObject:singleGoodStorage];
+                                                            }
+                                                        } else if ([[childElement objectForKey:HTML_Attribute_Class] isEqualToString:@"pg-image-gif"]) {
+                                                            // <p><img class="pg-image-gif" /></p>
+                                                            PGParserImageStorage *imageStorage = [PGParserImageStorage new];
+                                                            imageStorage.isGIF = YES;
+                                                            imageStorage.image = [childElement objectForKey:HTML_Attribute_Src];
+                                                            if ([childElement objectForKey:HTML_Attribute_Image_Ratio]) {
+                                                                imageStorage.ratio = [[childElement objectForKey:HTML_Attribute_Image_Ratio] floatValue];
+                                                            }
+                                                            [storages addObject:imageStorage];
+                                                        } else if ([[childElement objectForKey:HTML_Attribute_Class] isEqualToString:@"pg-image-catalog"]) {
+                                                            // <p><img class="pg-image-catalog" /></p>
+                                                            PGParserCatalogImageStorage *imageStorage = [PGParserCatalogImageStorage new];
+                                                            imageStorage.image = [childElement objectForKey:HTML_Attribute_Src];
+                                                            if ([childElement objectForKey:HTML_Attribute_Image_Ratio]) {
+                                                                imageStorage.ratio = [[childElement objectForKey:HTML_Attribute_Image_Ratio] floatValue];
+                                                            }
+                                                            [storages addObject:imageStorage];
+                                                        }
+                                                    }
+                                                    *stop = YES;
+                                                }
+                                            }
+                                        }];
+                                        *stop = YES;
                                     }
                                 }
                             } else if ([childElement.tagName isEqualToString:HTML_Tag_Strong]) {

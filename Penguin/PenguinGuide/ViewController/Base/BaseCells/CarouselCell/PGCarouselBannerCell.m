@@ -40,7 +40,7 @@
 
 + (CGSize)cellSize
 {
-    return CGSizeMake(UISCREEN_WIDTH, UISCREEN_WIDTH*160/320);
+    return CGSizeMake(UISCREEN_WIDTH, UISCREEN_WIDTH*9/16);
 }
 
 #pragma mark - <PGPagedScrollViewDelegate>

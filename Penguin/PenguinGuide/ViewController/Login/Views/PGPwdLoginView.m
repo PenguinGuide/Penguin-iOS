@@ -53,6 +53,7 @@
     if (!_phoneTextField) {
         _phoneTextField = [[PGLoginTextField alloc] initWithFrame:CGRectMake(45, 0, self.pg_width-90, 40)];
         _phoneTextField.placeholder = @"请输入手机号";
+        _phoneTextField.keyboardType = UIKeyboardTypePhonePad;
     }
     return _phoneTextField;
 }
@@ -62,6 +63,7 @@
     if (!_pwdTextField) {
         _pwdTextField = [[PGLoginTextField alloc] initWithFrame:CGRectMake(45, self.phoneTextField.pg_bottom+10, self.pg_width-90, 40)];
         _pwdTextField.placeholder = @"请输入密码";
+        _pwdTextField.secureTextEntry = YES;
     }
     return _pwdTextField;
 }
@@ -71,7 +73,7 @@
     if (!_forgotPwdButton) {
         _forgotPwdButton = [[UIButton alloc] initWithFrame:CGRectMake(self.pg_width-45-70, self.pwdTextField.pg_bottom+10, 70, 20)];
         [_forgotPwdButton addTarget:self action:@selector(forgotPwdButtonClicked) forControlEvents:UIControlEventTouchUpInside];
-        NSAttributedString *attrS = [[NSAttributedString alloc] initWithString:@"忘记密码?" attributes:@{NSForegroundColorAttributeName:[UIColor colorWithHexString:@"EF6733"],
+        NSAttributedString *attrS = [[NSAttributedString alloc] initWithString:@"忘记密码?" attributes:@{NSForegroundColorAttributeName:Theme.colorRed,
                                                                                                         NSFontAttributeName:Theme.fontExtraSmallBold,
                                                                                                         NSUnderlineStyleAttributeName:@(NSUnderlineStyleSingle)}];
         [_forgotPwdButton setAttributedTitle:attrS forState:UIControlStateNormal];

@@ -27,9 +27,9 @@
     [self setClearButtonMode:UITextFieldViewModeAlways];
     [self setLeftView:paddingView];
     [self setTintColor:Theme.colorExtraHighlight];
-    [self setFont:Theme.fontSmallBold];
+    [self setFont:Theme.fontLargeBold];
     [self setTextColor:Theme.colorText];
-    [self setBackground:[UIImage imageNamed:@"pg_search_textfield_bg"]];
+//    [self setBackground:[UIImage imageNamed:@"pg_search_textfield_bg"]];
 }
 
 @end

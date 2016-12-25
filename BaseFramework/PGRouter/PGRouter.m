@@ -47,7 +47,27 @@
     // path components
     NSArray *pathComponents = [self pathComponents:route];
     
-    [self openURL:pathComponents parameters:params];
+    NSString *scheme = pathComponents[0];
+    if ([scheme isEqualToString:@"http"] || [scheme isEqualToString:@"https"]) {
+        // http && https
+        if (route && route.length > 0) {
+            NSMutableDictionary *parameters = [NSMutableDictionary new];
+            parameters[@"web_url"] = route;
+            
+            if (self.routes[scheme]) {
+                NSMutableDictionary *pathSubDict = self.routes[scheme];
+                
+                if ([pathSubDict objectForKey:@"_"]) {
+                    PGRouterHandler handler = pathSubDict[@"_"];
+                    if (handler) {
+                        handler(parameters);
+                    }
+                }
+            }
+        }
+    } else {
+        [self openURL:pathComponents parameters:params];
+    }
 }
 
 #pragma mark - <Private Methods>
@@ -71,6 +91,17 @@
         }
         
         pathSubDict[@"_"] = [handler copy];
+    } else {
+        if (pathComponents.count == 1 && ([pathComponents[0] isEqualToString:@"http"] || [pathComponents[0] isEqualToString:@"https"])) {
+            // http && https
+            NSString *scheme = pathComponents[0];
+            if (![self.routes objectForKey:scheme]) {
+                self.routes[scheme] = [NSMutableDictionary dictionary];
+            }
+            
+            NSMutableDictionary *pathSubDict = self.routes[scheme];
+            pathSubDict[@"_"] = [handler copy];
+        }
     }
 }
 

@@ -13,6 +13,7 @@
 #import "PGParserVideoStorage.h"
 #import "PGParserSingleGoodStorage.h"
 #import "PGParserGoodsCollectionStorage.h"
+#import "PGParserNewlineStorage.h"
 
 @interface PGStringParser : NSObject
 

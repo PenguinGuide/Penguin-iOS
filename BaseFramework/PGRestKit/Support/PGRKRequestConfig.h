@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "PGRKParams.h"
 #import "PGRKModel.h"
+#import "PGRKResponse.h"
 #import "PGRKMockAPIManager.h"
 
 @interface PGRKRequestConfig : NSObject
@@ -42,6 +43,27 @@
 @property (nonatomic, strong) PGRKModel *model;
 
 /**
+ *  @property typeKey
+ *
+ *  @brief key path for model type if response has multiple models
+ */
+@property (nonatomic, strong) NSString *typeKey;
+
+/**
+ *  @property models
+ *
+ *  @brief response mapping models for multiple mappings
+ */
+@property (nonatomic, strong) NSArray *models;
+
+/**
+ *  @property response
+ *
+ *  @brief pagination response object
+ */
+@property (nonatomic, strong) PGRKResponse *response;
+
+/**
  *  @property pattern
  *
  *  @brief path patterns
@@ -56,6 +78,8 @@
 @property (nonatomic, strong) NSDictionary *pattern;
 
 @property (nonatomic, strong) NSString *accessToken;
+
+@property (nonatomic, strong) UIImage *image;
 
 /**
  *  Mock Configs ********* IMPORTANT DEBUG ONLY *********

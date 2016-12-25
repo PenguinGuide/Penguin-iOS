@@ -64,6 +64,22 @@ static const float TabBarHeight = 50.f;
     }
 }
 
+- (void)showTabDot:(NSInteger)index
+{
+    if (index < self.viewControllers.count) {
+        PGTab *tab = self.tabBar.tabs[index];
+        [tab showDotView];
+    }
+}
+
+- (void)hideTabDot:(NSInteger)index
+{
+    if (index < self.viewControllers.count) {
+        PGTab *tab = self.tabBar.tabs[index];
+        [tab hideDotView];
+    }
+}
+
 - (void)setSelectedViewController:(UIViewController *)viewController
 {
     if (![self.selectedViewController isEqual:viewController]) {
@@ -94,12 +110,17 @@ static const float TabBarHeight = 50.f;
         NSString *tabBarTitle = [vc tabBarTitle];
         NSString *tabBarImage = [vc tabBarImage];
         NSString *tabBarHighlightImage = [vc tabBarHighlightImage];
+        BOOL showDotView = NO;
+        if ([vc respondsToSelector:@selector(tabBarShouldShowDot)]) {
+            showDotView = [vc tabBarShouldShowDot];
+        }
         
         PGTab *tab = [[PGTab alloc] init];
         [tab setBackgroundColor:[UIColor clearColor]];
         tab.tabTitle = tabBarTitle;
         tab.tabImage = tabBarImage;
         tab.tabHighlightImage = tabBarHighlightImage;
+        tab.shouldShowDotView = showDotView;
         
         [tabs addObject:tab];
     }
@@ -115,11 +136,24 @@ static const float TabBarHeight = 50.f;
 {
     if (index < self.viewControllers.count) {
         UIViewController *selectedVC = self.viewControllers[index];
-        [self setSelectedViewController:selectedVC];
-        
-        if ([selectedVC respondsToSelector:@selector(tabBarDidClicked)]) {
+        if ([selectedVC respondsToSelector:@selector(tabBarShouldClicked)]) {
             id<PGTabBarControllerDelegate> vc = selectedVC;
-            [vc tabBarDidClicked];
+            BOOL shouldClicked = [vc tabBarShouldClicked];
+            if (shouldClicked) {
+                [self setSelectedViewController:selectedVC];
+                
+                if ([selectedVC respondsToSelector:@selector(tabBarDidClicked)]) {
+                    id<PGTabBarControllerDelegate> vc = selectedVC;
+                    [vc tabBarDidClicked];
+                }
+            }
+        } else {
+            [self setSelectedViewController:selectedVC];
+            
+            if ([selectedVC respondsToSelector:@selector(tabBarDidClicked)]) {
+                id<PGTabBarControllerDelegate> vc = selectedVC;
+                [vc tabBarDidClicked];
+            }
         }
     }
 }

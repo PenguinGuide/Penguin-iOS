@@ -26,14 +26,14 @@
     topLabel.font = Theme.fontSmallBold;
     topLabel.textColor = Theme.colorText;
     topLabel.textAlignment = NSTextAlignmentCenter;
-    topLabel.text = @"企鹅转载，未经允许不得转载";
+    topLabel.text = @"企鹅出品，未经允许不得转载";
     
     UILabel *bottomLabel = [[UILabel alloc] initWithFrame:CGRectMake((self.pg_width-180)/2, 52, 180, 22)];
     bottomLabel.backgroundColor = [UIColor colorWithHexString:@"FEE500"];
     bottomLabel.font = Theme.fontSmallBold;
     bottomLabel.textColor = Theme.colorText;
     bottomLabel.textAlignment = NSTextAlignmentCenter;
-    bottomLabel.text = @"更多阅读，请点击[往期回顾]";
+    bottomLabel.text = @"更多精彩阅读，请滑动下方";
     
     [self.contentView addSubview:topLabel];
     [self.contentView addSubview:bottomLabel];

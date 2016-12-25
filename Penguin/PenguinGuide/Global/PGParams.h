@@ -6,8 +6,8 @@
 //  Copyright © 2016 Xinglian. All rights reserved.
 //
 
-#define ParamsPage @"max_id"
-#define ParamsPerPage @"per_page"
+#define ParamsPageCursor @"cursor"
+#define ParamsPerPage @"count"
 
 #import <PGRestKit/PGRestKit.h>
 

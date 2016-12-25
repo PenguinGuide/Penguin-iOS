@@ -19,7 +19,7 @@
 
 - (NSAttributedString *)paragraphAttributedString
 {
-    NSAttributedString *attrS = [[NSAttributedString alloc] initWithString:self attributes:@{NSFontAttributeName:[UIFont systemFontOfSize:14.f weight:UIFontWeightLight],
+    NSAttributedString *attrS = [[NSAttributedString alloc] initWithString:self attributes:@{NSFontAttributeName:[UIFont systemFontOfSize:14.f weight:UIFontWeightRegular],
                                                                                              NSParagraphStyleAttributeName:[self defaultParagraphStyle]}];
     
     return attrS;
@@ -27,7 +27,7 @@
 
 - (NSAttributedString *)centerAlignedParagraphAttributedString
 {
-    NSAttributedString *attrS = [[NSAttributedString alloc] initWithString:self attributes:@{NSFontAttributeName:[UIFont systemFontOfSize:14.f weight:UIFontWeightLight],
+    NSAttributedString *attrS = [[NSAttributedString alloc] initWithString:self attributes:@{NSFontAttributeName:[UIFont systemFontOfSize:14.f weight:UIFontWeightRegular],
                                                                                              NSParagraphStyleAttributeName:[self centerAlignedParagraphStyle]}];
     
     return attrS;
@@ -68,7 +68,7 @@
             NSString *fontSize = style[CSS_Style_Font_Size];
             if ([fontSize rangeOfString:@"px"].location != NSNotFound) {
                 fontSize = [fontSize stringByReplacingOccurrencesOfString:@"px" withString:@""];
-                [attrS addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:[fontSize floatValue] weight:UIFontWeightLight] range:NSMakeRange(0, attrS.length)];
+                [attrS addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:[fontSize floatValue] weight:UIFontWeightRegular] range:NSMakeRange(0, attrS.length)];
             }
         } else if ([key isEqualToString:CSS_Style_Font_Strong]) {
             [attrS addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:14.f weight:UIFontWeightBold] range:NSMakeRange(0, attrS.length)];
@@ -80,7 +80,7 @@
 - (NSAttributedString *)attributedStringWithColor:(NSString *)color font:(UIFont *)font
 {
     NSAttributedString *attrStr = [[NSAttributedString alloc] initWithString:self
-                                                                  attributes:@{NSFontAttributeName:font?font:[UIFont systemFontOfSize:16.f weight:UIFontWeightLight],
+                                                                  attributes:@{NSFontAttributeName:font?font:[UIFont systemFontOfSize:16.f weight:UIFontWeightRegular],
                                                                                NSForegroundColorAttributeName:[UIColor colorWithHexString:color],
                                                                                NSParagraphStyleAttributeName:[self defaultParagraphStyle]}];
     return attrStr;
@@ -108,10 +108,10 @@
 - (NSMutableParagraphStyle *)defaultParagraphStyle
 {
     NSMutableParagraphStyle *defaultParagraphStyle = [[NSMutableParagraphStyle alloc] init];
-    defaultParagraphStyle.alignment = NSTextAlignmentJustified;
-    defaultParagraphStyle.firstLineHeadIndent = 30.f;
-    defaultParagraphStyle.headIndent = 30.f;
-    defaultParagraphStyle.tailIndent = -30.f;
+    defaultParagraphStyle.alignment = NSTextAlignmentLeft;
+    defaultParagraphStyle.firstLineHeadIndent = 20.f;
+    defaultParagraphStyle.headIndent = 20.f;
+    defaultParagraphStyle.tailIndent = -20.f;
     defaultParagraphStyle.lineSpacing = 5.f;
     defaultParagraphStyle.lineBreakMode = NSLineBreakByWordWrapping;
     
@@ -122,9 +122,9 @@
 {
     NSMutableParagraphStyle *centerAlignedParagraphStyle = [[NSMutableParagraphStyle alloc] init];
     centerAlignedParagraphStyle.alignment = NSTextAlignmentCenter;
-    centerAlignedParagraphStyle.firstLineHeadIndent = 30.f;
-    centerAlignedParagraphStyle.headIndent = 30.f;
-    centerAlignedParagraphStyle.tailIndent = -30.f;
+    centerAlignedParagraphStyle.firstLineHeadIndent = 20.f;
+    centerAlignedParagraphStyle.headIndent = 20.f;
+    centerAlignedParagraphStyle.tailIndent = -20.f;
     centerAlignedParagraphStyle.lineSpacing = 5.f;
     centerAlignedParagraphStyle.lineBreakMode = NSLineBreakByWordWrapping;
     

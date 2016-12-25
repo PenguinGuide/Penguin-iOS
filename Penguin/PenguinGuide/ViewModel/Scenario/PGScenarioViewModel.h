@@ -12,6 +12,7 @@
 @interface PGScenarioViewModel : PGBaseViewModel
 
 @property (nonatomic, strong, readonly) PGScenario *scenario;
-@property (nonatomic, strong, readonly) NSArray *feedsArray;
+
+- (void)requestScenario:(NSString *)scenarioId;
 
 @end

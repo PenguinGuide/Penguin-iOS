@@ -6,30 +6,24 @@
 //  Copyright © 2016 Xinglian. All rights reserved.
 //
 
-#define ArticleCell @"ArticleCell"
-#define GoodCell @"GoodCell"
-#define ArticlesCollectionViewTag 1
-#define GoodsCollectionViewTag 2
-
 #import "PGSearchResultsViewController.h"
-#import "PGArticleViewController.h"
 
-#import "PGSearchResultsViewModel.h"
+#import "PGPagedController.h"
+#import "PGSearchResultsArticlesViewController.h"
+#import "PGSearchResultsGoodsViewController.h"
 
-#import "PGSearchResultsArticleCell.h"
-#import "PGSingleGoodBannerCell.h"
-
+#import "PGCityGuideSegmentIndicator.h"
 #import "PGSearchResultsHeaderView.h"
 
-@interface PGSearchResultsViewController () <UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, PGSearchResultsHeaderViewDelegate>
+@interface PGSearchResultsViewController () <PGSearchResultsHeaderViewDelegate>
 
 @property (nonatomic, strong) NSString *keyword;
 
-@property (nonatomic, strong) PGSearchResultsViewModel *viewModel;
+@property (nonatomic, strong) PGPagedController *pagedController;
+@property (nonatomic, strong) PGSearchResultsArticlesViewController *articlesVC;
+@property (nonatomic, strong) PGSearchResultsGoodsViewController *goodsVC;
 
 @property (nonatomic, strong) PGSearchResultsHeaderView *headerView;
-@property (nonatomic, strong) UICollectionView *articlesCollectionView;
-@property (nonatomic, strong) UICollectionView *goodsCollectionView;
 
 @end
 
@@ -47,30 +41,25 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    
     self.automaticallyAdjustsScrollViewInsets = NO;
     
-    self.view.backgroundColor = Theme.colorBackground;
+    self.view.backgroundColor = [UIColor whiteColor];
     
-    [self.view addSubview:self.articlesCollectionView];
     [self.view addSubview:self.headerView];
     
-    self.viewModel = [[PGSearchResultsViewModel alloc] initWithAPIClient:self.apiClient];
-    [self.viewModel searchArticles:@""];
+    self.pagedController = [[PGPagedController alloc] init];
+    self.pagedController.backgroundColor = [UIColor whiteColor];
+    self.pagedController.equalWidth = YES;
+    self.pagedController.disableScrolling = YES;
     
-    PGWeakSelf(self);
-    [self observe:self.viewModel keyPath:@"articlesArray" block:^(id changedObject) {
-        NSArray *bannersArray = changedObject;
-        if (bannersArray && [bannersArray isKindOfClass:[NSArray class]]) {
-            [weakself.articlesCollectionView reloadData];
-        }
-    }];
-    [self observe:self.viewModel keyPath:@"goodsArray" block:^(id changedObject) {
-        NSArray *bannersArray = changedObject;
-        if (bannersArray && [bannersArray isKindOfClass:[NSArray class]]) {
-            [weakself.goodsCollectionView reloadData];
-        }
-    }];
+    self.pagedController.view.frame = CGRectMake(0, 60, UISCREEN_WIDTH, UISCREEN_HEIGHT-60);
+    [self.view addSubview:self.pagedController.view];
+    [self addChildViewController:self.pagedController];
+    [self.pagedController didMoveToParentViewController:self];
+    
+    self.articlesVC = [[PGSearchResultsArticlesViewController alloc] initWithKeyword:self.keyword];
+    self.goodsVC = [[PGSearchResultsGoodsViewController alloc] initWithKeyword:self.keyword];
+    [self.pagedController reloadWithViewControllers:@[self.articlesVC, self.goodsVC] titles:@[@"文 章", @"商 品"] selectedViewClass:[PGCityGuideSegmentIndicator class]];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -83,13 +72,6 @@
 - (void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
-    
-    [self.navigationController setNavigationBarHidden:NO animated:NO];
-}
-
-- (void)dealloc
-{
-    [self unobserve];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -97,105 +79,11 @@
     // Dispose of any resources that can be recreated.
 }
 
-#pragma mark - <UICollectionViewDataSource>
-
-- (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView
-{
-    return 1;
-}
-
-- (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
-{
-    if (collectionView.tag == ArticlesCollectionViewTag) {
-        return self.viewModel.articlesArray.count;
-    } else {
-        return self.viewModel.goodsArray.count;
-    }
-}
-
-- (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
-{
-    if (collectionView.tag == ArticlesCollectionViewTag) {
-        PGSearchResultsArticleCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:ArticleCell forIndexPath:indexPath];
-        [cell setCellWithArticle:self.viewModel.articlesArray[indexPath.item]];
-        
-        return cell;
-    } else {
-        PGSingleGoodBannerCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:GoodCell forIndexPath:indexPath];
-        [cell setCellWithSingleGood:self.viewModel.goodsArray[indexPath.item]];
-        
-        return cell;
-    }
-}
-
-#pragma mark - <UICollectionViewDelegate>
-
-- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath
-{
-    if (collectionView.tag == ArticlesCollectionViewTag) {
-        return [PGSearchResultsArticleCell cellSize];
-    } else {
-        return [PGSingleGoodBannerCell cellSize];
-    }
-}
-
-- (CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout minimumLineSpacingForSectionAtIndex:(NSInteger)section
-{
-    if (collectionView.tag == ArticlesCollectionViewTag) {
-        return 15.f;
-    } else {
-        return 10.f;
-    }
-}
-
-- (CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout minimumInteritemSpacingForSectionAtIndex:(NSInteger)section
-{
-    return 0.f;
-}
-
-- (UIEdgeInsets)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout insetForSectionAtIndex:(NSInteger)section
-{
-    return UIEdgeInsetsMake(10, 10, 10, 10);
-}
-
-- (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
-{
-    if (collectionView.tag == ArticlesCollectionViewTag) {
-        PGArticleBanner *articleBanner = self.viewModel.articlesArray[indexPath.item];
-        PGArticleViewController *articleVC = [[PGArticleViewController alloc] initWithArticleId:articleBanner.articleId animated:NO];
-        [self.navigationController pushViewController:articleVC animated:YES];
-    } else if (collectionView.tag == GoodsCollectionViewTag) {
-        
-    }
-}
-
 #pragma mark - <PGSearchResultsHeaderViewDelegate>
-
-- (void)segmentDidClicked:(NSInteger)index
-{
-    if (index == 0) {
-        if (self.viewModel.articlesArray.count == 0) {
-            [self.viewModel searchArticles:@""];
-            [self.articlesCollectionView removeFromSuperview];
-            [self.view addSubview:self.articlesCollectionView];
-        } else {
-            self.articlesCollectionView.hidden = NO;
-            self.goodsCollectionView.hidden = YES;
-        }
-    } else if (index == 1) {
-        if (self.viewModel.goodsArray.count == 0) {
-            [self.viewModel searchGoods:@""];
-            [self.goodsCollectionView removeFromSuperview];
-            [self.view addSubview:self.goodsCollectionView];
-        } else {
-            self.articlesCollectionView.hidden = YES;
-            self.goodsCollectionView.hidden = NO;
-        }
-    }
-}
 
 - (void)cancelButtonClicked
 {
+    PGGlobal.tempNavigationController = nil;
     [self.navigationController dismissViewControllerAnimated:NO completion:nil];
 }
 
@@ -204,39 +92,77 @@
     [self.navigationController popViewControllerAnimated:YES];
 }
 
-- (UICollectionView *)articlesCollectionView {
-	if(_articlesCollectionView == nil) {
-		_articlesCollectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(0, 94, UISCREEN_WIDTH, UISCREEN_HEIGHT-94) collectionViewLayout:[UICollectionViewFlowLayout new]];
-        _articlesCollectionView.backgroundColor = Theme.colorBackground;
-        _articlesCollectionView.tag = ArticlesCollectionViewTag;
-        _articlesCollectionView.dataSource = self;
-        _articlesCollectionView.delegate = self;
+- (void)searchButtonClicked:(NSString *)keyword
+{
+    NSString *trimmedKeyword = [[keyword componentsSeparatedByCharactersInSet:[NSCharacterSet whitespaceCharacterSet]] componentsJoinedByString:@""];
+    
+    if (![trimmedKeyword isEqualToString:self.keyword] && ![trimmedKeyword isEqualToString:@""]) {
+        self.keyword = trimmedKeyword;
+        [self.articlesVC.view removeFromSuperview];
+        [self.articlesVC removeFromParentViewController];
+        [self.articlesVC didMoveToParentViewController:nil];
         
-        [_articlesCollectionView registerClass:[PGSearchResultsArticleCell class] forCellWithReuseIdentifier:ArticleCell];
-	}
-	return _articlesCollectionView;
+        [self.goodsVC.view removeFromSuperview];
+        [self.goodsVC removeFromParentViewController];
+        [self.goodsVC didMoveToParentViewController:nil];
+        
+        [self.pagedController.view removeFromSuperview];
+        [self.pagedController removeFromParentViewController];
+        [self.pagedController didMoveToParentViewController:nil];
+        
+        self.pagedController = [[PGPagedController alloc] init];
+        self.pagedController.backgroundColor = [UIColor whiteColor];
+        self.pagedController.equalWidth = YES;
+        self.pagedController.disableScrolling = YES;
+        
+        self.pagedController.view.frame = CGRectMake(0, 60, UISCREEN_WIDTH, UISCREEN_HEIGHT-60);
+        [self.view addSubview:self.pagedController.view];
+        [self addChildViewController:self.pagedController];
+        [self.pagedController didMoveToParentViewController:self];
+        
+        self.articlesVC = [[PGSearchResultsArticlesViewController alloc] initWithKeyword:self.keyword];
+        self.goodsVC = [[PGSearchResultsGoodsViewController alloc] initWithKeyword:self.keyword];
+        
+        [self.pagedController reloadWithViewControllers:@[self.articlesVC, self.goodsVC] titles:@[@"文 章", @"商 品"] selectedViewClass:[PGCityGuideSegmentIndicator class]];
+    }
 }
 
-- (UICollectionView *)goodsCollectionView {
-	if(_goodsCollectionView == nil) {
-		_goodsCollectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(0, 94, UISCREEN_WIDTH, UISCREEN_HEIGHT-94) collectionViewLayout:[UICollectionViewFlowLayout new]];
-        _goodsCollectionView.backgroundColor = Theme.colorBackground;
-        _goodsCollectionView.tag = GoodsCollectionViewTag;
-        _goodsCollectionView.dataSource = self;
-        _goodsCollectionView.delegate = self;
-        
-        [_goodsCollectionView registerClass:[PGSingleGoodBannerCell class] forCellWithReuseIdentifier:GoodCell];
-	}
-	return _goodsCollectionView;
-}
+#pragma mark - <Lazy Init>
+
+//- (PGPagedController *)pagedController
+//{
+//    if (!_pagedController) {
+//        _pagedController = [[PGPagedController alloc] init];
+//        _pagedController.backgroundColor = [UIColor whiteColor];
+//        _pagedController.equalWidth = YES;
+//        _pagedController.disableScrolling = YES;
+//    }
+//    return _pagedController;
+//}
+
+//- (PGSearchResultsArticlesViewController *)articlesVC
+//{
+//    if (!_articlesVC) {
+//        _articlesVC = [[PGSearchResultsArticlesViewController alloc] initWithKeyword:self.keyword];
+//    }
+//    return _articlesVC;
+//}
+//
+//- (PGSearchResultsGoodsViewController *)goodsVC
+//{
+//    if (!_goodsVC) {
+//        _goodsVC = [[PGSearchResultsGoodsViewController alloc] initWithKeyword:self.keyword];
+//    }
+//    return _goodsVC;
+//}
 
 - (PGSearchResultsHeaderView *)headerView {
-	if(_headerView == nil) {
-		_headerView = [[PGSearchResultsHeaderView alloc] initWithFrame:CGRectMake(0, 0, UISCREEN_WIDTH, 94)];
+    if(_headerView == nil) {
+        _headerView = [[PGSearchResultsHeaderView alloc] initWithFrame:CGRectMake(0, 0, UISCREEN_WIDTH, 60)];
         _headerView.delegate = self;
-        [_headerView setHeaderViewWithKeyword:self.keyword segments:@[@"文 章(78)", @"商 品(35)"]];
-	}
-	return _headerView;
+        [_headerView setHeaderViewWithKeyword:self.keyword];
+    }
+    return _headerView;
 }
 
 @end

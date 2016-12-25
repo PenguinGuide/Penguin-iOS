@@ -10,7 +10,7 @@
 #define ArticleCommentReplyCell @"ArticleCommentReplyCell"
 
 #import "PGCommentsViewController.h"
-#import "PGCommentsViewModel.h"
+//#import "PGCommentsViewModel.h"
 #import "PGArticleCommentCell.h"
 #import "PGArticleCommentReplyCell.h"
 #import "PGCommentInputAccessoryView.h"
@@ -21,6 +21,8 @@
 @property (nonatomic, strong) PGCommentInputAccessoryView *commentInputAccessoryView;
 
 @property (nonatomic, strong) PGCommentsViewModel *viewModel;
+
+@property (nonatomic, strong) PGComment *selectedComment;
 
 @end
 
@@ -37,17 +39,41 @@
     [self.view addSubview:self.commentInputAccessoryView];
     
     self.viewModel = [[PGCommentsViewModel alloc] initWithAPIClient:self.apiClient];
-    [self.viewModel requestComments:self.articleId];
     
     PGWeakSelf(self);
     [self observe:self.viewModel keyPath:@"commentsArray" block:^(id changedObject) {
-        NSArray *commentsArray = changedObject;
-        if (commentsArray && [commentsArray isKindOfClass:[NSArray class]]) {
-            [weakself.commentsCollectionView reloadData];
+        if (weakself.viewModel.nextPageIndexes || weakself.viewModel.nextPageIndexes.count > 0) {
+            @try {
+                [weakself.commentsCollectionView insertItemsAtIndexPaths:weakself.viewModel.nextPageIndexes];
+            } @catch (NSException *exception) {
+                NSLog(@"exception: %@", exception);
+            }
+        } else {
+            NSArray *commentsArray = changedObject;
+            if (commentsArray && [commentsArray isKindOfClass:[NSArray class]]) {
+                [weakself.commentsCollectionView reloadData];
+            }
         }
         [weakself dismissLoading];
+        [weakself.commentsCollectionView endBottomRefreshing];
     }];
-    [self observeError:self.viewModel];
+    [self observe:self.viewModel keyPath:@"error" block:^(id changedObject) {
+        NSError *error = changedObject;
+        if (error && [error isKindOfClass:[NSError class]]) {
+            [weakself showErrorMessage:error];
+            [weakself dismissLoading];
+            [weakself.commentsCollectionView endBottomRefreshing];
+        }
+    }];
+    [self observeCollectionView:self.commentsCollectionView endOfFeeds:self.viewModel];
+}
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    
+    self.commentInputAccessoryView.commentTextView.text = @"";
+    self.commentInputAccessoryView.frame = CGRectMake(0, UISCREEN_HEIGHT, UISCREEN_WIDTH, 60);
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -58,6 +84,13 @@
         [self showLoading];
         [self.viewModel requestComments:self.articleId];
     }
+}
+
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    
+    [self.commentInputAccessoryView.commentTextView resignFirstResponder];
 }
 
 - (void)dealloc
@@ -81,15 +114,15 @@
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
     PGComment *comment = self.viewModel.commentsArray[indexPath.item];
-    if (!comment.replyComment) {
-        PGArticleCommentCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:ArticleCommentCell forIndexPath:indexPath];
+    if (comment.replyComment || comment.replyDeleted) {
+        PGArticleCommentReplyCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:ArticleCommentReplyCell forIndexPath:indexPath];
         cell.delegate = self;
         
         [cell setCellWithComment:comment];
         
         return cell;
     } else {
-        PGArticleCommentReplyCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:ArticleCommentReplyCell forIndexPath:indexPath];
+        PGArticleCommentCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:ArticleCommentCell forIndexPath:indexPath];
         cell.delegate = self;
         
         [cell setCellWithComment:comment];
@@ -103,11 +136,19 @@
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath
 {
     PGComment *comment = self.viewModel.commentsArray[indexPath.item];
-    if (!comment.replyComment) {
-        return [PGArticleCommentCell cellSize:comment];
-    } else {
+    if (comment.replyComment || comment.replyDeleted) {
         return [PGArticleCommentReplyCell cellSize:comment];
+    } else {
+        return [PGArticleCommentCell cellSize:comment];
     }
+}
+
+- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout referenceSizeForFooterInSection:(NSInteger)section
+{
+    if (self.viewModel.endFlag) {
+        return [PGBaseCollectionViewFooterView footerViewSize];
+    }
+    return CGSizeZero;
 }
 
 - (UIEdgeInsets)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout insetForSectionAtIndex:(NSInteger)section
@@ -128,35 +169,50 @@
     return 15.f;
 }
 
+- (UICollectionReusableView *)collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath
+{
+    if (kind == UICollectionElementKindSectionFooter) {
+        PGBaseCollectionViewFooterView *footerView = [collectionView dequeueReusableSupplementaryViewOfKind:kind withReuseIdentifier:BaseCollectionViewFooterView forIndexPath:indexPath];
+        
+        return footerView;
+    }
+    
+    return nil;
+}
+
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    PGWeakSelf(self);
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        UICollectionViewCell *cell = [collectionView cellForItemAtIndexPath:indexPath];
-        if ([cell isKindOfClass:[PGArticleCommentCell class]]) {
-            PGArticleCommentCell *commentCell = (PGArticleCommentCell *)cell;
-            [commentCell unselectLabel];
-            
-            if (indexPath.item < weakself.viewModel.commentsArray.count) {
-                PGComment *selectedComment = weakself.viewModel.commentsArray[indexPath.item];
-                weakself.commentInputAccessoryView.commentTextView.text = @"";
-                weakself.commentInputAccessoryView.commentTextView.placeholder = [NSString stringWithFormat:@"回复%@", selectedComment.user.nickname];
+    if (PGGlobal.userId && PGGlobal.userId.length > 0) {
+        PGWeakSelf(self);
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            UICollectionViewCell *cell = [collectionView cellForItemAtIndexPath:indexPath];
+            if ([cell isKindOfClass:[PGArticleCommentCell class]]) {
+                PGArticleCommentCell *commentCell = (PGArticleCommentCell *)cell;
+                [commentCell unselectLabel];
                 
-                [weakself.commentInputAccessoryView.commentTextView becomeFirstResponder];
-            }
-        } else if ([cell isKindOfClass:[PGArticleCommentReplyCell class]]) {
-            PGArticleCommentReplyCell *replyCell = (PGArticleCommentReplyCell *)cell;
-            [replyCell unselectLabel];
-            
-            if (indexPath.item < weakself.viewModel.commentsArray.count) {
-                PGComment *selectedComment = self.viewModel.commentsArray[indexPath.item];
-                weakself.commentInputAccessoryView.commentTextView.text = @"";
-                weakself.commentInputAccessoryView.commentTextView.placeholder = [NSString stringWithFormat:@"回复%@", selectedComment.user.nickname];
+                if (indexPath.item < weakself.viewModel.commentsArray.count) {
+                    weakself.selectedComment = weakself.viewModel.commentsArray[indexPath.item];
+                    weakself.commentInputAccessoryView.commentTextView.text = @"";
+                    weakself.commentInputAccessoryView.commentTextView.placeholder = [NSString stringWithFormat:@"回复%@", weakself.selectedComment.user.nickname];
+                    
+                    [weakself.commentInputAccessoryView.commentTextView becomeFirstResponder];
+                }
+            } else if ([cell isKindOfClass:[PGArticleCommentReplyCell class]]) {
+                PGArticleCommentReplyCell *replyCell = (PGArticleCommentReplyCell *)cell;
+                [replyCell unselectLabel];
                 
-                [weakself.commentInputAccessoryView.commentTextView becomeFirstResponder];
+                if (indexPath.item < weakself.viewModel.commentsArray.count) {
+                    weakself.selectedComment = self.viewModel.commentsArray[indexPath.item];
+                    weakself.commentInputAccessoryView.commentTextView.text = @"";
+                    weakself.commentInputAccessoryView.commentTextView.placeholder = [NSString stringWithFormat:@"回复%@", weakself.selectedComment.user.nickname];
+                    
+                    [weakself.commentInputAccessoryView.commentTextView becomeFirstResponder];
+                }
             }
-        }
-    });
+        });
+    } else {
+        [PGRouterManager routeToLoginPage];
+    }
 }
 
 - (BOOL)collectionView:(UICollectionView *)collectionView shouldHighlightItemAtIndexPath:(NSIndexPath *)indexPath
@@ -190,6 +246,7 @@
 
 - (void)commentMoreButtonClicked:(PGArticleCommentCell *)cell
 {
+    PGWeakSelf(self);
     PGAlertAction *reportAction = [PGAlertAction actionWithTitle:@"举报"
                                                            style:^(PGAlertActionStyle *style) {
                                                                
@@ -200,28 +257,169 @@
                                                            style:^(PGAlertActionStyle *style) {
                                                                style.type = PGAlertActionTypeDestructive;
                                                            } handler:^{
-                                                               
+                                                               NSIndexPath *indexPath = [self.commentsCollectionView indexPathForCell:cell];
+                                                               PGComment *comment = self.viewModel.commentsArray[indexPath.item];
+                                                               [weakself showLoading];
+                                                               [weakself.viewModel deleteComment:comment.commentId completion:^(BOOL success) {
+                                                                   if (success) {
+                                                                       [weakself showToast:@"删除成功"];
+                                                                   }
+                                                                   [weakself dismissLoading];
+                                                               }];
                                                            }];
     PGAlertController *alertController = [PGAlertController alertControllerWithTitle:nil message:nil style:^(PGAlertStyle *style) {
         style.alertType = PGAlertTypeActionSheet;
     }];
-    [alertController addActions:@[reportAction, deleteAction]];
+    NSIndexPath *indexPath = [self.commentsCollectionView indexPathForCell:cell];
+    if (indexPath.item < self.viewModel.commentsArray.count) {
+        PGComment *comment = self.viewModel.commentsArray[indexPath.item];
+        if ([comment.user.userId isEqualToString:PGGlobal.userId]) {
+            [alertController addActions:@[reportAction, deleteAction]];
+        } else {
+            [alertController addActions:@[reportAction]];
+        }
+        [self presentViewController:alertController animated:YES completion:nil];
+    }
+}
+
+- (void)commentLikeButtonClicked:(PGArticleCommentCell *)cell
+{
+    __block PGArticleCommentCell *weakCell = cell;
     
-    [self presentViewController:alertController animated:YES completion:nil];
+    NSIndexPath *indexPath = [self.commentsCollectionView indexPathForCell:cell];
+    if (indexPath.item < self.viewModel.commentsArray.count) {
+        __block PGComment *comment = self.viewModel.commentsArray[indexPath.item];
+        [self.viewModel likeComment:comment.commentId completion:^(BOOL success) {
+            if (success) {
+                comment.likesCount++;
+                comment.liked = YES;
+                [weakCell animateLikeButton:comment.likesCount];
+            }
+        }];
+    }
+}
+
+- (void)commentDislikeButtonClicked:(PGArticleCommentCell *)cell
+{
+    __block PGArticleCommentCell *weakCell = cell;
     
+    NSIndexPath *indexPath = [self.commentsCollectionView indexPathForCell:cell];
+    if (indexPath.item < self.viewModel.commentsArray.count) {
+        PGComment *comment = self.viewModel.commentsArray[indexPath.item];
+        [self.viewModel dislikeComment:comment.commentId completion:^(BOOL success) {
+            if (success) {
+                comment.likesCount--;
+                comment.liked = NO;
+                [weakCell animateDislikeButton:comment.likesCount];
+            }
+        }];
+    }
 }
 
 #pragma mark - <PGArticleCommentReplyCellDelegate>
+
+- (void)commentReplyMoreButtonClicked:(PGArticleCommentReplyCell *)cell
+{
+    PGWeakSelf(self);
+    PGAlertAction *reportAction = [PGAlertAction actionWithTitle:@"举报"
+                                                           style:^(PGAlertActionStyle *style) {
+                                                               
+                                                           } handler:^{
+                                                               
+                                                           }];
+    PGAlertAction *deleteAction = [PGAlertAction actionWithTitle:@"删除"
+                                                           style:^(PGAlertActionStyle *style) {
+                                                               style.type = PGAlertActionTypeDestructive;
+                                                           } handler:^{
+                                                               NSIndexPath *indexPath = [self.commentsCollectionView indexPathForCell:cell];
+                                                               if (indexPath.item < self.viewModel.commentsArray.count) {
+                                                                   PGComment *comment = self.viewModel.commentsArray[indexPath.item];
+                                                                   [weakself showLoading];
+                                                                   [weakself.viewModel deleteComment:comment.commentId completion:^(BOOL success) {
+                                                                       if (success) {
+                                                                           [weakself showToast:@"删除成功"];
+                                                                       }
+                                                                       [weakself dismissLoading];
+                                                                   }];
+                                                               }
+                                                           }];
+    NSIndexPath *indexPath = [self.commentsCollectionView indexPathForCell:cell];
+    if (indexPath.item < self.viewModel.commentsArray.count) {
+        PGComment *comment = self.viewModel.commentsArray[indexPath.item];
+        if ([comment.user.userId isEqualToString:PGGlobal.userId]) {
+            [self showAlert:nil message:nil actions:@[reportAction, deleteAction] style:^(PGAlertStyle *style) {
+                style.alertType = PGAlertTypeActionSheet;
+            }];
+        } else {
+            [self showAlert:nil message:nil actions:@[reportAction] style:^(PGAlertStyle *style) {
+                style.alertType = PGAlertTypeActionSheet;
+            }];
+        }
+    }
+}
+
+- (void)commentReplyLikeButtonClicked:(PGArticleCommentReplyCell *)cell
+{
+    __block PGArticleCommentReplyCell *weakCell = cell;
+    
+    NSIndexPath *indexPath = [self.commentsCollectionView indexPathForCell:cell];
+    if (indexPath.item < self.viewModel.commentsArray.count) {
+        __block PGComment *comment = self.viewModel.commentsArray[indexPath.item];
+        [self.viewModel likeComment:comment.commentId completion:^(BOOL success) {
+            if (success) {
+                comment.likesCount++;
+                [weakCell animateLikeButton:comment.likesCount];
+            }
+        }];
+    }
+}
+
+- (void)commentReplyDislikeButtonClicked:(PGArticleCommentReplyCell *)cell
+{
+    __block PGArticleCommentReplyCell *weakCell = cell;
+    
+    NSIndexPath *indexPath = [self.commentsCollectionView indexPathForCell:cell];
+    if (indexPath.item < self.viewModel.commentsArray.count) {
+        PGComment *comment = self.viewModel.commentsArray[indexPath.item];
+        [self.viewModel dislikeComment:comment.commentId completion:^(BOOL success) {
+            if (success) {
+                comment.likesCount--;
+                [weakCell animateDislikeButton:comment.likesCount];
+            }
+        }];
+    }
+}
 
 #pragma mark - <PGCommentInputAccessoryViewDelegate>
 
 - (void)sendComment:(NSString *)comment
 {
     if (comment.length > 0) {
-        [self.commentInputAccessoryView.commentTextView resignFirstResponder];
-        [self showToast:@"发送成功" position:PGToastPositionTop];
+        PGWeakSelf(self);
+        [self showLoading];
+        if (!self.selectedComment) {
+            [self.viewModel sendComment:comment completion:^(BOOL success) {
+                if (success) {
+                    weakself.selectedComment = nil;
+                    [weakself.commentInputAccessoryView.commentTextView resignFirstResponder];
+                    [weakself showToast:@"评论成功"];
+                }
+                [weakself dismissLoading];
+            }];
+        } else {
+            [self.viewModel sendReplyComment:comment commentId:self.selectedComment.commentId completion:^(BOOL success) {
+                if (success) {
+                    weakself.selectedComment = nil;
+                    [weakself.commentInputAccessoryView.commentTextView resignFirstResponder];
+                    [weakself showToast:@"回复成功"];
+                } else {
+                    [weakself showToast:@"回复失败"];
+                }
+                [weakself dismissLoading];
+            }];
+        }
     } else {
-        [self showToast:@"回复内容不能为空" position:PGToastPositionTop];
+        [self showToast:@"回复内容不能为空"];
     }
 }
 
@@ -229,6 +427,7 @@
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
+    self.selectedComment = nil;
     [self.commentInputAccessoryView.commentTextView resignFirstResponder];
 }
 
@@ -243,7 +442,7 @@
     [UIView animateWithDuration:animationDuration animations:^{
         if (beginFrame.origin.y >= endFrame.origin.y) {
             // move up
-            weakself.commentInputAccessoryView.frame = CGRectMake(weakself.commentInputAccessoryView.pg_x, endFrame.origin.y-44, weakself.commentInputAccessoryView.pg_width, weakself.commentInputAccessoryView.pg_height);
+            weakself.commentInputAccessoryView.frame = CGRectMake(weakself.commentInputAccessoryView.pg_x, endFrame.origin.y-60, weakself.commentInputAccessoryView.pg_width, weakself.commentInputAccessoryView.pg_height);
         } else {
             // move down
             weakself.commentInputAccessoryView.frame = CGRectMake(weakself.commentInputAccessoryView.pg_x, endFrame.origin.y, weakself.commentInputAccessoryView.pg_width, weakself.commentInputAccessoryView.pg_height);
@@ -262,6 +461,13 @@
         
         [_commentsCollectionView registerClass:[PGArticleCommentCell class] forCellWithReuseIdentifier:ArticleCommentCell];
         [_commentsCollectionView registerClass:[PGArticleCommentReplyCell class] forCellWithReuseIdentifier:ArticleCommentReplyCell];
+        
+        PGWeakSelf(self);
+        [_commentsCollectionView enableInfiniteScrolling:^{
+            if (!weakself.viewModel.endFlag) {
+                [weakself.viewModel requestComments:weakself.articleId];
+            }
+        }];
     }
     return _commentsCollectionView;
 }
@@ -269,7 +475,7 @@
 - (PGCommentInputAccessoryView *)commentInputAccessoryView
 {
     if (!_commentInputAccessoryView) {
-        _commentInputAccessoryView = [[PGCommentInputAccessoryView alloc] initWithFrame:CGRectMake(0, UISCREEN_HEIGHT, UISCREEN_WIDTH, 44)];
+        _commentInputAccessoryView = [[PGCommentInputAccessoryView alloc] initWithFrame:CGRectMake(0, UISCREEN_HEIGHT, UISCREEN_WIDTH, 60)];
         _commentInputAccessoryView.delegate = self;
     }
     return _commentInputAccessoryView;

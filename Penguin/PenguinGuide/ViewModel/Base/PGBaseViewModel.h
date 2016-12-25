@@ -12,13 +12,19 @@
 @interface PGBaseViewModel : NSObject
 
 @property (nonatomic, strong, readonly) PGAPIClient *apiClient;
-@property (nonatomic, assign, readwrite) NSString *maxId;
+@property (nonatomic, strong, readwrite) NSString *cursor;
+@property (nonatomic, assign, readwrite) NSInteger page;
+@property (nonatomic, assign, readwrite) BOOL isPreloadingNextPage;
 
+@property (nonatomic, assign, readwrite) BOOL endFlag;
 @property (nonatomic, strong, readwrite) NSError *error;
+
+@property (nonatomic, strong, readwrite) PGRKResponse *response;
 
 - (id)initWithAPIClient:(PGAPIClient *)apiClient;
 
 - (void)requestData;
 - (void)loadNextPage;
+- (void)clearPagination;
 
 @end

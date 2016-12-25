@@ -9,7 +9,7 @@
 static UIFont *fontSize10, *fontSize12, *fontSize14, *fontSize16, *fontSize18;
 static UIFont *fontSize10Bold, *fontSize12Bold, *fontSize14Bold, *fontSize16Bold, *fontSize18Bold;
 static NSArray *loadingImages;
-static UIColor *colorHighlight, *colorExtraHighlight, *colorLightGray, *colorText, *colorLightText, *colorBackground, *colorLightBackground;
+static UIColor *colorHighlight, *colorExtraHighlight, *colorLightGray, *colorText, *colorLightText, *colorBackground, *colorLightBackground, *colorRed;
 static UIColor *colorBorder, *colorLightBorder;
 
 #import "PGThemeManager.h"
@@ -30,11 +30,11 @@ static UIColor *colorBorder, *colorLightBorder;
 - (id)init
 {
     if (self = [super init]) {
-        fontSize10 = [UIFont systemFontOfSize:10.f weight:UIFontWeightLight];
-        fontSize12 = [UIFont systemFontOfSize:12.f weight:UIFontWeightLight];
-        fontSize14 = [UIFont systemFontOfSize:14.f weight:UIFontWeightLight];
-        fontSize16 = [UIFont systemFontOfSize:16.f weight:UIFontWeightLight];
-        fontSize18 = [UIFont systemFontOfSize:18.f weight:UIFontWeightLight];
+        fontSize10 = [UIFont systemFontOfSize:10.f weight:UIFontWeightRegular];
+        fontSize12 = [UIFont systemFontOfSize:12.f weight:UIFontWeightRegular];
+        fontSize14 = [UIFont systemFontOfSize:14.f weight:UIFontWeightRegular];
+        fontSize16 = [UIFont systemFontOfSize:16.f weight:UIFontWeightRegular];
+        fontSize18 = [UIFont systemFontOfSize:18.f weight:UIFontWeightRegular];
         
         fontSize10Bold = [UIFont systemFontOfSize:10.f weight:UIFontWeightMedium];
         fontSize12Bold = [UIFont systemFontOfSize:12.f weight:UIFontWeightMedium];
@@ -44,10 +44,11 @@ static UIColor *colorBorder, *colorLightBorder;
         
         colorHighlight = [UIColor colorWithRed:241.f/256.f green:149.f/256.f blue:114.f/256.f alpha:1.f];
         colorExtraHighlight = [UIColor colorWithRed:239.f/256.f green:103.f/256.f blue:51.f/256.f alpha:1.f];
-        colorText = [UIColor colorWithRed:69.f/256.f green:69.f/256.f blue:69.f/256.f alpha:1.f];
+        colorText = [UIColor colorWithRed:0.f/256.f green:0.f/256.f blue:0.f/256.f alpha:1.f];
         colorLightText = [UIColor colorWithRed:175.f/256.f green:175.f/256.f blue:175.f/256.f alpha:1.f];
         colorBackground = [UIColor colorWithRed:241.f/256.f green:241.f/256.f blue:241.f/256.f alpha:1.f];
         colorLightBackground = [UIColor colorWithRed:248.f/256.f green:248.f/256.f blue:248.f/256.f alpha:1.f];
+        colorRed = [UIColor colorWithRed:219.f/256.f green:103.f/256.f blue:51/256.f alpha:1.f];
         
         colorBorder = [UIColor colorWithRed:225.f/256.f green:225.f/256.f blue:225.f/256.f alpha:1.f];
         colorLightBorder = [UIColor colorWithRed:234.f/256.f green:234.f/256.f blue:234.f/256.f alpha:1.f];
@@ -263,6 +264,15 @@ static UIColor *colorBorder, *colorLightBorder;
         return colorLightBackground;
     } else {
         return colorLightBackground;
+    }
+}
+
+- (UIColor *)colorRed
+{
+    if (self.themeStyle == PGThemeStyleDefault) {
+        return colorRed;
+    } else {
+        return colorRed;
     }
 }
 

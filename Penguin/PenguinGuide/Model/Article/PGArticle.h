@@ -8,7 +8,7 @@
 
 #import <PGRestKit/PGRestKit.h>
 #import "PGTag.h"
-#import "PGImageBanner.h"
+#import "PGArticleBanner.h"
 
 @interface PGArticle : PGRKModel
 
@@ -18,10 +18,14 @@
 @property (nonatomic, strong) NSString *subTitle;
 @property (nonatomic, strong) NSString *author;
 @property (nonatomic, strong) NSString *designer;
+@property (nonatomic, strong) NSString *photographer;
 @property (nonatomic, strong) NSString *desc;
 @property (nonatomic, strong) NSString *channel;
+@property (nonatomic, strong) NSString *channelIcon;
 @property (nonatomic, strong) NSString *date;
 @property (nonatomic, strong) NSString *shareUrl;
+@property (nonatomic, assign) BOOL isLiked;
+@property (nonatomic, assign) BOOL isCollected;
 @property (nonatomic, strong) NSArray *tagsArray;
 @property (nonatomic, strong) NSArray *relatedArticlesArray;
 

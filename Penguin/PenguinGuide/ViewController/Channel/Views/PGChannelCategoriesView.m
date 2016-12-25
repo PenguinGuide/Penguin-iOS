@@ -53,17 +53,18 @@
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
 {
-    return self.categoriesArray.count+1;
+    return self.categoriesArray.count;
 }
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
     PGChannelCategoryCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:CategoryCell forIndexPath:indexPath];
     
-    if (indexPath.item == self.categoriesArray.count) {
-        [cell setMoreCategoryCell];
+    id category = self.categoriesArray[indexPath.item];
+    if ([category isKindOfClass:[PGChannelCategory class]]) {
+        [cell setCellWithChannelCategory:category];
     } else {
-        [cell setCellWithCategory:self.categoriesArray[indexPath.item]];
+        [cell setCellWithScenarioCategory:category];
     }
     
     if (indexPath.item == self.currentSelectedIndex) {
@@ -77,28 +78,34 @@
 
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    return CGSizeMake(80, 45);
+    return CGSizeMake(80, 45+8);
 }
 
 - (UIEdgeInsets)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout insetForSectionAtIndex:(NSInteger)section
 {
-    return UIEdgeInsetsMake((self.pg_height-45)/2, 8, (self.pg_height-45)/2, 8);
+    return UIEdgeInsetsMake(0, 8, 0, 8);
 }
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (indexPath.item == self.categoriesArray.count) {
-        if (self.delegate && [self.delegate respondsToSelector:@selector(moreCategoryDidSelect)]) {
-            [self.delegate moreCategoryDidSelect];
+    PGChannelCategoryCell *lastSelectedCell = (PGChannelCategoryCell *)[collectionView cellForItemAtIndexPath:[NSIndexPath indexPathForItem:self.currentSelectedIndex inSection:0]];
+    [lastSelectedCell setSelected:NO];
+    
+    self.currentSelectedIndex = indexPath.item;
+    PGChannelCategoryCell *currentSelectedCell = (PGChannelCategoryCell *)[collectionView cellForItemAtIndexPath:indexPath];
+    [currentSelectedCell setSelected:YES];
+    
+    id category = self.categoriesArray[self.currentSelectedIndex];
+    if ([category isKindOfClass:[PGChannelCategory class]]) {
+        if (self.delegate && [self.delegate respondsToSelector:@selector(channelCategoryDidSelect:)]) {
+            [self.delegate channelCategoryDidSelect:category];
         }
-    } else {
-        PGChannelCategoryCell *lastSelectedCell = (PGChannelCategoryCell *)[collectionView cellForItemAtIndexPath:[NSIndexPath indexPathForItem:self.currentSelectedIndex inSection:0]];
-        [lastSelectedCell setSelected:NO];
-        
-        self.currentSelectedIndex = indexPath.item;
-        PGChannelCategoryCell *currentSelectedCell = (PGChannelCategoryCell *)[collectionView cellForItemAtIndexPath:indexPath];
-        [currentSelectedCell setSelected:YES];
+    } else if ([category isKindOfClass:[PGScenarioCategory class]]) {
+        if (self.delegate && [self.delegate respondsToSelector:@selector(scenarioCategoryDidSelect:)]) {
+            [self.delegate scenarioCategoryDidSelect:category];
+        }
     }
+
 }
 
 - (UICollectionView *)categoriesCollectionView {
@@ -107,7 +114,7 @@
         layout.scrollDirection = UICollectionViewScrollDirectionHorizontal;
         layout.minimumLineSpacing = 5.f;
         layout.minimumInteritemSpacing = 0.f;
-		_categoriesCollectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(0, 0, self.pg_width, self.pg_height) collectionViewLayout:layout];
+		_categoriesCollectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(0, 8, self.pg_width, self.pg_height-8) collectionViewLayout:layout];
         _categoriesCollectionView.dataSource = self;
         _categoriesCollectionView.delegate = self;
         _categoriesCollectionView.backgroundColor = Theme.colorBackground;

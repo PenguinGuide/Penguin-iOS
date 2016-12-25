@@ -13,6 +13,9 @@
 
 @property (nonatomic, strong) NSString *totalArticles;
 @property (nonatomic, strong) NSString *desc;
+@property (nonatomic, strong) NSString *name;
+@property (nonatomic, strong) NSString *channelId;
+@property (nonatomic, strong) NSString *icon;
 @property (nonatomic, strong) NSArray *categoriesArray;
 
 @end

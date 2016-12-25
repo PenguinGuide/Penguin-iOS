@@ -13,13 +13,14 @@
 + (NSDictionary *)JSONKeyPathsByPropertyKey
 {
     return @{
-             @"discountPrice" : @"discount_price",
+             @"discountPrice" : @[@"discount_price", @"price"],
              @"originalPrice" : @"original_price",
              @"name" : @"name",
-             @"image" : @"image",
+             @"image" : @[@"image", @"image_url"],
              @"unit" : @"unit",
              @"desc" : @"desc",
-             @"time" : @"time",
+             @"startTime" : @"begin_at",
+             @"endTime" : @"end_at",
              @"link" : @"link",
              @"isNew" : @"is_new",
              @"isCollected": @"collected",
@@ -28,13 +29,23 @@
              
              @"bannersArray": @"images",
              @"tagsArray": @"tags",
-             @"relatedArticlesArray": @"related_articles"
+             @"relatedGoods": @"recommends"
             };
+}
+
++ (NSValueTransformer *)imageJSONTransformer
+{
+    return [PGGood stringTransformer:@[@"image", @"image_url"]];
+}
+
++ (NSValueTransformer *)goodIdJSONTransformer
+{
+    return [NSValueTransformer valueTransformerForName:PGStringValueTransformer];
 }
 
 + (NSValueTransformer *)discountPriceJSONTransformer
 {
-    return [NSValueTransformer valueTransformerForName:PGStringValueTransformer];
+    return [PGGood stringTransformer:@[@"discount_price", @"price"]];
 }
 
 + (NSValueTransformer *)originalPriceJSONTransformer
@@ -42,7 +53,12 @@
     return [NSValueTransformer valueTransformerForName:PGStringValueTransformer];
 }
 
-+ (NSValueTransformer *)timeJSONTransformer
++ (NSValueTransformer *)startTimeJSONTransformer
+{
+    return [NSValueTransformer valueTransformerForName:PGStringValueTransformer];
+}
+
++ (NSValueTransformer *)endTimeJSONTransformer
 {
     return [NSValueTransformer valueTransformerForName:PGStringValueTransformer];
 }
@@ -52,9 +68,9 @@
     return [MTLJSONAdapter arrayTransformerWithModelClass:[PGTag class]];
 }
 
-+ (NSValueTransformer *)relatedArticlesArrayJSONTransformer
++ (NSValueTransformer *)relatedGoodsJSONTransformer
 {
-    return [MTLJSONAdapter arrayTransformerWithModelClass:[PGImageBanner class]];
+    return [MTLJSONAdapter arrayTransformerWithModelClass:[PGGood class]];
 }
 
 @end

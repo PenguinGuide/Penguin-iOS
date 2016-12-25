@@ -10,9 +10,14 @@
 // view controllers
 #import "PGTabBarController.h"
 #import "PGHomeViewController.h"
+#import "PGExploreViewController.h"
+#import "PGCityGuideViewController.h"
+#import "PGCityGuideArticlesViewController.h"
 #import "PGArticleViewController.h"
 // transitions
 #import "PGHomeToArticleTransition.h"
+#import "PGExploreToArticleTransition.h"
+#import "PGCityGuideToArticleTransition.h"
 #import "PGArticleToHomeTransition.h"
 
 @implementation PGBaseViewController (TransitionAnimation)
@@ -26,8 +31,38 @@
         if ([fromVC isKindOfClass:[PGTabBarController class]]) {
             PGTabBarController *tabbarController = (PGTabBarController *)fromVC;
             if ([toVC isKindOfClass:[PGArticleViewController class]]) {
-                if ([tabbarController.selectedViewController isKindOfClass:[PGHomeViewController class]]) {
-                    return [[PGHomeToArticleTransition alloc] init];
+                PGArticleViewController *articleVC = (PGArticleViewController *)toVC;
+                if (!articleVC.disableTransition) {
+                    if ([tabbarController.selectedViewController isKindOfClass:[PGHomeViewController class]]) {
+                        PGHomeViewController *homeVC = (PGHomeViewController *)tabbarController.selectedViewController;
+                        PGArticleBannerCell *cell = (PGArticleBannerCell *)[homeVC.feedsCollectionView cellForItemAtIndexPath:[[homeVC.feedsCollectionView indexPathsForSelectedItems] firstObject]];
+                        if (cell) {
+                            return [[PGHomeToArticleTransition alloc] init];
+                        } else {
+                            return nil;
+                        }
+                    } else if ([tabbarController.selectedViewController isKindOfClass:[PGExploreViewController class]]) {
+                        PGExploreViewController *exploreVC = (PGExploreViewController *)tabbarController.selectedViewController;
+                        NSIndexPath *selectedIndexPath = [exploreVC.feedsCollectionView indexPathsForSelectedItems].firstObject;
+                        PGArticleBannerCell *cell = (PGArticleBannerCell *)[exploreVC.feedsCollectionView cellForItemAtIndexPath:selectedIndexPath];
+                        if (cell) {
+                            return [[PGExploreToArticleTransition alloc] init];
+                        } else {
+                            return nil;
+                        }
+                    } else if ([tabbarController.selectedViewController isKindOfClass:[PGCityGuideViewController class]]) {
+//                        PGCityGuideViewController *cityGuideVC = (PGCityGuideViewController *)tabbarController.selectedViewController;
+//                        PGCityGuideArticlesViewController *cityGuideArticlesVC = cityGuideVC.pagedController.viewControllers[cityGuideVC.pagedController.currentPage];
+//                        NSIndexPath *selectedIndexPath = [cityGuideArticlesVC.articlesCollectionView indexPathsForSelectedItems].firstObject;
+//                        PGArticleBannerCell *cell = (PGArticleBannerCell *)[cityGuideArticlesVC.articlesCollectionView cellForItemAtIndexPath:selectedIndexPath];
+//                        if (cell) {
+//                            return [[PGCityGuideToArticleTransition alloc] init];
+//                        } else {
+//                            return nil;
+//                        }
+                    }
+                } else {
+                    return nil;
                 }
             }
         } else {

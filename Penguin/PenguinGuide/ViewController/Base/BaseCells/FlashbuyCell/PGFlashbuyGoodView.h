@@ -12,6 +12,6 @@
 @interface PGFlashbuyGoodView : UIView
 
 - (void)setViewWithGood:(PGGood *)good;
-- (void)setCountDown:(int)secsLeft;
+- (void)setCountDown:(NSDate *)startDate endDate:(NSDate *)endDate;
 
 @end

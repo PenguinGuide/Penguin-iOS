@@ -29,10 +29,26 @@
     [self.loginScrollView addSubview:self.pwdLoginView];
 }
 
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    
+    [self.pwdLoginView.phoneTextField resignFirstResponder];
+    [self.pwdLoginView.pwdTextField resignFirstResponder];
+}
+
 #pragma mark - <PGLoginDelegate>
 
 - (void)loginButtonClicked:(UIView *)view
 {
+    if (!self.pwdLoginView.phoneTextField.text || self.pwdLoginView.phoneTextField.text.length == 0) {
+        [self showToast:@"请输入手机号"];
+        return;
+    }
+    if (!self.pwdLoginView.pwdTextField.text || self.pwdLoginView.pwdTextField.text.length == 0) {
+        [self showToast:@"请输入密码"];
+        return;
+    }
     if ([view isKindOfClass:[PGPwdLoginView class]]) {
         PGParams *params = [PGParams new];
         params[@"mobile"] = self.pwdLoginView.phoneTextField.text;
@@ -51,7 +67,6 @@
                     NSString *accessToken = response[@"access_token"];
                     if (accessToken && accessToken.length > 0) {
                         [PGGlobal synchronizeToken:accessToken];
-                        [weakself.apiClient updateAccessToken:accessToken];
                     }
                 }
                 if (response[@"user_id"]) {
@@ -61,6 +76,7 @@
                     }
                 }
             }
+            [[NSNotificationCenter defaultCenter] postNotificationName:PG_NOTIFICATION_LOGIN object:nil];
             [weakself dismissLoading];
             [weakself dismissViewControllerAnimated:YES completion:nil];
         } failure:^(NSError *error) {
@@ -76,6 +92,12 @@
     [self.navigationController pushViewController:pwdResetVC animated:YES];
 }
 
+- (void)accessoryDoneButtonClicked
+{
+    [self.pwdLoginView.phoneTextField resignFirstResponder];
+    [self.pwdLoginView.pwdTextField resignFirstResponder];
+}
+
 - (PGPwdLoginView *)pwdLoginView
 {
     if (!_pwdLoginView) {
@@ -83,6 +105,8 @@
         _pwdLoginView.delegate = self;
         _pwdLoginView.phoneTextField.delegate = self;
         _pwdLoginView.pwdTextField.delegate = self;
+        _pwdLoginView.phoneTextField.inputAccessoryView = self.accessoryView;
+        _pwdLoginView.pwdTextField.inputAccessoryView = self.accessoryView;
     }
     return _pwdLoginView;
 }

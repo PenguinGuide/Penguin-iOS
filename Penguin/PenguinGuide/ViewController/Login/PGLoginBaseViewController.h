@@ -17,4 +17,6 @@
 @property (nonatomic, strong) UIButton *backButton;
 @property (nonatomic, strong) UIButton *closeButton;
 
+@property (nonatomic, strong) UIView *accessoryView;
+
 @end

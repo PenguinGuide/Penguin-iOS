@@ -10,9 +10,9 @@
 
 @protocol PGSearchResultsHeaderViewDelegate <NSObject>
 
-- (void)segmentDidClicked:(NSInteger)index;
 - (void)cancelButtonClicked;
 - (void)backButtonClicked;
+- (void)searchButtonClicked:(NSString *)keyword;
 
 @end
 
@@ -20,6 +20,6 @@
 
 @property (nonatomic, weak) id<PGSearchResultsHeaderViewDelegate> delegate;
 
-- (void)setHeaderViewWithKeyword:(NSString *)keyword segments:(NSArray *)segments;
+- (void)setHeaderViewWithKeyword:(NSString *)keyword;
 
 @end

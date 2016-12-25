@@ -32,6 +32,7 @@
 
 - (void)observe:(id)object keyPath:(NSString *)keyPath block:(void(^)(id changedObject))block;
 - (void)unobserve;
+- (void)observeCollectionView:(PGBaseCollectionView *)collectionView endOfFeeds:(PGBaseViewModel *)viewModel;
 
 - (void)backButtonClicked;
 
@@ -39,10 +40,14 @@
 - (void)showToast:(NSString *)message position:(PGToastPosition)position;
 - (void)showAlert:(NSString *)title message:(NSString *)message actions:(NSArray *)actions style:(void (^)(PGAlertStyle *))styleConfig;
 - (void)showLoading;
+- (void)showOccupiedLoading;
 - (void)dismissLoading;
 
 - (void)showPopup:(UIView *)popupView;
 - (void)dismissPopup;
+
+- (void)showPlaceholder:(NSString *)image desc:(NSString *)desc;
+- (void)showNetworkLostPlaceholder;
 
 - (void)observeError:(PGBaseViewModel *)viewModel;
 - (void)showErrorMessage:(NSError *)error;

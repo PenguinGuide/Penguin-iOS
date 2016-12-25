@@ -6,29 +6,44 @@
 //  Copyright © 2016 Xinglian. All rights reserved.
 //
 
-#import "PGScenarioViewController.h"
-#import "PGArticleViewController.h"
+#define FeedsViewTag 999
+#define GoodsViewTag 1999
 
+#define FeedsCell @"FeedsCell"
+#define GoodsCell @"GoodsCell"
+
+#import "PGScenarioViewController.h"
+#import "PGPagedController.h"
+#import "PGScenarioFeedsViewController.h"
+#import "PGScenarioGoodsViewController.h"
 #import "PGScenarioViewModel.h"
 
-#import "UIScrollView+PGScrollView.h"
+#import "PGCityGuideSegmentIndicator.h"
 
-#import "PGFeedsCollectionView.h"
-#import "PGChannelCategoriesView.h"
-
-@interface PGScenarioViewController () <PGFeedsCollectionViewDelegate>
+@interface PGScenarioViewController ()
 
 @property (nonatomic, strong) PGScenarioViewModel *viewModel;
 
-@property (nonatomic, strong) PGFeedsCollectionView *feedsCollectionView;
-@property (nonatomic, strong) UIButton *backButton;
-@property (nonatomic, strong) PGChannelCategoriesView *categoriesView;
-@property (nonatomic, strong) UIImageView *imageView;
-@property (nonatomic, assign) CGFloat lastContentOffsetY;
+@property (nonatomic, strong) NSString *scenarioId;
+
+@property (nonatomic, strong) PGScenarioFeedsViewController *feedsVC;
+@property (nonatomic, strong) PGScenarioGoodsViewController *goodsVC;
+
+@property (nonatomic, strong) PGPagedController *pagedController;
+
+@property (nonatomic, assign) BOOL darkStatusBar;
 
 @end
 
 @implementation PGScenarioViewController
+
+- (id)initWithScenarioId:(NSString *)scenarioId
+{
+    if (self = [super init]) {
+        self.scenarioId = scenarioId;
+    }
+    return self;
+}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -36,25 +51,33 @@
     
     self.automaticallyAdjustsScrollViewInsets = NO;
     
-    [self.view addSubview:self.feedsCollectionView];
-    [self.view addSubview:self.categoriesView];
-    [self.view addSubview:self.backButton];
+    [self.view addSubview:self.pagedController.view];
+    [self addChildViewController:self.pagedController];
+    [self.pagedController didMoveToParentViewController:self];
     
     self.viewModel = [[PGScenarioViewModel alloc] initWithAPIClient:self.apiClient];
-    [self.viewModel requestData];
     
     PGWeakSelf(self);
-    [self observe:self.viewModel keyPath:@"feedsArray" block:^(id changedObject) {
-        NSArray *feedsArray = changedObject;
-        if (feedsArray && [feedsArray isKindOfClass:[NSArray class]]) {
-            [weakself.categoriesView reloadViewWithCategories:weakself.viewModel.scenario.categoriesArray];
-            [weakself.feedsCollectionView reloadData];
+    [self observe:self.viewModel keyPath:@"scenario" block:^(id changedObject) {
+        PGScenario *scenario = changedObject;
+        if (scenario && [scenario isKindOfClass:[PGScenario class]]) {
+            [UIView setAnimationsEnabled:NO];
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.25 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                [UIView setAnimationsEnabled:YES];
+            });
             
-            weakself.imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, UISCREEN_WIDTH, UISCREEN_WIDTH*9/16)];
-            [weakself.imageView setWithImageURL:self.viewModel.scenario.image placeholder:nil completion:nil];
-            [weakself.feedsCollectionView setHeaderView:self.imageView naviTitle:self.viewModel.scenario.title rightNaviButton:nil];
+            [weakself setNavigationTitle:weakself.viewModel.scenario.title];
+            
+            weakself.feedsVC = [[PGScenarioFeedsViewController alloc] initWithScenarioId:weakself.viewModel.scenario.scenarioId];
+            weakself.goodsVC = [[PGScenarioGoodsViewController alloc] initWithScenarioId:weakself.viewModel.scenario.scenarioId];
+            
+            [weakself.pagedController reloadWithViewControllers:@[weakself.feedsVC, weakself.goodsVC]
+                                                         titles:@[weakself.isFromStorePage?@"教 你 买":@"边 读 边 选", @"商 品"]
+                                              selectedViewClass:[PGCityGuideSegmentIndicator class]];
         }
+        [weakself dismissLoading];
     }];
+    [self observeError:self.viewModel];
     
     [self setNeedsStatusBarAppearanceUpdate];
 }
@@ -63,104 +86,72 @@
 {
     [super viewWillAppear:animated];
     
-    [self.navigationController setNavigationBarHidden:YES animated:NO];
+    [self.navigationController setNavigationBarHidden:NO animated:NO];
+}
+
+- (void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    
+    if (!self.viewModel.scenario) {
+        [self showLoading];
+        [self.viewModel requestScenario:self.scenarioId];
+    }
 }
 
 - (void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
-    
-    [self.navigationController setNavigationBarHidden:NO animated:NO];
-}
-
-- (void)dealloc
-{
-    [self unobserve];
 }
 
 - (UIStatusBarStyle)preferredStatusBarStyle
 {
-    return UIStatusBarStyleLightContent;
+    return UIStatusBarStyleDefault;
+}
+
+#pragma mark - <PGScenarioSegmentControllerDelegate>
+
+- (void)backButtonClicked
+{
+    [self.navigationController popViewControllerAnimated:YES];
+}
+
+- (void)updateStatusBar:(BOOL)isLightContent
+{
+    if (isLightContent) {
+        if (self.darkStatusBar) {
+            self.darkStatusBar = NO;
+            [self setNeedsStatusBarAppearanceUpdate];
+        } else {
+            self.darkStatusBar = NO;
+        }
+    } else {
+        if (!self.darkStatusBar) {
+            self.darkStatusBar = YES;
+            [self setNeedsStatusBarAppearanceUpdate];
+        } else {
+            self.darkStatusBar = YES;
+        }
+    }
+}
+
+#pragma mark - <Lazy Init>
+
+- (PGPagedController *)pagedController
+{
+    if (!_pagedController) {
+        _pagedController = [[PGPagedController alloc] init];
+        _pagedController.equalWidth = YES;
+        _pagedController.disableScrolling = YES;
+        _pagedController.view.frame = CGRectMake(0, 64, self.view.pg_width, UISCREEN_HEIGHT-64);
+        _pagedController.segmentHeight = 60.f;
+    }
+    return _pagedController;
 }
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
-}
-
-#pragma mark - <PGFeedsCollectionViewDelegate>
-
-- (NSArray *)recommendsArray
-{
-    return [NSArray new];
-}
-
-- (NSArray *)feedsArray
-{
-    return self.viewModel.feedsArray;
-}
-
-- (CGSize)feedsHeaderSize
-{
-    return CGSizeZero;
-}
-
-- (NSString *)tabType
-{
-    return @"scenario";
-}
-
-- (UIEdgeInsets)topEdgeInsets
-{
-    return UIEdgeInsetsMake(UISCREEN_WIDTH*9/16+54, 0, 7, 0);
-}
-
-- (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
-{
-    id banner = self.viewModel.feedsArray[indexPath.item];
-    
-    if ([banner isKindOfClass:[PGArticleBanner class]]) {
-        PGArticleBanner *articleBanner = (PGArticleBanner *)banner;
-        [[PGRouter sharedInstance] openURL:articleBanner.link];
-    }
-}
-
-- (void)scrollViewDidScroll:(UIScrollView *)scrollView
-{
-    [scrollView scrollViewShouldUpdate];
-    if (UISCREEN_WIDTH*9/16-scrollView.contentOffset.y <= 64) {
-        self.categoriesView.frame = CGRectMake(0, 64, UISCREEN_WIDTH, 54);
-    } else {
-        self.categoriesView.frame = CGRectMake(0, UISCREEN_WIDTH*9/16+(self.lastContentOffsetY-scrollView.contentOffset.y), UISCREEN_WIDTH, 54);
-    }
-}
-
-#pragma mark - <Setters && Getters>
-
-- (PGFeedsCollectionView *)feedsCollectionView {
-	if(_feedsCollectionView == nil) {
-		_feedsCollectionView = [[PGFeedsCollectionView alloc] initWithFrame:CGRectMake(0, 0, UISCREEN_WIDTH, UISCREEN_HEIGHT) collectionViewLayout:[UICollectionViewFlowLayout new]];
-        _feedsCollectionView.feedsDelegate = self;
-	}
-	return _feedsCollectionView;
-}
-
-- (UIButton *)backButton {
-	if(_backButton == nil) {
-        _backButton = [[UIButton alloc] initWithFrame:CGRectMake(24, 35, 50, 50)];
-        [_backButton setImage:[UIImage imageNamed:@"pg_navigation_back_button_light"] forState:UIControlStateNormal];
-        [_backButton setContentVerticalAlignment:UIControlContentVerticalAlignmentTop];
-        [_backButton setContentHorizontalAlignment:UIControlContentHorizontalAlignmentLeft];
-        [_backButton addTarget:self action:@selector(backButtonClicked) forControlEvents:UIControlEventTouchUpInside];
-	}
-	return _backButton;
-}
-
-- (PGChannelCategoriesView *)categoriesView {
-	if(_categoriesView == nil) {
-		_categoriesView = [[PGChannelCategoriesView alloc] initWithFrame:CGRectMake(0, UISCREEN_WIDTH*9/16, UISCREEN_WIDTH, 54)];
-	}
-	return _categoriesView;
 }
 
 @end

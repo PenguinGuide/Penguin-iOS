@@ -14,6 +14,7 @@
 @property (nonatomic, strong, readonly) PGChannel *channel;
 @property (nonatomic, strong, readonly) NSArray *articlesArray;
 
-- (void)setViewModelWithChannelId:(NSString *)channelId;
+- (void)requestChannel:(NSString *)channelId;
+- (void)requestArticles:(NSString *)channelId categoryId:(NSString *)categoryId;
 
 @end

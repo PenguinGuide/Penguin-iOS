@@ -17,18 +17,18 @@
              @"avatar": @"avatar_url",
              @"userId": @"id",
              @"location": @"location",
-             @"sex": @"sex",
-             @"collectionCount": @"collection_count",
-             @"messageCount": @"message_count"
+             @"sex": @"gender",
+             @"birthday": @"birth",
+             @"phoneNumber": @"mobile",
+             @"collectionCount": @"collect_count",
+             @"hasNewMessage": @"has_new_message",
+             @"weixinBinded": @"wechat_binding",
+             @"weiboBinded": @"weibo_binding",
+             @"hasPassword": @"has_password"
             };
 }
 
 + (NSValueTransformer *)collectionCountJSONTransformer
-{
-    return [NSValueTransformer valueTransformerForName:PGStringValueTransformer];
-}
-
-+ (NSValueTransformer *)messageCountJSONTransformer
 {
     return [NSValueTransformer valueTransformerForName:PGStringValueTransformer];
 }
