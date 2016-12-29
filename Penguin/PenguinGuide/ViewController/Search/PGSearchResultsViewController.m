@@ -97,7 +97,7 @@
     NSString *trimmedKeyword = [[keyword componentsSeparatedByCharactersInSet:[NSCharacterSet whitespaceCharacterSet]] componentsJoinedByString:@""];
     
     if (![trimmedKeyword isEqualToString:self.keyword] && ![trimmedKeyword isEqualToString:@""]) {
-        self.keyword = trimmedKeyword;
+        self.keyword = keyword;
         [self.articlesVC.view removeFromSuperview];
         [self.articlesVC removeFromParentViewController];
         [self.articlesVC didMoveToParentViewController:nil];
@@ -128,33 +128,6 @@
 }
 
 #pragma mark - <Lazy Init>
-
-//- (PGPagedController *)pagedController
-//{
-//    if (!_pagedController) {
-//        _pagedController = [[PGPagedController alloc] init];
-//        _pagedController.backgroundColor = [UIColor whiteColor];
-//        _pagedController.equalWidth = YES;
-//        _pagedController.disableScrolling = YES;
-//    }
-//    return _pagedController;
-//}
-
-//- (PGSearchResultsArticlesViewController *)articlesVC
-//{
-//    if (!_articlesVC) {
-//        _articlesVC = [[PGSearchResultsArticlesViewController alloc] initWithKeyword:self.keyword];
-//    }
-//    return _articlesVC;
-//}
-//
-//- (PGSearchResultsGoodsViewController *)goodsVC
-//{
-//    if (!_goodsVC) {
-//        _goodsVC = [[PGSearchResultsGoodsViewController alloc] initWithKeyword:self.keyword];
-//    }
-//    return _goodsVC;
-//}
 
 - (PGSearchResultsHeaderView *)headerView {
     if(_headerView == nil) {

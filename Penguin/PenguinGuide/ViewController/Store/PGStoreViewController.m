@@ -37,9 +37,6 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     
-    [self.view addSubview:self.feedsCollectionView];
-    [self.view addSubview:self.searchButton];
-    
     self.viewModel = [[PGStoreViewModel alloc] initWithAPIClient:self.apiClient];
     [self.viewModel requestData];
     
@@ -47,6 +44,10 @@
     [self observe:self.viewModel keyPath:@"feedsArray" block:^(id changedObject) {
         NSArray *feedsArray = changedObject;
         if (feedsArray && [feedsArray isKindOfClass:[NSArray class]]) {
+            if (!weakself.feedsCollectionView.superview) {
+                [weakself.view addSubview:weakself.feedsCollectionView];
+                [weakself.view addSubview:weakself.searchButton];
+            }
             [UIView setAnimationsEnabled:NO];
             [weakself.feedsCollectionView reloadData];
             dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.25 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
@@ -60,6 +61,10 @@
     [self observe:self.viewModel keyPath:@"error" block:^(id changedObject) {
         NSError *error = changedObject;
         if (error && [error isKindOfClass:[NSError class]]) {
+            if (!weakself.feedsCollectionView.superview) {
+                [weakself.view addSubview:weakself.feedsCollectionView];
+                [weakself.view addSubview:weakself.searchButton];
+            }
             [weakself showErrorMessage:error];
             [weakself dismissLoading];
             [weakself.feedsCollectionView endTopRefreshing];
@@ -249,6 +254,10 @@
             }
         }
     }
+    
+//    if (self.feedsCollectionView.storeHeaderView) {
+//        [self.feedsCollectionView.storeHeaderView.bannersView scrollToNextPage];
+//    }
 }
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView

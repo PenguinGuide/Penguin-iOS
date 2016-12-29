@@ -11,5 +11,6 @@
 @interface PGPageBasePlaceholder : UIView
 
 - (id)initWithImage:(NSString *)image desc:(NSString *)desc top:(CGFloat)top height:(CGFloat)height;
+- (id)initWithImage:(NSString *)image desc:(NSString *)desc buttonTitle:(NSString *)title top:(CGFloat)top height:(CGFloat)height;
 
 @end

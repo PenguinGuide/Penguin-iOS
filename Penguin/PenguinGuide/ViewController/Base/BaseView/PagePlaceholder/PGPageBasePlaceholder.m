@@ -12,10 +12,12 @@
 
 @property (nonatomic, strong) NSString *image;
 @property (nonatomic, strong) NSString *desc;
+@property (nonatomic, strong) NSString *title;
 
 @property (nonatomic, strong) UIImageView *placeholderImageView;
 @property (nonatomic, strong) UILabel *descLabel;
 @property (nonatomic, strong) UIImageView *footerImageView;
+@property (nonatomic, strong) UIButton *button;
 
 @end
 
@@ -33,6 +35,31 @@
         [self addSubview:self.placeholderImageView];
         [self addSubview:self.descLabel];
         [self addSubview:self.footerImageView];
+        
+        if (self.desc && self.desc.length > 0) {
+            self.descLabel.hidden = NO;
+        } else {
+            self.descLabel.hidden = YES;
+        }
+    }
+    
+    return self;
+}
+
+- (id)initWithImage:(NSString *)image desc:(NSString *)desc buttonTitle:(NSString *)title top:(CGFloat)top height:(CGFloat)height
+{
+    if (self = [super init]) {
+        self.backgroundColor = [UIColor whiteColor];
+        self.frame = CGRectMake(0, top, UISCREEN_WIDTH, height);
+        
+        self.image = image;
+        self.desc = desc;
+        self.title = title;
+        
+        [self addSubview:self.placeholderImageView];
+        [self addSubview:self.descLabel];
+        [self addSubview:self.footerImageView];
+        [self addSubview:self.button];
         
         if (self.desc && self.desc.length > 0) {
             self.descLabel.hidden = NO;
@@ -68,6 +95,23 @@
         _descLabel.text = self.desc;
     }
     return _descLabel;
+}
+
+- (UIButton *)button
+{
+    if (!_button) {
+        _button = [[UIButton alloc] init];
+        [_button setBackgroundColor:Theme.colorHighlight];
+        [_button setTitleColor:Theme.colorText forState:UIControlStateNormal];
+        [_button setTitle:self.title forState:UIControlStateNormal];
+        [_button.titleLabel setFont:Theme.fontLargeBold];
+        [_button setClipsToBounds:YES];
+        [_button.layer setCornerRadius:4.f];
+        
+        CGSize textSize = [self.title sizeWithAttributes:@{NSFontAttributeName:Theme.fontLargeBold}];
+        _button.frame = CGRectMake((self.pg_width-(textSize.width+25))/2, self.descLabel.pg_bottom+20, textSize.width+25, 35);
+    }
+    return _button;
 }
 
 - (UIImageView *)footerImageView

@@ -199,6 +199,17 @@
     }
 }
 
+- (void)scrollToNextPage
+{
+    NSInteger nextPage = 0;
+    if (self.circularMode) {
+        if (self.currentPage < self.banners.count-1) {
+            nextPage = self.currentPage+1;
+        }
+        [self.pagedScrollView setContentOffset:CGPointMake(self.pagedScrollView.frame.size.width*(nextPage+1), self.pagedScrollView.contentOffset.y) animated:YES];
+    }
+}
+
 #pragma mark - <UIScrollViewDelegate>
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView

@@ -12,6 +12,7 @@
 
 @property (nonatomic, strong) NSString *paginationKey;
 @property (nonatomic, strong) NSString *cursor;
+@property (nonatomic, assign) NSInteger countPerPage;
 
 @property (nonatomic, strong) NSArray *nextPageIndexesArray;
 @property (nonatomic, strong) NSIndexSet *nextPageIndexesSet;

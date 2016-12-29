@@ -153,7 +153,13 @@
 
 - (void)linkButtonClicked
 {
-    
+    if (self.shareLink && self.shareLink.length > 0) {
+        UIPasteboard *pb = [UIPasteboard generalPasteboard];
+        [pb setString:self.shareLink];
+        [self showToast:@"复制成功"];
+    } else {
+        [self showToast:@"复制失败"];
+    }
 }
 
 - (void)cancelButtonClicked

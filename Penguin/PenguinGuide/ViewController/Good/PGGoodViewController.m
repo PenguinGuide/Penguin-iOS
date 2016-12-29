@@ -240,8 +240,10 @@
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    PGGood *good = self.viewModel.good.relatedGoods[indexPath.item];
-    [PGRouterManager routeToGoodDetailPage:good.goodId link:good.link];
+    if (self.viewModel.good.relatedGoods.count > 0 && indexPath.section == 1) {
+        PGGood *good = self.viewModel.good.relatedGoods[indexPath.item];
+        [PGRouterManager routeToGoodDetailPage:good.goodId link:good.link];
+    }
 }
 
 #pragma mark - <Button Events>

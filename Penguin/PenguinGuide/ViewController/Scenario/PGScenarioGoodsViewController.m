@@ -51,7 +51,9 @@
                 [UIView setAnimationsEnabled:YES];
             });
         }
-        [weakself dismissLoading];
+        if (weakself.delegate && [weakself.delegate respondsToSelector:@selector(dismissPageLoading)]) {
+            [weakself.delegate dismissPageLoading];
+        }
         [weakself.goodsCollectionView endBottomRefreshing];
     }];
     [self observeError:self.viewModel];
@@ -63,7 +65,9 @@
     [super viewDidAppear:animated];
     
     if (self.viewModel.goodsArray.count == 0) {
-        [self showLoading];
+        if (self.delegate && [self.delegate respondsToSelector:@selector(showPageLoading)]) {
+            [self.delegate showPageLoading];
+        }
         [self.viewModel requestGoods:self.scenarioId];
     }
 }

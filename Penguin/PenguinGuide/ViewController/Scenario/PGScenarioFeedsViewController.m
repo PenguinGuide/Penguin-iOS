@@ -50,12 +50,16 @@
                 [UIView setAnimationsEnabled:YES];
             });
         }
-        [weakself dismissLoading];
+        if (weakself.delegate && [weakself.delegate respondsToSelector:@selector(dismissPageLoading)]) {
+            [weakself.delegate dismissPageLoading];
+        }
         [weakself.feedsCollectionView endBottomRefreshing];
     }];
     [self observe:self.viewModel keyPath:@"error" block:^(id changedObject) {
         [weakself showErrorMessage:weakself.viewModel.error];
-        [weakself dismissLoading];
+        if (weakself.delegate && [weakself.delegate respondsToSelector:@selector(dismissPageLoading)]) {
+            [weakself.delegate dismissPageLoading];
+        }
         [weakself.feedsCollectionView endBottomRefreshing];
     }];
     [self observeCollectionView:self.feedsCollectionView endOfFeeds:self.viewModel];
@@ -66,7 +70,9 @@
     [super viewDidAppear:animated];
     
     if (self.viewModel.feedsArray.count == 0) {
-        [self showLoading];
+        if (self.delegate && [self.delegate respondsToSelector:@selector(showPageLoading)]) {
+            [self.delegate showPageLoading];
+        }
         [self.viewModel requestFeeds:self.scenarioId];
     }
 }

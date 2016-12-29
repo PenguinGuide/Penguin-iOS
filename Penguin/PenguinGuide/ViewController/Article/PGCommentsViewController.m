@@ -15,6 +15,8 @@
 #import "PGArticleCommentReplyCell.h"
 #import "PGCommentInputAccessoryView.h"
 
+#import "PGCommentReportViewController.h"
+
 @interface PGCommentsViewController () <UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, PGArticleCommentCellDelegate, PGArticleCommentReplyCellDelegate, PGCommentInputAccessoryViewDelegate>
 
 @property (nonatomic, strong) PGBaseCollectionView *commentsCollectionView;
@@ -42,18 +44,11 @@
     
     PGWeakSelf(self);
     [self observe:self.viewModel keyPath:@"commentsArray" block:^(id changedObject) {
-        if (weakself.viewModel.nextPageIndexes || weakself.viewModel.nextPageIndexes.count > 0) {
-            @try {
-                [weakself.commentsCollectionView insertItemsAtIndexPaths:weakself.viewModel.nextPageIndexes];
-            } @catch (NSException *exception) {
-                NSLog(@"exception: %@", exception);
-            }
-        } else {
-            NSArray *commentsArray = changedObject;
-            if (commentsArray && [commentsArray isKindOfClass:[NSArray class]]) {
-                [weakself.commentsCollectionView reloadData];
-            }
-        }
+        [UIView setAnimationsEnabled:NO];
+        [weakself.commentsCollectionView reloadData];
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.25f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            [UIView setAnimationsEnabled:YES];
+        });
         [weakself dismissLoading];
         [weakself.commentsCollectionView endBottomRefreshing];
     }];
@@ -61,9 +56,9 @@
         NSError *error = changedObject;
         if (error && [error isKindOfClass:[NSError class]]) {
             [weakself showErrorMessage:error];
-            [weakself dismissLoading];
-            [weakself.commentsCollectionView endBottomRefreshing];
         }
+        [weakself dismissLoading];
+        [weakself.commentsCollectionView endBottomRefreshing];
     }];
     [self observeCollectionView:self.commentsCollectionView endOfFeeds:self.viewModel];
 }
@@ -192,8 +187,8 @@
                 
                 if (indexPath.item < weakself.viewModel.commentsArray.count) {
                     weakself.selectedComment = weakself.viewModel.commentsArray[indexPath.item];
-                    weakself.commentInputAccessoryView.commentTextView.text = @"";
-                    weakself.commentInputAccessoryView.commentTextView.placeholder = [NSString stringWithFormat:@"回复%@", weakself.selectedComment.user.nickname];
+                    weakself.commentInputAccessoryView.commentTextView.text = nil;
+                    weakself.commentInputAccessoryView.commentTextView.attributedPlaceholder = [[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"回复%@", weakself.selectedComment.user.nickname] attributes:@{NSFontAttributeName:Theme.fontMedium, NSForegroundColorAttributeName:[UIColor colorWithHexString:@"AFAFAF"]}];
                     
                     [weakself.commentInputAccessoryView.commentTextView becomeFirstResponder];
                 }
@@ -203,8 +198,8 @@
                 
                 if (indexPath.item < weakself.viewModel.commentsArray.count) {
                     weakself.selectedComment = self.viewModel.commentsArray[indexPath.item];
-                    weakself.commentInputAccessoryView.commentTextView.text = @"";
-                    weakself.commentInputAccessoryView.commentTextView.placeholder = [NSString stringWithFormat:@"回复%@", weakself.selectedComment.user.nickname];
+                    weakself.commentInputAccessoryView.commentTextView.text = nil;
+                    weakself.commentInputAccessoryView.commentTextView.attributedPlaceholder = [[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"回复%@", weakself.selectedComment.user.nickname] attributes:@{NSFontAttributeName:Theme.fontMedium, NSForegroundColorAttributeName:[UIColor colorWithHexString:@"AFAFAF"]}];
                     
                     [weakself.commentInputAccessoryView.commentTextView becomeFirstResponder];
                 }
@@ -251,18 +246,22 @@
                                                            style:^(PGAlertActionStyle *style) {
                                                                
                                                            } handler:^{
+                                                               NSIndexPath *indexPath = [weakself.commentsCollectionView indexPathForCell:cell];
+                                                               PGComment *comment = weakself.viewModel.commentsArray[indexPath.item];
                                                                
+                                                               PGCommentReportViewController *reportVC = [[PGCommentReportViewController alloc] initWithCommentId:comment.commentId];
+                                                               [weakself.navigationController pushViewController:reportVC animated:YES];
                                                            }];
     PGAlertAction *deleteAction = [PGAlertAction actionWithTitle:@"删除"
                                                            style:^(PGAlertActionStyle *style) {
                                                                style.type = PGAlertActionTypeDestructive;
                                                            } handler:^{
-                                                               NSIndexPath *indexPath = [self.commentsCollectionView indexPathForCell:cell];
+                                                               __block NSIndexPath *indexPath = [self.commentsCollectionView indexPathForCell:cell];
                                                                PGComment *comment = self.viewModel.commentsArray[indexPath.item];
                                                                [weakself showLoading];
-                                                               [weakself.viewModel deleteComment:comment.commentId completion:^(BOOL success) {
+                                                               [weakself.viewModel deleteComment:comment.commentId index:indexPath.item completion:^(BOOL success) {
                                                                    if (success) {
-                                                                       [weakself showToast:@"删除成功"];
+                                                                       [weakself showToast:@"删除评论"];
                                                                    }
                                                                    [weakself dismissLoading];
                                                                }];
@@ -325,7 +324,11 @@
                                                            style:^(PGAlertActionStyle *style) {
                                                                
                                                            } handler:^{
+                                                               NSIndexPath *indexPath = [weakself.commentsCollectionView indexPathForCell:cell];
+                                                               PGComment *comment = weakself.viewModel.commentsArray[indexPath.item];
                                                                
+                                                               PGCommentReportViewController *reportVC = [[PGCommentReportViewController alloc] initWithCommentId:comment.commentId];
+                                                               [weakself.navigationController pushViewController:reportVC animated:YES];
                                                            }];
     PGAlertAction *deleteAction = [PGAlertAction actionWithTitle:@"删除"
                                                            style:^(PGAlertActionStyle *style) {
@@ -335,9 +338,9 @@
                                                                if (indexPath.item < self.viewModel.commentsArray.count) {
                                                                    PGComment *comment = self.viewModel.commentsArray[indexPath.item];
                                                                    [weakself showLoading];
-                                                                   [weakself.viewModel deleteComment:comment.commentId completion:^(BOOL success) {
+                                                                   [weakself.viewModel deleteComment:comment.commentId index:indexPath.item completion:^(BOOL success) {
                                                                        if (success) {
-                                                                           [weakself showToast:@"删除成功"];
+                                                                           [weakself showToast:@"删除评论"];
                                                                        }
                                                                        [weakself dismissLoading];
                                                                    }];

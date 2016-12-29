@@ -180,6 +180,20 @@
             }
         }
     }];
+    
+    [[PGRouter sharedInstance] registerRoute:@"https://" toHandler:^(NSDictionary *params) {
+        if (PGGlobal.rootNavigationController) {
+            if (params[@"web_url"]) {
+                NSString *webUrl = params[@"web_url"];
+                PGWebViewController *webVC = [[PGWebViewController alloc] initWithURL:webUrl];
+                if (PGGlobal.tempNavigationController) {
+                    [PGGlobal.tempNavigationController pushViewController:webVC animated:YES];
+                } else {
+                    [PGGlobal.rootNavigationController pushViewController:webVC animated:YES];
+                }
+            }
+        }
+    }];
 }
 
 + (void)routeToLoginPage

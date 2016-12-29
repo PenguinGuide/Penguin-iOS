@@ -65,9 +65,9 @@
         NSError *error = changedObject;
         if (error && [error isKindOfClass:[NSError class]]) {
             [weakself showErrorMessage:error];
-            [weakself dismissLoading];
-            [weakself.scenariosCollectionView endBottomRefreshing];
         }
+        [weakself dismissLoading];
+        [weakself.scenariosCollectionView endBottomRefreshing];
     }];
     [self observeCollectionView:self.scenariosCollectionView endOfFeeds:self.viewModel];
 }

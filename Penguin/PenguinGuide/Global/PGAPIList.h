@@ -46,6 +46,7 @@
 #define PG_Article_Comment              @"/article_comment/:commentId"
 #define PG_Article_Comment_Reply        @"/article_comment/:commentId/reply"
 #define PG_Article_Comment_Like         @"/comment_favor/:commentId"
+#define PG_Report                       @"/report"
 
 #define PG_Comments                     @"/comments/:articleId"
 

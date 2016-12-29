@@ -31,7 +31,7 @@
 {
     [self.contentView addSubview:self.iconImageView];
     [self.contentView addSubview:self.messageLabel];
-    [self.contentView addSubview:self.dotImageView];
+//    [self.contentView addSubview:self.dotImageView];
     
     UIView *horizontalLine = [[UIView alloc] initWithFrame:CGRectMake(47, self.pg_height-1/[UIScreen mainScreen].scale, self.pg_width, 1/[UIScreen mainScreen].scale)];
     horizontalLine.backgroundColor = [UIColor colorWithHexString:@"F1F1F1"];

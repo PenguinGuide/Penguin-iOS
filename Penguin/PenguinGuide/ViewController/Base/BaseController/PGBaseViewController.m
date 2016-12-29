@@ -285,7 +285,18 @@
 
 - (void)showNetworkLostPlaceholder
 {
+    PGPageBasePlaceholder *placeholderView = [self.view viewWithTag:PlaceholderTag];
+    if (placeholderView) {
+        [placeholderView removeFromSuperview];
+    }
+    placeholderView = [[PGPageBasePlaceholder alloc] initWithImage:@"pg_network_failed_placeholder"
+                                                              desc:@"你的网络已切换至南极线路，点击重试"
+                                                       buttonTitle:@"重新加载"
+                                                               top:0.f
+                                                            height:self.view.pg_height];
+    placeholderView.tag = PlaceholderTag;
     
+    [self.view addSubview:placeholderView];
 }
 
 #pragma mark - <Error Handling>
@@ -318,6 +329,8 @@
     NSInteger errorCode = error.code;
     if (errorCode == 401) {
         [PGRouterManager routeToLoginPage];
+    } else if (errorCode == -1009) {
+        [self showNetworkLostPlaceholder];
     }
 }
 

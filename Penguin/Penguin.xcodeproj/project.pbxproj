@@ -230,12 +230,17 @@
 		4BD01CB6C1E9C581FF15B7C3 /* libPods-PenguinGuideUITests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 154BB784023749113FEC3760 /* libPods-PenguinGuideUITests.a */; };
 		9D4A0C0A718990CD7428E6E8 /* libPods-PenguinGuide.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2781A6FFECE60736EAE2C13D /* libPods-PenguinGuide.a */; };
 		C7AED6BA0A3F2EAAA994C062 /* libPods-PenguinGuideTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = ECDB672886290E17696F19CC /* libPods-PenguinGuideTests.a */; };
+		FF1D93331E13A42300DFB17A /* UIScrollView+UzysAnimatedGifPullToRefresh.m in Sources */ = {isa = PBXBuildFile; fileRef = FF1D93301E13A42300DFB17A /* UIScrollView+UzysAnimatedGifPullToRefresh.m */; };
+		FF1D93341E13A42300DFB17A /* UzysAnimatedGifActivityIndicator.m in Sources */ = {isa = PBXBuildFile; fileRef = FF1D93321E13A42300DFB17A /* UzysAnimatedGifActivityIndicator.m */; };
+		FF1D93381E13A51700DFB17A /* AnimatedGIFImageSerialization.m in Sources */ = {isa = PBXBuildFile; fileRef = FF1D93371E13A51700DFB17A /* AnimatedGIFImageSerialization.m */; };
 		FF24DF6A1E02745200A17486 /* PGSearchResultsArticlesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FF24DF691E02745200A17486 /* PGSearchResultsArticlesViewController.m */; };
 		FF24DF6D1E02770800A17486 /* PGSearchResultsGoodsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FF24DF6C1E02770800A17486 /* PGSearchResultsGoodsViewController.m */; };
 		FF24DF701E027A7800A17486 /* PGSearchResultsArticlesViewModel.m in Sources */ = {isa = PBXBuildFile; fileRef = FF24DF6F1E027A7800A17486 /* PGSearchResultsArticlesViewModel.m */; };
 		FF24DF731E027A8800A17486 /* PGSearchResultsGoodsViewModel.m in Sources */ = {isa = PBXBuildFile; fileRef = FF24DF721E027A8800A17486 /* PGSearchResultsGoodsViewModel.m */; };
+		FF2C24881E10F9CA0020BFFF /* PGMessageContentViewModel.m in Sources */ = {isa = PBXBuildFile; fileRef = FF2C24871E10F9CA0020BFFF /* PGMessageContentViewModel.m */; };
 		FF2F8ECC1E0127ED00A29377 /* PGArticleParagraphTextLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = FF2F8ECB1E0127ED00A29377 /* PGArticleParagraphTextLabel.m */; };
 		FF2F8ECF1E013FAE00A29377 /* PGArticleRelatedArticleView.m in Sources */ = {isa = PBXBuildFile; fileRef = FF2F8ECE1E013FAE00A29377 /* PGArticleRelatedArticleView.m */; };
+		FF3150F11E14C506002A23D5 /* PGCommentReportViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FF3150F01E14C506002A23D5 /* PGCommentReportViewController.m */; };
 		FFE73E751E0BB6E000057F3B /* PGPageBasePlaceholder.m in Sources */ = {isa = PBXBuildFile; fileRef = FFE73E741E0BB6E000057F3B /* PGPageBasePlaceholder.m */; };
 		FFF8164C1E07ACC80001FDFE /* PGExploreToArticleTransition.m in Sources */ = {isa = PBXBuildFile; fileRef = FFF8164B1E07ACC80001FDFE /* PGExploreToArticleTransition.m */; };
 		FFF8164F1E07BFC70001FDFE /* PGCityGuideToArticleTransition.m in Sources */ = {isa = PBXBuildFile; fileRef = FFF8164E1E07BFC70001FDFE /* PGCityGuideToArticleTransition.m */; };
@@ -693,6 +698,14 @@
 		DCFE72ABD6C7737387832668 /* Pods-PenguinGuideUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PenguinGuideUITests.release.xcconfig"; path = "Pods/Target Support Files/Pods-PenguinGuideUITests/Pods-PenguinGuideUITests.release.xcconfig"; sourceTree = "<group>"; };
 		ECDB672886290E17696F19CC /* libPods-PenguinGuideTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-PenguinGuideTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		FC37FF962E7BA5F15850D8D2 /* Pods-PenguinGuide.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PenguinGuide.release.xcconfig"; path = "Pods/Target Support Files/Pods-PenguinGuide/Pods-PenguinGuide.release.xcconfig"; sourceTree = "<group>"; };
+		FF1D932F1E13A42300DFB17A /* UIScrollView+UzysAnimatedGifPullToRefresh.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIScrollView+UzysAnimatedGifPullToRefresh.h"; sourceTree = "<group>"; };
+		FF1D93301E13A42300DFB17A /* UIScrollView+UzysAnimatedGifPullToRefresh.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIScrollView+UzysAnimatedGifPullToRefresh.m"; sourceTree = "<group>"; };
+		FF1D93311E13A42300DFB17A /* UzysAnimatedGifActivityIndicator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UzysAnimatedGifActivityIndicator.h; sourceTree = "<group>"; };
+		FF1D93321E13A42300DFB17A /* UzysAnimatedGifActivityIndicator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UzysAnimatedGifActivityIndicator.m; sourceTree = "<group>"; };
+		FF1D93351E13A43000DFB17A /* UzysAnimatedGifPullToRefreshConfiguration.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UzysAnimatedGifPullToRefreshConfiguration.h; sourceTree = "<group>"; };
+		FF1D93361E13A51700DFB17A /* AnimatedGIFImageSerialization.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AnimatedGIFImageSerialization.h; sourceTree = "<group>"; };
+		FF1D93371E13A51700DFB17A /* AnimatedGIFImageSerialization.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AnimatedGIFImageSerialization.m; sourceTree = "<group>"; };
+		FF231A981E1274C40099536C /* PGScenarioDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PGScenarioDelegate.h; sourceTree = "<group>"; };
 		FF24DF681E02745200A17486 /* PGSearchResultsArticlesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PGSearchResultsArticlesViewController.h; sourceTree = "<group>"; };
 		FF24DF691E02745200A17486 /* PGSearchResultsArticlesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PGSearchResultsArticlesViewController.m; sourceTree = "<group>"; };
 		FF24DF6B1E02770800A17486 /* PGSearchResultsGoodsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PGSearchResultsGoodsViewController.h; sourceTree = "<group>"; };
@@ -701,10 +714,14 @@
 		FF24DF6F1E027A7800A17486 /* PGSearchResultsArticlesViewModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PGSearchResultsArticlesViewModel.m; sourceTree = "<group>"; };
 		FF24DF711E027A8800A17486 /* PGSearchResultsGoodsViewModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PGSearchResultsGoodsViewModel.h; sourceTree = "<group>"; };
 		FF24DF721E027A8800A17486 /* PGSearchResultsGoodsViewModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PGSearchResultsGoodsViewModel.m; sourceTree = "<group>"; };
+		FF2C24861E10F9CA0020BFFF /* PGMessageContentViewModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PGMessageContentViewModel.h; sourceTree = "<group>"; };
+		FF2C24871E10F9CA0020BFFF /* PGMessageContentViewModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PGMessageContentViewModel.m; sourceTree = "<group>"; };
 		FF2F8ECA1E0127ED00A29377 /* PGArticleParagraphTextLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PGArticleParagraphTextLabel.h; sourceTree = "<group>"; };
 		FF2F8ECB1E0127ED00A29377 /* PGArticleParagraphTextLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PGArticleParagraphTextLabel.m; sourceTree = "<group>"; };
 		FF2F8ECD1E013FAE00A29377 /* PGArticleRelatedArticleView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PGArticleRelatedArticleView.h; sourceTree = "<group>"; };
 		FF2F8ECE1E013FAE00A29377 /* PGArticleRelatedArticleView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PGArticleRelatedArticleView.m; sourceTree = "<group>"; };
+		FF3150EF1E14C506002A23D5 /* PGCommentReportViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PGCommentReportViewController.h; sourceTree = "<group>"; };
+		FF3150F01E14C506002A23D5 /* PGCommentReportViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PGCommentReportViewController.m; sourceTree = "<group>"; };
 		FFE73E731E0BB6E000057F3B /* PGPageBasePlaceholder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PGPageBasePlaceholder.h; sourceTree = "<group>"; };
 		FFE73E741E0BB6E000057F3B /* PGPageBasePlaceholder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PGPageBasePlaceholder.m; sourceTree = "<group>"; };
 		FFF8164A1E07ACC80001FDFE /* PGExploreToArticleTransition.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PGExploreToArticleTransition.h; sourceTree = "<group>"; };
@@ -1082,6 +1099,7 @@
 				0F141FB91D74683000884052 /* CollectionView */,
 				0FBBEDE51D7420F0001E75BA /* SegmentView */,
 				0F9E8E281DC64F26003027CF /* NavigationView */,
+				FF1D932E1E13A3AC00DFB17A /* PullToRefresh */,
 				FFE73E721E0BB6CE00057F3B /* PagePlaceholder */,
 			);
 			path = BaseView;
@@ -1351,6 +1369,7 @@
 				0F10C01F1DF5C3C0000D34DA /* PageController */,
 				0F10C0131DF5C19D000D34DA /* ARSegmentPageController */,
 				0F6E900D1D7586CA00F4ED32 /* Views */,
+				FF231A981E1274C40099536C /* PGScenarioDelegate.h */,
 				0F6E900A1D7528E400F4ED32 /* PGScenarioViewController.h */,
 				0F6E900B1D7528E400F4ED32 /* PGScenarioViewController.m */,
 				0FD736F41DF12B9900E0058E /* PGScenarioFeedsViewController.h */,
@@ -1812,6 +1831,8 @@
 			children = (
 				0FA1B2A41DC1FCD70022ECE2 /* PGMessageViewModel.h */,
 				0FA1B2A51DC1FCD70022ECE2 /* PGMessageViewModel.m */,
+				FF2C24861E10F9CA0020BFFF /* PGMessageContentViewModel.h */,
+				FF2C24871E10F9CA0020BFFF /* PGMessageContentViewModel.m */,
 			);
 			path = Message;
 			sourceTree = "<group>";
@@ -1952,6 +1973,8 @@
 				0FB4FE441D38939900A1EAAA /* PGArticleViewController.m */,
 				0F09D05D1DAC9B0300FDA3F2 /* PGCommentsViewController.h */,
 				0F09D05E1DAC9B0300FDA3F2 /* PGCommentsViewController.m */,
+				FF3150EF1E14C506002A23D5 /* PGCommentReportViewController.h */,
+				FF3150F01E14C506002A23D5 /* PGCommentReportViewController.m */,
 			);
 			path = Article;
 			sourceTree = "<group>";
@@ -2196,6 +2219,20 @@
 				154BB784023749113FEC3760 /* libPods-PenguinGuideUITests.a */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		FF1D932E1E13A3AC00DFB17A /* PullToRefresh */ = {
+			isa = PBXGroup;
+			children = (
+				FF1D932F1E13A42300DFB17A /* UIScrollView+UzysAnimatedGifPullToRefresh.h */,
+				FF1D93301E13A42300DFB17A /* UIScrollView+UzysAnimatedGifPullToRefresh.m */,
+				FF1D93311E13A42300DFB17A /* UzysAnimatedGifActivityIndicator.h */,
+				FF1D93321E13A42300DFB17A /* UzysAnimatedGifActivityIndicator.m */,
+				FF1D93361E13A51700DFB17A /* AnimatedGIFImageSerialization.h */,
+				FF1D93371E13A51700DFB17A /* AnimatedGIFImageSerialization.m */,
+				FF1D93351E13A43000DFB17A /* UzysAnimatedGifPullToRefreshConfiguration.h */,
+			);
+			path = PullToRefresh;
 			sourceTree = "<group>";
 		};
 		FFE73E721E0BB6CE00057F3B /* PagePlaceholder */ = {
@@ -2561,8 +2598,10 @@
 				0F04BF171DC0A40D001E7D31 /* PGArticleParagraphSingleGoodCell.m in Sources */,
 				0FA5F2F51D9501D400E9242B /* PGMe.m in Sources */,
 				0FA8AD781DF413AB00AF43F2 /* PGScenarioPagerCollectionView.m in Sources */,
+				FF1D93341E13A42300DFB17A /* UzysAnimatedGifActivityIndicator.m in Sources */,
 				0FA965D81DEC129F00EC3CE8 /* PGCityGuideArticlesViewController.m in Sources */,
 				0F02E1AE1DBDE1D700AA0428 /* PGArticleCommentLikeButton.m in Sources */,
+				FF2C24881E10F9CA0020BFFF /* PGMessageContentViewModel.m in Sources */,
 				0F0008D91D718F3500BED6FA /* PGSearchRecommendsViewModel.m in Sources */,
 				0F3765461D6F2577007B9481 /* PGSingleGoodBannerCell.m in Sources */,
 				0F2DC29F1D32995500277C9E /* PGBaseNavigationController.m in Sources */,
@@ -2723,6 +2762,7 @@
 				0FED89A11DADEAED0081B999 /* PGSignupViewController.m in Sources */,
 				0FD590D31D38B71600731962 /* PGBaseViewController+TransitionAnimation.m in Sources */,
 				0F1C75BA1DC70C320044C931 /* PGHistoryCell.m in Sources */,
+				FF1D93381E13A51700DFB17A /* AnimatedGIFImageSerialization.m in Sources */,
 				0FAF649C1DAE0E0100543513 /* PGLoginSocialView.m in Sources */,
 				0F0008C21D71724A00BED6FA /* PGChannelAllCategoriesHeaderView.m in Sources */,
 				0FC1600C1DACCDEA00EC462C /* PGLoginViewController.m in Sources */,
@@ -2731,7 +2771,9 @@
 				0F67A1031DB77F3E0021250B /* PGSignupInfoViewController.m in Sources */,
 				0FF76F901DAF2DAE008831D8 /* PGPwdResetViewController.m in Sources */,
 				0F10C02E1DF5CEF8000D34DA /* ARSegmentPageController.m in Sources */,
+				FF3150F11E14C506002A23D5 /* PGCommentReportViewController.m in Sources */,
 				0FFAD0F41D780DF8009F9E27 /* PGGoodsCollectionView.m in Sources */,
+				FF1D93331E13A42300DFB17A /* UIScrollView+UzysAnimatedGifPullToRefresh.m in Sources */,
 				0F00CBAB1DD99CB3008BFA7E /* PGWebViewController.m in Sources */,
 				0FA5F2EE1D94DFFF00E9242B /* PGMeCell.m in Sources */,
 				0FAC90081DDB11C900955639 /* PGDeveloperViewController.m in Sources */,

@@ -26,9 +26,15 @@
     self.font = Theme.fontSmallBold;
     self.returnKeyType = UIReturnKeyDone;
     
+    
     UIView *horizontalLine = [[UIView alloc] initWithFrame:CGRectMake(0, self.pg_height-1/[UIScreen mainScreen].scale, self.pg_width, 1/[UIScreen mainScreen].scale)];
     horizontalLine.backgroundColor = Theme.colorText;
     [self addSubview:horizontalLine];
+}
+
+- (BOOL)canPerformAction:(SEL)action withSender:(id)sender
+{
+    return NO;
 }
 
 - (void)setPlaceholder:(NSString *)placeholder
@@ -40,6 +46,5 @@
         self.attributedPlaceholder = attrPlaceholder;
     }
 }
-
 
 @end

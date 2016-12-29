@@ -19,6 +19,6 @@
 - (void)sendReplyComment:(NSString *)content commentId:(NSString *)commentId completion:(void(^)(BOOL success))completion;
 - (void)likeComment:(NSString *)commentId completion:(void(^)(BOOL success))completion;
 - (void)dislikeComment:(NSString *)commentId completion:(void(^)(BOOL success))completion;
-- (void)deleteComment:(NSString *)commentId completion:(void(^)(BOOL success))completion;
+- (void)deleteComment:(NSString *)commentId index:(NSInteger)index completion:(void(^)(BOOL success))completion;
 
 @end
