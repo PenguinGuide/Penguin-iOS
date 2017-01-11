@@ -8,8 +8,8 @@
 
 #import <UIKit/UIKit.h>
 
-@interface PGSettingsCell : UICollectionViewCell
+@interface PGPersonalSettingsCell : UICollectionViewCell
 
-- (void)setCellWithDesc:(NSString *)desc content:(NSString *)content isImage:(BOOL)isImage;
+- (void)setCellWithDesc:(NSString *)desc content:(NSString *)content;
 
 @end

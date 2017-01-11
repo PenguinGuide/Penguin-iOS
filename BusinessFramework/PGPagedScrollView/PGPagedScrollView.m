@@ -201,12 +201,9 @@
 
 - (void)scrollToNextPage
 {
-    NSInteger nextPage = 0;
     if (self.circularMode) {
-        if (self.currentPage < self.banners.count-1) {
-            nextPage = self.currentPage+1;
-        }
-        [self.pagedScrollView setContentOffset:CGPointMake(self.pagedScrollView.frame.size.width*(nextPage+1), self.pagedScrollView.contentOffset.y) animated:YES];
+        NSInteger currentIndex = self.currentPage+1;
+        [self.pagedScrollView setContentOffset:CGPointMake(self.pagedScrollView.frame.size.width*(currentIndex+1), self.pagedScrollView.contentOffset.y) animated:YES];
     }
 }
 
@@ -244,7 +241,20 @@
     self.currentPage = currentPage;
 }
 
+// scrollToNextPage will not call this delegate method
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
+{
+    if (self.circularMode) {
+        if (self.currentIndex == 0) {
+            [scrollView setContentOffset:CGPointMake((self.banners.count-2)*self.frame.size.width, 0) animated:NO];
+        } else if (self.currentIndex == self.banners.count-1) {
+            [scrollView setContentOffset:CGPointMake(self.frame.size.width, 0) animated:NO];
+        }
+        self.currentIndex = self.currentPage;
+    }
+}
+
+- (void)scrollViewDidEndScrollingAnimation:(UIScrollView *)scrollView
 {
     if (self.circularMode) {
         if (self.currentIndex == 0) {

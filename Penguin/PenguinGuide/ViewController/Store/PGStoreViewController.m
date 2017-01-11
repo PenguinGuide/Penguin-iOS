@@ -18,6 +18,8 @@
 
 #import "MSWeakTimer.h"
 
+#import "UIScrollView+PGPullToRefresh.h"
+
 @interface PGStoreViewController () <PGFeedsCollectionViewDelegate>
 
 @property (nonatomic, strong) PGStoreViewModel *viewModel;
@@ -25,7 +27,8 @@
 
 @property (nonatomic, strong) UIButton *searchButton;
 
-@property (nonatomic, strong) MSWeakTimer *weakTimer;
+@property (nonatomic, strong) MSWeakTimer *flashbuyWeakTimer;
+@property (nonatomic, strong) MSWeakTimer *bannersWeakTimer;
 
 @property (nonatomic, assign) BOOL statusbarIsWhiteBackground;
 
@@ -80,12 +83,18 @@
     
     [self.navigationController setNavigationBarHidden:YES animated:NO];
     
-    self.weakTimer = [MSWeakTimer scheduledTimerWithTimeInterval:1.0
-                                                          target:self
-                                                        selector:@selector(countdown)
-                                                        userInfo:nil
-                                                         repeats:YES
-                                                   dispatchQueue:dispatch_get_main_queue()];
+    self.flashbuyWeakTimer = [MSWeakTimer scheduledTimerWithTimeInterval:1.f
+                                                                  target:self
+                                                                selector:@selector(flashbuyCountDown)
+                                                                userInfo:nil
+                                                                 repeats:YES
+                                                           dispatchQueue:dispatch_get_main_queue()];
+    self.bannersWeakTimer = [MSWeakTimer scheduledTimerWithTimeInterval:3.f
+                                                                 target:self
+                                                               selector:@selector(bannersCountDown)
+                                                               userInfo:nil
+                                                                repeats:YES
+                                                          dispatchQueue:dispatch_get_main_queue()];
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -118,7 +127,8 @@
 {
     [super viewWillDisappear:animated];
     
-    [self.weakTimer invalidate];
+    [self.flashbuyWeakTimer invalidate];
+    [self.bannersWeakTimer invalidate];
 }
 
 - (UIStatusBarStyle)preferredStatusBarStyle
@@ -134,8 +144,11 @@
 - (void)dealloc
 {
     [self unobserve];
-    [self.weakTimer invalidate];
-    self.weakTimer = nil;
+    
+    [self.flashbuyWeakTimer invalidate];
+    [self.bannersWeakTimer invalidate];
+    self.flashbuyWeakTimer = nil;
+    self.bannersWeakTimer = nil;
 }
 
 #pragma mark - <PGTabBarControllerDelegate>
@@ -240,7 +253,7 @@
     });
 }
 
-- (void)countdown
+- (void)flashbuyCountDown
 {
     for (UICollectionViewCell *visibleCell in self.feedsCollectionView.visibleCells) {
         if ([visibleCell isKindOfClass:[PGFlashbuyBannerCell class]]) {
@@ -254,10 +267,13 @@
             }
         }
     }
-    
-//    if (self.feedsCollectionView.storeHeaderView) {
-//        [self.feedsCollectionView.storeHeaderView.bannersView scrollToNextPage];
-//    }
+}
+
+- (void)bannersCountDown
+{
+    if (self.feedsCollectionView.storeHeaderView) {
+        [self.feedsCollectionView.storeHeaderView.bannersView scrollToNextPage];
+    }
 }
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
@@ -309,17 +325,32 @@
         _feedsCollectionView.feedsDelegate = self;
         
         PGWeakSelf(self);
-        [_feedsCollectionView enablePullToRefreshWithTopInset:0.f completion:^{
-            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.4 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                [weakself.viewModel clearPagination];
-                [weakself.viewModel requestData];
-            });
-        }];
+        [_feedsCollectionView addPullToRefresh:Theme.loadingImages
+                                      topInset:64-36-5
+                                        height:64.f
+                                          rate:0.f
+                                       handler:^{
+                                           [weakself end];
+                                       }];
+//        [_feedsCollectionView enablePullToRefreshWithTopInset:0.f completion:^{
+//            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.4 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+//                [weakself.viewModel clearPagination];
+//                [weakself.viewModel requestData];
+//            });
+//        }];
         [_feedsCollectionView enableInfiniteScrolling:^{
             [weakself.viewModel requestFeeds];
         }];
     }
     return _feedsCollectionView;
+}
+
+- (void)end
+{
+    PGWeakSelf(self);
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2.f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [weakself.feedsCollectionView endPullToRefresh];
+    });
 }
 
 - (UIButton *)searchButton

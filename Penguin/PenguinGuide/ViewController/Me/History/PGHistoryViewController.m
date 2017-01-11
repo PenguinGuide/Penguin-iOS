@@ -51,6 +51,7 @@
         [weakself dismissLoading];
         [weakself.historyCollectionView endBottomRefreshing];
     }];
+    [self observeCollectionView:self.historyCollectionView endOfFeeds:self.viewModel];
 }
 
 - (void)viewWillAppear:(BOOL)animated

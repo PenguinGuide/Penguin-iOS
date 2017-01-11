@@ -26,6 +26,8 @@
 #import "PGGoodCell.h"
 #import "PGGoodRelatedGoodsHeaderView.h"
 
+#import "MSWeakTimer.h"
+
 @interface PGGoodViewController () <UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout>
 
 @property (nonatomic, strong) PGBaseCollectionView *goodCollectionView;
@@ -33,6 +35,8 @@
 
 @property (nonatomic, strong) NSString *goodId;
 @property (nonatomic, strong) PGGoodViewModel *viewModel;
+
+@property (nonatomic, strong) MSWeakTimer *bannersWeakTimer;
 
 @end
 
@@ -76,6 +80,13 @@
     [self setNeedsStatusBarAppearanceUpdate];
     
     [self.navigationController setNavigationBarHidden:YES animated:NO];
+    
+    self.bannersWeakTimer = [MSWeakTimer scheduledTimerWithTimeInterval:5.f
+                                                                 target:self
+                                                               selector:@selector(bannersCountDown)
+                                                               userInfo:nil
+                                                                repeats:YES
+                                                          dispatchQueue:dispatch_get_main_queue()];
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -93,6 +104,8 @@
     [super viewWillDisappear:animated];
     
     [self.navigationController setNavigationBarHidden:NO animated:NO];
+    
+    [self.bannersWeakTimer invalidate];
 }
 
 - (UIStatusBarStyle)preferredStatusBarStyle
@@ -103,6 +116,9 @@
 - (void)dealloc
 {
     [self unobserve];
+    
+    [self.bannersWeakTimer invalidate];
+    self.bannersWeakTimer = nil;
 }
 
 #pragma mark - <UICollectionViewDataSource>
@@ -243,6 +259,14 @@
     if (self.viewModel.good.relatedGoods.count > 0 && indexPath.section == 1) {
         PGGood *good = self.viewModel.good.relatedGoods[indexPath.item];
         [PGRouterManager routeToGoodDetailPage:good.goodId link:good.link];
+    }
+}
+
+- (void)bannersCountDown
+{
+    PGGoodBannersCell *cell = (PGGoodBannersCell *)[self.goodCollectionView cellForItemAtIndexPath:[NSIndexPath indexPathForItem:0 inSection:0]];
+    if (cell) {
+        [cell.pagedScrollView scrollToNextPage];
     }
 }
 

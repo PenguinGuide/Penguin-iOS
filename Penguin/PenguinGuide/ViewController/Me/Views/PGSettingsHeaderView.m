@@ -29,8 +29,8 @@
 {
     [self addSubview:self.titleLabel];
     
-    UIView *horizontalLine = [[UIView alloc] initWithFrame:CGRectMake(27, self.pg_height-2, self.pg_width-27-39, 2)];
-    horizontalLine.backgroundColor = Theme.colorText;
+    UIView *horizontalLine = [[UIView alloc] initWithFrame:CGRectMake(45, 10, self.pg_width-90, 1/[UIScreen mainScreen].scale)];
+    horizontalLine.backgroundColor = [UIColor colorWithHexString:@"E1E1E1"];
     [self addSubview:horizontalLine];
 }
 
@@ -42,9 +42,10 @@
 - (UILabel *)titleLabel
 {
     if (!_titleLabel) {
-        _titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(30, 0, self.pg_width-60, self.pg_height)];
+        _titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(30, 42, self.pg_width-60, 18)];
         _titleLabel.font = Theme.fontLargeBold;
         _titleLabel.textColor = Theme.colorText;
+        _titleLabel.textAlignment = NSTextAlignmentCenter;
     }
     return _titleLabel;
 }

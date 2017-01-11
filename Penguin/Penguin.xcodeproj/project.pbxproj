@@ -46,7 +46,7 @@
 		0F141FCC1D74752500884052 /* PGExploreViewModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 0F141FCB1D74752500884052 /* PGExploreViewModel.m */; };
 		0F1456481DEEE3A500533396 /* PGAllScenariosViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0F1456471DEEE3A500533396 /* PGAllScenariosViewController.m */; };
 		0F14564B1DEEE41100533396 /* PGAllScenariosViewModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 0F14564A1DEEE41100533396 /* PGAllScenariosViewModel.m */; };
-		0F1666901D9916FB009E71BB /* PGSettingsCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0F16668F1D9916FB009E71BB /* PGSettingsCell.m */; };
+		0F1666901D9916FB009E71BB /* PGPersonalSettingsCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0F16668F1D9916FB009E71BB /* PGPersonalSettingsCell.m */; };
 		0F18E4951D7D64AA004377F1 /* pg_article_1.json in Resources */ = {isa = PBXBuildFile; fileRef = 0F18E4941D7D64AA004377F1 /* pg_article_1.json */; };
 		0F18E4971D7D64B7004377F1 /* pg_article_2.json in Resources */ = {isa = PBXBuildFile; fileRef = 0F18E4961D7D64B7004377F1 /* pg_article_2.json */; };
 		0F18E4991D7D64BF004377F1 /* pg_article_3.json in Resources */ = {isa = PBXBuildFile; fileRef = 0F18E4981D7D64BF004377F1 /* pg_article_3.json */; };
@@ -241,6 +241,9 @@
 		FF2F8ECC1E0127ED00A29377 /* PGArticleParagraphTextLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = FF2F8ECB1E0127ED00A29377 /* PGArticleParagraphTextLabel.m */; };
 		FF2F8ECF1E013FAE00A29377 /* PGArticleRelatedArticleView.m in Sources */ = {isa = PBXBuildFile; fileRef = FF2F8ECE1E013FAE00A29377 /* PGArticleRelatedArticleView.m */; };
 		FF3150F11E14C506002A23D5 /* PGCommentReportViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FF3150F01E14C506002A23D5 /* PGCommentReportViewController.m */; };
+		FF5D366B1E25FE9B00C91DDD /* PGPersonalSettingsAvatarCell.m in Sources */ = {isa = PBXBuildFile; fileRef = FF5D366A1E25FE9B00C91DDD /* PGPersonalSettingsAvatarCell.m */; };
+		FFD92D4B1E24E7FA00086DC0 /* PGSystemSettingsCell.m in Sources */ = {isa = PBXBuildFile; fileRef = FFD92D4A1E24E7FA00086DC0 /* PGSystemSettingsCell.m */; };
+		FFD92D4E1E24EBDF00086DC0 /* PGSystemSettingsTaobaoCell.m in Sources */ = {isa = PBXBuildFile; fileRef = FFD92D4D1E24EBDF00086DC0 /* PGSystemSettingsTaobaoCell.m */; };
 		FFE73E751E0BB6E000057F3B /* PGPageBasePlaceholder.m in Sources */ = {isa = PBXBuildFile; fileRef = FFE73E741E0BB6E000057F3B /* PGPageBasePlaceholder.m */; };
 		FFF8164C1E07ACC80001FDFE /* PGExploreToArticleTransition.m in Sources */ = {isa = PBXBuildFile; fileRef = FFF8164B1E07ACC80001FDFE /* PGExploreToArticleTransition.m */; };
 		FFF8164F1E07BFC70001FDFE /* PGCityGuideToArticleTransition.m in Sources */ = {isa = PBXBuildFile; fileRef = FFF8164E1E07BFC70001FDFE /* PGCityGuideToArticleTransition.m */; };
@@ -342,8 +345,8 @@
 		0F1456471DEEE3A500533396 /* PGAllScenariosViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PGAllScenariosViewController.m; sourceTree = "<group>"; };
 		0F1456491DEEE41100533396 /* PGAllScenariosViewModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PGAllScenariosViewModel.h; sourceTree = "<group>"; };
 		0F14564A1DEEE41100533396 /* PGAllScenariosViewModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PGAllScenariosViewModel.m; sourceTree = "<group>"; };
-		0F16668E1D9916FB009E71BB /* PGSettingsCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PGSettingsCell.h; sourceTree = "<group>"; };
-		0F16668F1D9916FB009E71BB /* PGSettingsCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PGSettingsCell.m; sourceTree = "<group>"; };
+		0F16668E1D9916FB009E71BB /* PGPersonalSettingsCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PGPersonalSettingsCell.h; sourceTree = "<group>"; };
+		0F16668F1D9916FB009E71BB /* PGPersonalSettingsCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PGPersonalSettingsCell.m; sourceTree = "<group>"; };
 		0F18E4941D7D64AA004377F1 /* pg_article_1.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = pg_article_1.json; sourceTree = "<group>"; };
 		0F18E4961D7D64B7004377F1 /* pg_article_2.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = pg_article_2.json; sourceTree = "<group>"; };
 		0F18E4981D7D64BF004377F1 /* pg_article_3.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = pg_article_3.json; sourceTree = "<group>"; };
@@ -722,6 +725,12 @@
 		FF2F8ECE1E013FAE00A29377 /* PGArticleRelatedArticleView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PGArticleRelatedArticleView.m; sourceTree = "<group>"; };
 		FF3150EF1E14C506002A23D5 /* PGCommentReportViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PGCommentReportViewController.h; sourceTree = "<group>"; };
 		FF3150F01E14C506002A23D5 /* PGCommentReportViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PGCommentReportViewController.m; sourceTree = "<group>"; };
+		FF5D36691E25FE9B00C91DDD /* PGPersonalSettingsAvatarCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PGPersonalSettingsAvatarCell.h; sourceTree = "<group>"; };
+		FF5D366A1E25FE9B00C91DDD /* PGPersonalSettingsAvatarCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PGPersonalSettingsAvatarCell.m; sourceTree = "<group>"; };
+		FFD92D491E24E7FA00086DC0 /* PGSystemSettingsCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PGSystemSettingsCell.h; sourceTree = "<group>"; };
+		FFD92D4A1E24E7FA00086DC0 /* PGSystemSettingsCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PGSystemSettingsCell.m; sourceTree = "<group>"; };
+		FFD92D4C1E24EBDF00086DC0 /* PGSystemSettingsTaobaoCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PGSystemSettingsTaobaoCell.h; sourceTree = "<group>"; };
+		FFD92D4D1E24EBDF00086DC0 /* PGSystemSettingsTaobaoCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PGSystemSettingsTaobaoCell.m; sourceTree = "<group>"; };
 		FFE73E731E0BB6E000057F3B /* PGPageBasePlaceholder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PGPageBasePlaceholder.h; sourceTree = "<group>"; };
 		FFE73E741E0BB6E000057F3B /* PGPageBasePlaceholder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PGPageBasePlaceholder.m; sourceTree = "<group>"; };
 		FFF8164A1E07ACC80001FDFE /* PGExploreToArticleTransition.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PGExploreToArticleTransition.h; sourceTree = "<group>"; };
@@ -1853,8 +1862,14 @@
 			children = (
 				0FA5F2EC1D94DFFF00E9242B /* PGMeCell.h */,
 				0FA5F2ED1D94DFFF00E9242B /* PGMeCell.m */,
-				0F16668E1D9916FB009E71BB /* PGSettingsCell.h */,
-				0F16668F1D9916FB009E71BB /* PGSettingsCell.m */,
+				0F16668E1D9916FB009E71BB /* PGPersonalSettingsCell.h */,
+				0F16668F1D9916FB009E71BB /* PGPersonalSettingsCell.m */,
+				FF5D36691E25FE9B00C91DDD /* PGPersonalSettingsAvatarCell.h */,
+				FF5D366A1E25FE9B00C91DDD /* PGPersonalSettingsAvatarCell.m */,
+				FFD92D491E24E7FA00086DC0 /* PGSystemSettingsCell.h */,
+				FFD92D4A1E24E7FA00086DC0 /* PGSystemSettingsCell.m */,
+				FFD92D4C1E24EBDF00086DC0 /* PGSystemSettingsTaobaoCell.h */,
+				FFD92D4D1E24EBDF00086DC0 /* PGSystemSettingsTaobaoCell.m */,
 				0F083BE71DC305350021B7D9 /* PGCollectionCell.h */,
 				0F083BE81DC305350021B7D9 /* PGCollectionCell.m */,
 				0FA1B29A1DC1F4F40022ECE2 /* PGMessageCell.h */,
@@ -2613,6 +2628,7 @@
 				0F51B3191D6D853C00B4690F /* PGFlashbuyBanner.m in Sources */,
 				0FC160131DACD8B600EC462C /* PGLoginTextField.m in Sources */,
 				0F141FCC1D74752500884052 /* PGExploreViewModel.m in Sources */,
+				FFD92D4E1E24EBDF00086DC0 /* PGSystemSettingsTaobaoCell.m in Sources */,
 				0F8A79A11DF1626800711A16 /* PGScenarioGoodsViewModel.m in Sources */,
 				0FC160101DACD85D00EC462C /* PGLoginView.m in Sources */,
 				0FBBEDE41D741894001E75BA /* PGSearchResultsHeaderView.m in Sources */,
@@ -2636,6 +2652,7 @@
 				0F1456481DEEE3A500533396 /* PGAllScenariosViewController.m in Sources */,
 				0FAADD191D767F8C00FC7933 /* PGScenarioViewModel.m in Sources */,
 				FFF8164F1E07BFC70001FDFE /* PGCityGuideToArticleTransition.m in Sources */,
+				FFD92D4B1E24E7FA00086DC0 /* PGSystemSettingsCell.m in Sources */,
 				0F9E8E201DC5F806003027CF /* PGCollectionViewModel.m in Sources */,
 				0FBBEDE11D73E08C001E75BA /* PGSearchResultsArticleCell.m in Sources */,
 				0FB8F9721D339EBA005E6C56 /* PGGlobalObject.m in Sources */,
@@ -2651,7 +2668,7 @@
 				0FAADD151D767EBB00FC7933 /* PGScenarioCategory.m in Sources */,
 				0F066A641DF963F600B785B9 /* PGQiniuUploadImageManager.m in Sources */,
 				0F0008CC1D7187A400BED6FA /* PGSearchResultsViewController.m in Sources */,
-				0F1666901D9916FB009E71BB /* PGSettingsCell.m in Sources */,
+				0F1666901D9916FB009E71BB /* PGPersonalSettingsCell.m in Sources */,
 				0FAF649F1DAE2CD000543513 /* PGPwdLoginViewController.m in Sources */,
 				0F10C02F1DF5CEF8000D34DA /* ARSegmentPageHeader.m in Sources */,
 				0F51B3221D6D887D00B4690F /* PGSingleGoodBanner.m in Sources */,
@@ -2752,6 +2769,7 @@
 				0FFEAF1E1D76B31B0067C888 /* PGStoreViewModel.m in Sources */,
 				0F10C0251DF5C49F000D34DA /* PGScenarioSegmentHeaderView.m in Sources */,
 				0F37653C1D6F2561007B9481 /* PGFlashbuyBannerCell.m in Sources */,
+				FF5D366B1E25FE9B00C91DDD /* PGPersonalSettingsAvatarCell.m in Sources */,
 				0F84FE221D485EAF0054F2D7 /* PGArticleParagraphTextCell.m in Sources */,
 				0FFCB5411D2D050D00D863FA /* PGLoginViewModel.m in Sources */,
 				0F9E8E271DC6097F003027CF /* PGCollectionContentViewModel.m in Sources */,

@@ -7,13 +7,14 @@
 //
 
 #define SettingCell @"SettingCell"
+#define TaoBaoCell @"TaoBaoCell"
 #define SettingHeaderView @"SettingHeaderView"
 #define LogoutFooterView @"LogoutFooterView"
 
 #import "PGSystemSettingsViewController.h"
 #import "PGDeveloperViewController.h"
-#import "PGSettingsCell.h"
-#import "PGSettingsHeaderView.h"
+#import "PGSystemSettingsCell.h"
+#import "PGSystemSettingsTaobaoCell.h"
 #import "PGSettingsLogoutFooterView.h"
 
 #import "SDImageCache.h"
@@ -30,6 +31,8 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     
+    [self setNavigationTitle:@"系统设置"];
+    
     [self.view addSubview:self.settingsCollectionView];
 }
 
@@ -39,7 +42,7 @@
     
     [self.navigationController setNavigationBarHidden:NO animated:NO];
     
-    [self.navigationController.navigationBar pg_setBackgroundColor:[UIColor clearColor]];
+    [self.navigationController.navigationBar pg_setBackgroundColor:[UIColor whiteColor]];
     [self.navigationController.navigationBar setShadowImage:[UIImage new]];
 }
 
@@ -54,7 +57,7 @@
 
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView
 {
-    return 1;
+    return 2;
 }
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
@@ -65,6 +68,8 @@
 #else
         return 5;
 #endif
+    } else if (section == 1) {
+        return 1;
     }
     return 0;
 }
@@ -72,21 +77,26 @@
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
     if (indexPath.section == 0) {
-        PGSettingsCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:SettingCell forIndexPath:indexPath];
+        PGSystemSettingsCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:SettingCell forIndexPath:indexPath];
         
         if (indexPath.item == 0) {
-            [cell setCellWithDesc:@"清 除 缓 存" content:@"3.1M" isImage:YES];
+            [cell setCellWithDesc:@"清 除 缓 存"];
         } else if (indexPath.item == 1) {
-            [cell setCellWithDesc:@"关 于 我 们" content:nil isImage:NO];
+            [cell setCellWithDesc:@"关 于 我 们"];
         } else if (indexPath.item == 2) {
-            [cell setCellWithDesc:@"联 系 我 们" content:nil isImage:NO];
+            [cell setCellWithDesc:@"联 系 我 们"];
         } else if (indexPath.item == 3) {
-            [cell setCellWithDesc:@"用 户 协 议" content:nil isImage:NO];
+            [cell setCellWithDesc:@"用 户 协 议"];
         } else if (indexPath.item == 4) {
-            [cell setCellWithDesc:@"评 分" content:nil isImage:NO];
+            [cell setCellWithDesc:@"评 分"];
         } else if (indexPath.item == 5) {
-            [cell setCellWithDesc:@"开 发 者 页 面" content:nil isImage:NO];
+            [cell setCellWithDesc:@"开 发 者 页 面"];
         }
+        
+        return cell;
+    } else if (indexPath.section == 1) {
+        PGSystemSettingsTaobaoCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:TaoBaoCell forIndexPath:indexPath];
+        [cell setCellWithAuthorized:NO];
         
         return cell;
     }
@@ -98,17 +108,23 @@
 
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    return CGSizeMake(UISCREEN_WIDTH, 50);
+    return CGSizeMake(UISCREEN_WIDTH, 60);
 }
 
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout referenceSizeForHeaderInSection:(NSInteger)section
 {
-    return CGSizeMake(UISCREEN_WIDTH, 68);
+    if (section == 0) {
+        return CGSizeMake(UISCREEN_WIDTH, 20);
+    }
+    return CGSizeZero;
 }
 
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout referenceSizeForFooterInSection:(NSInteger)section
 {
-    return CGSizeMake(UISCREEN_WIDTH, 70);
+    if (section == 1) {
+        return CGSizeMake(UISCREEN_WIDTH, 70);
+    }
+    return CGSizeZero;
 }
 
 - (CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout minimumLineSpacingForSectionAtIndex:(NSInteger)section
@@ -128,18 +144,21 @@
 
 - (UICollectionReusableView *)collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath
 {
-    if (kind == UICollectionElementKindSectionHeader) {
-        if (indexPath.section == 0) {
-            PGSettingsHeaderView *headerView = [collectionView dequeueReusableSupplementaryViewOfKind:kind withReuseIdentifier:SettingHeaderView forIndexPath:indexPath];
-            [headerView setHeaderViewWithTitle:@"系统设置"];
-            
-            return headerView;
+    if (indexPath.section == 0) {
+        if (kind == UICollectionElementKindSectionHeader) {
+            if (indexPath.section == 0) {
+                UICollectionReusableView *headerView = [collectionView dequeueReusableSupplementaryViewOfKind:kind withReuseIdentifier:SettingHeaderView forIndexPath:indexPath];
+                
+                return headerView;
+            }
         }
-    } else if (kind == UICollectionElementKindSectionFooter) {
-        PGSettingsLogoutFooterView *footerView = [collectionView dequeueReusableSupplementaryViewOfKind:kind withReuseIdentifier:LogoutFooterView forIndexPath:indexPath];
-        [footerView.logoutButton addTarget:self action:@selector(logoutButtonClicked) forControlEvents:UIControlEventTouchUpInside];
-        
-        return footerView;
+    } else if (indexPath.section == 1) {
+        if (kind == UICollectionElementKindSectionFooter) {
+            PGSettingsLogoutFooterView *footerView = [collectionView dequeueReusableSupplementaryViewOfKind:kind withReuseIdentifier:LogoutFooterView forIndexPath:indexPath];
+            [footerView.logoutButton addTarget:self action:@selector(logoutButtonClicked) forControlEvents:UIControlEventTouchUpInside];
+            
+            return footerView;
+        }
     }
     
     return nil;
@@ -147,26 +166,30 @@
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (indexPath.item == 0) {
-        PGAlertAction *cancelAction = [PGAlertAction actionWithTitle:@"取消" style:^(PGAlertActionStyle *style) {
-            
-        } handler:^{
-            
-        }];
-        PGAlertAction *doneAction = [PGAlertAction actionWithTitle:@"确定" style:^(PGAlertActionStyle *style) {
-            style.type = PGAlertActionTypeDestructive;
-        } handler:^{
-            //[[SDImageCache sharedImageCache] clearDisk];
-            [[SDImageCache sharedImageCache] clearMemory];
-        }];
-        [self showAlert:@"清除缓存" message:@"确定清除缓存？" actions:@[cancelAction, doneAction] style:^(PGAlertStyle *style) {
-            style.alertType = PGAlertTypeAlert;
-        }];
-    } else if (indexPath.item == 5) {
+    if (indexPath.section == 0) {
+        if (indexPath.item == 0) {
+            PGAlertAction *cancelAction = [PGAlertAction actionWithTitle:@"取消" style:^(PGAlertActionStyle *style) {
+                
+            } handler:^{
+                
+            }];
+            PGAlertAction *doneAction = [PGAlertAction actionWithTitle:@"确定" style:^(PGAlertActionStyle *style) {
+                style.type = PGAlertActionTypeDestructive;
+            } handler:^{
+                //[[SDImageCache sharedImageCache] clearDisk];
+                [[SDImageCache sharedImageCache] clearMemory];
+            }];
+            [self showAlert:@"清除缓存" message:@"确定清除缓存？" actions:@[cancelAction, doneAction] style:^(PGAlertStyle *style) {
+                style.alertType = PGAlertTypeAlert;
+            }];
+        } else if (indexPath.item == 5) {
 #if (defined DEBUG)
-        PGDeveloperViewController *developerVC = [[PGDeveloperViewController alloc] init];
-        [self.navigationController pushViewController:developerVC animated:YES];
+            PGDeveloperViewController *developerVC = [[PGDeveloperViewController alloc] init];
+            [self.navigationController pushViewController:developerVC animated:YES];
 #endif
+        }
+    } else if (indexPath.section == 1) {
+        
     }
 }
 
@@ -188,13 +211,16 @@
 - (PGBaseCollectionView *)settingsCollectionView
 {
     if (!_settingsCollectionView) {
-        _settingsCollectionView = [[PGBaseCollectionView alloc] initWithFrame:CGRectMake(0, -20, UISCREEN_WIDTH, UISCREEN_HEIGHT+20) collectionViewLayout:[UICollectionViewFlowLayout new]];
+        _settingsCollectionView = [[PGBaseCollectionView alloc] initWithFrame:CGRectMake(0, 0, UISCREEN_WIDTH, UISCREEN_HEIGHT) collectionViewLayout:[UICollectionViewFlowLayout new]];
         _settingsCollectionView.dataSource = self;
         _settingsCollectionView.delegate = self;
         _settingsCollectionView.backgroundColor = [UIColor whiteColor];
+        _settingsCollectionView.showsHorizontalScrollIndicator = NO;
+        _settingsCollectionView.showsVerticalScrollIndicator = NO;
         
-        [_settingsCollectionView registerClass:[PGSettingsCell class] forCellWithReuseIdentifier:SettingCell];
-        [_settingsCollectionView registerClass:[PGSettingsHeaderView class] forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:SettingHeaderView];
+        [_settingsCollectionView registerClass:[PGSystemSettingsCell class] forCellWithReuseIdentifier:SettingCell];
+        [_settingsCollectionView registerClass:[PGSystemSettingsTaobaoCell class] forCellWithReuseIdentifier:TaoBaoCell];
+        [_settingsCollectionView registerClass:[UICollectionReusableView class] forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:SettingHeaderView];
         [_settingsCollectionView registerClass:[PGSettingsLogoutFooterView class] forSupplementaryViewOfKind:UICollectionElementKindSectionFooter withReuseIdentifier:LogoutFooterView];
     }
     return _settingsCollectionView;

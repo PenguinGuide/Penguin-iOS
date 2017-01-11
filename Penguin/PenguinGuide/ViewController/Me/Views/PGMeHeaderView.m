@@ -12,8 +12,7 @@
 @interface PGMeHeaderView ()
 
 @property (nonatomic, strong) UILabel *nameLabel;
-@property (nonatomic, strong) UIImageView *sexImageView;
-@property (nonatomic, strong) UILabel *locationLabel;
+@property (nonatomic, strong) UILabel *descLabel;
 
 @end
 
@@ -35,12 +34,11 @@
     [self addSubview:self.settingButton];
     [self addSubview:self.avatarButton];
     [self addSubview:self.nameLabel];
-    [self addSubview:self.sexImageView];
-    [self addSubview:self.locationLabel];
+    [self addSubview:self.descLabel];
     
-    UIView *horizontalLine = [[UIView alloc] initWithFrame:CGRectMake(self.pg_width/2-1/[UIScreen mainScreen].scale, self.nameLabel.pg_bottom+11, 1/[UIScreen mainScreen].scale, 20)];
-    horizontalLine.backgroundColor = Theme.colorText;
-    [self addSubview:horizontalLine];
+//    UIView *horizontalLine = [[UIView alloc] initWithFrame:CGRectMake(self.pg_width/2-1/[UIScreen mainScreen].scale, self.nameLabel.pg_bottom+11, 1/[UIScreen mainScreen].scale, 20)];
+//    horizontalLine.backgroundColor = Theme.colorText;
+//    [self addSubview:horizontalLine];
 }
 
 - (void)setViewWithMe:(PGMe *)me
@@ -52,20 +50,23 @@
         if (me.nickname) {
             self.nameLabel.text = me.nickname;
         }
-        if (me.location) {
-            self.locationLabel.text = [NSString stringWithFormat:@"%@", me.location];
-        }
+        
+        NSString *desc = @"";
         if ([me.sex isEqualToString:@"男"]) {
-            self.sexImageView.image = [UIImage imageNamed:@"pg_me_sex_male"];
+            desc = [desc stringByAppendingString:@"男"];
         } else {
-            self.sexImageView.image = [UIImage imageNamed:@"pg_me_sex_female"];
+            desc = [desc stringByAppendingString:@"女"];
         }
+        if (me.location) {
+            desc = [desc stringByAppendingString:[NSString stringWithFormat:@"  |  %@", me.location]];
+        }
+        self.descLabel.text = desc;
     }
 }
 
 + (CGSize)headerViewSize
 {
-    return CGSizeMake(UISCREEN_WIDTH, 55+84+10+22+10+22+10);
+    return CGSizeMake(UISCREEN_WIDTH, 55+84+10+22+10+22+10+30);
 }
 
 - (UIButton *)settingButton
@@ -93,7 +94,7 @@
 - (UILabel *)nameLabel
 {
     if (!_nameLabel) {
-        _nameLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, self.avatarButton.pg_bottom+10, self.pg_width, 22)];
+        _nameLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, self.avatarButton.pg_bottom+20, self.pg_width, 22)];
         _nameLabel.font = [UIFont systemFontOfSize:20.f];
         _nameLabel.textColor = Theme.colorText;
         _nameLabel.textAlignment = NSTextAlignmentCenter;
@@ -101,22 +102,15 @@
     return _nameLabel;
 }
 
-- (UIImageView *)sexImageView
+- (UILabel *)descLabel
 {
-    if (!_sexImageView) {
-        _sexImageView = [[UIImageView alloc] initWithFrame:CGRectMake(self.pg_width/2-20-22, self.nameLabel.pg_bottom+10, 22, 22)];
+    if (!_descLabel) {
+        _descLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, self.nameLabel.pg_bottom+20, self.pg_width, 22)];
+        _descLabel.textAlignment = NSTextAlignmentCenter;
+        _descLabel.font = Theme.fontSmallBold;
+        _descLabel.textColor = Theme.colorLightText;
     }
-    return _sexImageView;
-}
-
-- (UILabel *)locationLabel
-{
-    if (!_locationLabel) {
-        _locationLabel = [[UILabel alloc] initWithFrame:CGRectMake(self.pg_width/2+20, self.nameLabel.pg_bottom+10, 100, 22)];
-        _locationLabel.font = Theme.fontSmallBold;
-        _locationLabel.textColor = Theme.colorText;
-    }
-    return _locationLabel;
+    return _descLabel;
 }
 
 @end

@@ -75,9 +75,9 @@
 {
     if (!_placeholderImageView) {
         UIImage *placeholderImage = [UIImage imageNamed:self.image];
-        CGFloat width = UISCREEN_WIDTH-30*2;
+        CGFloat width = placeholderImage.size.width;
         CGFloat height = width * placeholderImage.size.height/placeholderImage.size.width;
-        _placeholderImageView = [[UIImageView alloc] initWithFrame:CGRectMake(30, 50, width, height)];
+        _placeholderImageView = [[UIImageView alloc] initWithFrame:CGRectMake((UISCREEN_WIDTH-width)/2, 100, width, height)];
         _placeholderImageView.image = placeholderImage;
         _placeholderImageView.clipsToBounds = YES;
         _placeholderImageView.contentMode = UIViewContentModeScaleAspectFill;

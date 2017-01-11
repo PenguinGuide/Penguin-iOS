@@ -28,14 +28,10 @@
 
 - (void)initialize
 {
-    self.backgroundColor = [UIColor colorWithHexString:@"FBFBFB"];
+    self.backgroundColor = [UIColor whiteColor];
     
     [self.contentView addSubview:self.descLabel];
     [self.contentView addSubview:self.countLabel];
-    
-    UIView *horizontalLine = [[UIView alloc] initWithFrame:CGRectMake(0, self.pg_height-1/[UIScreen mainScreen].scale, self.pg_width, 1/[UIScreen mainScreen].scale)];
-    horizontalLine.backgroundColor = [UIColor colorWithHexString:@"F1F1F1"];
-    [self.contentView addSubview:horizontalLine];
 }
 
 - (void)setCellWithDesc:(NSString *)desc count:(NSString *)count

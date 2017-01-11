@@ -229,7 +229,7 @@
 - (PGSettingsUpdateTextField *)updateTextField
 {
     if (!_updateTextField) {
-        _updateTextField = [[PGSettingsUpdateTextField alloc] initWithFrame:CGRectMake(30, 64+30, UISCREEN_WIDTH-60, 40)];
+        _updateTextField = [[PGSettingsUpdateTextField alloc] initWithFrame:CGRectMake(30, 64+20, UISCREEN_WIDTH-60, 40)];
         switch (self.settingType) {
             case PGSettingsTypeNickname:
                 _updateTextField.placeholder = @"点击修改昵称";

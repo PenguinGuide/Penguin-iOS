@@ -27,13 +27,13 @@
 - (UIButton *)logoutButton
 {
     if (!_logoutButton) {
-        _logoutButton = [[UIButton alloc] initWithFrame:CGRectMake(35, 28, self.pg_width-35-46, 42)];
+        _logoutButton = [[UIButton alloc] initWithFrame:CGRectMake(38, 28, self.pg_width-38*2, 42)];
         [_logoutButton setTitle:@"退 出 登 录" forState:UIControlStateNormal];
         [_logoutButton setTitleColor:Theme.colorText forState:UIControlStateNormal];
         [_logoutButton.titleLabel setFont:Theme.fontMediumBold];
         _logoutButton.clipsToBounds = YES;
         _logoutButton.layer.cornerRadius = 4.f;
-        _logoutButton.layer.borderColor = Theme.colorText.CGColor;
+        _logoutButton.layer.borderColor = [UIColor colorWithHexString:@"979797"].CGColor;
         _logoutButton.layer.borderWidth = 1/[UIScreen mainScreen].scale;
     }
     return _logoutButton;
