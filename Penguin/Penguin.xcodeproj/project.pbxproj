@@ -205,6 +205,7 @@
 		0FD590D61D38BB3100731962 /* PGHomeToArticleTransition.m in Sources */ = {isa = PBXBuildFile; fileRef = 0FD590D51D38BB3100731962 /* PGHomeToArticleTransition.m */; };
 		0FD736F61DF12B9900E0058E /* PGScenarioFeedsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0FD736F51DF12B9900E0058E /* PGScenarioFeedsViewController.m */; };
 		0FD736F91DF12BA700E0058E /* PGScenarioGoodsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0FD736F81DF12BA700E0058E /* PGScenarioGoodsViewController.m */; };
+		0FE0313C1E266EBD008496F1 /* PGShareAttribute.m in Sources */ = {isa = PBXBuildFile; fileRef = 0FE0313B1E266EBD008496F1 /* PGShareAttribute.m */; };
 		0FE6D8661D9BB767000B8B46 /* PGGoodInfoCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0FE6D8651D9BB767000B8B46 /* PGGoodInfoCell.m */; };
 		0FE6D8691D9BB775000B8B46 /* PGGoodDescCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0FE6D8681D9BB775000B8B46 /* PGGoodDescCell.m */; };
 		0FEC43591DDEB14A008C74F8 /* PGShareViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0FEC43581DDEB14A008C74F8 /* PGShareViewController.m */; };
@@ -644,6 +645,8 @@
 		0FD736F51DF12B9900E0058E /* PGScenarioFeedsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PGScenarioFeedsViewController.m; sourceTree = "<group>"; };
 		0FD736F71DF12BA700E0058E /* PGScenarioGoodsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PGScenarioGoodsViewController.h; sourceTree = "<group>"; };
 		0FD736F81DF12BA700E0058E /* PGScenarioGoodsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PGScenarioGoodsViewController.m; sourceTree = "<group>"; };
+		0FE0313A1E266EBD008496F1 /* PGShareAttribute.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PGShareAttribute.h; sourceTree = "<group>"; };
+		0FE0313B1E266EBD008496F1 /* PGShareAttribute.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PGShareAttribute.m; sourceTree = "<group>"; };
 		0FE6D8641D9BB767000B8B46 /* PGGoodInfoCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PGGoodInfoCell.h; sourceTree = "<group>"; };
 		0FE6D8651D9BB767000B8B46 /* PGGoodInfoCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PGGoodInfoCell.m; sourceTree = "<group>"; };
 		0FE6D8671D9BB775000B8B46 /* PGGoodDescCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PGGoodDescCell.h; sourceTree = "<group>"; };
@@ -1545,6 +1548,7 @@
 				0F9E8E211DC5FD92003027CF /* Collection */,
 				0F1C75BB1DC716EA0044C931 /* History */,
 				0F59B9201D92771400DB9FCE /* User */,
+				0FE031391E266EA5008496F1 /* Share */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -2109,6 +2113,15 @@
 				FFF8164E1E07BFC70001FDFE /* PGCityGuideToArticleTransition.m */,
 			);
 			path = TransitionAnimation;
+			sourceTree = "<group>";
+		};
+		0FE031391E266EA5008496F1 /* Share */ = {
+			isa = PBXGroup;
+			children = (
+				0FE0313A1E266EBD008496F1 /* PGShareAttribute.h */,
+				0FE0313B1E266EBD008496F1 /* PGShareAttribute.m */,
+			);
+			path = Share;
 			sourceTree = "<group>";
 		};
 		0FEC43561DDEB129008C74F8 /* Share */ = {
@@ -2718,6 +2731,7 @@
 				0F2D09BE1D6F102F00957301 /* PGTagViewController.m in Sources */,
 				0F6281BA1D8FB6EA004E0596 /* PGTag.m in Sources */,
 				0F59B9231D92771D00DB9FCE /* PGUser.m in Sources */,
+				0FE0313C1E266EBD008496F1 /* PGShareAttribute.m in Sources */,
 				0F02E1A91DBDCC9500AA0428 /* PGSettingsUpdateTextField.m in Sources */,
 				0FC9E6B51DB083FC007069D5 /* PGTopicInfoHeaderView.m in Sources */,
 				0F59B91B1D925B4300DB9FCE /* PGArticleCommentCell.m in Sources */,

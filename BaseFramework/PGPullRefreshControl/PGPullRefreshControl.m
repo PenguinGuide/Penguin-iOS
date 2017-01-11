@@ -106,8 +106,6 @@ typedef NS_ENUM(NSInteger, PullRefreshControlState) {
                     [self.animatedImageView stopAnimating];
                     self.animatedImageView.image = self.loadingImages[self.loadingImages.count-1];
                 }
-            } else {
-                //[self.animatedImageView stopAnimating];
             }
         }
     }

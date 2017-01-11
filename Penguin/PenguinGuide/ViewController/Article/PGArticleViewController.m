@@ -931,11 +931,16 @@
 
 - (void)shareButtonClicked
 {
-    PGShareViewController *shareVC = [[PGShareViewController alloc] initWithShareLink:self.viewModel.article.shareUrl
-                                                                                 text:@"测试分享"
-                                                                                title:self.viewModel.article.title
-                                                                                image:self.viewModel.article.image
-                                                                            thumbnail:self.viewModel.article.image];
+    PGShareAttribute *attribute = [[PGShareAttribute alloc] init];
+    attribute.url = self.viewModel.article.shareUrl;
+    attribute.text = @"测试分享";
+    attribute.title = self.viewModel.article.title;
+    attribute.image = self.viewModel.article.image;
+    attribute.thumbnailImage = self.viewModel.article.image;
+    attribute.shareViewImage = self.headerImageView.image;
+    
+    PGShareViewController *shareVC = [[PGShareViewController alloc] initWithShareAttribute:attribute];
+    
     [self presentViewController:shareVC animated:YES completion:nil];
 }
 

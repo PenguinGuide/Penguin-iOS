@@ -325,19 +325,12 @@
         _feedsCollectionView.feedsDelegate = self;
         
         PGWeakSelf(self);
-        [_feedsCollectionView addPullToRefresh:Theme.loadingImages
-                                      topInset:64-36-5
-                                        height:64.f
-                                          rate:0.f
-                                       handler:^{
-                                           [weakself end];
-                                       }];
-//        [_feedsCollectionView enablePullToRefreshWithTopInset:0.f completion:^{
-//            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.4 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-//                [weakself.viewModel clearPagination];
-//                [weakself.viewModel requestData];
-//            });
-//        }];
+        [_feedsCollectionView enablePullToRefreshWithTopInset:64-36-5 completion:^{
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.4 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                [weakself.viewModel clearPagination];
+                [weakself.viewModel requestData];
+            });
+        }];
         [_feedsCollectionView enableInfiniteScrolling:^{
             [weakself.viewModel requestFeeds];
         }];

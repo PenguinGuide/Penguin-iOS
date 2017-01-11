@@ -13,6 +13,8 @@
 
 @property (nonatomic, strong) UIView *topDimView;
 @property (nonatomic, strong) UIView *shareView;
+@property (nonatomic, strong) UIImageView *imageView;
+@property (nonatomic, strong) UILabel *titleLabel;
 
 @property (nonatomic, strong) NSString *shareLink;
 @property (nonatomic, strong) NSString *shareText;
@@ -20,22 +22,20 @@
 @property (nonatomic, strong) NSString *shareImage;
 @property (nonatomic, strong) NSString *shareThumbnail;
 
+@property (nonatomic, strong) PGShareAttribute *attribute;
+
 @end
 
 @implementation PGShareViewController
 
-- (id)initWithShareLink:(NSString *)shareLink text:(NSString *)text title:(NSString *)title image:(NSString *)image thumbnail:(NSString *)thumbnail
+- (id)initWithShareAttribute:(PGShareAttribute *)attribute
 {
     if (self = [super init]) {
         self.modalPresentationStyle = UIModalPresentationOverCurrentContext;
         self.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
-        self.view.backgroundColor = [UIColor colorWithWhite:0.f alpha:0.8f];
+        self.view.backgroundColor = [UIColor colorWithWhite:0.f alpha:0.6f];
         
-        self.shareLink = shareLink;
-        self.shareText = text;
-        self.shareTitle = title;
-        self.shareImage = image;
-        self.shareThumbnail = thumbnail;
+        self.attribute = attribute;
     }
     return self;
 }
@@ -57,17 +57,19 @@
 {
     [super viewWillAppear:animated];
     
-    PGWeakSelf(self);
-    [UIView animateWithDuration:0.2f
-                          delay:0.f
-         usingSpringWithDamping:1.f
-          initialSpringVelocity:0.5f
-                        options:UIViewAnimationOptionCurveEaseInOut
-                     animations:^{
-                         weakself.shareView.frame = CGRectMake(0, UISCREEN_HEIGHT-140, UISCREEN_WIDTH, 140);
-                     } completion:^(BOOL finished) {
-                         
-                     }];
+    self.imageView.image = self.attribute.shareViewImage;
+    
+//    PGWeakSelf(self);
+//    [UIView animateWithDuration:0.2f
+//                          delay:0.f
+//         usingSpringWithDamping:1.f
+//          initialSpringVelocity:0.5f
+//                        options:UIViewAnimationOptionCurveEaseInOut
+//                     animations:^{
+//                         weakself.shareView.frame = CGRectMake(0, UISCREEN_HEIGHT-140, UISCREEN_WIDTH, 140);
+//                     } completion:^(BOOL finished) {
+//                         
+//                     }];
 }
 
 - (void)momentsButtonClicked
@@ -162,11 +164,6 @@
     }
 }
 
-- (void)cancelButtonClicked
-{
-    [self dismissViewControllerAnimated:YES completion:nil];
-}
-
 #pragma mark - <Lazy Init>
 
 - (UIView *)topDimView
@@ -181,42 +178,46 @@
 - (UIView *)shareView
 {
     if (!_shareView) {
-        _shareView = [[UIView alloc] initWithFrame:CGRectMake(0, UISCREEN_HEIGHT, UISCREEN_WIDTH, 140)];
-        _shareView.backgroundColor = [UIColor whiteColorWithAlpha:0.8f];
+        //264/190
+        CGFloat width = UISCREEN_WIDTH-28*2;
+        CGFloat height = (UISCREEN_WIDTH-28*2)*190/264+94;
         
-        UIView *horizontalLine = [[UIView alloc] initWithFrame:CGRectMake(25, 140-44-1/[UIScreen mainScreen].scale, UISCREEN_WIDTH-50, 1/[UIScreen mainScreen].scale)];
-        horizontalLine.backgroundColor = Theme.colorText;
-        [_shareView addSubview:horizontalLine];
+        _shareView = [[UIView alloc] initWithFrame:CGRectMake((UISCREEN_WIDTH-width)/2, (UISCREEN_HEIGHT-height)/2, width, height)];
+        _shareView.backgroundColor = [UIColor whiteColor];
+        _shareView.clipsToBounds = YES;
+        _shareView.layer.cornerRadius = 5.f;
         
-        float delta = (UISCREEN_WIDTH-30*2-60*4)/3;
+        float delta = (UISCREEN_WIDTH-28*2-25*2-60*4)/3;
         
-        PGShareButton *momentsButton = [[PGShareButton alloc] initWithFrame:CGRectMake(30, 20, 60, 60)];
+        self.imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, width, height-94)];
+        self.imageView.backgroundColor = Theme.colorBackground;
+        self.imageView.clipsToBounds = YES;
+        self.imageView.contentMode = UIViewContentModeScaleAspectFill;
+        [_shareView addSubview:self.imageView];
+        
+        UIView *dimView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.imageView.pg_width, self.imageView.pg_height)];
+        dimView.backgroundColor = [UIColor blackColorWithAlpha:0.3];
+        [self.imageView addSubview:dimView];
+        
+        PGShareButton *momentsButton = [[PGShareButton alloc] initWithFrame:CGRectMake(25, self.imageView.pg_bottom+20, 60, 60)];
         [momentsButton setImage:@"pg_share_moments" title:@"朋友圈"];
         [momentsButton addTarget:self action:@selector(momentsButtonClicked) forControlEvents:UIControlEventTouchUpInside];
         [_shareView addSubview:momentsButton];
         
-        PGShareButton *wechatButton = [[PGShareButton alloc] initWithFrame:CGRectMake(momentsButton.pg_right+delta, 20, 60, 60)];
+        PGShareButton *wechatButton = [[PGShareButton alloc] initWithFrame:CGRectMake(momentsButton.pg_right+delta, self.imageView.pg_bottom+20, 60, 60)];
         [wechatButton setImage:@"pg_share_wechat" title:@"微信"];
         [wechatButton addTarget:self action:@selector(wechatButtonClicked) forControlEvents:UIControlEventTouchUpInside];
         [_shareView addSubview:wechatButton];
         
-        PGShareButton *weiboButton = [[PGShareButton alloc] initWithFrame:CGRectMake(wechatButton.pg_right+delta, 20, 60, 60)];
+        PGShareButton *weiboButton = [[PGShareButton alloc] initWithFrame:CGRectMake(wechatButton.pg_right+delta, self.imageView.pg_bottom+20, 60, 60)];
         [weiboButton setImage:@"pg_share_weibo" title:@"微博"];
         [weiboButton addTarget:self action:@selector(weiboButtonClicked) forControlEvents:UIControlEventTouchUpInside];
         [_shareView addSubview:weiboButton];
         
-        PGShareButton *linkButton = [[PGShareButton alloc] initWithFrame:CGRectMake(weiboButton.pg_right+delta, 20, 60, 60)];
+        PGShareButton *linkButton = [[PGShareButton alloc] initWithFrame:CGRectMake(weiboButton.pg_right+delta, self.imageView.pg_bottom+20, 60, 60)];
         [linkButton setImage:@"pg_share_link" title:@"复制链接"];
         [linkButton addTarget:self action:@selector(linkButtonClicked) forControlEvents:UIControlEventTouchUpInside];
         [_shareView addSubview:linkButton];
-        
-        UIButton *cancelButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 140-44, UISCREEN_WIDTH, 44)];
-        [cancelButton setTitle:@"取 消" forState:UIControlStateNormal];
-        [cancelButton setTitleColor:Theme.colorText forState:UIControlStateNormal];
-        [cancelButton.titleLabel setFont:Theme.fontMedium];
-        [cancelButton addTarget:self action:@selector(cancelButtonClicked) forControlEvents:UIControlEventTouchUpInside];
-        
-        [_shareView addSubview:cancelButton];
     }
     return _shareView;
 }
