@@ -139,6 +139,27 @@
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler
 {
     if (userInfo[@"type"]) {
+#if (defined DEBUG)
+        NSError *error;
+        NSData *jsonData = [NSJSONSerialization dataWithJSONObject:userInfo
+                                                           options:NSJSONWritingPrettyPrinted
+                                                             error:&error];
+        if (!error) {
+            NSString *dataStr = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
+            [[[UIAlertView alloc] initWithTitle:@"notification userinfo"
+                                       message:dataStr
+                                      delegate:nil
+                             cancelButtonTitle:@"OK"
+                              otherButtonTitles:nil, nil] show];
+        } else {
+            [[[UIAlertView alloc] initWithTitle:@"notification userinfo"
+                                        message:@"bad format"
+                                       delegate:nil
+                              cancelButtonTitle:@"OK"
+                              otherButtonTitles:nil, nil] show];
+        }
+#endif
+        
         NSString *notificationType = [NSString stringWithFormat:@"%@", userInfo[@"type"]];
         if ([notificationType isEqualToString:@"1"]) {
             // h5
@@ -190,6 +211,27 @@
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo
 {
     if (userInfo[@"type"]) {
+#if (defined DEBUG)
+        NSError *error;
+        NSData *jsonData = [NSJSONSerialization dataWithJSONObject:userInfo
+                                                           options:NSJSONWritingPrettyPrinted
+                                                             error:&error];
+        if (!error) {
+            NSString *dataStr = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
+            [[[UIAlertView alloc] initWithTitle:@"notification userinfo"
+                                        message:dataStr
+                                       delegate:nil
+                              cancelButtonTitle:@"OK"
+                              otherButtonTitles:nil, nil] show];
+        } else {
+            [[[UIAlertView alloc] initWithTitle:@"notification userinfo"
+                                        message:@"bad format"
+                                       delegate:nil
+                              cancelButtonTitle:@"OK"
+                              otherButtonTitles:nil, nil] show];
+        }
+#endif
+        
         NSString *notificationType = [NSString stringWithFormat:@"%@", userInfo[@"type"]];
         if ([notificationType isEqualToString:@"1"]) {
             // h5

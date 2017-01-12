@@ -39,14 +39,16 @@
 - (void)setCellWithAuthorized:(BOOL)authorized
 {
     UIImage *iconImage;
+    NSString *str;
     
     if (authorized) {
-        
+        iconImage = [UIImage imageNamed:@"pg_setting_taobao_highlight"];
+        str = @"淘 宝 已 授 权";
     } else {
         iconImage = [UIImage imageNamed:@"pg_setting_taobao"];
+        str = @"淘 宝 未 授 权";
     }
     
-    NSString *str = @"淘 宝 授 权";
     NSMutableAttributedString *attrS = [[NSMutableAttributedString alloc] initWithString:str];
     [attrS addAttribute:NSForegroundColorAttributeName value:Theme.colorText range:NSMakeRange(0, str.length)];
     [attrS addAttribute:NSFontAttributeName value:Theme.fontMediumBold range:NSMakeRange(0, str.length)];

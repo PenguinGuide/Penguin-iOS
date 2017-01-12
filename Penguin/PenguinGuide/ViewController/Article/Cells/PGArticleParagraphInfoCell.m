@@ -13,7 +13,9 @@ static NSString *TagCell = @"TagCell";
 
 @interface PGArticleParagraphInfoCell () <UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout>
 
-@property (nonatomic, strong) UILabel *dateLabel;
+@property (nonatomic, strong) UILabel *dayLabel;
+@property (nonatomic, strong) UILabel *monthLabel;
+@property (nonatomic, strong) UILabel *yearLabel;
 @property (nonatomic, strong) UIImageView *channelImageView;
 @property (nonatomic, strong) UILabel *channelLabel;
 @property (nonatomic, strong) UILabel *titleLabel;
@@ -41,7 +43,14 @@ static NSString *TagCell = @"TagCell";
 
 - (void)initialize
 {
-    [self.contentView addSubview:self.dateLabel];
+    [self.contentView addSubview:self.yearLabel];
+    [self.contentView addSubview:self.monthLabel];
+    [self.contentView addSubview:self.dayLabel];
+    
+    UIView *verticleLine = [[UIView alloc] initWithFrame:CGRectMake(70, 21, 2, 26)];
+    verticleLine.backgroundColor = Theme.colorText;
+    [self.contentView addSubview:verticleLine];
+    
     [self.contentView addSubview:self.channelImageView];
     [self.contentView addSubview:self.channelLabel];
     
@@ -63,11 +72,38 @@ static NSString *TagCell = @"TagCell";
         if (article.date && article.date.length > 0) {
             NSArray *datesArray = [article.date componentsSeparatedByString:@"/"];
             if (datesArray.count == 3) {
-                NSString *year = datesArray[0];
-                NSString *month = datesArray[1];
-                NSString *day = datesArray[2];
-                
-                self.dateLabel.text = [NSString stringWithFormat:@"%@.%@.%@", day, month, year];
+                NSArray *dates = [article.date componentsSeparatedByString:@"/"];
+                if (dates.count == 3) {
+                    self.yearLabel.text = dates[0];
+                    self.dayLabel.text = dates[2];
+                    
+                    NSString *month = dates[1];
+                    if ([month isEqualToString:@"1"]) {
+                        self.monthLabel.text = @"JAN.";
+                    } else if ([month isEqualToString:@"2"]) {
+                        self.monthLabel.text = @"FEB.";
+                    } else if ([month isEqualToString:@"3"]) {
+                        self.monthLabel.text = @"MAR.";
+                    } else if ([month isEqualToString:@"4"]) {
+                        self.monthLabel.text = @"APR.";
+                    } else if ([month isEqualToString:@"5"]) {
+                        self.monthLabel.text = @"MAY.";
+                    } else if ([month isEqualToString:@"6"]) {
+                        self.monthLabel.text = @"JUN.";
+                    } else if ([month isEqualToString:@"7"]) {
+                        self.monthLabel.text = @"JUL.";
+                    } else if ([month isEqualToString:@"8"]) {
+                        self.monthLabel.text = @"AUG.";
+                    } else if ([month isEqualToString:@"9"]) {
+                        self.monthLabel.text = @"SEP.";
+                    } else if ([month isEqualToString:@"10"]) {
+                        self.monthLabel.text = @"OCT.";
+                    } else if ([month isEqualToString:@"11"]) {
+                        self.monthLabel.text = @"NOV.";
+                    } else if ([month isEqualToString:@"12"]) {
+                        self.monthLabel.text = @"DEC.";
+                    }
+                }
             }
         }
         
@@ -263,20 +299,40 @@ static NSString *TagCell = @"TagCell";
 
 #pragma mark - <Setters && Getters>
 
-- (UILabel *)dateLabel
+- (UILabel *)dayLabel
 {
-    if (!_dateLabel) {
-        _dateLabel = [[UILabel alloc] initWithFrame:CGRectMake(30, 19, 150, 22)];
-        _dateLabel.font = Theme.fontLargeBold;
-        _dateLabel.textColor = Theme.colorText;
+    if (!_dayLabel) {
+        _dayLabel = [[UILabel alloc] initWithFrame:CGRectMake(30, 19, 40, 30)];
+        _dayLabel.font = [UIFont systemFontOfSize:28.f weight:UIFontWeightMedium];
+        _dayLabel.textColor = Theme.colorText;
     }
-    return _dateLabel;
+    return _dayLabel;
+}
+
+- (UILabel *)monthLabel
+{
+    if (!_monthLabel) {
+        _monthLabel = [[UILabel alloc] initWithFrame:CGRectMake(80, 19, 37, 15)];
+        _monthLabel.font = Theme.fontSmallBold;
+        _monthLabel.textColor = Theme.colorText;
+    }
+    return _monthLabel;
+}
+
+- (UILabel *)yearLabel
+{
+    if (!_yearLabel) {
+        _yearLabel = [[UILabel alloc] initWithFrame:CGRectMake(80, self.monthLabel.pg_bottom, 37, 15)];
+        _yearLabel.font = Theme.fontSmallBold;
+        _yearLabel.textColor = Theme.colorText;
+    }
+    return _yearLabel;
 }
 
 - (UIImageView *)channelImageView
 {
     if (!_channelImageView) {
-        _channelImageView = [[UIImageView alloc] initWithFrame:CGRectMake(self.dateLabel.pg_right+20, 21, 28, 28)];
+        _channelImageView = [[UIImageView alloc] initWithFrame:CGRectMake(self.monthLabel.pg_right+20, 21, 28, 28)];
     }
     return _channelImageView;
 }

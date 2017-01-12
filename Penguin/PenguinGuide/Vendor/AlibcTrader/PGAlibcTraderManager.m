@@ -10,6 +10,7 @@ static NSString *const AppKey = @"23465992";
 
 #import "PGAlibcTraderManager.h"
 #import <AlibcTradeSDK/AlibcTradeSDK.h>
+#import <AlibabaAuthSDK/ALBBSDK.h>
 
 @interface PGAlibcTraderManager ()
 
@@ -35,6 +36,30 @@ static NSString *const AppKey = @"23465992";
 + (BOOL)handleOpenURL:(NSURL *)url
 {
     return [[AlibcTradeSDK sharedInstance] handleOpenURL:url];
+}
+
++ (BOOL)isUserLogin
+{
+    return [[ALBBSession sharedInstance] isLogin];
+}
+
++ (void)login:(void (^)(BOOL success))completion
+{
+    [[ALBBSDK sharedInstance] auth:PGGlobal.tempNavigationController?PGGlobal.tempNavigationController:PGGlobal.rootNavigationController
+                   successCallback:^(ALBBSession *session) {
+                       if (completion) {
+                           completion(YES);
+                       }
+                   } failureCallback:^(ALBBSession *session, NSError *error) {
+                       if (completion) {
+                           completion(NO);
+                       }
+                   }];
+}
+
++ (void)logout
+{
+    [[ALBBSDK sharedInstance] logout];
 }
 
 + (void)openGoodDetailPage:(NSString *)goodId native:(BOOL)showNative

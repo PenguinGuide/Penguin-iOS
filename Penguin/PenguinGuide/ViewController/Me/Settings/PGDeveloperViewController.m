@@ -35,12 +35,28 @@
 {
     [PGGlobal synchronizeHostUrl:@"https://api.penguinguide.cn"];
     
+    [[NSNotificationCenter defaultCenter] postNotificationName:PG_NOTIFICATION_LOGOUT object:nil];
+    
+    [PGGlobal synchronizeUserId:nil];
+    [PGGlobal synchronizeToken:nil];
+    [PGShareManager logout];
+    
+    [PGGlobal.cache deleteObjectForKey:@"apns_token" fromTable:@"Session"];
+    
     self.currentHostLabel.text = @"当前环境：生产";
 }
 
 - (void)debugButtonClicked
 {
     [PGGlobal synchronizeHostUrl:@"https://api.penguin.guide"];
+    
+    [[NSNotificationCenter defaultCenter] postNotificationName:PG_NOTIFICATION_LOGOUT object:nil];
+    
+    [PGGlobal synchronizeUserId:nil];
+    [PGGlobal synchronizeToken:nil];
+    [PGShareManager logout];
+    
+    [PGGlobal.cache deleteObjectForKey:@"apns_token" fromTable:@"Session"];
     
     self.currentHostLabel.text = @"当前环境：测试";
 }

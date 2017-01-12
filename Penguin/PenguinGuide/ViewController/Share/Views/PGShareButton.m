@@ -27,7 +27,7 @@
     
     UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, self.pg_height-20, self.pg_width, 14)];
     label.text = title;
-    label.textColor = Theme.colorText;
+    label.textColor = Theme.colorLightText;
     label.font = Theme.fontSmall;
     label.textAlignment = NSTextAlignmentCenter;
     

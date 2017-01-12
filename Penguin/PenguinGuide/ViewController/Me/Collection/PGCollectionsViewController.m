@@ -149,11 +149,9 @@
 - (void)disCollectArticle:(PGArticleBanner *)article
 {
     PGWeakSelf(self);
-    __weak PGArticleBanner *weakArticle = article;
-    [self.viewModel disCollectArticle:article.articleId completion:^(BOOL success) {
+    NSInteger index = [self.viewModel.articles indexOfObject:article];
+    [self.viewModel disCollectArticle:article.articleId index:index completion:^(BOOL success) {
         if (success) {
-            NSInteger index = [weakself.viewModel.articles indexOfObject:weakArticle];
-            [weakself.articlesCollectionView deleteItemsAtIndexPaths:@[[NSIndexPath indexPathForItem:index inSection:0]]];
             [weakself showToast:@"取消成功"];
             [[NSNotificationCenter defaultCenter] postNotificationName:PG_NOTIFICATION_UPDATE_ME object:nil];
         } else {

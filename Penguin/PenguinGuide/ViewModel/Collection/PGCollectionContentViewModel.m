@@ -80,7 +80,7 @@
     }
 }
 
-- (void)disCollectArticle:(NSString *)articleId completion:(void (^)(BOOL success))completion
+- (void)disCollectArticle:(NSString *)articleId index:(NSInteger)index completion:(void (^)(BOOL success))completion
 {
     if (articleId && articleId.length > 0) {
         PGWeakSelf(self);
@@ -89,6 +89,16 @@
             config.keyPath = nil;
             config.pattern = @{@"articleId":articleId};
         } completion:^(id response) {
+            NSMutableArray *collectionsArray = [NSMutableArray arrayWithArray:weakself.articles];
+            if (index < collectionsArray.count) {
+                [collectionsArray removeObjectAtIndex:index];
+                weakself.articles = [NSArray arrayWithArray:collectionsArray];
+            }
+            if (weakself.articles.count == 0) {
+                weakself.endFlag = YES;
+            } else {
+                weakself.endFlag = NO;
+            }
             if (completion) {
                 completion(YES);
             }

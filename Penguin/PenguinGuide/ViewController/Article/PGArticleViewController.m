@@ -939,6 +939,39 @@
     attribute.thumbnailImage = self.viewModel.article.image;
     attribute.shareViewImage = self.headerImageView.image;
     
+    NSArray *dates = [self.viewModel.article.date componentsSeparatedByString:@"/"];
+    if (dates.count == 3) {
+        attribute.year = dates[0];
+        attribute.day = dates[2];
+        
+        NSString *month = dates[1];
+        if ([month isEqualToString:@"1"]) {
+            attribute.month = @"JAN.";
+        } else if ([month isEqualToString:@"2"]) {
+            attribute.month = @"FEB.";
+        } else if ([month isEqualToString:@"3"]) {
+            attribute.month = @"MAR.";
+        } else if ([month isEqualToString:@"4"]) {
+            attribute.month = @"APR.";
+        } else if ([month isEqualToString:@"5"]) {
+            attribute.month = @"MAY.";
+        } else if ([month isEqualToString:@"6"]) {
+            attribute.month = @"JUN.";
+        } else if ([month isEqualToString:@"7"]) {
+            attribute.month = @"JUL.";
+        } else if ([month isEqualToString:@"8"]) {
+            attribute.month = @"AUG.";
+        } else if ([month isEqualToString:@"9"]) {
+            attribute.month = @"SEP.";
+        } else if ([month isEqualToString:@"10"]) {
+            attribute.month = @"OCT.";
+        } else if ([month isEqualToString:@"11"]) {
+            attribute.month = @"NOV.";
+        } else if ([month isEqualToString:@"12"]) {
+            attribute.month = @"DEC.";
+        }
+    }
+    
     PGShareViewController *shareVC = [[PGShareViewController alloc] initWithShareAttribute:attribute];
     
     [self presentViewController:shareVC animated:YES completion:nil];

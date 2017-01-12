@@ -16,6 +16,7 @@
 #import "PGSystemSettingsCell.h"
 #import "PGSystemSettingsTaobaoCell.h"
 #import "PGSettingsLogoutFooterView.h"
+#import "PGAlibcTraderManager.h"
 
 #import "SDImageCache.h"
 
@@ -96,7 +97,8 @@
         return cell;
     } else if (indexPath.section == 1) {
         PGSystemSettingsTaobaoCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:TaoBaoCell forIndexPath:indexPath];
-        [cell setCellWithAuthorized:NO];
+        
+        [cell setCellWithAuthorized:[PGAlibcTraderManager isUserLogin]];
         
         return cell;
     }
@@ -176,7 +178,7 @@
             PGAlertAction *doneAction = [PGAlertAction actionWithTitle:@"确定" style:^(PGAlertActionStyle *style) {
                 style.type = PGAlertActionTypeDestructive;
             } handler:^{
-                //[[SDImageCache sharedImageCache] clearDisk];
+                [[SDImageCache sharedImageCache] clearDiskOnCompletion:nil];
                 [[SDImageCache sharedImageCache] clearMemory];
             }];
             [self showAlert:@"清除缓存" message:@"确定清除缓存？" actions:@[cancelAction, doneAction] style:^(PGAlertStyle *style) {
@@ -189,7 +191,34 @@
 #endif
         }
     } else if (indexPath.section == 1) {
-        
+        PGWeakSelf(self);
+        if ([PGAlibcTraderManager isUserLogin]) {
+            PGAlertAction *cancelAction = [PGAlertAction actionWithTitle:@"取消" style:^(PGAlertActionStyle *style) {
+                
+            } handler:^{
+                
+            }];
+            PGAlertAction *doneAction = [PGAlertAction actionWithTitle:@"确定" style:^(PGAlertActionStyle *style) {
+                style.type = PGAlertActionTypeDestructive;
+            } handler:^{
+                [PGAlibcTraderManager logout];
+                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.4 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                    [weakself.settingsCollectionView reloadData];
+                });
+            }];
+            [self showAlert:@"退出淘宝登录" message:@"确定退出淘宝登录？" actions:@[cancelAction, doneAction] style:^(PGAlertStyle *style) {
+                style.alertType = PGAlertTypeAlert;
+            }];
+        } else {
+            [PGAlibcTraderManager login:^(BOOL success) {
+                if (success) {
+                    [weakself showToast:@"淘宝登录成功"];
+                    [weakself.settingsCollectionView reloadData];
+                } else {
+                    [weakself showToast:@"淘宝登录失败"];
+                }
+            }];
+        }
     }
 }
 

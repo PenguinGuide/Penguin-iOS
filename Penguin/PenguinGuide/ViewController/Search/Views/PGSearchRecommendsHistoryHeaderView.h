@@ -8,6 +8,14 @@
 
 #import <UIKit/UIKit.h>
 
+@protocol PGSearchRecommendsHistoryHeaderViewDelegate <NSObject>
+
+- (void)historyDeleteButtonClicked;
+
+@end
+
 @interface PGSearchRecommendsHistoryHeaderView : UICollectionReusableView
+
+@property (nonatomic, weak) id<PGSearchRecommendsHistoryHeaderViewDelegate> delegate;
 
 @end

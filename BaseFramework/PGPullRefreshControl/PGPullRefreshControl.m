@@ -67,7 +67,9 @@ typedef NS_ENUM(NSInteger, PullRefreshControlState) {
 - (void)endPullRefresh
 {
     self.state = PullRefreshControlStateLoading;
-    [self.scrollView setContentOffset:CGPointZero animated:YES];
+    if (self.scrollView.contentOffset.y <= 0) {
+        [self.scrollView setContentOffset:CGPointZero animated:YES];
+    }
 }
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSKeyValueChangeKey,id> *)change context:(void *)context
@@ -76,10 +78,10 @@ typedef NS_ENUM(NSInteger, PullRefreshControlState) {
         UIGestureRecognizerState state = self.scrollView.panGestureRecognizer.state;
         if (state == UIGestureRecognizerStateBegan || state == UIGestureRecognizerStateChanged) {
             self.state = PullRefreshControlStateLoading;
-            NSLog(@"pull to refresh loading");
+            //NSLog(@"pull to refresh loading");
         } else {
             self.state = PullRefreshControlStateTriggered;
-            NSLog(@"pull to refresh triggered");
+            //NSLog(@"pull to refresh triggered");
         }
     }
     
@@ -107,6 +109,8 @@ typedef NS_ENUM(NSInteger, PullRefreshControlState) {
                     self.animatedImageView.image = self.loadingImages[self.loadingImages.count-1];
                 }
             }
+        } else {
+            
         }
     }
 }

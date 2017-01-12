@@ -30,6 +30,19 @@
     label.textColor = Theme.colorText;
     label.font = Theme.fontExtraLargeBold;
     [self addSubview:label];
+    
+    UIButton *deleteButton = [[UIButton alloc] initWithFrame:CGRectMake(self.pg_width-20-100, horizontalView.pg_bottom+10, 100, 30)];
+    deleteButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentRight;
+    [deleteButton setImage:[UIImage imageNamed:@"pg_search_history_delete"] forState:UIControlStateNormal];
+    [deleteButton addTarget:self action:@selector(deleteButtonClicked) forControlEvents:UIControlEventTouchUpInside];
+    [self addSubview:deleteButton];
+}
+
+- (void)deleteButtonClicked
+{
+    if (self.delegate && [self.delegate respondsToSelector:@selector(historyDeleteButtonClicked)]) {
+        [self.delegate historyDeleteButtonClicked];
+    }
 }
 
 @end

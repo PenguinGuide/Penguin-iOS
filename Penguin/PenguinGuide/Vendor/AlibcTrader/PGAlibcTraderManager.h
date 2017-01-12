@@ -13,6 +13,10 @@
 + (void)registerAlibcTraderSDK;
 + (BOOL)handleOpenURL:(NSURL *)url;
 
++ (BOOL)isUserLogin;
++ (void)login:(void (^)(BOOL success))completion;
++ (void)logout;
+
 + (void)openGoodDetailPage:(NSString *)goodId native:(BOOL)showNative;
 + (void)openMyOrdersPageWithNative:(BOOL)showNative;
 + (void)openMyShoppingCartPageWithNative:(BOOL)showNative;

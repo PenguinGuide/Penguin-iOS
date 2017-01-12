@@ -22,7 +22,7 @@
 #import "UICollectionViewLeftAlignedLayout.h"
 #import "PGSearchTextField.h"
 
-@interface PGSearchRecommendsViewController () <UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, UITextFieldDelegate>
+@interface PGSearchRecommendsViewController () <UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, UITextFieldDelegate, PGSearchRecommendsHistoryHeaderViewDelegate>
 
 @property (nonatomic, strong) PGSearchRecommendsViewModel *viewModel;
 
@@ -152,6 +152,7 @@
     if (indexPath.section == 1) {
         if (kind == UICollectionElementKindSectionHeader) {
             PGSearchRecommendsHistoryHeaderView *headerView = [collectionView dequeueReusableSupplementaryViewOfKind:kind withReuseIdentifier:HistoryHeaderView forIndexPath:indexPath];
+            headerView.delegate = self;
             
             return headerView;
         }
@@ -271,6 +272,15 @@
         return YES;
     }
     return NO;
+}
+
+#pragma mark - <PGSearchRecommendsHistoryHeaderViewDelegate>
+
+- (void)historyDeleteButtonClicked
+{
+    [PGGlobal.cache deleteObjectForKey:@"search_keywords" fromTable:@"Search"];
+    self.viewModel.historyArray = [NSArray new];
+    [self.searchCollectionView reloadData];
 }
 
 #pragma mark - <Setters && Getters>

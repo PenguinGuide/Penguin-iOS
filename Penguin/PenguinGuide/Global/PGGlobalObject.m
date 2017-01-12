@@ -181,7 +181,7 @@
 - (PGAPIClient *)apiClient
 {
     if (!_apiClient) {
-        _apiClient = [PGAPIClient client];
+        _apiClient = [PGAPIClient clientWithBaseUrl:self.hostUrl];
         if (self.accessToken) {
             [_apiClient updateAccessToken:[NSString stringWithFormat:@"Bearer %@", self.accessToken]];
         } else {
