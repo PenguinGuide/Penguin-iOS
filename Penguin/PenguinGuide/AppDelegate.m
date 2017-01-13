@@ -17,6 +17,8 @@
 #import "PGLaunchAds.h"
 #import "PGAlibcTraderManager.h"
 
+#import "AFNetworkReachabilityManager.h"
+
 #import "PGBaseNavigationController.h"
 
 #import "PGStoreViewController.h"
@@ -52,6 +54,8 @@
     [PGLog turnOffLogging];
     [PGAPIClient disableLogging];
 #endif
+    
+    [[AFNetworkReachabilityManager sharedManager] startMonitoring];
     
     [PGShareManager registerShareSDK];
     [PGAlibcTraderManager registerAlibcTraderSDK];

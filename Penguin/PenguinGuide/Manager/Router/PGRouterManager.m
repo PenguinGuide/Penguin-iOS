@@ -198,6 +198,8 @@
 
 + (void)routeToLoginPage
 {
+    [PGGlobal synchronizeUserId:nil];
+    [PGGlobal synchronizeToken:nil];
     [[PGRouter sharedInstance] openURL:@"qiechihe://login"];
 }
 

@@ -52,6 +52,11 @@
             self.userId = nil;
         }
         
+        if (!self.accessToken || !self.userId) {
+            [self synchronizeUserId:nil];
+            [self synchronizeToken:nil];
+        }
+        
         NSArray *hostUrlObject = [self.cache objectForKey:@"host_url" fromTable:@"Session"];
         if (hostUrlObject && [hostUrlObject isKindOfClass:[NSArray class]]) {
             self.hostUrl = [hostUrlObject firstObject];

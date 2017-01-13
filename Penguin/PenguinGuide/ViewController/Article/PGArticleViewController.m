@@ -30,6 +30,8 @@
 #import "PGShareViewController.h"
 #import "PGCommentReportViewController.h"
 
+#import "AFNetworkReachabilityManager.h"
+
 // views
 #import "PGArticleParagraphInfoCell.h"
 #import "PGArticleParagraphTextCell.h"
@@ -260,7 +262,11 @@
 
 - (void)animateCollectionView:(void (^)())completion
 {
-    self.animationCompletion = completion;
+    if (completion) {
+        self.animationCompletion = [completion copy];
+    } else {
+        self.animationCompletion = nil;
+    }
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -573,8 +579,37 @@
             if ([storage isKindOfClass:[PGParserVideoStorage class]]) {
                 PGParserVideoStorage *videoStorage = (PGParserVideoStorage *)storage;
                 if (videoStorage.link && videoStorage.link.length > 0) {
-                    PGVideoPlayerViewController *playerViewController = [[PGVideoPlayerViewController alloc] initWithVideoURL:videoStorage.link];
-                    [self.navigationController pushViewController:playerViewController animated:YES];
+                    PGWeakSelf(self);
+                    AFNetworkReachabilityStatus status = [AFNetworkReachabilityManager sharedManager].networkReachabilityStatus;
+                    switch (status) {
+                        case AFNetworkReachabilityStatusReachableViaWiFi:
+                        {
+                            PGVideoPlayerViewController *playerViewController = [[PGVideoPlayerViewController alloc] initWithVideoURL:videoStorage.link];
+                            [self.navigationController pushViewController:playerViewController animated:YES];
+                            break;
+                        }
+                            
+                        case AFNetworkReachabilityStatusReachableViaWWAN:
+                        {
+                            PGAlertAction *cancelAction = [PGAlertAction actionWithTitle:@"取消" style:nil handler:nil];
+                            PGAlertAction *doneAction = [PGAlertAction actionWithTitle:@"继续观看" style:^(PGAlertActionStyle *style) {
+                                style.type = PGAlertActionTypeDestructive;
+                            } handler:^{
+                                PGVideoPlayerViewController *playerViewController = [[PGVideoPlayerViewController alloc] initWithVideoURL:videoStorage.link];
+                                [weakself.navigationController pushViewController:playerViewController animated:YES];
+                            }];
+                            [self showAlert:@"已切换到3G/4G网络" message:@"继续播放将产生流量费用" actions:@[cancelAction, doneAction] style:^(PGAlertStyle *style) {
+                                style.alertType = PGAlertTypeAlert;
+                            }];
+                            break;
+                        }
+                        case AFNetworkReachabilityStatusUnknown:
+                            break;
+                        case AFNetworkReachabilityStatusNotReachable:
+                            break;
+                        default:
+                            break;
+                    }
                 }
             } else if ([storage isKindOfClass:[PGParserSingleGoodStorage class]]) {
                 PGParserSingleGoodStorage *singleGoodStorage = (PGParserSingleGoodStorage *)storage;
@@ -616,7 +651,7 @@
                         [replyCell unselectLabel];
                         
                         if (indexPath.item < weakself.viewModel.commentsArray.count) {
-                            weakself.selectedComment = self.viewModel.commentsArray[indexPath.item];
+                            weakself.selectedComment = weakself.viewModel.commentsArray[indexPath.item];
                             weakself.commentInputAccessoryView.commentTextView.text = @"";
                             weakself.commentInputAccessoryView.commentTextView.attributedPlaceholder = [[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"回复%@", weakself.selectedComment.user.nickname] attributes:@{NSFontAttributeName:Theme.fontMedium, NSForegroundColorAttributeName:[UIColor colorWithHexString:@"AFAFAF"]}];
                             
