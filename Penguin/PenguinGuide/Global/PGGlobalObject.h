@@ -23,9 +23,11 @@
 
 @property (nonatomic, strong, readonly) PGAPIClient *apiClient;
 @property (nonatomic, strong, readonly) PGCache *cache;
+
 @property (nonatomic, strong, readonly) NSString *userId;
 @property (nonatomic, strong, readonly) NSString *accessToken;
 @property (nonatomic, strong, readonly) NSString *hostUrl;
+
 @property (nonatomic, assign, readwrite) NSInteger smsCodeCountDown;
 @property (nonatomic, assign, readwrite) BOOL hasNewMessage;
 

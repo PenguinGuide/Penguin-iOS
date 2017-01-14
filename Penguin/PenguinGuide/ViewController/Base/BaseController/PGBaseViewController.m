@@ -27,26 +27,6 @@
 
 @implementation PGBaseViewController
 
-- (id)init
-{
-    if (self = [super init]) {
-        if (PGGlobal.accessToken) {
-            [self.apiClient updateAccessToken:[NSString stringWithFormat:@"Bearer %@", PGGlobal.accessToken]];
-        } else {
-            [self.apiClient updateAccessToken:nil];
-        }
-    }
-    
-    return self;
-}
-
-- (void)dealloc
-{
-    [self dismissLoading];
-    [self.apiClient cancelAllRequests];
-    self.apiClient = nil;
-}
-
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view, typically from a nib.
@@ -60,18 +40,24 @@
     // ISSUE: fix left sliding not working, http://blog.csdn.net/meegomeego/article/details/25879605
     self.navigationController.interactivePopGestureRecognizer.delegate = (id)self;
     
+    if (PGGlobal.accessToken) {
+        [self.apiClient setAuthorizationHeaderField:[NSString stringWithFormat:@"Bearer %@", PGGlobal.accessToken]];
+    } else {
+        [self.apiClient clearAuthorizationHeader];
+    }
+    
     PGWeakSelf(self);
     [self observe:PGGlobal keyPath:@"accessToken" block:^(id changedObject) {
         if (PGGlobal.accessToken) {
-            [weakself.apiClient updateAccessToken:[NSString stringWithFormat:@"Bearer %@", PGGlobal.accessToken]];
+            [weakself.apiClient setAuthorizationHeaderField:[NSString stringWithFormat:@"Bearer %@", PGGlobal.accessToken]];
         } else {
-            [weakself.apiClient updateAccessToken:nil];
+            [weakself.apiClient clearAuthorizationHeader];
         }
     }];
     [self observe:PGGlobal keyPath:@"hostUrl" block:^(id changedObject) {
         NSString *hostUrl = changedObject;
-        if (hostUrl && [hostUrl isKindOfClass:[NSString class]] && hostUrl.length > 0) {
-            [weakself.apiClient updateHostUrl:hostUrl];
+        if (hostUrl && [hostUrl isKindOfClass:[NSString class]] && hostUrl.length > 0 && ![hostUrl isEqualToString:PGGlobal.hostUrl]) {
+            [weakself.apiClient setBaseUrl:hostUrl];
         }
     }];
 }
@@ -102,6 +88,13 @@
     [super viewDidDisappear:animated];
     
     self.navigationController.delegate = nil;
+}
+
+- (void)dealloc
+{
+    [self dismissLoading];
+    [self.apiClient cancelAllRequests];
+    self.apiClient = nil;
 }
 
 - (UIInterfaceOrientationMask)supportedInterfaceOrientations
@@ -340,6 +333,11 @@
 {
     if (!_apiClient) {
         _apiClient = [PGAPIClient clientWithBaseUrl:PGGlobal.hostUrl];
+        if (PGGlobal.accessToken) {
+            [_apiClient setAuthorizationHeaderField:[NSString stringWithFormat:@"Bearer %@", PGGlobal.accessToken]];
+        } else {
+            [_apiClient clearAuthorizationHeader];
+        }
     }
     return _apiClient;
 }

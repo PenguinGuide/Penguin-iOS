@@ -93,6 +93,12 @@ static const int DefaultMaxConcurrentConnections = 5;
     } else {
         [self.sessionManager.requestSerializer clearAuthorizationHeader];
     }
+    
+}
+
+- (void)clearAuthorizationHeader
+{
+    [self.sessionManager.requestSerializer clearAuthorizationHeader];
 }
 
 #pragma mark - <Base Url>

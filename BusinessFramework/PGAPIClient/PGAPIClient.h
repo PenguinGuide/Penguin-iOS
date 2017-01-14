@@ -17,6 +17,7 @@
 + (id)clientWithBaseUrl:(NSString *)baseUrl timeout:(NSTimeInterval)timeout operationCount:(NSInteger)operationCount;
 
 - (void)setAuthorizationHeaderField:(NSString *)token;
+- (void)clearAuthorizationHeader;
 - (void)setBaseUrl:(NSString *)baseUrl;
 
 + (void)enableLogging;
