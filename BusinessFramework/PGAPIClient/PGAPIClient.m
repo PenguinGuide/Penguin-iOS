@@ -9,7 +9,6 @@
 #define PG_API_Result_Success 0
 #define PG_API_Result_Failed -1
 
-static const NSString *PGBaseURL = @"www.penguinguide.com";
 static const NSTimeInterval DefaultRequestTimeout = 30.0;
 static const int DefaultMaxConcurrentConnections = 5;
 
@@ -19,63 +18,46 @@ static const int DefaultMaxConcurrentConnections = 5;
 @interface PGAPIClient ()
 
 @property (nonatomic, strong) PGRKHTTPSessionManager *sessionManager;
-@property (nonatomic, strong) NSString *accessToken;
-@property (nonatomic, strong) NSString *hostUrl;
 
 @end
 
 @implementation PGAPIClient
 
-+ (id)client
-{
-    return [[PGAPIClient alloc] initWithTimeout:DefaultRequestTimeout operationCount:DefaultMaxConcurrentConnections];
-}
+#pragma mark - <Init Methods>
 
 + (id)clientWithBaseUrl:(NSString *)baseUrl
 {
-    return [[PGAPIClient alloc] initWithBaseUrl:baseUrl withTimeout:DefaultRequestTimeout operationCount:DefaultMaxConcurrentConnections];
+    return [[PGAPIClient alloc] initWithBaseUrl:baseUrl timeout:DefaultRequestTimeout operationCount:DefaultMaxConcurrentConnections];
 }
 
-+ (id)clientWithTimeout:(NSTimeInterval)timeout
++ (id)clientWithBaseUrl:(NSString *)baseUrl timeout:(NSTimeInterval)timeout
 {
-    return [[PGAPIClient alloc] initWithTimeout:timeout operationCount:DefaultMaxConcurrentConnections];
+    return [[PGAPIClient alloc] initWithBaseUrl:baseUrl timeout:timeout operationCount:DefaultMaxConcurrentConnections];
 }
 
-+ (id)clientWithOperationCount:(NSInteger)operationCount
++ (id)clientWithBaseUrl:(NSString *)baseUrl operationCount:(NSInteger)operationCount
 {
-    return [[PGAPIClient alloc] initWithTimeout:DefaultRequestTimeout operationCount:operationCount];
+    return [[PGAPIClient alloc] initWithBaseUrl:baseUrl timeout:DefaultRequestTimeout operationCount:operationCount];
 }
 
-+ (id)clientWithTimeout:(NSTimeInterval)timeout operationCount:(NSInteger)operationCount
++ (id)clientWithBaseUrl:(NSString *)baseUrl timeout:(NSTimeInterval)timeout operationCount:(NSInteger)operationCount
 {
-    return [[PGAPIClient alloc] initWithTimeout:timeout operationCount:operationCount];
+    return [[PGAPIClient alloc] initWithBaseUrl:baseUrl timeout:timeout operationCount:operationCount];
 }
 
-- (id)initWithBaseUrl:(NSString *)baseUrl withTimeout:(NSTimeInterval)timeout operationCount:(NSInteger)operationCount
+- (id)initWithBaseUrl:(NSString *)baseUrl timeout:(NSTimeInterval)timeout operationCount:(NSInteger)operationCount
 {
     if (self = [super init]) {
-        self.hostUrl = baseUrl;
-        [self initSessionManager:timeout operationCount:operationCount];
+        [self initSessionManager:baseUrl timeout:timeout operationCount:operationCount];
     }
     
     return self;
 }
 
-- (id)initWithTimeout:(NSTimeInterval)timeout operationCount:(NSInteger)operationCount
+- (void)initSessionManager:(NSString *)baseUrl timeout:(NSTimeInterval)timeout operationCount:(NSInteger)operationCount
 {
-    if (self = [super init]) {
-        [self initSessionManager:timeout operationCount:operationCount];
-    }
-    
-    return self;
-}
-
-- (void)initSessionManager:(NSTimeInterval)timeout operationCount:(NSInteger)operationCount
-{
-    if (self.hostUrl && self.hostUrl.length > 0) {
-        self.sessionManager = [PGRKHTTPSessionManager sessionManagerWithBaseURL:self.hostUrl timeout:timeout operationCount:operationCount];
-    } else {
-        self.sessionManager = [PGRKHTTPSessionManager sessionManagerWithBaseURL:@"https://api.penguinguide.cn" timeout:timeout operationCount:operationCount];
+    if (baseUrl && baseUrl.length > 0) {
+        self.sessionManager = [PGRKHTTPSessionManager sessionManagerWithBaseURL:baseUrl timeout:timeout operationCount:operationCount];
     }
     
     // content-type
@@ -100,13 +82,28 @@ static const int DefaultMaxConcurrentConnections = 5;
     [self.sessionManager addValue:userAgent forHTTPHeaderField:@"User-Agent"];
     // accept
     [self.sessionManager addValue:@"application/json" forHTTPHeaderField:@"Accept"];
-    
-    if (self.accessToken) {
-        [self.sessionManager addValue:self.accessToken forHTTPHeaderField:@"Authorization"];
+}
+
+#pragma mark - <Authorization Header Field>
+
+- (void)setAuthorizationHeaderField:(NSString *)token
+{
+    if (token && token.length > 0) {
+        [self.sessionManager addValue:token forHTTPHeaderField:@"Authorization"];
     } else {
-        [self.sessionManager addValue:nil forHTTPHeaderField:@"Authorization"];
+        [self.sessionManager.requestSerializer clearAuthorizationHeader];
     }
 }
+
+#pragma mark - <Base Url>
+
+- (void)setBaseUrl:(NSString *)baseUrl
+{
+    [self cancelAllRequests];
+    [self initSessionManager:baseUrl timeout:DefaultRequestTimeout operationCount:DefaultMaxConcurrentConnections];
+}
+
+#pragma mark - <Request Logger>
 
 + (void)enableLogging
 {
@@ -118,24 +115,7 @@ static const int DefaultMaxConcurrentConnections = 5;
     [PGRKHTTPSessionManager disableLogging];
 }
 
-- (void)updateHostUrl:(NSString *)hostUrl
-{
-    self.hostUrl = hostUrl;
-    
-    [self cancelAllRequests];
-    [self initSessionManager:DefaultRequestTimeout operationCount:DefaultRequestTimeout];
-}
-
-- (void)updateAccessToken:(NSString *)accessToken
-{
-    self.accessToken = accessToken;
-    
-    if (accessToken) {
-        [self.sessionManager addValue:accessToken forHTTPHeaderField:@"Authorization"];
-    } else {
-        [self.sessionManager addValue:nil forHTTPHeaderField:@"Authorization"];
-    }
-}
+#pragma mark - <Request Methods>
 
 - (void)pg_makeGetRequest:(void (^)(PGRKRequestConfig *config))configBlock
                completion:(PGRKCompletionBlock)completion

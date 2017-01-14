@@ -32,9 +32,10 @@
 - (void)synchronizeUserId:(NSString *)userId;
 - (void)synchronizeToken:(NSString *)accessToken;
 - (void)synchronizeHostUrl:(NSString *)hostUrl;
-- (void)registerAPNSToken:(NSString *)token;
-- (void)updateTimer;
 
+- (void)registerAPNSToken:(NSString *)token;
+
+- (void)updateTimer;
 - (void)resetSMSCodeTimer;
 
 @end
