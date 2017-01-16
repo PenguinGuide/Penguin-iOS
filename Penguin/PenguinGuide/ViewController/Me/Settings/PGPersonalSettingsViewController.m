@@ -55,15 +55,10 @@
 {
     [super viewWillAppear:animated];
     
-    [self.navigationController setNavigationBarHidden:NO animated:NO];
-    
     [self.navigationController.navigationBar pg_setBackgroundColor:[UIColor whiteColor]];
     [self.navigationController.navigationBar setShadowImage:[UIImage new]];
     
-    if (!self.viewModel.me) {
-        [self showOccupiedLoading];
-        [self.viewModel requestDetails];
-    }
+    [self reloadView];
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -71,6 +66,19 @@
     [super viewWillDisappear:animated];
     
     [self.navigationController.navigationBar pg_reset];
+}
+
+- (void)dealloc
+{
+    [self unobserve];
+}
+
+- (void)reloadView
+{
+    if (!self.viewModel.me) {
+        [self showOccupiedLoading];
+        [self.viewModel requestDetails];
+    }
 }
 
 #pragma mark - <UICollectionViewDataSource>

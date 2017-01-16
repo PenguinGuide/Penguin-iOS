@@ -6,6 +6,8 @@
 //  Copyright © 2016 Xinglian. All rights reserved.
 //
 
+#define PG_REQUEST_SUCCESS_NOTIFICATION @"PG_REQUEST_SUCCESS_NOTIFICATION"
+
 #import <Foundation/Foundation.h>
 #import "PGRestKit.h"
 

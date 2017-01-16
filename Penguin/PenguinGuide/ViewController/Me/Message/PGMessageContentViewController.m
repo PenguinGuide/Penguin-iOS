@@ -79,13 +79,17 @@
 {
     [super viewWillAppear:animated];
     
-    [self.navigationController setNavigationBarHidden:NO animated:NO];
+    [self reloadView];
 }
 
-- (void)viewDidAppear:(BOOL)animated
+- (void)dealloc
 {
-    [super viewDidAppear:animated];
-    
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+    [self unobserve];
+}
+
+- (void)reloadView
+{
     if (self.viewModel.messages.count == 0) {
         [self showLoading];
         if (self.type == PGMessageContentTypeSystem) {
@@ -96,12 +100,6 @@
             [self.viewModel requestLikesMessages];
         }
     }
-}
-
-- (void)dealloc
-{
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
-    [self unobserve];
 }
 
 #pragma mark - <UICollectionView>

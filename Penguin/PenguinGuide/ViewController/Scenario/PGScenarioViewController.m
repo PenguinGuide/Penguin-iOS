@@ -87,21 +87,11 @@
     [self setNeedsStatusBarAppearanceUpdate];
 }
 
-- (void)viewWillAppear:(BOOL)animated
-{
-    [super viewWillAppear:animated];
-    
-    [self.navigationController setNavigationBarHidden:NO animated:NO];
-}
-
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
     
-    if (!self.viewModel.scenario) {
-        [self showLoading];
-        [self.viewModel requestScenario:self.scenarioId];
-    }
+    [self reloadView];
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -112,6 +102,19 @@
 - (UIStatusBarStyle)preferredStatusBarStyle
 {
     return UIStatusBarStyleDefault;
+}
+
+- (void)dealloc
+{
+    [self unobserve];
+}
+
+- (void)reloadView
+{
+    if (!self.viewModel.scenario) {
+        [self showLoading];
+        [self.viewModel requestScenario:self.scenarioId];
+    }
 }
 
 #pragma mark - <PGScenarioSegmentControllerDelegate>

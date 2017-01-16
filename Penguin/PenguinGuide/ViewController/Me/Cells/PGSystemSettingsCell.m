@@ -40,7 +40,7 @@
     if (!_descLabel) {
         _descLabel = [[UILabel alloc] initWithFrame:CGRectMake(30, 0, self.pg_width-60, self.pg_height)];
         _descLabel.textAlignment = NSTextAlignmentCenter;
-        _descLabel.font = Theme.fontMediumBold;
+        _descLabel.font = Theme.fontExtraLargeBold;
         _descLabel.textColor = Theme.colorText;
     }
     return _descLabel;

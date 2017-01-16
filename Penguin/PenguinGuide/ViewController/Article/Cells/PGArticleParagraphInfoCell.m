@@ -118,7 +118,7 @@ static NSString *TagCell = @"TagCell";
         if (article.title.length > 0) {
             titleHeight = [article.title boundingRectWithSize:CGSizeMake(UISCREEN_WIDTH-60, 500)
                                                       options:NSStringDrawingUsesLineFragmentOrigin
-                                                   attributes:@{NSFontAttributeName:[UIFont systemFontOfSize:36.f weight:UIFontWeightBold]}
+                                                   attributes:@{NSFontAttributeName:[UIFont systemFontOfSize:32.f weight:UIFontWeightBold]}
                                                       context:nil].size.height;
             self.titleLabel.pg_height = titleHeight;
         }
@@ -214,7 +214,7 @@ static NSString *TagCell = @"TagCell";
         if (article.title.length > 0) {
             titleHeight = [article.title boundingRectWithSize:CGSizeMake(UISCREEN_WIDTH-60, 500)
                                                       options:NSStringDrawingUsesLineFragmentOrigin
-                                                   attributes:@{NSFontAttributeName:[UIFont systemFontOfSize:36.f weight:UIFontWeightBold]}
+                                                   attributes:@{NSFontAttributeName:[UIFont systemFontOfSize:32.f weight:UIFontWeightBold]}
                                                       context:nil].size.height;
         }
         
@@ -351,7 +351,7 @@ static NSString *TagCell = @"TagCell";
 {
     if (!_titleLabel) {
         _titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(30, self.dayLabel.pg_bottom+19, UISCREEN_WIDTH-60, 28)];
-        _titleLabel.font = [UIFont systemFontOfSize:36.f weight:UIFontWeightBold];
+        _titleLabel.font = [UIFont systemFontOfSize:32.f weight:UIFontWeightBold];
         _titleLabel.textColor = Theme.colorText;
         _titleLabel.numberOfLines = 0;
     }

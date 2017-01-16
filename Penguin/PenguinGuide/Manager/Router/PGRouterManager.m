@@ -11,7 +11,6 @@
 // view controllers
 #import "PGLoginViewController.h"
 #import "PGHomeViewController.h"
-#import "PGChannelViewController.h"
 #import "PGScenarioViewController.h"
 #import "PGTopicViewController.h"
 #import "PGArticleViewController.h"
@@ -109,20 +108,6 @@
                     [PGGlobal.tempNavigationController pushViewController:tagVC animated:YES];
                 } else {
                     [PGGlobal.rootNavigationController pushViewController:tagVC animated:YES];
-                }
-            }
-        }
-    }];
-    
-    [[PGRouter sharedInstance] registerRoute:@"qiechihe://channel" toHandler:^(NSDictionary *params) {
-        if (PGGlobal.rootNavigationController) {
-            if (params[@"channelId"]) {
-                NSString *categoryId = params[@"channelId"];
-                PGChannelViewController *channelVC = [[PGChannelViewController alloc] initWithChannelId:categoryId];
-                if (PGGlobal.tempNavigationController) {
-                    [PGGlobal.tempNavigationController pushViewController:channelVC animated:YES];
-                } else {
-                    [PGGlobal.rootNavigationController pushViewController:channelVC animated:YES];
                 }
             }
         }

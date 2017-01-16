@@ -59,11 +59,6 @@
     [self.view addSubview:self.searchCollectionView];
 }
 
-- (void)viewDidAppear:(BOOL)animated
-{
-    [super viewDidAppear:animated];
-}
-
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
@@ -72,10 +67,7 @@
     
     [self.navigationController setNavigationBarHidden:YES animated:NO];
     
-    if (self.viewModel.recommends.count == 0) {
-        [self showLoading];
-        [self.viewModel requestData];
-    }
+    [self reloadView];
     
     self.navigationItem.leftBarButtonItem = nil;
 }
@@ -89,19 +81,22 @@
     [self.searchTextField resignFirstResponder];
 }
 
-- (void)viewDidDisappear:(BOOL)animated
-{
-    [super viewDidDisappear:animated];
-}
-
 - (void)dealloc
 {
     [self unobserve];
 }
 
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
+- (void)reloadView
+{
+    if (self.viewModel.recommends.count == 0) {
+        [self showLoading];
+        [self.viewModel requestData];
+    }
+}
+
+- (BOOL)shouldHideNavigationBar
+{
+    return YES;
 }
 
 #pragma mark - <UICollectionViewDataSource>
@@ -327,6 +322,11 @@
         [_cancelButton addTarget:self action:@selector(cancelButtonClicked) forControlEvents:UIControlEventTouchUpInside];
     }
     return _cancelButton;
+}
+
+- (void)didReceiveMemoryWarning {
+    [super didReceiveMemoryWarning];
+    // Dispose of any resources that can be recreated.
 }
 
 @end

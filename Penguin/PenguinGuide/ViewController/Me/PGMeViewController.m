@@ -61,16 +61,8 @@
     [super viewWillAppear:animated];
     
     [self.navigationController setNavigationBarHidden:YES animated:NO];
-}
-
-- (void)viewDidAppear:(BOOL)animated
-{
-    [super viewDidAppear:animated];
     
-    if (!self.viewModel.me) {
-        [self showLoading];
-        [self.viewModel requestData];
-    }
+    [self reloadView];
 }
 
 - (void)dealloc
@@ -82,6 +74,19 @@
 - (UIStatusBarStyle)preferredStatusBarStyle
 {
     return UIStatusBarStyleDefault;
+}
+
+- (void)reloadView
+{
+    if (!self.viewModel.me) {
+        [self showLoading];
+        [self.viewModel requestData];
+    }
+}
+
+- (BOOL)shouldHideNavigationBar
+{
+    return YES;
 }
 
 #pragma mark - <PGTabBarControllerDelegate>

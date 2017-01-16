@@ -46,8 +46,8 @@
 - (void)setCellWithSingleGood:(PGSingleGoodBanner *)singleGood
 {
     if (singleGood.originalPrice && ![singleGood.originalPrice isEqualToString:@"0"]) {
-        NSMutableAttributedString *attrS = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"￥%@ %@", singleGood.discountPrice, singleGood.originalPrice]];
-        [attrS addAttribute:NSForegroundColorAttributeName value:Theme.colorHighlight range:NSMakeRange(0, singleGood.discountPrice.length+1)];
+        NSMutableAttributedString *attrS = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"¥%@ %@", singleGood.discountPrice, singleGood.originalPrice]];
+        [attrS addAttribute:NSForegroundColorAttributeName value:Theme.colorExtraHighlight range:NSMakeRange(0, singleGood.discountPrice.length+1)];
         [attrS addAttribute:NSFontAttributeName value:Theme.fontMediumBold range:NSMakeRange(0, singleGood.discountPrice.length+1)];
         [attrS addAttribute:NSStrikethroughStyleAttributeName value:[NSNumber numberWithInt:0] range:NSMakeRange(0, singleGood.discountPrice.length+1)];
         [attrS addAttribute:NSForegroundColorAttributeName value:Theme.colorLightText range:NSMakeRange(singleGood.discountPrice.length+2, singleGood.originalPrice.length)];
@@ -55,8 +55,8 @@
         [attrS addAttribute:NSStrikethroughStyleAttributeName value:[NSNumber numberWithInt:1] range:NSMakeRange(singleGood.discountPrice.length+2, singleGood.originalPrice.length)];
         self.priceLabel.attributedText = attrS;
     } else {
-        NSMutableAttributedString *attrS = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"￥%@", singleGood.discountPrice]];
-        [attrS addAttribute:NSForegroundColorAttributeName value:Theme.colorHighlight range:NSMakeRange(0, singleGood.discountPrice.length+1)];
+        NSMutableAttributedString *attrS = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"¥%@", singleGood.discountPrice]];
+        [attrS addAttribute:NSForegroundColorAttributeName value:Theme.colorExtraHighlight range:NSMakeRange(0, singleGood.discountPrice.length+1)];
         [attrS addAttribute:NSFontAttributeName value:Theme.fontMediumBold range:NSMakeRange(0, singleGood.discountPrice.length+1)];
         self.priceLabel.attributedText = attrS;
     }

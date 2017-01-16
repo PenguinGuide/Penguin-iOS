@@ -35,10 +35,6 @@
     [self addSubview:self.avatarButton];
     [self addSubview:self.nameLabel];
     [self addSubview:self.descLabel];
-    
-//    UIView *horizontalLine = [[UIView alloc] initWithFrame:CGRectMake(self.pg_width/2-1/[UIScreen mainScreen].scale, self.nameLabel.pg_bottom+11, 1/[UIScreen mainScreen].scale, 20)];
-//    horizontalLine.backgroundColor = Theme.colorText;
-//    [self addSubview:horizontalLine];
 }
 
 - (void)setViewWithMe:(PGMe *)me
@@ -66,16 +62,16 @@
 
 + (CGSize)headerViewSize
 {
-    return CGSizeMake(UISCREEN_WIDTH, 55+84+10+22+10+22+10+30);
+    return CGSizeMake(UISCREEN_WIDTH, 65+84+10+22+10+22+10+30);
 }
 
 - (UIButton *)settingButton
 {
     if (!_settingButton) {
-        _settingButton = [[UIButton alloc] initWithFrame:CGRectMake(self.pg_width-20-50, 30, 50, 50)];
-        _settingButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentRight;
-        _settingButton.contentVerticalAlignment = UIControlContentVerticalAlignmentTop;
-        [_settingButton setImage:[UIImage imageNamed:@"pg_me_setting"] forState:UIControlStateNormal];
+        _settingButton = [[UIButton alloc] initWithFrame:CGRectMake(self.pg_width-10-50, 20, 50, 50)];
+        [_settingButton setTitle:@"设置" forState:UIControlStateNormal];
+        [_settingButton setTitleColor:Theme.colorText forState:UIControlStateNormal];
+        [_settingButton.titleLabel setFont:Theme.fontLargeBold];
     }
     return _settingButton;
 }
@@ -83,7 +79,7 @@
 - (UIButton *)avatarButton
 {
     if (!_avatarButton) {
-        _avatarButton = [[UIButton alloc] initWithFrame:CGRectMake(self.pg_width/2-42, 55, 84, 84)];
+        _avatarButton = [[UIButton alloc] initWithFrame:CGRectMake(self.pg_width/2-42, 65, 84, 84)];
         _avatarButton.clipsToBounds = YES;
         _avatarButton.layer.cornerRadius = 42.f;
         _avatarButton.contentMode = UIViewContentModeScaleAspectFill;
@@ -107,7 +103,7 @@
     if (!_descLabel) {
         _descLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, self.nameLabel.pg_bottom+20, self.pg_width, 22)];
         _descLabel.textAlignment = NSTextAlignmentCenter;
-        _descLabel.font = Theme.fontSmallBold;
+        _descLabel.font = Theme.fontMediumBold;
         _descLabel.textColor = Theme.colorLightText;
     }
     return _descLabel;

@@ -146,6 +146,7 @@ static const int DefaultMaxConcurrentConnections = 5;
                                          completion(@[response]);
                                      }
                                  }
+                                 [[NSNotificationCenter defaultCenter] postNotificationName:PG_REQUEST_SUCCESS_NOTIFICATION object:nil];
                              } failure:^(NSError *error) {
                                  if (failure) {
                                      failure(error);
@@ -166,6 +167,7 @@ static const int DefaultMaxConcurrentConnections = 5;
                        if (completion) {
                            completion(response);
                        }
+                       [[NSNotificationCenter defaultCenter] postNotificationName:PG_REQUEST_SUCCESS_NOTIFICATION object:nil];
                    } failure:^(NSError *error) {
                        if (failure) {
                            failure(error);
@@ -186,6 +188,7 @@ static const int DefaultMaxConcurrentConnections = 5;
                                  if (completion) {
                                      completion(response);
                                  }
+                                 [[NSNotificationCenter defaultCenter] postNotificationName:PG_REQUEST_SUCCESS_NOTIFICATION object:nil];
                              } failure:^(NSError *error) {
                                  if (failure) {
                                      failure(error);
@@ -205,6 +208,7 @@ static const int DefaultMaxConcurrentConnections = 5;
                                   if (completion) {
                                       completion(response);
                                   }
+                                  [[NSNotificationCenter defaultCenter] postNotificationName:PG_REQUEST_SUCCESS_NOTIFICATION object:nil];
                               } failure:^(NSError *error) {
                                   if (failure) {
                                       failure(error);
@@ -224,6 +228,7 @@ static const int DefaultMaxConcurrentConnections = 5;
                                    if (completion) {
                                        completion(response);
                                    }
+                                   [[NSNotificationCenter defaultCenter] postNotificationName:PG_REQUEST_SUCCESS_NOTIFICATION object:nil];
                                } failure:^(NSError *error) {
                                    if (failure) {
                                        failure(error);
@@ -243,6 +248,7 @@ static const int DefaultMaxConcurrentConnections = 5;
                                     if (completion) {
                                         completion(response);
                                     }
+                                    [[NSNotificationCenter defaultCenter] postNotificationName:PG_REQUEST_SUCCESS_NOTIFICATION object:nil];
                                 } failure:^(NSError *error) {
                                     if (failure) {
                                         failure(error);
@@ -262,6 +268,7 @@ static const int DefaultMaxConcurrentConnections = 5;
                                   if (completion) {
                                       completion(response);
                                   }
+                                  [[NSNotificationCenter defaultCenter] postNotificationName:PG_REQUEST_SUCCESS_NOTIFICATION object:nil];
                               } failure:^(NSError *error) {
                                   if (failure) {
                                       failure(error);

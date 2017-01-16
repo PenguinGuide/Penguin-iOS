@@ -27,6 +27,14 @@
 
 @implementation PGSearchResultsGoodsViewController
 
+- (id)initWithKeyword:(NSString *)keyword
+{
+    if (self = [super init]) {
+        self.keyword = keyword;
+    }
+    return self;
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
@@ -52,28 +60,25 @@
     [self observeCollectionView:self.goodsCollectionView endOfFeeds:self.viewModel];
 }
 
-- (id)initWithKeyword:(NSString *)keyword
-{
-    if (self = [super init]) {
-        self.keyword = keyword;
-    }
-    return self;
-}
-
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
     
-    if (self.viewModel.goodsArray.count == 0) {
-        [self showLoading];
-        [self.viewModel requestGoods:self.keyword];
-    }
+    [self reloadView];
 }
 
 - (void)dealloc
 {
     if (self.isViewLoaded) {
         [self unobserve];
+    }
+}
+
+- (void)reloadView
+{
+    if (self.viewModel.goodsArray.count == 0) {
+        [self showLoading];
+        [self.viewModel requestGoods:self.keyword];
     }
 }
 

@@ -76,6 +76,11 @@
                      }];
 }
 
+- (void)reloadView
+{
+    [self hideNetworkLostPlaceholder];
+}
+
 - (void)momentsButtonClicked
 {
     if (self.attribute.url && self.attribute.url.length > 0) {

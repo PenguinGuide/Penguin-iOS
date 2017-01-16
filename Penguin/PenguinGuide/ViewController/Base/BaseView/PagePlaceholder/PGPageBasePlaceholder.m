@@ -71,6 +71,15 @@
     return self;
 }
 
+- (void)buttonClicked
+{
+    if (self.delegate && [self.delegate respondsToSelector:@selector(reloadButtonClicked)]) {
+        [self.delegate reloadButtonClicked];
+    }
+}
+
+#pragma mark - <Lazy Init>
+
 - (UIImageView *)placeholderImageView
 {
     if (!_placeholderImageView) {
@@ -90,7 +99,7 @@
     if (!_descLabel) {
         _descLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, self.placeholderImageView.pg_bottom+30, self.pg_width, 20)];
         _descLabel.font = Theme.fontLargeBold;
-        _descLabel.textColor = Theme.colorLightText;
+        _descLabel.textColor = Theme.colorText;
         _descLabel.textAlignment = NSTextAlignmentCenter;
         _descLabel.text = self.desc;
     }
@@ -101,15 +110,16 @@
 {
     if (!_button) {
         _button = [[UIButton alloc] init];
-        [_button setBackgroundColor:Theme.colorHighlight];
-        [_button setTitleColor:Theme.colorText forState:UIControlStateNormal];
+        [_button setBackgroundColor:Theme.colorText];
+        [_button setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
         [_button setTitle:self.title forState:UIControlStateNormal];
         [_button.titleLabel setFont:Theme.fontLargeBold];
         [_button setClipsToBounds:YES];
-        [_button.layer setCornerRadius:4.f];
+        [_button.layer setCornerRadius:15];
+        [_button addTarget:self action:@selector(buttonClicked) forControlEvents:UIControlEventTouchUpInside];
         
         CGSize textSize = [self.title sizeWithAttributes:@{NSFontAttributeName:Theme.fontLargeBold}];
-        _button.frame = CGRectMake((self.pg_width-(textSize.width+25))/2, self.descLabel.pg_bottom+20, textSize.width+25, 35);
+        _button.frame = CGRectMake((self.pg_width-(textSize.width+80))/2, self.descLabel.pg_bottom+40, textSize.width+80, 30);
     }
     return _button;
 }

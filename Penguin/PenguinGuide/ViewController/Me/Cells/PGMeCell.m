@@ -44,7 +44,7 @@
 
 + (CGSize)cellSize
 {
-    return CGSizeMake(UISCREEN_WIDTH, 90);
+    return CGSizeMake(UISCREEN_WIDTH, 80);
 }
 
 - (UILabel *)nameLabel
@@ -52,7 +52,7 @@
     if (!_nameLabel) {
         _nameLabel = [[UILabel alloc] initWithFrame:CGRectMake((UISCREEN_WIDTH-100)/2, (self.pg_height-20)/2, 100, 20)];
         _nameLabel.textAlignment = NSTextAlignmentCenter;
-        _nameLabel.font = [UIFont systemFontOfSize:20.f weight:UIFontWeightMedium];
+        _nameLabel.font = Theme.fontExtraLargeBold;
         _nameLabel.textColor = Theme.colorText;
     }
     return _nameLabel;

@@ -79,31 +79,19 @@
     
     [self setNeedsStatusBarAppearanceUpdate];
     
-    [self.navigationController setNavigationBarHidden:YES animated:NO];
-    
     self.bannersWeakTimer = [MSWeakTimer scheduledTimerWithTimeInterval:5.f
                                                                  target:self
                                                                selector:@selector(bannersCountDown)
                                                                userInfo:nil
                                                                 repeats:YES
                                                           dispatchQueue:dispatch_get_main_queue()];
-}
-
-- (void)viewDidAppear:(BOOL)animated
-{
-    [super viewDidAppear:animated];
     
-    if (!self.viewModel.good) {
-        [self showLoading];
-        [self.viewModel requestGood:self.goodId];
-    }
+    [self reloadView];
 }
 
 - (void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
-    
-    [self.navigationController setNavigationBarHidden:NO animated:NO];
     
     [self.bannersWeakTimer invalidate];
 }
@@ -119,6 +107,19 @@
     
     [self.bannersWeakTimer invalidate];
     self.bannersWeakTimer = nil;
+}
+
+- (void)reloadView
+{
+    if (!self.viewModel.good) {
+        [self showLoading];
+        [self.viewModel requestGood:self.goodId];
+    }
+}
+
+- (BOOL)shouldHideNavigationBar
+{
+    return YES;
 }
 
 #pragma mark - <UICollectionViewDataSource>

@@ -43,13 +43,13 @@
 
 - (void)setViewWithGood:(PGGood *)good
 {
-    NSString *title = [NSString stringWithFormat:@"￥%@  %@", good.discountPrice, good.name];
+    NSString *title = [NSString stringWithFormat:@"¥%@  %@", good.discountPrice, good.name];
     CGSize titleSize = [title sizeWithAttributes:@{NSFontAttributeName:Theme.fontMediumBold}];
     self.titleButton.pg_width = titleSize.width+25;
     
-    [self.titleButton setTitle:[NSString stringWithFormat:@"￥%@  %@", good.discountPrice, good.name] forState:UIControlStateNormal];
+    [self.titleButton setTitle:[NSString stringWithFormat:@"¥%@  %@", good.discountPrice, good.name] forState:UIControlStateNormal];
     [self.goodImageView setWithImageURL:good.image placeholder:nil completion:nil];
-    [self.priceLabel setText:[NSString stringWithFormat:@"原价 ￥%@", good.originalPrice]];
+    [self.priceLabel setText:[NSString stringWithFormat:@"原价 ¥%@", good.originalPrice]];
 }
 
 - (void)setCountDown:(NSDate *)startDate endDate:(NSDate *)endDate

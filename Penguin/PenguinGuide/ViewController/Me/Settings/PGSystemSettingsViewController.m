@@ -41,8 +41,6 @@
 {
     [super viewWillAppear:animated];
     
-    [self.navigationController setNavigationBarHidden:NO animated:NO];
-    
     [self.navigationController.navigationBar pg_setBackgroundColor:[UIColor whiteColor]];
     [self.navigationController.navigationBar setShadowImage:[UIImage new]];
 }
@@ -52,6 +50,11 @@
     [super viewWillDisappear:animated];
     
     [self.navigationController.navigationBar pg_reset];
+}
+
+- (void)reloadView
+{
+    [self hideNetworkLostPlaceholder];
 }
 
 #pragma mark - <UICollectionViewDataSource>
@@ -184,6 +187,9 @@
             [self showAlert:@"清除缓存" message:@"确定清除缓存？" actions:@[cancelAction, doneAction] style:^(PGAlertStyle *style) {
                 style.alertType = PGAlertTypeAlert;
             }];
+        } else if (indexPath.item == 4) {
+            // rate app
+            [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"itms-apps://itunes.apple.com/app/id1182887153"]];
         } else if (indexPath.item == 5) {
 #if (defined DEBUG)
             PGDeveloperViewController *developerVC = [[PGDeveloperViewController alloc] init];

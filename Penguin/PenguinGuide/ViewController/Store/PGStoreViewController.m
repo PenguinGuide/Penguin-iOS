@@ -7,7 +7,6 @@
 //
 
 #import "PGStoreViewController.h"
-#import "PGStoreCategoryViewController.h"
 #import "PGSearchRecommendsViewController.h"
 #import "PGArticleViewController.h"
 
@@ -95,6 +94,8 @@
                                                                userInfo:nil
                                                                 repeats:YES
                                                           dispatchQueue:dispatch_get_main_queue()];
+    
+    [self reloadView];
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -102,11 +103,6 @@
     [super viewDidAppear:animated];
     
     [self setNeedsStatusBarAppearanceUpdate];
-    
-    if (self.viewModel.feedsArray.count == 0) {
-        [self showLoading];
-        [self.viewModel requestData];
-    }
     
     if (self.statusbarIsWhiteBackground) {
         UIView *statusBar = [[[UIApplication sharedApplication] valueForKey:@"statusBarWindow"] valueForKey:@"statusBar"];
@@ -149,6 +145,19 @@
     [self.bannersWeakTimer invalidate];
     self.flashbuyWeakTimer = nil;
     self.bannersWeakTimer = nil;
+}
+
+- (void)reloadView
+{
+    if (self.viewModel.feedsArray.count == 0) {
+        [self showLoading];
+        [self.viewModel requestData];
+    }
+}
+
+- (BOOL)shouldHideNavigationBar
+{
+    return YES;
 }
 
 #pragma mark - <PGTabBarControllerDelegate>

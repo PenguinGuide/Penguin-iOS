@@ -144,6 +144,11 @@ typedef NS_ENUM(NSInteger, GestureDirection) {
     self.playerLayer = nil;
 }
 
+- (void)reloadView
+{
+    [self hideNetworkLostPlaceholder];
+}
+
 - (BOOL)prefersStatusBarHidden
 {
     return YES;

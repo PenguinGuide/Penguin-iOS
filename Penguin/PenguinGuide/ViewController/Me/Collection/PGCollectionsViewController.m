@@ -9,7 +9,6 @@
 #define ArticleBannerCell @"ArticleBannerCell"
 
 #import "PGCollectionsViewController.h"
-#import "PGCollectionsContentViewController.h"
 #import "PGCollectionContentViewModel.h"
 #import "PGArticleBannerCell.h"
 
@@ -60,13 +59,16 @@
 {
     [super viewWillAppear:animated];
     
-    [self.navigationController setNavigationBarHidden:NO animated:NO];
+    [self reloadView];
 }
 
-- (void)viewDidAppear:(BOOL)animated
+- (void)dealloc
 {
-    [super viewDidAppear:animated];
-    
+    [self unobserve];
+}
+
+- (void)reloadView
+{
     if (self.viewModel.articles.count == 0 && !self.viewModel.endFlag) {
         [self showLoading];
         [self.viewModel requestData];

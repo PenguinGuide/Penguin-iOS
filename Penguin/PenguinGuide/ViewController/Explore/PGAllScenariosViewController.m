@@ -76,13 +76,16 @@
 {
     [super viewWillAppear:animated];
     
-    [self.navigationController setNavigationBarHidden:NO animated:NO];
+    [self reloadView];
 }
 
-- (void)viewDidAppear:(BOOL)animated
+- (void)dealloc
 {
-    [super viewDidAppear:animated];
-    
+    [self unobserve];
+}
+
+- (void)reloadView
+{
     if (self.viewModel.scenariosArray.count == 0) {
         [self showLoading];
         [self.viewModel requestScenarios:self.scenarioType];

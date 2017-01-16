@@ -69,16 +69,8 @@
     
     self.commentInputAccessoryView.commentTextView.text = @"";
     self.commentInputAccessoryView.frame = CGRectMake(0, UISCREEN_HEIGHT, UISCREEN_WIDTH, 60);
-}
-
-- (void)viewDidAppear:(BOOL)animated
-{
-    [super viewDidAppear:animated];
     
-    if (!self.viewModel.commentsArray) {
-        [self showLoading];
-        [self.viewModel requestComments:self.articleId];
-    }
+    [self reloadView];
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -92,6 +84,14 @@
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
     [self unobserve];
+}
+
+- (void)reloadView
+{
+    if (!self.viewModel.commentsArray) {
+        [self showLoading];
+        [self.viewModel requestComments:self.articleId];
+    }
 }
 
 #pragma mark - <UICollectionViewDataSource>

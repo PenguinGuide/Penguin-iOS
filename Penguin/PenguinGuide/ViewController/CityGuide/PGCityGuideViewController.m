@@ -50,6 +50,8 @@
     [super viewWillAppear:animated];
     
     [self.navigationController setNavigationBarHidden:YES animated:NO];
+    
+    [self reloadView];
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -57,10 +59,6 @@
     [super viewDidAppear:animated];
     
     [self setNeedsStatusBarAppearanceUpdate];
-    
-    if (self.viewModel.citiesArray.count == 0) {
-        [self.viewModel requestData];
-    }
 }
 
 - (void)viewDidDisappear:(BOOL)animated
@@ -76,6 +74,18 @@
 - (void)dealloc
 {
     [self unobserve];
+}
+
+- (void)reloadView
+{
+    if (self.viewModel.citiesArray.count == 0) {
+        [self.viewModel requestData];
+    }
+}
+
+- (BOOL)shouldHideNavigationBar
+{
+    return YES;
 }
 
 #pragma mark - <PGTabBarControllerDelegate>

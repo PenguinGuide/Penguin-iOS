@@ -65,8 +65,6 @@
 {
     [super viewWillAppear:animated];
     
-    [self.navigationController setNavigationBarHidden:NO animated:NO];
-    
     [self.navigationController.navigationBar pg_setBackgroundColor:[UIColor clearColor]];
     [self.navigationController.navigationBar setShadowImage:[UIImage new]];
 }
@@ -90,6 +88,11 @@
     [super viewDidDisappear:animated];
     
     [self.updateTextField resignFirstResponder];
+}
+
+- (void)reloadView
+{
+    [self hideNetworkLostPlaceholder];
 }
 
 #pragma mark - <UIPickerViewDataSource>

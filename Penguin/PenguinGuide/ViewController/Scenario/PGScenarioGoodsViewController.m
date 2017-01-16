@@ -60,10 +60,15 @@
     [self observeCollectionView:self.goodsCollectionView endOfFeeds:self.viewModel];
 }
 
-- (void)viewDidAppear:(BOOL)animated
+- (void)viewWillAppear:(BOOL)animated
 {
-    [super viewDidAppear:animated];
+    [super viewWillAppear:animated];
     
+    [self reloadView];
+}
+
+- (void)reloadView
+{
     if (self.viewModel.goodsArray.count == 0) {
         if (self.delegate && [self.delegate respondsToSelector:@selector(showPageLoading)]) {
             [self.delegate showPageLoading];

@@ -62,16 +62,14 @@
     [self.pagedController reloadWithViewControllers:@[self.articlesVC, self.goodsVC] titles:@[@"文 章", @"商 品"] selectedViewClass:[PGCityGuideSegmentIndicator class]];
 }
 
-- (void)viewWillAppear:(BOOL)animated
-{
-    [super viewWillAppear:animated];
-    
-    [self.navigationController setNavigationBarHidden:YES animated:NO];
-}
-
 - (void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
+}
+
+- (BOOL)shouldHideNavigationBar
+{
+    return YES;
 }
 
 - (void)didReceiveMemoryWarning {

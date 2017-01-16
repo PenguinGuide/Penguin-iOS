@@ -21,7 +21,6 @@
 #import "PGHomeViewController.h"
 #import "PGLoginViewController.h"
 #import "PGArticleViewController.h"
-#import "PGChannelViewController.h"
 #import "PGSearchRecommendsViewController.h"
 // view models
 #import "PGHomeViewModel.h"

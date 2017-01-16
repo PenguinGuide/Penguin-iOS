@@ -6,8 +6,6 @@
 //  Copyright © 2016 Xinglian. All rights reserved.
 //
 
-#define PlaceholderTag 899
-
 #import "PGBaseViewController.h"
 #import "PGBaseViewController+TransitionAnimation.h"
 
@@ -16,12 +14,15 @@
 
 #import "PGPageBasePlaceholder.h"
 
-@interface PGBaseViewController () <UINavigationControllerDelegate>
+@interface PGBaseViewController () <UINavigationControllerDelegate, PGPageBasePlaceholderDelegate>
 
 @property (nonatomic, strong, readwrite) PGAPIClient *apiClient;
 @property (nonatomic, strong, readwrite) FBKVOController *KVOController;
 @property (nonatomic, strong) MBProgressHUD *hud;
 @property (nonatomic, strong) PGPopupViewController *popupViewController;
+
+@property (nonatomic, strong) PGPageBasePlaceholder *placeholderView;
+@property (nonatomic, strong) PGPageBasePlaceholder *lostNetworkPlaceholderView;
 
 @end
 
@@ -30,6 +31,8 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view, typically from a nib.
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(requestSuccess) name:PG_REQUEST_SUCCESS_NOTIFICATION object:nil];
+    
     self.view.backgroundColor = [UIColor whiteColor];
     
     UIImage *backButtonImage = [[UIImage imageNamed:@"pg_navigation_back_button"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
@@ -109,7 +112,7 @@
 
 - (void)setNavigationTitle:(NSString *)title
 {
-    [self.navigationController.navigationBar setTitleTextAttributes:@{NSFontAttributeName:Theme.fontMediumBold, NSForegroundColorAttributeName:Theme.colorText}];
+    [self.navigationController.navigationBar setTitleTextAttributes:@{NSFontAttributeName:Theme.fontExtraLargeBold, NSForegroundColorAttributeName:Theme.colorText}];
     [self.navigationItem setTitle:title];
 }
 
@@ -126,6 +129,34 @@
 {
     [self.navigationController.navigationBar setBackgroundImage:nil forBarMetrics:UIBarMetricsDefault];
     [self.navigationController.navigationBar setShadowImage:nil];
+}
+
+#pragma mark - <UINavigationControllerDelegate>
+
+// NOTE: hide UINavigationBar: http://www.jianshu.com/p/182777e4b034
+- (void)navigationController:(UINavigationController *)navigationController willShowViewController:(UIViewController *)viewController animated:(BOOL)animated
+{
+    if ([viewController isKindOfClass:[PGBaseViewController class]]) {
+        if ([(PGBaseViewController *)viewController shouldHideNavigationBar]) {
+            [self.navigationController setNavigationBarHidden:YES animated:NO];
+        } else {
+            [self.navigationController setNavigationBarHidden:NO animated:NO];
+        }
+    } else if ([viewController isKindOfClass:[PGTabBarController class]]) {
+        UIViewController *selectedViewController = [(PGTabBarController *)viewController selectedViewController];
+        if ([selectedViewController isKindOfClass:[PGBaseViewController class]]) {
+            if ([(PGBaseViewController *)selectedViewController shouldHideNavigationBar]) {
+                [self.navigationController setNavigationBarHidden:YES animated:NO];
+            } else {
+                [self.navigationController setNavigationBarHidden:NO animated:NO];
+            }
+        }
+    }
+}
+
+- (BOOL)shouldHideNavigationBar
+{
+    return NO;
 }
 
 #pragma mark - <Back Button>
@@ -152,6 +183,7 @@
 - (void)unobserve
 {
     [self.KVOController unobserveAll];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:PG_REQUEST_SUCCESS_NOTIFICATION object:nil];
 }
 
 - (void)observeCollectionView:(PGBaseCollectionView *)collectionView endOfFeeds:(PGBaseViewModel *)viewModel
@@ -266,30 +298,49 @@
 
 - (void)showPlaceholder:(NSString *)image desc:(NSString *)desc
 {
-    PGPageBasePlaceholder *placeholderView = [self.view viewWithTag:PlaceholderTag];
-    if (placeholderView) {
-        [placeholderView removeFromSuperview];
+    if (self.placeholderView) {
+        [self.placeholderView removeFromSuperview];
     }
-    placeholderView = [[PGPageBasePlaceholder alloc] initWithImage:image desc:desc top:64.f height:self.view.pg_height-64.f];
-    placeholderView.tag = PlaceholderTag;
+    [self.placeholderView removeFromSuperview];
+    self.placeholderView = [[PGPageBasePlaceholder alloc] initWithImage:image desc:desc top:64.f height:self.view.pg_height-64.f];
     
-    [self.view addSubview:placeholderView];
+    [self.view addSubview:self.placeholderView];
 }
 
 - (void)showNetworkLostPlaceholder
 {
-    PGPageBasePlaceholder *placeholderView = [self.view viewWithTag:PlaceholderTag];
-    if (placeholderView) {
-        [placeholderView removeFromSuperview];
-    }
-    placeholderView = [[PGPageBasePlaceholder alloc] initWithImage:@"pg_network_failed_placeholder"
-                                                              desc:@"你的网络已切换至南极线路，点击重试"
-                                                       buttonTitle:@"重新加载"
-                                                               top:0.f
-                                                            height:self.view.pg_height];
-    placeholderView.tag = PlaceholderTag;
+    [self.lostNetworkPlaceholderView removeFromSuperview];
+    self.lostNetworkPlaceholderView = [[PGPageBasePlaceholder alloc] initWithImage:@"pg_network_failed_placeholder"
+                                                                   desc:@"你的网络已切换至南极线路，点击重试"
+                                                            buttonTitle:@"重新加载"
+                                                                    top:0.f
+                                                                 height:self.view.pg_height];
+    self.lostNetworkPlaceholderView.delegate = self;
     
-    [self.view addSubview:placeholderView];
+    [self.view addSubview:self.lostNetworkPlaceholderView];
+    
+}
+
+- (void)hideNetworkLostPlaceholder
+{
+    if (self.lostNetworkPlaceholderView) {
+        self.lostNetworkPlaceholderView.delegate = nil;
+        [self.lostNetworkPlaceholderView removeFromSuperview];
+    }
+}
+
+#pragma mark - <PGPageBasePlaceholderDelegate>
+
+- (void)reloadButtonClicked
+{
+    [(id<PGViewController>)self reloadView];
+}
+
+#pragma mark - <Success Handling>
+
+- (void)requestSuccess
+{
+    [self hideNetworkLostPlaceholder];
 }
 
 #pragma mark - <Error Handling>
@@ -322,8 +373,11 @@
     NSInteger errorCode = error.code;
     if (errorCode == 401) {
         [PGRouterManager routeToLoginPage];
+        [self hideNetworkLostPlaceholder];
     } else if (errorCode == -1009) {
         [self showNetworkLostPlaceholder];
+    } else {
+        [self hideNetworkLostPlaceholder];
     }
 }
 

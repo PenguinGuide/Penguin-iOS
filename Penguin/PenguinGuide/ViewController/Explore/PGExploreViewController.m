@@ -97,10 +97,7 @@
     // NOTE: put it in viewWillAppear doesn't work
     [self setNeedsStatusBarAppearanceUpdate];
     
-    if (self.viewModel.articlesArray.count == 0) {
-        [self showLoading];
-        [self.viewModel requestData];
-    }
+    [self reloadView];
     
     if (self.statusbarIsWhiteBackground) {
         UIView *statusBar = [[[UIApplication sharedApplication] valueForKey:@"statusBarWindow"] valueForKey:@"statusBar"];
@@ -148,6 +145,19 @@
     
     [self.bannersWeakTimer invalidate];
     self.bannersWeakTimer = nil;
+}
+
+- (void)reloadView
+{
+    if (self.viewModel.articlesArray.count == 0) {
+        [self showLoading];
+        [self.viewModel requestData];
+    }
+}
+
+- (BOOL)shouldHideNavigationBar
+{
+    return YES;
 }
 
 #pragma mark - <PGTabBarControllerDelegate>

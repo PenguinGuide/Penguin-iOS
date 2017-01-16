@@ -275,10 +275,6 @@
     
     [self setNeedsStatusBarAppearanceUpdate];
     
-    if (self.viewModel.article == nil) {
-        [self.viewModel requestData];
-    }
-    
     if (self.statusbarIsWhiteBackground) {
         UIView *statusBar = [[[UIApplication sharedApplication] valueForKey:@"statusBarWindow"] valueForKey:@"statusBar"];
         if ([statusBar respondsToSelector:@selector(setBackgroundColor:)]) {
@@ -296,13 +292,9 @@
 {
     [super viewWillAppear:animated];
     
-    if (self.viewModel.article == nil) {
-        [self showLoading];
-    }
+    [self reloadView];
     
     [self.commentInputAccessoryView setUserInteractionEnabled:YES];
-    
-    [self.navigationController setNavigationBarHidden:YES animated:NO];
     
     self.commentInputAccessoryView.commentTextView.text = @"";
     if (UISCREEN_WIDTH < UISCREEN_HEIGHT) {
@@ -315,8 +307,6 @@
 - (void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
-    
-    [self.navigationController setNavigationBarHidden:NO animated:NO];
     
     [self.commentInputAccessoryView.commentTextView resignFirstResponder];
     [self.commentInputAccessoryView setUserInteractionEnabled:NO];
@@ -345,6 +335,19 @@
     } else {
         return UIStatusBarStyleLightContent;
     }
+}
+
+- (void)reloadView
+{
+    if (self.viewModel.article == nil) {
+        [self showLoading];
+        [self.viewModel requestData];
+    }
+}
+
+- (BOOL)shouldHideNavigationBar
+{
+    return YES;
 }
 
 #pragma mark - <UICollectionViewDataSource>
