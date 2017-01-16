@@ -333,7 +333,11 @@
 
 - (void)reloadButtonClicked
 {
-    [(id<PGViewController>)self reloadView];
+    if ([(id<PGViewController>)self respondsToSelector:@selector(reloadView)]) {
+        [(id<PGViewController>)self reloadView];
+    } else {
+        [self hideNetworkLostPlaceholder];
+    }
 }
 
 #pragma mark - <Success Handling>
