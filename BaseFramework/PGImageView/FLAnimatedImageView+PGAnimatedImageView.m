@@ -38,10 +38,17 @@
     
     imageURL = [imageURL stringByAppendingString:cropQuery];
     
-    __weak typeof(self) weakSelf = self;
+    __weak typeof(self) weakself = self;
     [self sd_setImageWithURL:[NSURL URLWithString:imageURL]
             placeholderImage:placeholder
                    completed:^(UIImage * _Nullable image, NSError * _Nullable error, SDImageCacheType cacheType, NSURL * _Nullable imageURL) {
+                       if (image && cacheType == SDImageCacheTypeNone) {
+                           CATransition *transition = [CATransition animation];
+                           transition.type = kCATransitionFade; // there are other types but this is the nicest
+                           transition.duration = 0.3; // set the duration that you like
+                           transition.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
+                           [weakself.layer addAnimation:transition forKey:nil];
+                       }
                        if (completion) {
                            completion(nil);
                        }
@@ -74,11 +81,17 @@
     }
     
     imageURL = [imageURL stringByAppendingString:cropQuery];
-    __weak typeof(self) weakSelf = self;
+    __weak typeof(self) weakself = self;
     [self sd_setImageWithURL:[NSURL URLWithString:imageURL]
             placeholderImage:placeholder
                    completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
-                       weakSelf.image = image;
+                       if (image && cacheType == SDImageCacheTypeNone) {
+                           CATransition *transition = [CATransition animation];
+                           transition.type = kCATransitionFade; // there are other types but this is the nicest
+                           transition.duration = 0.3; // set the duration that you like
+                           transition.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
+                           [weakself.layer addAnimation:transition forKey:nil];
+                       }
                        if (completion) {
                            completion(nil);
                        }

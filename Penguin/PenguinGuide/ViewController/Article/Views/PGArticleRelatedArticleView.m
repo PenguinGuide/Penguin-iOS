@@ -46,6 +46,7 @@
         _bannerImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, self.pg_width, self.pg_width*9/16)];
         _bannerImageView.clipsToBounds = YES;
         _bannerImageView.contentMode = UIViewContentModeScaleAspectFill;
+        _bannerImageView.backgroundColor = Theme.colorBackground;
     }
     return _bannerImageView;
 }

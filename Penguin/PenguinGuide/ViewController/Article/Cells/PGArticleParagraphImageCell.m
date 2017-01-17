@@ -33,7 +33,7 @@
 - (void)setCellWithImage:(NSString *)image
 {
     self.imageView.frame = CGRectMake(0, 20, self.pg_width, self.pg_height-40);
-    [self.imageView setWithImageURL:image placeholder:PGImageViewPlaceholder completion:nil];
+    [self.imageView setWithImageURL:image placeholder:nil completion:nil];
 }
 
 - (UIImageView *)imageView
@@ -42,6 +42,7 @@
         _imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 20, self.pg_width, self.pg_height-40)];
         _imageView.clipsToBounds = YES;
         _imageView.contentMode = UIViewContentModeScaleAspectFill;
+        _imageView.backgroundColor = Theme.colorBackground;
     }
     return _imageView;
 }
