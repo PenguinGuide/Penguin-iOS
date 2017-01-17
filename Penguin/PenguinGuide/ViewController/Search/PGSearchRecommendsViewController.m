@@ -45,11 +45,8 @@
     
     PGWeakSelf(self);
     [self observe:self.viewModel keyPath:@"recommends" block:^(id changedObject) {
-        NSArray *recommends = changedObject;
-        if (recommends && [recommends isKindOfClass:[NSArray class]]) {
-            weakself.viewModel.historyArray = [PGGlobal.cache objectForKey:@"search_keywords" fromTable:@"Search"];
-            [weakself.searchCollectionView reloadData];
-        }
+        weakself.viewModel.historyArray = [PGGlobal.cache objectForKey:@"search_keywords" fromTable:@"Search"];
+        [weakself.searchCollectionView reloadData];
         [weakself dismissLoading];
     }];
     
@@ -91,6 +88,9 @@
     if (self.viewModel.recommends.count == 0) {
         [self showLoading];
         [self.viewModel requestData];
+    } else {
+        self.viewModel.historyArray = [PGGlobal.cache objectForKey:@"search_keywords" fromTable:@"Search"];
+        [self.searchCollectionView reloadData];
     }
 }
 
