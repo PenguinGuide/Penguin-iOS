@@ -294,11 +294,12 @@
 - (UILabel *)titleLabel
 {
     if (!_titleLabel) {
+        CGFloat width = UISCREEN_WIDTH-28*2;
         CGFloat height = (UISCREEN_WIDTH-28*2)*190/264;
         if (DEVICE_IS_LESS_OR_EQUAL_TO_IPHONE_5) {
-            _titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(26, height-20-84, 130, 84)];
+            _titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(26, height-20-84, width-52-26, 84)];
         } else {
-            _titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(26, height-30-84, 130, 84)];
+            _titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(26, height-30-84, width-52-26, 84)];
         }
         _titleLabel.font = [UIFont systemFontOfSize:20.f weight:UIFontWeightMedium];
         _titleLabel.textColor = [UIColor whiteColor];

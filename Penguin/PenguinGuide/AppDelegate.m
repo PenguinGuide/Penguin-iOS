@@ -17,6 +17,10 @@
 #import "PGLaunchAds.h"
 #import "PGAlibcTraderManager.h"
 
+#import <SDWebImage/SDWebImageDownloader.h>
+#import <SDWebImage/SDImageCache.h>
+#import <SDWebImage/SDImageCacheConfig.h>
+
 #import "AFNetworkReachabilityManager.h"
 
 #import "PGBaseNavigationController.h"
@@ -55,6 +59,12 @@
     [PGAPIClient disableLogging];
 #endif
     
+    // SDWebImage
+    // NOTE: decodeImage causes a lot of memorys: http://blog.csdn.net/xiaobai20131118/article/details/50682062
+    [SDWebImageDownloader.sharedDownloader setShouldDecompressImages:NO];
+    [SDImageCache.sharedImageCache.config setShouldDecompressImages:NO];
+    
+    // AFNetworking
     [[AFNetworkReachabilityManager sharedManager] startMonitoring];
     
     [PGShareManager registerShareSDK];
