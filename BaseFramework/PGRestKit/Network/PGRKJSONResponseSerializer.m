@@ -111,6 +111,9 @@ static const NSString *kResponseKey = @"kResponseKey";
         }
         if (responseObject && [responseObject isKindOfClass:[NSArray class]] && paginationResponse) {
             if ([responseObject count] > 0) {
+                if (paginationResponse.pagination.countPerPage > 0 && [responseObject count] < paginationResponse.pagination.countPerPage) {
+                    paginationResponse.pagination.cursor = nil;
+                }
                 if (paginationResponse.pagination.needPerformingBatchUpdate) {
                     if (paginationResponse.dataArray.count > 0) {
                         if (paginationResponse.pagination.paginateSections) {

@@ -11,7 +11,6 @@
 // view controllers
 #import "PGLoginViewController.h"
 #import "PGHomeViewController.h"
-#import "PGChannelViewController.h"
 #import "PGScenarioViewController.h"
 #import "PGTopicViewController.h"
 #import "PGArticleViewController.h"
@@ -114,20 +113,6 @@
         }
     }];
     
-    [[PGRouter sharedInstance] registerRoute:@"qiechihe://channel" toHandler:^(NSDictionary *params) {
-        if (PGGlobal.rootNavigationController) {
-            if (params[@"channelId"]) {
-                NSString *categoryId = params[@"channelId"];
-                PGChannelViewController *channelVC = [[PGChannelViewController alloc] initWithChannelId:categoryId];
-                if (PGGlobal.tempNavigationController) {
-                    [PGGlobal.tempNavigationController pushViewController:channelVC animated:YES];
-                } else {
-                    [PGGlobal.rootNavigationController pushViewController:channelVC animated:YES];
-                }
-            }
-        }
-    }];
-    
     [[PGRouter sharedInstance] registerRoute:@"qiechihe://scenario" toHandler:^(NSDictionary *params) {
         if (PGGlobal.rootNavigationController) {
             if (params[@"scenarioId"]) {
@@ -180,10 +165,26 @@
             }
         }
     }];
+    
+    [[PGRouter sharedInstance] registerRoute:@"https://" toHandler:^(NSDictionary *params) {
+        if (PGGlobal.rootNavigationController) {
+            if (params[@"web_url"]) {
+                NSString *webUrl = params[@"web_url"];
+                PGWebViewController *webVC = [[PGWebViewController alloc] initWithURL:webUrl];
+                if (PGGlobal.tempNavigationController) {
+                    [PGGlobal.tempNavigationController pushViewController:webVC animated:YES];
+                } else {
+                    [PGGlobal.rootNavigationController pushViewController:webVC animated:YES];
+                }
+            }
+        }
+    }];
 }
 
 + (void)routeToLoginPage
 {
+    [PGGlobal synchronizeUserId:nil];
+    [PGGlobal synchronizeToken:nil];
     [[PGRouter sharedInstance] openURL:@"qiechihe://login"];
 }
 

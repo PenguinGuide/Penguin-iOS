@@ -45,23 +45,23 @@
 {
     [super viewWillAppear:animated];
     
-    [self.navigationController setNavigationBarHidden:NO animated:NO];
-}
-
-- (void)viewDidAppear:(BOOL)animated
-{
-    [super viewDidAppear:animated];
-    
-    if (!self.viewModel.countsDict) {
-        [self showLoading];
-        [self.viewModel requestData];
-    }
+    [self reloadView];
 }
 
 - (void)dealloc
 {
     [self unobserve];
 }
+
+- (void)reloadView
+{
+    if (!self.viewModel.countsDict) {
+        [self showLoading];
+        [self.viewModel requestData];
+    }
+}
+
+#pragma mark - <UICollectionView>
 
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView
 {

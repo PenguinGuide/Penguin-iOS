@@ -66,12 +66,7 @@
 {
     [super viewWillAppear:animated];
     
-    [self.navigationController setNavigationBarHidden:NO animated:NO];
-    
-    if (self.viewModel.topic == nil) {
-        [self showLoading];
-        [self.viewModel requestTopic:self.topicId];
-    }
+    [self reloadView];
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -79,14 +74,22 @@
     [super viewWillDisappear:animated];
 }
 
+- (UIStatusBarStyle)preferredStatusBarStyle
+{
+    return UIStatusBarStyleDefault;
+}
+
 - (void)dealloc
 {
     [self unobserve];
 }
 
-- (UIStatusBarStyle)preferredStatusBarStyle
+- (void)reloadView
 {
-    return UIStatusBarStyleDefault;
+    if (self.viewModel.topic == nil) {
+        [self showLoading];
+        [self.viewModel requestTopic:self.topicId];
+    }
 }
 
 #pragma mark - <UICollectionViewDataSource>

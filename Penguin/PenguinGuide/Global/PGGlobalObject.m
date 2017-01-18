@@ -52,6 +52,11 @@
             self.userId = nil;
         }
         
+        if (!self.accessToken || !self.userId) {
+            [self synchronizeUserId:nil];
+            [self synchronizeToken:nil];
+        }
+        
         NSArray *hostUrlObject = [self.cache objectForKey:@"host_url" fromTable:@"Session"];
         if (hostUrlObject && [hostUrlObject isKindOfClass:[NSArray class]]) {
             self.hostUrl = [hostUrlObject firstObject];
@@ -84,8 +89,10 @@
     self.accessToken = accessToken;
     if (accessToken) {
         [self.cache putObject:@[self.accessToken] forKey:@"access_token" intoTable:@"Session"];
+        [self.apiClient setAuthorizationHeaderField:[NSString stringWithFormat:@"Bearer %@", self.accessToken]];
     } else {
         [self.cache deleteObjectForKey:@"access_token" fromTable:@"Session"];
+        [self.apiClient clearAuthorizationHeader];
     }
 }
 
@@ -94,6 +101,7 @@
     self.hostUrl = hostUrl;
     if (hostUrl) {
         [self.cache putObject:@[self.hostUrl] forKey:@"host_url" intoTable:@"Session"];
+        [self.apiClient setBaseUrl:self.hostUrl];
     }
 }
 
@@ -181,11 +189,11 @@
 - (PGAPIClient *)apiClient
 {
     if (!_apiClient) {
-        _apiClient = [PGAPIClient client];
+        _apiClient = [PGAPIClient clientWithBaseUrl:self.hostUrl];
         if (self.accessToken) {
-            [_apiClient updateAccessToken:[NSString stringWithFormat:@"Bearer %@", self.accessToken]];
+            [_apiClient setAuthorizationHeaderField:[NSString stringWithFormat:@"Bearer %@", self.accessToken]];
         } else {
-            [_apiClient updateAccessToken:nil];
+            [_apiClient clearAuthorizationHeader];
         }
         
     }

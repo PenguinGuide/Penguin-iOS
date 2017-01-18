@@ -13,14 +13,14 @@
 #import "PGArticleCommentReplyCell.h"
 #import "PGCommentInputAccessoryView.h"
 
-#import "PGMessageViewModel.h"
+#import "PGMessageContentViewModel.h"
 
 @interface PGMessageContentViewController () <UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, PGCommentInputAccessoryViewDelegate>
 
 @property (nonatomic, assign) PGMessageContentType type;
 @property (nonatomic, strong) PGBaseCollectionView *messagesCollectionView;
 @property (nonatomic, strong) PGCommentInputAccessoryView *commentInputAccessoryView;
-@property (nonatomic, strong) PGMessageViewModel *viewModel;
+@property (nonatomic, strong) PGMessageContentViewModel *viewModel;
 @property (nonatomic, strong) PGMessage *selectedMessage;
 
 @end
@@ -52,7 +52,7 @@
     [self.view addSubview:self.messagesCollectionView];
     [self.view addSubview:self.commentInputAccessoryView];
     
-    self.viewModel = [[PGMessageViewModel alloc] initWithAPIClient:self.apiClient];
+    self.viewModel = [[PGMessageContentViewModel alloc] initWithAPIClient:self.apiClient];
     
     PGWeakSelf(self);
     [self observe:self.viewModel keyPath:@"messages" block:^(id changedObject) {
@@ -79,13 +79,17 @@
 {
     [super viewWillAppear:animated];
     
-    [self.navigationController setNavigationBarHidden:NO animated:NO];
+    [self reloadView];
 }
 
-- (void)viewDidAppear:(BOOL)animated
+- (void)dealloc
 {
-    [super viewDidAppear:animated];
-    
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+    [self unobserve];
+}
+
+- (void)reloadView
+{
     if (self.viewModel.messages.count == 0) {
         [self showLoading];
         if (self.type == PGMessageContentTypeSystem) {
@@ -96,12 +100,6 @@
             [self.viewModel requestLikesMessages];
         }
     }
-}
-
-- (void)dealloc
-{
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
-    [self unobserve];
 }
 
 #pragma mark - <UICollectionView>
@@ -137,7 +135,6 @@
         
         return cell;
     }
-
 }
 
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath
@@ -303,6 +300,17 @@
         } else {
             [_messagesCollectionView registerClass:[PGMessageContentCell class] forCellWithReuseIdentifier:MessageCell];
         }
+        
+        PGWeakSelf(self);
+        [_messagesCollectionView enableInfiniteScrolling:^{
+            if (weakself.type == PGMessageContentTypeSystem) {
+                [weakself.viewModel requestSystemMessages];
+            } else if (weakself.type == PGMessageContentTypeReply) {
+                [weakself.viewModel requestReplyMessages];
+            } else if (weakself.type == PGMessageContentTypeLikes) {
+                [weakself.viewModel requestLikesMessages];
+            }
+        }];
     }
     return _messagesCollectionView;
 }

@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "PGViewController.h"
 #import "PGAPIClient.h"
 #import "FBKVOController.h"
 #import "PGBaseViewModel.h"
@@ -21,7 +22,7 @@
 
 #import "PGAnalytics.h"
 
-@interface PGBaseViewController : UIViewController
+@interface PGBaseViewController : UIViewController <PGViewController>
 
 @property (nonatomic, strong, readonly) PGAPIClient *apiClient;
 @property (nonatomic, strong, readonly) FBKVOController *KVOController;
@@ -48,8 +49,11 @@
 
 - (void)showPlaceholder:(NSString *)image desc:(NSString *)desc;
 - (void)showNetworkLostPlaceholder;
+- (void)hideNetworkLostPlaceholder;
 
 - (void)observeError:(PGBaseViewModel *)viewModel;
 - (void)showErrorMessage:(NSError *)error;
+
+- (BOOL)shouldHideNavigationBar;
 
 @end

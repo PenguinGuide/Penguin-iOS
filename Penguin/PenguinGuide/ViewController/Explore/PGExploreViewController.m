@@ -24,6 +24,8 @@
 
 #import "PGExploreViewModel.h"
 
+#import "MSWeakTimer.h"
+
 @interface PGExploreViewController () <UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, PGArticleBannerCellDelegate>
 
 @property (nonatomic, strong, readwrite) PGBaseCollectionView *feedsCollectionView;
@@ -31,6 +33,9 @@
 @property (nonatomic, strong) PGExploreViewModel *viewModel;
 
 @property (nonatomic, assign) BOOL statusbarIsWhiteBackground;
+
+@property (nonatomic, strong) MSWeakTimer *bannersWeakTimer;
+@property (nonatomic, strong) PGExploreRecommendsHeaderView *bannersHeaderView;
 
 @end
 
@@ -76,6 +81,13 @@
     [super viewWillAppear:animated];
     
     [self.navigationController setNavigationBarHidden:YES animated:NO];
+    
+    self.bannersWeakTimer = [MSWeakTimer scheduledTimerWithTimeInterval:3.f
+                                                                 target:self
+                                                               selector:@selector(bannersCountDown)
+                                                               userInfo:nil
+                                                                repeats:YES
+                                                          dispatchQueue:dispatch_get_main_queue()];
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -85,10 +97,7 @@
     // NOTE: put it in viewWillAppear doesn't work
     [self setNeedsStatusBarAppearanceUpdate];
     
-    if (self.viewModel.articlesArray.count == 0) {
-        [self showLoading];
-        [self.viewModel requestData];
-    }
+    [self reloadView];
     
     if (self.statusbarIsWhiteBackground) {
         UIView *statusBar = [[[UIApplication sharedApplication] valueForKey:@"statusBarWindow"] valueForKey:@"statusBar"];
@@ -108,6 +117,8 @@
 - (void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
+    
+    [self.bannersWeakTimer invalidate];
     
     // http://stackoverflow.com/questions/11656055/scrollviewdidscroll-delegate-is-invoking-automatically
     // NOTE: if barHidden sets to NO, scrollViewDidScroll will not be called (next page nothing to update)
@@ -131,6 +142,22 @@
 - (void)dealloc
 {
     [self unobserve];
+    
+    [self.bannersWeakTimer invalidate];
+    self.bannersWeakTimer = nil;
+}
+
+- (void)reloadView
+{
+    if (self.viewModel.articlesArray.count == 0) {
+        [self showLoading];
+        [self.viewModel requestData];
+    }
+}
+
+- (BOOL)shouldHideNavigationBar
+{
+    return YES;
 }
 
 #pragma mark - <PGTabBarControllerDelegate>
@@ -273,10 +300,10 @@
 {
     if (kind == UICollectionElementKindSectionHeader) {
         if (indexPath.section == 0) {
-            PGExploreRecommendsHeaderView *headerView = [collectionView dequeueReusableSupplementaryViewOfKind:kind withReuseIdentifier:ExploreHeaderView forIndexPath:indexPath];
-            [headerView reloadBannersWithRecommendsArray:self.viewModel.recommendsArray];
+            self.bannersHeaderView = [collectionView dequeueReusableSupplementaryViewOfKind:kind withReuseIdentifier:ExploreHeaderView forIndexPath:indexPath];
+            [self.bannersHeaderView reloadBannersWithRecommendsArray:self.viewModel.recommendsArray];
             
-            return headerView;
+            return self.bannersHeaderView;
         } else if (indexPath.section == 3) {
             UICollectionReusableView *headerView = [collectionView dequeueReusableSupplementaryViewOfKind:kind withReuseIdentifier:ArticleHeaderView forIndexPath:indexPath];
             
@@ -333,6 +360,13 @@
         } else {
             self.statusbarIsWhiteBackground = NO;
         }
+    }
+}
+
+- (void)bannersCountDown
+{
+    if (self.bannersHeaderView) {
+        [self.bannersHeaderView.bannersView scrollToNextPage];
     }
 }
 

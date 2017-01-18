@@ -108,7 +108,7 @@ static NSString *const GoodCell = @"GoodCell";
 	if(_bannerImageView == nil) {
         CGFloat width = UISCREEN_WIDTH-40;
 		_bannerImageView = [[UIImageView alloc] initWithFrame:CGRectMake(20, 0, width, width*9/16)];
-        _bannerImageView.backgroundColor = Theme.colorText;
+        _bannerImageView.backgroundColor = Theme.colorBackground;
         _bannerImageView.clipsToBounds = YES;
         _bannerImageView.contentMode = UIViewContentModeScaleAspectFill;
 	}

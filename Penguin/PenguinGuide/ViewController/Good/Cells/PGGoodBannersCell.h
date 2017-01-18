@@ -7,8 +7,11 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "PGPagedScrollView.h"
 
 @interface PGGoodBannersCell : UICollectionViewCell
+
+@property (nonatomic, strong, readonly) PGPagedScrollView *pagedScrollView;
 
 - (void)reloadCellWithBanners:(NSArray *)banners;
 

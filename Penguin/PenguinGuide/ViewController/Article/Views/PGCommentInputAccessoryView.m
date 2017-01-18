@@ -36,6 +36,11 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(textViewDidChange) name:UITextViewTextDidChangeNotification object:nil];
 }
 
+- (void)dealloc
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
 #pragma mark - <UITextViewDelegate>
 
 - (void)textViewDidChange
@@ -69,7 +74,7 @@
     return YES;
 }
 
-- (UITextView *)commentTextView
+- (PGCommentTextView *)commentTextView
 {
     if (!_commentTextView) {
         _commentTextView = [[PGCommentTextView alloc] initWithFrame:CGRectMake(27, 7, self.pg_width-54, 30)];
@@ -78,7 +83,7 @@
         _commentTextView.backgroundColor = [UIColor whiteColor];
         _commentTextView.returnKeyType = UIReturnKeySend;
         _commentTextView.delegate = self;
-        _commentTextView.placeholder = @"输 入 你 的 回 复";
+        _commentTextView.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"输 入 你 的 回 复" attributes:@{NSFontAttributeName:Theme.fontMedium, NSForegroundColorAttributeName:[UIColor colorWithHexString:@"AFAFAF"]}];
         
         CGSize textSize = [_commentTextView sizeThatFits:CGSizeMake(self.pg_width-27, MAXFLOAT)];
         _commentTextView.frame = CGRectMake(27, (self.pg_height-textSize.height)/2, self.pg_width-54, textSize.height);

@@ -51,28 +51,27 @@
         [weakself dismissLoading];
         [weakself.historyCollectionView endBottomRefreshing];
     }];
+    [self observeCollectionView:self.historyCollectionView endOfFeeds:self.viewModel];
 }
 
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
     
-    [self.navigationController setNavigationBarHidden:NO animated:NO];
-}
-
-- (void)viewDidAppear:(BOOL)animated
-{
-    [super viewDidAppear:animated];
-    
-    if (self.viewModel.histories.count == 0 && !self.viewModel.endFlag) {
-        [self showLoading];
-        [self.viewModel requestData];
-    }
+    [self reloadView];
 }
 
 - (void)dealloc
 {
     [self unobserve];
+}
+
+- (void)reloadView
+{
+    if (self.viewModel.histories.count == 0 && !self.viewModel.endFlag) {
+        [self showLoading];
+        [self.viewModel requestData];
+    }
 }
 
 #pragma mark - <UICollectionViewDataSource>

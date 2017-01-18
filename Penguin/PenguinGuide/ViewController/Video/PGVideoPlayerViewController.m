@@ -63,7 +63,7 @@ typedef NS_ENUM(NSInteger, GestureDirection) {
 - (id)initWithVideoURL:(NSString *)url
 {
     if (self = [super init]) {
-        self.videoURL = @"http://cdn-images-1.penguinguide.cn/王宝和螃蟹做法%20有码%201080p%20zoe.mp4";
+        self.videoURL = @"https://cdn-video-1.penguinguide.cn/generic720";
     }
     
     return self;
@@ -142,6 +142,11 @@ typedef NS_ENUM(NSInteger, GestureDirection) {
     self.player = nil;
     self.playerItem = nil;
     self.playerLayer = nil;
+}
+
+- (void)reloadView
+{
+    [self hideNetworkLostPlaceholder];
 }
 
 - (BOOL)prefersStatusBarHidden
@@ -289,6 +294,7 @@ typedef NS_ENUM(NSInteger, GestureDirection) {
     PGWeakSelf(self);
     [self.playerItem seekToTime:CMTimeMakeWithSeconds(self.playerSlider.value*CMTimeGetSeconds(self.playerItem.duration), self.playerItem.duration.timescale)
               completionHandler:^(BOOL finished) {
+                  [weakself continuePlaying];
                   //[weakself showLoading];
               }];
 }
@@ -374,6 +380,8 @@ typedef NS_ENUM(NSInteger, GestureDirection) {
             self.currentPlayerSliderValue = self.playerSlider.value;
             self.currentPlayerSliderValue = self.volumeSlider.value;
             self.currentSystemVolumeSliderValue = self.systemVolumeSlider.value;
+            self.backwardButton.hidden = YES;
+            self.forwardButton.hidden = YES;
             if (self.currentGestureDirection == GestureDirectionLeft || self.currentGestureDirection == GestureDirectionRight) {
                 [self playerSliderValueChanged];
             }

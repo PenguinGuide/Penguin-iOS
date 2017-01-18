@@ -6,12 +6,14 @@
 //  Copyright © 2016 Xinglian. All rights reserved.
 //
 
+#define AvatarCell @"AvatarCell"
 #define SettingCell @"SettingCell"
 #define SettingHeaderView @"SettingHeaderView"
 
 #import "PGPersonalSettingsViewController.h"
 #import "PGSettingsUpdateViewController.h"
-#import "PGSettingsCell.h"
+#import "PGPersonalSettingsCell.h"
+#import "PGPersonalSettingsAvatarCell.h"
 #import "PGSettingsHeaderView.h"
 
 #import "PGMeViewModel.h"
@@ -33,6 +35,8 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     
+    [self setNavigationTitle:@"个人设置"];
+    
     [self.view addSubview:self.settingsCollectionView];
     
     self.viewModel = [[PGMeViewModel alloc] initWithAPIClient:self.apiClient];
@@ -51,15 +55,10 @@
 {
     [super viewWillAppear:animated];
     
-    [self.navigationController setNavigationBarHidden:NO animated:NO];
-    
-    [self.navigationController.navigationBar pg_setBackgroundColor:[UIColor clearColor]];
+    [self.navigationController.navigationBar pg_setBackgroundColor:[UIColor whiteColor]];
     [self.navigationController.navigationBar setShadowImage:[UIImage new]];
     
-    if (!self.viewModel.me) {
-        [self showOccupiedLoading];
-        [self.viewModel requestDetails];
-    }
+    [self reloadView];
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -69,18 +68,33 @@
     [self.navigationController.navigationBar pg_reset];
 }
 
+- (void)dealloc
+{
+    [self unobserve];
+}
+
+- (void)reloadView
+{
+    if (!self.viewModel.me) {
+        [self showOccupiedLoading];
+        [self.viewModel requestDetails];
+    }
+}
+
 #pragma mark - <UICollectionViewDataSource>
 
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView
 {
-    return 2;
+    return 3;
 }
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
 {
     if (section == 0) {
-        return 6;
+        return 1;
     } else if (section == 1) {
+        return 5;
+    } else if (section == 2) {
         return 3;
     }
     return 0;
@@ -89,47 +103,51 @@
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
     if (indexPath.section == 0) {
-        PGSettingsCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:SettingCell forIndexPath:indexPath];
+        PGPersonalSettingsAvatarCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:AvatarCell forIndexPath:indexPath];
+        
+        [cell setCellWithAvatar:self.viewModel.me.avatar];
+        
+        return cell;
+    } else if (indexPath.section == 1) {
+        PGPersonalSettingsCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:SettingCell forIndexPath:indexPath];
         
         if (indexPath.item == 0) {
-            [cell setCellWithDesc:@"头 像" content:self.viewModel.me.avatar isImage:YES];
+            [cell setCellWithDesc:@"昵 称" content:self.viewModel.me.nickname];
         } else if (indexPath.item == 1) {
-            [cell setCellWithDesc:@"昵 称" content:self.viewModel.me.nickname isImage:NO];
-        } else if (indexPath.item == 2) {
             if ([self.viewModel.me.sex isEqualToString:@"男"]) {
-                [cell setCellWithDesc:@"性 别" content:@"男" isImage:NO];
+                [cell setCellWithDesc:@"性 别" content:@"男"];
             } else {
-                [cell setCellWithDesc:@"性 别" content:@"女" isImage:NO];
+                [cell setCellWithDesc:@"性 别" content:@"女"];
             }
+        } else if (indexPath.item == 2) {
+            [cell setCellWithDesc:@"城 市" content:self.viewModel.me.location];
         } else if (indexPath.item == 3) {
-            [cell setCellWithDesc:@"城 市" content:self.viewModel.me.location isImage:NO];
+            [cell setCellWithDesc:@"生 日" content:self.viewModel.me.birthday];
         } else if (indexPath.item == 4) {
-            [cell setCellWithDesc:@"生 日" content:self.viewModel.me.birthday isImage:NO];
-        } else if (indexPath.item == 5) {
             if (self.viewModel.me.hasPassword) {
-                [cell setCellWithDesc:@"密 码" content:@"已设置" isImage:NO];
+                [cell setCellWithDesc:@"密 码" content:@"已设置"];
             } else {
-                [cell setCellWithDesc:@"密 码" content:@"未设置" isImage:NO];
+                [cell setCellWithDesc:@"密 码" content:@"未设置"];
             }
         }
         
         return cell;
-    } else if (indexPath.section == 1) {
-        PGSettingsCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:SettingCell forIndexPath:indexPath];
+    } else if (indexPath.section == 2) {
+        PGPersonalSettingsCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:SettingCell forIndexPath:indexPath];
         
         if (indexPath.item == 0) {
-            [cell setCellWithDesc:@"手 机 号" content:self.viewModel.me.phoneNumber isImage:NO];
+            [cell setCellWithDesc:@"手 机 号" content:self.viewModel.me.phoneNumber];
         } else if (indexPath.item == 1) {
             if (self.viewModel.me.weixinBinded) {
-                [cell setCellWithDesc:@"微 信" content:@"已绑定" isImage:NO];
+                [cell setCellWithDesc:@"微 信" content:@"已绑定"];
             } else {
-                [cell setCellWithDesc:@"微 信" content:@"未绑定" isImage:NO];
+                [cell setCellWithDesc:@"微 信" content:@"未绑定"];
             }
         } else if (indexPath.item == 2) {
             if (self.viewModel.me.weiboBinded) {
-                [cell setCellWithDesc:@"微 博" content:@"已绑定" isImage:NO];
+                [cell setCellWithDesc:@"微 博" content:@"已绑定"];
             } else {
-                [cell setCellWithDesc:@"微 博" content:@"未绑定" isImage:NO];
+                [cell setCellWithDesc:@"微 博" content:@"未绑定"];
             }
         }
         
@@ -143,12 +161,19 @@
 
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    return CGSizeMake(UISCREEN_WIDTH, 50);
+    if (indexPath.section == 0) {
+        return CGSizeMake(UISCREEN_WIDTH, 20+80+20+16+20);
+    } else {
+        return CGSizeMake(UISCREEN_WIDTH, 50);
+    }
 }
 
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout referenceSizeForHeaderInSection:(NSInteger)section
 {
-    return CGSizeMake(UISCREEN_WIDTH, 68);
+    if (section == 2) {
+        return CGSizeMake(UISCREEN_WIDTH, 80);
+    }
+    return CGSizeZero;
 }
 
 - (CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout minimumLineSpacingForSectionAtIndex:(NSInteger)section
@@ -169,12 +194,7 @@
 - (UICollectionReusableView *)collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath
 {
     if (kind == UICollectionElementKindSectionHeader) {
-        if (indexPath.section == 0) {
-            PGSettingsHeaderView *headerView = [collectionView dequeueReusableSupplementaryViewOfKind:kind withReuseIdentifier:SettingHeaderView forIndexPath:indexPath];
-            [headerView setHeaderViewWithTitle:@"个人设置"];
-            
-            return headerView;
-        } else if (indexPath.section == 1) {
+        if (indexPath.section == 2) {
             PGSettingsHeaderView *headerView = [collectionView dequeueReusableSupplementaryViewOfKind:kind withReuseIdentifier:SettingHeaderView forIndexPath:indexPath];
             [headerView setHeaderViewWithTitle:@"账号绑定"];
             
@@ -188,27 +208,27 @@
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
     if (indexPath.section == 0) {
+        UIImagePickerController *imagePickerController = [[UIImagePickerController alloc] init];
+        imagePickerController.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
+        imagePickerController.allowsEditing = YES;
+        imagePickerController.delegate = self;
+        
+        [self.navigationController presentViewController:imagePickerController animated:YES completion:nil];
+    } else if (indexPath.section == 1) {
         if (indexPath.item == 0) {
-            UIImagePickerController *imagePickerController = [[UIImagePickerController alloc] init];
-            imagePickerController.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
-            imagePickerController.allowsEditing = YES;
-            imagePickerController.delegate = self;
-            
-            [self.navigationController presentViewController:imagePickerController animated:YES completion:nil];
-        } else if (indexPath.item == 1) {
             PGSettingsUpdateViewController *settingsUpdateVC = [[PGSettingsUpdateViewController alloc] initWithType:PGSettingsTypeNickname content:self.viewModel.me.nickname];
             [self.navigationController pushViewController:settingsUpdateVC animated:YES];
-        } else if (indexPath.item == 2) {
+        } else if (indexPath.item == 1) {
             PGSettingsUpdateViewController *settingsUpdateVC = [[PGSettingsUpdateViewController alloc] initWithType:PGSettingsTypeSex content:self.viewModel.me.sex];
             [self.navigationController pushViewController:settingsUpdateVC animated:YES];
-        } else if (indexPath.item == 3) {
+        } else if (indexPath.item == 2) {
             PGSettingsUpdateViewController *settingsUpdateVC = [[PGSettingsUpdateViewController alloc] initWithType:PGSettingsTypeLocation content:self.viewModel.me.location];
             [self.navigationController pushViewController:settingsUpdateVC animated:YES];
-        } else if (indexPath.item == 4) {
+        } else if (indexPath.item == 3) {
             PGSettingsUpdateViewController *settingsUpdateVC = [[PGSettingsUpdateViewController alloc] initWithType:PGSettingsTypeBirthday content:self.viewModel.me.birthday];
             [self.navigationController pushViewController:settingsUpdateVC animated:YES];
         }
-    } else if (indexPath.section == 1) {
+    } else if (indexPath.section == 2) {
         if (indexPath.item == 0) {
             if (!self.viewModel.me.phoneNumber || self.viewModel.me.phoneNumber.length == 0) {
                 
@@ -308,12 +328,15 @@
 - (PGBaseCollectionView *)settingsCollectionView
 {
     if (!_settingsCollectionView) {
-        _settingsCollectionView = [[PGBaseCollectionView alloc] initWithFrame:CGRectMake(0, -20, UISCREEN_WIDTH, UISCREEN_HEIGHT+20) collectionViewLayout:[UICollectionViewFlowLayout new]];
+        _settingsCollectionView = [[PGBaseCollectionView alloc] initWithFrame:CGRectMake(0, 0, UISCREEN_WIDTH, UISCREEN_HEIGHT) collectionViewLayout:[UICollectionViewFlowLayout new]];
         _settingsCollectionView.dataSource = self;
         _settingsCollectionView.delegate = self;
         _settingsCollectionView.backgroundColor = [UIColor whiteColor];
+        _settingsCollectionView.showsHorizontalScrollIndicator = NO;
+        _settingsCollectionView.showsVerticalScrollIndicator = NO;
         
-        [_settingsCollectionView registerClass:[PGSettingsCell class] forCellWithReuseIdentifier:SettingCell];
+        [_settingsCollectionView registerClass:[PGPersonalSettingsAvatarCell class] forCellWithReuseIdentifier:AvatarCell];
+        [_settingsCollectionView registerClass:[PGPersonalSettingsCell class] forCellWithReuseIdentifier:SettingCell];
         [_settingsCollectionView registerClass:[PGSettingsHeaderView class] forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:SettingHeaderView];
     }
     return _settingsCollectionView;

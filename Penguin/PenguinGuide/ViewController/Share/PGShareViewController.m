@@ -13,29 +13,27 @@
 
 @property (nonatomic, strong) UIView *topDimView;
 @property (nonatomic, strong) UIView *shareView;
+@property (nonatomic, strong) UIImageView *articleShareImageView;
 
-@property (nonatomic, strong) NSString *shareLink;
-@property (nonatomic, strong) NSString *shareText;
-@property (nonatomic, strong) NSString *shareTitle;
-@property (nonatomic, strong) NSString *shareImage;
-@property (nonatomic, strong) NSString *shareThumbnail;
+@property (nonatomic, strong) UILabel *dayLabel;
+@property (nonatomic, strong) UILabel *monthLabel;
+@property (nonatomic, strong) UILabel *yearLabel;
+@property (nonatomic, strong) UILabel *titleLabel;
+
+@property (nonatomic, strong) PGShareAttribute *attribute;
 
 @end
 
 @implementation PGShareViewController
 
-- (id)initWithShareLink:(NSString *)shareLink text:(NSString *)text title:(NSString *)title image:(NSString *)image thumbnail:(NSString *)thumbnail
+- (id)initWithShareAttribute:(PGShareAttribute *)attribute
 {
     if (self = [super init]) {
         self.modalPresentationStyle = UIModalPresentationOverCurrentContext;
         self.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
-        self.view.backgroundColor = [UIColor colorWithWhite:0.f alpha:0.8f];
+        self.view.backgroundColor = [UIColor colorWithWhite:0.f alpha:0.6f];
         
-        self.shareLink = shareLink;
-        self.shareText = text;
-        self.shareTitle = title;
-        self.shareImage = image;
-        self.shareThumbnail = thumbnail;
+        self.attribute = attribute;
     }
     return self;
 }
@@ -57,30 +55,43 @@
 {
     [super viewWillAppear:animated];
     
+    self.articleShareImageView.image = self.attribute.shareViewImage;
+    self.dayLabel.text = self.attribute.day;
+    self.monthLabel.text = self.attribute.month;
+    self.yearLabel.text = self.attribute.year;
+    self.titleLabel.text = self.attribute.title;
+    
+    __block CGFloat height = (UISCREEN_WIDTH-28*2)*190/264+94;
+    
     PGWeakSelf(self);
-    [UIView animateWithDuration:0.2f
+    [UIView animateWithDuration:0.4f
                           delay:0.f
-         usingSpringWithDamping:1.f
-          initialSpringVelocity:0.5f
-                        options:UIViewAnimationOptionCurveEaseInOut
+         usingSpringWithDamping:0.75f
+          initialSpringVelocity:0.8f
+                        options:UIViewAnimationOptionCurveEaseOut
                      animations:^{
-                         weakself.shareView.frame = CGRectMake(0, UISCREEN_HEIGHT-140, UISCREEN_WIDTH, 140);
+                         weakself.shareView.frame = CGRectMake(weakself.shareView.pg_x, (UISCREEN_HEIGHT-height)/2, weakself.shareView.pg_width, weakself.shareView.pg_height);
                      } completion:^(BOOL finished) {
                          
                      }];
 }
 
+- (void)reloadView
+{
+    [self hideNetworkLostPlaceholder];
+}
+
 - (void)momentsButtonClicked
 {
-    if (self.shareLink && self.shareLink.length > 0) {
+    if (self.attribute.url && self.attribute.url.length > 0) {
         PGWeakSelf(self);
         [self showLoading];
         [PGShareManager shareItem:^(PGShareItem *shareItem) {
-            shareItem.text = weakself.shareText;
-            shareItem.title = weakself.shareTitle;
-            shareItem.image = weakself.shareImage;
-            shareItem.thumbnailImage = weakself.shareThumbnail;
-            shareItem.url = weakself.shareLink;
+            shareItem.text = weakself.attribute.text;
+            shareItem.title = weakself.attribute.title;
+            shareItem.image = weakself.attribute.image;
+            shareItem.thumbnailImage = weakself.attribute.thumbnailImage;
+            shareItem.url = weakself.attribute.url;
         } toPlatform:SSDKPlatformSubTypeWechatTimeline
                        completion:^(SSDKResponseState state) {
                            if (state == SSDKResponseStateSuccess) {
@@ -99,15 +110,15 @@
 
 - (void)wechatButtonClicked
 {
-    if (self.shareLink && self.shareLink.length > 0) {
+    if (self.attribute.url && self.attribute.url.length > 0) {
         PGWeakSelf(self);
         [self showLoading];
         [PGShareManager shareItem:^(PGShareItem *shareItem) {
-            shareItem.text = weakself.shareText;
-            shareItem.title = weakself.shareTitle;
-            shareItem.image = weakself.shareImage;
-            shareItem.thumbnailImage = weakself.shareThumbnail;
-            shareItem.url = weakself.shareLink;
+            shareItem.text = weakself.attribute.text;
+            shareItem.title = weakself.attribute.title;
+            shareItem.image = weakself.attribute.image;
+            shareItem.thumbnailImage = weakself.attribute.thumbnailImage;
+            shareItem.url = weakself.attribute.url;
         } toPlatform:SSDKPlatformSubTypeWechatSession
                        completion:^(SSDKResponseState state) {
                            if (state == SSDKResponseStateSuccess) {
@@ -126,15 +137,15 @@
 
 - (void)weiboButtonClicked
 {
-    if (self.shareLink && self.shareLink.length > 0) {
+    if (self.attribute.url && self.attribute.url.length > 0) {
         PGWeakSelf(self);
         [self showLoading];
         [PGShareManager shareItem:^(PGShareItem *shareItem) {
-            shareItem.text = weakself.shareText;
-            shareItem.title = weakself.shareTitle;
-            shareItem.image = weakself.shareImage;
-            shareItem.thumbnailImage = weakself.shareThumbnail;
-            shareItem.url = weakself.shareLink;
+            shareItem.text = weakself.attribute.text;
+            shareItem.title = weakself.attribute.title;
+            shareItem.image = weakself.attribute.image;
+            shareItem.thumbnailImage = weakself.attribute.thumbnailImage;
+            shareItem.url = weakself.attribute.url;
         } toPlatform:SSDKPlatformTypeSinaWeibo
                        completion:^(SSDKResponseState state) {
                            if (state == SSDKResponseStateSuccess) {
@@ -153,10 +164,16 @@
 
 - (void)linkButtonClicked
 {
-    
+    if (self.attribute.url && self.attribute.url.length > 0) {
+        UIPasteboard *pb = [UIPasteboard generalPasteboard];
+        [pb setString:self.attribute.url];
+        [self showToast:@"复制成功"];
+    } else {
+        [self showToast:@"复制失败"];
+    }
 }
 
-- (void)cancelButtonClicked
+- (void)closeButtonClicked
 {
     [self dismissViewControllerAnimated:YES completion:nil];
 }
@@ -166,7 +183,7 @@
 - (UIView *)topDimView
 {
     if (!_topDimView) {
-        _topDimView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, UISCREEN_WIDTH, UISCREEN_HEIGHT-140)];
+        _topDimView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, UISCREEN_WIDTH, UISCREEN_HEIGHT)];
         _topDimView.backgroundColor = [UIColor clearColor];
     }
     return _topDimView;
@@ -175,44 +192,120 @@
 - (UIView *)shareView
 {
     if (!_shareView) {
-        _shareView = [[UIView alloc] initWithFrame:CGRectMake(0, UISCREEN_HEIGHT, UISCREEN_WIDTH, 140)];
-        _shareView.backgroundColor = [UIColor whiteColorWithAlpha:0.8f];
+        CGFloat width = UISCREEN_WIDTH-28*2;
+        CGFloat height = (UISCREEN_WIDTH-28*2)*190/264+94;
         
-        UIView *horizontalLine = [[UIView alloc] initWithFrame:CGRectMake(25, 140-44-1/[UIScreen mainScreen].scale, UISCREEN_WIDTH-50, 1/[UIScreen mainScreen].scale)];
-        horizontalLine.backgroundColor = Theme.colorText;
-        [_shareView addSubview:horizontalLine];
+        _shareView = [[UIView alloc] initWithFrame:CGRectMake((UISCREEN_WIDTH-width)/2, UISCREEN_HEIGHT, width, height)];
+        _shareView.backgroundColor = [UIColor whiteColor];
+        _shareView.clipsToBounds = YES;
+        _shareView.layer.cornerRadius = 5.f;
         
-        float delta = (UISCREEN_WIDTH-30*2-60*4)/3;
+        float delta = (UISCREEN_WIDTH-28*2-25*2-60*4)/3;
         
-        PGShareButton *momentsButton = [[PGShareButton alloc] initWithFrame:CGRectMake(30, 20, 60, 60)];
+        [_shareView addSubview:self.articleShareImageView];
+        
+        PGShareButton *momentsButton = [[PGShareButton alloc] initWithFrame:CGRectMake(25, height-94+20, 60, 60)];
         [momentsButton setImage:@"pg_share_moments" title:@"朋友圈"];
         [momentsButton addTarget:self action:@selector(momentsButtonClicked) forControlEvents:UIControlEventTouchUpInside];
         [_shareView addSubview:momentsButton];
         
-        PGShareButton *wechatButton = [[PGShareButton alloc] initWithFrame:CGRectMake(momentsButton.pg_right+delta, 20, 60, 60)];
+        PGShareButton *wechatButton = [[PGShareButton alloc] initWithFrame:CGRectMake(momentsButton.pg_right+delta, height-94+20, 60, 60)];
         [wechatButton setImage:@"pg_share_wechat" title:@"微信"];
         [wechatButton addTarget:self action:@selector(wechatButtonClicked) forControlEvents:UIControlEventTouchUpInside];
         [_shareView addSubview:wechatButton];
         
-        PGShareButton *weiboButton = [[PGShareButton alloc] initWithFrame:CGRectMake(wechatButton.pg_right+delta, 20, 60, 60)];
+        PGShareButton *weiboButton = [[PGShareButton alloc] initWithFrame:CGRectMake(wechatButton.pg_right+delta, height-94+20, 60, 60)];
         [weiboButton setImage:@"pg_share_weibo" title:@"微博"];
         [weiboButton addTarget:self action:@selector(weiboButtonClicked) forControlEvents:UIControlEventTouchUpInside];
         [_shareView addSubview:weiboButton];
         
-        PGShareButton *linkButton = [[PGShareButton alloc] initWithFrame:CGRectMake(weiboButton.pg_right+delta, 20, 60, 60)];
+        PGShareButton *linkButton = [[PGShareButton alloc] initWithFrame:CGRectMake(weiboButton.pg_right+delta, height-94+20, 60, 60)];
         [linkButton setImage:@"pg_share_link" title:@"复制链接"];
         [linkButton addTarget:self action:@selector(linkButtonClicked) forControlEvents:UIControlEventTouchUpInside];
         [_shareView addSubview:linkButton];
-        
-        UIButton *cancelButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 140-44, UISCREEN_WIDTH, 44)];
-        [cancelButton setTitle:@"取 消" forState:UIControlStateNormal];
-        [cancelButton setTitleColor:Theme.colorText forState:UIControlStateNormal];
-        [cancelButton.titleLabel setFont:Theme.fontMedium];
-        [cancelButton addTarget:self action:@selector(cancelButtonClicked) forControlEvents:UIControlEventTouchUpInside];
-        
-        [_shareView addSubview:cancelButton];
     }
     return _shareView;
+}
+
+- (UIImageView *)articleShareImageView
+{
+    if (!_articleShareImageView) {
+        CGFloat width = UISCREEN_WIDTH-28*2;
+        CGFloat height = (UISCREEN_WIDTH-28*2)*190/264+94;
+        
+        _articleShareImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, width, height-94)];
+        _articleShareImageView.backgroundColor = Theme.colorBackground;
+        _articleShareImageView.clipsToBounds = YES;
+        _articleShareImageView.contentMode = UIViewContentModeScaleAspectFill;
+        _articleShareImageView.userInteractionEnabled = YES;
+        
+        UIView *dimView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, _articleShareImageView.pg_width, _articleShareImageView.pg_height)];
+        dimView.backgroundColor = [UIColor blackColorWithAlpha:0.3];
+        [_articleShareImageView addSubview:dimView];
+        
+        [_articleShareImageView addSubview:self.dayLabel];
+        
+        UIView *verticleLine = [[UIView alloc] initWithFrame:CGRectMake(66, 34, 2, 26)];
+        verticleLine.backgroundColor = [UIColor whiteColor];
+        [_articleShareImageView addSubview:verticleLine];
+        
+        [_articleShareImageView addSubview:self.monthLabel];
+        [_articleShareImageView addSubview:self.yearLabel];
+        [_articleShareImageView addSubview:self.titleLabel];
+        
+        UIButton *closeButton = [[UIButton alloc] initWithFrame:CGRectMake(width-60, 10, 50, 50)];
+        [closeButton setImage:[UIImage imageNamed:@"pg_login_close"] forState:UIControlStateNormal];
+        [closeButton addTarget:self action:@selector(closeButtonClicked) forControlEvents:UIControlEventTouchUpInside];
+        [_articleShareImageView addSubview:closeButton];
+    }
+    return _articleShareImageView;
+}
+
+- (UILabel *)dayLabel
+{
+    if (!_dayLabel) {
+        _dayLabel = [[UILabel alloc] initWithFrame:CGRectMake(26, 32, 40, 30)];
+        _dayLabel.font = [UIFont systemFontOfSize:28.f weight:UIFontWeightMedium];
+        _dayLabel.textColor = [UIColor whiteColor];
+    }
+    return _dayLabel;
+}
+
+- (UILabel *)monthLabel
+{
+    if (!_monthLabel) {
+        _monthLabel = [[UILabel alloc] initWithFrame:CGRectMake(76, 32, 37, 15)];
+        _monthLabel.font = Theme.fontSmallBold;
+        _monthLabel.textColor = [UIColor whiteColor];
+    }
+    return _monthLabel;
+}
+
+- (UILabel *)yearLabel
+{
+    if (!_yearLabel) {
+        _yearLabel = [[UILabel alloc] initWithFrame:CGRectMake(76, self.monthLabel.pg_bottom, 37, 15)];
+        _yearLabel.font = Theme.fontSmallBold;
+        _yearLabel.textColor = [UIColor whiteColor];
+    }
+    return _yearLabel;
+}
+
+- (UILabel *)titleLabel
+{
+    if (!_titleLabel) {
+        CGFloat width = UISCREEN_WIDTH-28*2;
+        CGFloat height = (UISCREEN_WIDTH-28*2)*190/264;
+        if (DEVICE_IS_LESS_OR_EQUAL_TO_IPHONE_5) {
+            _titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(26, height-20-84, width-52-26, 84)];
+        } else {
+            _titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(26, height-30-84, width-52-26, 84)];
+        }
+        _titleLabel.font = [UIFont systemFontOfSize:20.f weight:UIFontWeightMedium];
+        _titleLabel.textColor = [UIColor whiteColor];
+        _titleLabel.numberOfLines = 3;
+    }
+    return _titleLabel;
 }
 
 - (void)didReceiveMemoryWarning {

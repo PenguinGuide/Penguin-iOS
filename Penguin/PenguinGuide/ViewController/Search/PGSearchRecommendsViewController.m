@@ -22,7 +22,7 @@
 #import "UICollectionViewLeftAlignedLayout.h"
 #import "PGSearchTextField.h"
 
-@interface PGSearchRecommendsViewController () <UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, UITextFieldDelegate>
+@interface PGSearchRecommendsViewController () <UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, UITextFieldDelegate, PGSearchRecommendsHistoryHeaderViewDelegate>
 
 @property (nonatomic, strong) PGSearchRecommendsViewModel *viewModel;
 
@@ -45,11 +45,8 @@
     
     PGWeakSelf(self);
     [self observe:self.viewModel keyPath:@"recommends" block:^(id changedObject) {
-        NSArray *recommends = changedObject;
-        if (recommends && [recommends isKindOfClass:[NSArray class]]) {
-            weakself.viewModel.historyArray = [PGGlobal.cache objectForKey:@"search_keywords" fromTable:@"Search"];
-            [weakself.searchCollectionView reloadData];
-        }
+        weakself.viewModel.historyArray = [PGGlobal.cache objectForKey:@"search_keywords" fromTable:@"Search"];
+        [weakself.searchCollectionView reloadData];
         [weakself dismissLoading];
     }];
     
@@ -57,11 +54,6 @@
     [self.searchTextFieldContainerView addSubview:self.searchTextField];
     [self.searchTextFieldContainerView addSubview:self.cancelButton];
     [self.view addSubview:self.searchCollectionView];
-}
-
-- (void)viewDidAppear:(BOOL)animated
-{
-    [super viewDidAppear:animated];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -72,10 +64,7 @@
     
     [self.navigationController setNavigationBarHidden:YES animated:NO];
     
-    if (self.viewModel.recommends.count == 0) {
-        [self showLoading];
-        [self.viewModel requestData];
-    }
+    [self reloadView];
     
     self.navigationItem.leftBarButtonItem = nil;
 }
@@ -89,19 +78,25 @@
     [self.searchTextField resignFirstResponder];
 }
 
-- (void)viewDidDisappear:(BOOL)animated
-{
-    [super viewDidDisappear:animated];
-}
-
 - (void)dealloc
 {
     [self unobserve];
 }
 
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
+- (void)reloadView
+{
+    if (self.viewModel.recommends.count == 0) {
+        [self showLoading];
+        [self.viewModel requestData];
+    } else {
+        self.viewModel.historyArray = [PGGlobal.cache objectForKey:@"search_keywords" fromTable:@"Search"];
+        [self.searchCollectionView reloadData];
+    }
+}
+
+- (BOOL)shouldHideNavigationBar
+{
+    return YES;
 }
 
 #pragma mark - <UICollectionViewDataSource>
@@ -152,6 +147,7 @@
     if (indexPath.section == 1) {
         if (kind == UICollectionElementKindSectionHeader) {
             PGSearchRecommendsHistoryHeaderView *headerView = [collectionView dequeueReusableSupplementaryViewOfKind:kind withReuseIdentifier:HistoryHeaderView forIndexPath:indexPath];
+            headerView.delegate = self;
             
             return headerView;
         }
@@ -273,6 +269,15 @@
     return NO;
 }
 
+#pragma mark - <PGSearchRecommendsHistoryHeaderViewDelegate>
+
+- (void)historyDeleteButtonClicked
+{
+    [PGGlobal.cache deleteObjectForKey:@"search_keywords" fromTable:@"Search"];
+    self.viewModel.historyArray = [NSArray new];
+    [self.searchCollectionView reloadData];
+}
+
 #pragma mark - <Setters && Getters>
 
 - (UICollectionView *)searchCollectionView {
@@ -317,6 +322,11 @@
         [_cancelButton addTarget:self action:@selector(cancelButtonClicked) forControlEvents:UIControlEventTouchUpInside];
     }
     return _cancelButton;
+}
+
+- (void)didReceiveMemoryWarning {
+    [super didReceiveMemoryWarning];
+    // Dispose of any resources that can be recreated.
 }
 
 @end

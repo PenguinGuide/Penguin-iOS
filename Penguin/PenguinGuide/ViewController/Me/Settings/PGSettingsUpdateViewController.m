@@ -65,8 +65,6 @@
 {
     [super viewWillAppear:animated];
     
-    [self.navigationController setNavigationBarHidden:NO animated:NO];
-    
     [self.navigationController.navigationBar pg_setBackgroundColor:[UIColor clearColor]];
     [self.navigationController.navigationBar setShadowImage:[UIImage new]];
 }
@@ -90,6 +88,11 @@
     [super viewDidDisappear:animated];
     
     [self.updateTextField resignFirstResponder];
+}
+
+- (void)reloadView
+{
+    [self hideNetworkLostPlaceholder];
 }
 
 #pragma mark - <UIPickerViewDataSource>
@@ -229,7 +232,7 @@
 - (PGSettingsUpdateTextField *)updateTextField
 {
     if (!_updateTextField) {
-        _updateTextField = [[PGSettingsUpdateTextField alloc] initWithFrame:CGRectMake(30, 64+30, UISCREEN_WIDTH-60, 40)];
+        _updateTextField = [[PGSettingsUpdateTextField alloc] initWithFrame:CGRectMake(30, 64+20, UISCREEN_WIDTH-60, 40)];
         switch (self.settingType) {
             case PGSettingsTypeNickname:
                 _updateTextField.placeholder = @"点击修改昵称";

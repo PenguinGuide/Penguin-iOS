@@ -6,22 +6,24 @@
 //  Copyright © 2016 Xinglian. All rights reserved.
 //
 
+#define PG_REQUEST_SUCCESS_NOTIFICATION @"PG_REQUEST_SUCCESS_NOTIFICATION"
+
 #import <Foundation/Foundation.h>
 #import "PGRestKit.h"
 
 @interface PGAPIClient : NSObject
 
-+ (id)client;
 + (id)clientWithBaseUrl:(NSString *)baseUrl;
-+ (id)clientWithTimeout:(NSTimeInterval)timeout;
-+ (id)clientWithOperationCount:(NSInteger)operationCount;
-+ (id)clientWithTimeout:(NSTimeInterval)timeout operationCount:(NSInteger)operationCount;
++ (id)clientWithBaseUrl:(NSString *)baseUrl timeout:(NSTimeInterval)timeout;
++ (id)clientWithBaseUrl:(NSString *)baseUrl operationCount:(NSInteger)operationCount;
++ (id)clientWithBaseUrl:(NSString *)baseUrl timeout:(NSTimeInterval)timeout operationCount:(NSInteger)operationCount;
+
+- (void)setAuthorizationHeaderField:(NSString *)token;
+- (void)clearAuthorizationHeader;
+- (void)setBaseUrl:(NSString *)baseUrl;
 
 + (void)enableLogging;
 + (void)disableLogging;
-
-- (void)updateHostUrl:(NSString *)hostUrl;
-- (void)updateAccessToken:(NSString *)accessToken;
 
 - (void)pg_makeGetRequest:(void(^)(PGRKRequestConfig *config))configBlock
                completion:(PGRKCompletionBlock)completion

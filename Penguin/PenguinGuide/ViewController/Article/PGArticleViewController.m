@@ -28,6 +28,9 @@
 #import "PGCommentsViewController.h"
 #import "PGGoodViewController.h"
 #import "PGShareViewController.h"
+#import "PGCommentReportViewController.h"
+
+#import "AFNetworkReachabilityManager.h"
 
 // views
 #import "PGArticleParagraphInfoCell.h"
@@ -164,7 +167,27 @@
                                      if (weakself.animationCompletion) {
                                          weakself.animationCompletion();
                                      }
+                                     
+                                     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.1f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                                         if ([PGGlobal.cache objectForKey:weakself.articleId fromTable:@"ArticlePosition"]) {
+                                             NSString *contentOffsetStr = [[PGGlobal.cache objectForKey:weakself.articleId fromTable:@"ArticlePosition"] firstObject];
+                                             if (contentOffsetStr && contentOffsetStr.length > 0) {
+                                                 CGPoint contentOffset = CGPointFromString(contentOffsetStr);
+                                                 [weakself.articleCollectionView setContentOffset:contentOffset animated:NO];
+                                             }
+                                         }
+                                     });
                                  }];
+            } else {
+                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.1f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                    if ([PGGlobal.cache objectForKey:weakself.articleId fromTable:@"ArticlePosition"]) {
+                        NSString *contentOffsetStr = [[PGGlobal.cache objectForKey:weakself.articleId fromTable:@"ArticlePosition"] firstObject];
+                        if (contentOffsetStr && contentOffsetStr.length > 0) {
+                            CGPoint contentOffset = CGPointFromString(contentOffsetStr);
+                            [weakself.articleCollectionView setContentOffset:contentOffset animated:NO];
+                        }
+                    }
+                });
             }
         }
         [weakself dismissLoading];
@@ -194,6 +217,7 @@
     [self observe:self.viewModel keyPath:@"likeSuccess" block:^(id changedObject) {
         BOOL likeSuccess = [changedObject boolValue];
         if (likeSuccess) {
+            [weakself showToast:@"喜欢"];
             weakself.likeButton.tag = 1;
             [weakself.likeButton setImage:[UIImage imageNamed:@"pg_article_liked"] forState:UIControlStateNormal];
         }
@@ -202,6 +226,7 @@
     [self observe:self.viewModel keyPath:@"dislikeSuccess" block:^(id changedObject) {
         BOOL dislikeSuccess = [changedObject boolValue];
         if (dislikeSuccess) {
+            [weakself showToast:@"不再喜欢"];
             weakself.likeButton.tag = 0;
             [weakself.likeButton setImage:[UIImage imageNamed:@"pg_article_like"] forState:UIControlStateNormal];
         }
@@ -210,14 +235,16 @@
     [self observe:self.viewModel keyPath:@"collectSuccess" block:^(id changedObject) {
         BOOL collectSuccess = [changedObject boolValue];
         if (collectSuccess) {
+            [weakself showToast:@"收藏成功"];
             weakself.collectButton.tag = 1;
             [weakself.collectButton setImage:[UIImage imageNamed:@"pg_article_collected"] forState:UIControlStateNormal];
         }
         [weakself dismissLoading];
     }];
     [self observe:self.viewModel keyPath:@"discollectSuccess" block:^(id changedObject) {
-        BOOL collectSuccess = [changedObject boolValue];
-        if (collectSuccess) {
+        BOOL discollectSuccess = [changedObject boolValue];
+        if (discollectSuccess) {
+            [weakself showToast:@"取消收藏"];
             weakself.collectButton.tag = 0;
             [weakself.collectButton setImage:[UIImage imageNamed:@"pg_article_collect"] forState:UIControlStateNormal];
         }
@@ -235,7 +262,11 @@
 
 - (void)animateCollectionView:(void (^)())completion
 {
-    self.animationCompletion = completion;
+    if (completion) {
+        self.animationCompletion = [completion copy];
+    } else {
+        self.animationCompletion = nil;
+    }
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -243,10 +274,6 @@
     [super viewDidAppear:animated];
     
     [self setNeedsStatusBarAppearanceUpdate];
-    
-    if (self.viewModel.article == nil) {
-        [self.viewModel requestData];
-    }
     
     if (self.statusbarIsWhiteBackground) {
         UIView *statusBar = [[[UIApplication sharedApplication] valueForKey:@"statusBarWindow"] valueForKey:@"statusBar"];
@@ -265,11 +292,9 @@
 {
     [super viewWillAppear:animated];
     
-    if (self.viewModel.article == nil) {
-        [self showLoading];
-    }
+    [self reloadView];
     
-    [self.navigationController setNavigationBarHidden:YES animated:NO];
+    [self.commentInputAccessoryView setUserInteractionEnabled:YES];
     
     self.commentInputAccessoryView.commentTextView.text = @"";
     if (UISCREEN_WIDTH < UISCREEN_HEIGHT) {
@@ -283,9 +308,18 @@
 {
     [super viewWillDisappear:animated];
     
-    [self.navigationController setNavigationBarHidden:NO animated:NO];
-    
     [self.commentInputAccessoryView.commentTextView resignFirstResponder];
+    [self.commentInputAccessoryView setUserInteractionEnabled:NO];
+}
+
+- (void)viewDidDisappear:(BOOL)animated
+{
+    [super viewDidDisappear:animated];
+    
+    if (self.articleId && self.articleId.length > 0) {
+        CGPoint contentOffset = self.articleCollectionView.contentOffset;
+        [PGGlobal.cache putObject:@[NSStringFromCGPoint(contentOffset)] forKey:self.articleId intoTable:@"ArticlePosition"];
+    }
 }
 
 - (void)dealloc
@@ -301,6 +335,19 @@
     } else {
         return UIStatusBarStyleLightContent;
     }
+}
+
+- (void)reloadView
+{
+    if (self.viewModel.article == nil) {
+        [self showLoading];
+        [self.viewModel requestData];
+    }
+}
+
+- (BOOL)shouldHideNavigationBar
+{
+    return YES;
 }
 
 #pragma mark - <UICollectionViewDataSource>
@@ -471,7 +518,7 @@
             if ([storage isKindOfClass:[PGParserTextStorage class]]) {
                 PGParserTextStorage *textStorage = (PGParserTextStorage *)storage;
                 
-                return [self textSize:textStorage.text];
+                return [PGArticleParagraphTextCell cellSize:textStorage];
             } else if ([storage isKindOfClass:[PGParserImageStorage class]]) {
                 PGParserImageStorage *imageStorage = (PGParserImageStorage *)storage;
                 CGFloat width = UISCREEN_WIDTH;
@@ -535,8 +582,37 @@
             if ([storage isKindOfClass:[PGParserVideoStorage class]]) {
                 PGParserVideoStorage *videoStorage = (PGParserVideoStorage *)storage;
                 if (videoStorage.link && videoStorage.link.length > 0) {
-                    PGVideoPlayerViewController *playerViewController = [[PGVideoPlayerViewController alloc] initWithVideoURL:videoStorage.link];
-                    [self.navigationController pushViewController:playerViewController animated:YES];
+                    PGWeakSelf(self);
+                    AFNetworkReachabilityStatus status = [AFNetworkReachabilityManager sharedManager].networkReachabilityStatus;
+                    switch (status) {
+                        case AFNetworkReachabilityStatusReachableViaWiFi:
+                        {
+                            PGVideoPlayerViewController *playerViewController = [[PGVideoPlayerViewController alloc] initWithVideoURL:videoStorage.link];
+                            [self.navigationController pushViewController:playerViewController animated:YES];
+                            break;
+                        }
+                            
+                        case AFNetworkReachabilityStatusReachableViaWWAN:
+                        {
+                            PGAlertAction *cancelAction = [PGAlertAction actionWithTitle:@"取消" style:nil handler:nil];
+                            PGAlertAction *doneAction = [PGAlertAction actionWithTitle:@"继续观看" style:^(PGAlertActionStyle *style) {
+                                style.type = PGAlertActionTypeDestructive;
+                            } handler:^{
+                                PGVideoPlayerViewController *playerViewController = [[PGVideoPlayerViewController alloc] initWithVideoURL:videoStorage.link];
+                                [weakself.navigationController pushViewController:playerViewController animated:YES];
+                            }];
+                            [self showAlert:@"已切换到3G/4G网络" message:@"继续播放将产生流量费用" actions:@[cancelAction, doneAction] style:^(PGAlertStyle *style) {
+                                style.alertType = PGAlertTypeAlert;
+                            }];
+                            break;
+                        }
+                        case AFNetworkReachabilityStatusUnknown:
+                            break;
+                        case AFNetworkReachabilityStatusNotReachable:
+                            break;
+                        default:
+                            break;
+                    }
                 }
             } else if ([storage isKindOfClass:[PGParserSingleGoodStorage class]]) {
                 PGParserSingleGoodStorage *singleGoodStorage = (PGParserSingleGoodStorage *)storage;
@@ -569,7 +645,7 @@
                         if (indexPath.item < weakself.viewModel.commentsArray.count) {
                             weakself.selectedComment = weakself.viewModel.commentsArray[indexPath.item];
                             weakself.commentInputAccessoryView.commentTextView.text = @"";
-                            weakself.commentInputAccessoryView.commentTextView.placeholder = [NSString stringWithFormat:@"回复%@", weakself.selectedComment.user.nickname];
+                            weakself.commentInputAccessoryView.commentTextView.attributedPlaceholder = [[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"回复%@", weakself.selectedComment.user.nickname] attributes:@{NSFontAttributeName:Theme.fontMedium, NSForegroundColorAttributeName:[UIColor colorWithHexString:@"AFAFAF"]}];
                             
                             [weakself.commentInputAccessoryView.commentTextView becomeFirstResponder];
                         }
@@ -578,9 +654,9 @@
                         [replyCell unselectLabel];
                         
                         if (indexPath.item < weakself.viewModel.commentsArray.count) {
-                            weakself.selectedComment = self.viewModel.commentsArray[indexPath.item];
+                            weakself.selectedComment = weakself.viewModel.commentsArray[indexPath.item];
                             weakself.commentInputAccessoryView.commentTextView.text = @"";
-                            weakself.commentInputAccessoryView.commentTextView.placeholder = [NSString stringWithFormat:@"回复%@", weakself.selectedComment.user.nickname];
+                            weakself.commentInputAccessoryView.commentTextView.attributedPlaceholder = [[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"回复%@", weakself.selectedComment.user.nickname] attributes:@{NSFontAttributeName:Theme.fontMedium, NSForegroundColorAttributeName:[UIColor colorWithHexString:@"AFAFAF"]}];
                             
                             [weakself.commentInputAccessoryView.commentTextView becomeFirstResponder];
                         }
@@ -636,13 +712,16 @@
 
 - (void)commentMoreButtonClicked:(PGArticleCommentCell *)cell
 {
+    PGWeakSelf(self);
     PGAlertAction *reportAction = [PGAlertAction actionWithTitle:@"举报"
                                                            style:^(PGAlertActionStyle *style) {
                                                                
                                                            } handler:^{
-//                                                               NSIndexPath *indexPath = [self.articleCollectionView indexPathForCell:cell];
-//                                                               PGComment *comment = self.viewModel.commentsArray[indexPath.item];
-                                                               
+                                                               NSIndexPath *indexPath = [weakself.articleCollectionView indexPathForCell:cell];
+                                                               PGComment *comment = weakself.viewModel.commentsArray[indexPath.item];
+
+                                                               PGCommentReportViewController *reportVC = [[PGCommentReportViewController alloc] initWithCommentId:comment.commentId];
+                                                               [weakself.navigationController pushViewController:reportVC animated:YES];
                                                            }];
     PGAlertController *alertController = [PGAlertController alertControllerWithTitle:nil message:nil style:^(PGAlertStyle *style) {
         style.alertType = PGAlertTypeActionSheet;
@@ -690,11 +769,16 @@
 
 - (void)commentReplyMoreButtonClicked:(PGArticleCommentReplyCell *)cell
 {
+    PGWeakSelf(self);
     PGAlertAction *reportAction = [PGAlertAction actionWithTitle:@"举报"
                                                            style:^(PGAlertActionStyle *style) {
                                                                
                                                            } handler:^{
+                                                               NSIndexPath *indexPath = [weakself.articleCollectionView indexPathForCell:cell];
+                                                               PGComment *comment = weakself.viewModel.commentsArray[indexPath.item];
                                                                
+                                                               PGCommentReportViewController *reportVC = [[PGCommentReportViewController alloc] initWithCommentId:comment.commentId];
+                                                               [weakself.navigationController pushViewController:reportVC animated:YES];
                                                            }];
     PGAlertController *alertController = [PGAlertController alertControllerWithTitle:nil message:nil style:^(PGAlertStyle *style) {
         style.alertType = PGAlertTypeActionSheet;
@@ -806,6 +890,7 @@
 - (void)scrollViewDidEndScrollingAnimation:(UIScrollView *)scrollView
 {
     if (self.shouldShowCommentInput) {
+        [self.commentInputAccessoryView.commentTextView setText:nil];
         [self.commentInputAccessoryView.commentTextView becomeFirstResponder];
     }
     self.shouldShowCommentInput = NO;
@@ -856,10 +941,10 @@
 {
     if (PGGlobal.userId && PGGlobal.userId.length > 0) {
         if (self.likeButton.tag == 0) {
-            [self showLoading];
+//            [self showLoading];
             [self.viewModel likeArticle];
         } else {
-            [self showLoading];
+//            [self showLoading];
             [self.viewModel dislikeArticle];
         }
     } else {
@@ -871,10 +956,10 @@
 {
     if (PGGlobal.userId && PGGlobal.userId.length > 0) {
         if (self.collectButton.tag == 0) {
-            [self showLoading];
+//            [self showLoading];
             [self.viewModel collectArticle];
         } else {
-            [self showLoading];
+//            [self showLoading];
             [self.viewModel discollectArticle];
         }
     } else {
@@ -884,11 +969,49 @@
 
 - (void)shareButtonClicked
 {
-    PGShareViewController *shareVC = [[PGShareViewController alloc] initWithShareLink:self.viewModel.article.shareUrl
-                                                                                 text:@"测试分享"
-                                                                                title:self.viewModel.article.title
-                                                                                image:self.viewModel.article.image
-                                                                            thumbnail:self.viewModel.article.image];
+    PGShareAttribute *attribute = [[PGShareAttribute alloc] init];
+    attribute.url = self.viewModel.article.shareUrl;
+    attribute.text = @"测试分享";
+    attribute.title = self.viewModel.article.title;
+    attribute.image = self.viewModel.article.image;
+    attribute.thumbnailImage = self.viewModel.article.image;
+    attribute.shareViewImage = self.headerImageView.image;
+    
+    NSArray *dates = [self.viewModel.article.date componentsSeparatedByString:@"/"];
+    if (dates.count == 3) {
+        attribute.year = dates[0];
+        attribute.day = dates[2];
+        
+        NSString *month = dates[1];
+        if ([month isEqualToString:@"1"]) {
+            attribute.month = @"JAN.";
+        } else if ([month isEqualToString:@"2"]) {
+            attribute.month = @"FEB.";
+        } else if ([month isEqualToString:@"3"]) {
+            attribute.month = @"MAR.";
+        } else if ([month isEqualToString:@"4"]) {
+            attribute.month = @"APR.";
+        } else if ([month isEqualToString:@"5"]) {
+            attribute.month = @"MAY.";
+        } else if ([month isEqualToString:@"6"]) {
+            attribute.month = @"JUN.";
+        } else if ([month isEqualToString:@"7"]) {
+            attribute.month = @"JUL.";
+        } else if ([month isEqualToString:@"8"]) {
+            attribute.month = @"AUG.";
+        } else if ([month isEqualToString:@"9"]) {
+            attribute.month = @"SEP.";
+        } else if ([month isEqualToString:@"10"]) {
+            attribute.month = @"OCT.";
+        } else if ([month isEqualToString:@"11"]) {
+            attribute.month = @"NOV.";
+        } else if ([month isEqualToString:@"12"]) {
+            attribute.month = @"DEC.";
+        }
+    }
+    
+    PGShareViewController *shareVC = [[PGShareViewController alloc] initWithShareAttribute:attribute];
+    
     [self presentViewController:shareVC animated:YES completion:nil];
 }
 
@@ -919,22 +1042,6 @@
     PGCommentsViewController *commentsVC = [[PGCommentsViewController alloc] init];
     commentsVC.articleId = self.articleId;
     [self.navigationController pushViewController:commentsVC animated:YES];
-}
-
-#pragma mark - <Calculate Text Cell Size>
-
-- (CGSize)textSize:(NSAttributedString *)attrS
-{
-    @autoreleasepool {
-        // NOTE: calculate NSAttributedString size http://stackoverflow.com/questions/13621084/boundingrectwithsize-for-nsattributedstring-returning-wrong-size, https://developer.apple.com/library/content/documentation/Cocoa/Conceptual/TextLayout/Tasks/StringHeight.html
-        // NOTE: counting NSAttributedString number of lines https://developer.apple.com/library/content/documentation/Cocoa/Conceptual/TextLayout/Tasks/CountLines.html
-        if (attrS) {
-            CGSize textSize = [PGArticleParagraphTextLabel sizeWithWidth:UISCREEN_WIDTH attriStr:attrS];
-            
-            return CGSizeMake(UISCREEN_WIDTH, ceil(textSize.height+15));
-        }
-        return CGSizeZero;
-    }
 }
 
 #pragma mark - <Setters && Getters>

@@ -17,6 +17,7 @@
         self.paginationKey = nil;
         self.cursor = nil;
         self.paginatedSection = 0;
+        self.countPerPage = 10;
     }
     return self;
 }

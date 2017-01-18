@@ -98,19 +98,27 @@
 
 + (CGSize)cellSize:(PGComment *)comment
 {
-    if (comment.content && comment.content.length > 0) {
-        CGFloat height = 42+15;
-        
-        NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle defaultParagraphStyle] mutableCopy];
-        paragraphStyle.lineSpacing = 5.f;
-        CGSize textSize = [comment.content boundingRectWithSize:CGSizeMake(UISCREEN_WIDTH-30*2, 1000)
-                                                        options:NSStringDrawingUsesLineFragmentOrigin
-                                                     attributes:@{NSFontAttributeName:Theme.fontSmall, NSParagraphStyleAttributeName:paragraphStyle}
-                                                        context:nil].size;
-        height = height + textSize.height+5;
-        
-        return CGSizeMake(UISCREEN_WIDTH, height);
+    // NOTE: 内存优化，将这份布局信息作为一个属性保存到对应的Model中: https://gold.xitu.io/post/58667d86128fe10057eae0d2
+    if (CGSizeEqualToSize(comment.commentSize, CGSizeZero)) {
+        if (comment.content && comment.content.length > 0) {
+            CGFloat height = 42+15;
+            
+            NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle defaultParagraphStyle] mutableCopy];
+            paragraphStyle.lineSpacing = 5.f;
+            CGSize textSize = [comment.content boundingRectWithSize:CGSizeMake(UISCREEN_WIDTH-30*2, 1000)
+                                                            options:NSStringDrawingUsesLineFragmentOrigin
+                                                         attributes:@{NSFontAttributeName:Theme.fontSmall, NSParagraphStyleAttributeName:paragraphStyle}
+                                                            context:nil].size;
+            height = height + textSize.height+5;
+            
+            comment.commentSize = CGSizeMake(UISCREEN_WIDTH, height);
+            
+            return comment.commentSize;
+        }
+    } else {
+        return comment.commentSize;
     }
+
     return CGSizeZero;
 }
 

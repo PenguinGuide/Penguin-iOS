@@ -21,11 +21,11 @@
     UIView *containerView = [transitionContext containerView];
     
     PGTabBarController *tabbarController = [transitionContext viewControllerForKey:UITransitionContextFromViewControllerKey];
-    PGExploreViewController *exploreVC = (PGExploreViewController *)tabbarController.selectedViewController;
-    PGArticleViewController *articleVC = (PGArticleViewController *)[transitionContext viewControllerForKey:UITransitionContextToViewControllerKey];
+    __block PGExploreViewController *exploreVC = (PGExploreViewController *)tabbarController.selectedViewController;
+    __block PGArticleViewController *articleVC = (PGArticleViewController *)[transitionContext viewControllerForKey:UITransitionContextToViewControllerKey];
     
     NSIndexPath *selectedIndexPath = [exploreVC.feedsCollectionView indexPathsForSelectedItems].firstObject;
-    PGArticleBannerCell *cell = (PGArticleBannerCell *)[exploreVC.feedsCollectionView cellForItemAtIndexPath:selectedIndexPath];
+    __block PGArticleBannerCell *cell = (PGArticleBannerCell *)[exploreVC.feedsCollectionView cellForItemAtIndexPath:selectedIndexPath];
     
     if (cell) {
         CGRect rect = [containerView convertRect:cell.bannerImageView.frame fromView:cell.bannerImageView.superview];
@@ -123,12 +123,14 @@
                              }
                              articleVC.view.alpha = 1.f;
                          } completion:^(BOOL finished) {
+                             __weak PGArticleViewController *weakArticleVC = articleVC;
                              [articleVC animateCollectionView:^{
                                  [topScreenshotView removeFromSuperview];
                                  [bottomScreenshotView removeFromSuperview];
                                  exploreVC.feedsCollectionView.hidden = NO;
                                  cell.bannerImageView.hidden = NO;
-                                 articleVC.headerImageView.hidden = NO;
+                                 // NOTE: articleVC.headerImageView.hidden = NO; this will cause memory leak (capture PGArticleViewController, dealloc will not be called)
+                                 weakArticleVC.headerImageView.hidden = NO;
                              }];
                              [transitionContext completeTransition:!transitionContext.transitionWasCancelled];
                          }];

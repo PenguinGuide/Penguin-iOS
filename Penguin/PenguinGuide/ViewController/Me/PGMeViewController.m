@@ -61,16 +61,8 @@
     [super viewWillAppear:animated];
     
     [self.navigationController setNavigationBarHidden:YES animated:NO];
-}
-
-- (void)viewDidAppear:(BOOL)animated
-{
-    [super viewDidAppear:animated];
     
-    if (!self.viewModel.me) {
-        [self showLoading];
-        [self.viewModel requestData];
-    }
+    [self reloadView];
 }
 
 - (void)dealloc
@@ -82,6 +74,19 @@
 - (UIStatusBarStyle)preferredStatusBarStyle
 {
     return UIStatusBarStyleDefault;
+}
+
+- (void)reloadView
+{
+    if (!self.viewModel.me) {
+        [self showLoading];
+        [self.viewModel requestData];
+    }
+}
+
+- (BOOL)shouldHideNavigationBar
+{
+    return YES;
 }
 
 #pragma mark - <PGTabBarControllerDelegate>
@@ -145,13 +150,13 @@
     PGMeCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:MeCell forIndexPath:indexPath];
     
     if (indexPath.item == 0) {
-        [cell setCellWithIcon:@"pg_me_order" name:@"订 单" count:nil];
+        [cell setCellWithName:@"我 的 订 单" highlight:NO];
     } else if (indexPath.item == 1) {
-        [cell setCellWithIcon:@"pg_me_collection" name:@"我 的 收 藏" count:self.viewModel.me.collectionCount];
+        [cell setCellWithName:@"我 的 收 藏" highlight:NO];
     } else if (indexPath.item == 2) {
-        [cell setCellWithIcon:@"pg_me_message" name:@"我 的 消 息" highlight:self.viewModel.me.hasNewMessage];
+        [cell setCellWithName:@"我 的 消 息" highlight:self.viewModel.me.hasNewMessage];
     } else if (indexPath.item == 3) {
-        [cell setCellWithIcon:@"pg_me_history" name:@"我 的 足 迹" count:nil];
+        [cell setCellWithName:@"我 的 足 迹" highlight:NO];
     }
     
     return cell;

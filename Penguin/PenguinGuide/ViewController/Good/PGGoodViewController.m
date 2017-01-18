@@ -26,6 +26,8 @@
 #import "PGGoodCell.h"
 #import "PGGoodRelatedGoodsHeaderView.h"
 
+#import "MSWeakTimer.h"
+
 @interface PGGoodViewController () <UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout>
 
 @property (nonatomic, strong) PGBaseCollectionView *goodCollectionView;
@@ -33,6 +35,8 @@
 
 @property (nonatomic, strong) NSString *goodId;
 @property (nonatomic, strong) PGGoodViewModel *viewModel;
+
+@property (nonatomic, strong) MSWeakTimer *bannersWeakTimer;
 
 @end
 
@@ -75,24 +79,21 @@
     
     [self setNeedsStatusBarAppearanceUpdate];
     
-    [self.navigationController setNavigationBarHidden:YES animated:NO];
-}
-
-- (void)viewDidAppear:(BOOL)animated
-{
-    [super viewDidAppear:animated];
+    self.bannersWeakTimer = [MSWeakTimer scheduledTimerWithTimeInterval:5.f
+                                                                 target:self
+                                                               selector:@selector(bannersCountDown)
+                                                               userInfo:nil
+                                                                repeats:YES
+                                                          dispatchQueue:dispatch_get_main_queue()];
     
-    if (!self.viewModel.good) {
-        [self showLoading];
-        [self.viewModel requestGood:self.goodId];
-    }
+    [self reloadView];
 }
 
 - (void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
     
-    [self.navigationController setNavigationBarHidden:NO animated:NO];
+    [self.bannersWeakTimer invalidate];
 }
 
 - (UIStatusBarStyle)preferredStatusBarStyle
@@ -103,6 +104,22 @@
 - (void)dealloc
 {
     [self unobserve];
+    
+    [self.bannersWeakTimer invalidate];
+    self.bannersWeakTimer = nil;
+}
+
+- (void)reloadView
+{
+    if (!self.viewModel.good) {
+        [self showLoading];
+        [self.viewModel requestGood:self.goodId];
+    }
+}
+
+- (BOOL)shouldHideNavigationBar
+{
+    return YES;
 }
 
 #pragma mark - <UICollectionViewDataSource>
@@ -240,8 +257,18 @@
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    PGGood *good = self.viewModel.good.relatedGoods[indexPath.item];
-    [PGRouterManager routeToGoodDetailPage:good.goodId link:good.link];
+    if (self.viewModel.good.relatedGoods.count > 0 && indexPath.section == 1) {
+        PGGood *good = self.viewModel.good.relatedGoods[indexPath.item];
+        [PGRouterManager routeToGoodDetailPage:good.goodId link:good.link];
+    }
+}
+
+- (void)bannersCountDown
+{
+    PGGoodBannersCell *cell = (PGGoodBannersCell *)[self.goodCollectionView cellForItemAtIndexPath:[NSIndexPath indexPathForItem:0 inSection:0]];
+    if (cell) {
+        [cell.pagedScrollView scrollToNextPage];
+    }
 }
 
 #pragma mark - <Button Events>

@@ -7,8 +7,11 @@
 //
 
 #import "PGBaseViewController.h"
+#import "PGScenarioDelegate.h"
 
 @interface PGScenarioFeedsViewController : PGBaseViewController
+
+@property (nonatomic, weak) id<PGScenarioDelegate> delegate;
 
 - (id)initWithScenarioId:(NSString *)scenarioId;
 

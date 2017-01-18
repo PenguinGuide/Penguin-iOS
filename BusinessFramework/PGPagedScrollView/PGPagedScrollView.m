@@ -141,7 +141,7 @@
                 NSString *imageName = self.banners[i];
                 if ([imageName containsString:@".gif"]) {
                     FLAnimatedImageView *gifImageView = [[FLAnimatedImageView alloc] initWithFrame:CGRectMake(i*self.frame.size.width, 0, self.frame.size.width, self.frame.size.height-15-30)];
-                    gifImageView.backgroundColor = [UIColor colorWithHexString:@"454545"];
+                    gifImageView.backgroundColor = [UIColor colorWithRed:248.f/256.f green:248.f/256.f blue:248.f/256.f alpha:1.f];
                     gifImageView.clipsToBounds = YES;
                     [gifImageView setWithImageURL:imageName placeholder:nil completion:nil];
                     [self.pagedScrollView addSubview:gifImageView];
@@ -152,7 +152,7 @@
                     [gifImageView addGestureRecognizer:tapGesture];
                 } else {
                     UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(i*self.frame.size.width, 0, self.frame.size.width, self.pagedScrollView.frame.size.height)];
-                    imageView.backgroundColor = [UIColor colorWithHexString:@"454545"];
+                    imageView.backgroundColor = [UIColor colorWithRed:248.f/256.f green:248.f/256.f blue:248.f/256.f alpha:1.f];
                     imageView.contentMode = UIViewContentModeScaleAspectFill;
                     imageView.clipsToBounds = YES;
                     [imageView setWithImageURL:imageName placeholder:nil completion:nil];
@@ -199,6 +199,14 @@
     }
 }
 
+- (void)scrollToNextPage
+{
+    if (self.circularMode) {
+        NSInteger currentIndex = self.currentPage+1;
+        [self.pagedScrollView setContentOffset:CGPointMake(self.pagedScrollView.frame.size.width*(currentIndex+1), self.pagedScrollView.contentOffset.y) animated:YES];
+    }
+}
+
 #pragma mark - <UIScrollViewDelegate>
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
@@ -233,7 +241,20 @@
     self.currentPage = currentPage;
 }
 
+// scrollToNextPage will not call this delegate method
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
+{
+    if (self.circularMode) {
+        if (self.currentIndex == 0) {
+            [scrollView setContentOffset:CGPointMake((self.banners.count-2)*self.frame.size.width, 0) animated:NO];
+        } else if (self.currentIndex == self.banners.count-1) {
+            [scrollView setContentOffset:CGPointMake(self.frame.size.width, 0) animated:NO];
+        }
+        self.currentIndex = self.currentPage;
+    }
+}
+
+- (void)scrollViewDidEndScrollingAnimation:(UIScrollView *)scrollView
 {
     if (self.circularMode) {
         if (self.currentIndex == 0) {

@@ -7,9 +7,10 @@
 //
 
 #import "PGBaseViewController.h"
+#import "PGShareAttribute.h"
 
 @interface PGShareViewController : PGBaseViewController
 
-- (id)initWithShareLink:(NSString *)shareLink text:(NSString *)text title:(NSString *)title image:(NSString *)image thumbnail:(NSString *)thumbnail;
+- (id)initWithShareAttribute:(PGShareAttribute *)attribute;
 
 @end

@@ -73,19 +73,24 @@
     [self observeCollectionView:self.articlesCollectionView endOfFeeds:self.viewModel];
 }
 
-- (void)viewDidAppear:(BOOL)animated
+- (void)viewWillAppear:(BOOL)animated
 {
-    [super viewDidAppear:animated];
+    [super viewWillAppear:animated];
     
-    if (self.viewModel.articlesArray.count == 0) {
-        [self showLoading];
-        [self.viewModel requestArticles:self.cityId];
-    }
+    [self reloadView];
 }
 
 - (void)dealloc
 {
     [self unobserve];
+}
+
+- (void)reloadView
+{
+    if (self.viewModel.articlesArray.count == 0) {
+        [self showLoading];
+        [self.viewModel requestArticles:self.cityId];
+    }
 }
 
 #pragma mark - <UICollectionView>

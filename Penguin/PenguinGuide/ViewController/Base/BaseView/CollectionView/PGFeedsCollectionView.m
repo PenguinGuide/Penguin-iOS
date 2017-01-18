@@ -21,8 +21,6 @@
 
 #import "PGFeedsCollectionView.h"
 #import "PGHomeRecommendsHeaderView.h"
-#import "PGExploreRecommendsHeaderView.h"
-#import "PGStoreRecommendsHeaderView.h"
 
 @interface PGFeedsCollectionView () <UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, PGHomeRecommendsHeaderViewDelegate, PGStoreRecommendsHeaderViewDelegate>
 
@@ -165,16 +163,16 @@
             
             return headerView;
         } else if ([tabType isEqualToString:@"explore"]) {
-            PGExploreRecommendsHeaderView *headerView = [collectionView dequeueReusableSupplementaryViewOfKind:kind withReuseIdentifier:ExploreHeaderView forIndexPath:indexPath];
-            [headerView reloadBannersWithRecommendsArray:[self.feedsDelegate recommendsArray]];
+            self.exploreHeaderView = [collectionView dequeueReusableSupplementaryViewOfKind:kind withReuseIdentifier:ExploreHeaderView forIndexPath:indexPath];
+            [self.exploreHeaderView reloadBannersWithRecommendsArray:[self.feedsDelegate recommendsArray]];
             
-            return headerView;
+            return self.exploreHeaderView;
         } else if ([tabType isEqualToString:@"store"]) {
-            PGStoreRecommendsHeaderView *headerView = [collectionView dequeueReusableSupplementaryViewOfKind:kind withReuseIdentifier:StoreHeaderView forIndexPath:indexPath];
-            headerView.delegate = self;
-            [headerView reloadBannersWithRecommendsArray:[self.feedsDelegate recommendsArray] categoriesArray:[self.feedsDelegate iconsArray]];
+            self.storeHeaderView = [collectionView dequeueReusableSupplementaryViewOfKind:kind withReuseIdentifier:StoreHeaderView forIndexPath:indexPath];
+            self.storeHeaderView.delegate = self;
+            [self.storeHeaderView reloadBannersWithRecommendsArray:[self.feedsDelegate recommendsArray] categoriesArray:[self.feedsDelegate iconsArray]];
             
-            return headerView;
+            return self.storeHeaderView;
         }
     } else if (kind == UICollectionElementKindSectionFooter) {
         if (self.feedsDelegate && [self.feedsDelegate respondsToSelector:@selector(feedsArray)]) {
@@ -260,9 +258,8 @@
     }
     NSArray *feedsArray = [self.feedsDelegate feedsArray];
     id banner = feedsArray[section];
-    if (section == feedsArray.count-1) {
-        return UIEdgeInsetsMake(15, 0, 0, 0);
-    } else if ([banner isKindOfClass:[PGArticleBanner class]]) {
+    
+    if ([banner isKindOfClass:[PGArticleBanner class]]) {
         if (section == 0) {
             id nextBanner = feedsArray[section+1];
             if ([nextBanner isKindOfClass:[PGArticleBanner class]]) {
@@ -280,6 +277,8 @@
         } else {
             return UIEdgeInsetsZero;
         }
+    } else if (section == feedsArray.count-1) {
+        return UIEdgeInsetsMake(15, 0, 0, 0);
     } else {
         if (section == 0) {
             return UIEdgeInsetsMake(15, 0, 15, 0);

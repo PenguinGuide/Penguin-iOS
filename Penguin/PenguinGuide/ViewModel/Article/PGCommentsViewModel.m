@@ -28,10 +28,7 @@
         self.isPreloadingNextPage = YES;
         
         if (!self.response) {
-            self.response = [[PGRKResponse alloc] init];
-            self.response.pagination.needPerformingBatchUpdate = YES;
-            self.response.pagination.paginationKey = @"next";
-            self.response.pagination.paginateSections = NO;
+            self.response = [PGRKResponse responseWithNextPagination];
         }
         
         PGWeakSelf(self);
@@ -46,7 +43,6 @@
             config.response = weakself.response;
         } paginationCompletion:^(PGRKResponse *response) {
             weakself.response = response;
-            weakself.nextPageIndexes = response.pagination.nextPageIndexesArray;
             weakself.commentsArray = response.dataArray;
             weakself.endFlag = response.pagination.endFlag;
             
@@ -111,7 +107,7 @@
     }
 }
 
-- (void)likeComment:(NSString *)commentId completion:(void (^)(BOOL))completion
+- (void)likeComment:(NSString *)commentId completion:(void (^)(BOOL success))completion
 {
     if (commentId && commentId.length > 0) {
         PGWeakSelf(self);
@@ -132,7 +128,7 @@
     }
 }
 
-- (void)dislikeComment:(NSString *)commentId completion:(void (^)(BOOL))completion
+- (void)dislikeComment:(NSString *)commentId completion:(void (^)(BOOL success))completion
 {
     if (commentId && commentId.length > 0) {
         PGWeakSelf(self);
@@ -153,7 +149,7 @@
     }
 }
 
-- (void)deleteComment:(NSString *)commentId completion:(void (^)(BOOL))completion
+- (void)deleteComment:(NSString *)commentId index:(NSInteger)index completion:(void (^)(BOOL success))completion
 {
     if (commentId && commentId.length > 0) {
         PGWeakSelf(self);
@@ -162,6 +158,11 @@
             config.keyPath = nil;
             config.pattern = @{@"commentId":commentId};
         } completion:^(id response) {
+            NSMutableArray *dataArray = [NSMutableArray arrayWithArray:weakself.commentsArray];
+            if (index < dataArray.count) {
+                [dataArray removeObjectAtIndex:index];
+                weakself.commentsArray = [NSArray arrayWithArray:dataArray];
+            }
             if (completion) {
                 completion(YES);
             }

@@ -25,9 +25,9 @@
     UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake((self.pg_width-30)/2, 0, 30, 30)];
     imageView.image = [UIImage imageNamed:image];
     
-    UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, self.pg_height-14, self.pg_width, 14)];
+    UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, self.pg_height-20, self.pg_width, 14)];
     label.text = title;
-    label.textColor = Theme.colorText;
+    label.textColor = Theme.colorLightText;
     label.font = Theme.fontSmall;
     label.textAlignment = NSTextAlignmentCenter;
     

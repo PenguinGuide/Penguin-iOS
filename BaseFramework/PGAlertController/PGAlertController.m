@@ -388,7 +388,7 @@
                              } completion:^(BOOL finished) {
                                  [weakSelf.actionSheetView removeFromSuperview];
                                  [weakSelf dismissViewControllerAnimated:YES completion:^{
-                                     if (action) {
+                                     if (action && action.handler) {
                                          action.handler();
                                      }
                                  }];
@@ -409,7 +409,7 @@
         if (tag < self.actions.count) {
             __block PGAlertAction *action = self.actions[tag];
             [self dismissViewControllerAnimated:YES completion:^{
-                if (action) {
+                if (action && action.handler) {
                     action.handler();
                 }
             }];

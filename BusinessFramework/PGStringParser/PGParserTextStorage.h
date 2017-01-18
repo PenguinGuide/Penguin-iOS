@@ -11,5 +11,6 @@
 @interface PGParserTextStorage : NSObject
 
 @property (nonatomic, strong) NSAttributedString *text;
+@property (nonatomic, assign) CGSize textSize;
 
 @end

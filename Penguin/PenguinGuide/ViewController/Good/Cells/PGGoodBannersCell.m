@@ -7,12 +7,11 @@
 //
 
 #import "PGGoodBannersCell.h"
-#import "PGPagedScrollView.h"
 #import "PGImageBanner.h"
 
 @interface PGGoodBannersCell () <PGPagedScrollViewDelegate>
 
-@property (nonatomic, strong) PGPagedScrollView *pagedScrollView;
+@property (nonatomic, strong, readwrite) PGPagedScrollView *pagedScrollView;
 @property (nonatomic, strong) NSArray *bannersArray;
 
 @end

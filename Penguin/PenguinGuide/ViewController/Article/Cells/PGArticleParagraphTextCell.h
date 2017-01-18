@@ -7,9 +7,12 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "PGParserTextStorage.h"
 
 @interface PGArticleParagraphTextCell : UICollectionViewCell
 
 - (void)setCellWithStr:(NSAttributedString *)attrStr;
+
++ (CGSize)cellSize:(PGParserTextStorage *)textStorage;
 
 @end

@@ -51,19 +51,28 @@
                 [UIView setAnimationsEnabled:YES];
             });
         }
-        [weakself dismissLoading];
+        if (weakself.delegate && [weakself.delegate respondsToSelector:@selector(dismissPageLoading)]) {
+            [weakself.delegate dismissPageLoading];
+        }
         [weakself.goodsCollectionView endBottomRefreshing];
     }];
     [self observeError:self.viewModel];
     [self observeCollectionView:self.goodsCollectionView endOfFeeds:self.viewModel];
 }
 
-- (void)viewDidAppear:(BOOL)animated
+- (void)viewWillAppear:(BOOL)animated
 {
-    [super viewDidAppear:animated];
+    [super viewWillAppear:animated];
     
+    [self reloadView];
+}
+
+- (void)reloadView
+{
     if (self.viewModel.goodsArray.count == 0) {
-        [self showLoading];
+        if (self.delegate && [self.delegate respondsToSelector:@selector(showPageLoading)]) {
+            [self.delegate showPageLoading];
+        }
         [self.viewModel requestGoods:self.scenarioId];
     }
 }

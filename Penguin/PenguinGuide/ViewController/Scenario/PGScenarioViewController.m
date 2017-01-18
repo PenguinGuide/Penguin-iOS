@@ -20,7 +20,9 @@
 
 #import "PGCityGuideSegmentIndicator.h"
 
-@interface PGScenarioViewController ()
+#import "PGScenarioDelegate.h"
+
+@interface PGScenarioViewController () <PGScenarioDelegate>
 
 @property (nonatomic, strong) PGScenarioViewModel *viewModel;
 
@@ -71,6 +73,9 @@
             weakself.feedsVC = [[PGScenarioFeedsViewController alloc] initWithScenarioId:weakself.viewModel.scenario.scenarioId];
             weakself.goodsVC = [[PGScenarioGoodsViewController alloc] initWithScenarioId:weakself.viewModel.scenario.scenarioId];
             
+            weakself.feedsVC.delegate = weakself;
+            weakself.goodsVC.delegate = weakself;
+            
             [weakself.pagedController reloadWithViewControllers:@[weakself.feedsVC, weakself.goodsVC]
                                                          titles:@[weakself.isFromStorePage?@"教 你 买":@"边 读 边 选", @"商 品"]
                                               selectedViewClass:[PGCityGuideSegmentIndicator class]];
@@ -82,21 +87,11 @@
     [self setNeedsStatusBarAppearanceUpdate];
 }
 
-- (void)viewWillAppear:(BOOL)animated
-{
-    [super viewWillAppear:animated];
-    
-    [self.navigationController setNavigationBarHidden:NO animated:NO];
-}
-
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
     
-    if (!self.viewModel.scenario) {
-        [self showLoading];
-        [self.viewModel requestScenario:self.scenarioId];
-    }
+    [self reloadView];
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -107,6 +102,19 @@
 - (UIStatusBarStyle)preferredStatusBarStyle
 {
     return UIStatusBarStyleDefault;
+}
+
+- (void)dealloc
+{
+    [self unobserve];
+}
+
+- (void)reloadView
+{
+    if (!self.viewModel.scenario) {
+        [self showLoading];
+        [self.viewModel requestScenario:self.scenarioId];
+    }
 }
 
 #pragma mark - <PGScenarioSegmentControllerDelegate>
@@ -133,6 +141,18 @@
             self.darkStatusBar = YES;
         }
     }
+}
+
+#pragma mark - <PGScenarioDelegate>
+
+- (void)showPageLoading
+{
+    [self showLoading];
+}
+
+- (void)dismissPageLoading
+{
+    [self dismissLoading];
 }
 
 #pragma mark - <Lazy Init>

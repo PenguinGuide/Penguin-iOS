@@ -10,11 +10,9 @@
 
 @interface PGHistoryCell ()
 
-@property (nonatomic, strong) UIImageView *quoteImageView;
 @property (nonatomic, strong) UILabel *dateLabel;
 @property (nonatomic, strong) UILabel *contentLabel;
 @property (nonatomic, strong) UIView *containerView;
-@property (nonatomic, strong) UIImageView *maskImageView;
 @property (nonatomic, strong) UIImageView *articleImageView;
 @property (nonatomic, strong) UILabel *articleTitleLabel;
 @property (nonatomic, strong) UIView *horizontalLine;
@@ -34,7 +32,6 @@
 
 - (void)initialize
 {
-    [self.contentView addSubview:self.quoteImageView];
     [self.contentView addSubview:self.dateLabel];
     [self.contentView addSubview:self.contentLabel];
     [self.contentView addSubview:self.containerView];
@@ -72,19 +69,10 @@
     return CGSizeMake(UISCREEN_WIDTH, 20+14+5+size.height+10+80+20);
 }
 
-- (UIImageView *)quoteImageView
-{
-    if (!_quoteImageView) {
-        _quoteImageView = [[UIImageView alloc] initWithFrame:CGRectMake(27, 20, 14, 14)];
-        _quoteImageView.image = [UIImage imageNamed:@"pg_history_quate"];
-    }
-    return _quoteImageView;
-}
-
 - (UILabel *)dateLabel
 {
     if (!_dateLabel) {
-        _dateLabel = [[UILabel alloc] initWithFrame:CGRectMake(50, 20, 150, 16)];
+        _dateLabel = [[UILabel alloc] initWithFrame:CGRectMake(36, 20, 150, 16)];
         _dateLabel.font = Theme.fontMedium;
         _dateLabel.textColor = Theme.colorText;
     }
@@ -94,7 +82,7 @@
 - (UILabel *)contentLabel
 {
     if (!_contentLabel) {
-        _contentLabel = [[UILabel alloc] initWithFrame:CGRectMake(50, self.dateLabel.pg_bottom+5, UISCREEN_WIDTH-50-24, 0)];
+        _contentLabel = [[UILabel alloc] initWithFrame:CGRectMake(36, self.dateLabel.pg_bottom+5, UISCREEN_WIDTH-36-24, 0)];
         _contentLabel.numberOfLines = 0;
         _contentLabel.font = Theme.fontSmall;
         _contentLabel.textColor = Theme.colorText;
@@ -106,11 +94,7 @@
 {
     if (!_containerView) {
         _containerView = [[UIView alloc] initWithFrame:CGRectMake(24, self.contentLabel.pg_bottom+10, UISCREEN_WIDTH-48, 80)];
-        _containerView.backgroundColor = [UIColor colorWithHexString:@"F1F1F1"];
-        
-        self.maskImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, _containerView.pg_width, _containerView.pg_height)];
-        self.maskImageView.image = [[UIImage imageNamed:@"pg_bg_corner_mask"] resizableImageWithCapInsets:UIEdgeInsetsMake(6, 6, 6, 6) resizingMode:UIImageResizingModeStretch];
-        [_containerView addSubview:self.maskImageView];
+        _containerView.backgroundColor = [UIColor whiteColor];
     }
     return _containerView;
 }

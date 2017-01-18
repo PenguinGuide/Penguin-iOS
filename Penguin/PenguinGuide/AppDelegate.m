@@ -17,6 +17,12 @@
 #import "PGLaunchAds.h"
 #import "PGAlibcTraderManager.h"
 
+#import <SDWebImage/SDWebImageDownloader.h>
+#import <SDWebImage/SDImageCache.h>
+#import <SDWebImage/SDImageCacheConfig.h>
+
+#import "AFNetworkReachabilityManager.h"
+
 #import "PGBaseNavigationController.h"
 
 #import "PGStoreViewController.h"
@@ -53,13 +59,20 @@
     [PGAPIClient disableLogging];
 #endif
     
+    // SDWebImage
+    // NOTE: decodeImage causes a lot of memorys: http://blog.csdn.net/xiaobai20131118/article/details/50682062
+    [SDWebImageDownloader.sharedDownloader setShouldDecompressImages:NO];
+    [SDImageCache.sharedImageCache.config setShouldDecompressImages:NO];
+    
+    // AFNetworking
+    [[AFNetworkReachabilityManager sharedManager] startMonitoring];
+    
     [PGShareManager registerShareSDK];
     [PGAlibcTraderManager registerAlibcTraderSDK];
     [PGAnalytics setup:launchOptions];
     
     // Remote Notifications
-    UIUserNotificationSettings *settings = [UIUserNotificationSettings settingsForTypes:UIUserNotificationTypeBadge|UIUserNotificationTypeSound|UIUserNotificationTypeAlert
-                                                                             categories:nil];
+    UIUserNotificationSettings *settings = [UIUserNotificationSettings settingsForTypes:UIUserNotificationTypeBadge|UIUserNotificationTypeSound|UIUserNotificationTypeAlert categories:nil];
     [[UIApplication sharedApplication] registerUserNotificationSettings:settings];
     
     //[PGLaunchAds sharedInstance];
@@ -139,6 +152,27 @@
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler
 {
     if (userInfo[@"type"]) {
+#if (defined DEBUG)
+        NSError *error;
+        NSData *jsonData = [NSJSONSerialization dataWithJSONObject:userInfo
+                                                           options:NSJSONWritingPrettyPrinted
+                                                             error:&error];
+        if (!error) {
+            NSString *dataStr = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
+            [[[UIAlertView alloc] initWithTitle:@"notification userinfo"
+                                       message:dataStr
+                                      delegate:nil
+                             cancelButtonTitle:@"OK"
+                              otherButtonTitles:nil, nil] show];
+        } else {
+            [[[UIAlertView alloc] initWithTitle:@"notification userinfo"
+                                        message:@"bad format"
+                                       delegate:nil
+                              cancelButtonTitle:@"OK"
+                              otherButtonTitles:nil, nil] show];
+        }
+#endif
+        
         NSString *notificationType = [NSString stringWithFormat:@"%@", userInfo[@"type"]];
         if ([notificationType isEqualToString:@"1"]) {
             // h5
@@ -190,6 +224,27 @@
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo
 {
     if (userInfo[@"type"]) {
+#if (defined DEBUG)
+        NSError *error;
+        NSData *jsonData = [NSJSONSerialization dataWithJSONObject:userInfo
+                                                           options:NSJSONWritingPrettyPrinted
+                                                             error:&error];
+        if (!error) {
+            NSString *dataStr = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
+            [[[UIAlertView alloc] initWithTitle:@"notification userinfo"
+                                        message:dataStr
+                                       delegate:nil
+                              cancelButtonTitle:@"OK"
+                              otherButtonTitles:nil, nil] show];
+        } else {
+            [[[UIAlertView alloc] initWithTitle:@"notification userinfo"
+                                        message:@"bad format"
+                                       delegate:nil
+                              cancelButtonTitle:@"OK"
+                              otherButtonTitles:nil, nil] show];
+        }
+#endif
+        
         NSString *notificationType = [NSString stringWithFormat:@"%@", userInfo[@"type"]];
         if ([notificationType isEqualToString:@"1"]) {
             // h5
