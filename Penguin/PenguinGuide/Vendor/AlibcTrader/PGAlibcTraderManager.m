@@ -125,13 +125,15 @@ static NSString *const AppKey = @"23465992";
     AlibcTradeShowParams *showParams = [[AlibcTradeShowParams alloc] init];
     if (showNative) {
         showParams.openType = ALiOpenTypeNative;
-        showParams.backUrl = [NSString stringWithFormat:@"tbopen%@:https://h5.m.taobao.com", AppKey];
-        showParams.isNeedPush = YES;
     } else {
         showParams.openType = ALiOpenTypeH5;
     }
+    showParams.backUrl = [NSString stringWithFormat:@"tbopen%@:https://h5.m.taobao.com", AppKey];
+    showParams.isNeedPush = YES;
     
     id<AlibcTradePage> shoppingCartPage = [AlibcTradePageFactory myCartsPage];
+    
+    [PGGlobal.rootNavigationController setNavigationBarHidden:NO animated:NO];
     
     if (PGGlobal.rootNavigationController) {
         NSInteger ret = [[AlibcTradeSDK sharedInstance].tradeService show:PGGlobal.rootNavigationController

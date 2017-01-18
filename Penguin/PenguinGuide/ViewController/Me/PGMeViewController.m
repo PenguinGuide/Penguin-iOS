@@ -142,7 +142,7 @@
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
 {
-    return 4;
+    return 5;
 }
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
@@ -152,10 +152,12 @@
     if (indexPath.item == 0) {
         [cell setCellWithName:@"我 的 订 单" highlight:NO];
     } else if (indexPath.item == 1) {
-        [cell setCellWithName:@"我 的 收 藏" highlight:NO];
+        [cell setCellWithName:@"购 物 车" highlight:NO];
     } else if (indexPath.item == 2) {
-        [cell setCellWithName:@"我 的 消 息" highlight:self.viewModel.me.hasNewMessage];
+        [cell setCellWithName:@"我 的 收 藏" highlight:NO];
     } else if (indexPath.item == 3) {
+        [cell setCellWithName:@"我 的 消 息" highlight:self.viewModel.me.hasNewMessage];
+    } else if (indexPath.item == 4) {
         [cell setCellWithName:@"我 的 足 迹" highlight:NO];
     }
     
@@ -207,9 +209,11 @@
     if (indexPath.item == 0) {
         [PGAlibcTraderManager openMyOrdersPageWithNative:NO];
     } else if (indexPath.item == 1) {
+        [PGAlibcTraderManager openMyShoppingCartPageWithNative:NO];
+    } else if (indexPath.item == 2) {
         PGCollectionsViewController *collectionsVC = [[PGCollectionsViewController alloc] init];
         [self.navigationController pushViewController:collectionsVC animated:YES];
-    } else if (indexPath.item == 2) {
+    } else if (indexPath.item == 3) {
         PGMessageViewController *messageVC = [[PGMessageViewController alloc] init];
         [self.navigationController pushViewController:messageVC animated:YES];
         [self.viewModel readMessages:^(BOOL success) {
@@ -219,7 +223,7 @@
                 [appDelegate.tabBarController hideTabDot:3];
             }
         }];
-    } else if (indexPath.item == 3) {
+    } else if (indexPath.item == 4) {
         PGHistoryViewController *historyVC = [[PGHistoryViewController alloc] init];
         [self.navigationController pushViewController:historyVC animated:YES];
     }
@@ -272,6 +276,8 @@
         _meCollectionView.backgroundColor = [UIColor whiteColor];
         _meCollectionView.dataSource = self;
         _meCollectionView.delegate = self;
+        _meCollectionView.showsHorizontalScrollIndicator = NO;
+        _meCollectionView.showsVerticalScrollIndicator = NO;
         
         [_meCollectionView registerClass:[PGMeCell class] forCellWithReuseIdentifier:MeCell];
         [_meCollectionView registerClass:[PGMeHeaderView class] forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:HeaderView];
