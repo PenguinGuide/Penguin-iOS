@@ -37,6 +37,26 @@
     self.textLabel.attributedText = attrStr;
 }
 
++ (CGSize)cellSize:(PGParserTextStorage *)textStorage
+{
+    if (CGSizeEqualToSize(textStorage.textSize, CGSizeZero)) {
+        @autoreleasepool {
+            // NOTE: calculate NSAttributedString size http://stackoverflow.com/questions/13621084/boundingrectwithsize-for-nsattributedstring-returning-wrong-size, https://developer.apple.com/library/content/documentation/Cocoa/Conceptual/TextLayout/Tasks/StringHeight.html
+            // NOTE: counting NSAttributedString number of lines https://developer.apple.com/library/content/documentation/Cocoa/Conceptual/TextLayout/Tasks/CountLines.html
+            if (textStorage.text) {
+                CGSize textSize = [PGArticleParagraphTextLabel sizeWithWidth:UISCREEN_WIDTH attriStr:textStorage.text];
+                
+                textStorage.textSize = CGSizeMake(UISCREEN_WIDTH, ceil(textSize.height+15));
+                
+                return textStorage.textSize;
+            }
+            return CGSizeZero;
+        }
+    } else {
+        return textStorage.textSize;
+    }
+}
+
 - (UILabel *)textLabel
 {
     if (!_textLabel) {

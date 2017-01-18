@@ -518,7 +518,7 @@
             if ([storage isKindOfClass:[PGParserTextStorage class]]) {
                 PGParserTextStorage *textStorage = (PGParserTextStorage *)storage;
                 
-                return [self textSize:textStorage.text];
+                return [PGArticleParagraphTextCell cellSize:textStorage];
             } else if ([storage isKindOfClass:[PGParserImageStorage class]]) {
                 PGParserImageStorage *imageStorage = (PGParserImageStorage *)storage;
                 CGFloat width = UISCREEN_WIDTH;
@@ -1042,22 +1042,6 @@
     PGCommentsViewController *commentsVC = [[PGCommentsViewController alloc] init];
     commentsVC.articleId = self.articleId;
     [self.navigationController pushViewController:commentsVC animated:YES];
-}
-
-#pragma mark - <Calculate Text Cell Size>
-
-- (CGSize)textSize:(NSAttributedString *)attrS
-{
-    @autoreleasepool {
-        // NOTE: calculate NSAttributedString size http://stackoverflow.com/questions/13621084/boundingrectwithsize-for-nsattributedstring-returning-wrong-size, https://developer.apple.com/library/content/documentation/Cocoa/Conceptual/TextLayout/Tasks/StringHeight.html
-        // NOTE: counting NSAttributedString number of lines https://developer.apple.com/library/content/documentation/Cocoa/Conceptual/TextLayout/Tasks/CountLines.html
-        if (attrS) {
-            CGSize textSize = [PGArticleParagraphTextLabel sizeWithWidth:UISCREEN_WIDTH attriStr:attrS];
-            
-            return CGSizeMake(UISCREEN_WIDTH, ceil(textSize.height+15));
-        }
-        return CGSizeZero;
-    }
 }
 
 #pragma mark - <Setters && Getters>

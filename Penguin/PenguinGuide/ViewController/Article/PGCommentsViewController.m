@@ -108,6 +108,13 @@
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
+    if (self.viewModel.commentsArray.count-indexPath.item == 3) {
+        PGWeakSelf(self);
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
+            [weakself.viewModel requestComments:weakself.articleId];
+        });
+    }
+    
     PGComment *comment = self.viewModel.commentsArray[indexPath.item];
     if (comment.replyComment || comment.replyDeleted) {
         PGArticleCommentReplyCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:ArticleCommentReplyCell forIndexPath:indexPath];

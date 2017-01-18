@@ -17,6 +17,7 @@
 @property (nonatomic, strong) NSString *content;
 @property (nonatomic, strong) NSString *time;
 @property (nonatomic, strong) NSString *commentId;
+@property (nonatomic, assign) CGSize commentSize;
 
 @property (nonatomic, strong) PGUser *user;
 
