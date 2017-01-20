@@ -51,7 +51,7 @@
     
     NSMutableAttributedString *attrS = [[NSMutableAttributedString alloc] initWithString:str];
     [attrS addAttribute:NSForegroundColorAttributeName value:Theme.colorText range:NSMakeRange(0, str.length)];
-    [attrS addAttribute:NSFontAttributeName value:Theme.fontMediumBold range:NSMakeRange(0, str.length)];
+    [attrS addAttribute:NSFontAttributeName value:Theme.fontExtraLargeBold range:NSMakeRange(0, str.length)];
     
     self.taobaoIconView.image = iconImage;
     self.descLabel.attributedText = attrS;
@@ -65,7 +65,7 @@
     if (!_descLabel) {
         _descLabel = [[UILabel alloc] initWithFrame:CGRectMake(30, 0, 0, self.pg_height)];
         _descLabel.textAlignment = NSTextAlignmentCenter;
-        _descLabel.font = Theme.fontMediumBold;
+        _descLabel.font = Theme.fontExtraLargeBold;
         _descLabel.textColor = Theme.colorText;
     }
     return _descLabel;

@@ -282,10 +282,6 @@
             }
         } else if ([notificationType isEqualToString:@"6"]) {
             // system message
-        } else if ([notificationType isEqualToString:@"7"]) {
-            // version update
-        } else if ([notificationType isEqualToString:@"8"]) {
-            // rate app
         }
     }
     

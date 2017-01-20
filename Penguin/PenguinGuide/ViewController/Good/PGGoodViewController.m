@@ -79,6 +79,8 @@
     
     [self setNeedsStatusBarAppearanceUpdate];
     
+    [self.navigationController setNavigationBarHidden:YES animated:NO];
+    
     self.bannersWeakTimer = [MSWeakTimer scheduledTimerWithTimeInterval:5.f
                                                                  target:self
                                                                selector:@selector(bannersCountDown)
