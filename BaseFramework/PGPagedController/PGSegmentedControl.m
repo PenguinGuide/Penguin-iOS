@@ -29,33 +29,140 @@
 
 @property (nonatomic, strong) PGSegmentedScrollView *scrollView;
 @property (nonatomic, strong) UIView *indicatorView;
-@property (nonatomic, strong) NSArray *titles;
 @property (nonatomic, strong) NSMutableArray *labels;
 @property (nonatomic, assign) NSInteger currentPage;
+
+@property (nonatomic, assign) NSInteger selectedSegmentIndex;
+@property (nonatomic, strong) NSArray *segmentWidthsArray;
+@property (nonatomic, assign) CGFloat segmentControlWidth;
 
 @end
 
 @implementation PGSegmentedControl
 
-- (id)initWithFrame:(CGRect)frame
+- (id)initWithSegmentTitles:(NSArray *)segmentTitles Class:(Class)SelectedViewClass
 {
-    if (self = [super initWithFrame:frame]) {
-        [self initCommon];
+    if (self = [super init]) {
+        self.segmentTitles = segmentTitles;
+        self.SelectedViewClass = SelectedViewClass;
+
+        [self initSegmentControl];
     }
     return self;
 }
 
-- (void)initCommon
+- (void)reloadSegmentTitles:(NSArray *)segmentTitles Class:(__unsafe_unretained Class)SelectedViewClass
+{
+    self.segmentTitles = segmentTitles;
+    self.SelectedViewClass = SelectedViewClass;
+    
+    [self setNeedsLayout];  // call layoutSubviews，layoutSubviews方便数据计算
+    [self setNeedsDisplay]; // call drawRect，drawRect方便视图重绘
+}
+
+- (void)initSegmentControl
 {
     // default attribute values
-    self.scrollView.backgroundColor = [UIColor clearColor];
-    self.labels = [NSMutableArray new];
+    self.backgroundColor = [UIColor whiteColor];
     
-    self.scrollView = [[PGSegmentedScrollView alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width, self.frame.size.height)];
-    self.scrollView.showsVerticalScrollIndicator = NO;
+    self.textColor = [UIColor colorWithRed:175.f/256.f green:189.f/256.f blue:189.f/256.f alpha:1.f];
+    self.selectedTextColor = [UIColor blackColor];
+    self.textFont = [UIFont systemFontOfSize:16.f weight:UIFontWeightBold];
+    
+    self.segmentMargin = 15.f;
+    self.segmentPadding = 15.f;
+    
+    self.equalWidth = NO;
+    
+    self.selectedSegmentIndex = 0;
+    
+    // scroll view
+    self.scrollView = [[PGSegmentedScrollView alloc] init];
+    self.scrollView.scrollsToTop = NO;
+    self.scrollView.backgroundColor = [UIColor clearColor];
     self.scrollView.showsHorizontalScrollIndicator = NO;
-    self.scrollView.delegate = self;
+    self.scrollView.showsVerticalScrollIndicator = NO;
     [self addSubview:self.scrollView];
+}
+
+- (void)layoutSubviews
+{
+    [super layoutSubviews];
+    
+    [self updateSegmentsLayout];
+}
+
+- (void)drawRect:(CGRect)rect
+{
+    // otherwise background will be clear
+    [self.backgroundColor setFill];
+    UIRectFill([self bounds]);
+    
+    // remove all sublayers to avoid drawing images over existing ones
+    self.scrollView.layer.sublayers = nil;
+    
+    __weak typeof(self) weakself = self;
+    [self.segmentTitles enumerateObjectsUsingBlock:^(id title, NSUInteger idx, BOOL * _Nonnull stop) {
+        CGSize titleSize = [weakself titleSizeAtIndex:idx];
+        CGFloat x = weakself.segmentMargin+weakself.segmentPadding*idx;
+        for (int i = 0; i < weakself.segmentWidthsArray.count; i++) {
+            if (i == idx) {
+                break;
+            }
+            NSNumber *segmentWidth = weakself.segmentWidthsArray[i];
+            x += [segmentWidth floatValue];
+        }
+        
+        CATextLayer *titleLayer = [CATextLayer layer];
+        NSAttributedString *titleAttrStr = [weakself titleAttrStrAtIndex:idx];
+        titleLayer.frame = CGRectMake(x, (weakself.frame.size.height-titleAttrStr.size.height)/2, titleSize.width, weakself.frame.size.height);
+        titleLayer.string = [weakself titleAttrStrAtIndex:idx];
+        titleLayer.alignmentMode = kCAAlignmentCenter;
+        titleLayer.contentsScale = [[UIScreen mainScreen] scale];
+        if ([UIDevice currentDevice].systemVersion.floatValue < 10.0 ) {
+            titleLayer.truncationMode = kCATruncationEnd;
+        }
+        
+        [weakself.scrollView.layer addSublayer:titleLayer];
+    }];
+}
+
+- (void)updateSegmentsLayout
+{
+    NSMutableArray *segmentWidthsArray = [NSMutableArray new];
+    
+    __weak typeof(self) weakself = self;
+    self.segmentControlWidth = self.segmentMargin*2 + self.segmentPadding*(self.segmentTitles.count-1);
+    [self.segmentTitles enumerateObjectsUsingBlock:^(id title, NSUInteger idx, BOOL * _Nonnull stop) {
+        CGSize titleSize = [weakself titleSizeAtIndex:idx];
+        weakself.segmentControlWidth += titleSize.width;
+        [segmentWidthsArray addObject:@(titleSize.width)];
+    }];
+    self.segmentWidthsArray = [NSArray arrayWithArray:segmentWidthsArray];
+    
+    self.scrollView.frame = CGRectMake(0, 0, self.frame.size.width, self.frame.size.height);
+    self.scrollView.contentSize = CGSizeMake(self.segmentControlWidth, self.frame.size.height);
+}
+
+- (NSAttributedString *)titleAttrStrAtIndex:(NSInteger)index
+{
+    if (index < self.segmentTitles.count) {
+        NSString *title = self.segmentTitles[index];
+        NSAttributedString *attrS = [[NSAttributedString alloc] initWithString:title
+                                                                    attributes:@{NSFontAttributeName:self.textFont,
+                                                                                 NSForegroundColorAttributeName:index==self.selectedSegmentIndex?self.selectedTextColor:self.textColor}];
+        return attrS;
+    }
+    return nil;
+}
+
+- (CGSize)titleSizeAtIndex:(NSInteger)index
+{
+    if (index < self.segmentTitles.count) {
+        NSString *title = self.segmentTitles[index];
+        return [title sizeWithAttributes:@{NSFontAttributeName:self.textFont}];
+    }
+    return CGSizeZero;
 }
 
 - (void)reloadWithTitles:(NSArray *)titles Class:(__unsafe_unretained Class)SelectedViewClass
@@ -65,7 +172,7 @@
     }
     
     self.currentPage = 0;
-    self.titles = titles;
+    self.segmentTitles = titles;
     [self.labels removeAllObjects];
     
     if (titles.count > 0) {
@@ -74,7 +181,7 @@
             float titleWidth;
             NSString *title = titles[i];
             if (self.equalWidth) {
-                titleWidth = (self.frame.size.width-self.margin*2-(self.titles.count-1)*self.padding)/self.titles.count;
+                titleWidth = (self.frame.size.width-self.margin*2-(self.segmentTitles.count-1)*self.padding)/self.segmentTitles.count;
             } else {
                 titleWidth = [title sizeWithAttributes:@{NSFontAttributeName:self.textFont}].width+15;
             }
@@ -157,7 +264,7 @@
         self.currentPage = page;
         
         __weak typeof(self) weakSelf = self;
-        __block CGSize titleSize = [self.titles[self.currentPage] sizeWithAttributes:@{NSFontAttributeName:self.textFont}];
+        __block CGSize titleSize = [self.segmentTitles[self.currentPage] sizeWithAttributes:@{NSFontAttributeName:self.textFont}];
         [UIView animateWithDuration:0.2
                               delay:0.f
                             options:UIViewAnimationOptionCurveEaseInOut
@@ -194,7 +301,7 @@
         self.currentPage = selectedPage;
         
         __weak typeof(self) weakSelf = self;
-        __block CGSize titleSize = [self.titles[self.currentPage] sizeWithAttributes:@{NSFontAttributeName:self.textFont}];
+        __block CGSize titleSize = [self.segmentTitles[self.currentPage] sizeWithAttributes:@{NSFontAttributeName:self.textFont}];
         [UIView animateWithDuration:0.2
                               delay:0.f
                             options:UIViewAnimationOptionCurveEaseInOut

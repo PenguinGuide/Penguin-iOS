@@ -14,9 +14,6 @@
 
 @interface PGPagedController () <UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout>
 
-@property (nonatomic, strong, readwrite) NSArray *viewControllers;
-@property (nonatomic, strong) NSArray *titles;
-
 @property (nonatomic, strong) PGSegmentedControl *segmentedControl;
 @property (nonatomic, strong) UICollectionView *pagerCollectionView;
 
@@ -47,7 +44,8 @@
     // Do any additional setup after loading the view.
     
     // why use UIControl: http://www.tuicool.com/articles/B73AFj
-    self.segmentedControl = [[PGSegmentedControl alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.segmentHeight)];
+    self.segmentedControl = [[PGSegmentedControl alloc] initWithSegmentTitles:self.titles Class:self.SelectedViewClass];
+    self.segmentedControl.frame = CGRectMake(0, 0, self.view.frame.size.width, self.segmentHeight);
     self.segmentedControl.pagedController = self;
     self.segmentedControl.backgroundColor = self.backgroundColor;
     self.segmentedControl.textColor = self.textColor;
@@ -56,26 +54,35 @@
     self.segmentedControl.padding = self.padding;
     self.segmentedControl.margin = self.margin;
     self.segmentedControl.equalWidth = self.equalWidth;
+    self.segmentedControl.segmentTitles = self.titles;
+    self.segmentedControl.SelectedViewClass = self.SelectedViewClass;
+    
+    [self.view addSubview:self.segmentedControl];
+    [self.view addSubview:self.pagerCollectionView];
 }
 
 - (void)viewDidLayoutSubviews
 {
+    NSLog(@"viewDidLayoutSubviews");
     [super viewDidLayoutSubviews];
-    
-    if (!self.pagerCollectionView.superview) {
-        // NOTE: if put these codes in viewDidLoad, self.view.frame.size.height will be the height of the screen rather than the real height(subview)
-        [self.view addSubview:self.segmentedControl];
-        [self.view addSubview:self.pagerCollectionView];        
-    }
 }
 
-- (void)reloadWithViewControllers:(NSArray *)viewControllers titles:(NSArray *)titles selectedViewClass:(Class)SelectedViewClass
+//- (void)viewDidLayoutSubviews
+//{
+//    [super viewDidLayoutSubviews];
+//    
+//    if (!self.pagerCollectionView.superview) {
+//        // NOTE: if put these codes in viewDidLoad, self.view.frame.size.height will be the height of the screen rather than the real height(subview)
+//        [self.view addSubview:self.segmentedControl];
+//        [self.view addSubview:self.pagerCollectionView];
+//    }
+//}
+
+- (void)reload
 {
     self.currentPage = 0;
-    self.viewControllers = viewControllers;
-    self.titles = titles;
     
-    [self.segmentedControl reloadWithTitles:self.titles Class:SelectedViewClass];
+    [self.segmentedControl reloadSegmentTitles:self.titles Class:self.SelectedViewClass];
     
     for (UIViewController *vc in self.childViewControllers) {
         [vc.view removeFromSuperview];

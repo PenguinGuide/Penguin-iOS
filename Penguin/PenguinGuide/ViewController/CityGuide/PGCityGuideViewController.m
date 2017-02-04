@@ -151,9 +151,9 @@
 {
     if (!_pagedController) {
         _pagedController = [[PGPagedController alloc] init];
-        _pagedController.view.frame = CGRectMake(0, 20, self.view.pg_width, self.view.pg_height-20);
         _pagedController.segmentHeight = 60.f;
         _pagedController.SelectedViewClass = [PGCityGuideSegmentIndicator class];
+        _pagedController.view.frame = CGRectMake(0, 20, self.view.pg_width, self.view.pg_height-20);
     }
     return _pagedController;
 }
