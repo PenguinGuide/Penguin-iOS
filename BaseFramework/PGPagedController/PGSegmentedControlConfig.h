@@ -1,19 +1,15 @@
 //
-//  PGSegmentedControl.h
+//  PGSegmentedControlConfig.h
 //  Penguin
 //
-//  Created by Jing Dai on 24/11/2016.
-//  Copyright © 2016 Xinglian. All rights reserved.
+//  Created by Jing Dai on 04/02/2017.
+//  Copyright © 2017 Xinglian. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
-#import "PGPagedController.h"
+#import <Foundation/Foundation.h>
 
-@interface PGSegmentedControl : UIControl
+@interface PGSegmentedControlConfig : NSObject
 
-@property (nonatomic, weak) PGPagedController *pagedController;
-
-@property (nonatomic, strong) NSArray *segmentTitles;
 @property (nonatomic, assign) Class SelectedViewClass;
 
 /**
@@ -67,14 +63,5 @@
  Default is NO
  */
 @property (nonatomic, assign) BOOL equalWidth;
-
-//- (id)initWithSegmentTitles:(NSArray *)segmentTitles Class:(Class)SelectedViewClass;
-
-- (id)initWithSegmentTitles:(NSArray *)segmentTitles;
-
-- (void)reloadSegmentTitles:(NSArray *)segmentTitles;
-
-- (void)reloadWithTitles:(NSArray *)titles Class:(Class)SelectedViewClass;
-- (void)scrollToPage:(NSInteger)page;
 
 @end

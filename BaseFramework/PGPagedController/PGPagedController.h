@@ -10,26 +10,14 @@
 
 @interface PGPagedController : UIViewController
 
-@property (nonatomic, strong) NSArray *viewControllers;
-@property (nonatomic, strong) NSArray *titles;
-
-@property (nonatomic, strong) UIColor *backgroundColor;
-
-@property (nonatomic, strong) UIColor *textColor;
-@property (nonatomic, strong) UIColor *selectedTextColor;
-
-@property (nonatomic, strong) UIFont *textFont;
-
-@property (nonatomic, assign) CGFloat padding;
-@property (nonatomic, assign) CGFloat margin;
-
-@property (nonatomic, assign) CGFloat segmentHeight;
-@property (nonatomic, assign) BOOL equalWidth;
 @property (nonatomic, assign) BOOL disableScrolling;
 
-@property (nonatomic, assign) Class SelectedViewClass;
-
+@property (nonatomic, strong, readonly) NSArray *viewControllers;
+@property (nonatomic, strong, readonly) NSArray *titles;
+@property (nonatomic, assign, readonly) CGFloat segmentHeight;
 @property (nonatomic, assign, readonly) NSInteger currentPage;
+
+- (id)initWithViewControllers:(NSArray *)viewControllers titles:(NSArray *)titles segmentHeight:(CGFloat)segmentHeight;
 
 - (void)reload;
 

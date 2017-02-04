@@ -7,7 +7,7 @@
 //
 
 #import "PGBaseViewController.h"
-#import "PGPagedController.h"
+#import "UIViewController+PGPagedController.h"
 
 @interface PGCityGuideViewController : PGBaseViewController <PGTabBarControllerDelegate>
 

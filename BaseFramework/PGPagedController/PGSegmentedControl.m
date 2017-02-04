@@ -40,21 +40,19 @@
 
 @implementation PGSegmentedControl
 
-- (id)initWithSegmentTitles:(NSArray *)segmentTitles Class:(Class)SelectedViewClass
+- (id)initWithSegmentTitles:(NSArray *)segmentTitles
 {
     if (self = [super init]) {
         self.segmentTitles = segmentTitles;
-        self.SelectedViewClass = SelectedViewClass;
 
         [self initSegmentControl];
     }
     return self;
 }
 
-- (void)reloadSegmentTitles:(NSArray *)segmentTitles Class:(__unsafe_unretained Class)SelectedViewClass
+- (void)reloadSegmentTitles:(NSArray *)segmentTitles
 {
     self.segmentTitles = segmentTitles;
-    self.SelectedViewClass = SelectedViewClass;
     
     [self setNeedsLayout];  // call layoutSubviews，layoutSubviews方便数据计算
     [self setNeedsDisplay]; // call drawRect，drawRect方便视图重绘

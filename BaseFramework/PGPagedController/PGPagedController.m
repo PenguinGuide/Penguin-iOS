@@ -17,25 +17,26 @@
 @property (nonatomic, strong) PGSegmentedControl *segmentedControl;
 @property (nonatomic, strong) UICollectionView *pagerCollectionView;
 
+@property (nonatomic, strong, readwrite) NSArray *viewControllers;
+@property (nonatomic, strong, readwrite) NSArray *titles;
+
+@property (nonatomic, assign, readwrite) CGFloat segmentHeight;
 @property (nonatomic, assign, readwrite) NSInteger currentPage;
 
 @end
 
 @implementation PGPagedController
 
-- (id)init
+- (id)initWithViewControllers:(NSArray *)viewControllers titles:(NSArray *)titles segmentHeight:(CGFloat)segmentHeight
 {
     if (self = [super init]) {
-        self.backgroundColor = [UIColor whiteColor];
-        self.textColor = [UIColor colorWithRed:175.f/256.f green:189.f/256.f blue:189.f/256.f alpha:1.f];
-        self.selectedTextColor = [UIColor blackColor];
-        self.textFont = [UIFont systemFontOfSize:16.f weight:UIFontWeightBold];
-        self.padding = 15.f;
-        self.margin = 15.f;
-        self.currentPage = 0;
+        self.viewControllers = viewControllers;
+        self.titles = titles;
         
-        self.segmentHeight = 60.f;
+        self.currentPage = 0;
+        self.segmentHeight = segmentHeight > 0 ? segmentHeight : 60.f;
     }
+    
     return self;
 }
 
@@ -43,28 +44,7 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     
-    // why use UIControl: http://www.tuicool.com/articles/B73AFj
-    self.segmentedControl = [[PGSegmentedControl alloc] initWithSegmentTitles:self.titles Class:self.SelectedViewClass];
-    self.segmentedControl.frame = CGRectMake(0, 0, self.view.frame.size.width, self.segmentHeight);
-    self.segmentedControl.pagedController = self;
-    self.segmentedControl.backgroundColor = self.backgroundColor;
-    self.segmentedControl.textColor = self.textColor;
-    self.segmentedControl.selectedTextColor = self.selectedTextColor;
-    self.segmentedControl.textFont = self.textFont;
-    self.segmentedControl.padding = self.padding;
-    self.segmentedControl.margin = self.margin;
-    self.segmentedControl.equalWidth = self.equalWidth;
-    self.segmentedControl.segmentTitles = self.titles;
-    self.segmentedControl.SelectedViewClass = self.SelectedViewClass;
-    
-    [self.view addSubview:self.segmentedControl];
     [self.view addSubview:self.pagerCollectionView];
-}
-
-- (void)viewDidLayoutSubviews
-{
-    NSLog(@"viewDidLayoutSubviews");
-    [super viewDidLayoutSubviews];
 }
 
 //- (void)viewDidLayoutSubviews
@@ -82,7 +62,7 @@
 {
     self.currentPage = 0;
     
-    [self.segmentedControl reloadSegmentTitles:self.titles Class:self.SelectedViewClass];
+    [self.segmentedControl reloadSegmentTitles:self.titles];
     
     for (UIViewController *vc in self.childViewControllers) {
         [vc.view removeFromSuperview];

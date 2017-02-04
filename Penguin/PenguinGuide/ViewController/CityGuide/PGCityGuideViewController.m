@@ -132,31 +132,18 @@
         }
     }
     
-    self.pagedController.viewControllers = [NSArray arrayWithArray:cityViewControllers];
-    self.pagedController.titles = [NSArray arrayWithArray:cityNames];
-    self.pagedController.SelectedViewClass = [PGCityGuideSegmentIndicator class];
     
-    if (![self.childViewControllers containsObject:self.pagedController]) {
-        [self.view addSubview:self.pagedController.view];
-        [self addChildViewController:self.pagedController];
-        [self.pagedController didMoveToParentViewController:self];
-    } else {
-        [self.pagedController reload];
-    }
+    self.pagedController = [[PGPagedController alloc] initWithViewControllers:[NSArray arrayWithArray:cityViewControllers]
+                                                                       titles:[NSArray arrayWithArray:cityNames]
+                                                                segmentHeight:60.f];
+    self.pagedController.view.frame = CGRectMake(0, 20, self.view.pg_width, self.view.pg_height-20);
+    
+    [self addPagedController:self.pagedController config:^(PGSegmentedControlConfig *config) {
+        config.SelectedViewClass = [PGCityGuideSegmentIndicator class];
+    }];
 }
 
 #pragma mark - <Lazy Init>
-
-- (PGPagedController *)pagedController
-{
-    if (!_pagedController) {
-        _pagedController = [[PGPagedController alloc] init];
-        _pagedController.segmentHeight = 60.f;
-        _pagedController.SelectedViewClass = [PGCityGuideSegmentIndicator class];
-        _pagedController.view.frame = CGRectMake(0, 20, self.view.pg_width, self.view.pg_height-20);
-    }
-    return _pagedController;
-}
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
