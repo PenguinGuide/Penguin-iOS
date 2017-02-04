@@ -88,6 +88,9 @@
 - (void)imageViewDidSelect:(NSInteger)index
 {
     PGImageBanner *banner = self.dataArray[index];
+    if (banner.bannerId) {
+        [PGAnalytics trackEvent:related_article_banner_clicked params:@{event_id:banner.bannerId}];
+    }
     [[PGRouter sharedInstance] openURL:banner.link];
 }
 

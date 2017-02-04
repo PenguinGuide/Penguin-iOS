@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "PGMessage.h"
 
-@interface PGMessageContentCell : UICollectionViewCell
+@interface PGMessageContentCell : PGBaseCollectionViewCell
 
 - (void)setCellWithMessage:(PGMessage *)message type:(NSString *)type;
 

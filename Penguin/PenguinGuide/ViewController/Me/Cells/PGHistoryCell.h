@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "PGHistory.h"
 
-@interface PGHistoryCell : UICollectionViewCell
+@interface PGHistoryCell : PGBaseCollectionViewCell
 
 - (void)setCellWithHistory:(PGHistory *)history;
 + (CGSize)cellSize:(PGHistory *)history;

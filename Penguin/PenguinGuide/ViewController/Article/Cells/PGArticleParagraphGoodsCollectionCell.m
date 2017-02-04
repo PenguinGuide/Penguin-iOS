@@ -61,6 +61,13 @@
     PGGoodsCollectionGoodCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:GoodCell forIndexPath:indexPath];
     
     PGGood *good = self.goodsArray[indexPath.item];
+    cell.eventName = good_banner_clicked;
+    cell.eventId = good.goodId;
+    cell.pageName = article_view;
+    if (self.extraParams) {
+        cell.extraParams = self.extraParams;
+    }
+    
     [cell setCellWithGood:good];
     
     return cell;

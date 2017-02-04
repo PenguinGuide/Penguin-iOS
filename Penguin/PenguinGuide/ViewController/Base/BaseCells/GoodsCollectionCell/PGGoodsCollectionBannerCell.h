@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "PGGoodsCollectionBanner.h"
 
-@interface PGGoodsCollectionBannerCell : UICollectionViewCell
+@interface PGGoodsCollectionBannerCell : PGBaseCollectionViewCell
 
 @property (nonatomic, strong) UILabel *titleLabel;
 @property (nonatomic, strong) UILabel *descLabel;

@@ -19,7 +19,7 @@
 
 @end
 
-@interface PGArticleCommentCell : UICollectionViewCell
+@interface PGArticleCommentCell : PGBaseCollectionViewCell
 
 @property (nonatomic, weak) id<PGArticleCommentCellDelegate> delegate;
 

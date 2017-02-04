@@ -59,7 +59,7 @@
     
     self.articlesVC = [[PGSearchResultsArticlesViewController alloc] initWithKeyword:self.keyword];
     self.goodsVC = [[PGSearchResultsGoodsViewController alloc] initWithKeyword:self.keyword];
-    [self.pagedController reloadWithViewControllers:@[self.articlesVC, self.goodsVC] titles:@[@"文 章", @"商 品"] selectedViewClass:[PGCityGuideSegmentIndicator class]];
+    //[self.pagedController reloadWithViewControllers:@[self.articlesVC, self.goodsVC] titles:@[@"文 章", @"商 品"] selectedViewClass:[PGCityGuideSegmentIndicator class]];
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -70,6 +70,11 @@
 - (BOOL)shouldHideNavigationBar
 {
     return YES;
+}
+
+- (void)initAnalyticsKeys
+{
+    self.pageName = search_results_view;
 }
 
 - (void)didReceiveMemoryWarning {
@@ -121,7 +126,7 @@
         self.articlesVC = [[PGSearchResultsArticlesViewController alloc] initWithKeyword:self.keyword];
         self.goodsVC = [[PGSearchResultsGoodsViewController alloc] initWithKeyword:self.keyword];
         
-        [self.pagedController reloadWithViewControllers:@[self.articlesVC, self.goodsVC] titles:@[@"文 章", @"商 品"] selectedViewClass:[PGCityGuideSegmentIndicator class]];
+        //[self.pagedController reloadWithViewControllers:@[self.articlesVC, self.goodsVC] titles:@[@"文 章", @"商 品"] selectedViewClass:[PGCityGuideSegmentIndicator class]];
     }
 }
 

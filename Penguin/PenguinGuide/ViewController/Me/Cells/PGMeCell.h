@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface PGMeCell : UICollectionViewCell
+@interface PGMeCell : PGBaseCollectionViewCell
 
 - (void)setCellWithName:(NSString *)name highlight:(BOOL)highlight;
 

@@ -84,6 +84,10 @@
     PGCategoryCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:CategoryCell forIndexPath:indexPath];
     
     PGScenarioBanner *icon = self.banners[indexPath.item];
+    cell.eventName = scenario_banner_clicked;
+    cell.eventId = icon.scenarioId;
+    cell.pageName = explore_tab_view;
+    
     [cell setCellWithCategoryIcon:icon];
     
     return cell;

@@ -8,6 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-@interface PGArticleParagraphNewlineCell : UICollectionViewCell
+@interface PGArticleParagraphNewlineCell : PGBaseCollectionViewCell
 
 @end

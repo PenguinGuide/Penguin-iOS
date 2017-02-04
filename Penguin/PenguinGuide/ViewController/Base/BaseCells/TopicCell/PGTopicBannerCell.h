@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "PGTopicBanner.h"
 
-@interface PGTopicBannerCell : UICollectionViewCell
+@interface PGTopicBannerCell : PGBaseCollectionViewCell
 
 - (void)setCellWithTopic:(PGTopicBanner *)topic;
 

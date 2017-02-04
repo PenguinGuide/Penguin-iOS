@@ -93,7 +93,12 @@
 {
     PGGoodCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:GoodCell forIndexPath:indexPath];
     
-    [cell setCellWithGood:self.viewModel.goodsArray[indexPath.item]];
+    PGGood *good = self.viewModel.goodsArray[indexPath.item];
+    cell.eventName = good_banner_clicked;
+    cell.eventId = good.goodId;
+    cell.pageName = scenario_view;
+    
+    [cell setCellWithGood:good];
     
     return cell;
 }

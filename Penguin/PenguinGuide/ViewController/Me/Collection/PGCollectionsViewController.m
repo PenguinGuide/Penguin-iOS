@@ -92,6 +92,10 @@
     PGArticleBannerCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:ArticleBannerCell forIndexPath:indexPath];
     
     PGArticleBanner *articleBanner = self.viewModel.articles[indexPath.item];
+    cell.eventName = article_banner_clicked;
+    cell.eventId = articleBanner.articleId;
+    cell.pageName = my_collections_view;
+    
     articleBanner.isCollected = YES;
     [cell setDelegate:self];
     [cell setCellWithArticle:articleBanner allowGesture:YES];

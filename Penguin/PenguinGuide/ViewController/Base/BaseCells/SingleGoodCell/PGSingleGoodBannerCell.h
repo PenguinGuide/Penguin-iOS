@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "PGSingleGoodBanner.h"
 
-@interface PGSingleGoodBannerCell : UICollectionViewCell
+@interface PGSingleGoodBannerCell : PGBaseCollectionViewCell
 
 - (void)setCellWithSingleGood:(PGSingleGoodBanner *)singleGood;
 

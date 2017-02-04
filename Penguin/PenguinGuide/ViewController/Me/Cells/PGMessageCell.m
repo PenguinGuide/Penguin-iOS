@@ -44,7 +44,7 @@
 {
     if (!_descLabel) {
         _descLabel = [[UILabel alloc] initWithFrame:CGRectMake(30, 0, 200, 50)];
-        _descLabel.font = Theme.fontMedium;
+        _descLabel.font = Theme.fontLargeBold;
         _descLabel.textColor = Theme.colorText;
     }
     return _descLabel;

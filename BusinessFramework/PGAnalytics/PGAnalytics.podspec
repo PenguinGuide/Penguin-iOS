@@ -23,5 +23,6 @@ s.source_files = "*.{h,m}"
 
 s.dependency 'Zhugeio'
 s.dependency 'UMengAnalytics'
+s.dependency 'Aspects'
 
 end

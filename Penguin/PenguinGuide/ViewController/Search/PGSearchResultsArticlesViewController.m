@@ -109,8 +109,14 @@
         });
     }
     PGArticleBannerCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:ArticleCell forIndexPath:indexPath];
+    
+    PGArticleBanner *articleBanner = self.viewModel.articlesArray[indexPath.item];
+    cell.eventName = article_banner_clicked;
+    cell.eventId = articleBanner.articleId;
+    cell.pageName = search_results_view;
+    
     [cell setDelegate:self];
-    [cell setCellWithArticle:self.viewModel.articlesArray[indexPath.item]  allowGesture:YES];
+    [cell setCellWithArticle:articleBanner allowGesture:YES];
     
     return cell;
 }

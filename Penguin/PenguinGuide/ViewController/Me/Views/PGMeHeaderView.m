@@ -72,6 +72,7 @@
         [_settingButton setTitle:@"设置" forState:UIControlStateNormal];
         [_settingButton setTitleColor:Theme.colorText forState:UIControlStateNormal];
         [_settingButton.titleLabel setFont:Theme.fontLargeBold];
+        _settingButton.eventName = system_settings_button_clicked;
     }
     return _settingButton;
 }
@@ -83,6 +84,7 @@
         _avatarButton.clipsToBounds = YES;
         _avatarButton.layer.cornerRadius = 42.f;
         _avatarButton.contentMode = UIViewContentModeScaleAspectFill;
+        _avatarButton.eventName = my_avatar_button_clicked;
     }
     return _avatarButton;
 }

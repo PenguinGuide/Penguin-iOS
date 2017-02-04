@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface PGGoodDescCell : UICollectionViewCell
+@interface PGGoodDescCell : PGBaseCollectionViewCell
 
 - (void)setCellWithDesc:(NSString *)desc;
 

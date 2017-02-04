@@ -10,7 +10,6 @@
 
 // view controllers
 #import "PGLoginViewController.h"
-#import "PGHomeViewController.h"
 #import "PGScenarioViewController.h"
 #import "PGTopicViewController.h"
 #import "PGArticleViewController.h"
@@ -186,11 +185,6 @@
     [PGGlobal synchronizeUserId:nil];
     [PGGlobal synchronizeToken:nil];
     [[PGRouter sharedInstance] openURL:@"qiechihe://login"];
-}
-
-+ (void)routeToHomePage
-{
-    [[PGRouter sharedInstance] openURL:@"qiechihe://home"];
 }
 
 + (void)routeToTopicPage:(NSString *)topicId link:(NSString *)link

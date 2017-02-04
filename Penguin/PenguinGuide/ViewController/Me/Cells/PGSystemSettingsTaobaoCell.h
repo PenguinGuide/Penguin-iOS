@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface PGSystemSettingsTaobaoCell : UICollectionViewCell
+@interface PGSystemSettingsTaobaoCell : PGBaseCollectionViewCell
 
 - (void)setCellWithAuthorized:(BOOL)authorized;
 

@@ -31,6 +31,10 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view, typically from a nib.
+    if ([self respondsToSelector:@selector(initAnalyticsKeys)]) {
+        [self initAnalyticsKeys];
+    }
+    
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(requestSuccess) name:PG_REQUEST_SUCCESS_NOTIFICATION object:nil];
     
     self.view.backgroundColor = [UIColor whiteColor];

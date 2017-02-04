@@ -46,6 +46,10 @@
     NSMutableArray *views = [NSMutableArray new];
     for (PGGood *good in flashbuy.goodsArray) {
         PGFlashbuyGoodView *flashbuyGoodView = [[PGFlashbuyGoodView alloc] initWithFrame:CGRectMake(0, 0, self.pg_width, self.pg_height)];
+        flashbuyGoodView.eventName = flashbuy_banner_good_clicked;
+        flashbuyGoodView.eventId = good.goodId;
+        flashbuyGoodView.pageName = self.pageName;
+        
         [flashbuyGoodView setViewWithGood:good];
         [views addObject:flashbuyGoodView];
     }

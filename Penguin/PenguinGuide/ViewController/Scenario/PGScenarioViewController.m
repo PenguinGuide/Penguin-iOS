@@ -76,9 +76,9 @@
             weakself.feedsVC.delegate = weakself;
             weakself.goodsVC.delegate = weakself;
             
-            [weakself.pagedController reloadWithViewControllers:@[weakself.feedsVC, weakself.goodsVC]
-                                                         titles:@[weakself.isFromStorePage?@"教 你 买":@"边 读 边 选", @"商 品"]
-                                              selectedViewClass:[PGCityGuideSegmentIndicator class]];
+//            [weakself.pagedController reloadWithViewControllers:@[weakself.feedsVC, weakself.goodsVC]
+//                                                         titles:@[weakself.isFromStorePage?@"教 你 买":@"边 读 边 选", @"商 品"]
+//                                              selectedViewClass:[PGCityGuideSegmentIndicator class]];
         }
         [weakself dismissLoading];
     }];
@@ -115,6 +115,12 @@
         [self showLoading];
         [self.viewModel requestScenario:self.scenarioId];
     }
+}
+
+- (void)initAnalyticsKeys
+{
+    self.pageName = scenario_view;
+    self.pageId = self.scenarioId;
 }
 
 #pragma mark - <PGScenarioSegmentControllerDelegate>

@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface PGArticleParagraphVideoCell : UICollectionViewCell
+@interface PGArticleParagraphVideoCell : PGBaseCollectionViewCell
 
 - (void)setCellWithImage:(NSString *)image;
 

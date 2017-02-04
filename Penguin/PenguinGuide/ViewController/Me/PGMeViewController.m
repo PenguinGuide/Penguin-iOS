@@ -84,6 +84,11 @@
     }
 }
 
+- (void)initAnalyticsKeys
+{
+    self.pageName = my_tab_view;
+}
+
 - (BOOL)shouldHideNavigationBar
 {
     return YES;
@@ -150,14 +155,19 @@
     PGMeCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:MeCell forIndexPath:indexPath];
     
     if (indexPath.item == 0) {
+        cell.eventName = my_order_cell_clicked;
         [cell setCellWithName:@"我 的 订 单" highlight:NO];
     } else if (indexPath.item == 1) {
+        cell.eventName = my_shopping_cart_cell_clicked;
         [cell setCellWithName:@"购 物 车" highlight:NO];
     } else if (indexPath.item == 2) {
+        cell.eventName = my_collections_cell_clicked;
         [cell setCellWithName:@"我 的 收 藏" highlight:NO];
     } else if (indexPath.item == 3) {
+        cell.eventName = my_messages_cell_clicked;
         [cell setCellWithName:@"我 的 消 息" highlight:self.viewModel.me.hasNewMessage];
     } else if (indexPath.item == 4) {
+        cell.eventName = my_footprints_cell_clicked;
         [cell setCellWithName:@"我 的 足 迹" highlight:NO];
     }
     

@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface PGCollectionCell : UICollectionViewCell
+@interface PGCollectionCell : PGBaseCollectionViewCell
 
 - (void)setCellWithIcon:(NSString *)icon desc:(NSString *)desc count:(NSString *)count;
 

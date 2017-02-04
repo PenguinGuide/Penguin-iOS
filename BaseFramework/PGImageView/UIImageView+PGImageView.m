@@ -48,6 +48,7 @@
                 placeholderImage:placeholder
                        completed:^(UIImage * _Nullable image, NSError * _Nullable error, SDImageCacheType cacheType, NSURL * _Nullable imageURL) {
                            if (image && cacheType == SDImageCacheTypeNone) {
+                               // CATransition: http://blog.csdn.net/mad2man/article/details/17260887
                                CATransition *transition = [CATransition animation];
                                transition.type = kCATransitionFade; // there are other types but this is the nicest
                                transition.duration = 0.3; // set the duration that you like

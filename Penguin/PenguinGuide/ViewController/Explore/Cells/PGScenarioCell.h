@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface PGScenarioCell : UICollectionViewCell
+@interface PGScenarioCell : PGBaseCollectionViewCell
 
 - (void)reloadWithBanners:(NSArray *)banners title:(NSString *)title scenarioType:(NSString *)scenarioType;
 

@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface PGGoodTagsCell : UICollectionViewCell
+@interface PGGoodTagsCell : PGBaseCollectionViewCell
 
 - (void)reloadWithTagsArray:(NSArray *)tagsArray;
 

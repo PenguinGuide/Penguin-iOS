@@ -22,5 +22,8 @@
 @property (nonatomic, strong) NSString *commentsCount;
 @property (nonatomic, strong) NSString *articleId;
 @property (nonatomic, assign) BOOL isCollected;
+@property (nonatomic, assign) BOOL isNew;
+@property (nonatomic, assign) BOOL isRecommendGood;
+@property (nonatomic, assign) BOOL isRecommendResturant;
 
 @end

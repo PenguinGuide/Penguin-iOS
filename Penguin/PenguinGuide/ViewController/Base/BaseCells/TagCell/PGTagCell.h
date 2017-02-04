@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface PGTagCell : UICollectionViewCell
+@interface PGTagCell : PGBaseCollectionViewCell
 
 - (void)setCellWithTagName:(NSString *)tagName;
 - (void)setCellWithKeyword:(NSString *)keyword;

@@ -15,7 +15,7 @@ pod 'PGShare', :path => '../BusinessFramework/PGShare', :inhibit_warnings => tru
 pod 'PGTabBarController', :path => '../BusinessFramework/PGTabBarController'
 pod 'PGPagedScrollView', :path => '../BusinessFramework/PGPagedScrollView', :inhibit_warnings => true
 pod 'PGStringParser', :path => '../BusinessFramework/PGStringParser', :inhibit_warnings => true
-pod 'PGAnalytics', :path => '../BusinessFramework/PGAnalytics', :inhibit_warnings => true
+pod 'PGAnalytics', :path => '../BusinessFramework/PGAnalytics'
 
 #base framework
 pod 'PGRestKit', :path => '../BaseFramework/PGRestKit', :inhibit_warnings => true

@@ -15,7 +15,7 @@
 
 @end
 
-@interface PGArticleParagraphInfoCell : UICollectionViewCell
+@interface PGArticleParagraphInfoCell : PGBaseCollectionViewCell
 
 @property (nonatomic, weak) id<PGArticleParagraphInfoCellDelegate> delegate;
 

@@ -15,8 +15,6 @@
 
 + (void)routeToLoginPage;
 
-+ (void)routeToHomePage;
-
 + (void)routeToTopicPage:(NSString *)topicId link:(NSString *)link;
 
 + (void)routeToScenarioPage:(NSString *)scenarioId link:(NSString *)link fromStorePage:(BOOL)fromStorePage;

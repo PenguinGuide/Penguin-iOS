@@ -155,6 +155,11 @@
     }
 }
 
+- (void)initAnalyticsKeys
+{
+    self.pageName = store_tab_view;
+}
+
 - (BOOL)shouldHideNavigationBar
 {
     return YES;
@@ -359,6 +364,7 @@
 {
     if (!_searchButton) {
         _searchButton = [[UIButton alloc] initWithFrame:CGRectMake(24, 35, 50, 50)];
+        _searchButton.eventName = search_button_clicked;
         [_searchButton setImage:[UIImage imageNamed:@"pg_home_search_button"] forState:UIControlStateNormal];
         [_searchButton setContentVerticalAlignment:UIControlContentVerticalAlignmentTop];
         [_searchButton setContentHorizontalAlignment:UIControlContentHorizontalAlignmentLeft];

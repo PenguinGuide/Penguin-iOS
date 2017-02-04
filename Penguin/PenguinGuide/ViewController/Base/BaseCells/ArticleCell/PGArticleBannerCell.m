@@ -14,15 +14,17 @@
 
 @interface PGArticleBannerCell () <UIScrollViewDelegate, UIGestureRecognizerDelegate>
 
-@property (nonatomic, strong) PGArticleBanner *article;
+@property (nonatomic, strong, readwrite) PGArticleBanner *article;
 
-@property (nonatomic, strong) PGBannerImageScrollView *bannerImageScrollView;
+@property (nonatomic, strong, readwrite) PGBannerImageScrollView *bannerImageScrollView;
 @property (nonatomic, strong, readwrite) FLAnimatedImageView *bannerImageView;
-@property (nonatomic, strong) UIPanGestureRecognizer *panGesture;
-@property (nonatomic, strong) UIImageView *collectImageView;
-@property (nonatomic, strong) UILabel *collectLabel;
+@property (nonatomic, strong, readwrite) UIPanGestureRecognizer *panGesture;
+@property (nonatomic, strong, readwrite) UIImageView *collectImageView;
+@property (nonatomic, strong, readwrite) UILabel *collectLabel;
 @property (nonatomic, strong, readwrite) UILabel *titleLabel;
 @property (nonatomic, strong, readwrite) UILabel *subtitleLabel;
+@property (nonatomic, strong, readwrite) UIImageView *articleNewImageView;
+@property (nonatomic, strong, readwrite) UIImageView *tagImageView;
 
 @property (nonatomic, assign) BOOL isScrollling;
 
@@ -46,6 +48,8 @@
     [self.contentView addSubview:self.collectImageView];
     [self.contentView addSubview:self.collectLabel];
     [self.contentView addSubview:self.bannerImageScrollView];
+    [self.contentView addSubview:self.articleNewImageView];
+    [self.contentView addSubview:self.tagImageView];
     [self.bannerImageScrollView addSubview:self.bannerImageView];
     
     UIView *dimView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.bannerImageView.pg_width, self.bannerImageView.pg_height)];
@@ -83,6 +87,22 @@
         self.backgroundColor = Theme.colorHighlight;
         self.collectLabel.text = @"收藏";
         self.collectImageView.image = [UIImage imageNamed:@"pg_home_article_collect"];
+    }
+    
+    if (self.article.isNew) {
+        self.articleNewImageView.hidden = NO;
+    } else {
+        self.articleNewImageView.hidden = YES;
+    }
+    
+    if (self.article.isRecommendGood) {
+        self.tagImageView.hidden = NO;
+        self.tagImageView.image = [UIImage imageNamed:@"pg_article_banner_good_tag"];
+    } else if (self.article.isRecommendResturant) {
+        self.tagImageView.hidden = NO;
+        self.tagImageView.image = [UIImage imageNamed:@"pg_article_banner_resturant_tag"];
+    } else {
+        self.tagImageView.hidden = YES;
     }
 }
 
@@ -194,6 +214,25 @@
         _subtitleLabel.textAlignment = NSTextAlignmentCenter;
     }
     return _subtitleLabel;
+}
+
+- (UIImageView *)articleNewImageView
+{
+    if (!_articleNewImageView) {
+        _articleNewImageView = [[UIImageView alloc] initWithFrame:CGRectMake(14, 0, 28, 59)];
+        _articleNewImageView.image = [UIImage imageNamed:@"pg_article_banner_new_tag"];
+        _articleNewImageView.hidden = YES;
+    }
+    return _articleNewImageView;
+}
+
+- (UIImageView *)tagImageView
+{
+    if (!_tagImageView) {
+        _tagImageView = [[UIImageView alloc] initWithFrame:CGRectMake(self.pg_width-14-82, 14, 82, 20)];
+        _tagImageView.hidden = YES;
+    }
+    return _tagImageView;
 }
 
 - (CGFloat)labelWidth:(NSString *)str

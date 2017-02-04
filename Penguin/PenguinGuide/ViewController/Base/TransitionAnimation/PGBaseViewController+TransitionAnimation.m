@@ -9,16 +9,15 @@
 #import "PGBaseViewController+TransitionAnimation.h"
 // view controllers
 #import "PGTabBarController.h"
-#import "PGHomeViewController.h"
 #import "PGExploreViewController.h"
 #import "PGCityGuideViewController.h"
 #import "PGCityGuideArticlesViewController.h"
 #import "PGArticleViewController.h"
 // transitions
-#import "PGHomeToArticleTransition.h"
 #import "PGExploreToArticleTransition.h"
 #import "PGCityGuideToArticleTransition.h"
-#import "PGArticleToHomeTransition.h"
+
+#import "PGArticleBannerCell.h"
 
 @implementation PGBaseViewController (TransitionAnimation)
 
@@ -33,15 +32,7 @@
             if ([toVC isKindOfClass:[PGArticleViewController class]]) {
                 PGArticleViewController *articleVC = (PGArticleViewController *)toVC;
                 if (!articleVC.disableTransition) {
-                    if ([tabbarController.selectedViewController isKindOfClass:[PGHomeViewController class]]) {
-                        PGHomeViewController *homeVC = (PGHomeViewController *)tabbarController.selectedViewController;
-                        PGArticleBannerCell *cell = (PGArticleBannerCell *)[homeVC.feedsCollectionView cellForItemAtIndexPath:[[homeVC.feedsCollectionView indexPathsForSelectedItems] firstObject]];
-                        if (cell) {
-                            return [[PGHomeToArticleTransition alloc] init];
-                        } else {
-                            return nil;
-                        }
-                    } else if ([tabbarController.selectedViewController isKindOfClass:[PGExploreViewController class]]) {
+                    if ([tabbarController.selectedViewController isKindOfClass:[PGExploreViewController class]]) {
                         PGExploreViewController *exploreVC = (PGExploreViewController *)tabbarController.selectedViewController;
                         NSIndexPath *selectedIndexPath = [exploreVC.feedsCollectionView indexPathsForSelectedItems].firstObject;
                         PGArticleBannerCell *cell = (PGArticleBannerCell *)[exploreVC.feedsCollectionView cellForItemAtIndexPath:selectedIndexPath];

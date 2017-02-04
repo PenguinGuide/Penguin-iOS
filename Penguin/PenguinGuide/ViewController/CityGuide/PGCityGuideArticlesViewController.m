@@ -109,6 +109,14 @@
 {
     PGArticleBannerCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:ArticleBannerCell forIndexPath:indexPath];
     
+    PGArticleBanner *articleBanner = self.viewModel.articlesArray[indexPath.item];
+    cell.eventName = article_banner_clicked;
+    cell.eventId = articleBanner.articleId;
+    cell.pageName = city_guide_tab_view;
+    if (self.cityId) {
+        cell.extraParams = @{@"city_id":self.cityId};
+    }
+    
     [cell setCellWithArticle:self.viewModel.articlesArray[indexPath.item] allowGesture:NO];
     
     return cell;

@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface PGMessageCell : UICollectionViewCell
+@interface PGMessageCell : PGBaseCollectionViewCell
 
 - (void)setCellWithDesc:(NSString *)desc count:(NSString *)count;
 

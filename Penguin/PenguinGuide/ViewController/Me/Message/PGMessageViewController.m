@@ -78,18 +78,21 @@
     PGMessageCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:MessageCell forIndexPath:indexPath];
     
     if (indexPath.item == 0) {
+        cell.eventName = my_system_messages_cell_clicked;
         if (self.viewModel.countsDict[@"1"]) {
             [cell setCellWithDesc:@"系 统 消 息" count:[NSString stringWithFormat:@"%ld", [self.viewModel.countsDict[@"1"] integerValue]]];
         } else {
             [cell setCellWithDesc:@"系 统 消 息" count:nil];
         }
     } else if (indexPath.item == 1) {
+        cell.eventName = my_reply_messages_cell_clicked;
         if (self.viewModel.countsDict[@"2"]) {
             [cell setCellWithDesc:@"收 到 的 回 复" count:[NSString stringWithFormat:@"%ld", [self.viewModel.countsDict[@"2"] integerValue]]];
         } else {
             [cell setCellWithDesc:@"收 到 的 回 复" count:nil];
         }
     } else if (indexPath.item == 2) {
+        cell.eventName = my_like_messages_cell_clicked;
         if (self.viewModel.countsDict[@"3"]) {
             [cell setCellWithDesc:@"收 到 的 赞" count:[NSString stringWithFormat:@"%ld", [self.viewModel.countsDict[@"3"] integerValue]]];
         } else {

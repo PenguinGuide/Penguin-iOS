@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface PGSearchRecommendsHistoryCell : UICollectionViewCell
+@interface PGSearchRecommendsHistoryCell : PGBaseCollectionViewCell
 
 - (void)setCellWithStr:(NSString *)str;
 

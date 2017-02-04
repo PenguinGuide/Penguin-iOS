@@ -94,6 +94,12 @@
     }
 }
 
+- (void)initAnalyticsKeys
+{
+    self.pageName = article_comments_view;
+    self.pageId = self.articleId;
+}
+
 #pragma mark - <UICollectionViewDataSource>
 
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView

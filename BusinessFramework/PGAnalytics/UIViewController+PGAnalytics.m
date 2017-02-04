@@ -6,7 +6,9 @@
 //  Copyright © 2016 Xinglian. All rights reserved.
 //
 
-static char PageView;
+static char PageName;
+static char PageTitle;
+static char PageId;
 
 #import "UIViewController+PGAnalytics.h"
 #import "PGAnalytics.h"
@@ -14,50 +16,82 @@ static char PageView;
 
 @implementation UIViewController (PGAnalytics)
 
-+ (void)load
++ (void)setupHook
 {
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        [PGAnalytics swizzleMethodWithClass:[self class] originalSelector:@selector(viewWillAppear:) swizzledSelector:@selector(swizzled_viewWillAppear:)];
-        [PGAnalytics swizzleMethodWithClass:[self class] originalSelector:@selector(viewWillDisappear:) swizzledSelector:@selector(swizzled_viewWillDisappear:)];
-    });
+    [UIViewController aspect_hookSelector:@selector(viewWillAppear:) withOptions:AspectPositionAfter usingBlock:^(id<AspectInfo> aspectInfo, BOOL animated) {
+        NSString *pageName = [self pageName:[aspectInfo instance]];
+        NSDictionary *pageParams = [self pageParams:[aspectInfo instance]];
+        
+        [PGAnalytics startPageView:pageName];
+        [PGAnalytics trackEvent:pageName params:pageParams];
+    } error:NULL];
+    
+    [UIViewController aspect_hookSelector:@selector(viewWillDisappear:) withOptions:AspectPositionAfter usingBlock:^(id<AspectInfo> aspectInfo, BOOL animated) {
+        NSString *pageName = [self pageName:[aspectInfo instance]];
+        [PGAnalytics endPageView:pageName];
+    } error:NULL];
 }
 
-- (void)swizzled_viewDidLoad
++ (NSString *)pageName:(id)instance
 {
-    
-}
-
-- (void)swizzled_viewWillAppear:(BOOL)animated
-{
-    [self swizzled_viewWillAppear:animated];
-    
-    NSString *className = NSStringFromClass([self class]);
-    if ([className containsString:@"ViewController"]) {
-        NSString *pageView = self.pageView?self.pageView:NSStringFromClass([self class]);
-        [PGAnalytics startPageView:pageView];
+    if ([instance isKindOfClass:[UIViewController class]] && [instance respondsToSelector:@selector(pageName)]) {
+        NSString *pageName = [instance pageName];
+        return pageName;
     }
+    return nil;
 }
 
-- (void)swizzled_viewWillDisappear:(BOOL)animated
++ (NSDictionary *)pageParams:(id)instance
 {
-    [self swizzled_viewWillDisappear:animated];
+    NSString *pageTitle;
+    NSString *pageId;
     
-    NSString *className = NSStringFromClass([self class]);
-    if ([className containsString:@"ViewController"]) {
-        NSString *pageView = self.pageView?self.pageView:NSStringFromClass([self class]);
-        [PGAnalytics endPageView:pageView];
+    if ([instance isKindOfClass:[UIViewController class]] && [instance respondsToSelector:@selector(pageTitle)]) {
+        pageTitle = [instance pageTitle];
     }
+    if ([instance isKindOfClass:[UIViewController class]] && [instance respondsToSelector:@selector(pageId)]) {
+        pageId = [instance pageId];
+    }
+    
+    NSMutableDictionary *params = [NSMutableDictionary new];
+    if (pageTitle && pageTitle.length > 0) {
+        params[page_title] = pageTitle;
+    }
+    if (pageId && pageId.length > 0) {
+        params[page_id] = pageId;
+    }
+    
+    return [NSDictionary dictionaryWithDictionary:params];
 }
 
-- (void)setPageView:(NSString *)pageView
+- (void)setPageName:(NSString *)pageName
 {
-    objc_setAssociatedObject(self, &PageView, pageView, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+    objc_setAssociatedObject(self, &PageName, pageName, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
 
-- (NSString *)pageView
+- (NSString *)pageName
 {
-    return objc_getAssociatedObject(self, &PageView);
+    return objc_getAssociatedObject(self, &PageName);
+}
+
+- (void)setPageTitle:(NSString *)pageTitle
+{
+    objc_setAssociatedObject(self, &PageTitle, pageTitle, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+}
+
+- (NSString *)pageTitle
+{
+    return objc_getAssociatedObject(self, &PageTitle);
+}
+
+- (void)setPageId:(NSString *)pageId
+{
+    objc_setAssociatedObject(self, &PageId, pageId, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+}
+
+- (NSString *)pageId
+{
+    return objc_getAssociatedObject(self, &PageId);
 }
 
 @end

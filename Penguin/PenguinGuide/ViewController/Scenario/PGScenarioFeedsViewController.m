@@ -84,6 +84,11 @@
 
 #pragma mark - <PGFeedsCollectionViewDelegate>
 
+- (NSString *)tabType
+{
+    return @"scenario";
+}
+
 - (NSArray *)feedsArray
 {
     return self.viewModel.feedsArray;

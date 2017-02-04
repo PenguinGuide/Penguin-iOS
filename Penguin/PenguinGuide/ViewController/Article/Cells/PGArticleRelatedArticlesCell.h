@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "PGPagedScrollView.h"
 
-@interface PGArticleRelatedArticlesCell : UICollectionViewCell
+@interface PGArticleRelatedArticlesCell : PGBaseCollectionViewCell
 
 - (void)setCellWithDataArray:(NSArray *)dataArray;
 + (CGSize)cellSize;

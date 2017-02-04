@@ -20,9 +20,8 @@
 #define StoreHeaderView @"StoreHeaderView"
 
 #import "PGFeedsCollectionView.h"
-#import "PGHomeRecommendsHeaderView.h"
 
-@interface PGFeedsCollectionView () <UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, PGHomeRecommendsHeaderViewDelegate, PGStoreRecommendsHeaderViewDelegate>
+@interface PGFeedsCollectionView () <UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, PGStoreRecommendsHeaderViewDelegate>
 
 @end
 
@@ -46,7 +45,6 @@
         [self registerClass:[PGSingleGoodBannerCell class] forCellWithReuseIdentifier:SingleGoodBannerCell];
         [self registerClass:[PGFlashbuyBannerCell class] forCellWithReuseIdentifier:FlashbuyBannerCell];
         
-        [self registerClass:[PGHomeRecommendsHeaderView class] forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:HomeHeaderView];
         [self registerClass:[PGExploreRecommendsHeaderView class] forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:ExploreHeaderView];
         [self registerClass:[PGStoreRecommendsHeaderView class] forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:StoreHeaderView];
         [self registerClass:[PGBaseCollectionViewFooterView class] forSupplementaryViewOfKind:UICollectionElementKindSectionFooter withReuseIdentifier:BaseCollectionViewFooterView];
@@ -107,6 +105,12 @@
             PGCarouselBannerCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:CarouselBannerCell forIndexPath:indexPath];
             
             PGCarouselBanner *carouselBanner = (PGCarouselBanner *)banner;
+            if ([[self.feedsDelegate tabType] isEqualToString:@"store"]) {
+                cell.pageName = store_tab_view;
+            } else if ([[self.feedsDelegate tabType] isEqualToString:@"scenario"]) {
+                cell.pageName = scenario_view;
+            }
+            
             [cell reloadBannersWithData:carouselBanner.banners];
             
             return cell;
@@ -114,6 +118,14 @@
             PGArticleBannerCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:ArticleBannerCell forIndexPath:indexPath];
             
             PGArticleBanner *articleBanner = (PGArticleBanner *)banner;
+            cell.eventName = article_banner_clicked;
+            cell.eventId = articleBanner.articleId;
+            if ([[self.feedsDelegate tabType] isEqualToString:@"store"]) {
+                cell.pageName = store_tab_view;
+            } else if ([[self.feedsDelegate tabType] isEqualToString:@"scenario"]) {
+                cell.pageName = scenario_view;
+            }
+            
             [cell setCellWithArticle:articleBanner allowGesture:self.allowGesture];
             
             return cell;
@@ -121,6 +133,12 @@
             PGGoodsCollectionBannerCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:GoodsCollectionBannerCell forIndexPath:indexPath];
             
             PGGoodsCollectionBanner *goodsCollectionBanner = (PGGoodsCollectionBanner *)banner;
+            if ([[self.feedsDelegate tabType] isEqualToString:@"store"]) {
+                cell.pageName = store_tab_view;
+            } else if ([[self.feedsDelegate tabType] isEqualToString:@"scenario"]) {
+                cell.pageName = scenario_view;
+            }
+            
             [cell setCellWithGoodsCollection:goodsCollectionBanner];
             
             return cell;
@@ -128,6 +146,14 @@
             PGTopicBannerCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:TopicBannerCell forIndexPath:indexPath];
             
             PGTopicBanner *topicBanner = (PGTopicBanner *)banner;
+            cell.eventName = topic_banner_clicked;
+            cell.eventId = topicBanner.link;
+            if ([[self.feedsDelegate tabType] isEqualToString:@"store"]) {
+                cell.pageName = store_tab_view;
+            } else if ([[self.feedsDelegate tabType] isEqualToString:@"scenario"]) {
+                cell.pageName = scenario_view;
+            }
+            
             [cell setCellWithTopic:topicBanner];
             
             return cell;
@@ -135,6 +161,14 @@
             PGSingleGoodBannerCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:SingleGoodBannerCell forIndexPath:indexPath];
             
             PGSingleGoodBanner *singleGoodBanner = (PGSingleGoodBanner *)banner;
+            cell.eventName = single_good_banner_clicked;
+            cell.eventId = singleGoodBanner.goodsId;
+            if ([[self.feedsDelegate tabType] isEqualToString:@"store"]) {
+                cell.pageName = store_tab_view;
+            } else if ([[self.feedsDelegate tabType] isEqualToString:@"scenario"]) {
+                cell.pageName = scenario_view;
+            }
+            
             [cell setCellWithSingleGood:singleGoodBanner];
             
             return cell;
@@ -142,6 +176,12 @@
             PGFlashbuyBannerCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:FlashbuyBannerCell forIndexPath:indexPath];
             
             PGFlashbuyBanner *flashbuyBanner = (PGFlashbuyBanner *)banner;
+            if ([[self.feedsDelegate tabType] isEqualToString:@"store"]) {
+                cell.pageName = store_tab_view;
+            } else if ([[self.feedsDelegate tabType] isEqualToString:@"scenario"]) {
+                cell.pageName = scenario_view;
+            }
+            
             [cell reloadBannersWithFlashbuy:flashbuyBanner];
             [cell countdown:flashbuyBanner];
             
@@ -156,13 +196,7 @@
 {
     if (indexPath.section == 0 && kind == UICollectionElementKindSectionHeader) {
         NSString *tabType = [self.feedsDelegate tabType];
-        if ([tabType isEqualToString:@"home"]) {
-            PGHomeRecommendsHeaderView *headerView = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:HomeHeaderView forIndexPath:indexPath];
-            headerView.delegate = self;
-            [headerView reloadBannersWithRecommendsArray:[self.feedsDelegate recommendsArray] channelsArray:[self.feedsDelegate iconsArray]];
-            
-            return headerView;
-        } else if ([tabType isEqualToString:@"explore"]) {
+        if ([tabType isEqualToString:@"explore"]) {
             self.exploreHeaderView = [collectionView dequeueReusableSupplementaryViewOfKind:kind withReuseIdentifier:ExploreHeaderView forIndexPath:indexPath];
             [self.exploreHeaderView reloadBannersWithRecommendsArray:[self.feedsDelegate recommendsArray]];
             

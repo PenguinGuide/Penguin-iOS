@@ -10,4 +10,6 @@
 
 @interface UIApplication (PGAnalytics)
 
++ (void)setupHook;
+
 @end

@@ -19,7 +19,7 @@
 
 @end
 
-@interface PGArticleBannerCell : UICollectionViewCell
+@interface PGArticleBannerCell : PGBaseCollectionViewCell
 
 @property (nonatomic, weak) id<PGArticleBannerCellDelegate> delegate;
 

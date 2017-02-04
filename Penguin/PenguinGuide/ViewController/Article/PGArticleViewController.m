@@ -98,7 +98,6 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view
-    self.pageView = @"文章页面";
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillChangeFrame:) name:UIKeyboardWillChangeFrameNotification object:nil];
     
@@ -345,6 +344,12 @@
     }
 }
 
+- (void)initAnalyticsKeys
+{
+    self.pageName = article_view;
+    self.pageId = self.articleId;
+}
+
 - (BOOL)shouldHideNavigationBar
 {
     return YES;
@@ -415,6 +420,13 @@
             } else if ([storage isKindOfClass:[PGParserVideoStorage class]]) {
                 PGParserVideoStorage *videoStorage = (PGParserVideoStorage *)storage;
                 PGArticleParagraphVideoCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:ArticleParagraphVideoCell forIndexPath:indexPath];
+                cell.eventName = article_video_banner_clicked;
+                cell.eventId = videoStorage.link;
+                cell.pageName = article_view;
+                if (self.articleId) {
+                    cell.extraParams = @{@"article_id":self.articleId};
+                }
+                
                 [cell setCellWithImage:videoStorage.image];
                 
                 return cell;
@@ -422,6 +434,12 @@
                 PGParserSingleGoodStorage *singleGoodStorage = (PGParserSingleGoodStorage *)storage;
                 
                 PGArticleParagraphSingleGoodCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:ArticleParagraphSingleGoodCell forIndexPath:indexPath];
+                cell.eventName = good_banner_clicked;
+                cell.eventId = singleGoodStorage.goodId;
+                cell.pageName = article_view;
+                if (self.articleId) {
+                    cell.extraParams = @{@"article_id":self.articleId};
+                }
                 
                 [cell setCellWithGood:singleGoodStorage.good];
                 
@@ -430,6 +448,9 @@
                 PGParserGoodsCollectionStorage *goodsCollectionStorage = (PGParserGoodsCollectionStorage *)storage;
                 
                 PGArticleParagraphGoodsCollectionCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:ArticleParagraphGoodsCollectionCell forIndexPath:indexPath];
+                if (self.articleId) {
+                    cell.extraParams = @{@"article_id":self.articleId};
+                }
                 
                 [cell reloadCellWithGoodsArray:goodsCollectionStorage.goodsArray];
                 
@@ -471,6 +492,10 @@
     if (indexPath.section == 2 && kind == UICollectionElementKindSectionFooter && self.viewModel.commentsArray.count > 0) {
         PGArticleCommentsFooterView *footerView = [collectionView dequeueReusableSupplementaryViewOfKind:kind withReuseIdentifier:ArticleCommentsFooterView forIndexPath:indexPath];
         [footerView.allCommentsButton addTarget:self action:@selector(allCommentsButtonClicked) forControlEvents:UIControlEventTouchUpInside];
+        footerView.allCommentsButton.eventName = article_all_comments_button_clicked;
+        if (self.articleId) {
+            footerView.allCommentsButton.eventId = self.articleId;
+        }
         return footerView;
     }
     
@@ -1090,22 +1115,38 @@
         [self.likeButton setImage:[UIImage imageNamed:@"pg_article_like"] forState:UIControlStateNormal];
         [self.likeButton addTarget:self action:@selector(likeButtonClicked) forControlEvents:UIControlEventTouchUpInside];
         [self.likeButton setTag:0];
+        self.likeButton.eventName = article_like_button_clicked;
+        if (self.articleId) {
+            self.likeButton.eventId = self.articleId;
+        }
         [_toolbar addSubview:self.likeButton];
         
         self.commentButton = [[UIButton alloc] initWithFrame:CGRectMake(self.likeButton.pg_left-50, 0, 50, 50)];
         [self.commentButton setImage:[UIImage imageNamed:@"pg_article_comment"] forState:UIControlStateNormal];
         [self.commentButton addTarget:self action:@selector(commentButtonClicked) forControlEvents:UIControlEventTouchUpInside];
+        self.commentButton.eventName = article_comment_button_clicked;
+        if (self.articleId) {
+            self.commentButton.eventId = self.articleId;
+        }
         [_toolbar addSubview:self.commentButton];
         
         self.collectButton = [[UIButton alloc] initWithFrame:CGRectMake(self.commentButton.pg_left-50, 0, 50, 50)];
         [self.collectButton setImage:[UIImage imageNamed:@"pg_article_collect"] forState:UIControlStateNormal];
         [self.collectButton addTarget:self action:@selector(collectButtonClicked) forControlEvents:UIControlEventTouchUpInside];
         [self.collectButton setTag:0];
+        self.collectButton.eventName = article_collect_button_clicked;
+        if (self.articleId) {
+            self.collectButton.eventId = self.articleId;
+        }
         [_toolbar addSubview:self.collectButton];
         
         self.shareButton = [[UIButton alloc] initWithFrame:CGRectMake(self.collectButton.pg_left-50, 0, 50, 50)];
         [self.shareButton setImage:[UIImage imageNamed:@"pg_article_share"] forState:UIControlStateNormal];
         [self.shareButton addTarget:self action:@selector(shareButtonClicked) forControlEvents:UIControlEventTouchUpInside];
+        self.shareButton.eventName = article_share_button_clicked;
+        if (self.articleId) {
+            self.shareButton.eventId = self.articleId;
+        }
         [_toolbar addSubview:self.shareButton];
         
         UIView *horizontalLine = [[UIView alloc] initWithFrame:CGRectMake(0, 0, UISCREEN_WIDTH, 1/[UIScreen mainScreen].scale)];

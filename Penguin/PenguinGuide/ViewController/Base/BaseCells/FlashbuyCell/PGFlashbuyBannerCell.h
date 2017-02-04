@@ -10,7 +10,7 @@
 #import "PGFlashbuyBanner.h"
 #import "PGPagedScrollView.h"
 
-@interface PGFlashbuyBannerCell : UICollectionViewCell
+@interface PGFlashbuyBannerCell : PGBaseCollectionViewCell
 
 @property (nonatomic, strong, readonly) PGPagedScrollView *bannersView;
 

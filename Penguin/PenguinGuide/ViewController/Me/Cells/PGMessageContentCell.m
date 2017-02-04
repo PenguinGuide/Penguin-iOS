@@ -74,7 +74,7 @@
 {
     if (!_messageLabel) {
         _messageLabel = [[UILabel alloc] initWithFrame:CGRectMake(50, 0, UISCREEN_WIDTH-50-30, 50)];
-        _messageLabel.font = Theme.fontMedium;
+        _messageLabel.font = Theme.fontLargeBold;
         _messageLabel.textColor = Theme.colorText;
     }
     return _messageLabel;

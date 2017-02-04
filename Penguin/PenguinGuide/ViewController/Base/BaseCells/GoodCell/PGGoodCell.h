@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "PGGood.h"
 
-@interface PGGoodCell : UICollectionViewCell
+@interface PGGoodCell : PGBaseCollectionViewCell
 
 - (void)setCellWithGood:(PGGood *)good;
 - (void)setGrayBackgroundCellWithGood:(PGGood *)good;

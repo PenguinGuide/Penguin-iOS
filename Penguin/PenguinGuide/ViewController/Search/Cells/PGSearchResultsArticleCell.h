@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "PGArticleBanner.h"
 
-@interface PGSearchResultsArticleCell : UICollectionViewCell
+@interface PGSearchResultsArticleCell : PGBaseCollectionViewCell
 
 - (void)setCellWithArticle:(PGArticleBanner *)article;
 

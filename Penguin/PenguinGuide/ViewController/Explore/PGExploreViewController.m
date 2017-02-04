@@ -155,6 +155,11 @@
     }
 }
 
+- (void)initAnalyticsKeys
+{
+    self.pageName = explore_tab_view;
+}
+
 - (BOOL)shouldHideNavigationBar
 {
     return YES;
@@ -236,6 +241,10 @@
         PGArticleBannerCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:ArticleCell forIndexPath:indexPath];
         
         PGArticleBanner *articleBanner = self.viewModel.articlesArray[indexPath.item];
+        cell.eventName = article_banner_clicked;
+        cell.eventId = articleBanner.articleId;
+        cell.pageName = explore_tab_view;
+        
         [cell setDelegate:self];
         [cell setCellWithArticle:articleBanner allowGesture:YES];
         

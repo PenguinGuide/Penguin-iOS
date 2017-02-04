@@ -92,6 +92,12 @@
     }
 }
 
+- (void)initAnalyticsKeys
+{
+    self.pageName = topic_view;
+    self.pageId = self.topicId;
+}
+
 #pragma mark - <UICollectionViewDataSource>
 
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView
@@ -135,18 +141,45 @@
     if (indexPath.section == 1) {
         if (self.viewModel.topic.articlesArray.count > 0) {
             PGArticleBannerCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:ArticleCell forIndexPath:indexPath];
-            [cell setCellWithArticle:self.viewModel.topic.articlesArray[indexPath.item] allowGesture:YES];
+            
+            PGArticleBanner *articleBanner = self.viewModel.topic.articlesArray[indexPath.item];
+            cell.eventName = article_banner_clicked;
+            cell.eventId = articleBanner.articleId;
+            cell.pageName = topic_view;
+            if (self.topicId) {
+                cell.extraParams = @{@"topic_id":self.topicId};
+            }
+            
+            [cell setCellWithArticle:articleBanner allowGesture:YES];
             
             return cell;
         } else if (self.viewModel.topic.goodsArray.count > 0) {
             PGGoodCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:GoodCell forIndexPath:indexPath];
-            [cell setCellWithGood:self.viewModel.topic.goodsArray[indexPath.item]];
+            
+            PGGood *good = self.viewModel.topic.goodsArray[indexPath.item];
+            cell.eventName = good_banner_clicked;
+            cell.eventId = good.goodId;
+            cell.pageName = topic_view;
+            if (self.topicId) {
+                cell.extraParams = @{@"topic_id":self.topicId};
+            }
+            
+            [cell setGrayBackgroundCellWithGood:good];
             
             return cell;
         }
     } else if (indexPath.section == 2) {
         PGGoodCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:GoodCell forIndexPath:indexPath];
-        [cell setGrayBackgroundCellWithGood:self.viewModel.topic.goodsArray[indexPath.item]];
+        
+        PGGood *good = self.viewModel.topic.goodsArray[indexPath.item];
+        cell.eventName = good_banner_clicked;
+        cell.eventId = good.goodId;
+        cell.pageName = topic_view;
+        if (self.topicId) {
+            cell.extraParams = @{@"topic_id":self.topicId};
+        }
+        
+        [cell setGrayBackgroundCellWithGood:good];
         
         return cell;
     }

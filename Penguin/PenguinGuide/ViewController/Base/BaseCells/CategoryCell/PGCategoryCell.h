@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "PGScenarioBanner.h"
 
-@interface PGCategoryCell : UICollectionViewCell
+@interface PGCategoryCell : PGBaseCollectionViewCell
 
 - (void)setCellWithCategoryIcon:(PGScenarioBanner *)icon;
 

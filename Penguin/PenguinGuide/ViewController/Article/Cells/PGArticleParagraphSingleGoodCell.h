@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "PGGood.h"
 
-@interface PGArticleParagraphSingleGoodCell : UICollectionViewCell
+@interface PGArticleParagraphSingleGoodCell : PGBaseCollectionViewCell
 
 - (void)setCellWithGood:(PGGood *)good;
 

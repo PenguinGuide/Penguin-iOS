@@ -25,10 +25,6 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     
-    [self.view addSubview:self.pagedController.view];
-    [self addChildViewController:self.pagedController];
-    [self.pagedController didMoveToParentViewController:self];
-    
     self.parentViewController.navigationItem.leftBarButtonItem = nil;
     self.parentViewController.navigationItem.titleView = nil;
     
@@ -83,6 +79,11 @@
     }
 }
 
+- (void)initAnalyticsKeys
+{
+    self.pageName = city_guide_tab_view;
+}
+
 - (BOOL)shouldHideNavigationBar
 {
     return YES;
@@ -118,22 +119,30 @@
 - (void)reloadAllCities
 {
     NSMutableArray *cityViewControllers = [NSMutableArray new];
-    NSMutableArray *cityNamesArray = [NSMutableArray new];
+    NSMutableArray *cityNames = [NSMutableArray new];
     PGCityGuideArticlesViewController *allCitiesVC = [[PGCityGuideArticlesViewController alloc] initWithCityId:@"all"];
     [cityViewControllers addObject:allCitiesVC];
-    [cityNamesArray addObject:@"全部"];
+    [cityNames addObject:@"全部"];
     
     for (PGCityGuideCity *city in self.viewModel.citiesArray) {
         if (city.cityName.length > 0 && city.cityId.length > 0) {
             PGCityGuideArticlesViewController *vc = [[PGCityGuideArticlesViewController alloc] initWithCityId:city.cityId];
             [cityViewControllers addObject:vc];
-            [cityNamesArray addObject:city.cityName];
+            [cityNames addObject:city.cityName];
         }
     }
     
-    [self.pagedController reloadWithViewControllers:[NSArray arrayWithArray:cityViewControllers]
-                                             titles:[NSArray arrayWithArray:cityNamesArray]
-                                  selectedViewClass:[PGCityGuideSegmentIndicator class]];
+    self.pagedController.viewControllers = [NSArray arrayWithArray:cityViewControllers];
+    self.pagedController.titles = [NSArray arrayWithArray:cityNames];
+    self.pagedController.SelectedViewClass = [PGCityGuideSegmentIndicator class];
+    
+    if (![self.childViewControllers containsObject:self.pagedController]) {
+        [self.view addSubview:self.pagedController.view];
+        [self addChildViewController:self.pagedController];
+        [self.pagedController didMoveToParentViewController:self];
+    } else {
+        [self.pagedController reload];
+    }
 }
 
 #pragma mark - <Lazy Init>
@@ -144,6 +153,7 @@
         _pagedController = [[PGPagedController alloc] init];
         _pagedController.view.frame = CGRectMake(0, 20, self.view.pg_width, self.view.pg_height-20);
         _pagedController.segmentHeight = 60.f;
+        _pagedController.SelectedViewClass = [PGCityGuideSegmentIndicator class];
     }
     return _pagedController;
 }

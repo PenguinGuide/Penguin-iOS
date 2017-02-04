@@ -110,7 +110,13 @@
         });
     }
     PGSingleGoodBannerCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:GoodCell forIndexPath:indexPath];
-    [cell setCellWithSingleGood:self.viewModel.goodsArray[indexPath.item]];
+    
+    PGSingleGoodBanner *good = self.viewModel.goodsArray[indexPath.item];
+    cell.eventName = good_banner_clicked;
+    cell.eventId = good.goodsId;
+    cell.pageName = search_results_view;
+    
+    [cell setCellWithSingleGood:good];
     
     return cell;
 }

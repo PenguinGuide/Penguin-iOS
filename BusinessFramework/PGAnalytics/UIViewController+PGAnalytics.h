@@ -10,6 +10,13 @@
 
 @interface UIViewController (PGAnalytics)
 
-@property (nonatomic, strong) NSString *pageView;
+// event
+@property (nonatomic, strong) NSString *pageName;
+
+// params
+@property (nonatomic, strong) NSString *pageTitle;
+@property (nonatomic, strong) NSString *pageId;
+
++ (void)setupHook;
 
 @end

@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface PGArticleParagraphGoodsCollectionCell : UICollectionViewCell
+@interface PGArticleParagraphGoodsCollectionCell : PGBaseCollectionViewCell
 
 - (void)reloadCellWithGoodsArray:(NSArray *)goodsArray;
 

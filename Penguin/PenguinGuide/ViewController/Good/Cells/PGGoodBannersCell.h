@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "PGPagedScrollView.h"
 
-@interface PGGoodBannersCell : UICollectionViewCell
+@interface PGGoodBannersCell : PGBaseCollectionViewCell
 
 @property (nonatomic, strong, readonly) PGPagedScrollView *pagedScrollView;
 

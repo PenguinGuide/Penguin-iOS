@@ -94,6 +94,11 @@
     }
 }
 
+- (void)initAnalyticsKeys
+{
+    self.pageName = search_recommends_view;
+}
+
 - (BOOL)shouldHideNavigationBar
 {
     return YES;
@@ -127,12 +132,16 @@
 {
     if (indexPath.section == 0) {
         PGTagCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:TagCell forIndexPath:indexPath];
+        cell.eventName = search_recommend_tag_clicked;
+        cell.eventId = self.viewModel.recommends[indexPath.item];
         
         [cell setCellWithKeyword:self.viewModel.recommends[indexPath.item]];
         
         return cell;
     } else if (indexPath.section == 1) {
         PGSearchRecommendsHistoryCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:HistoryCell forIndexPath:indexPath];
+        cell.eventName = search_history_cell_clicked;
+        cell.eventId = self.viewModel.historyArray[indexPath.item];
         
         [cell setCellWithStr:self.viewModel.historyArray[indexPath.item]];
         
@@ -196,7 +205,7 @@
 - (UIEdgeInsets)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout insetForSectionAtIndex:(NSInteger)section
 {
     if (section == 0) {
-        return UIEdgeInsetsMake(10, 15, 10, 15);
+        return UIEdgeInsetsMake(0, 15, 10, 15);
     } else {
         return UIEdgeInsetsZero;
     }
@@ -251,6 +260,11 @@
 
 #pragma mark - <UITextFieldDelegate>
 
+- (void)textFieldDidBeginEditing:(UITextField *)textField
+{
+    [PGAnalytics trackEvent:search_textfield_clicked params:nil];
+}
+
 - (BOOL)textFieldShouldReturn:(UITextField *)textField
 {
     if (textField.text.length > 0) {
@@ -261,6 +275,8 @@
         [wordsArray insertObject:textField.text atIndex:0];
         self.viewModel.historyArray = [NSArray arrayWithArray:wordsArray];
         [PGGlobal.cache putObject:self.viewModel.historyArray forKey:@"search_keywords" intoTable:@"Search"];
+        
+        [PGAnalytics trackEvent:search_keyboard_button_clicked params:@{event_id:textField.text}];
         
         PGSearchResultsViewController *searchResultsVC = [[PGSearchResultsViewController alloc] initWithKeyword:textField.text];
         [self.navigationController pushViewController:searchResultsVC animated:YES];
@@ -283,7 +299,7 @@
 - (UICollectionView *)searchCollectionView {
 	if(_searchCollectionView == nil) {
         UICollectionViewLeftAlignedLayout *layout = [UICollectionViewLeftAlignedLayout new];
-		_searchCollectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(0, 64, UISCREEN_WIDTH, UISCREEN_HEIGHT-64) collectionViewLayout:layout];
+		_searchCollectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(0, self.searchTextFieldContainerView.pg_bottom, UISCREEN_WIDTH, UISCREEN_HEIGHT-64) collectionViewLayout:layout];
         _searchCollectionView.backgroundColor = [UIColor whiteColor];
         _searchCollectionView.dataSource = self;
         _searchCollectionView.delegate = self;
@@ -297,7 +313,7 @@
 
 - (UIView *)searchTextFieldContainerView {
 	if(_searchTextFieldContainerView == nil) {
-		_searchTextFieldContainerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, UISCREEN_WIDTH, 64)];
+		_searchTextFieldContainerView = [[UIView alloc] initWithFrame:CGRectMake(0, 20, UISCREEN_WIDTH, 64)];
         _searchTextFieldContainerView.backgroundColor = [UIColor whiteColor];
 	}
 	return _searchTextFieldContainerView;
@@ -305,7 +321,7 @@
 
 - (UITextField *)searchTextField {
     if(_searchTextField == nil) {
-        _searchTextField = [[PGSearchTextField alloc] initWithFrame:CGRectMake(15, 25, UISCREEN_WIDTH-15-50, 30)];
+        _searchTextField = [[PGSearchTextField alloc] initWithFrame:CGRectMake(15, 15, UISCREEN_WIDTH-15-50, 30)];
         _searchTextField.placeholder = @"请输入关键词";
         _searchTextField.returnKeyType = UIReturnKeySearch;
         _searchTextField.delegate = self;
@@ -315,7 +331,7 @@
 
 - (UIButton *)cancelButton {
     if(_cancelButton == nil) {
-        _cancelButton = [[UIButton alloc] initWithFrame:CGRectMake(UISCREEN_WIDTH-50, 25, 50, 30)];
+        _cancelButton = [[UIButton alloc] initWithFrame:CGRectMake(UISCREEN_WIDTH-50, 15, 50, 30)];
         [_cancelButton.titleLabel setFont:Theme.fontSmallBold];
         [_cancelButton setTitleColor:Theme.colorText forState:UIControlStateNormal];
         [_cancelButton setTitle:@"取 消" forState:UIControlStateNormal];

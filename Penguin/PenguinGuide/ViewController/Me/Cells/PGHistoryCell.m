@@ -50,7 +50,7 @@
     
     CGSize size = [history.content.content boundingRectWithSize:CGSizeMake(UISCREEN_WIDTH-50-24, 1000)
                                                         options:NSStringDrawingUsesLineFragmentOrigin
-                                                     attributes:@{NSFontAttributeName:Theme.fontSmall}
+                                                     attributes:@{NSFontAttributeName:Theme.fontMediumBold}
                                                         context:nil].size;
     self.contentLabel.pg_height = size.height;
     self.containerView.frame = CGRectMake(24, self.contentLabel.pg_bottom+10, UISCREEN_WIDTH-48, 80);
@@ -66,14 +66,14 @@
                                                      attributes:@{NSFontAttributeName:Theme.fontSmall}
                                                         context:nil].size;
     
-    return CGSizeMake(UISCREEN_WIDTH, 20+14+5+size.height+10+80+20);
+    return CGSizeMake(UISCREEN_WIDTH, 20+18+5+size.height+10+80+20);
 }
 
 - (UILabel *)dateLabel
 {
     if (!_dateLabel) {
-        _dateLabel = [[UILabel alloc] initWithFrame:CGRectMake(36, 20, 150, 16)];
-        _dateLabel.font = Theme.fontMedium;
+        _dateLabel = [[UILabel alloc] initWithFrame:CGRectMake(36, 20, 150, 18)];
+        _dateLabel.font = Theme.fontLargeBold;
         _dateLabel.textColor = Theme.colorText;
     }
     return _dateLabel;
@@ -84,7 +84,7 @@
     if (!_contentLabel) {
         _contentLabel = [[UILabel alloc] initWithFrame:CGRectMake(36, self.dateLabel.pg_bottom+5, UISCREEN_WIDTH-36-24, 0)];
         _contentLabel.numberOfLines = 0;
-        _contentLabel.font = Theme.fontSmall;
+        _contentLabel.font = Theme.fontMediumBold;
         _contentLabel.textColor = Theme.colorText;
     }
     return _contentLabel;
@@ -113,7 +113,7 @@
 {
     if (!_articleTitleLabel) {
         _articleTitleLabel = [[UILabel alloc] initWithFrame:CGRectMake(70, (80-42)/2, self.containerView.pg_width-70-15, 42)];
-        _articleTitleLabel.font = Theme.fontMedium;
+        _articleTitleLabel.font = Theme.fontLargeBold;
         _articleTitleLabel.textColor = Theme.colorText;
     }
     return _articleTitleLabel;

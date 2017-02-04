@@ -119,6 +119,12 @@
     }
 }
 
+- (void)initAnalyticsKeys
+{
+    self.pageName = good_view;
+    self.pageId = self.goodId;
+}
+
 - (BOOL)shouldHideNavigationBar
 {
     return YES;

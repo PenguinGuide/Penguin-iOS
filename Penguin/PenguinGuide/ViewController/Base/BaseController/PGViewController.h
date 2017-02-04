@@ -13,5 +13,6 @@
 @optional
 
 - (void)reloadView;
+- (void)initAnalyticsKeys;
 
 @end

@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface PGArticleParagraphFooterCell : UICollectionViewCell
+@interface PGArticleParagraphFooterCell : PGBaseCollectionViewCell
 
 + (CGSize)cellSize;
 

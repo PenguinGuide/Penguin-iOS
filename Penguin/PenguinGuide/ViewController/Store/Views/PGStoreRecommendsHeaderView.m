@@ -70,6 +70,10 @@
 - (void)imageViewDidSelect:(NSInteger)index
 {
     PGImageBanner *banner = self.dataArray[index];
+    if (banner.bannerId) {
+        [PGAnalytics trackEvent:recommends_banner_clicked params:@{event_id:banner.bannerId,
+                                                                   page_name:store_tab_view}];
+    }
     [[PGRouter sharedInstance] openURL:banner.link];
 }
 
@@ -103,6 +107,10 @@
     PGCategoryCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:CategoryCell forIndexPath:indexPath];
     
     PGScenarioBanner *icon = self.categoriesArray[indexPath.item];
+    cell.eventName = scenario_banner_clicked;
+    cell.eventId = icon.scenarioId;
+    cell.pageName = store_tab_view;
+    
     [cell setCellWithCategoryIcon:icon];
     
     return cell;

@@ -81,6 +81,10 @@ static NSString *const GoodCell = @"GoodCell";
     PGTopicGoodCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:GoodCell forIndexPath:indexPath];
     
     PGGood *good = self.goodsArray[indexPath.item];
+    cell.eventName = topic_banner_good_clicked;
+    cell.eventId = good.goodId;
+    cell.pageName = self.pageName;
+    
     [cell setCellWithGood:good];
     
     return cell;

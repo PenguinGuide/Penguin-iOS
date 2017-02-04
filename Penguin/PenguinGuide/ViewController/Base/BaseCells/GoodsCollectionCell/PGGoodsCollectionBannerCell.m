@@ -70,6 +70,10 @@ static NSString *const GoodCell = @"GoodCell";
     PGGoodsCollectionGoodCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:GoodCell forIndexPath:indexPath];
     
     PGGood *good = self.goodsArray[indexPath.item];
+    cell.eventName = goods_collection_good_clicked;
+    cell.eventId = good.goodId;
+    cell.pageName = self.pageName;
+    
     [cell setCellWithGood:good];
     
     return cell;

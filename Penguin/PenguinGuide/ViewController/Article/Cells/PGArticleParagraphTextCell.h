@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "PGParserTextStorage.h"
 
-@interface PGArticleParagraphTextCell : UICollectionViewCell
+@interface PGArticleParagraphTextCell : PGBaseCollectionViewCell
 
 - (void)setCellWithStr:(NSAttributedString *)attrStr;
 
