@@ -8,10 +8,12 @@
 
 #import <UIKit/UIKit.h>
 #import "PGSingleGoodBanner.h"
+#import "PGGood.h"
 
 @interface PGSingleGoodBannerCell : PGBaseCollectionViewCell
 
 - (void)setCellWithSingleGood:(PGSingleGoodBanner *)singleGood;
+- (void)setCellWithGood:(PGGood *)good;
 
 + (CGSize)cellSize;
 

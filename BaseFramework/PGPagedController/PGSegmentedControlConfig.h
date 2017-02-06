@@ -40,20 +40,17 @@
  */
 @property (nonatomic, strong) UIFont *textFont;
 
-@property (nonatomic, assign) CGFloat padding;
-@property (nonatomic, assign) CGFloat margin;
-
 /**
  Left-most segment distance to left bounds, right-most segment distance to right bounds
  
- Default is 15.f
+ Default is 20.f
  */
 @property (nonatomic, assign) CGFloat segmentMargin;
 
 /**
  Gap distance for segments
  
- Default is 15.f
+ Default is 25.f
  */
 @property (nonatomic, assign) CGFloat segmentPadding;
 

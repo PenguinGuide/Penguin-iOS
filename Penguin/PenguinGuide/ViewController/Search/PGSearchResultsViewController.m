@@ -8,7 +8,7 @@
 
 #import "PGSearchResultsViewController.h"
 
-#import "PGPagedController.h"
+#import "UIViewController+PGPagedController.h"
 #import "PGSearchResultsArticlesViewController.h"
 #import "PGSearchResultsGoodsViewController.h"
 
@@ -47,19 +47,18 @@
     
     [self.view addSubview:self.headerView];
     
-    self.pagedController = [[PGPagedController alloc] init];
-    self.pagedController.backgroundColor = [UIColor whiteColor];
-    self.pagedController.equalWidth = YES;
-    self.pagedController.disableScrolling = YES;
-    
-    self.pagedController.view.frame = CGRectMake(0, 60, UISCREEN_WIDTH, UISCREEN_HEIGHT-60);
-    [self.view addSubview:self.pagedController.view];
-    [self addChildViewController:self.pagedController];
-    [self.pagedController didMoveToParentViewController:self];
-    
     self.articlesVC = [[PGSearchResultsArticlesViewController alloc] initWithKeyword:self.keyword];
     self.goodsVC = [[PGSearchResultsGoodsViewController alloc] initWithKeyword:self.keyword];
-    //[self.pagedController reloadWithViewControllers:@[self.articlesVC, self.goodsVC] titles:@[@"文 章", @"商 品"] selectedViewClass:[PGCityGuideSegmentIndicator class]];
+    
+    self.pagedController = [[PGPagedController alloc] initWithViewControllers:@[self.articlesVC, self.goodsVC] titles:@[@"文 章", @"商 品"] segmentHeight:60.f];
+    self.pagedController.view.frame = CGRectMake(0, 60, UISCREEN_WIDTH, UISCREEN_HEIGHT-60);
+    self.pagedController.disableScrolling = YES;
+    
+    [self addPagedController:self.pagedController config:^(PGSegmentedControlConfig *config) {
+        config.SelectedViewClass = [PGCityGuideSegmentIndicator class];
+        config.equalWidth = YES;
+        config.backgroundColor = [UIColor whiteColor];
+    }];
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -109,24 +108,18 @@
         [self.goodsVC removeFromParentViewController];
         [self.goodsVC didMoveToParentViewController:nil];
         
-        [self.pagedController.view removeFromSuperview];
-        [self.pagedController removeFromParentViewController];
-        [self.pagedController didMoveToParentViewController:nil];
-        
-        self.pagedController = [[PGPagedController alloc] init];
-        self.pagedController.backgroundColor = [UIColor whiteColor];
-        self.pagedController.equalWidth = YES;
-        self.pagedController.disableScrolling = YES;
-        
-        self.pagedController.view.frame = CGRectMake(0, 60, UISCREEN_WIDTH, UISCREEN_HEIGHT-60);
-        [self.view addSubview:self.pagedController.view];
-        [self addChildViewController:self.pagedController];
-        [self.pagedController didMoveToParentViewController:self];
-        
         self.articlesVC = [[PGSearchResultsArticlesViewController alloc] initWithKeyword:self.keyword];
         self.goodsVC = [[PGSearchResultsGoodsViewController alloc] initWithKeyword:self.keyword];
         
-        //[self.pagedController reloadWithViewControllers:@[self.articlesVC, self.goodsVC] titles:@[@"文 章", @"商 品"] selectedViewClass:[PGCityGuideSegmentIndicator class]];
+        self.pagedController = [[PGPagedController alloc] initWithViewControllers:@[self.articlesVC, self.goodsVC] titles:@[@"文 章", @"商 品"] segmentHeight:60.f];
+        self.pagedController.view.frame = CGRectMake(0, 60, UISCREEN_WIDTH, UISCREEN_HEIGHT-60);
+        self.pagedController.disableScrolling = YES;
+        
+        [self addPagedController:self.pagedController config:^(PGSegmentedControlConfig *config) {
+            config.SelectedViewClass = [PGCityGuideSegmentIndicator class];
+            config.equalWidth = YES;
+            config.backgroundColor = [UIColor whiteColor];
+        }];
     }
 }
 

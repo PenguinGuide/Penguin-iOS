@@ -13,7 +13,7 @@
 #define GoodsCell @"GoodsCell"
 
 #import "PGScenarioViewController.h"
-#import "PGPagedController.h"
+#import "UIViewController+PGPagedController.h"
 #import "PGScenarioFeedsViewController.h"
 #import "PGScenarioGoodsViewController.h"
 #import "PGScenarioViewModel.h"
@@ -53,10 +53,6 @@
     
     self.automaticallyAdjustsScrollViewInsets = NO;
     
-    [self.view addSubview:self.pagedController.view];
-    [self addChildViewController:self.pagedController];
-    [self.pagedController didMoveToParentViewController:self];
-    
     self.viewModel = [[PGScenarioViewModel alloc] initWithAPIClient:self.apiClient];
     
     PGWeakSelf(self);
@@ -76,9 +72,16 @@
             weakself.feedsVC.delegate = weakself;
             weakself.goodsVC.delegate = weakself;
             
-//            [weakself.pagedController reloadWithViewControllers:@[weakself.feedsVC, weakself.goodsVC]
-//                                                         titles:@[weakself.isFromStorePage?@"教 你 买":@"边 读 边 选", @"商 品"]
-//                                              selectedViewClass:[PGCityGuideSegmentIndicator class]];
+            weakself.pagedController = [[PGPagedController alloc] initWithViewControllers:@[weakself.feedsVC, weakself.goodsVC]
+                                                                                   titles:@[weakself.isFromStorePage?@"教 你 买":@"边 读 边 选", @"商 品"]
+                                                                            segmentHeight:60.f];
+            weakself.pagedController.disableScrolling = YES;
+            weakself.pagedController.view.frame = CGRectMake(0, 64, self.view.pg_width, UISCREEN_HEIGHT-64);
+            
+            [weakself addPagedController:weakself.pagedController config:^(PGSegmentedControlConfig *config) {
+                config.SelectedViewClass = [PGCityGuideSegmentIndicator class];
+                config.equalWidth = YES;
+            }];
         }
         [weakself dismissLoading];
     }];
@@ -159,20 +162,6 @@
 - (void)dismissPageLoading
 {
     [self dismissLoading];
-}
-
-#pragma mark - <Lazy Init>
-
-- (PGPagedController *)pagedController
-{
-    if (!_pagedController) {
-        _pagedController = [[PGPagedController alloc] init];
-        _pagedController.equalWidth = YES;
-        _pagedController.disableScrolling = YES;
-        _pagedController.view.frame = CGRectMake(0, 64, self.view.pg_width, UISCREEN_HEIGHT-64);
-        _pagedController.segmentHeight = 60.f;
-    }
-    return _pagedController;
 }
 
 - (void)didReceiveMemoryWarning {

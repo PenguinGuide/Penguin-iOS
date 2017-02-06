@@ -8,9 +8,13 @@
 
 #import <UIKit/UIKit.h>
 
+@class PGSegmentedControl;
+
 @interface PGPagedController : UIViewController
 
 @property (nonatomic, assign) BOOL disableScrolling;
+
+@property (nonatomic, strong) PGSegmentedControl *segmentedControl;
 
 @property (nonatomic, strong, readonly) NSArray *viewControllers;
 @property (nonatomic, strong, readonly) NSArray *titles;

@@ -132,7 +132,6 @@
         }
     }
     
-    
     self.pagedController = [[PGPagedController alloc] initWithViewControllers:[NSArray arrayWithArray:cityViewControllers]
                                                                        titles:[NSArray arrayWithArray:cityNames]
                                                                 segmentHeight:60.f];

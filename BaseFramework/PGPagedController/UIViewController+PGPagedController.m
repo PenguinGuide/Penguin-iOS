@@ -24,32 +24,31 @@ static char PagedController;
 
 - (void)addPagedController:(PGPagedController *)pagedController config:(void (^)(PGSegmentedControlConfig *config))configBlock
 {
-    if (![self.childViewControllers containsObject:pagedController]) {
-        self.pagedController = pagedController;
-        
-        PGSegmentedControlConfig *config = [[PGSegmentedControlConfig alloc] init];
-        configBlock(config);
-        
-        // why use UIControl: http://www.tuicool.com/articles/B73AFj
-        self.segmentedControl = [[PGSegmentedControl alloc] initWithSegmentTitles:self.pagedController.titles];
-        self.segmentedControl.segmentTitles = self.pagedController.titles;
-        self.segmentedControl.SelectedViewClass = config.SelectedViewClass;
-        self.segmentedControl.pagedController = self.segmentedControl;
-        self.segmentedControl.backgroundColor = config.backgroundColor;
-        self.segmentedControl.textColor = config.textColor;
-        self.segmentedControl.selectedTextColor = config.selectedTextColor;
-        self.segmentedControl.textFont = config.textFont;
-        self.segmentedControl.padding = config.padding;
-        self.segmentedControl.margin = config.margin;
-        self.segmentedControl.equalWidth = config.equalWidth;
-        
-        self.segmentedControl.frame = CGRectMake(0, 0, self.view.frame.size.width, pagedController.segmentHeight);
-        [self.pagedController.view addSubview:self.segmentedControl];
-        
-        [self.view addSubview:self.pagedController.view];
-        [self addChildViewController:self.pagedController];
-        [self.pagedController didMoveToParentViewController:self];
+    [self.segmentedControl removeFromSuperview];
+    for (UIViewController *vc in self.childViewControllers) {
+        [vc.view removeFromSuperview];
+        [vc removeFromParentViewController];
+        [vc didMoveToParentViewController:nil];
     }
+    
+    self.segmentedControl = [[PGSegmentedControl alloc] initWithSegmentTitles:pagedController.titles];
+    self.pagedController = pagedController;
+    self.pagedController.segmentedControl = self.segmentedControl;
+    
+    PGSegmentedControlConfig *config = [[PGSegmentedControlConfig alloc] init];
+    configBlock(config);
+    
+    // why use UIControl: http://www.tuicool.com/articles/B73AFj
+    self.segmentedControl.segmentTitles = self.pagedController.titles;
+    self.segmentedControl.pagedController = self.pagedController;
+    self.segmentedControl.config = config;
+    
+    self.segmentedControl.frame = CGRectMake(0, 0, self.view.frame.size.width, pagedController.segmentHeight);
+    [self.pagedController.view addSubview:self.segmentedControl];
+    
+    [self.view addSubview:self.pagedController.view];
+    [self addChildViewController:self.pagedController];
+    [self.pagedController didMoveToParentViewController:self];
 }
 
 - (void)setPagedController:(PGPagedController *)pagedController

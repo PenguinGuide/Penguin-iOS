@@ -14,7 +14,6 @@
 
 @interface PGPagedController () <UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout>
 
-@property (nonatomic, strong) PGSegmentedControl *segmentedControl;
 @property (nonatomic, strong) UICollectionView *pagerCollectionView;
 
 @property (nonatomic, strong, readwrite) NSArray *viewControllers;
@@ -46,17 +45,6 @@
     
     [self.view addSubview:self.pagerCollectionView];
 }
-
-//- (void)viewDidLayoutSubviews
-//{
-//    [super viewDidLayoutSubviews];
-//    
-//    if (!self.pagerCollectionView.superview) {
-//        // NOTE: if put these codes in viewDidLoad, self.view.frame.size.height will be the height of the screen rather than the real height(subview)
-//        [self.view addSubview:self.segmentedControl];
-//        [self.view addSubview:self.pagerCollectionView];
-//    }
-//}
 
 - (void)reload
 {
@@ -110,7 +98,7 @@
     }
     
     UIViewController *vc = self.viewControllers[indexPath.item];
-    vc.view.frame = CGRectMake(0, 0, collectionView.frame.size.width, self.view.frame.size.height-self.segmentHeight);
+    vc.view.frame = CGRectMake(0, 0, collectionView.frame.size.width, collectionView.frame.size.height);
     vc.view.tag = PagerTag;
     [cell.contentView addSubview:vc.view];
     
@@ -119,7 +107,7 @@
 
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    return CGSizeMake(self.view.frame.size.width, self.view.frame.size.height-self.segmentHeight);
+    return CGSizeMake(self.view.frame.size.width, collectionView.frame.size.height);
 }
 
 - (CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout minimumLineSpacingForSectionAtIndex:(NSInteger)section

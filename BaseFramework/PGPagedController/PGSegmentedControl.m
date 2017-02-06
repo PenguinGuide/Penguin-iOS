@@ -30,10 +30,10 @@
 @property (nonatomic, strong) PGSegmentedScrollView *scrollView;
 @property (nonatomic, strong) UIView *indicatorView;
 @property (nonatomic, strong) NSMutableArray *labels;
-@property (nonatomic, assign) NSInteger currentPage;
 
 @property (nonatomic, assign) NSInteger selectedSegmentIndex;
 @property (nonatomic, strong) NSArray *segmentWidthsArray;
+@property (nonatomic, strong) NSArray *segmentHeightsArray;
 @property (nonatomic, assign) CGFloat segmentControlWidth;
 
 @end
@@ -58,20 +58,17 @@
     [self setNeedsDisplay]; // call drawRect，drawRect方便视图重绘
 }
 
+- (void)scrollToPage:(NSInteger)page
+{
+    if (self.selectedSegmentIndex != page) {
+        self.selectedSegmentIndex = page;
+        
+        [self setNeedsDisplay];
+    }
+}
+
 - (void)initSegmentControl
 {
-    // default attribute values
-    self.backgroundColor = [UIColor whiteColor];
-    
-    self.textColor = [UIColor colorWithRed:175.f/256.f green:189.f/256.f blue:189.f/256.f alpha:1.f];
-    self.selectedTextColor = [UIColor blackColor];
-    self.textFont = [UIFont systemFontOfSize:16.f weight:UIFontWeightBold];
-    
-    self.segmentMargin = 15.f;
-    self.segmentPadding = 15.f;
-    
-    self.equalWidth = NO;
-    
     self.selectedSegmentIndex = 0;
     
     // scroll view
@@ -93,7 +90,7 @@
 - (void)drawRect:(CGRect)rect
 {
     // otherwise background will be clear
-    [self.backgroundColor setFill];
+    [self.config.backgroundColor setFill];
     UIRectFill([self bounds]);
     
     // remove all sublayers to avoid drawing images over existing ones
@@ -102,7 +99,7 @@
     __weak typeof(self) weakself = self;
     [self.segmentTitles enumerateObjectsUsingBlock:^(id title, NSUInteger idx, BOOL * _Nonnull stop) {
         CGSize titleSize = [weakself titleSizeAtIndex:idx];
-        CGFloat x = weakself.segmentMargin+weakself.segmentPadding*idx;
+        CGFloat x = weakself.config.segmentMargin+weakself.config.segmentPadding*idx;
         for (int i = 0; i < weakself.segmentWidthsArray.count; i++) {
             if (i == idx) {
                 break;
@@ -111,9 +108,11 @@
             x += [segmentWidth floatValue];
         }
         
+        NSNumber *currentSegmentWidth = weakself.segmentWidthsArray[idx];
+        
         CATextLayer *titleLayer = [CATextLayer layer];
         NSAttributedString *titleAttrStr = [weakself titleAttrStrAtIndex:idx];
-        titleLayer.frame = CGRectMake(x, (weakself.frame.size.height-titleAttrStr.size.height)/2, titleSize.width, weakself.frame.size.height);
+        titleLayer.frame = CGRectMake(x, (weakself.frame.size.height-titleAttrStr.size.height)/2, [currentSegmentWidth floatValue], titleAttrStr.size.height);
         titleLayer.string = [weakself titleAttrStrAtIndex:idx];
         titleLayer.alignmentMode = kCAAlignmentCenter;
         titleLayer.contentsScale = [[UIScreen mainScreen] scale];
@@ -123,23 +122,76 @@
         
         [weakself.scrollView.layer addSublayer:titleLayer];
     }];
+    
+    // add indicator view
+    if (!self.indicatorView) {
+        self.indicatorView = [[self.config.SelectedViewClass alloc] init];
+        self.indicatorView.backgroundColor = [UIColor clearColor];
+    }
+    if (self.selectedSegmentIndex < self.segmentWidthsArray.count) {
+        CGFloat totalX = 0.f;
+        if (self.config.equalWidth) {
+            NSNumber *segmentWidth = weakself.segmentWidthsArray[weakself.selectedSegmentIndex];
+            totalX = self.config.segmentMargin+[segmentWidth floatValue]*(self.selectedSegmentIndex+1)+self.config.segmentPadding*self.selectedSegmentIndex;
+        } else {
+            for (int i = 0; i <= self.selectedSegmentIndex; i++) {
+                NSNumber *segmentWidth = self.segmentWidthsArray[i];
+                if (i == 0) {
+                    totalX = self.config.segmentMargin+[segmentWidth floatValue];
+                } else {
+                    totalX = totalX + self.config.segmentPadding+[segmentWidth floatValue];
+                }
+            }
+        }
+        __weak typeof(self) weakself = self;
+        __block CGSize currentTitleSize = [self titleSizeAtIndex:self.selectedSegmentIndex];
+        [UIView animateWithDuration:0.2f
+                              delay:0.f
+                            options:UIViewAnimationOptionCurveEaseInOut
+                         animations:^{
+                             NSNumber *currentSegmentWidth = weakself.segmentWidthsArray[weakself.selectedSegmentIndex];
+                             NSNumber *currentSegmentHeight = weakself.segmentHeightsArray[weakself.selectedSegmentIndex];
+                             if (weakself.config.equalWidth) {
+                                 CGFloat delta = ([currentSegmentWidth floatValue]-currentTitleSize.width)/2;
+                                 weakself.indicatorView.frame = CGRectMake(totalX-delta-currentTitleSize.width-weakself.config.segmentPadding/2, (weakself.frame.size.height-[currentSegmentHeight floatValue])/2, currentTitleSize.width+weakself.config.segmentPadding, [currentSegmentHeight floatValue]);
+                             } else {
+                                 weakself.indicatorView.frame = CGRectMake(totalX-[currentSegmentWidth floatValue]-weakself.config.segmentPadding/2, (weakself.frame.size.height-[currentSegmentHeight floatValue])/2, [currentSegmentWidth floatValue]+weakself.config.segmentPadding, [currentSegmentHeight floatValue]);
+                             }
+                         } completion:nil];
+    }
+    if (!self.indicatorView.superview) {
+        [self.scrollView addSubview:self.indicatorView];
+    }
 }
 
 - (void)updateSegmentsLayout
 {
     NSMutableArray *segmentWidthsArray = [NSMutableArray new];
+    NSMutableArray *segmentHeightsArray = [NSMutableArray new];
     
     __weak typeof(self) weakself = self;
-    self.segmentControlWidth = self.segmentMargin*2 + self.segmentPadding*(self.segmentTitles.count-1);
+    self.segmentControlWidth = self.config.segmentMargin*2 + self.config.segmentPadding*(self.segmentTitles.count-1);
     [self.segmentTitles enumerateObjectsUsingBlock:^(id title, NSUInteger idx, BOOL * _Nonnull stop) {
         CGSize titleSize = [weakself titleSizeAtIndex:idx];
-        weakself.segmentControlWidth += titleSize.width;
-        [segmentWidthsArray addObject:@(titleSize.width)];
+        if (weakself.config.equalWidth) {
+            CGFloat titleWidth = (weakself.frame.size.width-weakself.segmentControlWidth)/weakself.segmentTitles.count;
+            [segmentWidthsArray addObject:@(titleWidth)];
+            [segmentHeightsArray addObject:@(titleSize.height)];
+        } else {
+            weakself.segmentControlWidth += titleSize.width;
+            [segmentWidthsArray addObject:@(titleSize.width)];
+            [segmentHeightsArray addObject:@(titleSize.height)];
+        }
     }];
     self.segmentWidthsArray = [NSArray arrayWithArray:segmentWidthsArray];
+    self.segmentHeightsArray = [NSArray arrayWithArray:segmentHeightsArray];
     
     self.scrollView.frame = CGRectMake(0, 0, self.frame.size.width, self.frame.size.height);
-    self.scrollView.contentSize = CGSizeMake(self.segmentControlWidth, self.frame.size.height);
+    if (self.config.equalWidth) {
+        self.scrollView.contentSize = CGSizeMake(self.frame.size.width, self.frame.size.height);
+    } else {
+        self.scrollView.contentSize = CGSizeMake(self.segmentControlWidth, self.frame.size.height);
+    }
 }
 
 - (NSAttributedString *)titleAttrStrAtIndex:(NSInteger)index
@@ -147,8 +199,8 @@
     if (index < self.segmentTitles.count) {
         NSString *title = self.segmentTitles[index];
         NSAttributedString *attrS = [[NSAttributedString alloc] initWithString:title
-                                                                    attributes:@{NSFontAttributeName:self.textFont,
-                                                                                 NSForegroundColorAttributeName:index==self.selectedSegmentIndex?self.selectedTextColor:self.textColor}];
+                                                                    attributes:@{NSFontAttributeName:self.config.textFont,
+                                                                                 NSForegroundColorAttributeName:index==self.selectedSegmentIndex?self.config.selectedTextColor:self.config.textColor}];
         return attrS;
     }
     return nil;
@@ -158,160 +210,42 @@
 {
     if (index < self.segmentTitles.count) {
         NSString *title = self.segmentTitles[index];
-        return [title sizeWithAttributes:@{NSFontAttributeName:self.textFont}];
+        return [title sizeWithAttributes:@{NSFontAttributeName:self.config.textFont}];
     }
     return CGSizeZero;
-}
-
-- (void)reloadWithTitles:(NSArray *)titles Class:(__unsafe_unretained Class)SelectedViewClass
-{
-    for (UIView *subview in self.scrollView.subviews) {
-        [subview removeFromSuperview];
-    }
-    
-    self.currentPage = 0;
-    self.segmentTitles = titles;
-    [self.labels removeAllObjects];
-    
-    if (titles.count > 0) {
-        float totalWidth = self.margin;
-        for (int i = 0; i < titles.count; i++) {
-            float titleWidth;
-            NSString *title = titles[i];
-            if (self.equalWidth) {
-                titleWidth = (self.frame.size.width-self.margin*2-(self.segmentTitles.count-1)*self.padding)/self.segmentTitles.count;
-            } else {
-                titleWidth = [title sizeWithAttributes:@{NSFontAttributeName:self.textFont}].width+15;
-            }
-            UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(totalWidth, 0, titleWidth, self.frame.size.height)];
-            label.textAlignment = NSTextAlignmentCenter;
-            label.text = title;
-            label.font = self.textFont;
-            if (self.currentPage == i) {
-                label.textColor = self.selectedTextColor;
-            } else {
-                label.textColor = self.textColor;
-            }
-            [self.scrollView addSubview:label];
-            
-            if (i != titles.count-1) {
-                totalWidth = totalWidth+titleWidth+self.padding;
-            } else {
-                totalWidth = totalWidth+titleWidth;
-            }
-            
-            [self.labels addObject:label];
-        }
-        totalWidth = totalWidth+self.margin;
-        self.scrollView.contentSize = CGSizeMake(totalWidth, self.frame.size.height);
-        
-        if (self.labels.count > 0) {
-            id selectedObject = [SelectedViewClass new];
-            if ([selectedObject isKindOfClass:[UIView class]]) {
-                self.indicatorView = (UIView *)selectedObject;
-                self.indicatorView.backgroundColor = [UIColor clearColor];
-                UILabel *firstLabel = self.labels.firstObject;
-                if (firstLabel) {
-                    NSString *firstTitle = titles[0];
-                    CGSize titleSize = [firstTitle sizeWithAttributes:@{NSFontAttributeName:self.textFont}];
-                    if (self.equalWidth) {
-                        self.indicatorView.frame = CGRectMake(firstLabel.frame.origin.x+(firstLabel.frame.size.width-(titleSize.width+20))/2, (firstLabel.frame.size.height-titleSize.height)/2, titleSize.width+20, titleSize.height);
-                    } else {
-                        self.indicatorView.frame = CGRectMake(firstLabel.frame.origin.x, (firstLabel.frame.size.height-titleSize.height)/2, firstLabel.frame.size.width, titleSize.height);
-                    }
-                    [self.scrollView addSubview:self.indicatorView];
-                }
-            }
-        }
-    }
-}
-
-- (void)scrollToPage:(NSInteger)page
-{
-    if (page < self.labels.count && self.currentPage != page) {
-        UILabel *currentLabel = self.labels[self.currentPage];
-        __block UILabel *nextLabel = self.labels[page];
-        currentLabel.textColor = self.textColor;
-        nextLabel.textColor = self.selectedTextColor;
-        if (currentLabel.frame.origin.x > self.frame.size.width/2 && self.scrollView.contentSize.width > self.scrollView.frame.size.width) {
-            CGPoint offset = self.scrollView.contentOffset;
-            if (self.currentPage < page) {
-                CGPoint nextOffset;
-                if (page == self.labels.count-1) {
-                    nextOffset = CGPointMake(offset.x+(nextLabel.frame.size.width+self.margin), offset.y);
-                } else {
-                    nextOffset = CGPointMake(offset.x+(nextLabel.frame.size.width+self.padding), offset.y);
-                }
-                if (nextOffset.x+self.scrollView.frame.size.width >= self.scrollView.contentSize.width) {
-                    [self.scrollView setContentOffset:CGPointMake(self.scrollView.contentSize.width-self.scrollView.frame.size.width, offset.y) animated:YES];
-                } else {
-                    [self.scrollView setContentOffset:CGPointMake(offset.x+(nextLabel.frame.size.width+self.padding), offset.y) animated:YES];
-                }
-            } else {
-                CGPoint preOffset = CGPointMake(offset.x-(nextLabel.frame.size.width+self.padding), offset.y);
-                if (preOffset.x <= 0) {
-                    [self.scrollView setContentOffset:CGPointMake(0, offset.y) animated:YES];
-                } else {
-                    [self.scrollView setContentOffset:CGPointMake(offset.x-(nextLabel.frame.size.width+self.padding), offset.y) animated:YES];
-                }
-            }
-        } else {
-            [self.scrollView setContentOffset:CGPointMake(0, self.scrollView.contentOffset.y) animated:YES];
-        }
-        
-        self.currentPage = page;
-        
-        __weak typeof(self) weakSelf = self;
-        __block CGSize titleSize = [self.segmentTitles[self.currentPage] sizeWithAttributes:@{NSFontAttributeName:self.textFont}];
-        [UIView animateWithDuration:0.2
-                              delay:0.f
-                            options:UIViewAnimationOptionCurveEaseInOut
-                         animations:^{
-                             weakSelf.indicatorView.frame = CGRectMake(nextLabel.frame.origin.x, (nextLabel.frame.size.height-titleSize.height)/2, nextLabel.frame.size.width, titleSize.height);
-                         } completion:nil];
-    }
 }
 
 - (void)touchesEnded:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event
 {
     UITouch *touch = [touches anyObject];
-    
     CGPoint location = [touch locationInView:self];
-    CGPoint contentOffset = self.scrollView.contentOffset;
-    CGFloat x = location.x+contentOffset.x;
-    __block UILabel *selectedLabel;
-    NSInteger selectedPage = self.currentPage;
     
-    for (int i = 0; i < self.labels.count; i++) {
-        UILabel *label = self.labels[i];
-        if (label.frame.origin.x <= x && (label.frame.origin.x+label.frame.size.width) >= x) {
-            selectedLabel = label;
-            selectedPage = i;
+    CGFloat x = location.x + self.scrollView.contentOffset.x;
+    NSInteger selectedSegmentIndex = self.selectedSegmentIndex;
+    __block CGFloat totalX = 0;
+    for (int i = 0; i < self.segmentWidthsArray.count; i++) {
+        NSNumber *segmentWidth = self.segmentWidthsArray[i];
+        CGFloat minX = totalX+self.config.segmentPadding/2;
+        
+        if (i == 0) {
+            totalX = self.config.segmentMargin+[segmentWidth floatValue];
+        } else {
+            totalX = totalX+self.config.segmentPadding+[segmentWidth floatValue];
+        }
+        
+        CGFloat maxX = totalX+self.config.segmentPadding/2;
+        
+        if (x >= minX && x <= maxX) {
+            selectedSegmentIndex = i;
             break;
         }
     }
     
-    if (selectedLabel) {
-        UILabel *preLabel = [self.labels objectAtIndex:self.currentPage];
-        preLabel.textColor = self.textColor;
-        selectedLabel.textColor = self.selectedTextColor;
+    if (selectedSegmentIndex != self.selectedSegmentIndex) {
+        self.selectedSegmentIndex = selectedSegmentIndex;
+        [self.pagedController scrollToPage:self.selectedSegmentIndex];
         
-        self.currentPage = selectedPage;
-        
-        __weak typeof(self) weakSelf = self;
-        __block CGSize titleSize = [self.segmentTitles[self.currentPage] sizeWithAttributes:@{NSFontAttributeName:self.textFont}];
-        [UIView animateWithDuration:0.2
-                              delay:0.f
-                            options:UIViewAnimationOptionCurveEaseInOut
-                         animations:^{
-                             if (weakSelf.equalWidth) {
-                                 weakSelf.indicatorView.frame = CGRectMake(selectedLabel.frame.origin.x+(selectedLabel.frame.size.width-(titleSize.width+20))/2, (selectedLabel.frame.size.height-titleSize.height)/2, titleSize.width+20, titleSize.height);
-                             } else {
-                                 weakSelf.indicatorView.frame = CGRectMake(selectedLabel.frame.origin.x, (selectedLabel.frame.size.height-titleSize.height)/2, selectedLabel.frame.size.width, titleSize.height);
-                             }
-                         } completion:nil];
-        
-        [self.pagedController scrollToPage:selectedPage];
+        [self setNeedsDisplay];
     }
 }
 
