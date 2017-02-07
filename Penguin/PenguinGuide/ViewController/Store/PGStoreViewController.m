@@ -19,6 +19,8 @@
 
 #import "UIScrollView+PGPullToRefresh.h"
 
+#import "PGSystemNotificationView.h"
+
 @interface PGStoreViewController () <PGFeedsCollectionViewDelegate>
 
 @property (nonatomic, strong) PGStoreViewModel *viewModel;
@@ -117,6 +119,8 @@
     }
     
     self.feedsCollectionView.contentInset = UIEdgeInsetsZero;
+    
+    [self checkSystemNotification];
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -328,6 +332,32 @@
     PGBaseNavigationController *naviController = [[PGBaseNavigationController alloc] initWithRootViewController:searchRecommendsVC];
     PGGlobal.tempNavigationController = naviController;
     [self presentViewController:naviController animated:NO completion:nil];
+}
+
+#pragma mark - <Check System Notification>
+
+- (void)checkSystemNotification
+{
+    if (![[UIApplication sharedApplication] isRegisteredForRemoteNotifications]) {
+        NSArray *notificationExpireDate = [PGGlobal.cache objectForKey:@"system_notification_expire_date" fromTable:@"General"];
+        if (!notificationExpireDate) {
+            NSTimeInterval expireTime = [[NSDate date] timeIntervalSince1970]+5*24*60*60;
+            [PGGlobal.cache putObject:@[@(expireTime)] forKey:@"system_notification_expire_date" intoTable:@"General"];
+            PGWeakSelf(self);
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.4f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                [weakself showSystemNotificationPopup];
+            });
+        } else {
+            NSTimeInterval expireTime = [notificationExpireDate.firstObject doubleValue];
+            NSDate *expireDate = [NSDate dateWithTimeIntervalSince1970:expireTime];
+            if ([[NSDate date] compare:expireDate] == NSOrderedDescending) {
+                PGWeakSelf(self);
+                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.4f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                    [weakself showSystemNotificationPopup];
+                });
+            }
+        }
+    }
 }
 
 #pragma mark - <Lazy Init>

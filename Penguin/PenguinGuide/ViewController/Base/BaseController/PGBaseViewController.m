@@ -14,7 +14,7 @@
 
 #import "PGPageBasePlaceholder.h"
 
-@interface PGBaseViewController () <UINavigationControllerDelegate, PGPageBasePlaceholderDelegate>
+@interface PGBaseViewController () <UINavigationControllerDelegate, PGPageBasePlaceholderDelegate, PGSystemNotificationViewDelegate>
 
 @property (nonatomic, strong, readwrite) PGAPIClient *apiClient;
 @property (nonatomic, strong, readwrite) FBKVOController *KVOController;
@@ -236,7 +236,23 @@
     [self presentViewController:self.popupViewController animated:YES completion:nil];
 }
 
+- (void)showSystemNotificationPopup
+{
+    PGSystemNotificationView *notificationView = [[PGSystemNotificationView alloc] initWithFrame:CGRectMake(64, 135, UISCREEN_WIDTH-64*2, 275)];
+    notificationView.delegate = self;
+
+    self.popupViewController = [PGPopupViewController popupViewControllerWithPopupView:notificationView];
+    [self presentViewController:self.popupViewController animated:YES completion:nil];
+}
+
 - (void)dismissPopup
+{
+    [self.popupViewController dismissViewControllerAnimated:YES completion:nil];
+}
+
+#pragma mark - <PGSystemNotificationViewDelegate>
+
+- (void)dismissSystemNotificationView
 {
     [self.popupViewController dismissViewControllerAnimated:YES completion:nil];
 }

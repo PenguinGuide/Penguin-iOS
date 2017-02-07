@@ -19,6 +19,7 @@
 #import "UIView+PGToast.h"
 #import "PGAlertController.h"
 #import "PGPopupViewController.h"
+#import "PGSystemNotificationView.h"
 
 #import "PGAnalytics.h"
 
@@ -45,6 +46,7 @@
 - (void)dismissLoading;
 
 - (void)showPopup:(UIView *)popupView;
+- (void)showSystemNotificationPopup;
 - (void)dismissPopup;
 
 - (void)showPlaceholder:(NSString *)image desc:(NSString *)desc;

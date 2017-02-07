@@ -218,6 +218,7 @@
 		4BD01CB6C1E9C581FF15B7C3 /* libPods-PenguinGuideUITests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 154BB784023749113FEC3760 /* libPods-PenguinGuideUITests.a */; };
 		9D4A0C0A718990CD7428E6E8 /* libPods-PenguinGuide.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2781A6FFECE60736EAE2C13D /* libPods-PenguinGuide.a */; };
 		C7AED6BA0A3F2EAAA994C062 /* libPods-PenguinGuideTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = ECDB672886290E17696F19CC /* libPods-PenguinGuideTests.a */; };
+		FF07782C1E498A0200FD2FB9 /* PGSystemNotificationView.m in Sources */ = {isa = PBXBuildFile; fileRef = FF07782B1E498A0200FD2FB9 /* PGSystemNotificationView.m */; };
 		FF1D93331E13A42300DFB17A /* UIScrollView+UzysAnimatedGifPullToRefresh.m in Sources */ = {isa = PBXBuildFile; fileRef = FF1D93301E13A42300DFB17A /* UIScrollView+UzysAnimatedGifPullToRefresh.m */; };
 		FF1D93341E13A42300DFB17A /* UzysAnimatedGifActivityIndicator.m in Sources */ = {isa = PBXBuildFile; fileRef = FF1D93321E13A42300DFB17A /* UzysAnimatedGifActivityIndicator.m */; };
 		FF1D93381E13A51700DFB17A /* AnimatedGIFImageSerialization.m in Sources */ = {isa = PBXBuildFile; fileRef = FF1D93371E13A51700DFB17A /* AnimatedGIFImageSerialization.m */; };
@@ -666,6 +667,8 @@
 		DCFE72ABD6C7737387832668 /* Pods-PenguinGuideUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PenguinGuideUITests.release.xcconfig"; path = "Pods/Target Support Files/Pods-PenguinGuideUITests/Pods-PenguinGuideUITests.release.xcconfig"; sourceTree = "<group>"; };
 		ECDB672886290E17696F19CC /* libPods-PenguinGuideTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-PenguinGuideTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		FC37FF962E7BA5F15850D8D2 /* Pods-PenguinGuide.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PenguinGuide.release.xcconfig"; path = "Pods/Target Support Files/Pods-PenguinGuide/Pods-PenguinGuide.release.xcconfig"; sourceTree = "<group>"; };
+		FF07782A1E498A0200FD2FB9 /* PGSystemNotificationView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PGSystemNotificationView.h; sourceTree = "<group>"; };
+		FF07782B1E498A0200FD2FB9 /* PGSystemNotificationView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PGSystemNotificationView.m; sourceTree = "<group>"; };
 		FF1D932F1E13A42300DFB17A /* UIScrollView+UzysAnimatedGifPullToRefresh.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIScrollView+UzysAnimatedGifPullToRefresh.h"; sourceTree = "<group>"; };
 		FF1D93301E13A42300DFB17A /* UIScrollView+UzysAnimatedGifPullToRefresh.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIScrollView+UzysAnimatedGifPullToRefresh.m"; sourceTree = "<group>"; };
 		FF1D93311E13A42300DFB17A /* UzysAnimatedGifActivityIndicator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UzysAnimatedGifActivityIndicator.h; sourceTree = "<group>"; };
@@ -1072,6 +1075,7 @@
 				0F9E8E281DC64F26003027CF /* NavigationView */,
 				FF1D932E1E13A3AC00DFB17A /* PullToRefresh */,
 				FFE73E721E0BB6CE00057F3B /* PagePlaceholder */,
+				FF0778291E4989BF00FD2FB9 /* SystemNotificationView */,
 			);
 			path = BaseView;
 			sourceTree = "<group>";
@@ -2144,6 +2148,15 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		FF0778291E4989BF00FD2FB9 /* SystemNotificationView */ = {
+			isa = PBXGroup;
+			children = (
+				FF07782A1E498A0200FD2FB9 /* PGSystemNotificationView.h */,
+				FF07782B1E498A0200FD2FB9 /* PGSystemNotificationView.m */,
+			);
+			path = SystemNotificationView;
+			sourceTree = "<group>";
+		};
 		FF1D932E1E13A3AC00DFB17A /* PullToRefresh */ = {
 			isa = PBXGroup;
 			children = (
@@ -2697,6 +2710,7 @@
 				0F10C02E1DF5CEF8000D34DA /* ARSegmentPageController.m in Sources */,
 				FF3150F11E14C506002A23D5 /* PGCommentReportViewController.m in Sources */,
 				0FFAD0F41D780DF8009F9E27 /* PGGoodsCollectionView.m in Sources */,
+				FF07782C1E498A0200FD2FB9 /* PGSystemNotificationView.m in Sources */,
 				FF1D93331E13A42300DFB17A /* UIScrollView+UzysAnimatedGifPullToRefresh.m in Sources */,
 				0F00CBAB1DD99CB3008BFA7E /* PGWebViewController.m in Sources */,
 				0FA5F2EE1D94DFFF00E9242B /* PGMeCell.m in Sources */,
