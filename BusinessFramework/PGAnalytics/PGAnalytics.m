@@ -45,6 +45,7 @@
 
 + (void)setup:(NSDictionary *)launchOptions
 {
+    [[Zhuge sharedInstance].config setAppVersion:[[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"]];
     [[Zhuge sharedInstance] startWithAppKey:@"cc9eb0f7ede346909f476873b364fc1e"
                               launchOptions:launchOptions];
     

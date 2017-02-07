@@ -178,7 +178,7 @@
     } else if (indexPath.section == 1) {
         PGGoodCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:GoodRelatedGoodCell forIndexPath:indexPath];
         
-        [cell setCellWithGood:self.viewModel.good.relatedGoods[indexPath.item]];
+        [cell setGrayBackgroundCellWithGood:self.viewModel.good.relatedGoods[indexPath.item]];
         
         return cell;
     }

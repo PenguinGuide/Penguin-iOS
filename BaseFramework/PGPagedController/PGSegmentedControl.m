@@ -36,6 +36,8 @@
 @property (nonatomic, strong) NSArray *segmentHeightsArray;
 @property (nonatomic, assign) CGFloat segmentControlWidth;
 
+@property (nonatomic, assign) BOOL scrollToLeft;
+
 @end
 
 @implementation PGSegmentedControl
@@ -61,6 +63,11 @@
 - (void)scrollToPage:(NSInteger)page
 {
     if (self.selectedSegmentIndex != page) {
+        if (self.selectedSegmentIndex > page) {
+            self.scrollToLeft = NO;
+        } else {
+            self.scrollToLeft = YES;
+        }
         self.selectedSegmentIndex = page;
         
         [self setNeedsDisplay];
@@ -142,7 +149,18 @@
                     totalX = totalX + self.config.segmentPadding+[segmentWidth floatValue];
                 }
             }
+            
+            if (self.scrollToLeft) {
+                CGRect visibleRect = CGRectMake(totalX, 0, [self.segmentWidthsArray[self.selectedSegmentIndex] floatValue], [self.segmentHeightsArray[self.selectedSegmentIndex] floatValue]);
+                // NOTE: IMPORTANT note to learn
+                [self.scrollView scrollRectToVisible:visibleRect animated:YES];
+            } else {
+                CGRect visibleRect = CGRectMake(totalX-[self.segmentWidthsArray[self.selectedSegmentIndex] floatValue]-self.config.segmentPadding, 0, [self.segmentWidthsArray[self.selectedSegmentIndex] floatValue], [self.segmentHeightsArray[self.selectedSegmentIndex] floatValue]);
+                // NOTE: IMPORTANT note to learn
+                [self.scrollView scrollRectToVisible:visibleRect animated:YES];
+            }
         }
+        
         __weak typeof(self) weakself = self;
         __block CGSize currentTitleSize = [self titleSizeAtIndex:self.selectedSegmentIndex];
         [UIView animateWithDuration:0.2f
