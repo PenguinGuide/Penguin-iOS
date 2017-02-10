@@ -10,6 +10,10 @@
 
 @interface PGSegmentedControlConfig : NSObject
 
+@property (nonatomic, strong) NSArray *titles;
+
+@property (nonatomic, assign) CGFloat segmentHeight;
+
 @property (nonatomic, assign) Class SelectedViewClass;
 
 /**

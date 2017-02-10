@@ -33,6 +33,8 @@ typedef NS_ENUM(NSInteger, PullRefreshControlState) {
 
 - (void)dealloc
 {
+    self.animatedImageView = nil;
+    self.loadingImages = nil;
     [self.scrollView removeObserver:self forKeyPath:@"contentOffset"];
     [self.scrollView removeObserver:self forKeyPath:@"pan.state"];
     self.scrollView = nil;

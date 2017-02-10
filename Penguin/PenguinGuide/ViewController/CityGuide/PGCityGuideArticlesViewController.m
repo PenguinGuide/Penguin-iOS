@@ -48,8 +48,8 @@
                 NSLog(@"exception: %@", exception);
             }
         } else {
-            NSArray *commentsArray = changedObject;
-            if (commentsArray && [commentsArray isKindOfClass:[NSArray class]]) {
+            NSArray *articlesArray = changedObject;
+            if (articlesArray && [articlesArray isKindOfClass:[NSArray class]]) {
                 [UIView setAnimationsEnabled:NO];
                 [weakself.articlesCollectionView reloadData];
                 dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.25f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
@@ -184,8 +184,12 @@
         [_articlesCollectionView enablePullToRefreshWithTopInset:0.f
                                                       completion:^{
                                                           dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                                                              [weakself.viewModel clearPagination];
-                                                              [weakself.viewModel requestArticles:weakself.cityId];
+                                                              if ([weakself.cityId isEqualToString:@"all"]) {
+                                                                  [[NSNotificationCenter defaultCenter] postNotificationName:PG_NOTIFICATION_CITY_GUIDE_REFRESH object:nil];
+                                                              } else {
+                                                                  [weakself.viewModel clearPagination];
+                                                                  [weakself.viewModel requestArticles:weakself.cityId];
+                                                              }
                                                           });
                                                       }];
         [_articlesCollectionView enableInfiniteScrolling:^{

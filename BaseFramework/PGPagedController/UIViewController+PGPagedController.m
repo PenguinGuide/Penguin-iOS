@@ -22,33 +22,38 @@ static char PagedController;
 
 @implementation UIViewController (PGPagedController)
 
-- (void)addPagedController:(PGPagedController *)pagedController config:(void (^)(PGSegmentedControlConfig *config))configBlock
+- (void)addPagedController:(CGRect)frame viewControllers:(NSArray *)viewControllers segmentConfig:(void (^)(PGSegmentedControlConfig *config))configBlock
 {
-    [self.segmentedControl removeFromSuperview];
-    for (UIViewController *vc in self.childViewControllers) {
-        [vc.view removeFromSuperview];
-        [vc removeFromParentViewController];
-        [vc didMoveToParentViewController:nil];
-    }
-    
-    self.segmentedControl = [[PGSegmentedControl alloc] initWithSegmentTitles:pagedController.titles];
-    self.pagedController = pagedController;
-    self.pagedController.segmentedControl = self.segmentedControl;
-    
     PGSegmentedControlConfig *config = [[PGSegmentedControlConfig alloc] init];
     configBlock(config);
     
-    // why use UIControl: http://www.tuicool.com/articles/B73AFj
-    self.segmentedControl.segmentTitles = self.pagedController.titles;
-    self.segmentedControl.pagedController = self.pagedController;
-    self.segmentedControl.config = config;
+    if (!self.pagedController) {
+        self.pagedController = [[PGPagedController alloc] initWithViewControllers:viewControllers segmentHeight:config.segmentHeight];
+        self.pagedController.view.frame = frame;
+        if (config.equalWidth) {
+            self.pagedController.disableScrolling = YES;
+        }
+    } else {
+        [self.pagedController reload:viewControllers];
+    }
     
-    self.segmentedControl.frame = CGRectMake(0, 0, self.view.frame.size.width, pagedController.segmentHeight);
-    [self.pagedController.view addSubview:self.segmentedControl];
+    if (!self.segmentedControl) {
+        // why use UIControl: http://www.tuicool.com/articles/B73AFj
+        self.segmentedControl = [[PGSegmentedControl alloc] initWithConfig:config];
+        self.pagedController.segmentedControl = self.segmentedControl;
+        
+        self.segmentedControl.pagedController = self.pagedController;
+        self.segmentedControl.frame = CGRectMake(0, 0, self.view.frame.size.width, config.segmentHeight);
+        [self.pagedController.view addSubview:self.segmentedControl];
+    } else {
+        [self.segmentedControl reload:config];
+    }
     
-    [self.view addSubview:self.pagedController.view];
-    [self addChildViewController:self.pagedController];
-    [self.pagedController didMoveToParentViewController:self];
+    if (![self.childViewControllers containsObject:self.pagedController]) {
+        [self.view addSubview:self.pagedController.view];
+        [self addChildViewController:self.pagedController];
+        [self.pagedController didMoveToParentViewController:self];
+    }
 }
 
 - (void)setPagedController:(PGPagedController *)pagedController

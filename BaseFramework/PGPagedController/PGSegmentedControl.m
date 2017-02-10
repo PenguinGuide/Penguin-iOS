@@ -27,6 +27,8 @@
 
 @interface PGSegmentedControl () <UIScrollViewDelegate>
 
+@property (nonatomic, strong) PGSegmentedControlConfig *config;
+
 @property (nonatomic, strong) PGSegmentedScrollView *scrollView;
 @property (nonatomic, strong) UIView *indicatorView;
 @property (nonatomic, strong) NSMutableArray *labels;
@@ -42,19 +44,20 @@
 
 @implementation PGSegmentedControl
 
-- (id)initWithSegmentTitles:(NSArray *)segmentTitles
+- (id)initWithConfig:(PGSegmentedControlConfig *)config
 {
     if (self = [super init]) {
-        self.segmentTitles = segmentTitles;
-
+        self.config = config;
+        
         [self initSegmentControl];
     }
+    
     return self;
 }
 
-- (void)reloadSegmentTitles:(NSArray *)segmentTitles
+- (void)reload:(PGSegmentedControlConfig *)config
 {
-    self.segmentTitles = segmentTitles;
+    self.config = config;
     
     [self setNeedsLayout];  // call layoutSubviews，layoutSubviews方便数据计算
     [self setNeedsDisplay]; // call drawRect，drawRect方便视图重绘
@@ -104,7 +107,7 @@
     self.scrollView.layer.sublayers = nil;
     
     __weak typeof(self) weakself = self;
-    [self.segmentTitles enumerateObjectsUsingBlock:^(id title, NSUInteger idx, BOOL * _Nonnull stop) {
+    [self.config.titles enumerateObjectsUsingBlock:^(id title, NSUInteger idx, BOOL * _Nonnull stop) {
         CGSize titleSize = [weakself titleSizeAtIndex:idx];
         CGFloat x = weakself.config.segmentMargin+weakself.config.segmentPadding*idx;
         for (int i = 0; i < weakself.segmentWidthsArray.count; i++) {
@@ -188,11 +191,11 @@
     NSMutableArray *segmentHeightsArray = [NSMutableArray new];
     
     __weak typeof(self) weakself = self;
-    self.segmentControlWidth = self.config.segmentMargin*2 + self.config.segmentPadding*(self.segmentTitles.count-1);
-    [self.segmentTitles enumerateObjectsUsingBlock:^(id title, NSUInteger idx, BOOL * _Nonnull stop) {
+    self.segmentControlWidth = self.config.segmentMargin*2 + self.config.segmentPadding*(self.config.titles.count-1);
+    [self.config.titles enumerateObjectsUsingBlock:^(id title, NSUInteger idx, BOOL * _Nonnull stop) {
         CGSize titleSize = [weakself titleSizeAtIndex:idx];
         if (weakself.config.equalWidth) {
-            CGFloat titleWidth = (weakself.frame.size.width-weakself.segmentControlWidth)/weakself.segmentTitles.count;
+            CGFloat titleWidth = (weakself.frame.size.width-weakself.segmentControlWidth)/weakself.config.titles.count;
             [segmentWidthsArray addObject:@(titleWidth)];
             [segmentHeightsArray addObject:@(titleSize.height)];
         } else {
@@ -214,8 +217,8 @@
 
 - (NSAttributedString *)titleAttrStrAtIndex:(NSInteger)index
 {
-    if (index < self.segmentTitles.count) {
-        NSString *title = self.segmentTitles[index];
+    if (index < self.config.titles.count) {
+        NSString *title = self.config.titles[index];
         NSAttributedString *attrS = [[NSAttributedString alloc] initWithString:title
                                                                     attributes:@{NSFontAttributeName:self.config.textFont,
                                                                                  NSForegroundColorAttributeName:index==self.selectedSegmentIndex?self.config.selectedTextColor:self.config.textColor}];
@@ -226,8 +229,8 @@
 
 - (CGSize)titleSizeAtIndex:(NSInteger)index
 {
-    if (index < self.segmentTitles.count) {
-        NSString *title = self.segmentTitles[index];
+    if (index < self.config.titles.count) {
+        NSString *title = self.config.titles[index];
         return [title sizeWithAttributes:@{NSFontAttributeName:self.config.textFont}];
     }
     return CGSizeZero;

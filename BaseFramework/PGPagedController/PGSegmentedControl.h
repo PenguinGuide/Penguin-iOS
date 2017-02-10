@@ -14,12 +14,10 @@
 
 @property (nonatomic, weak) PGPagedController *pagedController;
 
-@property (nonatomic, strong) NSArray *segmentTitles;
-@property (nonatomic, strong) PGSegmentedControlConfig *config;
+- (id)initWithConfig:(PGSegmentedControlConfig *)config;
 
-- (id)initWithSegmentTitles:(NSArray *)segmentTitles;
+- (void)reload:(PGSegmentedControlConfig *)config;
 
-- (void)reloadSegmentTitles:(NSArray *)segmentTitles;
 - (void)scrollToPage:(NSInteger)page;
 
 @end

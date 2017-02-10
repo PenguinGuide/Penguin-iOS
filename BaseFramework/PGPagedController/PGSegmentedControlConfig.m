@@ -13,6 +13,8 @@
 - (id)init
 {
     if (self = [super init]) {
+        self.titles = [NSArray new];
+        self.segmentHeight = 60.f;
         self.backgroundColor = [UIColor whiteColor];
         self.textColor = [UIColor colorWithRed:175.f/256.f green:189.f/256.f blue:189.f/256.f alpha:1.f];
         self.selectedTextColor = [UIColor blackColor];

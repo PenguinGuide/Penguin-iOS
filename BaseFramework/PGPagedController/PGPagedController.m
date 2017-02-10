@@ -7,7 +7,6 @@
 //
 
 #define PagerCell @"PagerCell"
-#define PagerTag 1999
 
 #import "PGPagedController.h"
 #import "PGSegmentedControl.h"
@@ -17,7 +16,6 @@
 @property (nonatomic, strong) UICollectionView *pagerCollectionView;
 
 @property (nonatomic, strong, readwrite) NSArray *viewControllers;
-@property (nonatomic, strong, readwrite) NSArray *titles;
 
 @property (nonatomic, assign, readwrite) CGFloat segmentHeight;
 @property (nonatomic, assign, readwrite) NSInteger currentPage;
@@ -26,14 +24,13 @@
 
 @implementation PGPagedController
 
-- (id)initWithViewControllers:(NSArray *)viewControllers titles:(NSArray *)titles segmentHeight:(CGFloat)segmentHeight
+- (id)initWithViewControllers:(NSArray *)viewControllers segmentHeight:(CGFloat)segmentHeight
 {
     if (self = [super init]) {
         self.viewControllers = viewControllers;
-        self.titles = titles;
         
         self.currentPage = 0;
-        self.segmentHeight = segmentHeight > 0 ? segmentHeight : 60.f;
+        self.segmentHeight = segmentHeight;
     }
     
     return self;
@@ -46,25 +43,24 @@
     [self.view addSubview:self.pagerCollectionView];
 }
 
-- (void)reload
+- (void)reload:(NSArray *)viewControllers
 {
+    [self.childViewControllers enumerateObjectsUsingBlock:^(__kindof UIViewController * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        [obj willMoveToParentViewController:nil];
+        /**
+         *** IMPORTANT ***
+         because addSubview retain only view, not controller. because view is not released when viewcontroller is released,
+         and this cause crash if you'll try to do anything with view that is related to (already) released controller.
+         http://stackoverflow.com/questions/9144959/how-to-retain-view-after-addsubview-of-uiviewcontroller-with-arc
+         */
+        [obj.view removeFromSuperview];
+        [obj removeFromParentViewController];
+        
+        obj = nil;
+    }];
+    
+    self.viewControllers = viewControllers;
     self.currentPage = 0;
-    
-    [self.segmentedControl reloadSegmentTitles:self.titles];
-    
-    for (UIViewController *vc in self.childViewControllers) {
-        [vc.view removeFromSuperview];
-        [vc removeFromParentViewController];
-        [vc didMoveToParentViewController:nil];
-    }
-    
-    if (self.viewControllers.count > 0) {
-        for (int i = 0; i < self.viewControllers.count; i++) {
-            UIViewController *vc = self.viewControllers[i];
-            [self addChildViewController:vc];
-            [vc didMoveToParentViewController:self];
-        }
-    }
     
     [self.pagerCollectionView reloadData];
 }
@@ -92,15 +88,15 @@
     UICollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:PagerCell forIndexPath:indexPath];
     cell.backgroundColor = [UIColor clearColor];
     
-    UIView *loadedPagerView = [cell.contentView viewWithTag:PagerTag];
-    if (loadedPagerView) {
-        [loadedPagerView removeFromSuperview];
-    }
+    [cell.contentView.subviews makeObjectsPerformSelector:@selector(removeFromSuperview)];
     
     UIViewController *vc = self.viewControllers[indexPath.item];
+    if (![self.childViewControllers containsObject:vc]) {
+        [self addChildViewController:vc];
+    }
     vc.view.frame = CGRectMake(0, 0, collectionView.frame.size.width, collectionView.frame.size.height);
-    vc.view.tag = PagerTag;
     [cell.contentView addSubview:vc.view];
+    [vc didMoveToParentViewController:self];
     
     return cell;
 }

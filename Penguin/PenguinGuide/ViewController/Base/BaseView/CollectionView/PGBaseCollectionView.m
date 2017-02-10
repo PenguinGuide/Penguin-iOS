@@ -8,7 +8,7 @@
 
 #import "PGBaseCollectionView.h"
 #import "UIScrollView+PGPullToRefresh.h"
-//#import "UIScrollView+UzysAnimatedGifPullToRefresh.h"
+#import "UIScrollView+UzysAnimatedGifPullToRefresh.h"
 #import "SVPullToRefresh.h"
 
 @implementation PGBaseCollectionView

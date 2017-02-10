@@ -12,6 +12,8 @@
 
 @interface UIViewController (PGPagedController)
 
+- (void)addPagedController:(CGRect)frame viewControllers:(NSArray *)viewControllers segmentConfig:(void(^)(PGSegmentedControlConfig *config))configBlock;
+
 - (void)addPagedController:(PGPagedController *)pagedController config:(void(^)(PGSegmentedControlConfig *config))configBlock;
 
 @end

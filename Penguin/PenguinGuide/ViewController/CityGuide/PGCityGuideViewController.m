@@ -14,7 +14,6 @@
 
 @interface PGCityGuideViewController ()
 
-@property (nonatomic, strong, readwrite) PGPagedController *pagedController;
 @property (nonatomic, strong) PGCityGuideViewModel *viewModel;
 
 @end
@@ -24,6 +23,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(requestAllCities) name:PG_NOTIFICATION_CITY_GUIDE_REFRESH object:nil];
     
     self.parentViewController.navigationItem.leftBarButtonItem = nil;
     self.parentViewController.navigationItem.titleView = nil;
@@ -118,8 +118,9 @@
 
 - (void)reloadAllCities
 {
+    __block NSMutableArray *cityNames = [NSMutableArray new];
     NSMutableArray *cityViewControllers = [NSMutableArray new];
-    NSMutableArray *cityNames = [NSMutableArray new];
+    
     PGCityGuideArticlesViewController *allCitiesVC = [[PGCityGuideArticlesViewController alloc] initWithCityId:@"all"];
     [cityViewControllers addObject:allCitiesVC];
     [cityNames addObject:@"全部"];
@@ -132,17 +133,21 @@
         }
     }
     
-    self.pagedController = [[PGPagedController alloc] initWithViewControllers:[NSArray arrayWithArray:cityViewControllers]
-                                                                       titles:[NSArray arrayWithArray:cityNames]
-                                                                segmentHeight:60.f];
-    self.pagedController.view.frame = CGRectMake(0, 20, self.view.pg_width, self.view.pg_height-20);
-    
-    [self addPagedController:self.pagedController config:^(PGSegmentedControlConfig *config) {
-        config.SelectedViewClass = [PGCityGuideSegmentIndicator class];
-    }];
+    [self addPagedController:CGRectMake(0, 20, self.view.pg_width, self.view.pg_height-20)
+             viewControllers:[NSArray arrayWithArray:cityViewControllers]
+               segmentConfig:^(PGSegmentedControlConfig *config) {
+                   config.SelectedViewClass = [PGCityGuideSegmentIndicator class];
+                   config.titles = [NSArray arrayWithArray:cityNames];
+                   config.segmentHeight = 60.f;
+               }];
 }
 
-#pragma mark - <Lazy Init>
+#pragma mark - <Notification>
+
+- (void)requestAllCities
+{
+    [self.viewModel requestData];
+}
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];

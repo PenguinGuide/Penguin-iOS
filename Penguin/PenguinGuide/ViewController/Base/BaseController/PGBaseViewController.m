@@ -99,6 +99,8 @@
 
 - (void)dealloc
 {
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:PG_REQUEST_SUCCESS_NOTIFICATION object:nil];
+    
     [self dismissLoading];
     [self.apiClient cancelAllRequests];
     self.apiClient = nil;
@@ -187,7 +189,6 @@
 - (void)unobserve
 {
     [self.KVOController unobserveAll];
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:PG_REQUEST_SUCCESS_NOTIFICATION object:nil];
 }
 
 - (void)observeCollectionView:(PGBaseCollectionView *)collectionView endOfFeeds:(PGBaseViewModel *)viewModel

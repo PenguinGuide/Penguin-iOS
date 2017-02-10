@@ -11,6 +11,4 @@
 
 @interface PGCityGuideViewController : PGBaseViewController <PGTabBarControllerDelegate>
 
-@property (nonatomic, strong, readonly) PGPagedController *pagedController;
-
 @end

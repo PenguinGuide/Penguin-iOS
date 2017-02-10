@@ -72,16 +72,14 @@
             weakself.feedsVC.delegate = weakself;
             weakself.goodsVC.delegate = weakself;
             
-            weakself.pagedController = [[PGPagedController alloc] initWithViewControllers:@[weakself.feedsVC, weakself.goodsVC]
-                                                                                   titles:@[weakself.isFromStorePage?@"教 你 买":@"边 读 边 选", @"商 品"]
-                                                                            segmentHeight:60.f];
-            weakself.pagedController.disableScrolling = YES;
-            weakself.pagedController.view.frame = CGRectMake(0, 64, self.view.pg_width, UISCREEN_HEIGHT-64);
-            
-            [weakself addPagedController:weakself.pagedController config:^(PGSegmentedControlConfig *config) {
-                config.SelectedViewClass = [PGCityGuideSegmentIndicator class];
-                config.equalWidth = YES;
-            }];
+            [weakself addPagedController:CGRectMake(0, 64, self.view.pg_width, UISCREEN_HEIGHT-64)
+                         viewControllers:@[weakself.feedsVC, weakself.goodsVC]
+                           segmentConfig:^(PGSegmentedControlConfig *config) {
+                               config.titles = @[weakself.isFromStorePage?@"教 你 买":@"边 读 边 选", @"商 品"];
+                               config.segmentHeight = 60.f;
+                               config.SelectedViewClass = [PGCityGuideSegmentIndicator class];
+                               config.equalWidth = YES;
+                           }];
         }
         [weakself dismissLoading];
     }];

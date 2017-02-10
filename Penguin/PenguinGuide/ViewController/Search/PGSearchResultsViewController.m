@@ -50,15 +50,14 @@
     self.articlesVC = [[PGSearchResultsArticlesViewController alloc] initWithKeyword:self.keyword];
     self.goodsVC = [[PGSearchResultsGoodsViewController alloc] initWithKeyword:self.keyword];
     
-    self.pagedController = [[PGPagedController alloc] initWithViewControllers:@[self.articlesVC, self.goodsVC] titles:@[@"文 章", @"商 品"] segmentHeight:60.f];
-    self.pagedController.view.frame = CGRectMake(0, 60, UISCREEN_WIDTH, UISCREEN_HEIGHT-60);
-    self.pagedController.disableScrolling = YES;
-    
-    [self addPagedController:self.pagedController config:^(PGSegmentedControlConfig *config) {
-        config.SelectedViewClass = [PGCityGuideSegmentIndicator class];
-        config.equalWidth = YES;
-        config.backgroundColor = [UIColor whiteColor];
-    }];
+    [self addPagedController:CGRectMake(0, 60, UISCREEN_WIDTH, UISCREEN_HEIGHT-60)
+             viewControllers:@[self.articlesVC, self.goodsVC]
+               segmentConfig:^(PGSegmentedControlConfig *config) {
+                   config.titles = @[@"文 章", @"商 品"];
+                   config.SelectedViewClass = [PGCityGuideSegmentIndicator class];
+                   config.equalWidth = YES;
+                   config.backgroundColor = [UIColor whiteColor];
+               }];
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -111,15 +110,14 @@
         self.articlesVC = [[PGSearchResultsArticlesViewController alloc] initWithKeyword:self.keyword];
         self.goodsVC = [[PGSearchResultsGoodsViewController alloc] initWithKeyword:self.keyword];
         
-        self.pagedController = [[PGPagedController alloc] initWithViewControllers:@[self.articlesVC, self.goodsVC] titles:@[@"文 章", @"商 品"] segmentHeight:60.f];
-        self.pagedController.view.frame = CGRectMake(0, 60, UISCREEN_WIDTH, UISCREEN_HEIGHT-60);
-        self.pagedController.disableScrolling = YES;
-        
-        [self addPagedController:self.pagedController config:^(PGSegmentedControlConfig *config) {
-            config.SelectedViewClass = [PGCityGuideSegmentIndicator class];
-            config.equalWidth = YES;
-            config.backgroundColor = [UIColor whiteColor];
-        }];
+        [self addPagedController:CGRectMake(0, 60, UISCREEN_WIDTH, UISCREEN_HEIGHT-60)
+                 viewControllers:@[self.articlesVC, self.goodsVC]
+                   segmentConfig:^(PGSegmentedControlConfig *config) {
+                       config.titles = @[@"文 章", @"商 品"];
+                       config.SelectedViewClass = [PGCityGuideSegmentIndicator class];
+                       config.equalWidth = YES;
+                       config.backgroundColor = [UIColor whiteColor];
+                   }];
     }
 }
 

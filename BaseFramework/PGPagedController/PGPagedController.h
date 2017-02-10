@@ -17,13 +17,12 @@
 @property (nonatomic, strong) PGSegmentedControl *segmentedControl;
 
 @property (nonatomic, strong, readonly) NSArray *viewControllers;
-@property (nonatomic, strong, readonly) NSArray *titles;
 @property (nonatomic, assign, readonly) CGFloat segmentHeight;
 @property (nonatomic, assign, readonly) NSInteger currentPage;
 
-- (id)initWithViewControllers:(NSArray *)viewControllers titles:(NSArray *)titles segmentHeight:(CGFloat)segmentHeight;
+- (id)initWithViewControllers:(NSArray *)viewControllers segmentHeight:(CGFloat)segmentHeight;
 
-- (void)reload;
+- (void)reload:(NSArray *)viewControllers;
 
 - (void)scrollToPage:(NSInteger)page;
 

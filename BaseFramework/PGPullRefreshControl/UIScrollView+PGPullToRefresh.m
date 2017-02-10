@@ -15,17 +15,20 @@ static char pullRefreshControlKey;
 
 - (void)addPullToRefresh:(NSArray *)loadingImages topInset:(float)topInset height:(float)height rate:(float)rate handler:(void (^)(void))actionHandler
 {
-    self.pullRefreshControl = [[PGPullRefreshControl alloc] initWithFrame:CGRectMake(0, -height, self.frame.size.width, height)];
-    self.pullRefreshControl.loadingImages = loadingImages;
-    self.pullRefreshControl.topInset = topInset;
-    self.pullRefreshControl.height = height;
-    self.pullRefreshControl.rate = rate;
-    self.pullRefreshControl.scrollView = self;
-    self.pullRefreshControl.pullRefreshActionHandler = actionHandler;
+    PGPullRefreshControl *pullRefreshControl = [[PGPullRefreshControl alloc] initWithFrame:CGRectMake(0, -height, self.frame.size.width, height)];
+    pullRefreshControl = [[PGPullRefreshControl alloc] initWithFrame:CGRectMake(0, -height, self.frame.size.width, height)];
+    pullRefreshControl.loadingImages = loadingImages;
+    pullRefreshControl.topInset = topInset;
+    pullRefreshControl.height = height;
+    pullRefreshControl.rate = rate;
+    pullRefreshControl.scrollView = self;
+    pullRefreshControl.pullRefreshActionHandler = [actionHandler copy];
     
-    [self.pullRefreshControl invalidate];
+    [pullRefreshControl invalidate];
     
-    [self addSubview:self.pullRefreshControl];
+    [self addSubview:pullRefreshControl];
+    
+    self.pullRefreshControl = pullRefreshControl;
 }
 
 - (void)endPullToRefresh
@@ -35,7 +38,15 @@ static char pullRefreshControlKey;
 
 - (void)removePullToRefresh
 {
-    
+    [self.pullRefreshControl removeFromSuperview];
+    self.pullRefreshControl = nil;
+}
+
+// without this method, app will crash
+- (void)willMoveToSuperview:(UIView *)newSuperview {
+    if(newSuperview == nil) {
+        [self removePullToRefresh];
+    }
 }
 
 - (PGPullRefreshControl *)pullRefreshControl
@@ -45,7 +56,7 @@ static char pullRefreshControlKey;
 
 - (void)setPullRefreshControl:(PGPullRefreshControl *)pullRefreshControl
 {
-    objc_setAssociatedObject(self, &pullRefreshControlKey, pullRefreshControl, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+    objc_setAssociatedObject(self, &pullRefreshControlKey, pullRefreshControl, OBJC_ASSOCIATION_ASSIGN);
 }
 
 @end
