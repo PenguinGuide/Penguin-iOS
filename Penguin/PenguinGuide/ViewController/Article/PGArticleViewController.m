@@ -81,6 +81,8 @@
 @property (nonatomic, assign) BOOL statusbarIsWhiteBackground;
 @property (nonatomic, assign) BOOL shouldShowCommentInput;
 
+@property (nonatomic, strong) NSString *firstParagraphText;
+
 @end
 
 @implementation PGArticleViewController
@@ -143,6 +145,15 @@
             if (article.body && article.body.length > 0) {
                 PGStringParser *htmlParser = [PGStringParser htmlParserWithString:article.body];
                 weakself.viewModel.paragraphsArray = [htmlParser articleParsedStorages];
+                for (id storage in weakself.viewModel.paragraphsArray) {
+                    if ([storage isKindOfClass:[PGParserTextStorage class]]) {
+                        PGParserTextStorage *textStorage = (PGParserTextStorage *)storage;
+                        if (textStorage.text && textStorage.text.string > 0) {
+                            weakself.firstParagraphText = textStorage.text.string;
+                            break;
+                        }
+                    }
+                }
                 [weakself.viewModel requestGoods:^{
                     [weakself.viewModel requestComments];
                 }];
@@ -996,7 +1007,7 @@
 {
     PGShareAttribute *attribute = [[PGShareAttribute alloc] init];
     attribute.url = self.viewModel.article.shareUrl;
-    attribute.text = @"测试分享";
+    attribute.text = self.firstParagraphText ? self.firstParagraphText : self.viewModel.article.title;
     attribute.title = self.viewModel.article.title;
     attribute.image = self.viewModel.article.image;
     attribute.thumbnailImage = self.viewModel.article.image;
