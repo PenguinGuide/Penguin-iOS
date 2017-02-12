@@ -21,6 +21,7 @@
 @property (nonatomic) CGFloat pg_bottom;
 
 - (void)setTapAction:(void(^)(void))completion;
+- (void)setLongPressedAction:(void(^)(void))completion;
 - (UIImage *)screenshot;
 - (UIImage *)screenshotFromRect:(CGRect)rect;
 

@@ -11,6 +11,8 @@
 
 static char PGTapGestureKey;
 static char PGTapHandlerKey;
+static char PGLongPresseGestureKey;
+static char PGLongPresseHandlerKey;
 
 @interface UIView ()
 
@@ -105,6 +107,27 @@ static char PGTapHandlerKey;
 {
     if (recognizer.state == UIGestureRecognizerStateRecognized) {
         void(^action)(void) = objc_getAssociatedObject(self, &PGTapHandlerKey);
+        if (action) {
+            action();
+        }
+    }
+}
+
+- (void)setLongPressedAction:(void (^)(void))completion
+{
+    UILongPressGestureRecognizer *longPressGesture = objc_getAssociatedObject(self, &PGLongPresseGestureKey);
+    if (!longPressGesture) {
+        longPressGesture = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(longPressRecognized:)];
+        [self addGestureRecognizer:longPressGesture];
+        objc_setAssociatedObject(self, &PGLongPresseGestureKey, longPressGesture, OBJC_ASSOCIATION_RETAIN);
+    }
+    objc_setAssociatedObject(self, &PGLongPresseHandlerKey, completion, OBJC_ASSOCIATION_COPY);
+}
+
+- (void)longPressRecognized:(UIGestureRecognizer *)recognizer
+{
+    if (recognizer.state == UIGestureRecognizerStateRecognized) {
+        void(^action)(void) = objc_getAssociatedObject(self, &PGLongPresseHandlerKey);
         if (action) {
             action();
         }

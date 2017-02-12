@@ -12,7 +12,10 @@
 #define LogoutFooterView @"LogoutFooterView"
 
 #import "PGSystemSettingsViewController.h"
+#import "PGAboutUsViewController.h"
+#import "PGContactUsViewController.h"
 #import "PGDeveloperViewController.h"
+
 #import "PGSystemSettingsCell.h"
 #import "PGSystemSettingsTaobaoCell.h"
 #import "PGSettingsLogoutFooterView.h"
@@ -187,6 +190,12 @@
             [self showAlert:@"清除缓存" message:@"确定清除缓存？" actions:@[cancelAction, doneAction] style:^(PGAlertStyle *style) {
                 style.alertType = PGAlertTypeAlert;
             }];
+        } else if (indexPath.item == 1) {
+            PGAboutUsViewController *aboutUsVC = [[PGAboutUsViewController alloc] init];
+            [self.navigationController pushViewController:aboutUsVC animated:YES];
+        } else if (indexPath.item == 2) {
+            PGContactUsViewController *contactUsVC = [[PGContactUsViewController alloc] init];
+            [self.navigationController pushViewController:contactUsVC animated:YES];
         } else if (indexPath.item == 4) {
             // rate app
             [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"itms-apps://itunes.apple.com/app/id1182887153"]];

@@ -235,6 +235,9 @@
 		FFD92D4B1E24E7FA00086DC0 /* PGSystemSettingsCell.m in Sources */ = {isa = PBXBuildFile; fileRef = FFD92D4A1E24E7FA00086DC0 /* PGSystemSettingsCell.m */; };
 		FFD92D4E1E24EBDF00086DC0 /* PGSystemSettingsTaobaoCell.m in Sources */ = {isa = PBXBuildFile; fileRef = FFD92D4D1E24EBDF00086DC0 /* PGSystemSettingsTaobaoCell.m */; };
 		FFE73E751E0BB6E000057F3B /* PGPageBasePlaceholder.m in Sources */ = {isa = PBXBuildFile; fileRef = FFE73E741E0BB6E000057F3B /* PGPageBasePlaceholder.m */; };
+		FFF034641E5086E200D98D80 /* PGAboutUsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FFF034631E5086E200D98D80 /* PGAboutUsViewController.m */; };
+		FFF034671E5086F500D98D80 /* PGContactUsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FFF034661E5086F500D98D80 /* PGContactUsViewController.m */; };
+		FFF0346A1E50970D00D98D80 /* PGCopyLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = FFF034691E50970D00D98D80 /* PGCopyLabel.m */; };
 		FFF8164C1E07ACC80001FDFE /* PGExploreToArticleTransition.m in Sources */ = {isa = PBXBuildFile; fileRef = FFF8164B1E07ACC80001FDFE /* PGExploreToArticleTransition.m */; };
 		FFF8164F1E07BFC70001FDFE /* PGCityGuideToArticleTransition.m in Sources */ = {isa = PBXBuildFile; fileRef = FFF8164E1E07BFC70001FDFE /* PGCityGuideToArticleTransition.m */; };
 /* End PBXBuildFile section */
@@ -705,6 +708,12 @@
 		FFD92D4D1E24EBDF00086DC0 /* PGSystemSettingsTaobaoCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PGSystemSettingsTaobaoCell.m; sourceTree = "<group>"; };
 		FFE73E731E0BB6E000057F3B /* PGPageBasePlaceholder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PGPageBasePlaceholder.h; sourceTree = "<group>"; };
 		FFE73E741E0BB6E000057F3B /* PGPageBasePlaceholder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PGPageBasePlaceholder.m; sourceTree = "<group>"; };
+		FFF034621E5086E200D98D80 /* PGAboutUsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PGAboutUsViewController.h; sourceTree = "<group>"; };
+		FFF034631E5086E200D98D80 /* PGAboutUsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PGAboutUsViewController.m; sourceTree = "<group>"; };
+		FFF034651E5086F500D98D80 /* PGContactUsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PGContactUsViewController.h; sourceTree = "<group>"; };
+		FFF034661E5086F500D98D80 /* PGContactUsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PGContactUsViewController.m; sourceTree = "<group>"; };
+		FFF034681E50970D00D98D80 /* PGCopyLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PGCopyLabel.h; sourceTree = "<group>"; };
+		FFF034691E50970D00D98D80 /* PGCopyLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PGCopyLabel.m; sourceTree = "<group>"; };
 		FFF8164A1E07ACC80001FDFE /* PGExploreToArticleTransition.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PGExploreToArticleTransition.h; sourceTree = "<group>"; };
 		FFF8164B1E07ACC80001FDFE /* PGExploreToArticleTransition.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PGExploreToArticleTransition.m; sourceTree = "<group>"; };
 		FFF8164D1E07BFC70001FDFE /* PGCityGuideToArticleTransition.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PGCityGuideToArticleTransition.h; sourceTree = "<group>"; };
@@ -1695,6 +1704,10 @@
 				0F9E8E191DC5F74F003027CF /* PGSystemSettingsViewController.m */,
 				0F9E8E161DC5F74F003027CF /* PGSettingsUpdateViewController.h */,
 				0F9E8E171DC5F74F003027CF /* PGSettingsUpdateViewController.m */,
+				FFF034621E5086E200D98D80 /* PGAboutUsViewController.h */,
+				FFF034631E5086E200D98D80 /* PGAboutUsViewController.m */,
+				FFF034651E5086F500D98D80 /* PGContactUsViewController.h */,
+				FFF034661E5086F500D98D80 /* PGContactUsViewController.m */,
 				0FAC90061DDB11C900955639 /* PGDeveloperViewController.h */,
 				0FAC90071DDB11C900955639 /* PGDeveloperViewController.m */,
 			);
@@ -1799,6 +1812,8 @@
 				0F7A67E31DA7F45A00699AA2 /* PGSettingsLogoutFooterView.m */,
 				0F02E1A71DBDCC9500AA0428 /* PGSettingsUpdateTextField.h */,
 				0F02E1A81DBDCC9500AA0428 /* PGSettingsUpdateTextField.m */,
+				FFF034681E50970D00D98D80 /* PGCopyLabel.h */,
+				FFF034691E50970D00D98D80 /* PGCopyLabel.m */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -2619,6 +2634,7 @@
 				0F5274F41D9B6DAD006A5A56 /* PGGood.m in Sources */,
 				0F3765371D6F2558007B9481 /* PGCarouselBannerCell.m in Sources */,
 				0F7A67E11DA7E65100699AA2 /* PGSettingsHeaderView.m in Sources */,
+				FFF0346A1E50970D00D98D80 /* PGCopyLabel.m in Sources */,
 				0FA1B2A21DC1FA390022ECE2 /* PGMessageContentCell.m in Sources */,
 				0F9E8E1C1DC5F74F003027CF /* PGSystemSettingsViewController.m in Sources */,
 				FF24DF731E027A8800A17486 /* PGSearchResultsGoodsViewModel.m in Sources */,
@@ -2648,6 +2664,7 @@
 				0F877A381D7D1433007BDBE9 /* PGTopic.m in Sources */,
 				0F21FEBA1D9140EF0036F14A /* PGArticleRelatedArticlesCell.m in Sources */,
 				FFF8164C1E07ACC80001FDFE /* PGExploreToArticleTransition.m in Sources */,
+				FFF034641E5086E200D98D80 /* PGAboutUsViewController.m in Sources */,
 				0F9E8E131DC5F746003027CF /* PGMessageViewController.m in Sources */,
 				0F8A799B1DF15E4D00711A16 /* PGScenarioFeedsCollectionView.m in Sources */,
 				0F0F447F1D34FCFD007B90F2 /* PGImageBanner.m in Sources */,
@@ -2710,6 +2727,7 @@
 				0F10C02E1DF5CEF8000D34DA /* ARSegmentPageController.m in Sources */,
 				FF3150F11E14C506002A23D5 /* PGCommentReportViewController.m in Sources */,
 				0FFAD0F41D780DF8009F9E27 /* PGGoodsCollectionView.m in Sources */,
+				FFF034671E5086F500D98D80 /* PGContactUsViewController.m in Sources */,
 				FF07782C1E498A0200FD2FB9 /* PGSystemNotificationView.m in Sources */,
 				FF1D93331E13A42300DFB17A /* UIScrollView+UzysAnimatedGifPullToRefresh.m in Sources */,
 				0F00CBAB1DD99CB3008BFA7E /* PGWebViewController.m in Sources */,
