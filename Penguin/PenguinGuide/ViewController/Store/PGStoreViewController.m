@@ -343,6 +343,7 @@
         if (!notificationExpireDate) {
             NSTimeInterval expireTime = [[NSDate date] timeIntervalSince1970]+5*24*60*60;
             [PGGlobal.cache putObject:@[@(expireTime)] forKey:@"system_notification_expire_date" intoTable:@"General"];
+            
             PGWeakSelf(self);
             dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.4f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
                 [weakself showSystemNotificationPopup];
@@ -351,6 +352,9 @@
             NSTimeInterval expireTime = [notificationExpireDate.firstObject doubleValue];
             NSDate *expireDate = [NSDate dateWithTimeIntervalSince1970:expireTime];
             if ([[NSDate date] compare:expireDate] == NSOrderedDescending) {
+                NSTimeInterval expireTime = [[NSDate date] timeIntervalSince1970]+5*24*60*60;
+                [PGGlobal.cache putObject:@[@(expireTime)] forKey:@"system_notification_expire_date" intoTable:@"General"];
+                
                 PGWeakSelf(self);
                 dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.4f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
                     [weakself showSystemNotificationPopup];
