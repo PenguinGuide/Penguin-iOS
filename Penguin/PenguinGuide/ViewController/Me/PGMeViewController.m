@@ -69,7 +69,7 @@
 {
     [super viewDidAppear:animated];
     
-    self.meCollectionView.contentInset = UIEdgeInsetsMake(0, self.meCollectionView.contentInset.left, self.meCollectionView.contentInset.bottom, self.meCollectionView.contentInset.right);
+    self.meCollectionView.contentInset = UIEdgeInsetsZero;
 }
 
 - (void)dealloc
