@@ -65,6 +65,13 @@
     [self reloadView];
 }
 
+- (void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    
+    self.meCollectionView.contentInset = UIEdgeInsetsMake(0, self.meCollectionView.contentInset.left, self.meCollectionView.contentInset.bottom, self.meCollectionView.contentInset.right);
+}
+
 - (void)dealloc
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self];

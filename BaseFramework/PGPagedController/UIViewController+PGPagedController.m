@@ -15,7 +15,7 @@ static char PagedController;
 
 @interface UIViewController (PGPagedController)
 
-@property (nonatomic, strong) PGPagedController *pagedController;
+@property (nonatomic, strong, readwrite) PGPagedController *pagedController;
 @property (nonatomic, strong) PGSegmentedControl *segmentedControl;
 
 @end

@@ -12,6 +12,8 @@
 
 @interface UIViewController (PGPagedController)
 
+@property (nonatomic, strong, readonly) PGPagedController *pagedController;
+
 - (void)addPagedController:(CGRect)frame viewControllers:(NSArray *)viewControllers segmentConfig:(void(^)(PGSegmentedControlConfig *config))configBlock;
 
 - (void)addPagedController:(PGPagedController *)pagedController config:(void(^)(PGSegmentedControlConfig *config))configBlock;

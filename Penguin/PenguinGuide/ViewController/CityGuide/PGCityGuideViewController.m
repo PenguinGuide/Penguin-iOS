@@ -55,6 +55,8 @@
     [super viewDidAppear:animated];
     
     [self setNeedsStatusBarAppearanceUpdate];
+    
+    self.pagedController.pagerCollectionView.contentInset = UIEdgeInsetsMake(0, self.pagedController.pagerCollectionView.contentInset.left, self.pagedController.pagerCollectionView.contentInset.bottom, self.pagedController.pagerCollectionView.contentInset.right);
 }
 
 - (void)viewDidDisappear:(BOOL)animated

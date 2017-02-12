@@ -13,7 +13,7 @@
 
 @interface PGPagedController () <UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout>
 
-@property (nonatomic, strong) UICollectionView *pagerCollectionView;
+@property (nonatomic, strong, readwrite) UICollectionView *pagerCollectionView;
 
 @property (nonatomic, strong, readwrite) NSArray *viewControllers;
 

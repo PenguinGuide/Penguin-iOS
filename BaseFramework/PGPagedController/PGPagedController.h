@@ -15,6 +15,7 @@
 @property (nonatomic, assign) BOOL disableScrolling;
 
 @property (nonatomic, strong) PGSegmentedControl *segmentedControl;
+@property (nonatomic, strong, readonly) UICollectionView *pagerCollectionView;
 
 @property (nonatomic, strong, readonly) NSArray *viewControllers;
 @property (nonatomic, assign, readonly) CGFloat segmentHeight;
