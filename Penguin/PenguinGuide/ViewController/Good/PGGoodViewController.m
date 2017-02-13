@@ -326,9 +326,9 @@
         [buyButton.titleLabel setFont:Theme.fontMediumBold];
         [_bottomToolBar addSubview:buyButton];
         
-        UIButton *shareButton = [[UIButton alloc] initWithFrame:CGRectMake(buyButton.pg_left-60, 0, 50, 50)];
-        [shareButton setImage:[UIImage imageNamed:@"pg_article_share"] forState:UIControlStateNormal];
-        [_bottomToolBar addSubview:shareButton];
+//        UIButton *shareButton = [[UIButton alloc] initWithFrame:CGRectMake(buyButton.pg_left-60, 0, 50, 50)];
+//        [shareButton setImage:[UIImage imageNamed:@"pg_article_share"] forState:UIControlStateNormal];
+//        [_bottomToolBar addSubview:shareButton];
         
         UIView *horizontalLine = [[UIView alloc] initWithFrame:CGRectMake(0, 0, UISCREEN_WIDTH, 1/[UIScreen mainScreen].scale)];
         horizontalLine.backgroundColor = [UIColor colorWithHexString:@"E1E1E1"];
