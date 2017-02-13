@@ -10,8 +10,6 @@
 
 @interface PGCollectionContentViewModel ()
 
-@property (nonatomic, strong, readwrite) NSArray *articles;
-
 @end
 
 @implementation PGCollectionContentViewModel
@@ -89,16 +87,6 @@
             config.keyPath = nil;
             config.pattern = @{@"articleId":articleId};
         } completion:^(id response) {
-            NSMutableArray *collectionsArray = [NSMutableArray arrayWithArray:weakself.articles];
-            if (index < collectionsArray.count) {
-                [collectionsArray removeObjectAtIndex:index];
-                weakself.articles = [NSArray arrayWithArray:collectionsArray];
-            }
-            if (weakself.articles.count == 0) {
-                weakself.endFlag = YES;
-            } else {
-                weakself.endFlag = NO;
-            }
             if (completion) {
                 completion(YES);
             }

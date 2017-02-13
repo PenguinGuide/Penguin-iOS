@@ -18,6 +18,8 @@
 
 @property (nonatomic, strong) PGCollectionContentViewModel *viewModel;
 
+@property (nonatomic, assign) BOOL isPerformingBatchUpdates;
+
 @end
 
 @implementation PGCollectionsViewController
@@ -34,22 +36,24 @@
     
     PGWeakSelf(self);
     [self observe:self.viewModel keyPath:@"articles" block:^(id changedObject) {
-        NSArray *articles = changedObject;
-        if (articles && [articles isKindOfClass:[NSArray class]]) {
-            [UIView setAnimationsEnabled:NO];
-            [weakself.articlesCollectionView reloadData];
-            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.25 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                [UIView setAnimationsEnabled:YES];
-            });
-            
-            if (articles.count == 0 && !weakself.viewModel.endFlag) {
-                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.4 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                    [weakself showPlaceholder:@"pg_collections_placeholder" desc:@"还没有喜欢的内容呢"];
+        if (!weakself.isPerformingBatchUpdates) {
+            NSArray *articles = changedObject;
+            if (articles && [articles isKindOfClass:[NSArray class]]) {
+                [UIView setAnimationsEnabled:NO];
+                [weakself.articlesCollectionView reloadData];
+                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.25 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                    [UIView setAnimationsEnabled:YES];
                 });
+                
+                if (articles.count == 0 && !weakself.viewModel.endFlag) {
+                    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.4 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                        [weakself showPlaceholder:@"pg_collections_placeholder" desc:@"还没有喜欢的内容呢"];
+                    });
+                }
             }
+            [weakself dismissLoading];
+            [weakself.articlesCollectionView endBottomRefreshing];
         }
-        [weakself dismissLoading];
-        [weakself.articlesCollectionView endBottomRefreshing];
     }];
     [self observeError:self.viewModel];
     [self observeCollectionView:self.articlesCollectionView endOfFeeds:self.viewModel];
@@ -155,9 +159,30 @@
 - (void)disCollectArticle:(PGArticleBanner *)article
 {
     PGWeakSelf(self);
-    NSInteger index = [self.viewModel.articles indexOfObject:article];
+    __block NSInteger index = [self.viewModel.articles indexOfObject:article];
     [self.viewModel disCollectArticle:article.articleId index:index completion:^(BOOL success) {
         if (success) {
+            weakself.isPerformingBatchUpdates = YES;
+            __block NSMutableArray *articlesArray = [NSMutableArray arrayWithArray:weakself.viewModel.articles];
+            if (articlesArray.count > 1) {
+                [weakself.articlesCollectionView performBatchUpdates:^{
+                    [articlesArray removeObjectAtIndex:index];
+                    weakself.viewModel.articles = [NSArray arrayWithArray:articlesArray];
+                    [weakself.articlesCollectionView deleteItemsAtIndexPaths:@[[NSIndexPath indexPathForItem:index inSection:0]]];
+                } completion:^(BOOL finished) {
+                    weakself.isPerformingBatchUpdates = NO;
+                }];
+            } else {
+                [articlesArray removeObjectAtIndex:index];
+                weakself.viewModel.articles = [NSArray arrayWithArray:articlesArray];
+                [weakself.articlesCollectionView reloadData];
+                if (articlesArray.count == 0) {
+                    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.4 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                        [weakself showPlaceholder:@"pg_collections_placeholder" desc:@"还没有喜欢的内容呢"];
+                    });
+                }
+                weakself.isPerformingBatchUpdates = NO;
+            }
             [weakself showToast:@"取消成功"];
             [[NSNotificationCenter defaultCenter] postNotificationName:PG_NOTIFICATION_UPDATE_ME object:nil];
         } else {

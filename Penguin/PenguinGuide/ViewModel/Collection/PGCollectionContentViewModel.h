@@ -11,7 +11,7 @@
 
 @interface PGCollectionContentViewModel : PGBaseViewModel
 
-@property (nonatomic, strong, readonly) NSArray *articles;
+@property (nonatomic, strong, readwrite) NSArray *articles;
 
 - (void)requestData;
 - (void)collectArticle:(NSString *)articleId completion:(void(^)(BOOL success))completion;
