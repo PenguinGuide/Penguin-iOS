@@ -27,14 +27,12 @@ static char ToastTimer;
 
 - (void)showToast:(NSString *)message
 {
-    [self showToast:message position:PGToastPositionTop styleConfig:^(PGToastStyle *style) {
+    [self showToast:message position:PGToastPositionCenter styleConfig:^(PGToastStyle *style) {
         style.textFont = [UIFont systemFontOfSize:16.f weight:UIFontWeightLight];
-        style.textColor = [UIColor blackColor];
+        style.textColor = [UIColor whiteColor];
         style.textPadding = 5.f;
-        style.toastBackgroundColor = [UIColor colorWithWhite:1.f alpha:0.8f];
-        style.toastBorderColor = [UIColor blackColor];
-        style.toastBorderWidth = 1.f;
-        style.toastBorderRadius = 4.f;
+        style.toastBackgroundColor = [UIColor blackColor];
+        style.toastBorderRadius = 6.f;
     }];
 }
 
@@ -42,12 +40,10 @@ static char ToastTimer;
 {
     [self showToast:message position:position styleConfig:^(PGToastStyle *style) {
         style.textFont = [UIFont systemFontOfSize:16.f weight:UIFontWeightLight];
-        style.textColor = [UIColor blackColor];
+        style.textColor = [UIColor whiteColor];
         style.textPadding = 5.f;
-        style.toastBackgroundColor = [UIColor colorWithWhite:1.f alpha:0.8f];
-        style.toastBorderColor = [UIColor blackColor];
-        style.toastBorderWidth = 1.f;
-        style.toastBorderRadius = 4.f;
+        style.toastBackgroundColor = [UIColor blackColor];
+        style.toastBorderRadius = 6.f;
     }];
 }
 
@@ -65,7 +61,7 @@ static char ToastTimer;
         self.toastLabel.text = message;
         self.toastLabel.textAlignment = NSTextAlignmentCenter;
         
-        if (style.textColor) {
+        if (style.textFont) {
             self.toastLabel.font = style.textFont;
         } else {
             self.toastLabel.font = [UIFont systemFontOfSize:14.f weight:UIFontWeightLight];
@@ -74,23 +70,23 @@ static char ToastTimer;
         if (style.textColor) {
             self.toastLabel.textColor = style.textColor;
         } else {
-            self.toastLabel.textColor = [UIColor blackColor];
+            self.toastLabel.textColor = [UIColor whiteColor];
         }
         
         if (style.toastBackgroundColor) {
             self.toastLabel.backgroundColor = style.toastBackgroundColor;
         } else {
-            self.toastLabel.backgroundColor = [UIColor whiteColor];
+            self.toastLabel.backgroundColor = [UIColor blackColor];
         }
         
         if (style.toastBorderWidth > 0.f && style.toastBorderColor) {
             self.toastLabel.layer.borderWidth = style.toastBorderWidth;
             self.toastLabel.layer.borderColor = style.toastBorderColor.CGColor;
-            
-            if (style.toastBorderRadius > 0.f) {
-                self.toastLabel.clipsToBounds = YES;
-                self.toastLabel.layer.cornerRadius = style.toastBorderRadius;
-            }
+        }
+        
+        if (style.toastBorderRadius > 0.f) {
+            self.toastLabel.clipsToBounds = YES;
+            self.toastLabel.layer.cornerRadius = style.toastBorderRadius;
         }
         
         CGFloat labelWidth = MIN([UIScreen mainScreen].bounds.size.width-40, [message sizeWithAttributes:@{NSFontAttributeName:self.toastLabel.font}].width + 25);

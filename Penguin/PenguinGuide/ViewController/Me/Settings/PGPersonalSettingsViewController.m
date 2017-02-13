@@ -247,12 +247,12 @@
                             config.params = params;
                             config.keyPath = nil;
                         } completion:^(id response) {
-                            [weakself showToast:@"绑定成功"];
+                            [weakself showToast:@"绑定成功" position:PGToastPositionBottom];
                         } failure:^(NSError *error) {
                             [weakself showErrorMessage:error];
                         }];
                     } else if (state == SSDKResponseStateCancel || state == SSDKResponseStateFail) {
-                        [weakself showToast:@"绑定失败"];
+                        [weakself showToast:@"绑定失败" position:PGToastPositionBottom];
                     }
                 }];
             }
@@ -269,12 +269,12 @@
                             config.params = params;
                             config.keyPath = nil;
                         } completion:^(id response) {
-                            [weakself showToast:@"绑定成功"];
+                            [weakself showToast:@"绑定成功" position:PGToastPositionBottom];
                         } failure:^(NSError *error) {
                             [weakself showErrorMessage:error];
                         }];
                     } else if (state == SSDKResponseStateCancel || state == SSDKResponseStateFail) {
-                        [weakself showToast:@"绑定失败"];
+                        [weakself showToast:@"绑定失败" position:PGToastPositionBottom];
                     }
                 }];
             }
@@ -315,7 +315,7 @@
                     // TODO: user logout
                 }
             } else {
-                [weakself showToast:@"上传失败"];
+                [weakself showToast:@"上传失败" position:PGToastPositionBottom];
             }
             [weakself dismissLoading];
         }];
