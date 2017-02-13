@@ -336,9 +336,7 @@
                         [_cityPicker reloadComponent:1];
                         [_cityPicker selectRow:cityIndex inComponent:1 animated:YES];
                     }
-
                 }
-
             }
         }
     }
