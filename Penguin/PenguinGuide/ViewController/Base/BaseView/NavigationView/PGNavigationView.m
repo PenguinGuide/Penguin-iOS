@@ -35,4 +35,27 @@
     return naviView;
 }
 
++ (PGNavigationView *)defaultNavigationViewWithSearchButton
+{
+    PGNavigationView *naviView = [[PGNavigationView alloc] initWithFrame:CGRectMake(0, 0, UISCREEN_WIDTH, 64)];
+    
+    UIButton *searchButton = [[UIButton alloc] initWithFrame:CGRectMake(16, 31, 50, 50)];
+    searchButton.eventName = search_button_clicked;
+    [searchButton setImage:[UIImage imageNamed:@"pg_home_search_button"] forState:UIControlStateNormal];
+    [searchButton setContentVerticalAlignment:UIControlContentVerticalAlignmentTop];
+    [searchButton setContentHorizontalAlignment:UIControlContentHorizontalAlignmentLeft];
+    [searchButton addTarget:naviView action:@selector(searchButtonClicked) forControlEvents:UIControlEventTouchUpInside];
+    
+    [naviView addSubview:searchButton];
+    
+    return naviView;
+}
+
+- (void)searchButtonClicked
+{
+    if (self.delegate && [self.delegate respondsToSelector:@selector(searchButtonClicked)]) {
+        [self.delegate searchButtonClicked];
+    }
+}
+
 @end

@@ -8,8 +8,19 @@
 
 #import <UIKit/UIKit.h>
 
+@protocol PGNavigationViewDelegate <NSObject>
+
+@optional
+
+- (void)searchButtonClicked;
+
+@end
+
 @interface PGNavigationView : UIView
 
+@property (nonatomic, weak) id<PGNavigationViewDelegate> delegate;
+
 + (PGNavigationView *)defaultNavigationView;
++ (PGNavigationView *)defaultNavigationViewWithSearchButton;
 
 @end

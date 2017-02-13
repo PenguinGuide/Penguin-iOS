@@ -21,17 +21,15 @@
 
 #import "PGSystemNotificationView.h"
 
-@interface PGStoreViewController () <PGFeedsCollectionViewDelegate>
+@interface PGStoreViewController () <PGFeedsCollectionViewDelegate, PGNavigationViewDelegate>
+
+@property (nonatomic, strong) PGNavigationView *navigationView;
 
 @property (nonatomic, strong) PGStoreViewModel *viewModel;
 @property (nonatomic, strong) PGFeedsCollectionView *feedsCollectionView;
 
-@property (nonatomic, strong) UIButton *searchButton;
-
 @property (nonatomic, strong) MSWeakTimer *flashbuyWeakTimer;
 @property (nonatomic, strong) MSWeakTimer *bannersWeakTimer;
-
-@property (nonatomic, assign) BOOL statusbarIsWhiteBackground;
 
 @end
 
@@ -40,6 +38,10 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+    
+    self.navigationView = [PGNavigationView defaultNavigationViewWithSearchButton];
+    self.navigationView.delegate = self;
+    [self.view addSubview:self.navigationView];
     
     self.viewModel = [[PGStoreViewModel alloc] initWithAPIClient:self.apiClient];
     [self.viewModel requestData];
@@ -50,7 +52,6 @@
         if (feedsArray && [feedsArray isKindOfClass:[NSArray class]]) {
             if (!weakself.feedsCollectionView.superview) {
                 [weakself.view addSubview:weakself.feedsCollectionView];
-                [weakself.view addSubview:weakself.searchButton];
             }
             [UIView setAnimationsEnabled:NO];
             [weakself.feedsCollectionView reloadData];
@@ -67,7 +68,6 @@
         if (error && [error isKindOfClass:[NSError class]]) {
             if (!weakself.feedsCollectionView.superview) {
                 [weakself.view addSubview:weakself.feedsCollectionView];
-                [weakself.view addSubview:weakself.searchButton];
             }
             [weakself showErrorMessage:error];
             [weakself dismissLoading];
@@ -106,18 +106,6 @@
     
     [self setNeedsStatusBarAppearanceUpdate];
     
-    if (self.statusbarIsWhiteBackground) {
-        UIView *statusBar = [[[UIApplication sharedApplication] valueForKey:@"statusBarWindow"] valueForKey:@"statusBar"];
-        if ([statusBar respondsToSelector:@selector(setBackgroundColor:)]) {
-            statusBar.backgroundColor = [UIColor whiteColor];
-        }
-    } else {
-        UIView *statusBar = [[[UIApplication sharedApplication] valueForKey:@"statusBarWindow"] valueForKey:@"statusBar"];
-        if ([statusBar respondsToSelector:@selector(setBackgroundColor:)]) {
-            statusBar.backgroundColor = [UIColor clearColor];
-        }
-    }
-    
     self.feedsCollectionView.contentInset = UIEdgeInsetsZero;
     
     [self checkSystemNotification];
@@ -133,12 +121,7 @@
 
 - (UIStatusBarStyle)preferredStatusBarStyle
 {
-    // http://www.th7.cn/Program/IOS/201606/881633.shtml fix this method didn't called
-    if (self.statusbarIsWhiteBackground) {
-        return UIStatusBarStyleDefault;
-    } else {
-        return UIStatusBarStyleLightContent;
-    }
+    return UIStatusBarStyleDefault;
 }
 
 - (void)dealloc
@@ -294,37 +277,7 @@
     }
 }
 
-- (void)scrollViewDidScroll:(UIScrollView *)scrollView
-{
-    // NOTE: add background view to status bar http://stackoverflow.com/questions/19063365/how-to-change-the-status-bar-background-color-and-text-color-on-ios-7
-    if (scrollView.contentOffset.y >= UISCREEN_WIDTH*9/16) {
-        UIView *statusBar = [[[UIApplication sharedApplication] valueForKey:@"statusBarWindow"] valueForKey:@"statusBar"];
-        if ([statusBar respondsToSelector:@selector(setBackgroundColor:)]) {
-            statusBar.backgroundColor = [UIColor whiteColor];
-        }
-        if (!self.statusbarIsWhiteBackground) {
-            self.statusbarIsWhiteBackground = YES;
-            [self setNeedsStatusBarAppearanceUpdate];
-        } else {
-            self.statusbarIsWhiteBackground = YES;
-        }
-        self.searchButton.hidden = YES;
-    } else {
-        UIView *statusBar = [[[UIApplication sharedApplication] valueForKey:@"statusBarWindow"] valueForKey:@"statusBar"];
-        if ([statusBar respondsToSelector:@selector(setBackgroundColor:)]) {
-            statusBar.backgroundColor = [UIColor clearColor];
-        }
-        if (self.statusbarIsWhiteBackground) {
-            self.statusbarIsWhiteBackground = NO;
-            [self setNeedsStatusBarAppearanceUpdate];
-        } else {
-            self.statusbarIsWhiteBackground = NO;
-        }
-        self.searchButton.hidden = NO;
-    }
-}
-
-#pragma mark - <Button Events>
+#pragma mark - <PGNavigationViewDelegate>
 
 - (void)searchButtonClicked
 {
@@ -368,7 +321,7 @@
 
 - (PGFeedsCollectionView *)feedsCollectionView {
     if(_feedsCollectionView == nil) {
-        _feedsCollectionView = [[PGFeedsCollectionView alloc] initWithFrame:CGRectMake(0, 0, UISCREEN_WIDTH, UISCREEN_HEIGHT-50) collectionViewLayout:[UICollectionViewFlowLayout new]];
+        _feedsCollectionView = [[PGFeedsCollectionView alloc] initWithFrame:CGRectMake(0, 64, UISCREEN_WIDTH, UISCREEN_HEIGHT-50-64) collectionViewLayout:[UICollectionViewFlowLayout new]];
         _feedsCollectionView.contentInset = UIEdgeInsetsMake(-20, 0, 0, 0);
         _feedsCollectionView.feedsDelegate = self;
         
@@ -392,19 +345,6 @@
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2.f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         [weakself.feedsCollectionView endPullToRefresh];
     });
-}
-
-- (UIButton *)searchButton
-{
-    if (!_searchButton) {
-        _searchButton = [[UIButton alloc] initWithFrame:CGRectMake(24, 35, 50, 50)];
-        _searchButton.eventName = search_button_clicked;
-        [_searchButton setImage:[UIImage imageNamed:@"pg_home_search_button"] forState:UIControlStateNormal];
-        [_searchButton setContentVerticalAlignment:UIControlContentVerticalAlignmentTop];
-        [_searchButton setContentHorizontalAlignment:UIControlContentHorizontalAlignmentLeft];
-        [_searchButton addTarget:self action:@selector(searchButtonClicked) forControlEvents:UIControlEventTouchUpInside];
-    }
-    return _searchButton;
 }
 
 - (void)didReceiveMemoryWarning {
