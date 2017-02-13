@@ -9,7 +9,7 @@
 #import "PGSettingsUpdateViewController.h"
 #import "PGSettingsUpdateTextField.h"
 
-@interface PGSettingsUpdateViewController () <UIPickerViewDataSource, UIPickerViewDelegate>
+@interface PGSettingsUpdateViewController () <UIPickerViewDataSource, UIPickerViewDelegate, UITextFieldDelegate>
 
 @property (nonatomic, assign) PGSettingsType settingType;
 @property (nonatomic, strong) NSString *content;
@@ -169,6 +169,18 @@
     self.updateTextField.text = [self.df stringFromDate:date];
 }
 
+#pragma mark - <UITextFieldDelegate>
+
+- (BOOL)textFieldShouldReturn:(UITextField *)textField
+{
+    if (textField.text.length > 0) {
+        [textField resignFirstResponder];
+        return YES;
+    }
+    
+    return NO;
+}
+
 #pragma mark - <Button Events>
 
 - (void)saveButtonClicked
@@ -237,6 +249,7 @@
             case PGSettingsTypeNickname:
                 _updateTextField.placeholder = @"点击修改昵称";
                 _updateTextField.clearButtonMode = UITextFieldViewModeAlways;
+                _updateTextField.delegate = self;
                 break;
             case PGSettingsTypeSex:
                 _updateTextField.placeholder = @"点击修改性别";
@@ -272,6 +285,11 @@
         _dobPicker = [[UIDatePicker alloc] init];
         _dobPicker.datePickerMode = UIDatePickerModeDate;
         [_dobPicker addTarget:self action:@selector(datePickerValueChanged:) forControlEvents:UIControlEventValueChanged];
+        
+        NSDate *date = [self.df dateFromString:self.content];
+        if (date) {
+            [_dobPicker setDate:date animated:YES];
+        }
     }
     return _dobPicker;
 }
@@ -283,6 +301,12 @@
         _sexPicker.dataSource = self;
         _sexPicker.delegate = self;
         _sexPicker.tag = 0;
+        
+        if ([self.content isEqualToString:@"男"]) {
+            [_sexPicker selectRow:0 inComponent:0 animated:YES];
+        } else {
+            [_sexPicker selectRow:1 inComponent:0 animated:YES];
+        }
     }
     return _sexPicker;
 }
@@ -294,6 +318,29 @@
         _cityPicker.dataSource = self;
         _cityPicker.delegate = self;
         _cityPicker.tag = 1;
+        
+        if (self.content && self.content.length > 0) {
+            NSArray *cityComponents = [self.content componentsSeparatedByString:@" "];
+            if (cityComponents.count == 2) {
+                NSString *province = cityComponents[0];
+                NSString *city = cityComponents[1];
+                
+                if ([self.provincesArray containsObject:province]) {
+                    NSInteger provinceIndex = [self.provincesArray indexOfObject:province];
+                    self.currentIndex = provinceIndex;
+                    NSArray *citiesArray = self.districtsArray[provinceIndex];
+                    if ([citiesArray containsObject:city]) {
+                        NSInteger cityIndex = [citiesArray indexOfObject:city];
+                        
+                        [_cityPicker selectRow:provinceIndex inComponent:0 animated:YES];
+                        [_cityPicker reloadComponent:1];
+                        [_cityPicker selectRow:cityIndex inComponent:1 animated:YES];
+                    }
+
+                }
+
+            }
+        }
     }
     return _cityPicker;
 }
