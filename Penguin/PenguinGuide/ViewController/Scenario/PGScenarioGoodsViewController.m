@@ -17,7 +17,7 @@
 
 @property (nonatomic, strong) NSString *scenarioId;
 
-@property (nonatomic, strong) PGScenarioGoodsCollectionView *goodsCollectionView;
+@property (nonatomic, strong) PGBaseCollectionView *goodsCollectionView;
 @property (nonatomic, strong) PGScenarioGoodsViewModel *viewModel;
 
 @end
@@ -156,7 +156,7 @@
 - (PGBaseCollectionView *)goodsCollectionView
 {
     if (!_goodsCollectionView) {
-        _goodsCollectionView = [[PGScenarioGoodsCollectionView alloc] initWithFrame:CGRectMake(0, 0, UISCREEN_WIDTH, UISCREEN_HEIGHT-64-50) collectionViewLayout:[UICollectionViewFlowLayout new]];
+        _goodsCollectionView = [[PGBaseCollectionView alloc] initWithFrame:CGRectMake(0, 0, UISCREEN_WIDTH, UISCREEN_HEIGHT-64-50) collectionViewLayout:[UICollectionViewFlowLayout new]];
         _goodsCollectionView.dataSource = self;
         _goodsCollectionView.delegate = self;
         _goodsCollectionView.showsHorizontalScrollIndicator = NO;

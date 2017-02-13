@@ -14,7 +14,7 @@
 
 @interface PGScenarioFeedsViewController () <PGFeedsCollectionViewDelegate>
 
-@property (nonatomic, strong) PGScenarioFeedsCollectionView *feedsCollectionView;
+@property (nonatomic, strong) PGFeedsCollectionView *feedsCollectionView;
 
 @property (nonatomic, strong) PGScenarioFeedsViewModel *viewModel;
 
@@ -135,7 +135,7 @@
 - (PGFeedsCollectionView *)feedsCollectionView
 {
     if (!_feedsCollectionView) {
-        _feedsCollectionView = [[PGScenarioFeedsCollectionView alloc] initWithFrame:CGRectMake(0, 0, UISCREEN_WIDTH, UISCREEN_HEIGHT-64-50) collectionViewLayout:[UICollectionViewFlowLayout new]];
+        _feedsCollectionView = [[PGFeedsCollectionView alloc] initWithFrame:CGRectMake(0, 0, UISCREEN_WIDTH, UISCREEN_HEIGHT-64-50) collectionViewLayout:[UICollectionViewFlowLayout new]];
         _feedsCollectionView.feedsDelegate = self;
         _feedsCollectionView.showsHorizontalScrollIndicator = NO;
         _feedsCollectionView.showsVerticalScrollIndicator = NO;
