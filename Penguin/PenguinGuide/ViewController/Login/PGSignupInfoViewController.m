@@ -8,6 +8,7 @@
 
 #import "PGSignupInfoViewController.h"
 #import "PGLoginTextField.h"
+#import "UIButton+WebCache.h"
 
 @interface PGSignupInfoViewController () <UIPickerViewDataSource, UIPickerViewDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate>
 
@@ -183,7 +184,6 @@
         } failure:^(NSError *error) {
             [weakself dismissLoading];
             [weakself showErrorMessage:error];
-            [weakself dismissViewControllerAnimated:YES completion:nil];
         }];
     }
 }
@@ -206,7 +206,7 @@
 {
     __block UIImage *image = [info objectForKey:UIImagePickerControllerOriginalImage];
     if (image) {
-        [self showLoading];
+        [self showOccupiedLoading];
         PGWeakSelf(self);
         // NOTE: upload image with base64 data http://blog.csdn.net/a645258072/article/details/51728806
         [self.apiClient pg_uploadImage:^(PGRKRequestConfig *config) {
@@ -237,6 +237,9 @@
         _cameraButton.layer.cornerRadius = 46;
         [_cameraButton addTarget:self action:@selector(cameraButtonClicked) forControlEvents:UIControlEventTouchUpInside];
         [_cameraButton setImage:[UIImage imageNamed:@"pg_login_camera"] forState:UIControlStateNormal];
+        if (self.userAvatar && self.userAvatar.length > 0) {
+            [_cameraButton sd_setImageWithURL:[NSURL URLWithString:self.userAvatar] forState:UIControlStateNormal];
+        }
     }
     return _cameraButton;
 }
@@ -247,6 +250,9 @@
         _nicknameTextField = [[PGLoginTextField alloc] initWithFrame:CGRectMake(45, self.cameraButton.pg_bottom+40, UISCREEN_WIDTH-90, 40)];
         _nicknameTextField.placeholder = @"请输入昵称";
         _nicknameTextField.delegate = self;
+        if (self.userNickname && self.userNickname.length > 0) {
+            _nicknameTextField.text = self.userNickname;
+        }
     }
     return _nicknameTextField;
 }

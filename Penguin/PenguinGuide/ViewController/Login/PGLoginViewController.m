@@ -137,6 +137,8 @@
             PGGlobal.smsCodeCountDown = 60;
             [weakself.loginView.smsCodeButton setTitle:[NSString stringWithFormat:@"重新获取 %@s", @(PGGlobal.smsCodeCountDown)] forState:UIControlStateNormal];
             [PGGlobal resetSMSCodeTimer];
+            
+            [weakself.loginView.smsCodeTextField becomeFirstResponder];
         } failure:^(NSError *error) {
             [weakself showErrorMessage:error];
             [weakself dismissLoading];

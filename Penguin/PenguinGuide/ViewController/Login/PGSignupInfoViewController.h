@@ -11,5 +11,7 @@
 @interface PGSignupInfoViewController : PGLoginBaseViewController
 
 @property (nonatomic, strong) NSString *userId;
+@property (nonatomic, strong) NSString *userAvatar;
+@property (nonatomic, strong) NSString *userNickname;
 
 @end

@@ -389,10 +389,10 @@
         if (userInfo[@"message"]) {
             NSString *errorMsg = userInfo[@"message"];
             if (errorMsg && errorMsg.length > 0) {
-                [self showToast:errorMsg position:PGToastPositionTop];
+                [self showToast:errorMsg position:PGToastPositionCenter];
             }
         } else if (userInfo[NSLocalizedDescriptionKey]) {
-            [self showToast:userInfo[NSLocalizedDescriptionKey] position:PGToastPositionTop];
+            [self showToast:userInfo[NSLocalizedDescriptionKey] position:PGToastPositionCenter];
         }
     }
     NSInteger errorCode = error.code;
