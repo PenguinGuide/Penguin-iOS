@@ -82,7 +82,7 @@
 
 - (void)dealloc
 {
-    [self unobserve];
+    //[self unobserve];
 }
 
 - (void)reloadView

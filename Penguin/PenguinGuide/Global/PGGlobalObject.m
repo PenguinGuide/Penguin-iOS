@@ -70,6 +70,8 @@
                                                             userInfo:nil
                                                              repeats:YES
                                                        dispatchQueue:dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)];
+        
+        [self.cache clearTable:@"ArticlePosition"];
     }
     return self;
 }
