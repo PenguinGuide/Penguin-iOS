@@ -107,6 +107,13 @@
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
+    if (self.viewModel.articlesArray.count-indexPath.item == 3) {
+        PGWeakSelf(self);
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
+            [weakself.viewModel requestArticles:weakself.cityId];
+        });
+    }
+    
     PGArticleBannerCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:ArticleBannerCell forIndexPath:indexPath];
     
     PGArticleBanner *articleBanner = self.viewModel.articlesArray[indexPath.item];

@@ -72,7 +72,7 @@
             weakself.feedsVC.delegate = weakself;
             weakself.goodsVC.delegate = weakself;
             
-            [weakself addPagedController:CGRectMake(0, 64, self.view.pg_width, UISCREEN_HEIGHT-64)
+            [weakself addPagedController:CGRectMake(0, 64, weakself.view.pg_width, UISCREEN_HEIGHT-64)
                          viewControllers:@[weakself.feedsVC, weakself.goodsVC]
                            segmentConfig:^(PGSegmentedControlConfig *config) {
                                config.titles = @[weakself.isFromStorePage?@"教 你 买":@"边 读 边 选", @"商 品"];

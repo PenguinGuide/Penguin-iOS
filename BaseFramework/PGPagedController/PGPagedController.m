@@ -103,7 +103,7 @@
 
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    return CGSizeMake(self.view.frame.size.width, collectionView.frame.size.height);
+    return CGSizeMake(collectionView.frame.size.width, collectionView.frame.size.height);
 }
 
 - (CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout minimumLineSpacingForSectionAtIndex:(NSInteger)section
@@ -124,9 +124,9 @@
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
 {
     CGFloat pageWidth = scrollView.frame.size.width;
-    NSInteger currentPage = scrollView.contentOffset.x / pageWidth;
+    self.currentPage = scrollView.contentOffset.x / pageWidth;
     
-    [self.segmentedControl scrollToPage:currentPage];
+    [self.segmentedControl scrollToPage:self.currentPage];
 }
 
 #pragma mark - <Lazy Init>
