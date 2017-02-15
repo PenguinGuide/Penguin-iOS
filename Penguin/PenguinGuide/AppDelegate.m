@@ -248,6 +248,12 @@
         NSString *notificationType = [NSString stringWithFormat:@"%@", userInfo[@"type"]];
         if ([notificationType isEqualToString:@"1"]) {
             // h5
+            if (userInfo[@"url"]) {
+                NSString *url = [NSString stringWithFormat:@"%@", userInfo[@"url"]];
+                if (url && url.length > 0) {
+                    [[PGRouter sharedInstance] openURL:url];
+                }
+            }
         } else if ([notificationType isEqualToString:@"2"]) {
             // good detail
             if (userInfo[@"id"]) {
