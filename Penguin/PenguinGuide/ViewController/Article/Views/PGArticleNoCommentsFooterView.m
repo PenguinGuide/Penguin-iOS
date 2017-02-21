@@ -45,7 +45,7 @@
 {
     if (!_label) {
         _label = [[UILabel alloc] initWithFrame:CGRectMake(0, self.imageView.pg_bottom+50, self.pg_width, 16)];
-        _label.text = @"还没有评论，还来吐槽！";
+        _label.text = @"还没有评论，快来吐槽！";
         _label.font = Theme.fontMediumBold;
         _label.textColor = Theme.colorText;
         _label.textAlignment = NSTextAlignmentCenter;
