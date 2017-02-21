@@ -103,8 +103,6 @@
         [PGGlobal.cache putObject:@[currentVersion] forKey:@"app_version" intoTable:@"Session"];
     }
     
-    isFirstLaunch = YES;
-    
     if (isFirstLaunch) {
         PGLaunchGuidesViewController *launchGuidesVC = [[PGLaunchGuidesViewController alloc] initWithImages:@[@"launch_guides_1", @"launch_guides_2", @"launch_guides_3", @"launch_guides_4"]];
         PGWeakSelf(self);
