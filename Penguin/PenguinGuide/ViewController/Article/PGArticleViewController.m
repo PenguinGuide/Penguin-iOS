@@ -20,6 +20,7 @@
 #define ArticleCommentCell @"ArticleCommentCell"
 #define ArticleCommentReplyCell @"ArticleCommentReplyCell"
 #define ArticleCommentsFooterView @"ArticleCommentsFooterView"
+#define ArticleNoCommentsFooterView @"ArticleNoCommentsFooterView"
 
 #import "PGArticleViewController.h"
 #import "UIScrollView+PGScrollView.h"
@@ -48,6 +49,7 @@
 #import "PGArticleCommentReplyCell.h"
 #import "PGCommentInputAccessoryView.h"
 #import "PGArticleCommentsFooterView.h"
+#import "PGArticleNoCommentsFooterView.h"
 #import "PGArticleParagraphTextLabel.h"
 
 // view models
@@ -500,14 +502,20 @@
 
 - (UICollectionReusableView *)collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath
 {
-    if (indexPath.section == 2 && kind == UICollectionElementKindSectionFooter && self.viewModel.commentsArray.count > 0) {
-        PGArticleCommentsFooterView *footerView = [collectionView dequeueReusableSupplementaryViewOfKind:kind withReuseIdentifier:ArticleCommentsFooterView forIndexPath:indexPath];
-        [footerView.allCommentsButton addTarget:self action:@selector(allCommentsButtonClicked) forControlEvents:UIControlEventTouchUpInside];
-        footerView.allCommentsButton.eventName = article_all_comments_button_clicked;
-        if (self.articleId) {
-            footerView.allCommentsButton.eventId = self.articleId;
+    if (indexPath.section == 2 && kind == UICollectionElementKindSectionFooter) {
+        if (self.viewModel.commentsArray.count > 0) {
+            PGArticleCommentsFooterView *footerView = [collectionView dequeueReusableSupplementaryViewOfKind:kind withReuseIdentifier:ArticleCommentsFooterView forIndexPath:indexPath];
+            [footerView.allCommentsButton addTarget:self action:@selector(allCommentsButtonClicked) forControlEvents:UIControlEventTouchUpInside];
+            footerView.allCommentsButton.eventName = article_all_comments_button_clicked;
+            if (self.articleId) {
+                footerView.allCommentsButton.eventId = self.articleId;
+            }
+            return footerView;
+        } else {
+            PGArticleNoCommentsFooterView *footerView = [collectionView dequeueReusableSupplementaryViewOfKind:kind withReuseIdentifier:ArticleNoCommentsFooterView forIndexPath:indexPath];
+            return footerView;
         }
-        return footerView;
+
     }
     
     return nil;
@@ -603,8 +611,12 @@
 
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout referenceSizeForFooterInSection:(NSInteger)section
 {
-    if (section == 2 && self.viewModel.commentsArray.count > 0) {
-        return CGSizeMake(UISCREEN_WIDTH, 90);
+    if (section == 2) {
+        if (self.viewModel.commentsArray.count > 0) {
+            return CGSizeMake(UISCREEN_WIDTH, 90);
+        } else {
+            return CGSizeMake(UISCREEN_WIDTH, 50+90+50+20+30);
+        }
     }
     return CGSizeZero;
 }
@@ -1107,6 +1119,7 @@
         [_articleCollectionView registerClass:[PGArticleCommentCell class] forCellWithReuseIdentifier:ArticleCommentCell];
         [_articleCollectionView registerClass:[PGArticleCommentReplyCell class] forCellWithReuseIdentifier:ArticleCommentReplyCell];
         [_articleCollectionView registerClass:[PGArticleCommentsFooterView class] forSupplementaryViewOfKind:UICollectionElementKindSectionFooter withReuseIdentifier:ArticleCommentsFooterView];
+        [_articleCollectionView registerClass:[PGArticleNoCommentsFooterView class] forSupplementaryViewOfKind:UICollectionElementKindSectionFooter withReuseIdentifier:ArticleNoCommentsFooterView];
     }
     return _articleCollectionView;
 }
