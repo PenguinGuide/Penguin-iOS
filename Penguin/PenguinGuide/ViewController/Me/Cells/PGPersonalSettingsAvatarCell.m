@@ -50,7 +50,7 @@
         
         UIImageView *cameraCoverView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 80, 80)];
         cameraCoverView.userInteractionEnabled = NO;
-        cameraCoverView.image = [UIImage imageNamed:@"pg_login_camera"];
+        cameraCoverView.image = [UIImage imageNamed:@"pg_avatar_camera"];
         
         [_avatarButton addSubview:cameraCoverView];
     }

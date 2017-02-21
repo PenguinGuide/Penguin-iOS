@@ -39,6 +39,11 @@
     }
 }
 
+- (BOOL)shouldHideNavigationBar
+{
+    return YES;
+}
+
 - (void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
@@ -118,20 +123,19 @@
                 config.keyPath = nil;
             } completion:^(id response) {
                 if (response && [response isKindOfClass:[NSDictionary class]]) {
-                    if (response[@"access_token"]) {
-                        NSString *accessToken = response[@"access_token"];
-                        if (accessToken && accessToken.length > 0) {
-                            [PGGlobal synchronizeToken:accessToken];
-                        }
-                    }
-                    if (response[@"user_id"]) {
-                        NSString *userId = response[@"user_id"];
-                        if (userId && userId.length > 0) {
-                            [PGGlobal synchronizeUserId:userId];
-                        }
-                    }
-                    
                     if (response[@"is_new_user"] && [response[@"is_new_user"] boolValue] && PGGlobal.userId) {
+                        if (response[@"access_token"]) {
+                            NSString *accessToken = response[@"access_token"];
+                            if (accessToken && accessToken.length > 0) {
+                                [PGGlobal synchronizeToken:accessToken];
+                            }
+                        }
+                        if (response[@"user_id"]) {
+                            NSString *userId = response[@"user_id"];
+                            if (userId && userId.length > 0) {
+                                [PGGlobal synchronizeUserId:userId];
+                            }
+                        }
                         PGSignupInfoViewController *signupInfoVC = [[PGSignupInfoViewController alloc] init];
                         signupInfoVC.userId = PGGlobal.userId;
                         signupInfoVC.userAvatar = user.icon;
@@ -173,19 +177,19 @@
                 config.keyPath = nil;
             } completion:^(id response) {
                 if (response && [response isKindOfClass:[NSDictionary class]]) {
-                    if (response[@"access_token"]) {
-                        NSString *accessToken = response[@"access_token"];
-                        if (accessToken && accessToken.length > 0) {
-                            [PGGlobal synchronizeToken:accessToken];
-                        }
-                    }
-                    if (response[@"user_id"]) {
-                        NSString *userId = response[@"user_id"];
-                        if (userId && userId.length > 0) {
-                            [PGGlobal synchronizeUserId:userId];
-                        }
-                    }
                     if (response[@"is_new_user"] && [response[@"is_new_user"] boolValue] && PGGlobal.userId) {
+                        if (response[@"access_token"]) {
+                            NSString *accessToken = response[@"access_token"];
+                            if (accessToken && accessToken.length > 0) {
+                                [PGGlobal synchronizeToken:accessToken];
+                            }
+                        }
+                        if (response[@"user_id"]) {
+                            NSString *userId = response[@"user_id"];
+                            if (userId && userId.length > 0) {
+                                [PGGlobal synchronizeUserId:userId];
+                            }
+                        }
                         PGSignupInfoViewController *signupInfoVC = [[PGSignupInfoViewController alloc] init];
                         signupInfoVC.userId = PGGlobal.userId;
                         signupInfoVC.userAvatar = userInfoDict[@"avatar_hd"];

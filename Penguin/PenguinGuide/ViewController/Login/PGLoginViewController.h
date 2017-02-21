@@ -10,4 +10,6 @@
 
 @interface PGLoginViewController : PGLoginBaseViewController
 
+@property (nonatomic, assign) BOOL isPushedIn;
+
 @end

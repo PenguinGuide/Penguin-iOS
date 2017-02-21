@@ -10,6 +10,7 @@
 
 @interface PGMessageContentCell ()
 
+@property (nonatomic, strong) NSString *type;
 @property (nonatomic, strong) UIImageView *iconImageView;
 @property (nonatomic, strong) UILabel *messageLabel;
 @property (nonatomic, strong) UIImageView *dotImageView;
@@ -29,7 +30,6 @@
 
 - (void)initialize
 {
-    [self.contentView addSubview:self.iconImageView];
     [self.contentView addSubview:self.messageLabel];
 //    [self.contentView addSubview:self.dotImageView];
     
@@ -41,16 +41,24 @@
 - (void)setCellWithMessage:(PGMessage *)message type:(NSString *)type
 {
     if (message) {
-        if ([type isEqualToString:@"system"]) {
-            self.iconImageView.image = [UIImage imageNamed:@"pg_me_avatar_placeholder"];
+        self.type = type;
+        
+        if ([self.type isEqualToString:@"system"]) {
+            if (!self.iconImageView.superview) {
+                [self.contentView addSubview:self.iconImageView];
+            }
+            self.iconImageView.image = [UIImage imageNamed:@"pg_system_notification_icon"];
         } else {
+            if (!self.iconImageView.superview) {
+                [self.contentView addSubview:self.iconImageView];
+            }
             [self.iconImageView setWithImageURL:message.content.avatar placeholder:nil completion:nil];
         }
-        if ([type isEqualToString:@"system"]) {
+        if ([self.type isEqualToString:@"system"]) {
             [self.messageLabel setText:message.content.content];
-        } else if ([type isEqualToString:@"reply"]) {
+        } else if ([self.type isEqualToString:@"reply"]) {
             [self.messageLabel setText:[NSString stringWithFormat:@"%@回复了你：%@", message.content.nickname, message.content.content]];
-        } else if ([type isEqualToString:@"likes"]) {
+        } else if ([self.type isEqualToString:@"likes"]) {
             [self.messageLabel setText:[NSString stringWithFormat:@"%@赞了你：%@", message.content.nickname, message.content.content]];
         }
     }
@@ -59,13 +67,20 @@
 - (UIImageView *)iconImageView
 {
     if (!_iconImageView) {
-        _iconImageView = [[UIImageView alloc] initWithFrame:CGRectMake(15, 14, 22, 22)];
-        _iconImageView.contentMode = UIViewContentModeScaleAspectFill;
-        _iconImageView.clipsToBounds = YES;
-        
-        UIImageView *maskImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 22, 22)];
-        maskImageView.image = [[UIImage imageNamed:@"pg_avatar_white_corner_mask"] resizableImageWithCapInsets:UIEdgeInsetsZero resizingMode:UIImageResizingModeStretch];
-        [_iconImageView addSubview:maskImageView];
+        if ([self.type isEqualToString:@"system"]) {
+            _iconImageView = [[UIImageView alloc] initWithFrame:CGRectMake(15, 14, 22, 20)];
+            _iconImageView.contentMode = UIViewContentModeScaleAspectFill;
+            _iconImageView.clipsToBounds = YES;
+        } else {
+            _iconImageView = [[UIImageView alloc] initWithFrame:CGRectMake(15, 14, 22, 22)];
+            _iconImageView.contentMode = UIViewContentModeScaleAspectFill;
+            _iconImageView.clipsToBounds = YES;
+            
+            UIImageView *maskImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 22, 22)];
+            maskImageView.image = [[UIImage imageNamed:@"pg_avatar_white_corner_mask"] resizableImageWithCapInsets:UIEdgeInsetsZero resizingMode:UIImageResizingModeStretch];
+            [_iconImageView addSubview:maskImageView];
+        }
+
     }
     return _iconImageView;
 }

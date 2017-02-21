@@ -195,7 +195,10 @@
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (self.type == PGMessageContentTypeReply) {
+    if (self.type == PGMessageContentTypeSystem) {
+        PGMessage *message = self.viewModel.messages[indexPath.item];
+        [[PGRouter sharedInstance] openURL:message.link];
+    } else if (self.type == PGMessageContentTypeReply) {
         PGWeakSelf(self);
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
             UICollectionViewCell *cell = [collectionView cellForItemAtIndexPath:indexPath];
@@ -210,6 +213,9 @@
                 [weakself.commentInputAccessoryView.commentTextView becomeFirstResponder];
             }
         });
+    } else if (self.type == PGMessageContentTypeLikes) {
+        PGMessage *message = self.viewModel.messages[indexPath.item];
+        [[PGRouter sharedInstance] openURL:message.link];
     }
 }
 

@@ -39,34 +39,38 @@
 
 - (void)openURL:(NSString *)route
 {
-    route = [route stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
-    
-    // extract url parameters
-    NSMutableDictionary *params = [self extractParametersFromRoute:route];
-    
-    // path components
-    NSArray *pathComponents = [self pathComponents:route];
-    
-    NSString *scheme = pathComponents[0];
-    if ([scheme isEqualToString:@"http"] || [scheme isEqualToString:@"https"]) {
-        // http && https
-        if (route && route.length > 0) {
-            NSMutableDictionary *parameters = [NSMutableDictionary new];
-            parameters[@"web_url"] = route;
-            
-            if (self.routes[scheme]) {
-                NSMutableDictionary *pathSubDict = self.routes[scheme];
+    if (route) {
+        route = [route stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+        
+        // extract url parameters
+        NSMutableDictionary *params = [self extractParametersFromRoute:route];
+        
+        // path components
+        NSArray *pathComponents = [self pathComponents:route];
+        
+        NSString *scheme = pathComponents[0];
+        if ([scheme isEqualToString:@"http"] || [scheme isEqualToString:@"https"]) {
+            // http && https
+            if (route && route.length > 0) {
+                NSMutableDictionary *parameters = [NSMutableDictionary new];
+                parameters[@"web_url"] = route;
                 
-                if ([pathSubDict objectForKey:@"_"]) {
-                    PGRouterHandler handler = pathSubDict[@"_"];
-                    if (handler) {
-                        handler(parameters);
+                if (self.routes[scheme]) {
+                    NSMutableDictionary *pathSubDict = self.routes[scheme];
+                    
+                    if ([pathSubDict objectForKey:@"_"]) {
+                        PGRouterHandler handler = pathSubDict[@"_"];
+                        if (handler) {
+                            handler(parameters);
+                        }
                     }
                 }
             }
+        } else {
+            [self openURL:pathComponents parameters:params];
         }
     } else {
-        [self openURL:pathComponents parameters:params];
+        NSLog(@"route is nil");
     }
 }
 

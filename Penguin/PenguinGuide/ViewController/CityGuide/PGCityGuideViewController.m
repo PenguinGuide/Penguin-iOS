@@ -142,6 +142,17 @@
                    config.titles = [NSArray arrayWithArray:cityNames];
                    config.segmentHeight = 60.f;
                }];
+    
+    if (!self.indexClickedBlock) {
+        PGWeakSelf(self);
+        [self setIndexClickedBlock:^(NSInteger index) {
+            if (index < self.viewModel.citiesArray.count) {
+                PGCityGuideCity *selectedCity = weakself.viewModel.citiesArray[index];
+                [PGAnalytics trackEvent:city_guide_city_clicked params:@{event_id:selectedCity.cityId,
+                                                                         @"city_name":selectedCity.cityName}];
+            }
+        }];
+    }
 }
 
 #pragma mark - <Notification>

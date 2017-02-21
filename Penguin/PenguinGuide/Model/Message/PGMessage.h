@@ -13,5 +13,6 @@
 
 @property (nonatomic, strong) PGMessageContent *content;
 @property (nonatomic, strong) NSString *messageId;
+@property (nonatomic, strong) NSString *link;
 
 @end

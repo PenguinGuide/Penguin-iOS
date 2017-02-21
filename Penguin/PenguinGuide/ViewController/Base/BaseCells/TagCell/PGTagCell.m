@@ -10,7 +10,7 @@
 
 @interface PGTagCell ()
 
-@property (nonatomic, strong) UILabel *nameLabel;
+@property (nonatomic, strong) UIButton *nameButton;
 
 @end
 
@@ -27,19 +27,19 @@
 
 - (void)initialize
 {
-    [self.contentView addSubview:self.nameLabel];
+    [self.contentView addSubview:self.nameButton];
 }
 
 - (void)setCellWithTagName:(NSString *)tagName
 {
     CGSize size = [tagName sizeWithAttributes:@{NSFontAttributeName:Theme.fontSmall}];
     
-    self.nameLabel.backgroundColor = Theme.colorText;
-    self.nameLabel.textColor = [UIColor whiteColor];
-    self.nameLabel.font = Theme.fontSmall;
-    self.nameLabel.text = tagName;
-    self.nameLabel.layer.cornerRadius = 10.f;
-    self.nameLabel.pg_width = size.width+24;
+    self.nameButton.backgroundColor = Theme.colorText;
+    self.nameButton.layer.cornerRadius = 10.f;
+    self.nameButton.pg_width = size.width+24;
+    [self.nameButton.titleLabel setFont:Theme.fontMediumBold];
+    [self.nameButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    [self.nameButton setTitle:tagName forState:UIControlStateNormal];
 }
 
 + (CGSize)cellSize:(NSString *)tagName
@@ -53,12 +53,12 @@
 {
     CGSize size = [keyword sizeWithAttributes:@{NSFontAttributeName:Theme.fontMediumBold}];
     
-    self.nameLabel.backgroundColor = [UIColor colorWithHexString:@"F1F1F1"];
-    self.nameLabel.font = Theme.fontMediumBold;
-    self.nameLabel.textColor = Theme.colorExtraHighlight;
-    self.nameLabel.text = keyword;
-    self.nameLabel.layer.cornerRadius = 12.f;
-    self.nameLabel.pg_width = size.width+24;
+    self.nameButton.backgroundColor = [UIColor colorWithHexString:@"F1F1F1"];
+    self.nameButton.layer.cornerRadius = 12.f;
+    self.nameButton.pg_width = size.width+24;
+    [self.nameButton.titleLabel setFont:Theme.fontMediumBold];
+    [self.nameButton setTitleColor:Theme.colorExtraHighlight forState:UIControlStateNormal];
+    [self.nameButton setTitle:keyword forState:UIControlStateNormal];
 }
 
 + (CGSize)keywordCellSize:(NSString *)keyword
@@ -68,17 +68,17 @@
     return CGSizeMake(size.width+24, 30.f);
 }
 
-- (UILabel *)nameLabel {
-	if(_nameLabel == nil) {
-		_nameLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.pg_width, self.pg_height)];
-        _nameLabel.clipsToBounds = YES;
-        _nameLabel.layer.cornerRadius = 12.f;
-        _nameLabel.backgroundColor = [UIColor colorWithHexString:@"E1E1E1"];
-        _nameLabel.font = Theme.fontMediumBold;
-        _nameLabel.textColor = Theme.colorExtraHighlight;
-        _nameLabel.textAlignment = NSTextAlignmentCenter;
+- (UIButton *)nameButton {
+	if(_nameButton == nil) {
+		_nameButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, self.pg_width, self.pg_height)];
+        _nameButton.clipsToBounds = YES;
+        _nameButton.layer.cornerRadius = 12.f;
+        _nameButton.backgroundColor = [UIColor clearColor];
+        _nameButton.userInteractionEnabled = NO;
+        [_nameButton.titleLabel setFont:Theme.fontMediumBold];
+        [_nameButton setTitleColor:Theme.colorExtraHighlight forState:UIControlStateNormal];
 	}
-	return _nameLabel;
+	return _nameButton;
 }
 
 @end

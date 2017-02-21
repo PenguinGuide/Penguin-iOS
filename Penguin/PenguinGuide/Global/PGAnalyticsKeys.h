@@ -55,8 +55,14 @@
 #define related_article_banner_clicked  @"related_article_banner_clicked"
 #define article_video_banner_clicked    @"article_video_banner_clicked"
 
+#define city_guide_city_clicked         @"city_guide_city_clicked"
+
+#define scenario_page_article_tab_clicked   @"scenario_page_article_tab_clicked"
+#define scenario_page_good_tab_clicked      @"scenario_page_good_tab_clicked"
+
 #define article_share_button_clicked        @"article_share_button_clicked"
 #define article_collect_button_clicked      @"article_collect_button_clicked"
+#define article_collect_slider_clicked      @"article_collect_slider_clicked"
 #define article_comment_button_clicked      @"article_comment_button_clicked"
 #define article_like_button_clicked         @"article_like_button_clicked"
 #define article_all_comments_button_clicked @"article_all_comments_button_clicked"

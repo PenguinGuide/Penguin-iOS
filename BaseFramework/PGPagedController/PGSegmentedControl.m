@@ -73,6 +73,10 @@
         }
         self.selectedSegmentIndex = page;
         
+        if (self.indexClicked) {
+            self.indexClicked(self.selectedSegmentIndex);
+        }
+        
         [self setNeedsDisplay];
     }
 }
@@ -263,6 +267,9 @@
     }
     
     if (selectedSegmentIndex != self.selectedSegmentIndex) {
+        if (self.indexClicked) {
+            self.indexClicked(selectedSegmentIndex);
+        }
         self.selectedSegmentIndex = selectedSegmentIndex;
         [self.pagedController scrollToPage:self.selectedSegmentIndex];
         

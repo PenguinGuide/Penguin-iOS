@@ -30,8 +30,13 @@
     // Do any additional setup after loading the view.
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(smsCodeTimerUpdate:) name:PG_NOTIFICATION_SMS_CODE_COUNT_DOWN object:nil];
     
-    self.closeButton.hidden = NO;
-    self.backButton.hidden = YES;
+    if (self.isPushedIn) {
+        self.closeButton.hidden = YES;
+        self.backButton.hidden = NO;
+    } else {
+        self.closeButton.hidden = NO;
+        self.backButton.hidden = YES;
+    }
     
     [self.loginScrollView addSubview:self.loginView];
     [self.loginScrollView addSubview:self.registerButton];

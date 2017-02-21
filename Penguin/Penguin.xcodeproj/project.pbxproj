@@ -230,6 +230,7 @@
 		FF2F8ECC1E0127ED00A29377 /* PGArticleParagraphTextLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = FF2F8ECB1E0127ED00A29377 /* PGArticleParagraphTextLabel.m */; };
 		FF2F8ECF1E013FAE00A29377 /* PGArticleRelatedArticleView.m in Sources */ = {isa = PBXBuildFile; fileRef = FF2F8ECE1E013FAE00A29377 /* PGArticleRelatedArticleView.m */; };
 		FF3150F11E14C506002A23D5 /* PGCommentReportViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FF3150F01E14C506002A23D5 /* PGCommentReportViewController.m */; };
+		FF31D9A01E5583C600DB6F9C /* PGLaunchGuidesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FF31D99F1E5583C600DB6F9C /* PGLaunchGuidesViewController.m */; };
 		FF3E9A891E45A63400BFCA45 /* PGBaseCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = FF3E9A881E45A63400BFCA45 /* PGBaseCollectionViewCell.m */; };
 		FF5D366B1E25FE9B00C91DDD /* PGPersonalSettingsAvatarCell.m in Sources */ = {isa = PBXBuildFile; fileRef = FF5D366A1E25FE9B00C91DDD /* PGPersonalSettingsAvatarCell.m */; };
 		FFD92D4B1E24E7FA00086DC0 /* PGSystemSettingsCell.m in Sources */ = {isa = PBXBuildFile; fileRef = FFD92D4A1E24E7FA00086DC0 /* PGSystemSettingsCell.m */; };
@@ -696,6 +697,8 @@
 		FF2F8ECE1E013FAE00A29377 /* PGArticleRelatedArticleView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PGArticleRelatedArticleView.m; sourceTree = "<group>"; };
 		FF3150EF1E14C506002A23D5 /* PGCommentReportViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PGCommentReportViewController.h; sourceTree = "<group>"; };
 		FF3150F01E14C506002A23D5 /* PGCommentReportViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PGCommentReportViewController.m; sourceTree = "<group>"; };
+		FF31D99E1E5583C600DB6F9C /* PGLaunchGuidesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PGLaunchGuidesViewController.h; sourceTree = "<group>"; };
+		FF31D99F1E5583C600DB6F9C /* PGLaunchGuidesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PGLaunchGuidesViewController.m; sourceTree = "<group>"; };
 		FF3E9A871E45A63400BFCA45 /* PGBaseCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PGBaseCollectionViewCell.h; sourceTree = "<group>"; };
 		FF3E9A881E45A63400BFCA45 /* PGBaseCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PGBaseCollectionViewCell.m; sourceTree = "<group>"; };
 		FF528AC11E37207900D47025 /* PGAnalyticsKeys.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PGAnalyticsKeys.h; sourceTree = "<group>"; };
@@ -1485,6 +1488,7 @@
 				0F9761BF1D9A671300002430 /* Good */,
 				0F72986E1D965673001821C9 /* Video */,
 				0FEC43561DDEB129008C74F8 /* Share */,
+				FF31D99D1E55839700DB6F9C /* Launch */,
 			);
 			path = ViewController;
 			sourceTree = "<group>";
@@ -2186,6 +2190,15 @@
 			path = PullToRefresh;
 			sourceTree = "<group>";
 		};
+		FF31D99D1E55839700DB6F9C /* Launch */ = {
+			isa = PBXGroup;
+			children = (
+				FF31D99E1E5583C600DB6F9C /* PGLaunchGuidesViewController.h */,
+				FF31D99F1E5583C600DB6F9C /* PGLaunchGuidesViewController.m */,
+			);
+			path = Launch;
+			sourceTree = "<group>";
+		};
 		FF3E9A861E45A62000BFCA45 /* BaseCollectionCell */ = {
 			isa = PBXGroup;
 			children = (
@@ -2284,6 +2297,9 @@
 						CreatedOnToolsVersion = 7.3.1;
 						DevelopmentTeam = MS54G36RSK;
 						SystemCapabilities = {
+							com.apple.BackgroundModes = {
+								enabled = 1;
+							};
 							com.apple.Push = {
 								enabled = 1;
 							};
@@ -2593,6 +2609,7 @@
 				0FAADD191D767F8C00FC7933 /* PGScenarioViewModel.m in Sources */,
 				FFF8164F1E07BFC70001FDFE /* PGCityGuideToArticleTransition.m in Sources */,
 				FFD92D4B1E24E7FA00086DC0 /* PGSystemSettingsCell.m in Sources */,
+				FF31D9A01E5583C600DB6F9C /* PGLaunchGuidesViewController.m in Sources */,
 				0F9E8E201DC5F806003027CF /* PGCollectionViewModel.m in Sources */,
 				0FBBEDE11D73E08C001E75BA /* PGSearchResultsArticleCell.m in Sources */,
 				0FB8F9721D339EBA005E6C56 /* PGGlobalObject.m in Sources */,

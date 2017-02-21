@@ -16,6 +16,7 @@
 #import "PGShareManager.h"
 #import "PGLaunchAds.h"
 #import "PGAlibcTraderManager.h"
+#import "PGAnalytics.h"
 
 #import <SDWebImage/SDWebImageDownloader.h>
 #import <SDWebImage/SDImageCache.h>
@@ -30,7 +31,7 @@
 #import "PGCityGuideViewController.h"
 #import "PGMeViewController.h"
 
-#import "PGAnalytics.h"
+#import "PGLaunchGuidesViewController.h"
 
 @interface AppDelegate ()
 
@@ -76,18 +77,46 @@
     [[UIApplication sharedApplication] registerUserNotificationSettings:settings];
     
     //[PGLaunchAds sharedInstance];
+    PGStoreViewController *storeVC = [[PGStoreViewController alloc] init];
     PGCityGuideViewController *cityGuideVC = [[PGCityGuideViewController alloc] init];
     PGExploreViewController *exploreVC = [[PGExploreViewController alloc] init];
-    PGStoreViewController *storeVC = [[PGStoreViewController alloc] init];
     PGMeViewController *meVC = [[PGMeViewController alloc] init];
     
     self.tabBarController = [[PGTabBarController alloc] init];
     [self.tabBarController setViewControllers:@[storeVC, exploreVC, cityGuideVC, meVC]];
     
-    PGBaseNavigationController *navigationController = [[PGBaseNavigationController alloc] initWithRootViewController:self.tabBarController];
+    __block PGBaseNavigationController *navigationController = [[PGBaseNavigationController alloc] initWithRootViewController:self.tabBarController];
     PGGlobal.rootNavigationController = navigationController;
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
-    self.window.rootViewController = navigationController;
+    
+    BOOL isFirstLaunch = NO;
+    NSString *currentVersion = [[NSBundle mainBundle].infoDictionary objectForKey:@"CFBundleShortVersionString"];
+    NSArray *appVersion = [PGGlobal.cache objectForKey:@"app_version" fromTable:@"Session"];
+    if (appVersion && [appVersion isKindOfClass:[NSArray class]]) {
+        NSString *savedVersion = appVersion.firstObject;
+        if (![savedVersion isEqualToString:currentVersion]) {
+            isFirstLaunch = YES;
+            [PGGlobal.cache putObject:@[currentVersion] forKey:@"app_version" intoTable:@"Session"];
+        }
+    } else {
+        isFirstLaunch = YES;
+        [PGGlobal.cache putObject:@[currentVersion] forKey:@"app_version" intoTable:@"Session"];
+    }
+    
+    isFirstLaunch = YES;
+    
+    if (isFirstLaunch) {
+        PGLaunchGuidesViewController *launchGuidesVC = [[PGLaunchGuidesViewController alloc] initWithImages:@[@"launch_guides_1", @"launch_guides_2", @"launch_guides_3", @"launch_guides_4"]];
+        PGWeakSelf(self);
+        [launchGuidesVC setCompletionBlock:^{
+            weakself.window.rootViewController = navigationController;
+        }];
+        PGBaseNavigationController *launchGuidesNaviController = [[PGBaseNavigationController alloc] initWithRootViewController:launchGuidesVC];
+        self.window.rootViewController = launchGuidesNaviController;
+    } else {
+        self.window.rootViewController = navigationController;
+    }
+    
     [self.window makeKeyAndVisible];
     
     [NSThread sleepForTimeInterval:1.5f];

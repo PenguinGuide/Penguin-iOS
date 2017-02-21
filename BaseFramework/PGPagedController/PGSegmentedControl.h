@@ -13,6 +13,7 @@
 @interface PGSegmentedControl : UIControl
 
 @property (nonatomic, weak) PGPagedController *pagedController;
+@property (nonatomic, copy) void (^indexClicked)(NSInteger index);
 
 - (id)initWithConfig:(PGSegmentedControlConfig *)config;
 

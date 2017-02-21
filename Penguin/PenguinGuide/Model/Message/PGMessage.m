@@ -14,7 +14,8 @@
 {
     return @{
              @"content" : @"content",
-             @"messageId" : @"id"
+             @"messageId" : @"id",
+             @"link" : @"link"
              };
 }
 

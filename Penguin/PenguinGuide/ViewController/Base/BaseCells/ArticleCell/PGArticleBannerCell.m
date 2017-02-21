@@ -133,6 +133,7 @@
                     self.collectImageView.image = [UIImage imageNamed:@"pg_home_article_collected"];
                     self.collectLabel.text = @"已收藏";
                     if (self.delegate && [self.delegate respondsToSelector:@selector(collectArticle:)]) {
+                        [PGAnalytics trackEvent:article_collect_slider_clicked params:@{event_id:self.eventId}];
                         [self.delegate collectArticle:self.article];
                     }
                 }

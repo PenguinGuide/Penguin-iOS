@@ -12,6 +12,7 @@
 
 static char SegmentedControl;
 static char PagedController;
+static char IndexClickedBlock;
 
 @interface UIViewController (PGPagedController)
 
@@ -40,6 +41,12 @@ static char PagedController;
     if (!self.segmentedControl) {
         // why use UIControl: http://www.tuicool.com/articles/B73AFj
         self.segmentedControl = [[PGSegmentedControl alloc] initWithConfig:config];
+        __weak typeof(self) weakself = self;
+        [self.segmentedControl setIndexClicked:^(NSInteger index) {
+            if (weakself.indexClickedBlock) {
+                weakself.indexClickedBlock(index);
+            }
+        }];
         self.pagedController.segmentedControl = self.segmentedControl;
         
         self.segmentedControl.pagedController = self.pagedController;
@@ -74,6 +81,16 @@ static char PagedController;
 - (PGSegmentedControl *)segmentedControl
 {
     return objc_getAssociatedObject(self, &SegmentedControl);
+}
+
+- (void)setIndexClickedBlock:(IndexClicked)indexClickedBlock
+{
+    objc_setAssociatedObject(self, &IndexClickedBlock, indexClickedBlock, OBJC_ASSOCIATION_COPY);
+}
+
+- (IndexClicked)indexClickedBlock
+{
+    return objc_getAssociatedObject(self, &IndexClickedBlock);
 }
 
 @end

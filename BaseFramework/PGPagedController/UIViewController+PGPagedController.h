@@ -10,9 +10,12 @@
 #import "PGPagedController.h"
 #import "PGSegmentedControlConfig.h"
 
+typedef void (^IndexClicked)(NSInteger index);
+
 @interface UIViewController (PGPagedController)
 
 @property (nonatomic, strong, readonly) PGPagedController *pagedController;
+@property (nonatomic, copy) IndexClicked indexClickedBlock;
 
 - (void)addPagedController:(CGRect)frame viewControllers:(NSArray *)viewControllers segmentConfig:(void(^)(PGSegmentedControlConfig *config))configBlock;
 

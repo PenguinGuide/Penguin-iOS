@@ -80,6 +80,17 @@
                                config.SelectedViewClass = [PGCityGuideSegmentIndicator class];
                                config.equalWidth = YES;
                            }];
+            if (!weakself.indexClickedBlock) {
+                [weakself setIndexClickedBlock:^(NSInteger index) {
+                    if (weakself.scenarioId) {
+                        if (index == 0) {
+                            [PGAnalytics trackEvent:scenario_page_article_tab_clicked params:@{event_id:weakself.scenarioId}];
+                        } else if (index == 1) {
+                            [PGAnalytics trackEvent:scenario_page_good_tab_clicked params:@{event_id:weakself.scenarioId}];
+                        }
+                    }
+                }];
+            }
         }
         [weakself dismissLoading];
     }];

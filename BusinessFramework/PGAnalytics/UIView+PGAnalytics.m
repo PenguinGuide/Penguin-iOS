@@ -58,7 +58,10 @@ static char ExtraParams;
     NSDictionary *extraParams;
     
     if ([instance isKindOfClass:[UIButton class]]) {
-        
+        UIButton *button = (UIButton *)instance;
+        if ([button respondsToSelector:@selector(eventId)]) {
+            eventId = [button eventId];
+        }
     } else if ([instance isKindOfClass:[UICollectionView class]]) {
         UICollectionView *collectionView = (UICollectionView *)instance;
         UICollectionViewCell *cell = [collectionView cellForItemAtIndexPath:collectionView.indexPathsForSelectedItems.firstObject];

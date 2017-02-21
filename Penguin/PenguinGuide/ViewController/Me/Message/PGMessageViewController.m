@@ -58,6 +58,8 @@
     if (!self.viewModel.countsDict) {
         [self showLoading];
         [self.viewModel requestData];
+    } else {
+        [self.viewModel requestData];
     }
 }
 

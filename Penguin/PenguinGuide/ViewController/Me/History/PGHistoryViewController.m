@@ -138,6 +138,13 @@
     return nil;
 }
 
+- (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    PGHistory *history = self.viewModel.histories[indexPath.item];
+    
+    [PGRouterManager routeToArticlePage:history.content.articleId link:history.content.link];
+}
+
 - (PGBaseCollectionView *)historyCollectionView
 {
     if (!_historyCollectionView) {
