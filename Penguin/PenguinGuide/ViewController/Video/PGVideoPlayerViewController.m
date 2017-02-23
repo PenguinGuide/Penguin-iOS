@@ -97,7 +97,7 @@ typedef NS_ENUM(NSInteger, GestureDirection) {
     
     [self.view addSubview:self.videoDimView];
     [self.videoDimView addSubview:self.backButton];
-    [self.videoDimView addSubview:self.shareButton];
+    //[self.videoDimView addSubview:self.shareButton];
     [self.videoDimView addSubview:self.playButton];
     [self.videoDimView addSubview:self.forwardButton];
     [self.videoDimView addSubview:self.backwardButton];
@@ -157,6 +157,11 @@ typedef NS_ENUM(NSInteger, GestureDirection) {
 - (UIInterfaceOrientationMask)supportedInterfaceOrientations
 {
     return UIInterfaceOrientationMaskLandscape;
+}
+
+- (BOOL)shouldHideNavigationBar
+{
+    return YES;
 }
 
 - (BOOL)shouldAutorotate

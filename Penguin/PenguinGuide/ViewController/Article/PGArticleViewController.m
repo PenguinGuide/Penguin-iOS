@@ -314,6 +314,8 @@
     } else {
         self.commentInputAccessoryView.frame = CGRectMake(0, UISCREEN_WIDTH, UISCREEN_HEIGHT, 60);
     }
+    
+    [self.navigationController setNavigationBarHidden:YES animated:NO];
 }
 
 - (void)viewWillDisappear:(BOOL)animated
