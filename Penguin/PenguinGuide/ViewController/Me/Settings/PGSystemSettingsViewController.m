@@ -251,7 +251,9 @@
     
     [PGGlobal synchronizeUserId:nil];
     [PGGlobal synchronizeToken:nil];
+    [PGGlobal clearAPNSToken];
     [PGShareManager logout];
+    [PGAlibcTraderManager logout];
     
     [PGRouterManager routeToLoginPage];
 }

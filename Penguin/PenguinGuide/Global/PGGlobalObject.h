@@ -36,6 +36,7 @@
 - (void)synchronizeHostUrl:(NSString *)hostUrl;
 
 - (void)registerAPNSToken:(NSString *)token;
+- (void)clearAPNSToken;
 
 - (void)updateTimer;
 - (void)resetSMSCodeTimer;

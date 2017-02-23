@@ -136,7 +136,11 @@
         PGPersonalSettingsCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:SettingCell forIndexPath:indexPath];
         
         if (indexPath.item == 0) {
-            [cell setCellWithDesc:@"手 机 号" content:self.viewModel.me.phoneNumber];
+            if (self.viewModel.me.phoneNumber && self.viewModel.me.phoneNumber.length > 0) {
+                [cell setCellWithDesc:@"手 机 号" content:self.viewModel.me.phoneNumber];
+            } else {
+                [cell setCellWithDesc:@"手 机 号" content:@"未绑定"];
+            }
         } else if (indexPath.item == 1) {
             if (self.viewModel.me.weixinBinded) {
                 [cell setCellWithDesc:@"微 信" content:@"已绑定"];

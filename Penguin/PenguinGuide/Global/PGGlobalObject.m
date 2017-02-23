@@ -178,6 +178,11 @@
     }
 }
 
+- (void)clearAPNSToken
+{
+    [self.cache deleteObjectForKey:@"apns_token" fromTable:@"Session"];
+}
+
 #pragma mark - <Lazy Init>
 
 - (PGCache *)cache
