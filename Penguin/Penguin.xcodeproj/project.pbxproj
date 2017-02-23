@@ -233,6 +233,7 @@
 		FF3150F11E14C506002A23D5 /* PGCommentReportViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FF3150F01E14C506002A23D5 /* PGCommentReportViewController.m */; };
 		FF31D9A01E5583C600DB6F9C /* PGLaunchGuidesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FF31D99F1E5583C600DB6F9C /* PGLaunchGuidesViewController.m */; };
 		FF3E9A891E45A63400BFCA45 /* PGBaseCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = FF3E9A881E45A63400BFCA45 /* PGBaseCollectionViewCell.m */; };
+		FF4F6D561E5D3F5E00AB1BD4 /* PGPrivacyViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FF4F6D551E5D3F5E00AB1BD4 /* PGPrivacyViewController.m */; };
 		FF5D366B1E25FE9B00C91DDD /* PGPersonalSettingsAvatarCell.m in Sources */ = {isa = PBXBuildFile; fileRef = FF5D366A1E25FE9B00C91DDD /* PGPersonalSettingsAvatarCell.m */; };
 		FFD92D4B1E24E7FA00086DC0 /* PGSystemSettingsCell.m in Sources */ = {isa = PBXBuildFile; fileRef = FFD92D4A1E24E7FA00086DC0 /* PGSystemSettingsCell.m */; };
 		FFD92D4E1E24EBDF00086DC0 /* PGSystemSettingsTaobaoCell.m in Sources */ = {isa = PBXBuildFile; fileRef = FFD92D4D1E24EBDF00086DC0 /* PGSystemSettingsTaobaoCell.m */; };
@@ -704,6 +705,8 @@
 		FF31D99F1E5583C600DB6F9C /* PGLaunchGuidesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PGLaunchGuidesViewController.m; sourceTree = "<group>"; };
 		FF3E9A871E45A63400BFCA45 /* PGBaseCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PGBaseCollectionViewCell.h; sourceTree = "<group>"; };
 		FF3E9A881E45A63400BFCA45 /* PGBaseCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PGBaseCollectionViewCell.m; sourceTree = "<group>"; };
+		FF4F6D541E5D3F5E00AB1BD4 /* PGPrivacyViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PGPrivacyViewController.h; sourceTree = "<group>"; };
+		FF4F6D551E5D3F5E00AB1BD4 /* PGPrivacyViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PGPrivacyViewController.m; sourceTree = "<group>"; };
 		FF528AC11E37207900D47025 /* PGAnalyticsKeys.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PGAnalyticsKeys.h; sourceTree = "<group>"; };
 		FF5D36691E25FE9B00C91DDD /* PGPersonalSettingsAvatarCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PGPersonalSettingsAvatarCell.h; sourceTree = "<group>"; };
 		FF5D366A1E25FE9B00C91DDD /* PGPersonalSettingsAvatarCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PGPersonalSettingsAvatarCell.m; sourceTree = "<group>"; };
@@ -1717,6 +1720,8 @@
 				FFF034631E5086E200D98D80 /* PGAboutUsViewController.m */,
 				FFF034651E5086F500D98D80 /* PGContactUsViewController.h */,
 				FFF034661E5086F500D98D80 /* PGContactUsViewController.m */,
+				FF4F6D541E5D3F5E00AB1BD4 /* PGPrivacyViewController.h */,
+				FF4F6D551E5D3F5E00AB1BD4 /* PGPrivacyViewController.m */,
 				0FAC90061DDB11C900955639 /* PGDeveloperViewController.h */,
 				0FAC90071DDB11C900955639 /* PGDeveloperViewController.m */,
 			);
@@ -2639,6 +2644,7 @@
 				0FACB6841DE6E2F500CE89D5 /* PGCityGuideViewController.m in Sources */,
 				0F12070C1D9CBFD4007993AE /* PGGoodBannersCell.m in Sources */,
 				0F21FEBE1D9150FB0036F14A /* PGDashedLineView.m in Sources */,
+				FF4F6D561E5D3F5E00AB1BD4 /* PGPrivacyViewController.m in Sources */,
 				0FBBB0DA1DB4C8A900BA33AF /* PGSignupPwdViewController.m in Sources */,
 				0F7EEF5F1D210F63008D175C /* AppDelegate.m in Sources */,
 				0F84FE291D485F3D0054F2D7 /* PGArticleViewModel.m in Sources */,

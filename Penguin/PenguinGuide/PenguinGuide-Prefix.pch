@@ -33,6 +33,7 @@
 #import "PGBaseNavigationController.h"
 #import "PGBaseCollectionView.h"
 #import "PGBaseCollectionViewCell.h"
+#import "PGWebViewController.h"
 #import "PGNavigationView.h"
 
 #import "PGUser.h"

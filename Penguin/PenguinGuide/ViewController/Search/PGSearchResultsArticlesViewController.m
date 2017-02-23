@@ -114,6 +114,9 @@
     cell.eventName = article_banner_clicked;
     cell.eventId = articleBanner.articleId;
     cell.pageName = search_results_view;
+    if (articleBanner.title) {
+        cell.extraParams = @{@"article_title":articleBanner.title};
+    }
     
     [cell setDelegate:self];
     [cell setCellWithArticle:articleBanner allowGesture:YES];

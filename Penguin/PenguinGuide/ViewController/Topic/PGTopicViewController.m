@@ -146,8 +146,8 @@
             cell.eventName = article_banner_clicked;
             cell.eventId = articleBanner.articleId;
             cell.pageName = topic_view;
-            if (self.topicId) {
-                cell.extraParams = @{@"topic_id":self.topicId};
+            if (self.topicId && articleBanner.title) {
+                cell.extraParams = @{@"article_title":articleBanner.title, @"topic_id":self.topicId};
             }
             
             [cell setCellWithArticle:articleBanner allowGesture:YES];

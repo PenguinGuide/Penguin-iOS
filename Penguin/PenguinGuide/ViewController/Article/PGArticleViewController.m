@@ -615,7 +615,9 @@
         if (self.viewModel.commentsArray.count > 0) {
             return CGSizeMake(UISCREEN_WIDTH, 90);
         } else {
-            return CGSizeMake(UISCREEN_WIDTH, 50+90+50+20+30);
+            if (self.viewModel.article) {
+                return CGSizeMake(UISCREEN_WIDTH, 50+90+50+20+30);
+            }
         }
     }
     return CGSizeZero;

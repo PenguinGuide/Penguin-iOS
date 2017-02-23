@@ -8,6 +8,7 @@
 
 #import "PGShareViewController.h"
 #import "PGShareButton.h"
+#import "SDWebImageManager.h"
 
 @interface PGShareViewController ()
 
@@ -140,23 +141,31 @@
     if (self.attribute.url && self.attribute.url.length > 0) {
         PGWeakSelf(self);
         [self showLoading];
-        [PGShareManager shareItem:^(PGShareItem *shareItem) {
-            shareItem.text = weakself.attribute.text;
-            shareItem.title = weakself.attribute.title;
-            shareItem.image = weakself.attribute.image;
-            shareItem.thumbnailImage = weakself.attribute.thumbnailImage;
-            shareItem.url = weakself.attribute.url;
-        } toPlatform:SSDKPlatformTypeSinaWeibo
-                       completion:^(SSDKResponseState state) {
-                           if (state == SSDKResponseStateSuccess) {
-                               [self showToast:@"分享成功"];
-                           } else if (state == SSDKResponseStateCancel) {
-                               [self showToast:@"分享取消"];
-                           } else if (state == SSDKResponseStateFail) {
-                               [self showToast:@"分享失败"];
-                           }
-                           [weakself dismissLoading];
-                       }];
+        NSString *cropQuery = @"?imageView2/0/w/400/h/400";
+        NSString *imageUrl = [weakself.attribute.image stringByAppendingString:cropQuery];
+        [[SDWebImageManager sharedManager] loadImageWithURL:[NSURL URLWithString:imageUrl]
+                                                    options:SDWebImageHighPriority
+                                                   progress:nil
+                                                  completed:^(UIImage * _Nullable image, NSData * _Nullable data, NSError * _Nullable error, SDImageCacheType cacheType, BOOL finished, NSURL * _Nullable imageURL) {
+                                                      [PGShareManager shareItem:^(PGShareItem *shareItem) {
+                                                          shareItem.text = weakself.attribute.text;
+                                                          shareItem.title = weakself.attribute.title;
+                                                          shareItem.image = weakself.attribute.image;
+                                                          shareItem.weiboImage = image;
+                                                          shareItem.thumbnailImage = weakself.attribute.thumbnailImage;
+                                                          shareItem.url = weakself.attribute.url;
+                                                      } toPlatform:SSDKPlatformTypeSinaWeibo
+                                                                     completion:^(SSDKResponseState state) {
+                                                                         if (state == SSDKResponseStateSuccess) {
+                                                                             [self showToast:@"分享成功"];
+                                                                         } else if (state == SSDKResponseStateCancel) {
+                                                                             [self showToast:@"分享取消"];
+                                                                         } else if (state == SSDKResponseStateFail) {
+                                                                             [self showToast:@"分享失败"];
+                                                                         }
+                                                                         [weakself dismissLoading];
+                                                                     }];
+                                                  }];
     } else {
         [self showToast:@"分享失败"];
     }

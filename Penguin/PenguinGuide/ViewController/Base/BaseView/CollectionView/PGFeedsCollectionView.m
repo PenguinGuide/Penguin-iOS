@@ -125,6 +125,9 @@
             } else if ([[self.feedsDelegate tabType] isEqualToString:@"scenario"]) {
                 cell.pageName = scenario_view;
             }
+            if (articleBanner.title) {
+                cell.extraParams = @{@"article_title":articleBanner.title};
+            }
             
             [cell setCellWithArticle:articleBanner allowGesture:self.allowGesture];
             

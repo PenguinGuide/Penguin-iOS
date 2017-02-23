@@ -67,7 +67,10 @@
 {
     __block NSData *imageData = UIImageJPEGRepresentation(image, 0.9f);
     
-    QNUploadManager *uploadMgr = [[QNUploadManager alloc] init];
+    QNConfiguration *config = [QNConfiguration build:^(QNConfigurationBuilder *builder) {
+        builder.timeoutInterval = 15.f;
+    }];
+    QNUploadManager *uploadMgr = [[QNUploadManager alloc] initWithConfiguration:config];
     [uploadMgr putData:imageData key:nil token:token complete:^(QNResponseInfo *info, NSString *key, NSDictionary *resp) {
         if (resp[@"hash"] && [resp[@"hash"] length] > 0) {
             NSString *avatarUrl = [NSString stringWithFormat:@"https://%@/%@", domain, resp[@"hash"]];

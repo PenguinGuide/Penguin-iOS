@@ -14,6 +14,7 @@
 #import "PGSystemSettingsViewController.h"
 #import "PGAboutUsViewController.h"
 #import "PGContactUsViewController.h"
+#import "PGPrivacyViewController.h"
 #import "PGDeveloperViewController.h"
 
 #import "PGSystemSettingsCell.h"
@@ -196,6 +197,9 @@
         } else if (indexPath.item == 2) {
             PGContactUsViewController *contactUsVC = [[PGContactUsViewController alloc] init];
             [self.navigationController pushViewController:contactUsVC animated:YES];
+        } else if (indexPath.item == 3) {
+            PGPrivacyViewController *privacyVC = [[PGPrivacyViewController alloc] init];
+            [self.navigationController pushViewController:privacyVC animated:YES];
         } else if (indexPath.item == 4) {
             // rate app
             [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"itms-apps://itunes.apple.com/app/id1182887153"]];

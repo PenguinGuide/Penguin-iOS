@@ -42,7 +42,7 @@ static const NSString *WeiboAppSecret = @"fcb5a4ca57d16b1462997c4441935e38";
                          case SSDKPlatformTypeSinaWeibo:
                              [appInfo SSDKSetupSinaWeiboByAppKey:WeiboAppKey
                                                        appSecret:WeiboAppSecret
-                                                     redirectUri:@"http://penguinguide.cn/mobile"
+                                                     redirectUri:@"https://m.penguinguide.cn"
                                                         authType:SSDKAuthTypeBoth];
                          default:
                              break;
@@ -153,14 +153,14 @@ static const NSString *WeiboAppSecret = @"fcb5a4ca57d16b1462997c4441935e38";
 {
     NSMutableDictionary *shareParams = [NSMutableDictionary dictionary];
     
-    [shareParams SSDKSetupSinaWeiboShareParamsByText:shareItem.text
+    [shareParams SSDKSetupSinaWeiboShareParamsByText:[NSString stringWithFormat:@"%@ 点击查看:%@", shareItem.text, shareItem.url]
                                                title:shareItem.title
-                                               image:shareItem.image
-                                                 url:shareItem.url
+                                               image:shareItem.weiboImage
+                                                 url:[NSURL URLWithString:shareItem.url]
                                             latitude:0.f
                                            longitude:0.f
                                             objectID:nil
-                                                type:SSDKContentTypeText];
+                                                type:SSDKContentTypeAuto];
     
     [ShareSDK share:SSDKPlatformTypeSinaWeibo
          parameters:shareParams

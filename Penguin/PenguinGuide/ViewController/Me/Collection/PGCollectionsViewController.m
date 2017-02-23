@@ -99,6 +99,9 @@
     cell.eventName = article_banner_clicked;
     cell.eventId = articleBanner.articleId;
     cell.pageName = my_collections_view;
+    if (articleBanner.title) {
+        cell.extraParams = @{@"article_title":articleBanner.title};
+    }
     
     articleBanner.isCollected = YES;
     [cell setDelegate:self];

@@ -15,5 +15,6 @@
 @property (nonatomic, strong) NSString *url;
 @property (nonatomic, strong) NSString *thumbnailImage;
 @property (nonatomic, strong) NSString *image;
+@property (nonatomic, strong) UIImage *weiboImage;
 
 @end

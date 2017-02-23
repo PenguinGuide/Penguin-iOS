@@ -120,8 +120,8 @@
     cell.eventName = article_banner_clicked;
     cell.eventId = articleBanner.articleId;
     cell.pageName = city_guide_tab_view;
-    if (self.cityId) {
-        cell.extraParams = @{@"city_id":self.cityId};
+    if (articleBanner.title && self.cityId) {
+        cell.extraParams = @{@"article_title":articleBanner.title, @"city_id":self.cityId};
     }
     
     [cell setCellWithArticle:self.viewModel.articlesArray[indexPath.item] allowGesture:NO];

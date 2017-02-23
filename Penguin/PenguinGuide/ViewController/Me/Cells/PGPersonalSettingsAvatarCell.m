@@ -48,7 +48,7 @@
         _avatarButton.layer.cornerRadius = 40.f;
         _avatarButton.userInteractionEnabled = NO;
         
-        UIImageView *cameraCoverView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 80, 80)];
+        UIImageView *cameraCoverView = [[UIImageView alloc] initWithFrame:CGRectMake(25, 25, 30, 30)];
         cameraCoverView.userInteractionEnabled = NO;
         cameraCoverView.image = [UIImage imageNamed:@"pg_avatar_camera"];
         
