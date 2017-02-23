@@ -239,7 +239,7 @@
 
 - (void)showSystemNotificationPopup
 {
-    PGSystemNotificationView *notificationView = [[PGSystemNotificationView alloc] initWithFrame:CGRectMake(64, 135, UISCREEN_WIDTH-64*2, 275)];
+    PGSystemNotificationView *notificationView = [[PGSystemNotificationView alloc] initWithFrame:CGRectMake(64, (UISCREEN_HEIGHT-275)/2, UISCREEN_WIDTH-64*2, 275)];
     notificationView.delegate = self;
 
     self.popupViewController = [PGPopupViewController popupViewControllerWithPopupView:notificationView];

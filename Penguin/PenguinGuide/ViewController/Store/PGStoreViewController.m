@@ -291,7 +291,9 @@
 
 - (void)checkSystemNotification
 {
-    if (![[UIApplication sharedApplication] isRegisteredForRemoteNotifications]) {
+    // NOTE: [[UIApplication sharedApplication] isRegisteredForRemoteNotifications] doesn't work http://stackoverflow.com/questions/29787736/isregisteredforremotenotifications-returns-true-even-though-i-disabled-it-comple
+    UIUserNotificationSettings *notificationSettings = [UIApplication sharedApplication].currentUserNotificationSettings;
+    if (notificationSettings.types == UIUserNotificationTypeNone) {
         NSArray *notificationExpireDate = [PGGlobal.cache objectForKey:@"system_notification_expire_date" fromTable:@"General"];
         if (!notificationExpireDate) {
             NSTimeInterval expireTime = [[NSDate date] timeIntervalSince1970]+5*24*60*60;
