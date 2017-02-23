@@ -99,7 +99,7 @@
     if (!_pagedScrollView) {
         CGFloat width = self.pg_width-15-15;
         CGFloat height = self.pg_height-60-80-3;
-        _pagedScrollView = [[PGPagedScrollView alloc] initWithFrame:CGRectMake(15, 80, width, height) imageFillMode:PGPagedScrollViewImageFillModeFill iconMode:PGPagedScrollViewIconModeLight];
+        _pagedScrollView = [[PGPagedScrollView alloc] initWithFrame:CGRectMake(15, 80, width, height) imageFillMode:PGPagedScrollViewImageFillModeFill iconMode:PGPagedScrollViewIconModeDark];
         _pagedScrollView.delegate = self;
     }
     return _pagedScrollView;

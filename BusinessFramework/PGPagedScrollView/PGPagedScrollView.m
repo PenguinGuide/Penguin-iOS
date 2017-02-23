@@ -323,6 +323,11 @@
             _pageControl.selectedDotSize = 6.f;
             _pageControl.selectedDotColor = [UIColor colorWithHexString:@"F1F1F1"];
             _pageControl.dotColor = [UIColor colorWithHexString:@"8B8B8B"];
+        } else if (self.iconMode == PGPagedScrollViewIconModeDark) {
+            _pageControl.dotSize = 6.f;
+            _pageControl.selectedDotSize = 6.f;
+            _pageControl.selectedDotColor = [UIColor colorWithHexString:@"8B8B8B"];
+            _pageControl.dotColor = [UIColor colorWithHexString:@"F1F1F1"];
         } else {
             _pageControl.dotSize = 6.f;
             _pageControl.selectedDotSize = 6.f;
