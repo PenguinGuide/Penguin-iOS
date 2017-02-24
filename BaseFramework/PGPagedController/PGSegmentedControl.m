@@ -108,7 +108,9 @@
     UIRectFill([self bounds]);
     
     // remove all sublayers to avoid drawing images over existing ones
-    self.scrollView.layer.sublayers = nil;
+    if (([[[UIDevice currentDevice] systemVersion] compare:@"9.0" options:NSNumericSearch] != NSOrderedAscending)) {
+        self.scrollView.layer.sublayers = nil;
+    }
     
     __weak typeof(self) weakself = self;
     [self.config.titles enumerateObjectsUsingBlock:^(id title, NSUInteger idx, BOOL * _Nonnull stop) {
