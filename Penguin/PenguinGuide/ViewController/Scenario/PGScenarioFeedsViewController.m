@@ -140,6 +140,7 @@
         _feedsCollectionView.showsHorizontalScrollIndicator = NO;
         _feedsCollectionView.showsVerticalScrollIndicator = NO;
         _feedsCollectionView.backgroundColor = [UIColor whiteColor];
+        _feedsCollectionView.allowGesture = NO;
         
         PGWeakSelf(self);
         [_feedsCollectionView enableInfiniteScrolling:^{
