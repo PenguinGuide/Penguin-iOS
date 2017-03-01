@@ -146,7 +146,7 @@
             [_imagesScrollView addSubview:imageView];
             
             if (i == self.imagesArray.count-1) {
-                UIButton *visitsButton = [[UIButton alloc] initWithFrame:CGRectMake(60, self.imagesPageControl.pg_top-50, UISCREEN_WIDTH-60*2, 33)];
+                UIButton *visitsButton = [[UIButton alloc] initWithFrame:CGRectMake(60, self.imagesPageControl.pg_top-60, UISCREEN_WIDTH-60*2, 33)];
                 [visitsButton setTitle:@"进 入 首 页" forState:UIControlStateNormal];
                 [visitsButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
                 [visitsButton.titleLabel setFont:Theme.fontLargeBold];
@@ -157,30 +157,30 @@
                 [visitsButton addTarget:self action:@selector(visitsButtonClicked) forControlEvents:UIControlEventTouchUpInside];
                 [imageView addSubview:visitsButton];
                 
-                if (!PGGlobal.userId || PGGlobal.userId.length == 0) {
-                    CGFloat buttonWidth = (UISCREEN_WIDTH-60*2-20)/2;
-                    UIButton *loginButton = [[UIButton alloc] initWithFrame:CGRectMake(visitsButton.pg_left, visitsButton.pg_top-20-32, buttonWidth, 32)];
-                    [loginButton setTitle:@"登 录" forState:UIControlStateNormal];
-                    [loginButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-                    [loginButton.titleLabel setFont:Theme.fontLargeBold];
-                    loginButton.clipsToBounds = YES;
-                    loginButton.layer.borderWidth = 1/[UIScreen mainScreen].scale;
-                    loginButton.layer.borderColor = [UIColor whiteColor].CGColor;
-                    loginButton.layer.cornerRadius = 4.f;
-                    [loginButton addTarget:self action:@selector(loginButtonClicked) forControlEvents:UIControlEventTouchUpInside];
-                    [imageView addSubview:loginButton];
-                    
-                    UIButton *signupButton = [[UIButton alloc] initWithFrame:CGRectMake(loginButton.pg_right+20, visitsButton.pg_top-20-32, buttonWidth, 32)];
-                    [signupButton setTitle:@"注 册" forState:UIControlStateNormal];
-                    [signupButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-                    [signupButton.titleLabel setFont:Theme.fontLargeBold];
-                    signupButton.clipsToBounds = YES;
-                    signupButton.layer.borderWidth = 1/[UIScreen mainScreen].scale;
-                    signupButton.layer.borderColor = [UIColor whiteColor].CGColor;
-                    signupButton.layer.cornerRadius = 4.f;
-                    [signupButton addTarget:self action:@selector(signupButtonClicked) forControlEvents:UIControlEventTouchUpInside];
-                    [imageView addSubview:signupButton];
-                }
+//                if (!PGGlobal.userId || PGGlobal.userId.length == 0) {
+//                    CGFloat buttonWidth = (UISCREEN_WIDTH-60*2-20)/2;
+//                    UIButton *loginButton = [[UIButton alloc] initWithFrame:CGRectMake(visitsButton.pg_left, visitsButton.pg_top-20-32, buttonWidth, 32)];
+//                    [loginButton setTitle:@"登 录" forState:UIControlStateNormal];
+//                    [loginButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+//                    [loginButton.titleLabel setFont:Theme.fontLargeBold];
+//                    loginButton.clipsToBounds = YES;
+//                    loginButton.layer.borderWidth = 1/[UIScreen mainScreen].scale;
+//                    loginButton.layer.borderColor = [UIColor whiteColor].CGColor;
+//                    loginButton.layer.cornerRadius = 4.f;
+//                    [loginButton addTarget:self action:@selector(loginButtonClicked) forControlEvents:UIControlEventTouchUpInside];
+//                    [imageView addSubview:loginButton];
+//                    
+//                    UIButton *signupButton = [[UIButton alloc] initWithFrame:CGRectMake(loginButton.pg_right+20, visitsButton.pg_top-20-32, buttonWidth, 32)];
+//                    [signupButton setTitle:@"注 册" forState:UIControlStateNormal];
+//                    [signupButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+//                    [signupButton.titleLabel setFont:Theme.fontLargeBold];
+//                    signupButton.clipsToBounds = YES;
+//                    signupButton.layer.borderWidth = 1/[UIScreen mainScreen].scale;
+//                    signupButton.layer.borderColor = [UIColor whiteColor].CGColor;
+//                    signupButton.layer.cornerRadius = 4.f;
+//                    [signupButton addTarget:self action:@selector(signupButtonClicked) forControlEvents:UIControlEventTouchUpInside];
+//                    [imageView addSubview:signupButton];
+//                }
             } else {
                 
             }

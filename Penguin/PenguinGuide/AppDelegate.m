@@ -64,6 +64,7 @@
     // NOTE: decodeImage causes a lot of memorys: http://blog.csdn.net/xiaobai20131118/article/details/50682062
     [SDWebImageDownloader.sharedDownloader setShouldDecompressImages:NO];
     [SDImageCache.sharedImageCache.config setShouldDecompressImages:NO];
+    [SDImageCache.sharedImageCache.config setMaxCacheAge:60 * 60 * 24 * 7 * 3]; // 3 weeks
     
     // AFNetworking
     [[AFNetworkReachabilityManager sharedManager] startMonitoring];

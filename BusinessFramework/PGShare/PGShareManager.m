@@ -50,6 +50,16 @@ static const NSString *WeiboAppSecret = @"fcb5a4ca57d16b1462997c4441935e38";
                  }];
 }
 
++ (BOOL)isWechatInstalled
+{
+    return [WXApi isWXAppInstalled];
+}
+
++ (BOOL)isWeiboInstalled
+{
+    return [WeiboSDK isWeiboAppInstalled];
+}
+
 + (void)shareItem:(void (^)(PGShareItem *shareItem))itemBlock toPlatform:(SSDKPlatformType)platformType completion:(void (^)(SSDKResponseState state))completion
 {
     PGShareItem *shareItem = [[PGShareItem alloc] init];

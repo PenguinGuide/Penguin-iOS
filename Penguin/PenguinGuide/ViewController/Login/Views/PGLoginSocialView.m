@@ -48,15 +48,29 @@
     self.socialLabel.text = @"使用其他方式登录：";
     [socialView addSubview:self.socialLabel];
     
-    UIButton *weixinButton = [[UIButton alloc] initWithFrame:CGRectMake(self.socialLabel.pg_right, 0, 50, 50)];
-    [weixinButton addTarget:self action:@selector(weixinButtonClicked) forControlEvents:UIControlEventTouchUpInside];
-    [weixinButton setImage:[UIImage imageNamed:@"pg_login_wechat"] forState:UIControlStateNormal];
-    [socialView addSubview:weixinButton];
-    
-    UIButton *weiboButton = [[UIButton alloc] initWithFrame:CGRectMake(weixinButton.pg_right, 0, 50, 50)];
-    [weiboButton addTarget:self action:@selector(weiboButtonClicked) forControlEvents:UIControlEventTouchUpInside];
-    [weiboButton setImage:[UIImage imageNamed:@"pg_login_weibo"] forState:UIControlStateNormal];
-    [socialView addSubview:weiboButton];
+    if ([PGShareManager isWechatInstalled] && [PGShareManager isWeiboInstalled]) {
+        UIButton *weixinButton = [[UIButton alloc] initWithFrame:CGRectMake(self.socialLabel.pg_right, 0, 50, 50)];
+        [weixinButton addTarget:self action:@selector(weixinButtonClicked) forControlEvents:UIControlEventTouchUpInside];
+        [weixinButton setImage:[UIImage imageNamed:@"pg_login_wechat"] forState:UIControlStateNormal];
+        [socialView addSubview:weixinButton];
+        
+        UIButton *weiboButton = [[UIButton alloc] initWithFrame:CGRectMake(weixinButton.pg_right, 0, 50, 50)];
+        [weiboButton addTarget:self action:@selector(weiboButtonClicked) forControlEvents:UIControlEventTouchUpInside];
+        [weiboButton setImage:[UIImage imageNamed:@"pg_login_weibo"] forState:UIControlStateNormal];
+        [socialView addSubview:weiboButton];
+    } else if ([PGShareManager isWechatInstalled]) {
+        UIButton *weixinButton = [[UIButton alloc] initWithFrame:CGRectMake(self.socialLabel.pg_right, 0, 50, 50)];
+        [weixinButton addTarget:self action:@selector(weixinButtonClicked) forControlEvents:UIControlEventTouchUpInside];
+        [weixinButton setImage:[UIImage imageNamed:@"pg_login_wechat"] forState:UIControlStateNormal];
+        [socialView addSubview:weixinButton];
+    } else if ([PGShareManager isWeiboInstalled]) {
+        UIButton *weiboButton = [[UIButton alloc] initWithFrame:CGRectMake(self.socialLabel.pg_right, 0, 50, 50)];
+        [weiboButton addTarget:self action:@selector(weiboButtonClicked) forControlEvents:UIControlEventTouchUpInside];
+        [weiboButton setImage:[UIImage imageNamed:@"pg_login_weibo"] forState:UIControlStateNormal];
+        [socialView addSubview:weiboButton];
+    } else {
+        self.socialLabel.hidden = YES;
+    }
 }
 
 - (void)weixinButtonClicked

@@ -228,6 +228,7 @@
 		FF24DF731E027A8800A17486 /* PGSearchResultsGoodsViewModel.m in Sources */ = {isa = PBXBuildFile; fileRef = FF24DF721E027A8800A17486 /* PGSearchResultsGoodsViewModel.m */; };
 		FF2C24881E10F9CA0020BFFF /* PGMessageContentViewModel.m in Sources */ = {isa = PBXBuildFile; fileRef = FF2C24871E10F9CA0020BFFF /* PGMessageContentViewModel.m */; };
 		FF2D03051E5C1B3E003936B7 /* PGArticleNoCommentsFooterView.m in Sources */ = {isa = PBXBuildFile; fileRef = FF2D03041E5C1B3E003936B7 /* PGArticleNoCommentsFooterView.m */; };
+		FF2D2BB61E66A38E0085692F /* loading.gif in Resources */ = {isa = PBXBuildFile; fileRef = FF2D2BB51E66A38E0085692F /* loading.gif */; };
 		FF2F8ECC1E0127ED00A29377 /* PGArticleParagraphTextLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = FF2F8ECB1E0127ED00A29377 /* PGArticleParagraphTextLabel.m */; };
 		FF2F8ECF1E013FAE00A29377 /* PGArticleRelatedArticleView.m in Sources */ = {isa = PBXBuildFile; fileRef = FF2F8ECE1E013FAE00A29377 /* PGArticleRelatedArticleView.m */; };
 		FF3150F11E14C506002A23D5 /* PGCommentReportViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FF3150F01E14C506002A23D5 /* PGCommentReportViewController.m */; };
@@ -695,6 +696,7 @@
 		FF2C24871E10F9CA0020BFFF /* PGMessageContentViewModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PGMessageContentViewModel.m; sourceTree = "<group>"; };
 		FF2D03031E5C1B3E003936B7 /* PGArticleNoCommentsFooterView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PGArticleNoCommentsFooterView.h; sourceTree = "<group>"; };
 		FF2D03041E5C1B3E003936B7 /* PGArticleNoCommentsFooterView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PGArticleNoCommentsFooterView.m; sourceTree = "<group>"; };
+		FF2D2BB51E66A38E0085692F /* loading.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = loading.gif; sourceTree = "<group>"; };
 		FF2F8ECA1E0127ED00A29377 /* PGArticleParagraphTextLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PGArticleParagraphTextLabel.h; sourceTree = "<group>"; };
 		FF2F8ECB1E0127ED00A29377 /* PGArticleParagraphTextLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PGArticleParagraphTextLabel.m; sourceTree = "<group>"; };
 		FF2F8ECD1E013FAE00A29377 /* PGArticleRelatedArticleView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PGArticleRelatedArticleView.h; sourceTree = "<group>"; };
@@ -1528,6 +1530,7 @@
 		0F7EEF901D2116D1008D175C /* Resource */ = {
 			isa = PBXGroup;
 			children = (
+				FF2D2BB51E66A38E0085692F /* loading.gif */,
 				0F02E1AA1DBDDEE500AA0428 /* pg_cities_list.plist */,
 				0F7EEF661D210F63008D175C /* Assets.xcassets */,
 				0F7EEF911D2118F6008D175C /* Controller.xcassets */,
@@ -2377,6 +2380,7 @@
 				0F463AB71D6D4CC300654C34 /* v1_home_feeds.json in Resources */,
 				0F59B9261D927F1A00DB9FCE /* pg_comments.json in Resources */,
 				0FAADD1B1D7684E300FC7933 /* v1_scenario_feeds_scenario_scenarioid_category_categoryid.json in Resources */,
+				FF2D2BB61E66A38E0085692F /* loading.gif in Resources */,
 				0FBBEDF01D742D22001E75BA /* v1_search_goods.json in Resources */,
 				0FFEAF191D76B2B40067C888 /* v1_store_recommends.json in Resources */,
 			);
@@ -2885,7 +2889,7 @@
 					"\"${PODS_ROOT}/Headers/Public/ShareSDK3\"",
 				);
 				INFOPLIST_FILE = PenguinGuide/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.xinglian.penguin;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -3042,7 +3046,7 @@
 					"\"${PODS_ROOT}/Headers/Public/ShareSDK3\"",
 				);
 				INFOPLIST_FILE = PenguinGuide/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.xinglian.penguin;
@@ -3084,7 +3088,7 @@
 					"\"${PODS_ROOT}/Headers/Public/ShareSDK3\"",
 				);
 				INFOPLIST_FILE = PenguinGuide/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.xinglian.penguin;
 				PRODUCT_NAME = "$(TARGET_NAME)";
