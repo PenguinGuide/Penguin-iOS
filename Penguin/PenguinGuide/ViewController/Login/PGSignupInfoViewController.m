@@ -16,6 +16,7 @@ typedef NS_ENUM(NSInteger, PGTextFieldTag) {
 #import "PGSignupInfoViewController.h"
 #import "PGLoginTextField.h"
 #import "UIButton+WebCache.h"
+#import "PGQiniuUploadImageManager.h"
 
 @interface PGSignupInfoViewController () <UIPickerViewDataSource, UIPickerViewDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate>
 
@@ -227,19 +228,34 @@ typedef NS_ENUM(NSInteger, PGTextFieldTag) {
         [self showOccupiedLoading];
         PGWeakSelf(self);
         // NOTE: upload image with base64 data http://blog.csdn.net/a645258072/article/details/51728806
-        [self.apiClient pg_uploadImage:^(PGRKRequestConfig *config) {
-            config.route = PG_Upload_Image;
-            config.keyPath = nil;
-            config.image = image;
-        } completion:^(id response) {
-            if (response[@"avatar_url"]) {
-                weakself.avatarUrl = response[@"avatar_url"];
-                [weakself.cameraButton setImage:image forState:UIControlStateNormal];
+        [[PGQiniuUploadImageManager sharedManager] uploadImage:image completion:^(NSString *url) {
+            if (url && url.length > 0) {
+                if (PGGlobal.userId) {
+                    PGParams *params = [PGParams new];
+                    params[@"avatar_url"] = url;
+                    [weakself showLoading];
+                    PGWeakSelf(self);
+                    [weakself.apiClient pg_makePatchRequest:^(PGRKRequestConfig *config) {
+                        config.route = PG_User;
+                        config.params = params;
+                        config.keyPath = nil;
+                        config.pattern = @{@"userId":PGGlobal.userId};
+                    } completion:^(id response) {
+                        weakself.avatarUrl = url;
+                        [weakself.cameraButton setImage:image forState:UIControlStateNormal];
+                        [weakself dismissLoading];
+                    } failure:^(NSError *error) {
+                        [weakself showErrorMessage:error];
+                        [weakself dismissLoading];
+                    }];
+                } else {
+                    // TODO: user logout
+                }
+            } else {
+                [weakself showToast:@"上传失败" position:PGToastPositionBottom];
             }
             [weakself dismissLoading];
-        } failure:^(NSError *error) {
-            [weakself showErrorMessage:error];
-            [weakself dismissLoading];
+            [picker dismissViewControllerAnimated:YES completion:nil];
         }];
     }
     [picker dismissViewControllerAnimated:YES completion:nil];
