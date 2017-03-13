@@ -900,6 +900,7 @@
                 [weakself dismissLoading];
             }];
         }
+        [self.commentInputAccessoryView.commentTextView setText:nil];
     } else {
         [self showToast:@"回复内容不能为空"];
     }
