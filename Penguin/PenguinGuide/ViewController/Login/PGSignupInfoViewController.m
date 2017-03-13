@@ -6,6 +6,13 @@
 //  Copyright © 2016 Xinglian. All rights reserved.
 //
 
+typedef NS_ENUM(NSInteger, PGTextFieldTag) {
+    PGTextFieldTagNickname,
+    PGTextFieldTagDOB,
+    PGTextFieldTagSex,
+    PGTextFieldTagLocation
+};
+
 #import "PGSignupInfoViewController.h"
 #import "PGLoginTextField.h"
 #import "UIButton+WebCache.h"
@@ -69,6 +76,17 @@
     [self.dobTextField resignFirstResponder];
     [self.sexTextField resignFirstResponder];
     [self.locationTextField resignFirstResponder];
+}
+
+#pragma mark - <UITextFieldDelegate>
+
+- (void)textFieldDidBeginEditing:(UITextField *)textField
+{
+    if (textField.tag == PGTextFieldTagSex) {
+        if (!textField.text || [textField.text isEqualToString:@""]) {
+            textField.text = @"男";
+        }
+    }
 }
 
 #pragma mark - <UIPickerViewDataSource>
@@ -265,6 +283,7 @@
         _dobTextField.inputAccessoryView = self.accessoryView;
         _dobTextField.placeholder = @"选择你的出生年月";
         _dobTextField.delegate = self;
+        _dobTextField.tag = PGTextFieldTagDOB;
     }
     return _dobTextField;
 }
@@ -277,6 +296,7 @@
         _sexTextField.inputAccessoryView = self.accessoryView;
         _sexTextField.placeholder = @"选择你的性别";
         _sexTextField.delegate = self;
+        _sexTextField.tag = PGTextFieldTagSex;
     }
     return _sexTextField;
 }
@@ -289,6 +309,7 @@
         _locationTextField.inputAccessoryView = self.accessoryView;
         _locationTextField.placeholder = @"选择你的地区";
         _locationTextField.delegate = self;
+        _locationTextField.tag = PGTextFieldTagLocation;
     }
     return _locationTextField;
 }
