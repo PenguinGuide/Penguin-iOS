@@ -32,6 +32,8 @@
 #import "AppDelegate.h"
 #import "PGBaseNavigationController.h"
 #import "PGBaseCollectionView.h"
+#import "PGBaseCollectionViewDataSource.h"
+#import "PGBaseCollectionViewDelegate.h"
 #import "PGBaseCollectionViewCell.h"
 #import "PGWebViewController.h"
 #import "PGNavigationView.h"

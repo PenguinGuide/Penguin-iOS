@@ -226,6 +226,8 @@
 		FF24DF6D1E02770800A17486 /* PGSearchResultsGoodsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FF24DF6C1E02770800A17486 /* PGSearchResultsGoodsViewController.m */; };
 		FF24DF701E027A7800A17486 /* PGSearchResultsArticlesViewModel.m in Sources */ = {isa = PBXBuildFile; fileRef = FF24DF6F1E027A7800A17486 /* PGSearchResultsArticlesViewModel.m */; };
 		FF24DF731E027A8800A17486 /* PGSearchResultsGoodsViewModel.m in Sources */ = {isa = PBXBuildFile; fileRef = FF24DF721E027A8800A17486 /* PGSearchResultsGoodsViewModel.m */; };
+		FF2B964D1E6D3508002F3651 /* PGBaseCollectionViewDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = FF2B964C1E6D3508002F3651 /* PGBaseCollectionViewDataSource.m */; };
+		FF2B96501E6D3518002F3651 /* PGBaseCollectionViewDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = FF2B964F1E6D3518002F3651 /* PGBaseCollectionViewDelegate.m */; };
 		FF2C24881E10F9CA0020BFFF /* PGMessageContentViewModel.m in Sources */ = {isa = PBXBuildFile; fileRef = FF2C24871E10F9CA0020BFFF /* PGMessageContentViewModel.m */; };
 		FF2D03051E5C1B3E003936B7 /* PGArticleNoCommentsFooterView.m in Sources */ = {isa = PBXBuildFile; fileRef = FF2D03041E5C1B3E003936B7 /* PGArticleNoCommentsFooterView.m */; };
 		FF2D2BB61E66A38E0085692F /* loading.gif in Resources */ = {isa = PBXBuildFile; fileRef = FF2D2BB51E66A38E0085692F /* loading.gif */; };
@@ -692,6 +694,10 @@
 		FF24DF6F1E027A7800A17486 /* PGSearchResultsArticlesViewModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PGSearchResultsArticlesViewModel.m; sourceTree = "<group>"; };
 		FF24DF711E027A8800A17486 /* PGSearchResultsGoodsViewModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PGSearchResultsGoodsViewModel.h; sourceTree = "<group>"; };
 		FF24DF721E027A8800A17486 /* PGSearchResultsGoodsViewModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PGSearchResultsGoodsViewModel.m; sourceTree = "<group>"; };
+		FF2B964B1E6D3508002F3651 /* PGBaseCollectionViewDataSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PGBaseCollectionViewDataSource.h; sourceTree = "<group>"; };
+		FF2B964C1E6D3508002F3651 /* PGBaseCollectionViewDataSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PGBaseCollectionViewDataSource.m; sourceTree = "<group>"; };
+		FF2B964E1E6D3518002F3651 /* PGBaseCollectionViewDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PGBaseCollectionViewDelegate.h; sourceTree = "<group>"; };
+		FF2B964F1E6D3518002F3651 /* PGBaseCollectionViewDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PGBaseCollectionViewDelegate.m; sourceTree = "<group>"; };
 		FF2C24861E10F9CA0020BFFF /* PGMessageContentViewModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PGMessageContentViewModel.h; sourceTree = "<group>"; };
 		FF2C24871E10F9CA0020BFFF /* PGMessageContentViewModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PGMessageContentViewModel.m; sourceTree = "<group>"; };
 		FF2D03031E5C1B3E003936B7 /* PGArticleNoCommentsFooterView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PGArticleNoCommentsFooterView.h; sourceTree = "<group>"; };
@@ -937,6 +943,10 @@
 			children = (
 				0F141FBA1D74684000884052 /* PGBaseCollectionView.h */,
 				0F141FBB1D74684000884052 /* PGBaseCollectionView.m */,
+				FF2B964B1E6D3508002F3651 /* PGBaseCollectionViewDataSource.h */,
+				FF2B964C1E6D3508002F3651 /* PGBaseCollectionViewDataSource.m */,
+				FF2B964E1E6D3518002F3651 /* PGBaseCollectionViewDelegate.h */,
+				FF2B964F1E6D3518002F3651 /* PGBaseCollectionViewDelegate.m */,
 				0F2871EE1DBE511D006E0264 /* PGBaseCollectionViewFooterView.h */,
 				0F2871EF1DBE511D006E0264 /* PGBaseCollectionViewFooterView.m */,
 				0F141FBD1D7468AF00884052 /* PGFeedsCollectionView.h */,
@@ -2653,6 +2663,7 @@
 				0F7EEF5F1D210F63008D175C /* AppDelegate.m in Sources */,
 				0F84FE291D485F3D0054F2D7 /* PGArticleViewModel.m in Sources */,
 				0FD736F61DF12B9900E0058E /* PGScenarioFeedsViewController.m in Sources */,
+				FF2B96501E6D3518002F3651 /* PGBaseCollectionViewDelegate.m in Sources */,
 				0FBBEDEB1D742C12001E75BA /* PGSearchResultsViewModel.m in Sources */,
 				0FE6D8661D9BB767000B8B46 /* PGGoodInfoCell.m in Sources */,
 				0FAF64A21DAE2EC100543513 /* PGPwdLoginView.m in Sources */,
@@ -2672,6 +2683,7 @@
 				0F9E8E1C1DC5F74F003027CF /* PGSystemSettingsViewController.m in Sources */,
 				FF24DF731E027A8800A17486 /* PGSearchResultsGoodsViewModel.m in Sources */,
 				0FF80FF61DCAE027004D3145 /* PGArticleParagraphNewlineCell.m in Sources */,
+				FF2B964D1E6D3508002F3651 /* PGBaseCollectionViewDataSource.m in Sources */,
 				0FA965D51DEBF9F000EC3CE8 /* PGCityGuideSegmentIndicator.m in Sources */,
 				0F141FC31D746BFD00884052 /* PGExploreRecommendsHeaderView.m in Sources */,
 				0F9BD3941DA898550063DD7E /* PGGoodTagsCell.m in Sources */,

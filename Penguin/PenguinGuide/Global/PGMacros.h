@@ -14,6 +14,7 @@
 #define UISCREEN_WIDTH [[UIScreen mainScreen] bounds].size.width
 #define UISCREEN_HEIGHT [[UIScreen mainScreen] bounds].size.height
 #define SINGLE_LINE_WIDTH [UIScreen mainScreen].scale >= 2.0f ? 0.5f : 1.0f
+#define SINGLE_LINE_HEIGHT 1/[UIScreen mainScreen].scale
 
 #define DEVICE_IS_LESS_OR_EQUAL_TO_IPHONE_5 [[UIScreen mainScreen] bounds].size.width <= 320.f
 #define DEVICE_IS_IPHONE_5 [[UIScreen mainScreen] bounds].size.height == 568.f

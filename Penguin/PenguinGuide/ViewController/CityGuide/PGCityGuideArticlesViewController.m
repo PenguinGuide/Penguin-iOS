@@ -12,10 +12,12 @@
 #import "PGCityGuideArticlesViewModel.h"
 #import "PGArticleBannerCell.h"
 
-@interface PGCityGuideArticlesViewController () <UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout>
+@interface PGCityGuideArticlesViewController () <UICollectionViewDelegate, UICollectionViewDelegateFlowLayout>
 
 @property (nonatomic, strong, readwrite) PGBaseCollectionView *articlesCollectionView;
 @property (nonatomic, strong) PGCityGuideArticlesViewModel *viewModel;
+@property (nonatomic, strong) PGBaseCollectionViewDataSource *dataSource;
+@property (nonatomic, strong) PGBaseCollectionViewDelegate *delegate;
 
 @property (nonatomic, strong) NSString *cityId;
 
@@ -41,8 +43,10 @@
     
     PGWeakSelf(self);
     [self observe:self.viewModel keyPath:@"articlesArray" block:^(id changedObject) {
+        
         if (weakself.viewModel.nextPageIndexes || weakself.viewModel.nextPageIndexes.count > 0) {
             @try {
+                [weakself.dataSource reloadItems:weakself.viewModel.articlesArray];
                 [weakself.articlesCollectionView insertItemsAtIndexPaths:weakself.viewModel.nextPageIndexes];
             } @catch (NSException *exception) {
                 NSLog(@"exception: %@", exception);
@@ -50,6 +54,7 @@
         } else {
             NSArray *articlesArray = changedObject;
             if (articlesArray && [articlesArray isKindOfClass:[NSArray class]]) {
+                [weakself.dataSource reloadItems:articlesArray];
                 [UIView setAnimationsEnabled:NO];
                 [weakself.articlesCollectionView reloadData];
                 dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.25f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
@@ -95,55 +100,6 @@
 
 #pragma mark - <UICollectionView>
 
-- (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView
-{
-    return 1;
-}
-
-- (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
-{
-    return self.viewModel.articlesArray.count;
-}
-
-- (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
-{
-    if (self.viewModel.articlesArray.count-indexPath.item == 3) {
-        PGWeakSelf(self);
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
-            [weakself.viewModel requestArticles:weakself.cityId];
-        });
-    }
-    
-    PGArticleBannerCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:ArticleBannerCell forIndexPath:indexPath];
-    
-    PGArticleBanner *articleBanner = self.viewModel.articlesArray[indexPath.item];
-    cell.eventName = article_banner_clicked;
-    cell.eventId = articleBanner.articleId;
-    cell.pageName = city_guide_tab_view;
-    if (articleBanner.title && self.cityId) {
-        cell.extraParams = @{@"article_title":articleBanner.title, @"city_id":self.cityId};
-    }
-    
-    [cell setCellWithArticle:self.viewModel.articlesArray[indexPath.item] allowGesture:NO];
-    
-    return cell;
-}
-
-- (CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout minimumLineSpacingForSectionAtIndex:(NSInteger)section
-{
-    return 0.f;
-}
-
-- (CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout minimumInteritemSpacingForSectionAtIndex:(NSInteger)section
-{
-    return 0.f;
-}
-
-- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath
-{
-    return [PGArticleBannerCell cellSize];
-}
-
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout referenceSizeForFooterInSection:(NSInteger)section
 {
     if (!self.viewModel) {
@@ -181,8 +137,8 @@
     if(_articlesCollectionView == nil) {
         _articlesCollectionView = [[PGBaseCollectionView alloc] initWithFrame:CGRectMake(0, 0, UISCREEN_WIDTH, UISCREEN_HEIGHT-50-20-60) collectionViewLayout:[UICollectionViewFlowLayout new]];
         _articlesCollectionView.backgroundColor = [UIColor whiteColor];
-        _articlesCollectionView.dataSource = self;
-        _articlesCollectionView.delegate = self;
+        _articlesCollectionView.dataSource = self.dataSource;
+        _articlesCollectionView.delegate = self.delegate;
         
         [_articlesCollectionView registerClass:[PGArticleBannerCell class] forCellWithReuseIdentifier:ArticleBannerCell];
         [_articlesCollectionView registerClass:[PGBaseCollectionViewFooterView class] forSupplementaryViewOfKind:UICollectionElementKindSectionFooter withReuseIdentifier:BaseCollectionViewFooterView];
@@ -204,6 +160,42 @@
         }];
     }
     return _articlesCollectionView;
+}
+
+- (PGBaseCollectionViewDataSource *)dataSource
+{
+    if (!_dataSource) {
+        PGWeakSelf(self);
+        ConfigureCellBlock configureCellBlock = ^(UICollectionViewCell *cell, id item) {
+            if ([item isKindOfClass:[PGArticleBanner class]] && [cell isKindOfClass:[PGArticleBannerCell class]]) {
+                PGArticleBanner *articleBanner = (PGArticleBanner *)item;
+                PGArticleBannerCell *articleBannerCell = (PGArticleBannerCell *)cell;
+                
+                articleBannerCell.eventName = article_banner_clicked;
+                articleBannerCell.eventId = articleBanner.articleId;
+                articleBannerCell.pageName = city_guide_tab_view;
+                if (articleBanner.title && weakself.cityId) {
+                    articleBannerCell.extraParams = @{@"article_title":articleBanner.title, @"city_id":self.cityId};
+                }
+                [articleBannerCell setCellWithArticle:articleBanner allowGesture:NO];
+            }
+        };
+        _dataSource = [PGBaseCollectionViewDataSource dataSourceWithCellIdentifier:ArticleBannerCell
+                                                                configureCellBlock:configureCellBlock];
+    }
+    return _dataSource;
+}
+
+- (PGBaseCollectionViewDelegate *)delegate
+{
+    if (!_delegate) {
+        _delegate = [PGBaseCollectionViewDelegate delegateWithViewController:self
+                                                          minimumLineSpacing:0.f
+                                                     minimumInteritemSpacing:0.f
+                                                                      insets:UIEdgeInsetsZero
+                                                                    cellSize:[PGArticleBannerCell cellSize]];
+    }
+    return _delegate;
 }
 
 - (void)didReceiveMemoryWarning {
