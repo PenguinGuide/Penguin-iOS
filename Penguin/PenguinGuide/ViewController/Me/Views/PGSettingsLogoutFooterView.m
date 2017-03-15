@@ -22,6 +22,18 @@
 - (void)initialize
 {
     [self addSubview:self.logoutButton];
+    
+    self.userInteractionEnabled = YES;
+    UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(openDeveloperPage)];
+    tapGesture.numberOfTapsRequired = 7;
+    [self addGestureRecognizer:tapGesture];
+}
+
+- (void)openDeveloperPage
+{
+    if (self.openDeveloperPageHandler) {
+        self.openDeveloperPageHandler();
+    }
 }
 
 - (UIButton *)logoutButton

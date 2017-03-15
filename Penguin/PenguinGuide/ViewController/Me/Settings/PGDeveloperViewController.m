@@ -44,6 +44,8 @@
     [PGGlobal.cache deleteObjectForKey:@"apns_token" fromTable:@"Session"];
     
     self.currentHostLabel.text = @"当前环境：生产";
+    
+    [self.navigationController popToRootViewControllerAnimated:YES];
 }
 
 - (void)debugButtonClicked
@@ -59,6 +61,8 @@
     [PGGlobal.cache deleteObjectForKey:@"apns_token" fromTable:@"Session"];
     
     self.currentHostLabel.text = @"当前环境：测试";
+    
+    [self.navigationController popToRootViewControllerAnimated:YES];
 }
 
 #pragma mark - <Lazy Init>

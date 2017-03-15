@@ -11,5 +11,6 @@
 @interface PGSettingsLogoutFooterView : UICollectionReusableView
 
 @property (nonatomic, strong) UIButton *logoutButton;
+@property (nonatomic, copy) void (^openDeveloperPageHandler)();
 
 @end

@@ -71,11 +71,7 @@
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
 {
     if (section == 0) {
-#if (defined DEBUG)
-        return 6;
-#else
         return 5;
-#endif
     } else if (section == 1) {
         return 1;
     }
@@ -131,7 +127,7 @@
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout referenceSizeForFooterInSection:(NSInteger)section
 {
     if (section == 1) {
-        return CGSizeMake(UISCREEN_WIDTH, 70);
+        return CGSizeMake(UISCREEN_WIDTH, 100);
     }
     return CGSizeZero;
 }
@@ -165,6 +161,11 @@
         if (kind == UICollectionElementKindSectionFooter) {
             PGSettingsLogoutFooterView *footerView = [collectionView dequeueReusableSupplementaryViewOfKind:kind withReuseIdentifier:LogoutFooterView forIndexPath:indexPath];
             [footerView.logoutButton addTarget:self action:@selector(logoutButtonClicked) forControlEvents:UIControlEventTouchUpInside];
+            PGWeakSelf(self);
+            [footerView setOpenDeveloperPageHandler:^{
+                PGDeveloperViewController *developerVC = [[PGDeveloperViewController alloc] init];
+                [weakself.navigationController pushViewController:developerVC animated:YES];
+            }];
             
             return footerView;
         }
@@ -203,11 +204,6 @@
         } else if (indexPath.item == 4) {
             // rate app
             [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"itms-apps://itunes.apple.com/app/id1182887153"]];
-        } else if (indexPath.item == 5) {
-#if (defined DEBUG)
-            PGDeveloperViewController *developerVC = [[PGDeveloperViewController alloc] init];
-            [self.navigationController pushViewController:developerVC animated:YES];
-#endif
         }
     } else if (indexPath.section == 1) {
         PGWeakSelf(self);
