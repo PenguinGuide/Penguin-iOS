@@ -219,6 +219,8 @@
 		9D4A0C0A718990CD7428E6E8 /* libPods-PenguinGuide.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2781A6FFECE60736EAE2C13D /* libPods-PenguinGuide.a */; };
 		C7AED6BA0A3F2EAAA994C062 /* libPods-PenguinGuideTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = ECDB672886290E17696F19CC /* libPods-PenguinGuideTests.a */; };
 		FF07782C1E498A0200FD2FB9 /* PGSystemNotificationView.m in Sources */ = {isa = PBXBuildFile; fileRef = FF07782B1E498A0200FD2FB9 /* PGSystemNotificationView.m */; };
+		FF17AE461E7A5D9D006E6E0F /* PGCollectionsCell.m in Sources */ = {isa = PBXBuildFile; fileRef = FF17AE451E7A5D9D006E6E0F /* PGCollectionsCell.m */; };
+		FF17AE491E7A7865006E6E0F /* PGArticleCardCell.m in Sources */ = {isa = PBXBuildFile; fileRef = FF17AE481E7A7865006E6E0F /* PGArticleCardCell.m */; };
 		FF1D93331E13A42300DFB17A /* UIScrollView+UzysAnimatedGifPullToRefresh.m in Sources */ = {isa = PBXBuildFile; fileRef = FF1D93301E13A42300DFB17A /* UIScrollView+UzysAnimatedGifPullToRefresh.m */; };
 		FF1D93341E13A42300DFB17A /* UzysAnimatedGifActivityIndicator.m in Sources */ = {isa = PBXBuildFile; fileRef = FF1D93321E13A42300DFB17A /* UzysAnimatedGifActivityIndicator.m */; };
 		FF1D93381E13A51700DFB17A /* AnimatedGIFImageSerialization.m in Sources */ = {isa = PBXBuildFile; fileRef = FF1D93371E13A51700DFB17A /* AnimatedGIFImageSerialization.m */; };
@@ -238,6 +240,8 @@
 		FF3E9A891E45A63400BFCA45 /* PGBaseCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = FF3E9A881E45A63400BFCA45 /* PGBaseCollectionViewCell.m */; };
 		FF4F6D561E5D3F5E00AB1BD4 /* PGPrivacyViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FF4F6D551E5D3F5E00AB1BD4 /* PGPrivacyViewController.m */; };
 		FF5D366B1E25FE9B00C91DDD /* PGPersonalSettingsAvatarCell.m in Sources */ = {isa = PBXBuildFile; fileRef = FF5D366A1E25FE9B00C91DDD /* PGPersonalSettingsAvatarCell.m */; };
+		FF8300DA1E7BBCC200ED41EF /* PGExploreTodayArticleCell.m in Sources */ = {isa = PBXBuildFile; fileRef = FF8300D91E7BBCC200ED41EF /* PGExploreTodayArticleCell.m */; };
+		FF8300E01E7BEB5B00ED41EF /* PGExploreTagCell.m in Sources */ = {isa = PBXBuildFile; fileRef = FF8300DF1E7BEB5B00ED41EF /* PGExploreTagCell.m */; };
 		FFD92D4B1E24E7FA00086DC0 /* PGSystemSettingsCell.m in Sources */ = {isa = PBXBuildFile; fileRef = FFD92D4A1E24E7FA00086DC0 /* PGSystemSettingsCell.m */; };
 		FFD92D4E1E24EBDF00086DC0 /* PGSystemSettingsTaobaoCell.m in Sources */ = {isa = PBXBuildFile; fileRef = FFD92D4D1E24EBDF00086DC0 /* PGSystemSettingsTaobaoCell.m */; };
 		FFE73E751E0BB6E000057F3B /* PGPageBasePlaceholder.m in Sources */ = {isa = PBXBuildFile; fileRef = FFE73E741E0BB6E000057F3B /* PGPageBasePlaceholder.m */; };
@@ -678,6 +682,10 @@
 		FC37FF962E7BA5F15850D8D2 /* Pods-PenguinGuide.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PenguinGuide.release.xcconfig"; path = "Pods/Target Support Files/Pods-PenguinGuide/Pods-PenguinGuide.release.xcconfig"; sourceTree = "<group>"; };
 		FF07782A1E498A0200FD2FB9 /* PGSystemNotificationView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PGSystemNotificationView.h; sourceTree = "<group>"; };
 		FF07782B1E498A0200FD2FB9 /* PGSystemNotificationView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PGSystemNotificationView.m; sourceTree = "<group>"; };
+		FF17AE441E7A5D9D006E6E0F /* PGCollectionsCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PGCollectionsCell.h; sourceTree = "<group>"; };
+		FF17AE451E7A5D9D006E6E0F /* PGCollectionsCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PGCollectionsCell.m; sourceTree = "<group>"; };
+		FF17AE471E7A7865006E6E0F /* PGArticleCardCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PGArticleCardCell.h; sourceTree = "<group>"; };
+		FF17AE481E7A7865006E6E0F /* PGArticleCardCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PGArticleCardCell.m; sourceTree = "<group>"; };
 		FF1D932F1E13A42300DFB17A /* UIScrollView+UzysAnimatedGifPullToRefresh.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIScrollView+UzysAnimatedGifPullToRefresh.h"; sourceTree = "<group>"; };
 		FF1D93301E13A42300DFB17A /* UIScrollView+UzysAnimatedGifPullToRefresh.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIScrollView+UzysAnimatedGifPullToRefresh.m"; sourceTree = "<group>"; };
 		FF1D93311E13A42300DFB17A /* UzysAnimatedGifActivityIndicator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UzysAnimatedGifActivityIndicator.h; sourceTree = "<group>"; };
@@ -719,6 +727,10 @@
 		FF5D36691E25FE9B00C91DDD /* PGPersonalSettingsAvatarCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PGPersonalSettingsAvatarCell.h; sourceTree = "<group>"; };
 		FF5D366A1E25FE9B00C91DDD /* PGPersonalSettingsAvatarCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PGPersonalSettingsAvatarCell.m; sourceTree = "<group>"; };
 		FF6FB9131E2CA58200835E16 /* PGViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PGViewController.h; sourceTree = "<group>"; };
+		FF8300D81E7BBCC200ED41EF /* PGExploreTodayArticleCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PGExploreTodayArticleCell.h; sourceTree = "<group>"; };
+		FF8300D91E7BBCC200ED41EF /* PGExploreTodayArticleCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PGExploreTodayArticleCell.m; sourceTree = "<group>"; };
+		FF8300DE1E7BEB5B00ED41EF /* PGExploreTagCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PGExploreTagCell.h; sourceTree = "<group>"; };
+		FF8300DF1E7BEB5B00ED41EF /* PGExploreTagCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PGExploreTagCell.m; sourceTree = "<group>"; };
 		FFD92D491E24E7FA00086DC0 /* PGSystemSettingsCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PGSystemSettingsCell.h; sourceTree = "<group>"; };
 		FFD92D4A1E24E7FA00086DC0 /* PGSystemSettingsCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PGSystemSettingsCell.m; sourceTree = "<group>"; };
 		FFD92D4C1E24EBDF00086DC0 /* PGSystemSettingsTaobaoCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PGSystemSettingsTaobaoCell.h; sourceTree = "<group>"; };
@@ -1081,6 +1093,7 @@
 				0F3765311D6F2519007B9481 /* TopicCell */,
 				0F0008DB1D71908600BED6FA /* TagCell */,
 				0FFAD0F51D780FBD009F9E27 /* GoodCell */,
+				FF17AE431E7A5D75006E6E0F /* CollectionsCell */,
 			);
 			path = BaseCells;
 			sourceTree = "<group>";
@@ -1117,6 +1130,10 @@
 			children = (
 				0F357B3E1DED73A200942912 /* PGScenarioCell.h */,
 				0F357B3F1DED73A200942912 /* PGScenarioCell.m */,
+				FF8300D81E7BBCC200ED41EF /* PGExploreTodayArticleCell.h */,
+				FF8300D91E7BBCC200ED41EF /* PGExploreTodayArticleCell.m */,
+				FF8300DE1E7BEB5B00ED41EF /* PGExploreTagCell.h */,
+				FF8300DF1E7BEB5B00ED41EF /* PGExploreTagCell.m */,
 			);
 			path = Cells;
 			sourceTree = "<group>";
@@ -1128,6 +1145,8 @@
 				0F3765331D6F254E007B9481 /* PGArticleBannerCell.m */,
 				0F9AD32D1DDB826500CB329B /* PGBannerImageScrollView.h */,
 				0F9AD32E1DDB826500CB329B /* PGBannerImageScrollView.m */,
+				FF17AE471E7A7865006E6E0F /* PGArticleCardCell.h */,
+				FF17AE481E7A7865006E6E0F /* PGArticleCardCell.m */,
 			);
 			path = ArticleCell;
 			sourceTree = "<group>";
@@ -1496,8 +1515,8 @@
 			children = (
 				0FF816231D2BAD1E00C78E3A /* Base */,
 				0F90942F1D2A6997004513CE /* Login */,
-				0F3C7EEE1D2F72CB00284066 /* Store */,
 				0F3C7EEB1D2F72CB00284066 /* Explore */,
+				0F3C7EEE1D2F72CB00284066 /* Store */,
 				0FACB6811DE6E2E300CE89D5 /* CityGuide */,
 				0F3C7EED1D2F72CB00284066 /* Me */,
 				0F0008C61D71874000BED6FA /* Search */,
@@ -2199,6 +2218,15 @@
 			path = SystemNotificationView;
 			sourceTree = "<group>";
 		};
+		FF17AE431E7A5D75006E6E0F /* CollectionsCell */ = {
+			isa = PBXGroup;
+			children = (
+				FF17AE441E7A5D9D006E6E0F /* PGCollectionsCell.h */,
+				FF17AE451E7A5D9D006E6E0F /* PGCollectionsCell.m */,
+			);
+			path = CollectionsCell;
+			sourceTree = "<group>";
+		};
 		FF1D932E1E13A3AC00DFB17A /* PullToRefresh */ = {
 			isa = PBXGroup;
 			children = (
@@ -2623,6 +2651,7 @@
 				0F0008C91D71879400BED6FA /* PGSearchRecommendsViewController.m in Sources */,
 				0F9BD39A1DA8BED70063DD7E /* PGGoodRelatedGoodsHeaderView.m in Sources */,
 				0F51B31C1D6D85B200B4690F /* PGGoodsCollectionBanner.m in Sources */,
+				FF8300DA1E7BBCC200ED41EF /* PGExploreTodayArticleCell.m in Sources */,
 				0F59B9291D92886100DB9FCE /* PGArticleCommentReplyCell.m in Sources */,
 				0F3C7EF71D2F730F00284066 /* PGStoreViewController.m in Sources */,
 				0F9E8E1A1DC5F74F003027CF /* PGPersonalSettingsViewController.m in Sources */,
@@ -2693,6 +2722,7 @@
 				0F6281BD1D8FE61E004E0596 /* PGArticleParagraphCatalogImageCell.m in Sources */,
 				0F141FBC1D74684000884052 /* PGBaseCollectionView.m in Sources */,
 				0FA1B2A61DC1FCD70022ECE2 /* PGMessageViewModel.m in Sources */,
+				FF17AE491E7A7865006E6E0F /* PGArticleCardCell.m in Sources */,
 				FF2F8ECF1E013FAE00A29377 /* PGArticleRelatedArticleView.m in Sources */,
 				0F84FE251D485ECE0054F2D7 /* PGArticleParagraphImageCell.m in Sources */,
 				0F7F047E1DAA1E3000CA99AD /* PGAlibcTraderManager.m in Sources */,
@@ -2710,6 +2740,7 @@
 				0F21FEBA1D9140EF0036F14A /* PGArticleRelatedArticlesCell.m in Sources */,
 				FFF8164C1E07ACC80001FDFE /* PGExploreToArticleTransition.m in Sources */,
 				FFF034641E5086E200D98D80 /* PGAboutUsViewController.m in Sources */,
+				FF17AE461E7A5D9D006E6E0F /* PGCollectionsCell.m in Sources */,
 				0F9E8E131DC5F746003027CF /* PGMessageViewController.m in Sources */,
 				0F8A799B1DF15E4D00711A16 /* PGScenarioFeedsCollectionView.m in Sources */,
 				0F0F447F1D34FCFD007B90F2 /* PGImageBanner.m in Sources */,
@@ -2774,6 +2805,7 @@
 				0FFAD0F41D780DF8009F9E27 /* PGGoodsCollectionView.m in Sources */,
 				FFF034671E5086F500D98D80 /* PGContactUsViewController.m in Sources */,
 				FF07782C1E498A0200FD2FB9 /* PGSystemNotificationView.m in Sources */,
+				FF8300E01E7BEB5B00ED41EF /* PGExploreTagCell.m in Sources */,
 				FF1D93331E13A42300DFB17A /* UIScrollView+UzysAnimatedGifPullToRefresh.m in Sources */,
 				0F00CBAB1DD99CB3008BFA7E /* PGWebViewController.m in Sources */,
 				0FA5F2EE1D94DFFF00E9242B /* PGMeCell.m in Sources */,

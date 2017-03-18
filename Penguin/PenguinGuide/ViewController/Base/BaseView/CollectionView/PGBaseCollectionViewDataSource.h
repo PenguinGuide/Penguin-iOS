@@ -6,15 +6,16 @@
 //  Copyright © 2017 Xinglian. All rights reserved.
 //
 
-typedef void (^ConfigureCellBlock) (UICollectionViewCell *cell, id item);
-
 #import <Foundation/Foundation.h>
+#import "PGBaseCollectionViewCell.h"
+
+typedef void (^ConfigureCellBlock) (id<PGBaseCollectionViewCell> cell, PGRKModel *model);
 
 @interface PGBaseCollectionViewDataSource : NSObject <UICollectionViewDataSource>
 
 + (PGBaseCollectionViewDataSource *)dataSourceWithCellIdentifier:(NSString *)cellIdentifier
                                               configureCellBlock:(ConfigureCellBlock)configureCellBlock;
 
-- (void)reloadItems:(NSArray *)items;
+- (void)reloadModels:(NSArray *)models;
 
 @end

@@ -10,7 +10,7 @@
 
 @interface PGBaseCollectionViewDataSource ()
 
-@property (nonatomic, strong) NSArray *items;
+@property (nonatomic, strong) NSArray *models;
 @property (nonatomic, strong) NSString *cellIdentifier;
 @property (nonatomic, copy) ConfigureCellBlock configureCellBlock;
 
@@ -19,7 +19,7 @@
 @implementation PGBaseCollectionViewDataSource
 
 + (PGBaseCollectionViewDataSource *)dataSourceWithCellIdentifier:(NSString *)cellIdentifier
-                                              configureCellBlock:(void (^)(UICollectionViewCell *cell, id item))configureCellBlock
+                                              configureCellBlock:(void (^)(id<PGBaseCollectionViewCell> cell, PGRKModel *model))configureCellBlock
 {
     PGBaseCollectionViewDataSource *dataSource = [[PGBaseCollectionViewDataSource alloc] init];
     
@@ -29,9 +29,9 @@
     return dataSource;
 }
 
-- (void)reloadItems:(NSArray *)items
+- (void)reloadModels:(NSArray *)models
 {
-    self.items = items;
+    self.models = models;
 }
 
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView
@@ -41,16 +41,16 @@
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
 {
-    return self.items.count;
+    return self.models.count;
 }
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
     UICollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:self.cellIdentifier forIndexPath:indexPath];
     
-    id item = self.items[indexPath.item];
+    id model = self.models[indexPath.item];
     if (self.configureCellBlock) {
-        self.configureCellBlock(cell, item);
+        self.configureCellBlock((id<PGBaseCollectionViewCell>)cell, model);
     }
     
     return cell;

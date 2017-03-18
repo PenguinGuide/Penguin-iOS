@@ -8,6 +8,19 @@
 
 #import <UIKit/UIKit.h>
 
-@interface PGBaseCollectionViewCell : UICollectionViewCell
+@class PGBaseCollectionViewCell;
+
+@protocol PGBaseCollectionViewCell <NSObject>
+
+@optional
+
+- (void)setCellWithModel:(PGRKModel *)model;
+- (void)cellDidSelectWithModel:(PGRKModel *)model;
+
+@end
+
+@interface PGBaseCollectionViewCell : UICollectionViewCell <PGBaseCollectionViewCell>
+
+- (void)insertCellBorderLayer:(CGFloat)cornerRadius;
 
 @end

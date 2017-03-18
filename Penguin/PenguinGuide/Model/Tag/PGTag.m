@@ -13,9 +13,16 @@
 + (NSDictionary *)JSONKeyPathsByPropertyKey
 {
     return @{
+             @"image": @"icon_url",
              @"name": @"name",
-             @"link": @"link"
+             @"link": @"link",
+             @"tagId": @"id"
              };
+}
+
++ (NSValueTransformer *)tagIdJSONTransformer
+{
+    return [NSValueTransformer valueTransformerForName:PGStringValueTransformer];
 }
 
 @end

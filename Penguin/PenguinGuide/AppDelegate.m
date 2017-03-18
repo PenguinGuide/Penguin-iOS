@@ -84,7 +84,7 @@
     PGMeViewController *meVC = [[PGMeViewController alloc] init];
     
     self.tabBarController = [[PGTabBarController alloc] init];
-    [self.tabBarController setViewControllers:@[storeVC, exploreVC, cityGuideVC, meVC]];
+    [self.tabBarController setViewControllers:@[exploreVC, storeVC, cityGuideVC, meVC]];
     
     __block PGBaseNavigationController *navigationController = [[PGBaseNavigationController alloc] initWithRootViewController:self.tabBarController];
     PGGlobal.rootNavigationController = navigationController;

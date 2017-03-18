@@ -46,7 +46,7 @@
         
         if (weakself.viewModel.nextPageIndexes || weakself.viewModel.nextPageIndexes.count > 0) {
             @try {
-                [weakself.dataSource reloadItems:weakself.viewModel.articlesArray];
+                [weakself.dataSource reloadModels:weakself.viewModel.articlesArray];
                 [weakself.articlesCollectionView insertItemsAtIndexPaths:weakself.viewModel.nextPageIndexes];
             } @catch (NSException *exception) {
                 NSLog(@"exception: %@", exception);
@@ -54,7 +54,7 @@
         } else {
             NSArray *articlesArray = changedObject;
             if (articlesArray && [articlesArray isKindOfClass:[NSArray class]]) {
-                [weakself.dataSource reloadItems:articlesArray];
+                [weakself.dataSource reloadModels:articlesArray];
                 [UIView setAnimationsEnabled:NO];
                 [weakself.articlesCollectionView reloadData];
                 dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.25f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
@@ -166,9 +166,9 @@
 {
     if (!_dataSource) {
         PGWeakSelf(self);
-        ConfigureCellBlock configureCellBlock = ^(UICollectionViewCell *cell, id item) {
-            if ([item isKindOfClass:[PGArticleBanner class]] && [cell isKindOfClass:[PGArticleBannerCell class]]) {
-                PGArticleBanner *articleBanner = (PGArticleBanner *)item;
+        ConfigureCellBlock configureCellBlock = ^(id<PGBaseCollectionViewCell> cell, PGRKModel *model) {
+            if ([model isKindOfClass:[PGArticleBanner class]] && [cell isKindOfClass:[PGArticleBannerCell class]]) {
+                PGArticleBanner *articleBanner = (PGArticleBanner *)model;
                 PGArticleBannerCell *articleBannerCell = (PGArticleBannerCell *)cell;
                 
                 articleBannerCell.eventName = article_banner_clicked;

@@ -12,18 +12,11 @@ static NSString *ScenarioTypeGroup = @"2";
 
 #import "PGExploreViewModel.h"
 
-#import "PGArticleBanner.h"
-#import "PGScenarioBanner.h"
-
 @interface PGExploreViewModel ()
 
-@property (nonatomic, strong, readwrite) NSArray *recommendsArray;
-
-@property (nonatomic, strong, readwrite) NSArray *scenariosArray;
-@property (nonatomic, strong, readwrite) NSArray *categoriesArray;
-@property (nonatomic, strong, readwrite) NSArray *levelsArray;
-@property (nonatomic, strong, readwrite) NSArray *groupsArray;
-
+@property (nonatomic, strong, readwrite) NSArray *hotArticlesArray;
+@property (nonatomic, strong, readwrite) PGArticleBanner *currentArticle;
+@property (nonatomic, strong, readwrite) NSArray *tagsArray;
 @property (nonatomic, strong, readwrite) NSArray *articlesArray;
 
 @end
@@ -38,20 +31,15 @@ static NSString *ScenarioTypeGroup = @"2";
         config.keyPath = nil;
     } completion:^(id response) {
         NSDictionary *responseDict = [response firstObject];
-        if (responseDict && [responseDict isKindOfClass:[NSDictionary class]]) {
-            if (responseDict[@"banners"]) {
-                weakself.recommendsArray = [PGImageBanner modelsFromArray:responseDict[@"banners"]];
+        if ([responseDict isKindOfClass:[NSDictionary class]]) {
+            if (responseDict[@"daily"] && [responseDict[@"daily"] isKindOfClass:[NSDictionary class]]) {
+                weakself.currentArticle = [PGArticleBanner modelFromDictionary:responseDict[@"daily"]];
             }
-            if (responseDict[@"scenarios"]) {
-                weakself.scenariosArray = [PGScenarioBanner modelsFromArray:responseDict[@"scenarios"]];
-                
-                NSPredicate *categoryPredicate = [NSPredicate predicateWithFormat:@"type == %@", ScenarioTypeCategory];
-                NSPredicate *levelPredicate = [NSPredicate predicateWithFormat:@"type == %@", ScenarioTypeLevel];
-                NSPredicate *groupPredicate = [NSPredicate predicateWithFormat:@"type == %@", ScenarioTypeGroup];
-                
-                weakself.categoriesArray = [weakself.scenariosArray filteredArrayUsingPredicate:categoryPredicate];
-                weakself.levelsArray = [weakself.scenariosArray filteredArrayUsingPredicate:levelPredicate];
-                weakself.groupsArray = [weakself.scenariosArray filteredArrayUsingPredicate:groupPredicate];
+            if (responseDict[@"tags"] && [responseDict[@"tags"] isKindOfClass:[NSArray class]]) {
+                weakself.tagsArray = [PGTag modelsFromArray:responseDict[@"tags"]];
+            }
+            if (responseDict[@"hots"] && [responseDict[@"hots"] isKindOfClass:[NSArray class]]) {
+                weakself.hotArticlesArray = [PGArticleBanner modelsFromArray:responseDict[@"hots"]];
             }
         }
         [weakself requestArticles];
@@ -97,61 +85,61 @@ static NSString *ScenarioTypeGroup = @"2";
     }];
 }
 
-- (void)collectArticle:(NSString *)articleId completion:(void (^)(BOOL success))completion
-{
-    if (articleId && articleId.length > 0) {
-        PGWeakSelf(self);
-        [self.apiClient pg_makePutRequest:^(PGRKRequestConfig *config) {
-            config.route = PG_Article_Collect;
-            config.keyPath = nil;
-            config.pattern = @{@"articleId":articleId};
-        } completion:^(id response) {
-            if (completion) {
-                completion(YES);
-            }
-        } failure:^(NSError *error) {
-            if (completion) {
-                completion(NO);
-            }
-            weakself.error = error;
-        }];
-    } else {
-        if (completion) {
-            completion(NO);
-        }
-    }
-}
-
-- (void)disCollectArticle:(NSString *)articleId completion:(void (^)(BOOL success))completion
-{
-    if (articleId && articleId.length > 0) {
-        PGWeakSelf(self);
-        [self.apiClient pg_makeDeleteRequest:^(PGRKRequestConfig *config) {
-            config.route = PG_Article_Collect;
-            config.keyPath = nil;
-            config.pattern = @{@"articleId":articleId};
-        } completion:^(id response) {
-            if (completion) {
-                completion(YES);
-            }
-        } failure:^(NSError *error) {
-            if (completion) {
-                completion(NO);
-            }
-            weakself.error = error;
-        }];
-    } else {
-        if (completion) {
-            completion(NO);
-        }
-    }
-}
-
-- (void)clearPagination
-{
-    self.endFlag = NO;
-    self.isPreloadingNextPage = NO;
-    self.response = nil;
-}
+//- (void)collectArticle:(NSString *)articleId completion:(void (^)(BOOL success))completion
+//{
+//    if (articleId && articleId.length > 0) {
+//        PGWeakSelf(self);
+//        [self.apiClient pg_makePutRequest:^(PGRKRequestConfig *config) {
+//            config.route = PG_Article_Collect;
+//            config.keyPath = nil;
+//            config.pattern = @{@"articleId":articleId};
+//        } completion:^(id response) {
+//            if (completion) {
+//                completion(YES);
+//            }
+//        } failure:^(NSError *error) {
+//            if (completion) {
+//                completion(NO);
+//            }
+//            weakself.error = error;
+//        }];
+//    } else {
+//        if (completion) {
+//            completion(NO);
+//        }
+//    }
+//}
+//
+//- (void)disCollectArticle:(NSString *)articleId completion:(void (^)(BOOL success))completion
+//{
+//    if (articleId && articleId.length > 0) {
+//        PGWeakSelf(self);
+//        [self.apiClient pg_makeDeleteRequest:^(PGRKRequestConfig *config) {
+//            config.route = PG_Article_Collect;
+//            config.keyPath = nil;
+//            config.pattern = @{@"articleId":articleId};
+//        } completion:^(id response) {
+//            if (completion) {
+//                completion(YES);
+//            }
+//        } failure:^(NSError *error) {
+//            if (completion) {
+//                completion(NO);
+//            }
+//            weakself.error = error;
+//        }];
+//    } else {
+//        if (completion) {
+//            completion(NO);
+//        }
+//    }
+//}
+//
+//- (void)clearPagination
+//{
+//    self.endFlag = NO;
+//    self.isPreloadingNextPage = NO;
+//    self.response = nil;
+//}
 
 @end

@@ -10,4 +10,23 @@
 
 @implementation PGBaseCollectionViewCell
 
+- (void)insertCellBorderLayer:(CGFloat)cornerRadius
+{
+    CAShapeLayer *maskShapeLayer = [CAShapeLayer layer];
+    maskShapeLayer.frame = CGRectMake(0, 0, self.pg_width, self.pg_height);
+    
+    CAShapeLayer *borderShapeLayer = [CAShapeLayer layer];
+    borderShapeLayer.frame = CGRectMake(0, 0, self.pg_width, self.pg_height);
+    borderShapeLayer.lineWidth = 1.f;
+    borderShapeLayer.strokeColor = Theme.colorBackground.CGColor;
+    borderShapeLayer.fillColor = [UIColor clearColor].CGColor;
+    
+    UIBezierPath *bezierPath = [UIBezierPath bezierPathWithRoundedRect:CGRectMake(0, 0, self.pg_width, self.pg_height) cornerRadius:cornerRadius];
+    maskShapeLayer.path = bezierPath.CGPath;
+    borderShapeLayer.path = bezierPath.CGPath;
+    
+    [self.contentView.layer insertSublayer:borderShapeLayer atIndex:0];
+    [self.contentView.layer setMask:maskShapeLayer];
+}
+
 @end

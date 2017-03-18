@@ -156,7 +156,7 @@
 
 - (NSString *)tabBarTitle
 {
-    return @"市集";
+    return @"购买";
 }
 
 - (NSString *)tabBarImage

@@ -10,7 +10,9 @@
 
 @interface PGTag : PGRKModel
 
+@property (nonatomic, strong) NSString *image;
 @property (nonatomic, strong) NSString *name;
 @property (nonatomic, strong) NSString *link;
+@property (nonatomic, strong) NSString *tagId;
 
 @end

@@ -16,6 +16,8 @@
              @"image" : @"image",
              @"type" : @"type",
              @"title": @"title",
+             @"subTitle" : @"sub_title",
+             @"date" : @"created_at",
              @"coverTitle": @"cover_title",
              @"channel" : @"channel",
              @"channelIcon" : @"channel_icon",
@@ -31,6 +33,11 @@
 + (NSValueTransformer *)articleIdJSONTransformer
 {
     return [NSValueTransformer valueTransformerForName:PGStringValueTransformer];
+}
+
++ (NSValueTransformer *)dateJSONTransformer
+{
+    return [NSValueTransformer valueTransformerForName:PGTimeValueTransformer];
 }
 
 + (NSValueTransformer *)likesCountJSONTransformer
