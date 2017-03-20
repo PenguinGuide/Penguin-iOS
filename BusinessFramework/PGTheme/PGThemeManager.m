@@ -8,6 +8,7 @@
 
 static UIFont *fontSize10, *fontSize12, *fontSize14, *fontSize16, *fontSize18;
 static UIFont *fontSize10Bold, *fontSize12Bold, *fontSize14Bold, *fontSize16Bold, *fontSize18Bold;
+static UIFont *fontSize10Light, *fontSize12Light, *fontSize14Light, *fontSize16Light, *fontSize18Light;
 static NSArray *loadingImages;
 static UIColor *colorHighlight, *colorExtraHighlight, *colorLightGray, *colorText, *colorLightText, *colorBackground, *colorLightBackground, *colorRed;
 static UIColor *colorBorder, *colorLightBorder;
@@ -41,6 +42,12 @@ static UIColor *colorBorder, *colorLightBorder;
         fontSize14Bold = [UIFont systemFontOfSize:14.f weight:UIFontWeightMedium];
         fontSize16Bold = [UIFont systemFontOfSize:16.f weight:UIFontWeightMedium];
         fontSize18Bold = [UIFont systemFontOfSize:18.f weight:UIFontWeightMedium];
+        
+        fontSize10Light = [UIFont systemFontOfSize:10.f weight:UIFontWeightLight];
+        fontSize12Light = [UIFont systemFontOfSize:12.f weight:UIFontWeightLight];
+        fontSize14Light = [UIFont systemFontOfSize:14.f weight:UIFontWeightLight];
+        fontSize16Light = [UIFont systemFontOfSize:16.f weight:UIFontWeightLight];
+        fontSize18Light = [UIFont systemFontOfSize:18.f weight:UIFontWeightLight];
         
         colorHighlight = [UIColor colorWithRed:241.f/256.f green:149.f/256.f blue:114.f/256.f alpha:1.f];
         colorExtraHighlight = [UIColor colorWithRed:239.f/256.f green:103.f/256.f blue:51.f/256.f alpha:1.f];
@@ -201,6 +208,51 @@ static UIColor *colorBorder, *colorLightBorder;
         return fontSize18Bold;
     } else {
         return fontSize18Bold;
+    }
+}
+
+- (UIFont *)fontExtraSmallLight
+{
+    if (self.themeStyle == PGThemeStyleDefault) {
+        return fontSize10Light;
+    } else {
+        return fontSize10Light;
+    }
+}
+
+- (UIFont *)fontSmallLight
+{
+    if (self.themeStyle == PGThemeStyleDefault) {
+        return fontSize12Light;
+    } else {
+        return fontSize12Light;
+    }
+}
+
+- (UIFont *)fontMediumLight
+{
+    if (self.themeStyle == PGThemeStyleDefault) {
+        return fontSize14Light;
+    } else {
+        return fontSize14Light;
+    }
+}
+
+- (UIFont *)fontLargeLight
+{
+    if (self.themeStyle == PGThemeStyleDefault) {
+        return fontSize16Light;
+    } else {
+        return fontSize16Light;
+    }
+}
+
+- (UIFont *)fontExtraLargeLight
+{
+    if (self.themeStyle == PGThemeStyleDefault) {
+        return fontSize18Light;
+    } else {
+        return fontSize18Light;
     }
 }
 

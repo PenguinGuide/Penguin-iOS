@@ -165,4 +165,15 @@ static char PGLongPresseHandlerKey;
     return screenshot;
 }
 
+- (void)cropCornerRadius:(CGFloat)cornerRadius
+{
+    CAShapeLayer *maskLayer = [CAShapeLayer layer];
+    maskLayer.frame = CGRectMake(0, 0, self.pg_width, self.pg_height);
+    
+    UIBezierPath *bezierPath = [UIBezierPath bezierPathWithRoundedRect:CGRectMake(0, 0, self.pg_width, self.pg_height) cornerRadius:cornerRadius];
+    maskLayer.path = bezierPath.CGPath;
+    
+    [self.layer setMask:maskLayer];
+}
+
 @end

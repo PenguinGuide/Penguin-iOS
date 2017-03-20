@@ -214,7 +214,6 @@
 		0FFEAF171D76B2950067C888 /* v1_store_banners.json in Resources */ = {isa = PBXBuildFile; fileRef = 0FFEAF161D76B2950067C888 /* v1_store_banners.json */; };
 		0FFEAF191D76B2B40067C888 /* v1_store_recommends.json in Resources */ = {isa = PBXBuildFile; fileRef = 0FFEAF181D76B2B40067C888 /* v1_store_recommends.json */; };
 		0FFEAF1E1D76B31B0067C888 /* PGStoreViewModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 0FFEAF1D1D76B31B0067C888 /* PGStoreViewModel.m */; };
-		0FFEAF221D76B4920067C888 /* PGStoreRecommendsHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0FFEAF211D76B4920067C888 /* PGStoreRecommendsHeaderView.m */; };
 		4BD01CB6C1E9C581FF15B7C3 /* libPods-PenguinGuideUITests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 154BB784023749113FEC3760 /* libPods-PenguinGuideUITests.a */; };
 		9D4A0C0A718990CD7428E6E8 /* libPods-PenguinGuide.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2781A6FFECE60736EAE2C13D /* libPods-PenguinGuide.a */; };
 		C7AED6BA0A3F2EAAA994C062 /* libPods-PenguinGuideTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = ECDB672886290E17696F19CC /* libPods-PenguinGuideTests.a */; };
@@ -224,6 +223,7 @@
 		FF1D93331E13A42300DFB17A /* UIScrollView+UzysAnimatedGifPullToRefresh.m in Sources */ = {isa = PBXBuildFile; fileRef = FF1D93301E13A42300DFB17A /* UIScrollView+UzysAnimatedGifPullToRefresh.m */; };
 		FF1D93341E13A42300DFB17A /* UzysAnimatedGifActivityIndicator.m in Sources */ = {isa = PBXBuildFile; fileRef = FF1D93321E13A42300DFB17A /* UzysAnimatedGifActivityIndicator.m */; };
 		FF1D93381E13A51700DFB17A /* AnimatedGIFImageSerialization.m in Sources */ = {isa = PBXBuildFile; fileRef = FF1D93371E13A51700DFB17A /* AnimatedGIFImageSerialization.m */; };
+		FF24782C1E7F9FDE005ADD09 /* PGStoreScenarioCell.m in Sources */ = {isa = PBXBuildFile; fileRef = FF24782B1E7F9FDE005ADD09 /* PGStoreScenarioCell.m */; };
 		FF24DF6A1E02745200A17486 /* PGSearchResultsArticlesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FF24DF691E02745200A17486 /* PGSearchResultsArticlesViewController.m */; };
 		FF24DF6D1E02770800A17486 /* PGSearchResultsGoodsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FF24DF6C1E02770800A17486 /* PGSearchResultsGoodsViewController.m */; };
 		FF24DF701E027A7800A17486 /* PGSearchResultsArticlesViewModel.m in Sources */ = {isa = PBXBuildFile; fileRef = FF24DF6F1E027A7800A17486 /* PGSearchResultsArticlesViewModel.m */; };
@@ -666,8 +666,6 @@
 		0FFEAF181D76B2B40067C888 /* v1_store_recommends.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = v1_store_recommends.json; sourceTree = "<group>"; };
 		0FFEAF1C1D76B31B0067C888 /* PGStoreViewModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PGStoreViewModel.h; sourceTree = "<group>"; };
 		0FFEAF1D1D76B31B0067C888 /* PGStoreViewModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PGStoreViewModel.m; sourceTree = "<group>"; };
-		0FFEAF201D76B4920067C888 /* PGStoreRecommendsHeaderView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PGStoreRecommendsHeaderView.h; sourceTree = "<group>"; };
-		0FFEAF211D76B4920067C888 /* PGStoreRecommendsHeaderView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PGStoreRecommendsHeaderView.m; sourceTree = "<group>"; };
 		154BB784023749113FEC3760 /* libPods-PenguinGuideUITests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-PenguinGuideUITests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2781A6FFECE60736EAE2C13D /* libPods-PenguinGuide.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-PenguinGuide.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2A2B532DF8C32CC5932E4AB9 /* Pods-PenguinGuide.adhoc.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PenguinGuide.adhoc.xcconfig"; path = "Pods/Target Support Files/Pods-PenguinGuide/Pods-PenguinGuide.adhoc.xcconfig"; sourceTree = "<group>"; };
@@ -694,6 +692,8 @@
 		FF1D93361E13A51700DFB17A /* AnimatedGIFImageSerialization.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AnimatedGIFImageSerialization.h; sourceTree = "<group>"; };
 		FF1D93371E13A51700DFB17A /* AnimatedGIFImageSerialization.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AnimatedGIFImageSerialization.m; sourceTree = "<group>"; };
 		FF231A981E1274C40099536C /* PGScenarioDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PGScenarioDelegate.h; sourceTree = "<group>"; };
+		FF24782A1E7F9FDE005ADD09 /* PGStoreScenarioCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PGStoreScenarioCell.h; sourceTree = "<group>"; };
+		FF24782B1E7F9FDE005ADD09 /* PGStoreScenarioCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PGStoreScenarioCell.m; sourceTree = "<group>"; };
 		FF24DF681E02745200A17486 /* PGSearchResultsArticlesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PGSearchResultsArticlesViewController.h; sourceTree = "<group>"; };
 		FF24DF691E02745200A17486 /* PGSearchResultsArticlesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PGSearchResultsArticlesViewController.m; sourceTree = "<group>"; };
 		FF24DF6B1E02770800A17486 /* PGSearchResultsGoodsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PGSearchResultsGoodsViewController.h; sourceTree = "<group>"; };
@@ -1233,7 +1233,7 @@
 		0F3C7EEE1D2F72CB00284066 /* Store */ = {
 			isa = PBXGroup;
 			children = (
-				0FFEAF1F1D76B4770067C888 /* Views */,
+				FF2478291E7F9FD0005ADD09 /* Cells */,
 				0F3C7EF51D2F730F00284066 /* PGStoreViewController.h */,
 				0F3C7EF61D2F730F00284066 /* PGStoreViewController.m */,
 			);
@@ -2174,15 +2174,6 @@
 			path = Store;
 			sourceTree = "<group>";
 		};
-		0FFEAF1F1D76B4770067C888 /* Views */ = {
-			isa = PBXGroup;
-			children = (
-				0FFEAF201D76B4920067C888 /* PGStoreRecommendsHeaderView.h */,
-				0FFEAF211D76B4920067C888 /* PGStoreRecommendsHeaderView.m */,
-			);
-			path = Views;
-			sourceTree = "<group>";
-		};
 		4C5DF8A742DC41A858FB15DB /* Pods */ = {
 			isa = PBXGroup;
 			children = (
@@ -2239,6 +2230,15 @@
 				FF1D93351E13A43000DFB17A /* UzysAnimatedGifPullToRefreshConfiguration.h */,
 			);
 			path = PullToRefresh;
+			sourceTree = "<group>";
+		};
+		FF2478291E7F9FD0005ADD09 /* Cells */ = {
+			isa = PBXGroup;
+			children = (
+				FF24782A1E7F9FDE005ADD09 /* PGStoreScenarioCell.h */,
+				FF24782B1E7F9FDE005ADD09 /* PGStoreScenarioCell.m */,
+			);
+			path = Cells;
 			sourceTree = "<group>";
 		};
 		FF31D99D1E55839700DB6F9C /* Launch */ = {
@@ -2768,7 +2768,6 @@
 				0F0008D01D71885500BED6FA /* UICollectionViewLeftAlignedLayout.m in Sources */,
 				0F7EEF5C1D210F63008D175C /* main.m in Sources */,
 				0FE6D8691D9BB775000B8B46 /* PGGoodDescCell.m in Sources */,
-				0FFEAF221D76B4920067C888 /* PGStoreRecommendsHeaderView.m in Sources */,
 				0FFAD0F11D780A2B009F9E27 /* PGScenarioBanner.m in Sources */,
 				0F52AB631D96D742004598C3 /* PGVideoVolumeSlider.m in Sources */,
 				0F21FEB41D9114B30036F14A /* PGArticleParagraphVideoCell.m in Sources */,
@@ -2789,6 +2788,7 @@
 				0F9E8E271DC6097F003027CF /* PGCollectionContentViewModel.m in Sources */,
 				0F14564B1DEEE41100533396 /* PGAllScenariosViewModel.m in Sources */,
 				0FBBEDE81D7420F8001E75BA /* PGSegmentView.m in Sources */,
+				FF24782C1E7F9FDE005ADD09 /* PGStoreScenarioCell.m in Sources */,
 				0F9E8E241DC5FDB9003027CF /* PGCollection.m in Sources */,
 				0F3C7EF41D2F72FA00284066 /* PGExploreViewController.m in Sources */,
 				0FED89A11DADEAED0081B999 /* PGSignupViewController.m in Sources */,

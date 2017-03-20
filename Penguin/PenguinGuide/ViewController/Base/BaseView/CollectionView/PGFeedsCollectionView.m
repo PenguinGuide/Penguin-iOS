@@ -21,7 +21,7 @@
 
 #import "PGFeedsCollectionView.h"
 
-@interface PGFeedsCollectionView () <UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, PGStoreRecommendsHeaderViewDelegate>
+@interface PGFeedsCollectionView () <UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout>
 
 @end
 
@@ -46,7 +46,6 @@
         [self registerClass:[PGFlashbuyBannerCell class] forCellWithReuseIdentifier:FlashbuyBannerCell];
         
         [self registerClass:[PGExploreRecommendsHeaderView class] forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:ExploreHeaderView];
-        [self registerClass:[PGStoreRecommendsHeaderView class] forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:StoreHeaderView];
         [self registerClass:[PGBaseCollectionViewFooterView class] forSupplementaryViewOfKind:UICollectionElementKindSectionFooter withReuseIdentifier:BaseCollectionViewFooterView];
     }
     return self;
@@ -197,31 +196,6 @@
 
 - (UICollectionReusableView *)collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath
 {
-    if (indexPath.section == 0 && kind == UICollectionElementKindSectionHeader) {
-        NSString *tabType = [self.feedsDelegate tabType];
-        if ([tabType isEqualToString:@"explore"]) {
-            self.exploreHeaderView = [collectionView dequeueReusableSupplementaryViewOfKind:kind withReuseIdentifier:ExploreHeaderView forIndexPath:indexPath];
-            [self.exploreHeaderView reloadBannersWithRecommendsArray:[self.feedsDelegate recommendsArray]];
-            
-            return self.exploreHeaderView;
-        } else if ([tabType isEqualToString:@"store"]) {
-            self.storeHeaderView = [collectionView dequeueReusableSupplementaryViewOfKind:kind withReuseIdentifier:StoreHeaderView forIndexPath:indexPath];
-            self.storeHeaderView.delegate = self;
-            [self.storeHeaderView reloadBannersWithRecommendsArray:[self.feedsDelegate recommendsArray] categoriesArray:[self.feedsDelegate iconsArray]];
-            
-            return self.storeHeaderView;
-        }
-    } else if (kind == UICollectionElementKindSectionFooter) {
-        if (self.feedsDelegate && [self.feedsDelegate respondsToSelector:@selector(feedsArray)]) {
-            NSArray *feedsArray = [self.feedsDelegate feedsArray];
-            if (indexPath.section == feedsArray.count-1) {
-                PGBaseCollectionViewFooterView *footerView = [collectionView dequeueReusableSupplementaryViewOfKind:kind withReuseIdentifier:BaseCollectionViewFooterView forIndexPath:indexPath];
-                
-                return footerView;
-            }
-        }
-    }
-    
     return nil;
 }
 

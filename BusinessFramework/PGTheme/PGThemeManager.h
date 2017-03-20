@@ -34,6 +34,12 @@ typedef NS_ENUM(NSInteger, PGThemeStyle) {
 - (UIFont *)fontLargeBold;
 - (UIFont *)fontExtraLargeBold;
 
+- (UIFont *)fontExtraSmallLight;
+- (UIFont *)fontSmallLight;
+- (UIFont *)fontMediumLight;
+- (UIFont *)fontLargeLight;
+- (UIFont *)fontExtraLargeLight;
+
 - (NSArray *)loadingImages;
 
 - (UIColor *)colorHighlight;

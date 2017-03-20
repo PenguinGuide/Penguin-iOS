@@ -70,6 +70,7 @@
 
 @property (nonatomic, strong) UIScrollView *pagedScrollView;
 @property (nonatomic, strong) FXPageControl *pageControl;
+@property (nonatomic, strong) UILabel *pageLabel;
 @property (nonatomic, strong) NSMutableArray *banners;
 @property (nonatomic, strong) NSMutableArray *fixedBanners;
 @property (nonatomic) PGPagedScrollViewImageFillMode fillMode;
@@ -99,7 +100,11 @@
         self.iconMode = iconMode;
         
         [self addSubview:self.pagedScrollView];
-        [self addSubview:self.pageControl];
+        if (iconMode == PGPagedScrollViewIconModeLabel) {
+            [self addSubview:self.pageLabel];
+        } else {
+            [self addSubview:self.pageControl];
+        }
     }
     
     return self;
@@ -173,9 +178,18 @@
         self.circularMode = NO;
         NSArray *banners = [self.delegate viewsForScrollView];
         if (banners.count <= 1) {
-            self.pageControl.hidden = YES;
+            if (self.iconMode == PGPagedScrollViewIconModeLabel) {
+                self.pageLabel.hidden = YES;
+            } else {
+                self.pageControl.hidden = YES;
+            }
         } else {
-            self.pageControl.hidden = NO;
+            if (self.iconMode == PGPagedScrollViewIconModeLabel) {
+                self.pageLabel.hidden = NO;
+            } else {
+                self.pageControl.hidden = NO;
+            }
+            self.currentPage = 1;
         }
         if (banners.count > 0) {
             self.banners = [NSArray arrayWithArray:banners];
@@ -193,8 +207,12 @@
                 view.tag = i;
                 [view addGestureRecognizer:tapGesture];
             }
-            _pageControl.numberOfPages = self.banners.count;
-            _pageControl.currentPage = self.currentPage;
+            if (self.iconMode == PGPagedScrollViewIconModeLabel) {
+                self.pageLabel.text = [NSString stringWithFormat:@"%@/%@", @(self.currentPage), @(banners.count)];
+            } else {
+                _pageControl.numberOfPages = self.banners.count;
+                _pageControl.currentPage = self.currentPage;
+            }
         }
     }
 }
@@ -211,7 +229,12 @@
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
-    NSInteger prePage = self.pageControl.currentPage;
+    NSInteger prePage;
+    if (self.iconMode == PGPagedScrollViewIconModeLabel) {
+        prePage = self.currentPage;
+    } else {
+        prePage = self.pageControl.currentPage;
+    }
     
     CGRect visibleBounds = self.pagedScrollView.bounds;
     NSInteger currentPage = (NSInteger)(floorf(CGRectGetMidX(visibleBounds) / CGRectGetWidth(visibleBounds)));
@@ -235,7 +258,11 @@
         currentPage = self.banners.count-1;
     }
     if (currentPage != prePage) {
-        [self.pageControl setCurrentPage:currentPage];
+        if (self.iconMode == PGPagedScrollViewIconModeLabel) {
+            [self.pageLabel setText:[NSString stringWithFormat:@"%@/%@", @(currentPage+1), @(self.banners.count)]];
+        } else {
+            [self.pageControl setCurrentPage:currentPage];
+        }
     }
     
     self.currentPage = currentPage;
@@ -336,6 +363,25 @@
         }
     }
     return _pageControl;
+}
+
+- (UILabel *)pageLabel
+{
+    if (!_pageLabel) {
+        _pageLabel = [[UILabel alloc] initWithFrame:CGRectMake(self.frame.size.width-10-40, self.frame.size.height-10-30, 40, 30)];
+        _pageLabel.backgroundColor = [UIColor colorWithWhite:1.f alpha:0.8f];
+        _pageLabel.font = [UIFont systemFontOfSize:12.f weight:UIFontWeightRegular];
+        _pageLabel.textColor = [UIColor blackColor];
+        _pageLabel.textAlignment = NSTextAlignmentCenter;
+        
+        CAShapeLayer *maskLayer = [CAShapeLayer layer];
+        maskLayer.frame = CGRectMake(0, 0, 40, 30);
+        
+        UIBezierPath *bezierPath = [UIBezierPath bezierPathWithRoundedRect:CGRectMake(0, 0, 40, 30) cornerRadius:4.f];
+        maskLayer.path = bezierPath.CGPath;
+        _pageLabel.layer.mask = maskLayer;
+    }
+    return _pageLabel;
 }
 
 @end

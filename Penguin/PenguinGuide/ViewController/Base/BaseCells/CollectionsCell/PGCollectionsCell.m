@@ -69,7 +69,7 @@ static NSString *const CollectionCell = @"CollectionCell";
 {
     if (self.config.showBorder) {
         if ([cell isKindOfClass:[PGBaseCollectionViewCell class]]) {
-            [(PGBaseCollectionViewCell *)cell insertCellBorderLayer:4.f];
+            [(PGBaseCollectionViewCell *)cell insertCellBorderLayer:8.f];
         }
     }
 }

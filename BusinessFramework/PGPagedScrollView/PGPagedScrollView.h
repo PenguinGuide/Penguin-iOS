@@ -19,7 +19,8 @@ typedef NS_ENUM(NSInteger, PGPagedScrollViewIconMode) {
     PGPagedScrollViewIconModeLight,
     PGPagedScrollViewIconModeDark,
     PGPagedScrollViewIconModeImageDark,
-    PGPagedScrollViewIconModeImageLight
+    PGPagedScrollViewIconModeImageLight,
+    PGPagedScrollViewIconModeLabel
 };
 
 @protocol PGPagedScrollViewDelegate <NSObject>

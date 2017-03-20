@@ -34,10 +34,23 @@
     self.backgroundColor = [UIColor whiteColor];
     
     [self.contentView addSubview:self.bannersView];
-    
-    UIImageView *maskImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, self.pg_width, self.pg_height)];
-    maskImageView.image = [[UIImage imageNamed:@"pg_bg_corner_mask"] resizableImageWithCapInsets:UIEdgeInsetsMake(4, 4, 4, 4) resizingMode:UIImageResizingModeStretch];
-    [self.contentView addSubview:maskImageView];
+}
+
+- (void)setCellWithModel:(PGRKModel *)model
+{
+    self.flashbuy = (PGFlashbuyBanner *)model;
+    NSMutableArray *views = [NSMutableArray new];
+    for (PGGood *good in self.flashbuy.goodsArray) {
+        PGFlashbuyGoodView *flashbuyGoodView = [[PGFlashbuyGoodView alloc] initWithFrame:CGRectMake(0, 0, self.pg_width, self.pg_height)];
+        flashbuyGoodView.eventName = flashbuy_banner_good_clicked;
+        flashbuyGoodView.eventId = good.goodId;
+        flashbuyGoodView.pageName = self.pageName;
+        
+        [flashbuyGoodView setViewWithGood:good];
+        [views addObject:flashbuyGoodView];
+    }
+    self.viewsArray = [NSArray arrayWithArray:views];
+    [self.bannersView reloadData];
 }
 
 - (void)reloadBannersWithFlashbuy:(PGFlashbuyBanner *)flashbuy
@@ -74,7 +87,7 @@
 
 + (CGSize)cellSize
 {
-    return CGSizeMake(UISCREEN_WIDTH-40, (UISCREEN_WIDTH-40)*150/300);
+    return CGSizeMake(UISCREEN_WIDTH-44, (UISCREEN_WIDTH-44)*150/300);
 }
 
 #pragma mark - <PGPagedScrollViewDelegate>
@@ -95,7 +108,7 @@
 - (PGPagedScrollView *)bannersView
 {
     if (!_bannersView) {
-        _bannersView = [[PGPagedScrollView alloc] initWithFrame:CGRectMake(0, 0, self.pg_width, self.pg_height) imageFillMode:PGPagedScrollViewImageFillModeFill iconMode:PGPagedScrollViewIconModeLight];
+        _bannersView = [[PGPagedScrollView alloc] initWithFrame:CGRectMake(0, 0, self.pg_width, self.pg_height) imageFillMode:PGPagedScrollViewImageFillModeFill iconMode:PGPagedScrollViewIconModeLabel];
         _bannersView.delegate = self;
     }
     return _bannersView;

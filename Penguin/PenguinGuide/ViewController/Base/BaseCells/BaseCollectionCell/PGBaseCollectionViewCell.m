@@ -29,4 +29,15 @@
     [self.contentView.layer setMask:maskShapeLayer];
 }
 
+- (void)insertCellMask:(CGFloat)cornerRadius
+{
+    CAShapeLayer *maskShapeLayer = [CAShapeLayer layer];
+    maskShapeLayer.frame = CGRectMake(0, 0, self.pg_width, self.pg_height);
+    
+    UIBezierPath *bezierPath = [UIBezierPath bezierPathWithRoundedRect:CGRectMake(0, 0, self.pg_width, self.pg_height) cornerRadius:cornerRadius];
+    maskShapeLayer.path = bezierPath.CGPath;
+    
+    [self.contentView.layer setMask:maskShapeLayer];
+}
+
 @end

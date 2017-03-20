@@ -65,6 +65,7 @@
         [weakself.feedsCollectionView endTopRefreshing];
         [weakself.feedsCollectionView endBottomRefreshing];
     }];
+    [self observeCollectionView:self.feedsCollectionView endOfFeeds:self.viewModel];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -81,6 +82,8 @@
     [self reloadView];
     
     self.feedsCollectionView.contentInset = UIEdgeInsetsZero;
+    
+    [self checkSystemNotification];
 }
 
 - (void)dealloc
@@ -189,6 +192,33 @@
     return nil;
 }
 
+- (UICollectionReusableView *)collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath
+{
+    if (kind == UICollectionElementKindSectionHeader) {
+        if (indexPath.section == 3) {
+            UICollectionReusableView *headerView = [collectionView dequeueReusableSupplementaryViewOfKind:kind withReuseIdentifier:HistoryArticlesHeaderView forIndexPath:indexPath];
+            
+            [headerView.subviews makeObjectsPerformSelector:@selector(removeFromSuperview)];
+            
+            UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, UISCREEN_WIDTH, 60)];
+            label.attributedText = self.historyArticlesLabelText;
+            label.textAlignment = NSTextAlignmentCenter;
+            [headerView addSubview:label];
+            
+            return headerView;
+        }
+    }
+    if (kind == UICollectionElementKindSectionFooter) {
+        if (indexPath.section == 3) {
+            PGBaseCollectionViewFooterView *footerView = [collectionView dequeueReusableSupplementaryViewOfKind:kind withReuseIdentifier:BaseCollectionViewFooterView forIndexPath:indexPath];
+            
+            return footerView;
+        }
+    }
+    
+    return nil;
+}
+
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath
 {
     if (indexPath.section == 0) {
@@ -258,38 +288,11 @@
     return 0.f;
 }
 
- - (UICollectionReusableView *)collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath
-{
-    if (kind == UICollectionElementKindSectionHeader) {
-        if (indexPath.section == 3) {
-            UICollectionReusableView *headerView = [collectionView dequeueReusableSupplementaryViewOfKind:kind withReuseIdentifier:HistoryArticlesHeaderView forIndexPath:indexPath];
-            
-            [headerView.subviews makeObjectsPerformSelector:@selector(removeFromSuperview)];
-            
-            UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, UISCREEN_WIDTH, 60)];
-            label.attributedText = self.historyArticlesLabelText;
-            label.textAlignment = NSTextAlignmentCenter;
-            [headerView addSubview:label];
-            
-            return headerView;
-        }
-    }
-    if (kind == UICollectionElementKindSectionFooter) {
-        if (indexPath.section == 3) {
-            PGBaseCollectionViewFooterView *footerView = [collectionView dequeueReusableSupplementaryViewOfKind:kind withReuseIdentifier:BaseCollectionViewFooterView forIndexPath:indexPath];
-            
-            return footerView;
-        }
-    }
-    
-    return nil;
-}
-
 - (void)collectionView:(UICollectionView *)collectionView willDisplayCell:(UICollectionViewCell *)cell forItemAtIndexPath:(NSIndexPath *)indexPath
 {
     if (indexPath.section == 1) {
         if ([cell isKindOfClass:[PGExploreTodayArticleCell class]]) {
-            [(PGExploreTodayArticleCell *)cell insertCellBorderLayer:4.f];
+            [(PGExploreTodayArticleCell *)cell insertCellBorderLayer:8.f];
         }
     }
 }
@@ -345,6 +348,38 @@
 //        }
 //    }];
 //}
+
+#pragma mark - <Check System Notification>
+
+- (void)checkSystemNotification
+{
+    // NOTE: [[UIApplication sharedApplication] isRegisteredForRemoteNotifications] doesn't work http://stackoverflow.com/questions/29787736/isregisteredforremotenotifications-returns-true-even-though-i-disabled-it-comple
+    UIUserNotificationSettings *notificationSettings = [UIApplication sharedApplication].currentUserNotificationSettings;
+    if (notificationSettings.types == UIUserNotificationTypeNone) {
+        NSArray *notificationExpireDate = [PGGlobal.cache objectForKey:@"system_notification_expire_date" fromTable:@"General"];
+        if (!notificationExpireDate) {
+            NSTimeInterval expireTime = [[NSDate date] timeIntervalSince1970]+5*24*60*60;
+            [PGGlobal.cache putObject:@[@(expireTime)] forKey:@"system_notification_expire_date" intoTable:@"General"];
+            
+            PGWeakSelf(self);
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.4f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                [weakself showSystemNotificationPopup];
+            });
+        } else {
+            NSTimeInterval expireTime = [notificationExpireDate.firstObject doubleValue];
+            NSDate *expireDate = [NSDate dateWithTimeIntervalSince1970:expireTime];
+            if ([[NSDate date] compare:expireDate] == NSOrderedDescending) {
+                NSTimeInterval expireTime = [[NSDate date] timeIntervalSince1970]+5*24*60*60;
+                [PGGlobal.cache putObject:@[@(expireTime)] forKey:@"system_notification_expire_date" intoTable:@"General"];
+                
+                PGWeakSelf(self);
+                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.4f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                    [weakself showSystemNotificationPopup];
+                });
+            }
+        }
+    }
+}
 
 #pragma mark - <PGNavigationViewDelegate>
 

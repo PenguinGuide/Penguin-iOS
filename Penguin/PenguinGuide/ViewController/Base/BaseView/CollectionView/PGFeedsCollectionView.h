@@ -25,7 +25,6 @@
 #import "PGFlashbuyBannerCell.h"
 
 #import "PGExploreRecommendsHeaderView.h"
-#import "PGStoreRecommendsHeaderView.h"
 
 @protocol PGFeedsCollectionViewDelegate <NSObject>
 
@@ -53,7 +52,6 @@
 
 @property (nonatomic, weak) id<PGFeedsCollectionViewDelegate> feedsDelegate;
 
-@property (nonatomic, strong) PGStoreRecommendsHeaderView *storeHeaderView;
 @property (nonatomic, strong) PGExploreRecommendsHeaderView *exploreHeaderView;
 
 @property (nonatomic, assign) BOOL allowGesture;

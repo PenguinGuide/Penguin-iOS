@@ -69,6 +69,63 @@
     }
 }
 
+- (void)setWithImageURL:(NSString *)imageURL imageSize:(CGSize)imageSize placeholder:(UIImage *)placeholder completion:(void (^)(UIImage *))completion
+{
+    if (imageURL && imageURL.length > 0) {
+        NSString *cropQuery = @"";
+        
+        if ([self isSmallScreen]) {
+            if (CGSizeEqualToSize(imageSize, CGSizeZero)) {
+                cropQuery = @"?imageView2/0/w/750/h/750";
+            } else {
+                cropQuery = [NSString stringWithFormat:@"?imageView2/0/w/%@/h/%@", @((int)imageSize.width*2), @((int)imageSize.height*2)];
+            }
+        } else if ([self isMediumScreen]) {
+            if (CGSizeEqualToSize(imageSize, CGSizeZero)) {
+                cropQuery = @"?imageView2/0/w/1000/h/1000";
+            } else {
+                cropQuery = [NSString stringWithFormat:@"?imageView2/0/w/%@/h/%@", @((int)(imageSize.width*2.5)), @((int)(imageSize.width*2.5))];
+            }
+        } else {
+            if (CGSizeEqualToSize(imageSize, CGSizeZero)) {
+                cropQuery = @"?imageView2/0/w/1500/h/1500";
+            } else {
+                cropQuery = [NSString stringWithFormat:@"?imageView2/0/w/%@/h/%@", @((int)(imageSize.width*3)), @((int)(imageSize.height*3))];
+            }
+        }
+        
+        imageURL = [imageURL stringByAppendingString:cropQuery];
+        
+        if (placeholder) {
+            [self setImage:placeholder];
+        }
+        
+        __weak typeof(self) weakself = self;
+        [self sd_setImageWithURL:[NSURL URLWithString:imageURL]
+                placeholderImage:placeholder
+                       completed:^(UIImage * _Nullable image, NSError * _Nullable error, SDImageCacheType cacheType, NSURL * _Nullable imageURL) {
+                           if (image && cacheType == SDImageCacheTypeNone) {
+                               // CATransition: http://blog.csdn.net/mad2man/article/details/17260887
+                               CATransition *transition = [CATransition animation];
+                               transition.type = kCATransitionFade; // there are other types but this is the nicest
+                               transition.duration = 0.3; // set the duration that you like
+                               transition.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
+                               [weakself.layer addAnimation:transition forKey:nil];
+                           }
+                           if (completion) {
+                               if (!error) {
+                                   completion(image);
+                               } else {
+                                   NSLog(@"image: [%@] download failed, error: [%@]", imageURL.absoluteString, error);
+                                   completion(nil);
+                               }
+                           }
+                       }];
+    } else {
+        [self setImage:placeholder];
+    }
+}
+
 - (void)setBlurEffect
 {
     [self setLightBlurEffectWithAlpha:0.5f];

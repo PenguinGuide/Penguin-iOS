@@ -11,7 +11,7 @@
 
 #define PG_Home_Recommends              @"/v2/recommends/home"
 #define PG_Explore_Recommends           @"/article/featured"
-#define PG_Store_Recommends             @"/recommends/store"
+#define PG_Store_Recommends             @"/recommends/market"
 #define PG_City_Guide_Cities            @"/city_guide/cities"
 
 #define PG_Home_Feeds                   @"/feeds/home"

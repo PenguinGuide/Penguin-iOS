@@ -24,5 +24,6 @@
 - (void)setLongPressedAction:(void(^)(void))completion;
 - (UIImage *)screenshot;
 - (UIImage *)screenshotFromRect:(CGRect)rect;
+- (void)cropCornerRadius:(CGFloat)cornerRadius;
 
 @end

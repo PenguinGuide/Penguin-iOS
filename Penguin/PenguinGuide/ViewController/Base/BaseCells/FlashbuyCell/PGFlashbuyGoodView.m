@@ -32,7 +32,6 @@
 - (void)initialize
 {
     self.backgroundColor = Theme.colorLightBackground;
-    self.clipsToBounds = YES;
     
     [self addSubview:self.goodImageView];
     [self addSubview:self.titleButton];

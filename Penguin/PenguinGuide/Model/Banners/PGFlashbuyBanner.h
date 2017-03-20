@@ -7,6 +7,7 @@
 //
 
 #import <PGRestKit/PGRestKit.h>
+#import "PGGood.h"
 
 @interface PGFlashbuyBanner : PGRKModel
 

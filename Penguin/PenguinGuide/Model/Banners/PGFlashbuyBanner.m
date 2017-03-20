@@ -7,7 +7,6 @@
 //
 
 #import "PGFlashbuyBanner.h"
-#import "PGGood.h"
 
 @implementation PGFlashbuyBanner
 

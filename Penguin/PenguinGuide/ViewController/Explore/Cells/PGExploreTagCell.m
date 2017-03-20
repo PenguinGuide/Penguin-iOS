@@ -61,7 +61,7 @@
         shapeLayer.strokeColor = Theme.colorBackground.CGColor;
         shapeLayer.fillColor = [UIColor clearColor].CGColor;
         
-        UIBezierPath *bezierPath = [UIBezierPath bezierPathWithRoundedRect:CGRectMake(0, 0, self.pg_width, self.pg_width) cornerRadius:4.f];
+        UIBezierPath *bezierPath = [UIBezierPath bezierPathWithRoundedRect:CGRectMake(0, 0, self.pg_width, self.pg_width) cornerRadius:8.f];
         shapeLayer.path = bezierPath.CGPath;
         
         [_tagImageView.layer insertSublayer:shapeLayer atIndex:0];

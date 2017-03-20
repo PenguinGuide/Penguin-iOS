@@ -6,30 +6,37 @@
 //  Copyright © 2016 Xinglian. All rights reserved.
 //
 
+#define StoreScenariosCell @"StoreScenariosCell"
+#define StoreFlashbuyCell @"StoreFlashbuyCell"
+#define StoreSingleGoodCell @"StoreSingleGoodCell"
+#define StoreGoodsCollectionCell @"StoreGoodsCollectionCell"
+#define StoreGoodCell @"StoreGoodCell"
+#define StoreSalesHeaderView @"StoreSalesHeaderView"
+#define StoreCollectionsHeaderView @"StoreCollectionsHeaderView"
+#define StoreGoodsHeaderView @"StoreGoodsHeaderView"
+
 #import "PGStoreViewController.h"
 #import "PGSearchRecommendsViewController.h"
-#import "PGArticleViewController.h"
 
 #import "PGStoreViewModel.h"
 
-#import "PGFeedsCollectionView.h"
-#import "PGStoreRecommendsHeaderView.h"
+#import "PGCollectionsCell.h"
+#import "PGStoreScenarioCell.h"
+#import "PGFlashbuyBannerCell.h"
+#import "PGSingleGoodBannerCell.h"
+#import "PGGoodsCollectionBannerCell.h"
+#import "PGGoodCell.h"
 
-#import "MSWeakTimer.h"
-
-#import "UIScrollView+PGPullToRefresh.h"
-
-#import "PGSystemNotificationView.h"
-
-@interface PGStoreViewController () <PGFeedsCollectionViewDelegate, PGNavigationViewDelegate>
+@interface PGStoreViewController () <UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, PGNavigationViewDelegate>
 
 @property (nonatomic, strong) PGNavigationView *navigationView;
-
 @property (nonatomic, strong) PGStoreViewModel *viewModel;
-@property (nonatomic, strong) PGFeedsCollectionView *feedsCollectionView;
+@property (nonatomic, strong) PGBaseCollectionView *storeCollectionView;
 
-@property (nonatomic, strong) MSWeakTimer *flashbuyWeakTimer;
-@property (nonatomic, strong) MSWeakTimer *bannersWeakTimer;
+@property (nonatomic, strong) NSAttributedString *scenariosLabelText;
+@property (nonatomic, strong) NSAttributedString *salesLabelText;
+@property (nonatomic, strong) NSAttributedString *collectionsLabelText;
+@property (nonatomic, strong) NSAttributedString *goodsLabelText;
 
 @end
 
@@ -43,39 +50,17 @@
     self.navigationView.delegate = self;
     [self.view addSubview:self.navigationView];
     
+    [self.view addSubview:self.storeCollectionView];
+    
     self.viewModel = [[PGStoreViewModel alloc] initWithAPIClient:self.apiClient];
-    [self.viewModel requestData];
     
     PGWeakSelf(self);
-    [self observe:self.viewModel keyPath:@"feedsArray" block:^(id changedObject) {
-        NSArray *feedsArray = changedObject;
-        if (feedsArray && [feedsArray isKindOfClass:[NSArray class]]) {
-            if (!weakself.feedsCollectionView.superview) {
-                [weakself.view addSubview:weakself.feedsCollectionView];
-            }
-            [UIView setAnimationsEnabled:NO];
-            [weakself.feedsCollectionView reloadData];
-            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.25 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                [UIView setAnimationsEnabled:YES];
-            });
-        }
-        [weakself dismissLoading];
-        [weakself.feedsCollectionView endTopRefreshing];
-        [weakself.feedsCollectionView endBottomRefreshing];
-    }];
-    [self observe:self.viewModel keyPath:@"error" block:^(id changedObject) {
-        NSError *error = changedObject;
-        if (error && [error isKindOfClass:[NSError class]]) {
-            if (!weakself.feedsCollectionView.superview) {
-                [weakself.view addSubview:weakself.feedsCollectionView];
-            }
-            [weakself showErrorMessage:error];
-            [weakself dismissLoading];
-            [weakself.feedsCollectionView endTopRefreshing];
-            [weakself.feedsCollectionView endBottomRefreshing];
+    [self observe:self.viewModel keyPath:@"scenariosArray" block:^(id changedObject) {
+        NSArray *goodsArray = changedObject;
+        if (goodsArray && [goodsArray isKindOfClass:[NSArray class]]) {
+            [weakself.storeCollectionView reloadData];
         }
     }];
-    [self observeCollectionView:self.feedsCollectionView endOfFeeds:self.viewModel];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -84,62 +69,17 @@
     
     [self.navigationController setNavigationBarHidden:YES animated:NO];
     
-    self.flashbuyWeakTimer = [MSWeakTimer scheduledTimerWithTimeInterval:1.f
-                                                                  target:self
-                                                                selector:@selector(flashbuyCountDown)
-                                                                userInfo:nil
-                                                                 repeats:YES
-                                                           dispatchQueue:dispatch_get_main_queue()];
-    self.bannersWeakTimer = [MSWeakTimer scheduledTimerWithTimeInterval:3.f
-                                                                 target:self
-                                                               selector:@selector(bannersCountDown)
-                                                               userInfo:nil
-                                                                repeats:YES
-                                                          dispatchQueue:dispatch_get_main_queue()];
-    
     [self reloadView];
-}
-
-- (void)viewDidAppear:(BOOL)animated
-{
-    [super viewDidAppear:animated];
-    
-    [self setNeedsStatusBarAppearanceUpdate];
-    
-    self.feedsCollectionView.contentInset = UIEdgeInsetsZero;
-    
-    [self checkSystemNotification];
-}
-
-- (void)viewWillDisappear:(BOOL)animated
-{
-    [super viewWillDisappear:animated];
-    
-    [self.flashbuyWeakTimer invalidate];
-    [self.bannersWeakTimer invalidate];
-}
-
-- (UIStatusBarStyle)preferredStatusBarStyle
-{
-    return UIStatusBarStyleDefault;
 }
 
 - (void)dealloc
 {
     [self unobserve];
-    
-    [self.flashbuyWeakTimer invalidate];
-    [self.bannersWeakTimer invalidate];
-    self.flashbuyWeakTimer = nil;
-    self.bannersWeakTimer = nil;
 }
 
 - (void)reloadView
 {
-    if (self.viewModel.feedsArray.count == 0) {
-        [self showLoading];
-        [self.viewModel requestData];
-    }
+    [self.viewModel requestData];
 }
 
 - (void)initAnalyticsKeys
@@ -180,100 +120,213 @@
     [self setNeedsStatusBarAppearanceUpdate];
 }
 
-#pragma mark - <PGFeedsCollectionViewDelegate>
+#pragma mark - <UICollectionView>
 
-- (NSArray *)recommendsArray
+- (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView
 {
-    return self.viewModel.recommendsArray;
+    return 4;
 }
 
-- (NSArray *)iconsArray
+- (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
 {
-    return self.viewModel.categoriesArray;
-}
-
-- (NSArray *)feedsArray
-{
-    return self.viewModel.feedsArray;
-}
-
-- (CGSize)feedsHeaderSize
-{
-    if (!self.viewModel) {
-        return CGSizeZero;
+    if (section == 0) {
+        return 1;
     }
-    return [PGStoreRecommendsHeaderView headerViewSize];
+    if (section == 1) {
+        return self.viewModel.salesArray.count;
+    }
+    if (section == 2) {
+        return self.viewModel.collectionsArray.count;
+    }
+    if (section == 3) {
+        return self.viewModel.goodsArray.count;
+    }
+    return 0;
 }
 
-- (CGSize)feedsFooterSize
+- (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (!self.viewModel) {
-        return CGSizeZero;
+    if (indexPath.section == 0) {
+        PGCollectionsCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:StoreScenariosCell forIndexPath:indexPath];
+        [cell setCellWithTitle:self.scenariosLabelText
+                   collections:self.viewModel.scenariosArray
+                     cellClass:[PGStoreScenarioCell class]
+                        config:^(PGCollectionsCellConfig *config) {
+                            config.titleHeight = 60.f;
+                            config.minimumLineSpacing = 20.f;
+                            config.insets = UIEdgeInsetsMake(0, 22.f, 0.f, 22.f);
+                            config.collectionCellSize = [PGStoreScenarioCell cellSize];
+                            config.showBorder = NO;
+                        }];
+        return cell;
     }
-    if (self.viewModel.endFlag) {
-        return [PGBaseCollectionViewFooterView footerViewSize];
+    if (indexPath.section == 1) {
+        id banner = self.viewModel.salesArray[indexPath.item];
+        if ([banner isKindOfClass:[PGFlashbuyBanner class]]) {
+            PGFlashbuyBannerCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:StoreFlashbuyCell forIndexPath:indexPath];
+            if ([cell respondsToSelector:@selector(setCellWithModel:)]) {
+                [cell setCellWithModel:banner];
+            }
+            return cell;
+        } else if ([banner isKindOfClass:[PGSingleGoodBanner class]]) {
+            PGSingleGoodBannerCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:StoreSingleGoodCell forIndexPath:indexPath];
+            if ([cell respondsToSelector:@selector(setCellWithModel:)]) {
+                [cell setCellWithModel:banner];
+            }
+            return cell;
+        }
+    }
+    if (indexPath.section == 2) {
+        PGGoodsCollectionBannerCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:StoreGoodsCollectionCell forIndexPath:indexPath];
+        if ([cell respondsToSelector:@selector(setCellWithModel:)]) {
+            [cell setCellWithModel:self.viewModel.collectionsArray[indexPath.item]];
+        }
+        return cell;
+    }
+    if (indexPath.section == 3) {
+        PGGoodCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:StoreGoodCell forIndexPath:indexPath];
+        if ([cell respondsToSelector:@selector(setCellWithModel:)]) {
+            [cell setCellWithModel:self.viewModel.goodsArray[indexPath.item]];
+        }
+    }
+    return nil;
+}
+
+- (UICollectionReusableView *)collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath
+{
+    if (kind == UICollectionElementKindSectionHeader) {
+        if (indexPath.section == 1) {
+            UICollectionReusableView *headerView = [collectionView dequeueReusableSupplementaryViewOfKind:kind withReuseIdentifier:StoreSalesHeaderView forIndexPath:indexPath];
+            
+            [headerView.subviews makeObjectsPerformSelector:@selector(removeFromSuperview)];
+            
+            UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, UISCREEN_WIDTH, 60)];
+            label.attributedText = self.salesLabelText;
+            label.textAlignment = NSTextAlignmentCenter;
+            [headerView addSubview:label];
+            
+            return headerView;
+        }
+        if (indexPath.section == 2) {
+            UICollectionReusableView *headerView = [collectionView dequeueReusableSupplementaryViewOfKind:kind withReuseIdentifier:StoreCollectionsHeaderView forIndexPath:indexPath];
+            
+            [headerView.subviews makeObjectsPerformSelector:@selector(removeFromSuperview)];
+            
+            UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, UISCREEN_WIDTH, 60)];
+            label.attributedText = self.collectionsLabelText;
+            label.textAlignment = NSTextAlignmentCenter;
+            [headerView addSubview:label];
+            
+            return headerView;
+        }
+        if (indexPath.section == 3) {
+            UICollectionReusableView *headerView = [collectionView dequeueReusableSupplementaryViewOfKind:kind withReuseIdentifier:StoreGoodsHeaderView forIndexPath:indexPath];
+            
+            [headerView.subviews makeObjectsPerformSelector:@selector(removeFromSuperview)];
+            
+            UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, UISCREEN_WIDTH, 60)];
+            label.attributedText = self.goodsLabelText;
+            label.textAlignment = NSTextAlignmentCenter;
+            [headerView addSubview:label];
+            
+            return headerView;
+        }
+    }
+    if (kind == UICollectionElementKindSectionFooter) {
+        if (indexPath.section == 3) {
+            PGBaseCollectionViewFooterView *footerView = [collectionView dequeueReusableSupplementaryViewOfKind:kind withReuseIdentifier:BaseCollectionViewFooterView forIndexPath:indexPath];
+            
+            return footerView;
+        }
+    }
+    return nil;
+}
+
+- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    if (indexPath.section == 0) {
+        return CGSizeMake(UISCREEN_WIDTH, 60+[PGStoreScenarioCell cellSize].height);
+    }
+    if (indexPath.section == 1) {
+        id banner = self.viewModel.salesArray[indexPath.item];
+        if ([banner isKindOfClass:[PGFlashbuyBanner class]]) {
+            return [PGFlashbuyBannerCell cellSize];
+        } else if ([banner isKindOfClass:[PGSingleGoodBanner class]]) {
+            return [PGSingleGoodBannerCell cellSize];
+        }
+    }
+    if (indexPath.section == 2) {
+        id banner = self.viewModel.collectionsArray[indexPath.item];
+        if ([banner isKindOfClass:[PGGoodsCollectionBanner class]]) {
+            return [PGGoodsCollectionBannerCell cellSize];
+        }
+    }
+    if (indexPath.section == 3) {
+        id banner = self.viewModel.goodsArray[indexPath.item];
+        if ([banner isKindOfClass:[PGGoodCell class]]) {
+            return [PGGoodCell cellSize];
+        }
     }
     return CGSizeZero;
 }
 
-- (NSString *)tabType
+- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout referenceSizeForHeaderInSection:(NSInteger)section
 {
-    return @"store";
-}
-
-- (void)scenarioDidSelect:(PGScenarioBanner *)scenario
-{
-    [PGRouterManager routeToScenarioPage:scenario.scenarioId link:scenario.link fromStorePage:YES];
-}
-
-- (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
-{
-    id banner = self.viewModel.feedsArray[indexPath.section];
-    if ([banner isKindOfClass:[PGArticleBanner class]]) {
-        UIView *statusBar = [[[UIApplication sharedApplication] valueForKey:@"statusBarWindow"] valueForKey:@"statusBar"];
-        if ([statusBar respondsToSelector:@selector(setBackgroundColor:)]) {
-            statusBar.backgroundColor = [UIColor clearColor];
-        }
-        PGArticleBanner *articleBanner = (PGArticleBanner *)banner;
-        PGArticleViewController *articleVC = [[PGArticleViewController alloc] initWithArticleId:articleBanner.articleId animated:NO];
-        [self.navigationController pushViewController:articleVC animated:YES];
-    } else if ([banner isKindOfClass:[PGTopicBanner class]]) {
-        PGTopicBanner *topicBanner = (PGTopicBanner *)banner;
-        [[PGRouter sharedInstance] openURL:topicBanner.link];
-    } else if ([banner isKindOfClass:[PGSingleGoodBanner class]]) {
-        PGSingleGoodBanner *singleGoodBanner = (PGSingleGoodBanner *)banner;
-        [[PGRouter sharedInstance] openURL:singleGoodBanner.link];
-    }
-}
-
-- (void)shouldPreloadNextPage
-{
-    PGWeakSelf(self);
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
-        [weakself.viewModel requestFeeds];
-    });
-}
-
-- (void)flashbuyCountDown
-{
-    for (UICollectionViewCell *visibleCell in self.feedsCollectionView.visibleCells) {
-        if ([visibleCell isKindOfClass:[PGFlashbuyBannerCell class]]) {
-            PGFlashbuyBannerCell *cell = (PGFlashbuyBannerCell *)visibleCell;
-            NSInteger index = [[self.feedsCollectionView indexPathForCell:cell] section];
-            if (index < self.viewModel.feedsArray.count) {
-                PGFlashbuyBanner *flashbuy = self.viewModel.feedsArray[index];
-                if (flashbuy && [flashbuy isKindOfClass:[PGFlashbuyBanner class]] && cell) {
-                    [cell countdown:flashbuy];
-                }
-            }
+    if (section == 1) {
+        if (self.viewModel.salesArray.count > 0) {
+            return CGSizeMake(UISCREEN_WIDTH, 60.f);
         }
     }
+    if (section == 2) {
+        if (self.viewModel.collectionsArray.count > 0) {
+            return CGSizeMake(UISCREEN_WIDTH, 60.f);
+        }
+    }
+    if (section == 3) {
+        if (self.viewModel.goodsArray.count > 0) {
+            return CGSizeMake(UISCREEN_WIDTH, 60.f);
+        }
+    }
+    return CGSizeZero;
 }
 
-- (void)bannersCountDown
+- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout referenceSizeForFooterInSection:(NSInteger)section
 {
-    if (self.feedsCollectionView.storeHeaderView) {
-        [self.feedsCollectionView.storeHeaderView.bannersView scrollToNextPage];
+    if (section == 3) {
+        if (!self.viewModel) {
+            return CGSizeZero;
+        }
+        if (self.viewModel.endFlag) {
+            return [PGBaseCollectionViewFooterView footerViewSize];
+        }
+    }
+    return CGSizeZero;
+}
+
+- (UIEdgeInsets)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout insetForSectionAtIndex:(NSInteger)section
+{
+    return UIEdgeInsetsZero;
+}
+
+- (CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout minimumInteritemSpacingForSectionAtIndex:(NSInteger)section
+{
+    return 0.f;
+}
+
+- (CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout minimumLineSpacingForSectionAtIndex:(NSInteger)section
+{
+    if (section == 1) {
+        return 22.f;
+    }
+    return 0.f;
+}
+
+- (void)collectionView:(UICollectionView *)collectionView willDisplayCell:(UICollectionViewCell *)cell forItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    if (indexPath.section == 1) {
+        if ([cell isKindOfClass:[PGBaseCollectionViewCell class]]) {
+            [(PGBaseCollectionViewCell *)cell insertCellMask:8.f];
+        }
     }
 }
 
@@ -287,66 +340,81 @@
     [self presentViewController:naviController animated:NO completion:nil];
 }
 
-#pragma mark - <Check System Notification>
-
-- (void)checkSystemNotification
-{
-    // NOTE: [[UIApplication sharedApplication] isRegisteredForRemoteNotifications] doesn't work http://stackoverflow.com/questions/29787736/isregisteredforremotenotifications-returns-true-even-though-i-disabled-it-comple
-    UIUserNotificationSettings *notificationSettings = [UIApplication sharedApplication].currentUserNotificationSettings;
-    if (notificationSettings.types == UIUserNotificationTypeNone) {
-        NSArray *notificationExpireDate = [PGGlobal.cache objectForKey:@"system_notification_expire_date" fromTable:@"General"];
-        if (!notificationExpireDate) {
-            NSTimeInterval expireTime = [[NSDate date] timeIntervalSince1970]+5*24*60*60;
-            [PGGlobal.cache putObject:@[@(expireTime)] forKey:@"system_notification_expire_date" intoTable:@"General"];
-            
-            PGWeakSelf(self);
-            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.4f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                [weakself showSystemNotificationPopup];
-            });
-        } else {
-            NSTimeInterval expireTime = [notificationExpireDate.firstObject doubleValue];
-            NSDate *expireDate = [NSDate dateWithTimeIntervalSince1970:expireTime];
-            if ([[NSDate date] compare:expireDate] == NSOrderedDescending) {
-                NSTimeInterval expireTime = [[NSDate date] timeIntervalSince1970]+5*24*60*60;
-                [PGGlobal.cache putObject:@[@(expireTime)] forKey:@"system_notification_expire_date" intoTable:@"General"];
-                
-                PGWeakSelf(self);
-                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.4f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                    [weakself showSystemNotificationPopup];
-                });
-            }
-        }
-    }
-}
-
 #pragma mark - <Lazy Init>
 
-- (PGFeedsCollectionView *)feedsCollectionView {
-    if(_feedsCollectionView == nil) {
-        _feedsCollectionView = [[PGFeedsCollectionView alloc] initWithFrame:CGRectMake(0, 64, UISCREEN_WIDTH, UISCREEN_HEIGHT-50-64) collectionViewLayout:[UICollectionViewFlowLayout new]];
-        _feedsCollectionView.contentInset = UIEdgeInsetsMake(-20, 0, 0, 0);
-        _feedsCollectionView.feedsDelegate = self;
+- (PGBaseCollectionView *)storeCollectionView
+{
+    if (!_storeCollectionView) {
+        _storeCollectionView = [[PGBaseCollectionView alloc] initWithFrame:CGRectMake(0, 64, UISCREEN_WIDTH, UISCREEN_HEIGHT-64-50) collectionViewLayout:[UICollectionViewFlowLayout new]];
+        _storeCollectionView.dataSource = self;
+        _storeCollectionView.delegate = self;
         
-        PGWeakSelf(self);
-        [_feedsCollectionView enablePullToRefreshWithTopInset:64-36-5 completion:^{
-            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.4 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                [weakself.viewModel clearPagination];
-                [weakself.viewModel requestData];
-            });
-        }];
-        [_feedsCollectionView enableInfiniteScrolling:^{
-            [weakself.viewModel requestFeeds];
-        }];
+        [_storeCollectionView registerClass:[PGCollectionsCell class] forCellWithReuseIdentifier:StoreScenariosCell];
+        [_storeCollectionView registerClass:[PGFlashbuyBannerCell class] forCellWithReuseIdentifier:StoreFlashbuyCell];
+        [_storeCollectionView registerClass:[PGSingleGoodBannerCell class] forCellWithReuseIdentifier:StoreSingleGoodCell];
+        [_storeCollectionView registerClass:[PGGoodsCollectionBannerCell class] forCellWithReuseIdentifier:StoreGoodsCollectionCell];
+        [_storeCollectionView registerClass:[PGGoodCell class] forCellWithReuseIdentifier:StoreGoodCell];
+        [_storeCollectionView registerClass:[UICollectionReusableView class] forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:StoreSalesHeaderView];
+        [_storeCollectionView registerClass:[UICollectionReusableView class] forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:StoreCollectionsHeaderView];
+        [_storeCollectionView registerClass:[UICollectionReusableView class] forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:StoreGoodsHeaderView];
     }
-    return _feedsCollectionView;
+    return _storeCollectionView;
 }
 
-- (void)end
+- (NSAttributedString *)scenariosLabelText
 {
-    PGWeakSelf(self);
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2.f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        [weakself.feedsCollectionView endPullToRefresh];
-    });
+    if (!_scenariosLabelText) {
+        NSMutableAttributedString *attrS = [[NSMutableAttributedString alloc] initWithString:@"品类 · PENGUIN SCENARIOS"];
+        [attrS addAttribute:NSFontAttributeName value:Theme.fontLargeBold range:NSMakeRange(0, 5)];
+        [attrS addAttribute:NSForegroundColorAttributeName value:Theme.colorText range:NSMakeRange(0, 5)];
+        [attrS addAttribute:NSFontAttributeName value:Theme.fontLargeLight range:NSMakeRange(5, 17)];
+        [attrS addAttribute:NSForegroundColorAttributeName value:Theme.colorLightText range:NSMakeRange(5, 17)];
+        
+        _scenariosLabelText = [[NSAttributedString alloc] initWithAttributedString:attrS];
+    }
+    return _scenariosLabelText;
+}
+
+- (NSAttributedString *)salesLabelText
+{
+    if (!_salesLabelText) {
+        NSMutableAttributedString *attrS = [[NSMutableAttributedString alloc] initWithString:@"本周热卖 · PENGUIN SALES"];
+        [attrS addAttribute:NSFontAttributeName value:Theme.fontLargeBold range:NSMakeRange(0, 7)];
+        [attrS addAttribute:NSForegroundColorAttributeName value:Theme.colorText range:NSMakeRange(0, 7)];
+        [attrS addAttribute:NSFontAttributeName value:Theme.fontLargeLight range:NSMakeRange(7, 13)];
+        [attrS addAttribute:NSForegroundColorAttributeName value:Theme.colorLightText range:NSMakeRange(7, 13)];
+        
+        _salesLabelText = [[NSAttributedString alloc] initWithAttributedString:attrS];
+    }
+    return _salesLabelText;
+}
+
+- (NSAttributedString *)collectionsLabelText
+{
+    if (!_collectionsLabelText) {
+        NSMutableAttributedString *attrS = [[NSMutableAttributedString alloc] initWithString:@"精选集合 · PENGUIN COLLECTIONS"];
+        [attrS addAttribute:NSFontAttributeName value:Theme.fontLargeBold range:NSMakeRange(0, 7)];
+        [attrS addAttribute:NSForegroundColorAttributeName value:Theme.colorText range:NSMakeRange(0, 7)];
+        [attrS addAttribute:NSFontAttributeName value:Theme.fontLargeLight range:NSMakeRange(7, 19)];
+        [attrS addAttribute:NSForegroundColorAttributeName value:Theme.colorLightText range:NSMakeRange(7, 19)];
+        
+        _collectionsLabelText = [[NSAttributedString alloc] initWithAttributedString:attrS];
+    }
+    return _collectionsLabelText;
+}
+
+- (NSAttributedString *)goodsLabelText
+{
+    if (!_goodsLabelText) {
+        NSMutableAttributedString *attrS = [[NSMutableAttributedString alloc] initWithString:@"商品 · PENGUIN GOODS"];
+        [attrS addAttribute:NSFontAttributeName value:Theme.fontLargeBold range:NSMakeRange(0, 5)];
+        [attrS addAttribute:NSForegroundColorAttributeName value:Theme.colorText range:NSMakeRange(0, 5)];
+        [attrS addAttribute:NSFontAttributeName value:Theme.fontLargeLight range:NSMakeRange(5, 13)];
+        [attrS addAttribute:NSForegroundColorAttributeName value:Theme.colorLightText range:NSMakeRange(5, 13)];
+        
+        _goodsLabelText = [[NSAttributedString alloc] initWithAttributedString:attrS];
+    }
+    return _goodsLabelText;
 }
 
 - (void)didReceiveMemoryWarning {

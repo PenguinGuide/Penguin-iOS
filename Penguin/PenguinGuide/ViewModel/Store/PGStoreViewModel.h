@@ -10,9 +10,10 @@
 
 @interface PGStoreViewModel : PGBaseViewModel
 
-@property (nonatomic, strong, readonly) NSArray *recommendsArray;
-@property (nonatomic, strong, readonly) NSArray *categoriesArray;
-@property (nonatomic, strong, readonly) NSArray *feedsArray;
+@property (nonatomic, strong, readonly) NSArray *scenariosArray;
+@property (nonatomic, strong, readonly) NSArray *salesArray;
+@property (nonatomic, strong, readonly) NSArray *collectionsArray;
+@property (nonatomic, strong, readonly) NSArray *goodsArray;
 
 - (void)requestFeeds;
 
