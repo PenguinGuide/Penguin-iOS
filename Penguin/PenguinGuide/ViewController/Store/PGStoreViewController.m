@@ -318,6 +318,9 @@
     if (section == 1) {
         return 22.f;
     }
+    if (section == 2) {
+        return 22.f;
+    }
     return 0.f;
 }
 

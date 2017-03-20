@@ -39,6 +39,18 @@ static NSString *const GoodCell = @"GoodCell";
     [self.contentView addSubview:self.goodsCollectionView];
 }
 
+- (void)setCellWithModel:(PGRKModel *)model
+{
+    if ([model isKindOfClass:[PGGoodsCollectionBanner class]]) {
+        PGGoodsCollectionBanner *goodsCollection = (PGGoodsCollectionBanner *)model;
+        self.titleLabel.text = goodsCollection.title;
+        self.descLabel.text = goodsCollection.desc;
+        self.goodsArray = goodsCollection.goodsArray;
+        
+        [self.goodsCollectionView reloadData];
+    }
+}
+
 - (void)setCellWithGoodsCollection:(PGGoodsCollectionBanner *)goodsCollection
 {
     self.titleLabel.text = goodsCollection.title;
@@ -100,8 +112,9 @@ static NSString *const GoodCell = @"GoodCell";
 - (UILabel *)titleLabel {
 	if(_titleLabel == nil) {
 		_titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(20, 10, UISCREEN_WIDTH-40, 20)];
-        _titleLabel.font = Theme.fontExtraLargeBold;
-        _titleLabel.textColor = Theme.colorText;
+        _titleLabel.font = Theme.fontLargeBold;
+        _titleLabel.textColor = Theme.colorLightText;
+        _titleLabel.textAlignment = NSTextAlignmentCenter;
 	}
 	return _titleLabel;
 }
@@ -111,6 +124,7 @@ static NSString *const GoodCell = @"GoodCell";
 		_descLabel = [[UILabel alloc] initWithFrame:CGRectMake(20, self.titleLabel.pg_bottom+7, UISCREEN_WIDTH-40, 15)];
         _descLabel.font = Theme.fontSmallBold;
         _descLabel.textColor = Theme.colorLightText;
+        _descLabel.textAlignment = NSTextAlignmentCenter;
 	}
 	return _descLabel;
 }

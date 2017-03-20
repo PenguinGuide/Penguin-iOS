@@ -54,7 +54,18 @@
                 weakself.salesArray = [NSArray arrayWithArray:salesArray];
             }
             if (responseDict[@"recommends"] && [responseDict[@"recommends"] isKindOfClass:[NSArray class]]) {
-                weakself.collectionsArray = [PGGoodsCollectionBanner modelsFromArray:responseDict[@"recommends"]];
+                NSMutableArray *collectionsArray = [NSMutableArray new];
+                for (id banner in responseDict[@"recommends"]) {
+                    if (banner[@"type"]) {
+                        if ([banner[@"type"] isEqualToString:@"goods_collection"]) {
+                            PGGoodsCollectionBanner *goodsCollectionBanner = [PGGoodsCollectionBanner modelFromDictionary:banner];
+                            if (goodsCollectionBanner) {
+                                [collectionsArray addObject:goodsCollectionBanner];
+                            }
+                        }
+                    }
+                }
+                weakself.collectionsArray = [NSArray arrayWithArray:collectionsArray];
             }
             if (responseDict[@"scenarios"] && [responseDict[@"scenarios"] isKindOfClass:[NSArray class]]) {
                 weakself.scenariosArray = [PGScenarioBanner modelsFromArray:responseDict[@"scenarios"]];

@@ -30,7 +30,7 @@
 
 - (void)initialize
 {
-    self.backgroundColor = Theme.colorText;
+    self.backgroundColor = Theme.colorLightBackground;
     
     [self.contentView addSubview:self.priceLabel];
     [self.contentView addSubview:self.titleLabel];
