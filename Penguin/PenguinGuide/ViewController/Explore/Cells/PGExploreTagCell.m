@@ -48,6 +48,15 @@
     }
 }
 
+- (void)cellDidSelectWithModel:(PGRKModel *)model
+{
+    if ([model isKindOfClass:[PGTag class]]) {
+        PGTag *tag = (PGTag *)model;
+        
+        [PGRouterManager routeToTagPage:tag.tagId link:tag.link];
+    }
+}
+
 - (UIImageView *)tagImageView
 {
     if (!_tagImageView) {

@@ -17,6 +17,7 @@
 #define PG_Home_Feeds                   @"/feeds/home"
 #define PG_Explore_Feeds                @"/feeds/explore"
 #define PG_Store_Feeds                  @"/feeds/store"
+#define PG_Store_Goods                  @"/goods/market"
 
 #define PG_City_Guide_City_Articles     @"/city_guide"
 
@@ -63,7 +64,7 @@
 #define PG_Collection_Articles          @"/article_store"
 #define PG_History                      @"/foot_print/:userId"
 
-#define PG_Tag                          @"/tag/:tagId"
+#define PG_Tag                          @"/tag/:tagId/articles"
 
 #define PG_Phone_Register               @"/register"
 #define PG_Phone_Login                  @"/login"

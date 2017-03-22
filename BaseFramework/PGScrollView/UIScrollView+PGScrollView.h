@@ -16,6 +16,11 @@
             naviTitle:(NSString *)naviTitle
       rightNaviButton:(UIButton *)rightNaviButton;
 
+- (void)setHeaderView:(UIView *)headerView
+            imageView:(UIImageView *)imageView
+            naviTitle:(NSString *)naviTitle
+       showBackButton:(BOOL)showBackButton;
+
 - (void)scrollViewShouldUpdate;
 - (void)scrollViewShouldUpdateHeaderView;
 

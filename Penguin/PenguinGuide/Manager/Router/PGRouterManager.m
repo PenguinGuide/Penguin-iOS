@@ -261,4 +261,14 @@
     }
 }
 
++ (void)routeToTagPage:(NSString *)tagId link:(NSString *)link
+{
+    if (link && link.length > 0) {
+        [[PGRouter sharedInstance] openURL:link];
+    } else {
+        NSString *url = [NSString stringWithFormat:@"qiechihe://tag?tagId=%@", tagId];
+        [[PGRouter sharedInstance] openURL:url];
+    }
+}
+
 @end

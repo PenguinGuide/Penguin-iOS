@@ -13,6 +13,7 @@
 @optional
 
 - (void)searchButtonClicked;
+- (void)naviBackButtonClicked;
 
 @end
 
@@ -22,5 +23,6 @@
 
 + (PGNavigationView *)defaultNavigationView;
 + (PGNavigationView *)defaultNavigationViewWithSearchButton;
++ (PGNavigationView *)naviViewWithBackButton:(NSString *)naviTitle;
 
 @end

@@ -62,7 +62,7 @@ static NSString *const GoodCell = @"GoodCell";
 
 + (CGSize)cellSize
 {
-    return CGSizeMake(UISCREEN_WIDTH, 285);
+    return CGSizeMake(UISCREEN_WIDTH, 275);
 }
 
 #pragma mark - <UICollectionViewDataSource>
@@ -93,12 +93,12 @@ static NSString *const GoodCell = @"GoodCell";
 
 - (UIEdgeInsets)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout insetForSectionAtIndex:(NSInteger)section
 {
-    return UIEdgeInsetsMake(0, 20, 0, 20);
+    return UIEdgeInsetsMake(0, 22, 0, 22);
 }
 
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    return CGSizeMake(160, 220);
+    return CGSizeMake(150, 210);
 }
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
@@ -135,7 +135,7 @@ static NSString *const GoodCell = @"GoodCell";
         layout.scrollDirection = UICollectionViewScrollDirectionHorizontal;
         layout.minimumInteritemSpacing = 0.f;
         layout.minimumLineSpacing = 10.f;
-		_goodsCollectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(0, 50+15, UISCREEN_WIDTH, 220) collectionViewLayout:layout];
+		_goodsCollectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(0, 50+15, UISCREEN_WIDTH, 210) collectionViewLayout:layout];
         _goodsCollectionView.dataSource = self;
         _goodsCollectionView.delegate = self;
         _goodsCollectionView.showsVerticalScrollIndicator = NO;

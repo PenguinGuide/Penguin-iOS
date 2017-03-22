@@ -10,10 +10,12 @@
 
 @interface PGFlashbuyGoodView ()
 
-@property (nonatomic, strong) UIButton *titleButton;
-@property (nonatomic, strong) UILabel *descLabel;
-@property (nonatomic, strong) UILabel *countdownLabel;
+@property (nonatomic, strong) UILabel *titleLabel;
 @property (nonatomic, strong) UILabel *priceLabel;
+@property (nonatomic, strong) UILabel *descLabel;
+@property (nonatomic, strong) UILabel *secLabel;
+@property (nonatomic, strong) UILabel *minLabel;
+@property (nonatomic, strong) UILabel *hourLabel;
 @property (nonatomic, strong) UIImageView *goodImageView;
 
 @end
@@ -31,24 +33,45 @@
 
 - (void)initialize
 {
-    self.backgroundColor = Theme.colorLightBackground;
-    
-    [self addSubview:self.goodImageView];
-    [self addSubview:self.titleButton];
-    [self addSubview:self.descLabel];
-    [self addSubview:self.countdownLabel];
+    [self addSubview:self.titleLabel];
     [self addSubview:self.priceLabel];
+    [self addSubview:self.descLabel];
+    
+    [self addSubview:self.hourLabel];
+    UILabel *hourDotLabel = [[UILabel alloc] initWithFrame:CGRectMake(self.hourLabel.pg_right, self.hourLabel.pg_top, 16, 20)];
+    hourDotLabel.text = @":";
+    hourDotLabel.font = Theme.fontExtraLarge;
+    hourDotLabel.textColor = [UIColor blackColor];
+    hourDotLabel.textAlignment = NSTextAlignmentCenter;
+    [self addSubview:hourDotLabel];
+    
+    [self addSubview:self.minLabel];
+    UILabel *minDotLabel = [[UILabel alloc] initWithFrame:CGRectMake(self.minLabel.pg_right, self.minLabel.pg_top, 16, 20)];
+    minDotLabel.text = @":";
+    minDotLabel.font = Theme.fontExtraLarge;
+    minDotLabel.textColor = [UIColor blackColor];
+    minDotLabel.textAlignment = NSTextAlignmentCenter;
+    [self addSubview:minDotLabel];
+    
+    [self addSubview:self.secLabel];
+
+    [self addSubview:self.goodImageView];
 }
 
 - (void)setViewWithGood:(PGGood *)good
 {
-    NSString *title = [NSString stringWithFormat:@"¥%@  %@", good.discountPrice, good.name];
-    CGSize titleSize = [title sizeWithAttributes:@{NSFontAttributeName:Theme.fontMediumBold}];
-    self.titleButton.pg_width = titleSize.width+25;
+    self.titleLabel.text = good.name;
     
-    [self.titleButton setTitle:[NSString stringWithFormat:@"¥%@  %@", good.discountPrice, good.name] forState:UIControlStateNormal];
     [self.goodImageView setWithImageURL:good.image placeholder:nil completion:nil];
-    [self.priceLabel setText:[NSString stringWithFormat:@"原价 ¥%@", good.originalPrice]];
+    
+    NSMutableAttributedString *attrS = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"¥%@ %@", good.discountPrice, good.originalPrice]];
+    [attrS addAttribute:NSForegroundColorAttributeName value:Theme.colorExtraHighlight range:NSMakeRange(0, good.discountPrice.length+1)];
+    [attrS addAttribute:NSFontAttributeName value:Theme.fontExtraLargeBold range:NSMakeRange(0, good.discountPrice.length+1)];
+    [attrS addAttribute:NSStrikethroughStyleAttributeName value:[NSNumber numberWithInt:0] range:NSMakeRange(0, good.discountPrice.length+1)];
+    [attrS addAttribute:NSForegroundColorAttributeName value:Theme.colorLightText range:NSMakeRange(good.discountPrice.length+2, good.originalPrice.length)];
+    [attrS addAttribute:NSFontAttributeName value:Theme.fontMediumBold range:NSMakeRange(good.discountPrice.length+2, good.originalPrice.length)];
+    [attrS addAttribute:NSStrikethroughStyleAttributeName value:[NSNumber numberWithInt:1] range:NSMakeRange(good.discountPrice.length+2, good.originalPrice.length)];
+    self.priceLabel.attributedText = attrS;
 }
 
 - (void)setCountDown:(NSDate *)startDate endDate:(NSDate *)endDate
@@ -77,103 +100,88 @@
         NSString *secsStr = [NSString stringWithFormat:@"%02d", secs];
         
         if (hoursStr.length == 2 && minsStr.length == 2 && secsStr.length == 2) {
-            NSString *countdownStr = [NSString stringWithFormat:@"%@ h %@ min %@ s", hoursStr, minsStr, secsStr];
-            NSMutableAttributedString *attrS = [[NSMutableAttributedString alloc] initWithString:countdownStr];
-            [attrS addAttribute:NSForegroundColorAttributeName value:Theme.colorHighlight range:NSMakeRange(0, 2)];
-            [attrS addAttribute:NSFontAttributeName value:Theme.fontExtraLargeBold range:NSMakeRange(0, 2)];
-            [attrS addAttribute:NSForegroundColorAttributeName value:Theme.colorLightText range:NSMakeRange(3, 1)];
-            [attrS addAttribute:NSFontAttributeName value:Theme.fontExtraSmallBold range:NSMakeRange(3, 1)];
-            
-            [attrS addAttribute:NSForegroundColorAttributeName value:Theme.colorHighlight range:NSMakeRange(5, 2)];
-            [attrS addAttribute:NSFontAttributeName value:Theme.fontExtraLargeBold range:NSMakeRange(5, 2)];
-            [attrS addAttribute:NSForegroundColorAttributeName value:Theme.colorLightText range:NSMakeRange(8, 3)];
-            [attrS addAttribute:NSFontAttributeName value:Theme.fontExtraSmallBold range:NSMakeRange(8, 3)];
-            
-            [attrS addAttribute:NSForegroundColorAttributeName value:Theme.colorHighlight range:NSMakeRange(12, 2)];
-            [attrS addAttribute:NSFontAttributeName value:Theme.fontExtraLargeBold range:NSMakeRange(12, 2)];
-            [attrS addAttribute:NSForegroundColorAttributeName value:Theme.colorLightText range:NSMakeRange(15, 1)];
-            [attrS addAttribute:NSFontAttributeName value:Theme.fontExtraSmallBold range:NSMakeRange(15, 1)];
-            
-            self.countdownLabel.attributedText = attrS;
+            self.hourLabel.text = hoursStr;
+            self.minLabel.text = minsStr;
+            self.secLabel.text = secsStr;
         } else {
-            NSString *countdownStr = @"99 h 59 min 59 s";
-            NSMutableAttributedString *attrS = [[NSMutableAttributedString alloc] initWithString:countdownStr];
-            [attrS addAttribute:NSForegroundColorAttributeName value:Theme.colorHighlight range:NSMakeRange(0, 2)];
-            [attrS addAttribute:NSFontAttributeName value:Theme.fontExtraLargeBold range:NSMakeRange(0, 2)];
-            [attrS addAttribute:NSForegroundColorAttributeName value:Theme.colorLightText range:NSMakeRange(3, 1)];
-            [attrS addAttribute:NSFontAttributeName value:Theme.fontExtraSmallBold range:NSMakeRange(3, 1)];
-            
-            [attrS addAttribute:NSForegroundColorAttributeName value:Theme.colorHighlight range:NSMakeRange(5, 2)];
-            [attrS addAttribute:NSFontAttributeName value:Theme.fontExtraLargeBold range:NSMakeRange(5, 2)];
-            [attrS addAttribute:NSForegroundColorAttributeName value:Theme.colorLightText range:NSMakeRange(8, 3)];
-            [attrS addAttribute:NSFontAttributeName value:Theme.fontExtraSmallBold range:NSMakeRange(8, 3)];
-            
-            [attrS addAttribute:NSForegroundColorAttributeName value:Theme.colorHighlight range:NSMakeRange(12, 2)];
-            [attrS addAttribute:NSFontAttributeName value:Theme.fontExtraLargeBold range:NSMakeRange(12, 2)];
-            [attrS addAttribute:NSForegroundColorAttributeName value:Theme.colorLightText range:NSMakeRange(15, 1)];
-            [attrS addAttribute:NSFontAttributeName value:Theme.fontExtraSmallBold range:NSMakeRange(15, 1)];
-            
-            self.countdownLabel.attributedText = attrS;
+            self.hourLabel.text = @"99";
+            self.minLabel.text = @"59";
+            self.secLabel.text = @"59";
         }
     } else {
-        NSString *countdownStr = @"00 h 00 min 00 s";
-        NSMutableAttributedString *attrS = [[NSMutableAttributedString alloc] initWithString:countdownStr];
-        [attrS addAttribute:NSForegroundColorAttributeName value:Theme.colorHighlight range:NSMakeRange(0, 2)];
-        [attrS addAttribute:NSFontAttributeName value:Theme.fontExtraLargeBold range:NSMakeRange(0, 2)];
-        [attrS addAttribute:NSForegroundColorAttributeName value:Theme.colorLightText range:NSMakeRange(3, 1)];
-        [attrS addAttribute:NSFontAttributeName value:Theme.fontExtraSmallBold range:NSMakeRange(3, 1)];
-        
-        [attrS addAttribute:NSForegroundColorAttributeName value:Theme.colorHighlight range:NSMakeRange(5, 2)];
-        [attrS addAttribute:NSFontAttributeName value:Theme.fontExtraLargeBold range:NSMakeRange(5, 2)];
-        [attrS addAttribute:NSForegroundColorAttributeName value:Theme.colorLightText range:NSMakeRange(8, 3)];
-        [attrS addAttribute:NSFontAttributeName value:Theme.fontExtraSmallBold range:NSMakeRange(8, 3)];
-        
-        [attrS addAttribute:NSForegroundColorAttributeName value:Theme.colorHighlight range:NSMakeRange(12, 2)];
-        [attrS addAttribute:NSFontAttributeName value:Theme.fontExtraLargeBold range:NSMakeRange(12, 2)];
-        [attrS addAttribute:NSForegroundColorAttributeName value:Theme.colorLightText range:NSMakeRange(15, 1)];
-        [attrS addAttribute:NSFontAttributeName value:Theme.fontExtraSmallBold range:NSMakeRange(15, 1)];
-        
-        self.countdownLabel.attributedText = attrS;
+        self.hourLabel.text = @"00";
+        self.minLabel.text = @"00";
+        self.secLabel.text = @"00";
     }
 }
 
-#pragma mark - <Setters && Getters>
+#pragma mark - <Lazy Init>
 
-- (UIButton *)titleButton {
-	if(_titleButton == nil) {
-		_titleButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 20, 0, 26)];
-        _titleButton.userInteractionEnabled = NO;
-        [_titleButton.titleLabel setFont:Theme.fontMediumBold];
-        [_titleButton setTitleEdgeInsets:UIEdgeInsetsMake(0, -10, 0, 0)];
-        [_titleButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-        [_titleButton setBackgroundImage:[UIImage imageNamed:@"pg_flashbuy_arrow"] forState:UIControlStateNormal];
+- (UILabel *)titleLabel {
+	if(!_titleLabel) {
+        _titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(14, 19, self.pg_width/2-14-25, 34)];
+        _titleLabel.font = Theme.fontMediumBold;
+        _titleLabel.textColor = Theme.colorText;
+        _titleLabel.numberOfLines = 2;
 	}
-	return _titleButton;
+	return _titleLabel;
+}
+
+- (UILabel *)priceLabel {
+    if(_priceLabel == nil) {
+        _priceLabel = [[UILabel alloc] initWithFrame:CGRectMake(18, self.titleLabel.pg_bottom+15, self.pg_width/2-40, 14)];
+        _priceLabel.textColor = Theme.colorLightText;
+        _priceLabel.font = Theme.fontSmallBold;
+    }
+    return _priceLabel;
 }
 
 - (UILabel *)descLabel {
 	if(_descLabel == nil) {
-		_descLabel = [[UILabel alloc] initWithFrame:CGRectMake(20, self.titleButton.pg_bottom+20, self.pg_width/2-40, 18)];
-        _descLabel.textColor = Theme.colorText;
-        _descLabel.font = Theme.fontLargeBold;
+		_descLabel = [[UILabel alloc] initWithFrame:CGRectMake(17, self.pg_height-50-18, self.pg_width/2-40, 18)];
+        _descLabel.font = Theme.fontMedium;
+        _descLabel.textColor = Theme.colorLightText;
 	}
 	return _descLabel;
 }
 
-- (UILabel *)countdownLabel {
-	if(_countdownLabel == nil) {
-		_countdownLabel = [[UILabel alloc] initWithFrame:CGRectMake(20, self.descLabel.pg_bottom+5, self.pg_width/2-40, 20)];
-	}
-	return _countdownLabel;
+- (UILabel *)hourLabel
+{
+    if (!_hourLabel) {
+        _hourLabel = [[UILabel alloc] initWithFrame:CGRectMake(15, self.descLabel.pg_bottom+15, 24, 24)];
+        _hourLabel.font = Theme.fontMedium;
+        _hourLabel.textColor = [UIColor whiteColor];
+        _hourLabel.backgroundColor = [UIColor blackColor];
+        _hourLabel.textAlignment = NSTextAlignmentCenter;
+        [_hourLabel cropCornerRadius:4.f];
+    }
+    return _hourLabel;
 }
 
-- (UILabel *)priceLabel {
-	if(_priceLabel == nil) {
-		_priceLabel = [[UILabel alloc] initWithFrame:CGRectMake(20, self.countdownLabel.pg_bottom+10, self.pg_width/2-40, 14)];
-        _priceLabel.textColor = Theme.colorLightText;
-        _priceLabel.font = Theme.fontSmallBold;
-	}
-	return _priceLabel;
+- (UILabel *)minLabel
+{
+    if (!_minLabel) {
+        _minLabel = [[UILabel alloc] initWithFrame:CGRectMake(self.hourLabel.pg_right+16, self.descLabel.pg_bottom+15, 24, 24)];
+        _minLabel.font = Theme.fontMedium;
+        _minLabel.textColor = [UIColor whiteColor];
+        _minLabel.backgroundColor = [UIColor blackColor];
+        _minLabel.textAlignment = NSTextAlignmentCenter;
+        [_minLabel cropCornerRadius:4.f];
+    }
+    return _minLabel;
+}
+
+- (UILabel *)secLabel
+{
+    if (!_secLabel) {
+        _secLabel = [[UILabel alloc] initWithFrame:CGRectMake(self.minLabel.pg_right+16, self.descLabel.pg_bottom+15, 24, 24)];
+        _secLabel.font = Theme.fontMedium;
+        _secLabel.textColor = [UIColor whiteColor];
+        _secLabel.backgroundColor = [UIColor blackColor];
+        _secLabel.textAlignment = NSTextAlignmentCenter;
+        [_secLabel cropCornerRadius:4.f];
+    }
+    return _secLabel;
 }
 
 - (UIImageView *)goodImageView {

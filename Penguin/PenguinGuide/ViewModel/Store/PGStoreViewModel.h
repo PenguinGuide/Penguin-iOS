@@ -15,6 +15,6 @@
 @property (nonatomic, strong, readonly) NSArray *collectionsArray;
 @property (nonatomic, strong, readonly) NSArray *goodsArray;
 
-- (void)requestFeeds;
+- (void)requestGoods;
 
 @end

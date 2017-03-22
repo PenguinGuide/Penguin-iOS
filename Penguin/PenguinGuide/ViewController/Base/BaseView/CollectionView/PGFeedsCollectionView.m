@@ -171,7 +171,7 @@
                 cell.pageName = scenario_view;
             }
             
-            [cell setCellWithSingleGood:singleGoodBanner];
+            //[cell setCellWithSingleGood:singleGoodBanner];
             
             return cell;
         } else if ([banner isKindOfClass:[PGFlashbuyBanner class]]) {

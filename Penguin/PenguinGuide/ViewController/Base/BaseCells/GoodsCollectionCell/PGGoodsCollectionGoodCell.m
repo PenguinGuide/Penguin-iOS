@@ -30,17 +30,10 @@
 
 - (void)initialize
 {
-    self.backgroundColor = Theme.colorLightBackground;
-    self.clipsToBounds = YES;
-    
     [self.contentView addSubview:self.goodImageView];
     [self.contentView addSubview:self.titleLabel];
     [self.contentView addSubview:self.priceLabel];
     [self.contentView addSubview:self.stockImageView];
-    
-    UIImageView *maskImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, self.pg_width, self.pg_height)];
-    maskImageView.image = [[UIImage imageNamed:@"pg_bg_corner_mask"] resizableImageWithCapInsets:UIEdgeInsetsMake(4, 4, 4, 4) resizingMode:UIImageResizingModeStretch];
-    [self.contentView addSubview:maskImageView];
 }
 
 - (void)setCellWithGood:(PGGood *)good
@@ -71,31 +64,30 @@
     }
 }
 
-#pragma mark - <Setters && Getters>
+#pragma mark - <Lazy Init>
 
 - (UIImageView *)goodImageView {
 	if(_goodImageView == nil) {
-		_goodImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 160, 160)];
+		_goodImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 150, 150)];
         _goodImageView.backgroundColor = Theme.colorLightBackground;
-        _goodImageView.clipsToBounds = YES;
         _goodImageView.contentMode = UIViewContentModeScaleAspectFill;
+        [_goodImageView cropCornerRadius:8.f];
 	}
 	return _goodImageView;
 }
 
 - (UILabel *)titleLabel {
 	if(_titleLabel == nil) {
-		_titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(20, self.goodImageView.pg_bottom+5, 160-40, 30)];
+		_titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, self.goodImageView.pg_bottom+14, self.pg_width, 16)];
+        _titleLabel.font = Theme.fontMedium;
         _titleLabel.textColor = Theme.colorText;
-        _titleLabel.font = Theme.fontSmallBold;
-        _titleLabel.numberOfLines = 2;
 	}
 	return _titleLabel;
 }
 
 - (UILabel *)priceLabel {
 	if(_priceLabel == nil) {
-		_priceLabel = [[UILabel alloc] initWithFrame:CGRectMake(20, self.titleLabel.pg_bottom+3, 160-40, 16)];
+		_priceLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, self.titleLabel.pg_bottom+3, 160-40, 16)];
 	}
 	return _priceLabel;
 }

@@ -71,14 +71,50 @@
                 weakself.scenariosArray = [PGScenarioBanner modelsFromArray:responseDict[@"scenarios"]];
             }
         }
-        [weakself requestFeeds];
+        [weakself requestGoods];
     } failure:^(NSError *error) {
-        [weakself requestFeeds];
+        [weakself requestGoods];
     }];
 }
 
-- (void)requestFeeds
+- (void)requestGoods
 {
+    if (self.isPreloadingNextPage || self.endFlag) {
+        return;
+    }
+    
+    self.isPreloadingNextPage = YES;
+    
+    if (!self.response) {
+        self.response = [[PGRKResponse alloc] init];
+        self.response.pagination.needPerformingBatchUpdate = NO;
+        self.response.pagination.paginateSections = NO;
+        self.response.pagination.paginationKey = @"next";
+    }
+    
+    PGParams *params = [PGParams new];
+    params[@"per_page"] = @10;
+    
+    PGWeakSelf(self);
+    
+    [self.apiClient pg_makeGetRequest:^(PGRKRequestConfig *config) {
+        config.route = PG_Store_Goods;
+        config.params = params;
+        config.keyPath = @"items";
+        config.model = [PGGood new];
+        config.response = weakself.response;
+    } paginationCompletion:^(PGRKResponse *response) {
+        weakself.response = response;
+        weakself.goodsArray = response.dataArray;
+        weakself.endFlag = response.pagination.endFlag;
+        
+        weakself.isPreloadingNextPage = NO;
+    } failure:^(NSError *error) {
+        weakself.error = error;
+        
+        weakself.isPreloadingNextPage = NO;
+    }];
+
 //    if (self.isPreloadingNextPage || self.endFlag) {
 //        return;
 //    }
@@ -90,7 +126,7 @@
 //        self.response.pagination.needPerformingBatchUpdate = NO;
 //        self.response.pagination.paginationKey = @"cursor";
 //    }
-//    
+//
 //    PGWeakSelf(self);
 //    
 //    PGParams *params = [PGParams new];

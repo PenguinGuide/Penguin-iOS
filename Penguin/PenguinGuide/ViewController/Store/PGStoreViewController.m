@@ -27,6 +27,8 @@
 #import "PGGoodsCollectionBannerCell.h"
 #import "PGGoodCell.h"
 
+#import "MSWeakTimer.h"
+
 @interface PGStoreViewController () <UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, PGNavigationViewDelegate>
 
 @property (nonatomic, strong) PGNavigationView *navigationView;
@@ -37,6 +39,8 @@
 @property (nonatomic, strong) NSAttributedString *salesLabelText;
 @property (nonatomic, strong) NSAttributedString *collectionsLabelText;
 @property (nonatomic, strong) NSAttributedString *goodsLabelText;
+
+@property (nonatomic, strong) MSWeakTimer *flashbuyWeakTimer;
 
 @end
 
@@ -55,11 +59,18 @@
     self.viewModel = [[PGStoreViewModel alloc] initWithAPIClient:self.apiClient];
     
     PGWeakSelf(self);
-    [self observe:self.viewModel keyPath:@"scenariosArray" block:^(id changedObject) {
+    [self observe:self.viewModel keyPath:@"goodsArray" block:^(id changedObject) {
         NSArray *goodsArray = changedObject;
         if (goodsArray && [goodsArray isKindOfClass:[NSArray class]]) {
+            [UIView setAnimationsEnabled:NO];
             [weakself.storeCollectionView reloadData];
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.4f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                [UIView setAnimationsEnabled:YES];
+            });
         }
+        [weakself dismissLoading];
+        [weakself.storeCollectionView endTopRefreshing];
+        [weakself.storeCollectionView endBottomRefreshing];
     }];
 }
 
@@ -70,11 +81,21 @@
     [self.navigationController setNavigationBarHidden:YES animated:NO];
     
     [self reloadView];
+    
+    self.flashbuyWeakTimer = [MSWeakTimer scheduledTimerWithTimeInterval:1.f
+                                                                  target:self
+                                                                selector:@selector(flashbuyCountDown)
+                                                                userInfo:nil
+                                                                 repeats:YES
+                                                           dispatchQueue:dispatch_get_main_queue()];
 }
 
 - (void)dealloc
 {
     [self unobserve];
+    
+    [self.flashbuyWeakTimer invalidate];
+    self.flashbuyWeakTimer = nil;
 }
 
 - (void)reloadView
@@ -167,6 +188,7 @@
             if ([cell respondsToSelector:@selector(setCellWithModel:)]) {
                 [cell setCellWithModel:banner];
             }
+            [cell countdown:(PGFlashbuyBanner *)banner];
             return cell;
         } else if ([banner isKindOfClass:[PGSingleGoodBanner class]]) {
             PGSingleGoodBannerCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:StoreSingleGoodCell forIndexPath:indexPath];
@@ -188,6 +210,7 @@
         if ([cell respondsToSelector:@selector(setCellWithModel:)]) {
             [cell setCellWithModel:self.viewModel.goodsArray[indexPath.item]];
         }
+        return cell;
     }
     return nil;
 }
@@ -263,7 +286,7 @@
     }
     if (indexPath.section == 3) {
         id banner = self.viewModel.goodsArray[indexPath.item];
-        if ([banner isKindOfClass:[PGGoodCell class]]) {
+        if ([banner isKindOfClass:[PGGood class]]) {
             return [PGGoodCell cellSize];
         }
     }
@@ -305,11 +328,26 @@
 
 - (UIEdgeInsets)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout insetForSectionAtIndex:(NSInteger)section
 {
+    if (section == 0) {
+        return UIEdgeInsetsMake(0, 0, 15, 0);
+    }
+    if (section == 1) {
+        return UIEdgeInsetsMake(0, 0, 15, 0);
+    }
+    if (section == 2) {
+        return UIEdgeInsetsMake(0, 0, 15, 0);
+    }
+    if (section == 3) {
+        return UIEdgeInsetsMake(0, 22.f, 0, 22.f);
+    }
     return UIEdgeInsetsZero;
 }
 
 - (CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout minimumInteritemSpacingForSectionAtIndex:(NSInteger)section
 {
+    if (section == 3) {
+        return 20.f;
+    }
     return 0.f;
 }
 
@@ -328,7 +366,7 @@
 {
     if (indexPath.section == 1) {
         if ([cell isKindOfClass:[PGBaseCollectionViewCell class]]) {
-            [(PGBaseCollectionViewCell *)cell insertCellMask:8.f];
+            [(PGBaseCollectionViewCell *)cell insertCellBorderLayer:8.f];
         }
     }
 }
@@ -341,6 +379,24 @@
     PGBaseNavigationController *naviController = [[PGBaseNavigationController alloc] initWithRootViewController:searchRecommendsVC];
     PGGlobal.tempNavigationController = naviController;
     [self presentViewController:naviController animated:NO completion:nil];
+}
+
+#pragma mark - <Timer>
+
+- (void)flashbuyCountDown
+{
+    for (UICollectionViewCell *visibleCell in self.storeCollectionView.visibleCells) {
+        if ([visibleCell isKindOfClass:[PGFlashbuyBannerCell class]]) {
+            PGFlashbuyBannerCell *cell = (PGFlashbuyBannerCell *)visibleCell;
+            NSInteger index = [[self.storeCollectionView indexPathForCell:cell] item];
+            if (index < self.viewModel.salesArray.count) {
+                PGFlashbuyBanner *flashbuyBanner = self.viewModel.salesArray[index];
+                if (flashbuyBanner && [flashbuyBanner isKindOfClass:[PGFlashbuyBanner class]] && cell) {
+                    [cell countdown:flashbuyBanner];
+                }
+            }
+        }
+    }
 }
 
 #pragma mark - <Lazy Init>
@@ -360,6 +416,11 @@
         [_storeCollectionView registerClass:[UICollectionReusableView class] forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:StoreSalesHeaderView];
         [_storeCollectionView registerClass:[UICollectionReusableView class] forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:StoreCollectionsHeaderView];
         [_storeCollectionView registerClass:[UICollectionReusableView class] forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:StoreGoodsHeaderView];
+        
+        PGWeakSelf(self);
+        [_storeCollectionView enableInfiniteScrolling:^{
+            [weakself.viewModel requestGoods];
+        }];
     }
     return _storeCollectionView;
 }

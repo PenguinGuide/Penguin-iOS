@@ -27,7 +27,7 @@
 
 @property (nonatomic, strong) PGNavigationView *navigationView;
 
-@property (nonatomic, strong, readwrite) PGBaseCollectionView *feedsCollectionView;
+@property (nonatomic, strong, readwrite) PGBaseCollectionView *exploreCollectionView;
 
 @property (nonatomic, strong) PGExploreViewModel *viewModel;
 
@@ -46,7 +46,7 @@
     self.navigationView.delegate = self;
     [self.view addSubview:self.navigationView];
     
-    [self.view addSubview:self.feedsCollectionView];
+    [self.view addSubview:self.exploreCollectionView];
     
     self.viewModel = [[PGExploreViewModel alloc] initWithAPIClient:self.apiClient];
     
@@ -56,16 +56,16 @@
         if (articlesArray && [articlesArray isKindOfClass:[NSArray class]]) {
             // NOTE: fix reloadData flash http://www.cnblogs.com/Rinpe/p/5850238.html
             [UIView setAnimationsEnabled:NO];
-            [weakself.feedsCollectionView reloadData];
+            [weakself.exploreCollectionView reloadData];
             dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.25f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
                 [UIView setAnimationsEnabled:YES];
             });
         }
         [weakself dismissLoading];
-        [weakself.feedsCollectionView endTopRefreshing];
-        [weakself.feedsCollectionView endBottomRefreshing];
+        [weakself.exploreCollectionView endTopRefreshing];
+        [weakself.exploreCollectionView endBottomRefreshing];
     }];
-    [self observeCollectionView:self.feedsCollectionView endOfFeeds:self.viewModel];
+    [self observeCollectionView:self.exploreCollectionView endOfFeeds:self.viewModel];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -81,7 +81,7 @@
     
     [self reloadView];
     
-    self.feedsCollectionView.contentInset = UIEdgeInsetsZero;
+    self.exploreCollectionView.contentInset = UIEdgeInsetsZero;
     
     [self checkSystemNotification];
 }
@@ -393,19 +393,19 @@
 
 #pragma mark - <Lazy Init>
 
-- (PGBaseCollectionView *)feedsCollectionView {
-    if(_feedsCollectionView == nil) {
-        _feedsCollectionView = [[PGBaseCollectionView alloc] initWithFrame:CGRectMake(0, 64, UISCREEN_WIDTH, UISCREEN_HEIGHT-50-64) collectionViewLayout:[UICollectionViewFlowLayout new]];
-        _feedsCollectionView.dataSource = self;
-        _feedsCollectionView.delegate = self;
+- (PGBaseCollectionView *)exploreCollectionView {
+    if(_exploreCollectionView == nil) {
+        _exploreCollectionView = [[PGBaseCollectionView alloc] initWithFrame:CGRectMake(0, 64, UISCREEN_WIDTH, UISCREEN_HEIGHT-50-64) collectionViewLayout:[UICollectionViewFlowLayout new]];
+        _exploreCollectionView.dataSource = self;
+        _exploreCollectionView.delegate = self;
         
-        [_feedsCollectionView registerClass:[PGCollectionsCell class] forCellWithReuseIdentifier:HotArticlesCell];
-        [_feedsCollectionView registerClass:[PGExploreTodayArticleCell class] forCellWithReuseIdentifier:TodayArticleCell];
-        [_feedsCollectionView registerClass:[PGCollectionsCell class] forCellWithReuseIdentifier:TagsCell];
-        [_feedsCollectionView registerClass:[PGArticleBannerCell class] forCellWithReuseIdentifier:ArticleCell];
-        [_feedsCollectionView registerClass:[UICollectionReusableView class] forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:HistoryArticlesHeaderView];
+        [_exploreCollectionView registerClass:[PGCollectionsCell class] forCellWithReuseIdentifier:HotArticlesCell];
+        [_exploreCollectionView registerClass:[PGExploreTodayArticleCell class] forCellWithReuseIdentifier:TodayArticleCell];
+        [_exploreCollectionView registerClass:[PGCollectionsCell class] forCellWithReuseIdentifier:TagsCell];
+        [_exploreCollectionView registerClass:[PGArticleBannerCell class] forCellWithReuseIdentifier:ArticleCell];
+        [_exploreCollectionView registerClass:[UICollectionReusableView class] forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:HistoryArticlesHeaderView];
     }
-    return _feedsCollectionView;
+    return _exploreCollectionView;
 }
 
 - (NSAttributedString *)hotArticlesLabelText

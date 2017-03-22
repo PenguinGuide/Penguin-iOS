@@ -9,7 +9,9 @@
 #define DimViewDefaultAlpha 0.5f
 
 static char HeaderView;
+static char ImageView;
 static char RightNaviButton;
+static char HeaderViewHeight;
 static char ImageViewHeight;
 
 static char ScrollViewDimView;
@@ -21,7 +23,9 @@ static char ScrollViewNaviTitleLabel;
 @interface UIScrollView ()
 
 @property (nonatomic, strong) UIView *headerView;
+@property (nonatomic, strong) UIImageView *imageView;
 @property (nonatomic, strong) UIButton *rightNaviButton;
+@property (nonatomic, strong) NSNumber *headerViewOriginalHeight;
 @property (nonatomic, strong) NSNumber *imageViewOriginalHeight;
 
 @property (nonatomic, strong) UIView *dimView;
@@ -62,9 +66,35 @@ static char ScrollViewNaviTitleLabel;
     
     objc_setAssociatedObject(self, &HeaderView, headerView, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
     objc_setAssociatedObject(self, &RightNaviButton, rightNaviButton, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
-    objc_setAssociatedObject(self, &ImageViewHeight, @(height), OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+    objc_setAssociatedObject(self, &HeaderViewHeight, @(height), OBJC_ASSOCIATION_RETAIN_NONATOMIC);
     
     objc_setAssociatedObject(self, &ScrollViewDimView, dimView, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+}
+
+- (void)setHeaderView:(UIView *)headerView imageView:(UIImageView *)imageView naviTitle:(NSString *)naviTitle showBackButton:(BOOL)showBackButton
+{
+    headerView.contentMode = UIViewContentModeScaleAspectFill;
+    [self addSubview:headerView];
+
+    CGFloat headerViewHeight = headerView.frame.size.height;
+    CGFloat imageViewHeight = imageView.frame.size.height;
+    
+    if (naviTitle && naviTitle.length > 0) {
+        UILabel *naviTitleLabel = [[UILabel alloc] initWithFrame:CGRectMake(70, 20, [UIScreen mainScreen].bounds.size.width-140, 44)];
+        naviTitleLabel.font = [UIFont systemFontOfSize:16.f weight:UIFontWeightBold];
+        naviTitleLabel.textAlignment = NSTextAlignmentCenter;
+        naviTitleLabel.textColor = [UIColor blackColor];
+        naviTitleLabel.text = naviTitle;
+        naviTitleLabel.alpha = 0.f;
+        [self addSubview:naviTitleLabel];
+        
+        objc_setAssociatedObject(self, &ScrollViewNaviTitleLabel, naviTitleLabel, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+    }
+    
+    objc_setAssociatedObject(self, &HeaderView, headerView, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+    objc_setAssociatedObject(self, &HeaderViewHeight, @(headerViewHeight), OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+    objc_setAssociatedObject(self, &ImageView, imageView, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+    objc_setAssociatedObject(self, &ImageViewHeight, @(imageViewHeight), OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
 
 - (UIView *)headerView
@@ -72,9 +102,19 @@ static char ScrollViewNaviTitleLabel;
     return objc_getAssociatedObject(self, &HeaderView);
 }
 
+- (UIImageView *)imageView
+{
+    return objc_getAssociatedObject(self, &ImageView);
+}
+
 - (UIButton *)rightNaviButton
 {
     return objc_getAssociatedObject(self, &RightNaviButton);
+}
+
+- (NSNumber *)headerViewOriginalHeight
+{
+    return objc_getAssociatedObject(self, &HeaderViewHeight);
 }
 
 - (NSNumber *)imageViewOriginalHeight
@@ -95,7 +135,7 @@ static char ScrollViewNaviTitleLabel;
 - (void)scrollViewShouldUpdate
 {
     if (self.headerView) {
-        CGFloat headerImageHeight = [self.imageViewOriginalHeight floatValue];
+        CGFloat headerImageHeight = [self.headerViewOriginalHeight floatValue];
         CGFloat contentOffsetY = self.contentOffset.y;
         if (self.contentOffset.y > 0) {
             // scroll down
@@ -131,12 +171,14 @@ static char ScrollViewNaviTitleLabel;
 - (void)scrollViewShouldUpdateHeaderView
 {
     if (self.headerView) {
-        CGFloat headerImageHeight = [self.imageViewOriginalHeight floatValue];
+        CGFloat headerViewHeight = [self.headerViewOriginalHeight floatValue];
+        CGFloat imageViewHeight = [self.imageViewOriginalHeight floatValue];
         CGFloat contentOffsetY = self.contentOffset.y;
         if (self.contentOffset.y <= 0) {
             // pull refresh
-            self.headerView.frame = CGRectMake(0, contentOffsetY, self.headerView.frame.size.width, headerImageHeight+fabs(contentOffsetY));
-            self.dimView.frame = CGRectMake(0, 0, self.headerView.frame.size.width, headerImageHeight+fabs(contentOffsetY));
+            self.headerView.frame = CGRectMake(0, contentOffsetY, self.headerView.frame.size.width, headerViewHeight+fabs(contentOffsetY));
+            self.imageView.frame = CGRectMake(0, 0, self.imageView.frame.size.width, imageViewHeight+fabs(contentOffsetY));
+            self.dimView.frame = CGRectMake(0, 0, self.headerView.frame.size.width, headerViewHeight+fabs(contentOffsetY));
             self.dimView.userInteractionEnabled = NO;
             self.naviTitleLabel.frame = CGRectMake(70, 20, self.naviTitleLabel.frame.size.width, self.naviTitleLabel.frame.size.height);
         }

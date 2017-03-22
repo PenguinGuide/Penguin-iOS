@@ -15,14 +15,6 @@
     self = [super initWithFrame:frame];
     if (self) {
         self.backgroundColor = [UIColor whiteColor];
-        
-        UIImageView *iconImageView = [[UIImageView alloc] initWithFrame:CGRectMake((UISCREEN_WIDTH-46)/2.f, 20+(44-21)/2.f, 46, 21)];
-        iconImageView.image = [UIImage imageNamed:@"pg_home_logo"];
-        [self addSubview:iconImageView];
-        
-        UIView *horizontalLine = [[UIView alloc] initWithFrame:CGRectMake(0, 64-1/[UIScreen mainScreen].scale, UISCREEN_WIDTH, 1/[UIScreen mainScreen].scale)];
-        horizontalLine.backgroundColor = [UIColor colorWithHexString:@"E1E1E1"];
-        [self addSubview:horizontalLine];
     }
     return self;
 }
@@ -32,12 +24,28 @@
 {
     PGNavigationView *naviView = [[PGNavigationView alloc] initWithFrame:CGRectMake(0, 0, UISCREEN_WIDTH, 64)];
     
+    UIView *horizontalLine = [[UIView alloc] initWithFrame:CGRectMake(0, 64-1/[UIScreen mainScreen].scale, UISCREEN_WIDTH, 1/[UIScreen mainScreen].scale)];
+    horizontalLine.backgroundColor = [UIColor colorWithHexString:@"E1E1E1"];
+    [naviView addSubview:horizontalLine];
+    
+    UIImageView *iconImageView = [[UIImageView alloc] initWithFrame:CGRectMake((UISCREEN_WIDTH-46)/2.f, 20+(44-21)/2.f, 46, 21)];
+    iconImageView.image = [UIImage imageNamed:@"pg_home_logo"];
+    [naviView addSubview:iconImageView];
+    
     return naviView;
 }
 
 + (PGNavigationView *)defaultNavigationViewWithSearchButton
 {
     PGNavigationView *naviView = [[PGNavigationView alloc] initWithFrame:CGRectMake(0, 0, UISCREEN_WIDTH, 64)];
+    
+    UIView *horizontalLine = [[UIView alloc] initWithFrame:CGRectMake(0, 64-1/[UIScreen mainScreen].scale, UISCREEN_WIDTH, 1/[UIScreen mainScreen].scale)];
+    horizontalLine.backgroundColor = [UIColor colorWithHexString:@"E1E1E1"];
+    [naviView addSubview:horizontalLine];
+    
+    UIImageView *iconImageView = [[UIImageView alloc] initWithFrame:CGRectMake((UISCREEN_WIDTH-46)/2.f, 20+(44-21)/2.f, 46, 21)];
+    iconImageView.image = [UIImage imageNamed:@"pg_home_logo"];
+    [naviView addSubview:iconImageView];
     
     UIButton *searchButton = [[UIButton alloc] initWithFrame:CGRectMake(UISCREEN_WIDTH-24-50, 31, 50, 50)];
     searchButton.eventName = search_button_clicked;
@@ -51,10 +59,35 @@
     return naviView;
 }
 
++ (PGNavigationView *)naviViewWithBackButton:(NSString *)naviTitle
+{
+    PGNavigationView *naviView = [[PGNavigationView alloc] initWithFrame:CGRectMake(0, 0, UISCREEN_WIDTH, 64)];
+    UIButton *backButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 25, 40, 30)];
+    [backButton setImage:[UIImage imageNamed:@"pg_navigation_back_button"] forState:UIControlStateNormal];
+    [backButton addTarget:naviView action:@selector(backButtonClicked) forControlEvents:UIControlEventTouchUpInside];
+    [naviView addSubview:backButton];
+    
+    UILabel *naviTitleLabel = [[UILabel alloc] initWithFrame:CGRectMake(70, 20, [UIScreen mainScreen].bounds.size.width-140, 44)];
+    naviTitleLabel.font = [UIFont systemFontOfSize:16.f weight:UIFontWeightBold];
+    naviTitleLabel.textAlignment = NSTextAlignmentCenter;
+    naviTitleLabel.textColor = Theme.colorText;
+    naviTitleLabel.text = naviTitle;
+    [naviView addSubview:naviTitleLabel];
+    
+    return naviView;
+}
+
 - (void)searchButtonClicked
 {
     if (self.delegate && [self.delegate respondsToSelector:@selector(searchButtonClicked)]) {
         [self.delegate searchButtonClicked];
+    }
+}
+
+- (void)backButtonClicked
+{
+    if (self.delegate && [self.delegate respondsToSelector:@selector(naviBackButtonClicked)]) {
+        [self.delegate naviBackButtonClicked];
     }
 }
 

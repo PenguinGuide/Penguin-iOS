@@ -26,4 +26,6 @@
 
 + (void)routeToAllScenariosPage:(NSString *)scenarioType;
 
++ (void)routeToTagPage:(NSString *)tagId link:(NSString *)link;
+
 @end

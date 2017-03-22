@@ -40,4 +40,6 @@
 
 #import "PGUser.h"
 
+#import "Masonry.h"
+
 #endif /* PenguinGuide_Prefix_pch */

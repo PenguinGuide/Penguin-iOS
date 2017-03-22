@@ -12,6 +12,11 @@
 @interface PGTagViewModel : PGBaseViewModel
 
 @property (nonatomic, strong, readonly) NSString *tagName;
-@property (nonatomic, strong, readonly) NSArray *feedsArray;
+@property (nonatomic, strong, readonly) NSString *tagDesc;
+@property (nonatomic, strong, readonly) NSString *tagImage;
+@property (nonatomic, strong, readonly) NSArray *hotArticlesArray;
+@property (nonatomic, strong, readonly) NSArray *allArticlesArray;
+
+- (void)requestTagWithId:(NSString *)tagId;
 
 @end
