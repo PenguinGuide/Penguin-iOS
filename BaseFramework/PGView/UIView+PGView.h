@@ -25,5 +25,6 @@
 - (UIImage *)screenshot;
 - (UIImage *)screenshotFromRect:(CGRect)rect;
 - (void)cropCornerRadius:(CGFloat)cornerRadius;
+- (void)addBorder:(UIColor *)color borderWidth:(CGFloat)borderWidth cornerRadius:(CGFloat)cornerRadius;
 
 @end

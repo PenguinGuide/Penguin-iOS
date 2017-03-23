@@ -22,6 +22,7 @@
 @interface PGBaseCollectionViewCell : UICollectionViewCell <PGBaseCollectionViewCell>
 
 - (void)insertCellBorderLayer:(CGFloat)cornerRadius;
+- (void)insertCellBorderLayer:(CGFloat)cornerRadius rect:(CGRect)rect;
 - (void)insertCellMask:(CGFloat)cornerRadius;
 
 @end

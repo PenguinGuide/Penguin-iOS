@@ -64,16 +64,7 @@
         _tagImageView.clipsToBounds = YES;
         _tagImageView.backgroundColor = [UIColor whiteColor];
         
-        CAShapeLayer *shapeLayer = [CAShapeLayer layer];
-        shapeLayer.frame = CGRectMake(0, 0, self.pg_width, self.pg_width);
-        shapeLayer.lineWidth = 1.f;
-        shapeLayer.strokeColor = Theme.colorBackground.CGColor;
-        shapeLayer.fillColor = [UIColor clearColor].CGColor;
-        
-        UIBezierPath *bezierPath = [UIBezierPath bezierPathWithRoundedRect:CGRectMake(0, 0, self.pg_width, self.pg_width) cornerRadius:8.f];
-        shapeLayer.path = bezierPath.CGPath;
-        
-        [_tagImageView.layer insertSublayer:shapeLayer atIndex:0];
+        [_tagImageView addBorder:Theme.colorBackground borderWidth:1.f cornerRadius:8.f];
     }
     return _tagImageView;
 }

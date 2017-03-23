@@ -11,6 +11,6 @@
 
 @interface PGArticleParagraphSingleGoodCell : PGBaseCollectionViewCell
 
-- (void)setCellWithGood:(PGGood *)good;
++ (CGSize)cellSize;
 
 @end

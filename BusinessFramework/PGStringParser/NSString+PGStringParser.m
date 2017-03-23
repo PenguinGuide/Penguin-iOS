@@ -19,7 +19,7 @@
 
 - (NSAttributedString *)paragraphAttributedString
 {
-    NSAttributedString *attrS = [[NSAttributedString alloc] initWithString:self attributes:@{NSFontAttributeName:[UIFont systemFontOfSize:17.f weight:UIFontWeightRegular],
+    NSAttributedString *attrS = [[NSAttributedString alloc] initWithString:self attributes:@{NSFontAttributeName:[UIFont systemFontOfSize:16.f weight:UIFontWeightRegular],
                                                                                              NSParagraphStyleAttributeName:[self defaultParagraphStyle]}];
     
     return attrS;
@@ -27,7 +27,7 @@
 
 - (NSAttributedString *)centerAlignedParagraphAttributedString
 {
-    NSAttributedString *attrS = [[NSAttributedString alloc] initWithString:self attributes:@{NSFontAttributeName:[UIFont systemFontOfSize:17.f weight:UIFontWeightRegular],
+    NSAttributedString *attrS = [[NSAttributedString alloc] initWithString:self attributes:@{NSFontAttributeName:[UIFont systemFontOfSize:16.f weight:UIFontWeightRegular],
                                                                                              NSParagraphStyleAttributeName:[self centerAlignedParagraphStyle]}];
     
     return attrS;
@@ -80,7 +80,7 @@
 - (NSAttributedString *)attributedStringWithColor:(NSString *)color font:(UIFont *)font
 {
     NSAttributedString *attrStr = [[NSAttributedString alloc] initWithString:self
-                                                                  attributes:@{NSFontAttributeName:font?font:[UIFont systemFontOfSize:17.f weight:UIFontWeightRegular],
+                                                                  attributes:@{NSFontAttributeName:font?font:[UIFont systemFontOfSize:16.f weight:UIFontWeightRegular],
                                                                                NSForegroundColorAttributeName:[UIColor colorWithHexString:color],
                                                                                NSParagraphStyleAttributeName:[self defaultParagraphStyle]}];
     return attrStr;
@@ -109,9 +109,9 @@
 {
     NSMutableParagraphStyle *defaultParagraphStyle = [[NSMutableParagraphStyle alloc] init];
     defaultParagraphStyle.alignment = NSTextAlignmentLeft;
-    defaultParagraphStyle.firstLineHeadIndent = 30.f;
-    defaultParagraphStyle.headIndent = 30.f;
-    defaultParagraphStyle.tailIndent = -30.f;
+    defaultParagraphStyle.firstLineHeadIndent = 33.f;
+    defaultParagraphStyle.headIndent = 33.f;
+    defaultParagraphStyle.tailIndent = -33.f;
     defaultParagraphStyle.lineSpacing = 5.f;
     defaultParagraphStyle.lineBreakMode = NSLineBreakByWordWrapping;
     
@@ -122,9 +122,9 @@
 {
     NSMutableParagraphStyle *centerAlignedParagraphStyle = [[NSMutableParagraphStyle alloc] init];
     centerAlignedParagraphStyle.alignment = NSTextAlignmentCenter;
-    centerAlignedParagraphStyle.firstLineHeadIndent = 30.f;
-    centerAlignedParagraphStyle.headIndent = 30.f;
-    centerAlignedParagraphStyle.tailIndent = -30.f;
+    centerAlignedParagraphStyle.firstLineHeadIndent = 33.f;
+    centerAlignedParagraphStyle.headIndent = 33.f;
+    centerAlignedParagraphStyle.tailIndent = -33.f;
     centerAlignedParagraphStyle.lineSpacing = 5.f;
     centerAlignedParagraphStyle.lineBreakMode = NSLineBreakByWordWrapping;
     

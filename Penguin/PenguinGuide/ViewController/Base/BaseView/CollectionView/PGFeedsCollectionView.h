@@ -30,17 +30,9 @@
 
 @optional
 
+- (NSString *)pageName;
 - (NSArray *)feedsArray;
-- (NSArray *)recommendsArray;
-- (CGSize)feedsHeaderSize;
 - (CGSize)feedsFooterSize;
-- (NSString *)tabType;
-
-- (NSArray *)iconsArray;
-- (UIEdgeInsets)topEdgeInsets;
-
-- (void)scenarioDidSelect:(PGScenarioBanner *)scenario;
-- (void)categoryDidSelect:(PGScenarioBanner *)category;
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath;
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView;
@@ -51,8 +43,6 @@
 @interface PGFeedsCollectionView : PGBaseCollectionView
 
 @property (nonatomic, weak) id<PGFeedsCollectionViewDelegate> feedsDelegate;
-
-@property (nonatomic, strong) PGExploreRecommendsHeaderView *exploreHeaderView;
 
 @property (nonatomic, assign) BOOL allowGesture;
 

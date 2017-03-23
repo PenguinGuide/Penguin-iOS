@@ -135,11 +135,11 @@ static NSString *ScenarioTypeGroup = @"2";
 //    }
 //}
 //
-//- (void)clearPagination
-//{
-//    self.endFlag = NO;
-//    self.isPreloadingNextPage = NO;
-//    self.response = nil;
-//}
+- (void)clearPagination
+{
+    self.endFlag = NO;
+    self.isPreloadingNextPage = NO;
+    self.response = nil;
+}
 
 @end

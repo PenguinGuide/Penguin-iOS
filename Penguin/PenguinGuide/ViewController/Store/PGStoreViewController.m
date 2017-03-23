@@ -50,7 +50,7 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     
-    self.navigationView = [PGNavigationView defaultNavigationViewWithSearchButton];
+    self.navigationView = [PGNavigationView naviViewWithSearchButton];
     self.navigationView.delegate = self;
     [self.view addSubview:self.navigationView];
     
@@ -72,6 +72,7 @@
         [weakself.storeCollectionView endTopRefreshing];
         [weakself.storeCollectionView endBottomRefreshing];
     }];
+    [self observeCollectionView:self.storeCollectionView endOfFeeds:self.viewModel];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -100,7 +101,10 @@
 
 - (void)reloadView
 {
-    [self.viewModel requestData];
+    if (self.viewModel.scenariosArray.count == 0) {
+        [self showLoading];
+        [self.viewModel requestData];
+    }
 }
 
 - (void)initAnalyticsKeys
@@ -206,6 +210,12 @@
         return cell;
     }
     if (indexPath.section == 3) {
+        if (self.viewModel.goodsArray.count-indexPath.item == 4) {
+            PGWeakSelf(self);
+            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
+                [weakself.viewModel requestGoods];
+            });
+        }
         PGGoodCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:StoreGoodCell forIndexPath:indexPath];
         if ([cell respondsToSelector:@selector(setCellWithModel:)]) {
             [cell setCellWithModel:self.viewModel.goodsArray[indexPath.item]];
@@ -371,6 +381,19 @@
     }
 }
 
+- (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    id<PGBaseCollectionViewCell> selectedCell = (id<PGBaseCollectionViewCell>)[collectionView cellForItemAtIndexPath:indexPath];
+    if ([selectedCell respondsToSelector:@selector(cellDidSelectWithModel:)]) {
+        if (indexPath.section == 1) {
+            [selectedCell cellDidSelectWithModel:self.viewModel.salesArray[indexPath.item]];
+        }
+        if (indexPath.section == 3) {
+            [selectedCell cellDidSelectWithModel:self.viewModel.goodsArray[indexPath.item]];
+        }
+    }
+}
+
 #pragma mark - <PGNavigationViewDelegate>
 
 - (void)searchButtonClicked
@@ -418,6 +441,12 @@
         [_storeCollectionView registerClass:[UICollectionReusableView class] forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:StoreGoodsHeaderView];
         
         PGWeakSelf(self);
+        [_storeCollectionView enablePullToRefreshWithTopInset:0.f completion:^{
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.4 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                [weakself.viewModel clearPagination];
+                [weakself.viewModel requestData];
+            });
+        }];
         [_storeCollectionView enableInfiniteScrolling:^{
             [weakself.viewModel requestGoods];
         }];

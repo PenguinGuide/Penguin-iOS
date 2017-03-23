@@ -16,7 +16,6 @@
 @property (nonatomic, strong) NSArray *goodsArray;
 @property (nonatomic, strong) UIView *goodsView;
 @property (nonatomic, strong) PGBaseCollectionView *goodsCollectionView;
-@property (nonatomic, strong) UIImageView *pinImageView;
 
 @end
 
@@ -34,7 +33,6 @@
 - (void)initialize
 {
     [self.contentView addSubview:self.goodsCollectionView];
-    [self.contentView addSubview:self.pinImageView];
 }
 
 - (void)reloadCellWithGoodsArray:(NSArray *)goodsArray
@@ -42,6 +40,11 @@
     self.goodsArray = goodsArray;
     
     [self.goodsCollectionView reloadData];
+}
+
++ (CGSize)cellSize
+{
+    return CGSizeMake(UISCREEN_WIDTH-60, 250.f);
 }
 
 #pragma mark - <UICollectionViewDataSource>
@@ -77,7 +80,7 @@
 
 - (UIEdgeInsets)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout insetForSectionAtIndex:(NSInteger)section
 {
-    return UIEdgeInsetsMake(10, 10, 10, 10);
+    return UIEdgeInsetsZero;
 }
 
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath
@@ -100,29 +103,17 @@
         layout.scrollDirection = UICollectionViewScrollDirectionHorizontal;
         layout.minimumInteritemSpacing = 0.f;
         layout.minimumLineSpacing = 10.f;
-        _goodsCollectionView = [[PGBaseCollectionView alloc] initWithFrame:CGRectMake(0, 15, self.pg_width, self.pg_height-30) collectionViewLayout:layout];
+        _goodsCollectionView = [[PGBaseCollectionView alloc] initWithFrame:CGRectMake(0, 15, self.pg_width, 220) collectionViewLayout:layout];
         _goodsCollectionView.dataSource = self;
         _goodsCollectionView.delegate = self;
         _goodsCollectionView.showsVerticalScrollIndicator = NO;
         _goodsCollectionView.showsHorizontalScrollIndicator = NO;
         _goodsCollectionView.alwaysBounceVertical = NO;
         _goodsCollectionView.backgroundColor = [UIColor whiteColor];
-        _goodsCollectionView.layer.borderWidth = 2.f;
-        _goodsCollectionView.layer.borderColor = Theme.colorText.CGColor;
-        _goodsCollectionView.backgroundColor = [UIColor whiteColor];
         
         [_goodsCollectionView registerClass:[PGGoodsCollectionGoodCell class] forCellWithReuseIdentifier:GoodCell];
     }
     return _goodsCollectionView;
-}
-
-- (UIImageView *)pinImageView
-{
-    if (!_pinImageView) {
-        _pinImageView = [[UIImageView alloc] initWithFrame:CGRectMake(20, 0, 16, 44)];
-        _pinImageView.image = [UIImage imageNamed:@"pg_article_goods_collection_pin"];
-    }
-    return _pinImageView;
 }
 
 @end

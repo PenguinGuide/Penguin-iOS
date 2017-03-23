@@ -65,6 +65,14 @@
     }
 }
 
+- (void)cellDidSelectWithModel:(PGRKModel *)model
+{
+    if ([model isKindOfClass:[PGSingleGoodBanner class]]) {
+        PGSingleGoodBanner *singleGood = (PGSingleGoodBanner *)model;
+        [PGRouterManager routeToGoodDetailPage:singleGood.goodsId link:singleGood.link];
+    }
+}
+
 - (void)setCellWithGood:(PGGood *)good
 {
     if (good.originalPrice && ![good.originalPrice isEqualToString:@"0"]) {

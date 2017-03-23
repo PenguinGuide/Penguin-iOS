@@ -84,7 +84,7 @@
 
 #pragma mark - <PGFeedsCollectionViewDelegate>
 
-- (NSString *)tabType
+- (NSString *)pageName
 {
     return @"scenario";
 }

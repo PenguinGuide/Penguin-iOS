@@ -22,7 +22,8 @@
 @property (nonatomic, weak) id<PGNavigationViewDelegate> delegate;
 
 + (PGNavigationView *)defaultNavigationView;
-+ (PGNavigationView *)defaultNavigationViewWithSearchButton;
++ (PGNavigationView *)naviViewWithSearchButton;
 + (PGNavigationView *)naviViewWithBackButton:(NSString *)naviTitle;
++ (PGNavigationView *)naviViewWithShareButton;
 
 @end

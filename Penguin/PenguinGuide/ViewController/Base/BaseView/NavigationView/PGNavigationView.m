@@ -35,7 +35,7 @@
     return naviView;
 }
 
-+ (PGNavigationView *)defaultNavigationViewWithSearchButton
++ (PGNavigationView *)naviViewWithSearchButton
 {
     PGNavigationView *naviView = [[PGNavigationView alloc] initWithFrame:CGRectMake(0, 0, UISCREEN_WIDTH, 64)];
     
@@ -55,6 +55,30 @@
     [searchButton addTarget:naviView action:@selector(searchButtonClicked) forControlEvents:UIControlEventTouchUpInside];
     
     [naviView addSubview:searchButton];
+    
+    return naviView;
+}
+
++ (PGNavigationView *)naviViewWithShareButton
+{
+    PGNavigationView *naviView = [[PGNavigationView alloc] initWithFrame:CGRectMake(0, 0, UISCREEN_WIDTH, 64)];
+    
+    UIView *horizontalLine = [[UIView alloc] initWithFrame:CGRectMake(0, 64-1/[UIScreen mainScreen].scale, UISCREEN_WIDTH, SINGLE_LINE_HEIGHT)];
+    horizontalLine.backgroundColor = [UIColor colorWithHexString:@"E1E1E1"];
+    [naviView addSubview:horizontalLine];
+    
+    UIButton *backButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 25, 40, 30)];
+    [backButton setImage:[UIImage imageNamed:@"pg_article_back_button"] forState:UIControlStateNormal];
+    [backButton addTarget:naviView action:@selector(backButtonClicked) forControlEvents:UIControlEventTouchUpInside];
+    [naviView addSubview:backButton];
+    
+    UIButton *shareButton = [[UIButton alloc] initWithFrame:CGRectMake(UISCREEN_WIDTH-20-50, 31, 50, 50)];
+    [shareButton setImage:[UIImage imageNamed:@"pg_article_share"] forState:UIControlStateNormal];
+    [shareButton setContentVerticalAlignment:UIControlContentVerticalAlignmentTop];
+    [shareButton setContentHorizontalAlignment:UIControlContentHorizontalAlignmentRight];
+    [shareButton addTarget:naviView action:@selector(searchButtonClicked) forControlEvents:UIControlEventTouchUpInside];
+    
+    [naviView addSubview:shareButton];
     
     return naviView;
 }

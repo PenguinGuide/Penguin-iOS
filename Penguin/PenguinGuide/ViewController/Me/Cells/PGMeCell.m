@@ -10,6 +10,7 @@
 
 @interface PGMeCell ()
 
+@property (nonatomic, strong) UIImageView *iconImageView;
 @property (nonatomic, strong) UILabel *nameLabel;
 @property (nonatomic, strong) UIView *dotView;
 
@@ -28,12 +29,14 @@
 
 - (void)initialize
 {
+    [self.contentView addSubview:self.iconImageView];
     [self.contentView addSubview:self.nameLabel];
     [self.contentView addSubview:self.dotView];
 }
 
-- (void)setCellWithName:(NSString *)name highlight:(BOOL)highlight
+- (void)setCellWithName:(NSString *)name icon:(NSString *)icon highlight:(BOOL)highlight
 {
+    self.iconImageView.image = [UIImage imageNamed:icon];
     self.nameLabel.text = name;
     if (highlight) {
         self.dotView.hidden = NO;
@@ -44,14 +47,23 @@
 
 + (CGSize)cellSize
 {
-    return CGSizeMake(UISCREEN_WIDTH, 80);
+    return CGSizeMake(UISCREEN_WIDTH, 60);
+}
+
+#pragma mark - <Lazy Init>
+
+- (UIImageView *)iconImageView
+{
+    if (!_iconImageView) {
+        _iconImageView = [[UIImageView alloc] initWithFrame:CGRectMake((UISCREEN_WIDTH-100)/2-10, (self.pg_height-20)/2, 20, 20)];
+    }
+    return _iconImageView;
 }
 
 - (UILabel *)nameLabel
 {
     if (!_nameLabel) {
-        _nameLabel = [[UILabel alloc] initWithFrame:CGRectMake((UISCREEN_WIDTH-100)/2, (self.pg_height-20)/2, 100, 20)];
-        _nameLabel.textAlignment = NSTextAlignmentCenter;
+        _nameLabel = [[UILabel alloc] initWithFrame:CGRectMake((UISCREEN_WIDTH-100)/2+20, (self.pg_height-20)/2, 100, 20)];
         _nameLabel.font = Theme.fontExtraLargeBold;
         _nameLabel.textColor = Theme.colorText;
     }

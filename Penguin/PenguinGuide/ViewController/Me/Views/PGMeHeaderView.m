@@ -35,6 +35,10 @@
     [self addSubview:self.avatarButton];
     [self addSubview:self.nameLabel];
     [self addSubview:self.descLabel];
+    
+    UIView *horizontalLine = [[UIView alloc] initWithFrame:CGRectMake((self.pg_width-30)/2, self.pg_height-2-20, 30, 2)];
+    horizontalLine.backgroundColor = [UIColor blackColor];
+    [self addSubview:horizontalLine];
 }
 
 - (void)setViewWithMe:(PGMe *)me
@@ -62,14 +66,14 @@
 
 + (CGSize)headerViewSize
 {
-    return CGSizeMake(UISCREEN_WIDTH, 65+84+10+22+10+22+10+30);
+    return CGSizeMake(UISCREEN_WIDTH, 100+84+23+22+10+22+10+30+20);
 }
 
 - (UIButton *)settingButton
 {
     if (!_settingButton) {
         _settingButton = [[UIButton alloc] initWithFrame:CGRectMake(self.pg_width-10-50, 20, 50, 50)];
-        [_settingButton setTitle:@"设置" forState:UIControlStateNormal];
+        [_settingButton setTitle:@"编辑" forState:UIControlStateNormal];
         [_settingButton setTitleColor:Theme.colorText forState:UIControlStateNormal];
         [_settingButton.titleLabel setFont:Theme.fontLargeBold];
         _settingButton.eventName = system_settings_button_clicked;
@@ -80,7 +84,7 @@
 - (UIButton *)avatarButton
 {
     if (!_avatarButton) {
-        _avatarButton = [[UIButton alloc] initWithFrame:CGRectMake(self.pg_width/2-42, 65, 84, 84)];
+        _avatarButton = [[UIButton alloc] initWithFrame:CGRectMake(self.pg_width/2-42, 100, 84, 84)];
         _avatarButton.clipsToBounds = YES;
         _avatarButton.layer.cornerRadius = 42.f;
         _avatarButton.contentMode = UIViewContentModeScaleAspectFill;
@@ -92,7 +96,7 @@
 - (UILabel *)nameLabel
 {
     if (!_nameLabel) {
-        _nameLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, self.avatarButton.pg_bottom+20, self.pg_width, 22)];
+        _nameLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, self.avatarButton.pg_bottom+23, self.pg_width, 22)];
         _nameLabel.font = [UIFont systemFontOfSize:20.f];
         _nameLabel.textColor = Theme.colorText;
         _nameLabel.textAlignment = NSTextAlignmentCenter;

@@ -15,10 +15,6 @@
 #define SingleGoodBannerCell @"SingleGoodBannerCell"
 #define FlashbuyBannerCell @"FlashbuyBannerCell"
 
-#define HomeHeaderView @"HomeHeaderView"
-#define ExploreHeaderView @"ExploreHeaderView"
-#define StoreHeaderView @"StoreHeaderView"
-
 #import "PGFeedsCollectionView.h"
 
 @interface PGFeedsCollectionView () <UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout>
@@ -45,7 +41,6 @@
         [self registerClass:[PGSingleGoodBannerCell class] forCellWithReuseIdentifier:SingleGoodBannerCell];
         [self registerClass:[PGFlashbuyBannerCell class] forCellWithReuseIdentifier:FlashbuyBannerCell];
         
-        [self registerClass:[PGExploreRecommendsHeaderView class] forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:ExploreHeaderView];
         [self registerClass:[PGBaseCollectionViewFooterView class] forSupplementaryViewOfKind:UICollectionElementKindSectionFooter withReuseIdentifier:BaseCollectionViewFooterView];
     }
     return self;
@@ -104,9 +99,7 @@
             PGCarouselBannerCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:CarouselBannerCell forIndexPath:indexPath];
             
             PGCarouselBanner *carouselBanner = (PGCarouselBanner *)banner;
-            if ([[self.feedsDelegate tabType] isEqualToString:@"store"]) {
-                cell.pageName = store_tab_view;
-            } else if ([[self.feedsDelegate tabType] isEqualToString:@"scenario"]) {
+            if ([[self.feedsDelegate pageName] isEqualToString:@"scenario"]) {
                 cell.pageName = scenario_view;
             }
             
@@ -119,9 +112,7 @@
             PGArticleBanner *articleBanner = (PGArticleBanner *)banner;
             cell.eventName = article_banner_clicked;
             cell.eventId = articleBanner.articleId;
-            if ([[self.feedsDelegate tabType] isEqualToString:@"store"]) {
-                cell.pageName = store_tab_view;
-            } else if ([[self.feedsDelegate tabType] isEqualToString:@"scenario"]) {
+            if ([[self.feedsDelegate pageName] isEqualToString:@"scenario"]) {
                 cell.pageName = scenario_view;
             }
             if (articleBanner.title) {
@@ -135,9 +126,7 @@
             PGGoodsCollectionBannerCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:GoodsCollectionBannerCell forIndexPath:indexPath];
             
             PGGoodsCollectionBanner *goodsCollectionBanner = (PGGoodsCollectionBanner *)banner;
-            if ([[self.feedsDelegate tabType] isEqualToString:@"store"]) {
-                cell.pageName = store_tab_view;
-            } else if ([[self.feedsDelegate tabType] isEqualToString:@"scenario"]) {
+            if ([[self.feedsDelegate pageName] isEqualToString:@"scenario"]) {
                 cell.pageName = scenario_view;
             }
             
@@ -150,9 +139,7 @@
             PGTopicBanner *topicBanner = (PGTopicBanner *)banner;
             cell.eventName = topic_banner_clicked;
             cell.eventId = topicBanner.link;
-            if ([[self.feedsDelegate tabType] isEqualToString:@"store"]) {
-                cell.pageName = store_tab_view;
-            } else if ([[self.feedsDelegate tabType] isEqualToString:@"scenario"]) {
+            if ([[self.feedsDelegate pageName] isEqualToString:@"scenario"]) {
                 cell.pageName = scenario_view;
             }
             
@@ -165,22 +152,18 @@
             PGSingleGoodBanner *singleGoodBanner = (PGSingleGoodBanner *)banner;
             cell.eventName = single_good_banner_clicked;
             cell.eventId = singleGoodBanner.goodsId;
-            if ([[self.feedsDelegate tabType] isEqualToString:@"store"]) {
-                cell.pageName = store_tab_view;
-            } else if ([[self.feedsDelegate tabType] isEqualToString:@"scenario"]) {
+            if ([[self.feedsDelegate pageName] isEqualToString:@"scenario"]) {
                 cell.pageName = scenario_view;
             }
             
-            //[cell setCellWithSingleGood:singleGoodBanner];
+            [cell setCellWithModel:singleGoodBanner];
             
             return cell;
         } else if ([banner isKindOfClass:[PGFlashbuyBanner class]]) {
             PGFlashbuyBannerCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:FlashbuyBannerCell forIndexPath:indexPath];
             
             PGFlashbuyBanner *flashbuyBanner = (PGFlashbuyBanner *)banner;
-            if ([[self.feedsDelegate tabType] isEqualToString:@"store"]) {
-                cell.pageName = store_tab_view;
-            } else if ([[self.feedsDelegate tabType] isEqualToString:@"scenario"]) {
+            if ([[self.feedsDelegate pageName] isEqualToString:@"scenario"]) {
                 cell.pageName = scenario_view;
             }
             
@@ -196,6 +179,16 @@
 
 - (UICollectionReusableView *)collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath
 {
+    if (kind == UICollectionElementKindSectionFooter) {
+        if (self.feedsDelegate && [self.feedsDelegate respondsToSelector:@selector(feedsArray)]) {
+            NSArray *feedsArray = [self.feedsDelegate feedsArray];
+            if (indexPath.section == feedsArray.count-1) {
+                PGBaseCollectionViewFooterView *footerView = [collectionView dequeueReusableSupplementaryViewOfKind:kind withReuseIdentifier:BaseCollectionViewFooterView forIndexPath:indexPath];
+                
+                return footerView;
+            }
+        }
+    }
     return nil;
 }
 
@@ -227,12 +220,6 @@
 
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout referenceSizeForHeaderInSection:(NSInteger)section
 {
-    if (section == 0) {
-        if (self.feedsDelegate && [self.feedsDelegate respondsToSelector:@selector(feedsHeaderSize)]) {
-            return [self.feedsDelegate feedsHeaderSize];
-        }
-    }
-
     return CGSizeZero;
 }
 
@@ -246,7 +233,6 @@
             }
         }
     }
-    
     return CGSizeZero;
 }
 
@@ -262,11 +248,6 @@
 
 - (UIEdgeInsets)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout insetForSectionAtIndex:(NSInteger)section
 {
-    if (self.feedsDelegate && [self.feedsDelegate respondsToSelector:@selector(topEdgeInsets)]) {
-        if (section == 0) {
-            return [self.feedsDelegate topEdgeInsets];
-        }
-    }
     NSArray *feedsArray = [self.feedsDelegate feedsArray];
     id banner = feedsArray[section];
     
@@ -310,24 +291,6 @@
 {
     if (self.feedsDelegate && [self.feedsDelegate respondsToSelector:@selector(scrollViewDidScroll:)]) {
         [self.feedsDelegate scrollViewDidScroll:scrollView];
-    }
-}
-
-#pragma mark - <PGHomeRecommendsHeaderViewDelegate>
-
-- (void)scenarioDidSelect:(PGScenarioBanner *)scenario
-{
-    if (self.feedsDelegate && [self.feedsDelegate respondsToSelector:@selector(scenarioDidSelect:)]) {
-        [self.feedsDelegate scenarioDidSelect:scenario];
-    }
-}
-
-#pragma mark - <PGStoreRecommendsHeaderViewDelegate>
-
-- (void)categoryDidSelect:(PGScenarioBanner *)categoryIcon
-{
-    if (self.feedsDelegate && [self.feedsDelegate respondsToSelector:@selector(categoryDidSelect:)]) {
-        [self.feedsDelegate categoryDidSelect:categoryIcon];
     }
 }
 

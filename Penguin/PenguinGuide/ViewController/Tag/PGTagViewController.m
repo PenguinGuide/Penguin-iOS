@@ -64,6 +64,7 @@
             if (!weakself.tagHeaderView && weakself.viewModel.tagName) {
                 UIImageView *headerImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, UISCREEN_WIDTH, UISCREEN_WIDTH*9/16)];
                 headerImageView.contentMode = UIViewContentModeScaleAspectFill;
+                headerImageView.backgroundColor = Theme.colorBackground;
                 [headerImageView setWithImageURL:weakself.viewModel.tagImage placeholder:nil completion:nil];
                 weakself.tagHeaderView = [PGTagHeaderView headerViewWithImageView:headerImageView
                                                                             title:weakself.viewModel.tagName
@@ -77,6 +78,9 @@
                 [UIView setAnimationsEnabled:YES];
             });
         }
+        [weakself dismissLoading];
+        [weakself.tagCollectionView endTopRefreshing];
+        [weakself.tagCollectionView endBottomRefreshing];
     }];
     [self observeCollectionView:self.tagCollectionView endOfFeeds:self.viewModel];
     
@@ -93,6 +97,7 @@
 - (void)reloadView
 {
     if (!self.viewModel.tagName) {
+        [self showLoading];
         [self.viewModel requestTagWithId:self.tagId];
     }
 }
@@ -242,6 +247,16 @@
 - (CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout minimumInteritemSpacingForSectionAtIndex:(NSInteger)section
 {
     return 0.f;
+}
+
+- (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    id<PGBaseCollectionViewCell> selectedCell = (id<PGBaseCollectionViewCell>)[collectionView cellForItemAtIndexPath:indexPath];
+    if ([selectedCell respondsToSelector:@selector(cellDidSelectWithModel:)]) {
+        if (indexPath.section == 1) {
+            [selectedCell cellDidSelectWithModel:self.viewModel.allArticlesArray[indexPath.item]];
+        }
+    }
 }
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView

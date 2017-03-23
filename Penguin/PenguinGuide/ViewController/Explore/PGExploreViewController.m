@@ -42,7 +42,7 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     
-    self.navigationView = [PGNavigationView defaultNavigationViewWithSearchButton];
+    self.navigationView = [PGNavigationView naviViewWithSearchButton];
     self.navigationView.delegate = self;
     [self.view addSubview:self.navigationView];
     
@@ -94,6 +94,7 @@
 - (void)reloadView
 {
     if (self.viewModel.hotArticlesArray.count == 0) {
+        [self showLoading];
         [self.viewModel requestData];
     }
 }
@@ -121,7 +122,10 @@
         return 1;
     }
     if (section == 1) {
-        return 1;
+        if (self.viewModel.currentArticle) {
+            return 1;
+        }
+        return 0;
     }
     if (section == 2) {
         return 1;
@@ -297,6 +301,14 @@
     }
 }
 
+- (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    if (indexPath.section == 3) {
+        PGArticleBanner *articleBanner = self.viewModel.articlesArray[indexPath.item];
+        [PGRouterManager routeToArticlePage:articleBanner.articleId link:articleBanner.link];
+    }
+}
+
 #pragma mark - <PGTabBarControllerDelegate>
 
 - (NSString *)tabBarTitle
@@ -404,6 +416,17 @@
         [_exploreCollectionView registerClass:[PGCollectionsCell class] forCellWithReuseIdentifier:TagsCell];
         [_exploreCollectionView registerClass:[PGArticleBannerCell class] forCellWithReuseIdentifier:ArticleCell];
         [_exploreCollectionView registerClass:[UICollectionReusableView class] forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:HistoryArticlesHeaderView];
+        
+        PGWeakSelf(self);
+        [_exploreCollectionView enablePullToRefreshWithTopInset:0.f completion:^{
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.4 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                [weakself.viewModel clearPagination];
+                [weakself.viewModel requestData];
+            });
+        }];
+        [_exploreCollectionView enableInfiniteScrolling:^{
+            [weakself.viewModel requestArticles];
+        }];
     }
     return _exploreCollectionView;
 }
@@ -414,7 +437,7 @@
         NSMutableAttributedString *attrS = [[NSMutableAttributedString alloc] initWithString:@"热门推文 · PENGUIN HOT"];
         [attrS addAttribute:NSFontAttributeName value:Theme.fontLargeBold range:NSMakeRange(0, 7)];
         [attrS addAttribute:NSForegroundColorAttributeName value:Theme.colorText range:NSMakeRange(0, 7)];
-        [attrS addAttribute:NSFontAttributeName value:Theme.fontLargeBold range:NSMakeRange(7, 11)];
+        [attrS addAttribute:NSFontAttributeName value:Theme.fontLargeLight range:NSMakeRange(7, 11)];
         [attrS addAttribute:NSForegroundColorAttributeName value:Theme.colorLightText range:NSMakeRange(7, 11)];
         
         _hotArticlesLabelText = [[NSAttributedString alloc] initWithAttributedString:attrS];
@@ -428,7 +451,7 @@
         NSMutableAttributedString *attrS = [[NSMutableAttributedString alloc] initWithString:@"往期推文 · PENGUIN REVIEW"];
         [attrS addAttribute:NSFontAttributeName value:Theme.fontLargeBold range:NSMakeRange(0, 7)];
         [attrS addAttribute:NSForegroundColorAttributeName value:Theme.colorText range:NSMakeRange(0, 7)];
-        [attrS addAttribute:NSFontAttributeName value:Theme.fontLargeBold range:NSMakeRange(7, 14)];
+        [attrS addAttribute:NSFontAttributeName value:Theme.fontLargeLight range:NSMakeRange(7, 14)];
         [attrS addAttribute:NSForegroundColorAttributeName value:Theme.colorLightText range:NSMakeRange(7, 14)];
         
         _historyArticlesLabelText = [[NSAttributedString alloc] initWithAttributedString:attrS];

@@ -10,7 +10,7 @@
 
 @interface PGMeCell : PGBaseCollectionViewCell
 
-- (void)setCellWithName:(NSString *)name highlight:(BOOL)highlight;
+- (void)setCellWithName:(NSString *)name icon:(NSString *)icon highlight:(BOOL)highlight;
 
 + (CGSize)cellSize;
 

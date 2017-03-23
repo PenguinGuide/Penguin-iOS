@@ -12,6 +12,11 @@
 
 - (void)insertCellBorderLayer:(CGFloat)cornerRadius
 {
+    [self insertCellBorderLayer:cornerRadius rect:CGRectMake(0, 0, self.pg_width, self.pg_height)];
+}
+
+- (void)insertCellBorderLayer:(CGFloat)cornerRadius rect:(CGRect)rect
+{
     CAShapeLayer *maskShapeLayer = [CAShapeLayer layer];
     maskShapeLayer.frame = CGRectMake(0, 0, self.pg_width, self.pg_height);
     
@@ -21,7 +26,7 @@
     borderShapeLayer.strokeColor = Theme.colorBackground.CGColor;
     borderShapeLayer.fillColor = [UIColor clearColor].CGColor;
     
-    UIBezierPath *bezierPath = [UIBezierPath bezierPathWithRoundedRect:CGRectMake(0, 0, self.pg_width, self.pg_height) cornerRadius:cornerRadius];
+    UIBezierPath *bezierPath = [UIBezierPath bezierPathWithRoundedRect:rect cornerRadius:cornerRadius];
     maskShapeLayer.path = bezierPath.CGPath;
     borderShapeLayer.path = bezierPath.CGPath;
     

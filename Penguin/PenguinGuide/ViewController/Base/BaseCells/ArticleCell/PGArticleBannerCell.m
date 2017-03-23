@@ -106,6 +106,14 @@
     }
 }
 
+- (void)cellDidSelectWithModel:(PGRKModel *)model
+{
+    if ([model isKindOfClass:[PGArticleBanner class]]) {
+        PGArticleBanner *articleBanner = (PGArticleBanner *)model;
+        [PGRouterManager routeToArticlePage:articleBanner.articleId link:articleBanner.link];
+    }
+}
+
 + (CGSize)cellSize
 {
     return CGSizeMake(UISCREEN_WIDTH, UISCREEN_WIDTH*9/16);

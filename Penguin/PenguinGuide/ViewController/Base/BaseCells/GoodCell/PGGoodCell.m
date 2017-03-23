@@ -60,6 +60,14 @@
     }
 }
 
+- (void)cellDidSelectWithModel:(PGRKModel *)model
+{
+    if ([model isKindOfClass:[PGGood class]]) {
+        PGGood *good = (PGGood *)model;
+        [PGRouterManager routeToGoodDetailPage:good.goodId link:good.link];
+    }
+}
+
 - (void)setCellWithGood:(PGGood *)good
 {
     [self.goodImageView setWithImageURL:good.image placeholder:nil completion:nil];

@@ -19,6 +19,7 @@
 #define ArticleRelatedArticlesCell @"ArticleRelatedArticlesCell"
 #define ArticleCommentCell @"ArticleCommentCell"
 #define ArticleCommentReplyCell @"ArticleCommentReplyCell"
+#define ArticleHeaderView @"ArticleHeaderView"
 #define ArticleCommentsFooterView @"ArticleCommentsFooterView"
 #define ArticleNoCommentsFooterView @"ArticleNoCommentsFooterView"
 
@@ -62,6 +63,8 @@
 @interface PGArticleViewController () <UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, UIScrollViewDelegate, PGArticleCommentCellDelegate, PGArticleCommentReplyCellDelegate, PGCommentInputAccessoryViewDelegate, PGArticleParagraphInfoCellDelegate>
 
 @property (nonatomic, strong, readwrite) PGBaseCollectionView *articleCollectionView;
+
+@property (nonatomic, strong) PGNavigationView *naviView;
 
 @property (nonatomic, strong) UIView *toolbar;
 @property (nonatomic, strong) UIButton *backButton;
@@ -108,6 +111,7 @@
     self.automaticallyAdjustsScrollViewInsets = NO;
     
     [self.view addSubview:self.articleCollectionView];
+    [self.view addSubview:self.naviView];
     [self.view addSubview:self.toolbar];
     [self.view addSubview:self.commentInputAccessoryView];
     
@@ -118,17 +122,10 @@
     self.viewModel = [[PGArticleViewModel alloc] initWithAPIClient:self.apiClient];
     self.viewModel.articleId = self.articleId;
     
-    self.headerImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, UISCREEN_WIDTH, UISCREEN_WIDTH*9/16)];
-    self.headerImageView.backgroundColor = Theme.colorText;
-    self.headerImageView.clipsToBounds = YES;
-    
     PGWeakSelf(self);
     [self observe:self.viewModel keyPath:@"article" block:^(id changedObject) {
         PGArticle *article = changedObject;
         if (article && [article isKindOfClass:[PGArticle class]]) {
-            [weakself.headerImageView setWithImageURL:weakself.viewModel.article.image placeholder:nil completion:nil];
-            [weakself.articleCollectionView setHeaderView:weakself.headerImageView naviTitle:weakself.viewModel.article.title rightNaviButton:nil];
-            
             if (article.isLiked) {
                 [weakself.likeButton setImage:[UIImage imageNamed:@"pg_article_liked"] forState:UIControlStateNormal];
                 [weakself.likeButton setTag:1];
@@ -342,15 +339,6 @@
     [self unobserve];
 }
 
-- (UIStatusBarStyle)preferredStatusBarStyle
-{
-    if (self.statusbarIsWhiteBackground) {
-        return UIStatusBarStyleDefault;
-    } else {
-        return UIStatusBarStyleLightContent;
-    }
-}
-
 - (void)reloadView
 {
     if (self.viewModel.article == nil) {
@@ -456,7 +444,9 @@
                     cell.extraParams = @{@"article_id":self.articleId};
                 }
                 
-                [cell setCellWithGood:singleGoodStorage.good];
+                if ([cell respondsToSelector:@selector(setCellWithModel:)]) {
+                    [(id<PGBaseCollectionViewCell>)cell setCellWithModel:singleGoodStorage.good];
+                }
                 
                 return cell;
             } else if ([storage isKindOfClass:[PGParserGoodsCollectionStorage class]]) {
@@ -504,22 +494,34 @@
 
 - (UICollectionReusableView *)collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath
 {
-    if (indexPath.section == 2 && kind == UICollectionElementKindSectionFooter) {
-        if (self.viewModel.commentsArray.count > 0) {
-            PGArticleCommentsFooterView *footerView = [collectionView dequeueReusableSupplementaryViewOfKind:kind withReuseIdentifier:ArticleCommentsFooterView forIndexPath:indexPath];
-            [footerView.allCommentsButton addTarget:self action:@selector(allCommentsButtonClicked) forControlEvents:UIControlEventTouchUpInside];
-            footerView.allCommentsButton.eventName = article_all_comments_button_clicked;
-            if (self.articleId) {
-                footerView.allCommentsButton.eventId = self.articleId;
-            }
-            return footerView;
-        } else {
-            PGArticleNoCommentsFooterView *footerView = [collectionView dequeueReusableSupplementaryViewOfKind:kind withReuseIdentifier:ArticleNoCommentsFooterView forIndexPath:indexPath];
-            return footerView;
+    if (kind == UICollectionElementKindSectionHeader) {
+        if (indexPath.section == 0) {
+            UICollectionReusableView *headerView = [collectionView dequeueReusableSupplementaryViewOfKind:kind withReuseIdentifier:ArticleHeaderView forIndexPath:indexPath];
+            
+            [headerView.subviews makeObjectsPerformSelector:@selector(removeFromSuperview)];
+            UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, UISCREEN_WIDTH, UISCREEN_WIDTH*9/16)];
+            [imageView setWithImageURL:self.viewModel.article.image placeholder:nil completion:nil];
+            [headerView addSubview:imageView];
+            
+            return headerView;
         }
-
     }
-    
+    if (kind == UICollectionElementKindSectionFooter) {
+        if (indexPath.section == 2) {
+            if (self.viewModel.commentsArray.count > 0) {
+                PGArticleCommentsFooterView *footerView = [collectionView dequeueReusableSupplementaryViewOfKind:kind withReuseIdentifier:ArticleCommentsFooterView forIndexPath:indexPath];
+                [footerView.allCommentsButton addTarget:self action:@selector(allCommentsButtonClicked) forControlEvents:UIControlEventTouchUpInside];
+                footerView.allCommentsButton.eventName = article_all_comments_button_clicked;
+                if (self.articleId) {
+                    footerView.allCommentsButton.eventId = self.articleId;
+                }
+                return footerView;
+            } else {
+                PGArticleNoCommentsFooterView *footerView = [collectionView dequeueReusableSupplementaryViewOfKind:kind withReuseIdentifier:ArticleNoCommentsFooterView forIndexPath:indexPath];
+                return footerView;
+            }
+        }
+    }
     return nil;
 }
 
@@ -527,11 +529,10 @@
 
 - (UIEdgeInsets)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout insetForSectionAtIndex:(NSInteger)section
 {
-    if (section == 0) {
-        return UIEdgeInsetsMake(UISCREEN_WIDTH*9/16, 0, 0, 0);
-    } else if (section == 1) {
+    if (section == 1) {
         return UIEdgeInsetsMake(20, 0, 0, 0);
-    } else if (section == 2) {
+    }
+    if (section == 2) {
         if (self.viewModel.commentsArray.count > 0) {
             return UIEdgeInsetsMake(20, 0, 0, 0);
         }
@@ -591,9 +592,9 @@
                     return CGSizeMake(width, height);
                 }
             } else if ([storage isKindOfClass:[PGParserSingleGoodStorage class]]) {
-                return CGSizeMake(UISCREEN_WIDTH-60, UISCREEN_WIDTH+30);
+                return [PGArticleParagraphSingleGoodCell cellSize];
             } else if ([storage isKindOfClass:[PGParserGoodsCollectionStorage class]]) {
-                return CGSizeMake(UISCREEN_WIDTH-60, 270.f);
+                return [PGArticleParagraphGoodsCollectionCell cellSize];
             } else if ([storage isKindOfClass:[PGParserNewlineStorage class]]) {
                 return CGSizeMake(UISCREEN_WIDTH, 3.f);
             }
@@ -606,6 +607,16 @@
             return [PGArticleCommentReplyCell cellSize:comment];
         } else {
             return [PGArticleCommentCell cellSize:comment];
+        }
+    }
+    return CGSizeZero;
+}
+
+- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout referenceSizeForHeaderInSection:(NSInteger)section
+{
+    if (section == 0) {
+        if (self.viewModel.article.image) {
+            return CGSizeMake(UISCREEN_WIDTH, UISCREEN_WIDTH*9/16);
         }
     }
     return CGSizeZero;
@@ -718,6 +729,13 @@
         } else {
             [PGRouterManager routeToLoginPage];
         }
+    }
+}
+
+- (void)collectionView:(UICollectionView *)collectionView willDisplayCell:(UICollectionViewCell *)cell forItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    if ([cell isKindOfClass:[PGArticleParagraphSingleGoodCell class]]) {
+        [(PGBaseCollectionViewCell *)cell insertCellBorderLayer:8.f rect:CGRectMake(0, 20, [PGArticleParagraphSingleGoodCell cellSize].width, [PGArticleParagraphSingleGoodCell cellSize].height-40)];
     }
 }
 
@@ -1097,12 +1115,12 @@
     [self.navigationController pushViewController:commentsVC animated:YES];
 }
 
-#pragma mark - <Setters && Getters>
+#pragma mark - <Lazy Init>
 
 - (PGBaseCollectionView *)articleCollectionView
 {
     if (!_articleCollectionView) {
-        _articleCollectionView = [[PGBaseCollectionView alloc] initWithFrame:CGRectMake(0, 0, UISCREEN_WIDTH, UISCREEN_HEIGHT-50) collectionViewLayout:[UICollectionViewFlowLayout new]];
+        _articleCollectionView = [[PGBaseCollectionView alloc] initWithFrame:CGRectMake(0, 64, UISCREEN_WIDTH, UISCREEN_HEIGHT-50-64) collectionViewLayout:[UICollectionViewFlowLayout new]];
         _articleCollectionView.dataSource = self;
         _articleCollectionView.delegate = self;
         _articleCollectionView.contentSize = CGSizeMake(UISCREEN_WIDTH, UISCREEN_HEIGHT+300);
@@ -1123,10 +1141,20 @@
         
         [_articleCollectionView registerClass:[PGArticleCommentCell class] forCellWithReuseIdentifier:ArticleCommentCell];
         [_articleCollectionView registerClass:[PGArticleCommentReplyCell class] forCellWithReuseIdentifier:ArticleCommentReplyCell];
+        
+        [_articleCollectionView registerClass:[UICollectionReusableView class] forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:ArticleHeaderView];
         [_articleCollectionView registerClass:[PGArticleCommentsFooterView class] forSupplementaryViewOfKind:UICollectionElementKindSectionFooter withReuseIdentifier:ArticleCommentsFooterView];
         [_articleCollectionView registerClass:[PGArticleNoCommentsFooterView class] forSupplementaryViewOfKind:UICollectionElementKindSectionFooter withReuseIdentifier:ArticleNoCommentsFooterView];
     }
     return _articleCollectionView;
+}
+
+- (PGNavigationView *)naviView
+{
+    if (!_naviView) {
+        _naviView = [PGNavigationView naviViewWithShareButton];
+    }
+    return _naviView;
 }
 
 - (UIView *)toolbar

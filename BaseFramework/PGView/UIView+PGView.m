@@ -176,4 +176,30 @@ static char PGLongPresseHandlerKey;
     [self.layer setMask:maskLayer];
 }
 
+- (void)addBorder:(UIColor *)color borderWidth:(CGFloat)borderWidth cornerRadius:(CGFloat)cornerRadius
+{
+    CAShapeLayer *maskLayer;
+    if (cornerRadius > 0.f) {
+        maskLayer = [CAShapeLayer layer];
+        maskLayer.frame = CGRectMake(0, 0, self.pg_width, self.pg_height);
+    }
+    
+    CAShapeLayer *borderLayer = [CAShapeLayer layer];
+    borderLayer.frame = CGRectMake(0, 0, self.pg_width, self.pg_height);
+    borderLayer.lineWidth = borderWidth;
+    borderLayer.strokeColor = color.CGColor;
+    borderLayer.fillColor = [UIColor clearColor].CGColor;
+    
+    UIBezierPath *bezierPath = [UIBezierPath bezierPathWithRoundedRect:CGRectMake(0, 0, self.pg_width, self.pg_height) cornerRadius:cornerRadius];
+    if (maskLayer) {
+        maskLayer.path = bezierPath.CGPath;
+    }
+    borderLayer.path = bezierPath.CGPath;
+    
+    [self.layer insertSublayer:borderLayer atIndex:0];
+    if (maskLayer) {
+        [self.layer setMask:maskLayer];
+    }
+}
+
 @end

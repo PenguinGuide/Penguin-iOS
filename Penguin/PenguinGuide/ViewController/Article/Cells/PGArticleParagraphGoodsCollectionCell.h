@@ -12,4 +12,6 @@
 
 - (void)reloadCellWithGoodsArray:(NSArray *)goodsArray;
 
++ (CGSize)cellSize;
+
 @end

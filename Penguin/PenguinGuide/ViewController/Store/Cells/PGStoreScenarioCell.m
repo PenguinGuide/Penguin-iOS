@@ -11,8 +11,8 @@
 
 @interface PGStoreScenarioCell ()
 
-@property (nonatomic, strong) UIImageView *categoryImageView;
-@property (nonatomic, strong) UILabel *categoryTitleLabel;
+@property (nonatomic, strong) UIImageView *scenarioImageView;
+@property (nonatomic, strong) UILabel *scenarioTitleLabel;
 
 @end
 
@@ -29,22 +29,30 @@
 
 - (void)initialize
 {
-    [self.contentView addSubview:self.categoryImageView];
-    [self.contentView addSubview:self.categoryTitleLabel];
+    [self.contentView addSubview:self.scenarioImageView];
+    [self.contentView addSubview:self.scenarioTitleLabel];
 }
 
 - (void)setCellWithModel:(PGRKModel *)model
 {
     if ([model isKindOfClass:[PGScenarioBanner class]]) {
         PGScenarioBanner *scenarioBanner = (PGScenarioBanner *)model;
-        [self.categoryImageView setWithImageURL:scenarioBanner.image imageSize:CGSizeMake(82*2.5, 82*2.5) placeholder:nil completion:nil];
+        [self.scenarioImageView setWithImageURL:scenarioBanner.image imageSize:CGSizeMake(82*2.5, 82*2.5) placeholder:nil completion:nil];
         
         if (scenarioBanner.title) {
             CGSize textSize = [scenarioBanner.title sizeWithAttributes:@{NSFontAttributeName:Theme.fontExtraSmall}];
-            self.categoryTitleLabel.frame = CGRectMake(6, 6, textSize.width+8, 20);
-            [self.categoryTitleLabel setText:scenarioBanner.title];
-            [self.categoryTitleLabel cropCornerRadius:4.f];
+            self.scenarioTitleLabel.frame = CGRectMake(6, 6, textSize.width+8, 20);
+            [self.scenarioTitleLabel setText:scenarioBanner.title];
+            [self.scenarioTitleLabel cropCornerRadius:4.f];
         }
+    }
+}
+
+- (void)cellDidSelectWithModel:(PGRKModel *)model
+{
+    if ([model isKindOfClass:[PGScenarioBanner class]]) {
+        PGScenarioBanner *scenarioBanner = (PGScenarioBanner *)model;
+        [PGRouterManager routeToScenarioPage:scenarioBanner.scenarioId link:scenarioBanner.link fromStorePage:YES];
     }
 }
 
@@ -53,27 +61,27 @@
     return CGSizeMake(82, 82);
 }
 
-- (UIImageView *)categoryImageView
+- (UIImageView *)scenarioImageView
 {
-    if (!_categoryImageView) {
-        _categoryImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, self.pg_width, self.pg_height)];
-        _categoryImageView.backgroundColor = Theme.colorBackground;
-        _categoryImageView.contentMode = UIViewContentModeScaleAspectFill;
-        [_categoryImageView cropCornerRadius:4.f];
+    if (!_scenarioImageView) {
+        _scenarioImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, self.pg_width, self.pg_height)];
+        _scenarioImageView.backgroundColor = Theme.colorBackground;
+        _scenarioImageView.contentMode = UIViewContentModeScaleAspectFill;
+        [_scenarioImageView cropCornerRadius:4.f];
     }
-    return _categoryImageView;
+    return _scenarioImageView;
 }
 
-- (UILabel *)categoryTitleLabel
+- (UILabel *)scenarioTitleLabel
 {
-    if (!_categoryTitleLabel) {
-        _categoryTitleLabel = [[UILabel alloc] initWithFrame:CGRectZero];
-        _categoryTitleLabel.backgroundColor = [UIColor blackColor];
-        _categoryTitleLabel.font = Theme.fontExtraSmall;
-        _categoryTitleLabel.textAlignment = NSTextAlignmentCenter;
-        _categoryTitleLabel.textColor = [UIColor whiteColor];
+    if (!_scenarioTitleLabel) {
+        _scenarioTitleLabel = [[UILabel alloc] initWithFrame:CGRectZero];
+        _scenarioTitleLabel.backgroundColor = [UIColor blackColor];
+        _scenarioTitleLabel.font = Theme.fontExtraSmall;
+        _scenarioTitleLabel.textAlignment = NSTextAlignmentCenter;
+        _scenarioTitleLabel.textColor = [UIColor whiteColor];
     }
-    return _categoryTitleLabel;
+    return _scenarioTitleLabel;
 }
 
 @end
