@@ -82,6 +82,15 @@
         [weakself.tagCollectionView endTopRefreshing];
         [weakself.tagCollectionView endBottomRefreshing];
     }];
+    [self observe:self.viewModel keyPath:@"error" block:^(id changedObject) {
+        NSError *error = changedObject;
+        if (error && [error isKindOfClass:[NSError class]]) {
+            [weakself showErrorMessage:error];
+            [weakself dismissLoading];
+            [weakself.tagCollectionView endTopRefreshing];
+            [weakself.tagCollectionView endBottomRefreshing];
+        }
+    }];
     [self observeCollectionView:self.tagCollectionView endOfFeeds:self.viewModel];
     
     [self.view addSubview:self.lightBackButton];

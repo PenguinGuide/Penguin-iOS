@@ -19,7 +19,6 @@
 #define ArticleRelatedArticlesCell @"ArticleRelatedArticlesCell"
 #define ArticleCommentCell @"ArticleCommentCell"
 #define ArticleCommentReplyCell @"ArticleCommentReplyCell"
-#define ArticleHeaderView @"ArticleHeaderView"
 #define ArticleCommentsFooterView @"ArticleCommentsFooterView"
 #define ArticleNoCommentsFooterView @"ArticleNoCommentsFooterView"
 
@@ -52,6 +51,7 @@
 #import "PGArticleCommentsFooterView.h"
 #import "PGArticleNoCommentsFooterView.h"
 #import "PGArticleParagraphTextLabel.h"
+#import "PGArticleToolButton.h"
 
 // view models
 #import "PGArticleViewModel.h"
@@ -60,18 +60,19 @@
 #import "PGArticle.h"
 #import "PGStringParser.h"
 
-@interface PGArticleViewController () <UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, UIScrollViewDelegate, PGArticleCommentCellDelegate, PGArticleCommentReplyCellDelegate, PGCommentInputAccessoryViewDelegate, PGArticleParagraphInfoCellDelegate>
+@interface PGArticleViewController () <UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, UIScrollViewDelegate, PGArticleCommentCellDelegate, PGArticleCommentReplyCellDelegate, PGCommentInputAccessoryViewDelegate, PGArticleParagraphInfoCellDelegate, PGNavigationViewDelegate>
 
 @property (nonatomic, strong, readwrite) PGBaseCollectionView *articleCollectionView;
 
 @property (nonatomic, strong) PGNavigationView *naviView;
+@property (nonatomic, strong) UIButton *lightBackButton;
 
 @property (nonatomic, strong) UIView *toolbar;
-@property (nonatomic, strong) UIButton *backButton;
 @property (nonatomic, strong) UIButton *shareButton;
-@property (nonatomic, strong) UIButton *collectButton;
-@property (nonatomic, strong) UIButton *commentButton;
-@property (nonatomic, strong) UIButton *likeButton;
+@property (nonatomic, strong) PGArticleToolButton *collectButton;
+@property (nonatomic, strong) PGArticleToolButton *goodsListButton;
+@property (nonatomic, strong) PGArticleToolButton *commentButton;
+@property (nonatomic, strong) PGArticleToolButton *likeButton;
 
 @property (nonatomic, strong) PGCommentInputAccessoryView *commentInputAccessoryView;
 
@@ -87,6 +88,8 @@
 @property (nonatomic, assign) BOOL shouldShowCommentInput;
 
 @property (nonatomic, strong) NSString *firstParagraphText;
+
+@property (nonatomic, strong) UIImageView *articleHeaderView;
 
 @end
 
@@ -152,6 +155,13 @@
                             break;
                         }
                     }
+                }
+                if (!weakself.articleHeaderView) {
+                    weakself.articleHeaderView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, UISCREEN_WIDTH, UISCREEN_WIDTH*9/16)];
+                    weakself.articleHeaderView.contentMode = UIViewContentModeScaleAspectFill;
+                    weakself.articleHeaderView.backgroundColor = Theme.colorBackground;
+                    [weakself.articleHeaderView setWithImageURL:weakself.viewModel.article.image placeholder:nil completion:nil];
+                    [weakself.articleCollectionView setHeaderView:weakself.articleHeaderView imageView:nil naviTitle:weakself.viewModel.article.title showBackButton:YES];
                 }
                 [weakself.viewModel requestGoods:^{
                     [weakself.viewModel requestComments];
@@ -267,6 +277,8 @@
             [weakself.articleCollectionView endBottomRefreshing];
         }
     }];
+    
+    [self.view addSubview:self.lightBackButton];
 }
 
 - (void)animateCollectionView:(void (^)())completion
@@ -283,18 +295,6 @@
     [super viewDidAppear:animated];
     
     [self setNeedsStatusBarAppearanceUpdate];
-    
-    if (self.statusbarIsWhiteBackground) {
-        UIView *statusBar = [[[UIApplication sharedApplication] valueForKey:@"statusBarWindow"] valueForKey:@"statusBar"];
-        if ([statusBar respondsToSelector:@selector(setBackgroundColor:)]) {
-            statusBar.backgroundColor = [UIColor whiteColor];
-        }
-    } else {
-        UIView *statusBar = [[[UIApplication sharedApplication] valueForKey:@"statusBarWindow"] valueForKey:@"statusBar"];
-        if ([statusBar respondsToSelector:@selector(setBackgroundColor:)]) {
-            statusBar.backgroundColor = [UIColor clearColor];
-        }
-    }
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -494,18 +494,6 @@
 
 - (UICollectionReusableView *)collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath
 {
-    if (kind == UICollectionElementKindSectionHeader) {
-        if (indexPath.section == 0) {
-            UICollectionReusableView *headerView = [collectionView dequeueReusableSupplementaryViewOfKind:kind withReuseIdentifier:ArticleHeaderView forIndexPath:indexPath];
-            
-            [headerView.subviews makeObjectsPerformSelector:@selector(removeFromSuperview)];
-            UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, UISCREEN_WIDTH, UISCREEN_WIDTH*9/16)];
-            [imageView setWithImageURL:self.viewModel.article.image placeholder:nil completion:nil];
-            [headerView addSubview:imageView];
-            
-            return headerView;
-        }
-    }
     if (kind == UICollectionElementKindSectionFooter) {
         if (indexPath.section == 2) {
             if (self.viewModel.commentsArray.count > 0) {
@@ -529,6 +517,9 @@
 
 - (UIEdgeInsets)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout insetForSectionAtIndex:(NSInteger)section
 {
+    if (section == 0) {
+        return UIEdgeInsetsMake(UISCREEN_WIDTH*9/16+20, 0, 0, 0);
+    }
     if (section == 1) {
         return UIEdgeInsetsMake(20, 0, 0, 0);
     }
@@ -614,11 +605,6 @@
 
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout referenceSizeForHeaderInSection:(NSInteger)section
 {
-    if (section == 0) {
-        if (self.viewModel.article.image) {
-            return CGSizeMake(UISCREEN_WIDTH, UISCREEN_WIDTH*9/16);
-        }
-    }
     return CGSizeZero;
 }
 
@@ -930,28 +916,17 @@
 {
     [scrollView scrollViewShouldUpdateHeaderView];
     
-    if (scrollView.contentOffset.y >= UISCREEN_WIDTH*9/16) {
-        UIView *statusBar = [[[UIApplication sharedApplication] valueForKey:@"statusBarWindow"] valueForKey:@"statusBar"];
-        if ([statusBar respondsToSelector:@selector(setBackgroundColor:)]) {
-            statusBar.backgroundColor = [UIColor whiteColor];
-        }
-        if (!self.statusbarIsWhiteBackground) {
-            self.statusbarIsWhiteBackground = YES;
-            [self setNeedsStatusBarAppearanceUpdate];
-        } else {
-            self.statusbarIsWhiteBackground = YES;
-        }
+    CGFloat changeValue = UISCREEN_WIDTH*9/16-64;
+    
+    if (scrollView.contentOffset.y <= 0) {
+        self.naviView.alpha = 0.f;
+        self.lightBackButton.alpha = 1.f;
+    } else if (scrollView.contentOffset.y < changeValue) {
+        self.naviView.alpha = scrollView.contentOffset.y/changeValue;
+        self.lightBackButton.alpha = 0.f;
     } else {
-        UIView *statusBar = [[[UIApplication sharedApplication] valueForKey:@"statusBarWindow"] valueForKey:@"statusBar"];
-        if ([statusBar respondsToSelector:@selector(setBackgroundColor:)]) {
-            statusBar.backgroundColor = [UIColor clearColor];
-        }
-        if (self.statusbarIsWhiteBackground) {
-            self.statusbarIsWhiteBackground = NO;
-            [self setNeedsStatusBarAppearanceUpdate];
-        } else {
-            self.statusbarIsWhiteBackground = NO;
-        }
+        self.naviView.alpha = 1.f;
+        self.lightBackButton.alpha = 0.f;
     }
     
     self.selectedComment = nil;
@@ -1115,12 +1090,19 @@
     [self.navigationController pushViewController:commentsVC animated:YES];
 }
 
+#pragma mark - <PGNavigationViewDelegate>
+
+- (void)naviBackButtonClicked
+{
+    [super backButtonClicked];
+}
+
 #pragma mark - <Lazy Init>
 
 - (PGBaseCollectionView *)articleCollectionView
 {
     if (!_articleCollectionView) {
-        _articleCollectionView = [[PGBaseCollectionView alloc] initWithFrame:CGRectMake(0, 64, UISCREEN_WIDTH, UISCREEN_HEIGHT-50-64) collectionViewLayout:[UICollectionViewFlowLayout new]];
+        _articleCollectionView = [[PGBaseCollectionView alloc] initWithFrame:CGRectMake(0, 0, UISCREEN_WIDTH, UISCREEN_HEIGHT-50) collectionViewLayout:[UICollectionViewFlowLayout new]];
         _articleCollectionView.dataSource = self;
         _articleCollectionView.delegate = self;
         _articleCollectionView.contentSize = CGSizeMake(UISCREEN_WIDTH, UISCREEN_HEIGHT+300);
@@ -1142,7 +1124,6 @@
         [_articleCollectionView registerClass:[PGArticleCommentCell class] forCellWithReuseIdentifier:ArticleCommentCell];
         [_articleCollectionView registerClass:[PGArticleCommentReplyCell class] forCellWithReuseIdentifier:ArticleCommentReplyCell];
         
-        [_articleCollectionView registerClass:[UICollectionReusableView class] forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:ArticleHeaderView];
         [_articleCollectionView registerClass:[PGArticleCommentsFooterView class] forSupplementaryViewOfKind:UICollectionElementKindSectionFooter withReuseIdentifier:ArticleCommentsFooterView];
         [_articleCollectionView registerClass:[PGArticleNoCommentsFooterView class] forSupplementaryViewOfKind:UICollectionElementKindSectionFooter withReuseIdentifier:ArticleNoCommentsFooterView];
     }
@@ -1153,8 +1134,20 @@
 {
     if (!_naviView) {
         _naviView = [PGNavigationView naviViewWithShareButton];
+        _naviView.alpha = 0.f;
+        _naviView.delegate = self;
     }
     return _naviView;
+}
+
+- (UIButton *)lightBackButton
+{
+    if (!_lightBackButton) {
+        _lightBackButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 25, 40, 30)];
+        [_lightBackButton setImage:[UIImage imageNamed:@"pg_navigation_back_button_light"] forState:UIControlStateNormal];
+        [_lightBackButton addTarget:self action:@selector(backButtonClicked) forControlEvents:UIControlEventTouchUpInside];
+    }
+    return _lightBackButton;
 }
 
 - (UIView *)toolbar
@@ -1163,33 +1156,12 @@
         _toolbar = [[UIView alloc] initWithFrame:CGRectMake(0, UISCREEN_HEIGHT-50, UISCREEN_WIDTH, 50)];
         _toolbar.backgroundColor = [UIColor whiteColor];
         
-        self.backButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 44, 50)];
-        [self.backButton setImage:[UIImage imageNamed:@"pg_navigation_back_button"] forState:UIControlStateNormal];
-        [self.backButton addTarget:self action:@selector(backButtonClicked) forControlEvents:UIControlEventTouchUpInside];
-        [_toolbar addSubview:self.backButton];
-        
-        self.likeButton = [[UIButton alloc] initWithFrame:CGRectMake(UISCREEN_WIDTH-50, 0, 50, 50)];
-        [self.likeButton setImage:[UIImage imageNamed:@"pg_article_like"] forState:UIControlStateNormal];
-        [self.likeButton addTarget:self action:@selector(likeButtonClicked) forControlEvents:UIControlEventTouchUpInside];
-        [self.likeButton setTag:0];
-        self.likeButton.eventName = article_like_button_clicked;
-        if (self.articleId) {
-            self.likeButton.eventId = self.articleId;
-        }
-        [_toolbar addSubview:self.likeButton];
-        
-        self.commentButton = [[UIButton alloc] initWithFrame:CGRectMake(self.likeButton.pg_left-50, 0, 50, 50)];
-        [self.commentButton setImage:[UIImage imageNamed:@"pg_article_comment"] forState:UIControlStateNormal];
-        [self.commentButton addTarget:self action:@selector(commentButtonClicked) forControlEvents:UIControlEventTouchUpInside];
-        self.commentButton.eventName = article_comment_button_clicked;
-        if (self.articleId) {
-            self.commentButton.eventId = self.articleId;
-        }
-        [_toolbar addSubview:self.commentButton];
-        
-        self.collectButton = [[UIButton alloc] initWithFrame:CGRectMake(self.commentButton.pg_left-50, 0, 50, 50)];
-        [self.collectButton setImage:[UIImage imageNamed:@"pg_article_collect"] forState:UIControlStateNormal];
-        [self.collectButton addTarget:self action:@selector(collectButtonClicked) forControlEvents:UIControlEventTouchUpInside];
+        self.collectButton = [PGArticleToolButton toolButtonWithFrame:CGRectMake(20, 5, 50, 40)
+                                                                title:@"收藏"
+                                                                image:[UIImage imageNamed:@"pg_article_collect"]
+                                                            imageSize:CGSizeMake(20, 20)
+                                                                count:0];
+        [self.collectButton addTarget:self action:@selector(likeButtonClicked) forControlEvents:UIControlEventTouchUpInside];
         [self.collectButton setTag:0];
         self.collectButton.eventName = article_collect_button_clicked;
         if (self.articleId) {
@@ -1197,14 +1169,36 @@
         }
         [_toolbar addSubview:self.collectButton];
         
-        self.shareButton = [[UIButton alloc] initWithFrame:CGRectMake(self.collectButton.pg_left-50, 0, 50, 50)];
-        [self.shareButton setImage:[UIImage imageNamed:@"pg_article_share"] forState:UIControlStateNormal];
-        [self.shareButton addTarget:self action:@selector(shareButtonClicked) forControlEvents:UIControlEventTouchUpInside];
-        self.shareButton.eventName = article_share_button_clicked;
+        self.goodsListButton = [PGArticleToolButton toolButtonWithFrame:CGRectMake(self.collectButton.pg_right+15, 5, 50, 40)
+                                                                  title:@"商品列表"
+                                                                  image:[UIImage imageNamed:@"pg_article_goods_list_button"]
+                                                              imageSize:CGSizeMake(20, 20)
+                                                                  count:0];
+        [_toolbar addSubview:self.goodsListButton];
+        
+        self.commentButton = [PGArticleToolButton toolButtonWithFrame:CGRectMake(UISCREEN_WIDTH-20-50, 5, 50, 40)
+                                                                title:@"评论"
+                                                                image:[UIImage imageNamed:@"pg_article_comment"]
+                                                            imageSize:CGSizeMake(20, 20)
+                                                                count:0];
+        [self.commentButton addTarget:self action:@selector(commentButtonClicked) forControlEvents:UIControlEventTouchUpInside];
+        self.commentButton.eventName = article_comment_button_clicked;
         if (self.articleId) {
-            self.shareButton.eventId = self.articleId;
+            self.commentButton.eventId = self.articleId;
         }
-        [_toolbar addSubview:self.shareButton];
+        [_toolbar addSubview:self.commentButton];
+        
+        self.likeButton = [PGArticleToolButton toolButtonWithFrame:CGRectMake(self.commentButton.pg_left-10-50, 5, 50, 40)
+                                                             title:@"喜欢"
+                                                             image:[UIImage imageNamed:@"pg_article_like"]
+                                                         imageSize:CGSizeMake(20, 20)
+                                                             count:0];
+        [self.likeButton addTarget:self action:@selector(likeButtonClicked) forControlEvents:UIControlEventTouchUpInside];
+        self.likeButton.eventName = article_like_button_clicked;
+        if (self.articleId) {
+            self.likeButton.eventId = self.articleId;
+        }
+        [_toolbar addSubview:self.likeButton];
         
         UIView *horizontalLine = [[UIView alloc] initWithFrame:CGRectMake(0, 0, UISCREEN_WIDTH, 1/[UIScreen mainScreen].scale)];
         horizontalLine.backgroundColor = [UIColor colorWithHexString:@"E1E1E1"];

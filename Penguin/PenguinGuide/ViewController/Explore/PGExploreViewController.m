@@ -65,6 +65,15 @@
         [weakself.exploreCollectionView endTopRefreshing];
         [weakself.exploreCollectionView endBottomRefreshing];
     }];
+    [self observe:self.viewModel keyPath:@"error" block:^(id changedObject) {
+        NSError *error = changedObject;
+        if (error && [error isKindOfClass:[NSError class]]) {
+            [weakself showErrorMessage:error];
+            [weakself dismissLoading];
+            [weakself.exploreCollectionView endTopRefreshing];
+            [weakself.exploreCollectionView endBottomRefreshing];
+        }
+    }];
     [self observeCollectionView:self.exploreCollectionView endOfFeeds:self.viewModel];
 }
 
@@ -303,6 +312,12 @@
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
+    if (indexPath.section == 1) {
+        id<PGBaseCollectionViewCell> selectedCell = (id<PGBaseCollectionViewCell>)[collectionView cellForItemAtIndexPath:indexPath];
+        if ([selectedCell respondsToSelector:@selector(cellDidSelectWithModel:)]) {
+            [selectedCell cellDidSelectWithModel:self.viewModel.currentArticle];
+        }
+    }
     if (indexPath.section == 3) {
         PGArticleBanner *articleBanner = self.viewModel.articlesArray[indexPath.item];
         [PGRouterManager routeToArticlePage:articleBanner.articleId link:articleBanner.link];
@@ -435,9 +450,9 @@
 {
     if (!_hotArticlesLabelText) {
         NSMutableAttributedString *attrS = [[NSMutableAttributedString alloc] initWithString:@"热门推文 · PENGUIN HOT"];
-        [attrS addAttribute:NSFontAttributeName value:Theme.fontLargeBold range:NSMakeRange(0, 7)];
+        [attrS addAttribute:NSFontAttributeName value:Theme.fontExtraLargeBold range:NSMakeRange(0, 7)];
         [attrS addAttribute:NSForegroundColorAttributeName value:Theme.colorText range:NSMakeRange(0, 7)];
-        [attrS addAttribute:NSFontAttributeName value:Theme.fontLargeLight range:NSMakeRange(7, 11)];
+        [attrS addAttribute:NSFontAttributeName value:Theme.fontExtraLargeLight range:NSMakeRange(7, 11)];
         [attrS addAttribute:NSForegroundColorAttributeName value:Theme.colorLightText range:NSMakeRange(7, 11)];
         
         _hotArticlesLabelText = [[NSAttributedString alloc] initWithAttributedString:attrS];
@@ -449,9 +464,9 @@
 {
     if (!_historyArticlesLabelText) {
         NSMutableAttributedString *attrS = [[NSMutableAttributedString alloc] initWithString:@"往期推文 · PENGUIN REVIEW"];
-        [attrS addAttribute:NSFontAttributeName value:Theme.fontLargeBold range:NSMakeRange(0, 7)];
+        [attrS addAttribute:NSFontAttributeName value:Theme.fontExtraLargeBold range:NSMakeRange(0, 7)];
         [attrS addAttribute:NSForegroundColorAttributeName value:Theme.colorText range:NSMakeRange(0, 7)];
-        [attrS addAttribute:NSFontAttributeName value:Theme.fontLargeLight range:NSMakeRange(7, 14)];
+        [attrS addAttribute:NSFontAttributeName value:Theme.fontExtraLargeLight range:NSMakeRange(7, 14)];
         [attrS addAttribute:NSForegroundColorAttributeName value:Theme.colorLightText range:NSMakeRange(7, 14)];
         
         _historyArticlesLabelText = [[NSAttributedString alloc] initWithAttributedString:attrS];

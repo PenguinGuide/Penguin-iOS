@@ -213,7 +213,7 @@
     if (section == 0) {
         return UIEdgeInsetsZero;
     } else if (section == 1) {
-        return UIEdgeInsetsMake(10, 8, 10, 8);
+        return UIEdgeInsetsMake(0, 22.f, 0, 22.f);
     }
     return UIEdgeInsetsZero;
 }
@@ -254,16 +254,13 @@
 
 - (CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout minimumLineSpacingForSectionAtIndex:(NSInteger)section
 {
-    if (section == 1) {
-        return 10.f;
-    }
     return 0.f;
 }
 
 - (CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout minimumInteritemSpacingForSectionAtIndex:(NSInteger)section
 {
     if (section == 1) {
-        return 11.f;
+        return 20.f;
     }
     return 0.f;
 }

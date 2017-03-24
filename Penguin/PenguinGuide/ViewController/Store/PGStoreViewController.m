@@ -72,6 +72,15 @@
         [weakself.storeCollectionView endTopRefreshing];
         [weakself.storeCollectionView endBottomRefreshing];
     }];
+    [self observe:self.viewModel keyPath:@"error" block:^(id changedObject) {
+        NSError *error = changedObject;
+        if (error && [error isKindOfClass:[NSError class]]) {
+            [weakself showErrorMessage:error];
+            [weakself dismissLoading];
+            [weakself.storeCollectionView endTopRefreshing];
+            [weakself.storeCollectionView endBottomRefreshing];
+        }
+    }];
     [self observeCollectionView:self.storeCollectionView endOfFeeds:self.viewModel];
 }
 
@@ -81,14 +90,19 @@
     
     [self.navigationController setNavigationBarHidden:YES animated:NO];
     
-    [self reloadView];
-    
     self.flashbuyWeakTimer = [MSWeakTimer scheduledTimerWithTimeInterval:1.f
                                                                   target:self
                                                                 selector:@selector(flashbuyCountDown)
                                                                 userInfo:nil
                                                                  repeats:YES
                                                            dispatchQueue:dispatch_get_main_queue()];
+}
+
+- (void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    
+    [self reloadView];
 }
 
 - (void)dealloc
@@ -210,7 +224,7 @@
         return cell;
     }
     if (indexPath.section == 3) {
-        if (self.viewModel.goodsArray.count-indexPath.item == 4) {
+        if (self.viewModel.goodsArray.count-indexPath.item == 2) {
             PGWeakSelf(self);
             dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
                 [weakself.viewModel requestGoods];
@@ -458,9 +472,9 @@
 {
     if (!_scenariosLabelText) {
         NSMutableAttributedString *attrS = [[NSMutableAttributedString alloc] initWithString:@"品类 · PENGUIN SCENARIOS"];
-        [attrS addAttribute:NSFontAttributeName value:Theme.fontLargeBold range:NSMakeRange(0, 5)];
+        [attrS addAttribute:NSFontAttributeName value:Theme.fontExtraLargeBold range:NSMakeRange(0, 5)];
         [attrS addAttribute:NSForegroundColorAttributeName value:Theme.colorText range:NSMakeRange(0, 5)];
-        [attrS addAttribute:NSFontAttributeName value:Theme.fontLargeLight range:NSMakeRange(5, 17)];
+        [attrS addAttribute:NSFontAttributeName value:Theme.fontExtraLargeLight range:NSMakeRange(5, 17)];
         [attrS addAttribute:NSForegroundColorAttributeName value:Theme.colorLightText range:NSMakeRange(5, 17)];
         
         _scenariosLabelText = [[NSAttributedString alloc] initWithAttributedString:attrS];
@@ -472,9 +486,9 @@
 {
     if (!_salesLabelText) {
         NSMutableAttributedString *attrS = [[NSMutableAttributedString alloc] initWithString:@"本周热卖 · PENGUIN SALES"];
-        [attrS addAttribute:NSFontAttributeName value:Theme.fontLargeBold range:NSMakeRange(0, 7)];
+        [attrS addAttribute:NSFontAttributeName value:Theme.fontExtraLargeBold range:NSMakeRange(0, 7)];
         [attrS addAttribute:NSForegroundColorAttributeName value:Theme.colorText range:NSMakeRange(0, 7)];
-        [attrS addAttribute:NSFontAttributeName value:Theme.fontLargeLight range:NSMakeRange(7, 13)];
+        [attrS addAttribute:NSFontAttributeName value:Theme.fontExtraLargeLight range:NSMakeRange(7, 13)];
         [attrS addAttribute:NSForegroundColorAttributeName value:Theme.colorLightText range:NSMakeRange(7, 13)];
         
         _salesLabelText = [[NSAttributedString alloc] initWithAttributedString:attrS];
@@ -486,9 +500,9 @@
 {
     if (!_collectionsLabelText) {
         NSMutableAttributedString *attrS = [[NSMutableAttributedString alloc] initWithString:@"精选集合 · PENGUIN COLLECTIONS"];
-        [attrS addAttribute:NSFontAttributeName value:Theme.fontLargeBold range:NSMakeRange(0, 7)];
+        [attrS addAttribute:NSFontAttributeName value:Theme.fontExtraLargeBold range:NSMakeRange(0, 7)];
         [attrS addAttribute:NSForegroundColorAttributeName value:Theme.colorText range:NSMakeRange(0, 7)];
-        [attrS addAttribute:NSFontAttributeName value:Theme.fontLargeLight range:NSMakeRange(7, 19)];
+        [attrS addAttribute:NSFontAttributeName value:Theme.fontExtraLargeLight range:NSMakeRange(7, 19)];
         [attrS addAttribute:NSForegroundColorAttributeName value:Theme.colorLightText range:NSMakeRange(7, 19)];
         
         _collectionsLabelText = [[NSAttributedString alloc] initWithAttributedString:attrS];
@@ -500,9 +514,9 @@
 {
     if (!_goodsLabelText) {
         NSMutableAttributedString *attrS = [[NSMutableAttributedString alloc] initWithString:@"商品 · PENGUIN GOODS"];
-        [attrS addAttribute:NSFontAttributeName value:Theme.fontLargeBold range:NSMakeRange(0, 5)];
+        [attrS addAttribute:NSFontAttributeName value:Theme.fontExtraLargeBold range:NSMakeRange(0, 5)];
         [attrS addAttribute:NSForegroundColorAttributeName value:Theme.colorText range:NSMakeRange(0, 5)];
-        [attrS addAttribute:NSFontAttributeName value:Theme.fontLargeLight range:NSMakeRange(5, 13)];
+        [attrS addAttribute:NSFontAttributeName value:Theme.fontExtraLargeLight range:NSMakeRange(5, 13)];
         [attrS addAttribute:NSForegroundColorAttributeName value:Theme.colorLightText range:NSMakeRange(5, 13)];
         
         _goodsLabelText = [[NSAttributedString alloc] initWithAttributedString:attrS];

@@ -64,6 +64,14 @@
     }
 }
 
+- (void)cellDidSelectWithModel:(PGRKModel *)model
+{
+    if ([model isKindOfClass:[PGArticleBanner class]]) {
+        PGArticleBanner *articleBanner = (PGArticleBanner *)model;
+        [PGRouterManager routeToArticlePage:articleBanner.articleId link:articleBanner.link];
+    }
+}
+
 - (UILabel *)titleLabel
 {
     if (!_titleLabel) {

@@ -417,6 +417,8 @@ static NSString *TagCell = @"TagCell";
         _tagsCollectionView.dataSource = self;
         _tagsCollectionView.delegate = self;
         _tagsCollectionView.backgroundColor = [UIColor whiteColor];
+        _tagsCollectionView.showsHorizontalScrollIndicator = NO;
+        _tagsCollectionView.showsVerticalScrollIndicator = NO;
         
         [_tagsCollectionView registerClass:[PGTagCell class] forCellWithReuseIdentifier:TagCell];
     }

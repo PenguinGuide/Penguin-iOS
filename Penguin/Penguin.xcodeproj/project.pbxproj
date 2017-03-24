@@ -223,6 +223,7 @@
 		FF1D93331E13A42300DFB17A /* UIScrollView+UzysAnimatedGifPullToRefresh.m in Sources */ = {isa = PBXBuildFile; fileRef = FF1D93301E13A42300DFB17A /* UIScrollView+UzysAnimatedGifPullToRefresh.m */; };
 		FF1D93341E13A42300DFB17A /* UzysAnimatedGifActivityIndicator.m in Sources */ = {isa = PBXBuildFile; fileRef = FF1D93321E13A42300DFB17A /* UzysAnimatedGifActivityIndicator.m */; };
 		FF1D93381E13A51700DFB17A /* AnimatedGIFImageSerialization.m in Sources */ = {isa = PBXBuildFile; fileRef = FF1D93371E13A51700DFB17A /* AnimatedGIFImageSerialization.m */; };
+		FF1DD55A1E84F1660070DD04 /* PGArticleToolButton.m in Sources */ = {isa = PBXBuildFile; fileRef = FF1DD5591E84F1660070DD04 /* PGArticleToolButton.m */; };
 		FF24782C1E7F9FDE005ADD09 /* PGStoreScenarioCell.m in Sources */ = {isa = PBXBuildFile; fileRef = FF24782B1E7F9FDE005ADD09 /* PGStoreScenarioCell.m */; };
 		FF24DF6A1E02745200A17486 /* PGSearchResultsArticlesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FF24DF691E02745200A17486 /* PGSearchResultsArticlesViewController.m */; };
 		FF24DF6D1E02770800A17486 /* PGSearchResultsGoodsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FF24DF6C1E02770800A17486 /* PGSearchResultsGoodsViewController.m */; };
@@ -692,6 +693,8 @@
 		FF1D93351E13A43000DFB17A /* UzysAnimatedGifPullToRefreshConfiguration.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UzysAnimatedGifPullToRefreshConfiguration.h; sourceTree = "<group>"; };
 		FF1D93361E13A51700DFB17A /* AnimatedGIFImageSerialization.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AnimatedGIFImageSerialization.h; sourceTree = "<group>"; };
 		FF1D93371E13A51700DFB17A /* AnimatedGIFImageSerialization.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AnimatedGIFImageSerialization.m; sourceTree = "<group>"; };
+		FF1DD5581E84F1660070DD04 /* PGArticleToolButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PGArticleToolButton.h; sourceTree = "<group>"; };
+		FF1DD5591E84F1660070DD04 /* PGArticleToolButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PGArticleToolButton.m; sourceTree = "<group>"; };
 		FF231A981E1274C40099536C /* PGScenarioDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PGScenarioDelegate.h; sourceTree = "<group>"; };
 		FF24782A1E7F9FDE005ADD09 /* PGStoreScenarioCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PGStoreScenarioCell.h; sourceTree = "<group>"; };
 		FF24782B1E7F9FDE005ADD09 /* PGStoreScenarioCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PGStoreScenarioCell.m; sourceTree = "<group>"; };
@@ -1061,6 +1064,8 @@
 				FF2F8ECB1E0127ED00A29377 /* PGArticleParagraphTextLabel.m */,
 				FF2F8ECD1E013FAE00A29377 /* PGArticleRelatedArticleView.h */,
 				FF2F8ECE1E013FAE00A29377 /* PGArticleRelatedArticleView.m */,
+				FF1DD5581E84F1660070DD04 /* PGArticleToolButton.h */,
+				FF1DD5591E84F1660070DD04 /* PGArticleToolButton.m */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -2746,6 +2751,7 @@
 				0F6281BA1D8FB6EA004E0596 /* PGTag.m in Sources */,
 				0F59B9231D92771D00DB9FCE /* PGUser.m in Sources */,
 				0FE0313C1E266EBD008496F1 /* PGShareAttribute.m in Sources */,
+				FF1DD55A1E84F1660070DD04 /* PGArticleToolButton.m in Sources */,
 				0F02E1A91DBDCC9500AA0428 /* PGSettingsUpdateTextField.m in Sources */,
 				0FC9E6B51DB083FC007069D5 /* PGTopicInfoHeaderView.m in Sources */,
 				0F59B91B1D925B4300DB9FCE /* PGArticleCommentCell.m in Sources */,
