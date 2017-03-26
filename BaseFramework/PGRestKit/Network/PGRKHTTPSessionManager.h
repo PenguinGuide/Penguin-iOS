@@ -13,6 +13,7 @@ typedef void(^PGRKFailureBlock)(NSError *error);
 typedef void(^PGRKPaginationCompletionBlock)(PGRKResponse *response);
 
 #import <AFNetworking/AFNetworking.h>
+#import "PGRKJSONRequestSerializer.h"
 #import "PGRKJSONResponseSerializer.h"
 #import "PGRKRequestConfig.h"
 #import "PGRKResponse.h"

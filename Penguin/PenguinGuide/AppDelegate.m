@@ -66,6 +66,11 @@
     [SDImageCache.sharedImageCache.config setShouldDecompressImages:NO];
     [SDImageCache.sharedImageCache.config setMaxCacheAge:60 * 60 * 24 * 7 * 3]; // 3 weeks
     
+    NSURLCache *urlCache = [[NSURLCache alloc] initWithMemoryCapacity:4*1024*1024
+                                                         diskCapacity:100*1024*1024
+                                                             diskPath:nil];
+    NSURLCache.sharedURLCache = urlCache;
+    
     // AFNetworking
     [[AFNetworkReachabilityManager sharedManager] startMonitoring];
     

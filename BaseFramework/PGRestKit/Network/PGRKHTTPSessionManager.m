@@ -56,6 +56,7 @@ static const int DefaultMaxConcurrentConnections = 5;
     
     PGRKHTTPSessionManager *sessionManager = [[PGRKHTTPSessionManager alloc] initWithBaseURL:[NSURL URLWithString:baseURL]
                                                                         sessionConfiguration:config];
+    sessionManager.requestSerializer = [PGRKJSONRequestSerializer serializer];
     sessionManager.responseSerializer = [PGRKJSONResponseSerializer serializer];
     return sessionManager;
 }
@@ -151,6 +152,7 @@ static const int DefaultMaxConcurrentConnections = 5;
                                                    failure(error);
                                                }
                                            }];
+            
             PGRKJSONResponseSerializer *serializer = self.responseSerializer;
             [serializer registerKeyPath:config.keyPath modelClass:config.model.class toTask:task];
         } else {
@@ -247,7 +249,6 @@ static const int DefaultMaxConcurrentConnections = 5;
                                                    failure(error);
                                                }
                                            }];
-            
             PGRKJSONResponseSerializer *serializer = self.responseSerializer;
             if (config.response) {
                 if (config.model) {
