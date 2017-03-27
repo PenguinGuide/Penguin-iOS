@@ -33,8 +33,6 @@ static const NSString *kTaskKey = @"kTaskKey";
         responseStatusCode = (NSUInteger)[(NSHTTPURLResponse *)response statusCode];
     }
     
-    id responseObject;
-    
     if (responseStatusCode == 304) {
         NSCachedURLResponse *cachedResponse;
         if (self.serializersDict[response.URL.absoluteString] && self.serializersDict[response.URL.absoluteString][kTaskKey]) {
@@ -42,6 +40,7 @@ static const NSString *kTaskKey = @"kTaskKey";
             cachedResponse = [[NSURLCache sharedURLCache] cachedResponseForRequest:task.currentRequest];
         }
         
+        id responseObject;
         if (cachedResponse) {
             responseObject = [super responseObjectForResponse:cachedResponse.response data:cachedResponse.data error:error];
         } else {
@@ -65,12 +64,11 @@ static const NSString *kTaskKey = @"kTaskKey";
                     }
                     NSString *fileName = [self cachedFileNameForKey:response.URL.absoluteString];
                     NSString *cachedFileName = [directory stringByAppendingPathComponent:fileName];
-                    BOOL success = [NSKeyedArchiver archiveRootObject:etag toFile:cachedFileName];
-                    NSLog(@"");
+                    [NSKeyedArchiver archiveRootObject:etag toFile:cachedFileName];
                 }
             }
         }
-        responseObject = [super responseObjectForResponse:response data:data error:error];
+        id responseObject = [super responseObjectForResponse:response data:data error:error];
         
         return [self modelsFromResponse:responseObject absoluteUrl:response.URL.absoluteString data:data error:error];
     } else {
