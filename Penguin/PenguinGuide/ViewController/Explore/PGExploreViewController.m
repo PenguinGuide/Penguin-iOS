@@ -131,13 +131,13 @@
         return 1;
     }
     if (section == 1) {
+        return 1;
+    }
+    if (section == 2) {
         if (self.viewModel.currentArticle) {
             return 1;
         }
         return 0;
-    }
-    if (section == 2) {
-        return 1;
     }
     if (section == 3) {
         return self.viewModel.articlesArray.count;
@@ -161,12 +161,6 @@
                         }];
         return cell;
     } else if (indexPath.section == 1) {
-        PGExploreTodayArticleCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:TodayArticleCell forIndexPath:indexPath];
-        if ([cell respondsToSelector:@selector(setCellWithModel:)]) {
-            [(id<PGBaseCollectionViewCell>)cell setCellWithModel:self.viewModel.currentArticle];
-        }
-        return cell;
-    } else if (indexPath.section == 2) {
         PGCollectionsCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:TagsCell forIndexPath:indexPath];
         [cell setCellWithTitle:nil
                    collections:self.viewModel.tagsArray
@@ -178,6 +172,12 @@
                             config.collectionCellSize = [PGExploreTagCell cellSize];
                             config.showBorder = NO;
                         }];
+        return cell;
+    } else if (indexPath.section == 2) {
+        PGExploreTodayArticleCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:TodayArticleCell forIndexPath:indexPath];
+        if ([cell respondsToSelector:@selector(setCellWithModel:)]) {
+            [(id<PGBaseCollectionViewCell>)cell setCellWithModel:self.viewModel.currentArticle];
+        }
         return cell;
     } else if (indexPath.section == 3) {
         if (self.viewModel.articlesArray.count-indexPath.item == 3) {
@@ -238,10 +238,10 @@
         return CGSizeMake(UISCREEN_WIDTH, 60+[PGArticleCardCell cellSize].height);
     }
     if (indexPath.section == 1) {
-        return CGSizeMake(UISCREEN_WIDTH-22*2, 60);
+        return CGSizeMake(UISCREEN_WIDTH, [PGExploreTagCell cellSize].height);
     }
     if (indexPath.section == 2) {
-        return CGSizeMake(UISCREEN_WIDTH, [PGExploreTagCell cellSize].height);
+        return [PGExploreTodayArticleCell cellSize];
     }
     if (indexPath.section == 3) {
         id banner = self.viewModel.articlesArray[indexPath.item];
@@ -283,10 +283,10 @@
         return UIEdgeInsetsZero;
     }
     if (section == 1) {
-        return UIEdgeInsetsMake(30, 22, 24, 22);
+        return UIEdgeInsetsMake(30, 0, 15, 0);
     }
     if (section == 2) {
-        return UIEdgeInsetsMake(10, 0, 15, 0);
+        return UIEdgeInsetsMake(30, 22, 24, 22);
     }
     return UIEdgeInsetsZero;
 }
@@ -301,18 +301,9 @@
     return 0.f;
 }
 
-- (void)collectionView:(UICollectionView *)collectionView willDisplayCell:(UICollectionViewCell *)cell forItemAtIndexPath:(NSIndexPath *)indexPath
-{
-    if (indexPath.section == 1) {
-        if ([cell isKindOfClass:[PGExploreTodayArticleCell class]]) {
-            [(PGExploreTodayArticleCell *)cell insertCellBorderLayer:8.f];
-        }
-    }
-}
-
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (indexPath.section == 1) {
+    if (indexPath.section == 2) {
         id<PGBaseCollectionViewCell> selectedCell = (id<PGBaseCollectionViewCell>)[collectionView cellForItemAtIndexPath:indexPath];
         if ([selectedCell respondsToSelector:@selector(cellDidSelectWithModel:)]) {
             [selectedCell cellDidSelectWithModel:self.viewModel.currentArticle];

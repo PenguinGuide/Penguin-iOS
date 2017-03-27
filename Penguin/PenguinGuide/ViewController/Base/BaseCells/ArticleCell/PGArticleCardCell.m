@@ -37,7 +37,7 @@
 
 + (CGSize)cellSize
 {
-    return CGSizeMake(150, 2*150/3.f+10+40+15+12+20);
+    return CGSizeMake(225, 2*225/3.f+10+40+10+12+10);
 }
 
 #pragma mark - <PGBaseCollectionViewCell>
@@ -116,7 +116,7 @@
 {
     if (!_titleLabel) {
         _titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(14, self.articleImageView.pg_bottom+10, self.pg_width-28, 40)];
-        _titleLabel.font = Theme.fontMediumBold;
+        _titleLabel.font = Theme.fontLargeBold;
         _titleLabel.textColor = Theme.colorText;
         _titleLabel.numberOfLines = 2;
     }
@@ -126,7 +126,7 @@
 - (UILabel *)dateLabel
 {
     if (!_dateLabel) {
-        _dateLabel = [[UILabel alloc] initWithFrame:CGRectMake(14, self.titleLabel.pg_bottom+15, self.pg_width-28, 12)];
+        _dateLabel = [[UILabel alloc] initWithFrame:CGRectMake(14, self.titleLabel.pg_bottom+10, self.pg_width-28, 12)];
         _dateLabel.font = Theme.fontExtraSmallBold;
         _dateLabel.textColor = Theme.colorText;
     }

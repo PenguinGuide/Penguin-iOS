@@ -10,6 +10,11 @@
 
 @implementation PGBaseCollectionViewCell
 
++ (CGSize)cellSize
+{
+    return CGSizeZero;
+}
+
 - (void)insertCellBorderLayer:(CGFloat)cornerRadius
 {
     [self insertCellBorderLayer:cornerRadius rect:CGRectMake(0, 0, self.pg_width, self.pg_height)];
