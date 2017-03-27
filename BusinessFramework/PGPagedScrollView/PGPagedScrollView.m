@@ -110,6 +110,11 @@
     return self;
 }
 
+- (void)updateLabelFrame:(CGRect)frame
+{
+    self.pageLabel.frame = frame;
+}
+
 - (void)reloadData
 {
     if (self.delegate && [self.delegate respondsToSelector:@selector(imagesForScrollView)]) {
@@ -208,7 +213,13 @@
                 [view addGestureRecognizer:tapGesture];
             }
             if (self.iconMode == PGPagedScrollViewIconModeLabel) {
-                self.pageLabel.text = [NSString stringWithFormat:@"%@/%@", @(self.currentPage), @(banners.count)];
+                NSString *currentPageStr = [NSString stringWithFormat:@"%@", @(self.currentPage)];
+                NSString *totalPagesStr = [NSString stringWithFormat:@"%@", @(banners.count)];
+                NSString *countStr = [NSString stringWithFormat:@"%@/%@", currentPageStr, totalPagesStr];
+                NSMutableAttributedString *countAttrStr = [[NSMutableAttributedString alloc] initWithString:countStr];
+                [countAttrStr addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:16.f weight:UIFontWeightBold] range:NSMakeRange(0, currentPageStr.length)];
+                [countAttrStr addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:12.f weight:UIFontWeightBold] range:NSMakeRange(currentPageStr.length, 1+totalPagesStr.length)];
+                self.pageLabel.attributedText = countAttrStr;
             } else {
                 _pageControl.numberOfPages = self.banners.count;
                 _pageControl.currentPage = self.currentPage;
@@ -259,7 +270,13 @@
     }
     if (currentPage != prePage) {
         if (self.iconMode == PGPagedScrollViewIconModeLabel) {
-            [self.pageLabel setText:[NSString stringWithFormat:@"%@/%@", @(currentPage+1), @(self.banners.count)]];
+            NSString *currentPageStr = [NSString stringWithFormat:@"%@", @(currentPage+1)];
+            NSString *totalPagesStr = [NSString stringWithFormat:@"%@", @(self.banners.count)];
+            NSString *countStr = [NSString stringWithFormat:@"%@/%@", currentPageStr, totalPagesStr];
+            NSMutableAttributedString *countAttrStr = [[NSMutableAttributedString alloc] initWithString:countStr];
+            [countAttrStr addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:16.f weight:UIFontWeightBold] range:NSMakeRange(0, currentPageStr.length)];
+            [countAttrStr addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:12.f weight:UIFontWeightBold] range:NSMakeRange(currentPageStr.length, 1+totalPagesStr.length)];
+            self.pageLabel.attributedText = countAttrStr;
         } else {
             [self.pageControl setCurrentPage:currentPage];
         }
@@ -370,7 +387,6 @@
     if (!_pageLabel) {
         _pageLabel = [[UILabel alloc] initWithFrame:CGRectMake(self.frame.size.width-10-40, self.frame.size.height-10-30, 40, 30)];
         _pageLabel.backgroundColor = [UIColor colorWithWhite:1.f alpha:0.8f];
-        _pageLabel.font = [UIFont systemFontOfSize:12.f weight:UIFontWeightRegular];
         _pageLabel.textColor = [UIColor blackColor];
         _pageLabel.textAlignment = NSTextAlignmentCenter;
         

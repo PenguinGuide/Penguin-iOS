@@ -13,7 +13,7 @@
 
 @interface PGArticleRelatedArticlesCell () <PGPagedScrollViewDelegate>
 
-@property (nonatomic, strong) UIImageView *bannerFrameView;
+@property (nonatomic, strong) UILabel *title;
 @property (nonatomic, strong) PGPagedScrollView *pagedScrollView;
 @property (nonatomic, strong) NSArray *dataArray;
 @property (nonatomic, strong) NSArray *viewsArray;
@@ -33,7 +33,7 @@
 
 - (void)initialize
 {
-    [self.contentView addSubview:self.bannerFrameView];
+    [self.contentView addSubview:self.title];
     [self.contentView addSubview:self.pagedScrollView];
     
     PGDashedLineView *dashedLine = [[PGDashedLineView alloc] initWithFrame:CGRectMake(0, self.pg_height-5-2, self.pg_width, 2)];
@@ -47,8 +47,8 @@
     
     NSMutableArray *views = [NSMutableArray new];
     for (PGArticleBanner *banner in dataArray) {
-        CGFloat width = self.pg_width-15-15;
-        CGFloat height = width*9/16+10+18+10+15;
+        CGFloat width = self.pg_width;
+        CGFloat height = width*9/16+38;
         
         PGArticleRelatedArticleView *articleView = [[PGArticleRelatedArticleView alloc] initWithFrame:CGRectMake(0, 0, width, height)];
         [articleView setViewWithImage:banner.image title:banner.title];
@@ -61,8 +61,8 @@
 
 + (CGSize)cellSize
 {
-    CGFloat width = UISCREEN_WIDTH-60;
-    CGFloat height = width*279/290+60;
+    CGFloat width = UISCREEN_WIDTH-33*2;
+    CGFloat height = 30+15+width*9/16+30+38;
     
     return CGSizeMake(width, height);
 }
@@ -74,17 +74,6 @@
     return self.viewsArray;
 }
 
-- (UIImageView *)bannerFrameView
-{
-    if (!_bannerFrameView) {
-        _bannerFrameView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, self.pg_width, self.pg_height-60)];
-        _bannerFrameView.clipsToBounds = YES;
-        _bannerFrameView.contentMode = UIViewContentModeScaleAspectFill;
-        _bannerFrameView.image = [UIImage imageNamed:@"pg_article_banner_frame"];
-    }
-    return _bannerFrameView;
-}
-
 - (void)imageViewDidSelect:(NSInteger)index
 {
     PGArticleBanner *articleBanner = self.dataArray[index];
@@ -94,12 +83,27 @@
     [[PGRouter sharedInstance] openURL:articleBanner.link];
 }
 
+#pragma mark - <Lazy Init>
+
+- (UILabel *)title
+{
+    if (!_title) {
+        _title = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.pg_width, 30)];
+        _title.text = @"·  猜你喜欢  ·";
+        _title.font = Theme.fontExtraLargeBold;
+        _title.textColor = [UIColor blackColor];
+        _title.textAlignment = NSTextAlignmentCenter;
+    }
+    return _title;
+}
+
 - (PGPagedScrollView *)pagedScrollView
 {
     if (!_pagedScrollView) {
-        CGFloat width = self.pg_width-15-15;
-        CGFloat height = self.pg_height-60-80-3;
-        _pagedScrollView = [[PGPagedScrollView alloc] initWithFrame:CGRectMake(15, 80, width, height) imageFillMode:PGPagedScrollViewImageFillModeFill iconMode:PGPagedScrollViewIconModeDark];
+        CGFloat width = self.pg_width;
+        CGFloat height = width*9/16+38;
+        _pagedScrollView = [[PGPagedScrollView alloc] initWithFrame:CGRectMake(0, self.title.pg_bottom+15, width, height) imageFillMode:PGPagedScrollViewImageFillModeFill iconMode:PGPagedScrollViewIconModeLabel];
+        [_pagedScrollView updateLabelFrame:CGRectMake(_pagedScrollView.frame.size.width-10-40, _pagedScrollView.frame.size.height-10-38-30, 40, 30)];
         _pagedScrollView.delegate = self;
     }
     return _pagedScrollView;

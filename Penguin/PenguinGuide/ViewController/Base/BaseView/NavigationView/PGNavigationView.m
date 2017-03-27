@@ -76,7 +76,7 @@
     [shareButton setImage:[UIImage imageNamed:@"pg_article_share"] forState:UIControlStateNormal];
     [shareButton setContentVerticalAlignment:UIControlContentVerticalAlignmentTop];
     [shareButton setContentHorizontalAlignment:UIControlContentHorizontalAlignmentRight];
-    [shareButton addTarget:naviView action:@selector(searchButtonClicked) forControlEvents:UIControlEventTouchUpInside];
+    [shareButton addTarget:naviView action:@selector(shareButtonClicked) forControlEvents:UIControlEventTouchUpInside];
     
     [naviView addSubview:shareButton];
     
@@ -112,6 +112,13 @@
 {
     if (self.delegate && [self.delegate respondsToSelector:@selector(naviBackButtonClicked)]) {
         [self.delegate naviBackButtonClicked];
+    }
+}
+
+- (void)shareButtonClicked
+{
+    if (self.delegate && [self.delegate respondsToSelector:@selector(naviShareButtonClicked)]) {
+        [self.delegate naviShareButtonClicked];
     }
 }
 

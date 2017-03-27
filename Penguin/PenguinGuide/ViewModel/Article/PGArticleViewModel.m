@@ -41,6 +41,8 @@
     if (self.paragraphsArray && self.paragraphsArray.count > 0) {
         __block dispatch_group_t group = dispatch_group_create();
         
+        __block NSMutableArray *goodsArray = [NSMutableArray new];
+        
         for (id storage in self.paragraphsArray) {
             if ([storage isKindOfClass:[PGParserSingleGoodStorage class]]) {
                 __block PGParserSingleGoodStorage *singleGoodStorage = (PGParserSingleGoodStorage *)storage;
@@ -54,6 +56,7 @@
                     } completion:^(id response) {
                         PGGood *good = [response firstObject];
                         singleGoodStorage.good = good;
+                        [goodsArray addObject:good];
                         dispatch_group_leave(group);
                     } failure:^(NSError *error) {
                         dispatch_group_leave(group);
@@ -70,6 +73,7 @@
                         config.model = [PGGood new];
                     } completion:^(id response) {
                         goodsCollectionStorage.goodsArray = response;
+                        [goodsArray addObjectsFromArray:response];
                         dispatch_group_leave(group);
                     } failure:^(NSError *error) {
                         dispatch_group_leave(group);
@@ -78,7 +82,9 @@
             }
         }
         
+        PGWeakSelf(self);
         dispatch_group_notify(group, dispatch_get_main_queue(), ^{
+            weakself.goodsArray = [NSArray arrayWithArray:goodsArray];
             if (completion) {
                 completion();
             }

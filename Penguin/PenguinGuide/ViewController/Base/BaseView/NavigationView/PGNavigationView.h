@@ -14,6 +14,7 @@
 
 - (void)searchButtonClicked;
 - (void)naviBackButtonClicked;
+- (void)naviShareButtonClicked;
 
 @end
 

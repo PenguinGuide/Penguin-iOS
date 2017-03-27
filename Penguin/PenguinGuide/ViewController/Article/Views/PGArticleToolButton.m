@@ -44,14 +44,14 @@
 
 - (CGRect)imageRectForContentRect:(CGRect)contentRect
 {
-    return CGRectMake((contentRect.size.width-self.imageSize.width)/2, 0, self.imageSize.width, self.imageSize.height);
+    return CGRectMake((contentRect.size.width-self.imageSize.width)/2, 6, self.imageSize.width, self.imageSize.height);
 }
 
 - (UILabel *)toolButtonTitleLabel
 {
     if (!_toolButtonTitleLabel) {
-        _toolButtonTitleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, self.imageSize.height+6, self.pg_width, 17)];
-        _toolButtonTitleLabel.font = Theme.fontSmallBold;
+        _toolButtonTitleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, self.pg_height-6-10, self.pg_width, 10)];
+        _toolButtonTitleLabel.font = Theme.fontExtraSmall;
         _toolButtonTitleLabel.textColor = Theme.colorLightText;
         _toolButtonTitleLabel.highlightedTextColor = Theme.colorExtraHighlight;
         _toolButtonTitleLabel.textAlignment = NSTextAlignmentCenter;

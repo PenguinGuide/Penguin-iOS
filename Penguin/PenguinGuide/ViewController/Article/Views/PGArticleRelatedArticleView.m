@@ -54,7 +54,7 @@
 - (UILabel *)titleLabel
 {
     if (!_titleLabel) {
-        _titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, self.pg_width*9/16+10, self.pg_width, 18)];
+        _titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, self.pg_width*9/16+20, self.pg_width, 18)];
         _titleLabel.font = Theme.fontLargeBold;
         _titleLabel.textColor = Theme.colorText;
         _titleLabel.textAlignment = NSTextAlignmentCenter;

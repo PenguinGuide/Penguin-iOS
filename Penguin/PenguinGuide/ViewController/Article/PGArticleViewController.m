@@ -30,6 +30,7 @@
 #import "PGGoodViewController.h"
 #import "PGShareViewController.h"
 #import "PGCommentReportViewController.h"
+#import "PGArticleGoodsViewController.h"
 
 #import "AFNetworkReachabilityManager.h"
 
@@ -66,9 +67,9 @@
 
 @property (nonatomic, strong) PGNavigationView *naviView;
 @property (nonatomic, strong) UIButton *lightBackButton;
+@property (nonatomic, strong) UIButton *lightShareButton;
 
 @property (nonatomic, strong) UIView *toolbar;
-@property (nonatomic, strong) UIButton *shareButton;
 @property (nonatomic, strong) PGArticleToolButton *collectButton;
 @property (nonatomic, strong) PGArticleToolButton *goodsListButton;
 @property (nonatomic, strong) PGArticleToolButton *commentButton;
@@ -279,6 +280,7 @@
     }];
     
     [self.view addSubview:self.lightBackButton];
+    [self.view addSubview:self.lightShareButton];
 }
 
 - (void)animateCollectionView:(void (^)())completion
@@ -921,12 +923,15 @@
     if (scrollView.contentOffset.y <= 0) {
         self.naviView.alpha = 0.f;
         self.lightBackButton.alpha = 1.f;
+        self.lightShareButton.alpha = 1.f;
     } else if (scrollView.contentOffset.y < changeValue) {
         self.naviView.alpha = scrollView.contentOffset.y/changeValue;
         self.lightBackButton.alpha = 0.f;
+        self.lightShareButton.alpha = 0.f;
     } else {
         self.naviView.alpha = 1.f;
         self.lightBackButton.alpha = 0.f;
+        self.lightShareButton.alpha = 0.f;
     }
     
     self.selectedComment = nil;
@@ -1021,7 +1026,7 @@
     attribute.title = self.viewModel.article.title;
     attribute.image = self.viewModel.article.image;
     attribute.thumbnailImage = self.viewModel.article.image;
-    attribute.shareViewImage = self.headerImageView.image;
+    attribute.shareViewImage = self.articleHeaderView.image;
     
     NSArray *dates = [self.viewModel.article.date componentsSeparatedByString:@"/"];
     if (dates.count == 3) {
@@ -1090,11 +1095,26 @@
     [self.navigationController pushViewController:commentsVC animated:YES];
 }
 
+- (void)goodsListButtonClicked
+{
+    if (self.viewModel.goodsArray.count == 0) {
+        [self showToast:@"该文章里没有商品哦~"];
+    } else {
+        PGArticleGoodsViewController *goodsVC = [[PGArticleGoodsViewController alloc] initWithGoods:self.viewModel.goodsArray];
+        [self.navigationController pushViewController:goodsVC animated:YES];
+    }
+}
+
 #pragma mark - <PGNavigationViewDelegate>
 
 - (void)naviBackButtonClicked
 {
     [super backButtonClicked];
+}
+
+- (void)naviShareButtonClicked
+{
+    [self shareButtonClicked];
 }
 
 #pragma mark - <Lazy Init>
@@ -1150,18 +1170,30 @@
     return _lightBackButton;
 }
 
+- (UIButton *)lightShareButton
+{
+    if (!_lightShareButton) {
+        _lightShareButton = [[UIButton alloc] initWithFrame:CGRectMake(UISCREEN_WIDTH-20-50, 31, 50, 50)];
+        [_lightShareButton setImage:[UIImage imageNamed:@"pg_article_share_light"] forState:UIControlStateNormal];
+        [_lightShareButton setContentVerticalAlignment:UIControlContentVerticalAlignmentTop];
+        [_lightShareButton setContentHorizontalAlignment:UIControlContentHorizontalAlignmentRight];
+        [_lightShareButton addTarget:self action:@selector(shareButtonClicked) forControlEvents:UIControlEventTouchUpInside];
+    }
+    return _lightShareButton;
+}
+
 - (UIView *)toolbar
 {
     if (!_toolbar) {
         _toolbar = [[UIView alloc] initWithFrame:CGRectMake(0, UISCREEN_HEIGHT-50, UISCREEN_WIDTH, 50)];
         _toolbar.backgroundColor = [UIColor whiteColor];
         
-        self.collectButton = [PGArticleToolButton toolButtonWithFrame:CGRectMake(20, 5, 50, 40)
+        self.collectButton = [PGArticleToolButton toolButtonWithFrame:CGRectMake(20, 0, 50, 50)
                                                                 title:@"收藏"
                                                                 image:[UIImage imageNamed:@"pg_article_collect"]
                                                             imageSize:CGSizeMake(20, 20)
                                                                 count:0];
-        [self.collectButton addTarget:self action:@selector(likeButtonClicked) forControlEvents:UIControlEventTouchUpInside];
+        [self.collectButton addTarget:self action:@selector(collectButtonClicked) forControlEvents:UIControlEventTouchUpInside];
         [self.collectButton setTag:0];
         self.collectButton.eventName = article_collect_button_clicked;
         if (self.articleId) {
@@ -1169,14 +1201,15 @@
         }
         [_toolbar addSubview:self.collectButton];
         
-        self.goodsListButton = [PGArticleToolButton toolButtonWithFrame:CGRectMake(self.collectButton.pg_right+15, 5, 50, 40)
+        self.goodsListButton = [PGArticleToolButton toolButtonWithFrame:CGRectMake(self.collectButton.pg_right+15, 0, 50, 50)
                                                                   title:@"商品列表"
                                                                   image:[UIImage imageNamed:@"pg_article_goods_list_button"]
                                                               imageSize:CGSizeMake(20, 20)
                                                                   count:0];
+        [self.goodsListButton addTarget:self action:@selector(goodsListButtonClicked) forControlEvents:UIControlEventTouchUpInside];
         [_toolbar addSubview:self.goodsListButton];
         
-        self.commentButton = [PGArticleToolButton toolButtonWithFrame:CGRectMake(UISCREEN_WIDTH-20-50, 5, 50, 40)
+        self.commentButton = [PGArticleToolButton toolButtonWithFrame:CGRectMake(UISCREEN_WIDTH-20-50, 0, 50, 50)
                                                                 title:@"评论"
                                                                 image:[UIImage imageNamed:@"pg_article_comment"]
                                                             imageSize:CGSizeMake(20, 20)
@@ -1188,7 +1221,7 @@
         }
         [_toolbar addSubview:self.commentButton];
         
-        self.likeButton = [PGArticleToolButton toolButtonWithFrame:CGRectMake(self.commentButton.pg_left-10-50, 5, 50, 40)
+        self.likeButton = [PGArticleToolButton toolButtonWithFrame:CGRectMake(self.commentButton.pg_left-10-50, 0, 50, 50)
                                                              title:@"喜欢"
                                                              image:[UIImage imageNamed:@"pg_article_like"]
                                                          imageSize:CGSizeMake(20, 20)

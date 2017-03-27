@@ -39,6 +39,7 @@ typedef NS_ENUM(NSInteger, PGPagedScrollViewIconMode) {
 
 - (id)initWithFrame:(CGRect)frame imageFillMode:(PGPagedScrollViewImageFillMode)fillMode iconMode:(PGPagedScrollViewIconMode)iconMode;
 
+- (void)updateLabelFrame:(CGRect)frame;
 - (void)reloadData;
 - (void)scrollToNextPage;
 

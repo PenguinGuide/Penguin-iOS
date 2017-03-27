@@ -111,7 +111,7 @@ static NSString *const GoodCell = @"GoodCell";
 
 - (UILabel *)titleLabel {
 	if(_titleLabel == nil) {
-		_titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(20, 10, UISCREEN_WIDTH-40, 20)];
+		_titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(20, 8, UISCREEN_WIDTH-40, 20)];
         _titleLabel.font = Theme.fontLargeBold;
         _titleLabel.textColor = Theme.colorLightText;
         _titleLabel.textAlignment = NSTextAlignmentCenter;
@@ -122,7 +122,7 @@ static NSString *const GoodCell = @"GoodCell";
 - (UILabel *)descLabel {
 	if(_descLabel == nil) {
 		_descLabel = [[UILabel alloc] initWithFrame:CGRectMake(20, self.titleLabel.pg_bottom+7, UISCREEN_WIDTH-40, 15)];
-        _descLabel.font = Theme.fontSmallBold;
+        _descLabel.font = Theme.fontSmallLight;
         _descLabel.textColor = Theme.colorLightText;
         _descLabel.textAlignment = NSTextAlignmentCenter;
 	}

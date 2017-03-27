@@ -16,6 +16,7 @@
 @property (nonatomic, strong) PGArticle *article;
 @property (nonatomic, strong) NSArray *commentsArray;
 @property (nonatomic, strong) NSArray *paragraphsArray;
+@property (nonatomic, strong) NSArray *goodsArray;
 @property (nonatomic, strong, readonly) NSError *commentError;
 
 @property (nonatomic, assign) BOOL likeSuccess;

@@ -62,6 +62,28 @@
         self.descLabel.text = singleGood.desc;
         
         [self.goodImageView setWithImageURL:singleGood.image placeholder:nil completion:nil];
+    } else if ([model isKindOfClass:[PGGood class]]) {
+        PGGood *good = (PGGood *)model;
+        if (good.originalPrice && ![good.originalPrice isEqualToString:@"0"]) {
+            NSMutableAttributedString *attrS = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"¥%@ %@", good.discountPrice, good.originalPrice]];
+            [attrS addAttribute:NSForegroundColorAttributeName value:Theme.colorExtraHighlight range:NSMakeRange(0, good.discountPrice.length+1)];
+            [attrS addAttribute:NSFontAttributeName value:Theme.fontLargeBold range:NSMakeRange(0, good.discountPrice.length+1)];
+            [attrS addAttribute:NSStrikethroughStyleAttributeName value:[NSNumber numberWithInt:0] range:NSMakeRange(0, good.discountPrice.length+1)];
+            [attrS addAttribute:NSForegroundColorAttributeName value:Theme.colorLightText range:NSMakeRange(good.discountPrice.length+2, good.originalPrice.length)];
+            [attrS addAttribute:NSFontAttributeName value:Theme.fontMediumBold range:NSMakeRange(good.discountPrice.length+2, good.originalPrice.length)];
+            [attrS addAttribute:NSStrikethroughStyleAttributeName value:[NSNumber numberWithInt:1] range:NSMakeRange(good.discountPrice.length+2, good.originalPrice.length)];
+            self.priceLabel.attributedText = attrS;
+        } else {
+            NSMutableAttributedString *attrS = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"¥%@", good.discountPrice]];
+            [attrS addAttribute:NSForegroundColorAttributeName value:Theme.colorExtraHighlight range:NSMakeRange(0, good.discountPrice.length+1)];
+            [attrS addAttribute:NSFontAttributeName value:Theme.fontLargeBold range:NSMakeRange(0, good.discountPrice.length+1)];
+            self.priceLabel.attributedText = attrS;
+        }
+        
+        self.titleLabel.text = good.name;
+        self.descLabel.text = good.desc;
+        
+        [self.goodImageView setWithImageURL:good.image placeholder:nil completion:nil];
     }
 }
 
@@ -70,6 +92,9 @@
     if ([model isKindOfClass:[PGSingleGoodBanner class]]) {
         PGSingleGoodBanner *singleGood = (PGSingleGoodBanner *)model;
         [PGRouterManager routeToGoodDetailPage:singleGood.goodsId link:singleGood.link];
+    } else if ([model isKindOfClass:[PGGood class]]) {
+        PGGood *good = (PGGood *)model;
+        [PGRouterManager routeToGoodDetailPage:good.goodId link:good.link];
     }
 }
 
@@ -108,7 +133,7 @@
 - (UILabel *)titleLabel {
 	if(_titleLabel == nil) {
         CGFloat width = UISCREEN_WIDTH-20;
-		_titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(14, 13, width/2-14-25, 34)];
+		_titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(22, 13, width/2-22*2, 34)];
         _titleLabel.textColor = Theme.colorText;
         _titleLabel.font = Theme.fontMediumBold;
         _titleLabel.numberOfLines = 2;
@@ -119,7 +144,7 @@
 - (UILabel *)descLabel {
     if(_descLabel == nil) {
         CGFloat width = UISCREEN_WIDTH-20;
-        _descLabel = [[UILabel alloc] initWithFrame:CGRectMake(17, self.titleLabel.pg_bottom+7, width/2-40, 18)];
+        _descLabel = [[UILabel alloc] initWithFrame:CGRectMake(22, self.titleLabel.pg_bottom+5, width/2-22*2, 18)];
         _descLabel.font = Theme.fontSmall;
         _descLabel.textColor = Theme.colorLightText;
     }
@@ -129,7 +154,7 @@
 - (UILabel *)priceLabel {
 	if(_priceLabel == nil) {
         CGFloat width = UISCREEN_WIDTH-20;
-		_priceLabel = [[UILabel alloc] initWithFrame:CGRectMake(18, self.pg_height-10-14, width/2-40, 14)];
+		_priceLabel = [[UILabel alloc] initWithFrame:CGRectMake(22, self.pg_height-18-14, width/2-22*2, 14)];
 	}
 	return _priceLabel;
 }
