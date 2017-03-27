@@ -13,6 +13,7 @@
 @property (nonatomic, strong) UIImageView *iconImageView;
 @property (nonatomic, strong) UILabel *nameLabel;
 @property (nonatomic, strong) UIView *dotView;
+@property (nonatomic, strong) UIView *horizontalLine;
 
 @end
 
@@ -32,9 +33,10 @@
     [self.contentView addSubview:self.iconImageView];
     [self.contentView addSubview:self.nameLabel];
     [self.contentView addSubview:self.dotView];
+    [self.contentView addSubview:self.horizontalLine];
 }
 
-- (void)setCellWithName:(NSString *)name icon:(NSString *)icon highlight:(BOOL)highlight
+- (void)setCellWithName:(NSString *)name icon:(NSString *)icon highlight:(BOOL)highlight showHorizontalLine:(BOOL)showHorizontalLine
 {
     self.iconImageView.image = [UIImage imageNamed:icon];
     self.nameLabel.text = name;
@@ -42,6 +44,11 @@
         self.dotView.hidden = NO;
     } else {
         self.dotView.hidden = YES;
+    }
+    if (showHorizontalLine) {
+        self.horizontalLine.hidden = NO;
+    } else {
+        self.horizontalLine.hidden = YES;
     }
 }
 
@@ -52,22 +59,22 @@
 
 #pragma mark - <Lazy Init>
 
-- (UIImageView *)iconImageView
-{
-    if (!_iconImageView) {
-        _iconImageView = [[UIImageView alloc] initWithFrame:CGRectMake((UISCREEN_WIDTH-100)/2-10, (self.pg_height-20)/2, 20, 20)];
-    }
-    return _iconImageView;
-}
-
 - (UILabel *)nameLabel
 {
     if (!_nameLabel) {
-        _nameLabel = [[UILabel alloc] initWithFrame:CGRectMake((UISCREEN_WIDTH-100)/2+20, (self.pg_height-20)/2, 100, 20)];
-        _nameLabel.font = Theme.fontExtraLargeBold;
+        _nameLabel = [[UILabel alloc] initWithFrame:CGRectMake(58, (self.pg_height-20)/2, 100, 20)];
+        _nameLabel.font = Theme.fontExtraLarge;
         _nameLabel.textColor = Theme.colorText;
     }
     return _nameLabel;
+}
+
+- (UIImageView *)iconImageView
+{
+    if (!_iconImageView) {
+        _iconImageView = [[UIImageView alloc] initWithFrame:CGRectMake(UISCREEN_WIDTH-58-20, (self.pg_height-20)/2, 20, 20)];
+    }
+    return _iconImageView;
 }
 
 - (UIView *)dotView
@@ -79,6 +86,15 @@
         _dotView.backgroundColor = [UIColor colorWithRed:239.f/256.f green:103.f/256.f blue:51.f/256.f alpha:1.f];
     }
     return _dotView;
+}
+
+- (UIView *)horizontalLine
+{
+    if (!_horizontalLine) {
+        _horizontalLine = [[UIView alloc] initWithFrame:CGRectMake(58, self.pg_height-SINGLE_LINE_HEIGHT, self.pg_width-58*2, SINGLE_LINE_HEIGHT)];
+        _horizontalLine.backgroundColor = [UIColor colorWithHexString:@"F1F1F1"];
+    }
+    return _horizontalLine;
 }
 
 @end

@@ -163,19 +163,19 @@
     
     if (indexPath.item == 0) {
         cell.eventName = my_order_cell_clicked;
-        [cell setCellWithName:@"我 的 订 单" icon:@"pg_me_order" highlight:NO];
+        [cell setCellWithName:@"我 的 订 单" icon:@"pg_me_order" highlight:NO showHorizontalLine:YES];
     } else if (indexPath.item == 1) {
         cell.eventName = my_collections_cell_clicked;
-        [cell setCellWithName:@"我 的 收 藏" icon:@"pg_me_collection" highlight:NO];
+        [cell setCellWithName:@"我 的 收 藏" icon:@"pg_me_collection" highlight:NO showHorizontalLine:YES];
     } else if (indexPath.item == 2) {
         cell.eventName = my_messages_cell_clicked;
-        [cell setCellWithName:@"我 的 消 息" icon:@"pg_me_message" highlight:self.viewModel.me.hasNewMessage];
+        [cell setCellWithName:@"我 的 消 息" icon:@"pg_me_message" highlight:self.viewModel.me.hasNewMessage showHorizontalLine:YES];
     } else if (indexPath.item == 3) {
         cell.eventName = my_footprints_cell_clicked;
-        [cell setCellWithName:@"我 的 足 迹" icon:@"pg_me_history" highlight:NO];
+        [cell setCellWithName:@"我 的 足 迹" icon:@"pg_me_history" highlight:NO showHorizontalLine:YES];
     } else if (indexPath.item == 4) {
         cell.eventName = my_shopping_cart_cell_clicked;
-        [cell setCellWithName:@"购  物  车" icon:@"pg_me_cart" highlight:NO];
+        [cell setCellWithName:@"购 物 车" icon:@"pg_me_cart" highlight:NO showHorizontalLine:NO];
     }
     
     return cell;
