@@ -11,6 +11,7 @@
 #import "PGArticleBannerCell.h"
 #import "PGBannerImageScrollView.h"
 #import "FLAnimatedImageView+PGAnimatedImageView.h"
+#import "PGCoverTagView.h"
 
 @interface PGArticleBannerCell () <UIScrollViewDelegate, UIGestureRecognizerDelegate>
 
@@ -25,6 +26,8 @@
 @property (nonatomic, strong, readwrite) UILabel *subtitleLabel;
 @property (nonatomic, strong, readwrite) UIImageView *articleNewImageView;
 @property (nonatomic, strong, readwrite) UIImageView *tagImageView;
+@property (nonatomic, strong, readwrite) PGCoverTagView *statusTagView;
+@property (nonatomic, strong, readwrite) PGCoverTagView *descTagView;
 
 @property (nonatomic, assign) BOOL isScrollling;
 
@@ -57,6 +60,9 @@
     [self.bannerImageView addSubview:dimView];
     [dimView addSubview:self.titleLabel];
     [dimView addSubview:self.subtitleLabel];
+    
+    [self.bannerImageView addSubview:self.statusTagView];
+    [self.bannerImageView addSubview:self.descTagView];
     
     // http://stackoverflow.com/questions/14298650/uicollectionviewcell-with-uiscrollview-cancels-didselectitematindexpath
     [self.contentView addGestureRecognizer:self.bannerImageScrollView.panGestureRecognizer];
@@ -103,6 +109,26 @@
         self.tagImageView.image = [UIImage imageNamed:@"pg_article_banner_resturant_tag"];
     } else {
         self.tagImageView.hidden = YES;
+    }
+
+    if ([self.article.status isEqualToString:@"1"]) {
+        self.statusTagView.hidden = YES;
+    } else {
+        self.statusTagView.hidden = NO;
+        if ([self.article.status isEqualToString:@"2"]) {
+            // NEW
+            [self.statusTagView setTagViewWithTitle:@"NEW!" style:PGCoverTagViewStyleNew];
+        } else if ([self.article.status isEqualToString:@"3"]) {
+            // HOT
+            [self.statusTagView setTagViewWithTitle:@"HOT!" style:PGCoverTagViewStyleHot];
+        }
+    }
+    
+    if (self.article.desc.length > 0) {
+        self.descTagView.hidden = NO;
+        [self.descTagView setTagViewWithTitle:self.article.desc style:PGCoverTagViewStyleNormal];
+    } else {
+        self.descTagView.hidden = YES;
     }
 }
 
@@ -242,6 +268,22 @@
         _tagImageView.hidden = YES;
     }
     return _tagImageView;
+}
+
+- (PGCoverTagView *)statusTagView
+{
+    if (!_statusTagView) {
+        _statusTagView = [PGCoverTagView tagViewWithMargin:CGPointMake(20, 20) alignment:PGCoverTagViewAlignmentLeft];
+    }
+    return _statusTagView;
+}
+
+- (PGCoverTagView *)descTagView
+{
+    if (!_descTagView) {
+        _descTagView = [PGCoverTagView tagViewWithMargin:CGPointMake(20, 20) alignment:PGCoverTagViewAlignmentRight];
+    }
+    return _descTagView;
 }
 
 - (CGFloat)labelWidth:(NSString *)str

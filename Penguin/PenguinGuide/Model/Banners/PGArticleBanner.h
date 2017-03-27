@@ -23,6 +23,8 @@
 @property (nonatomic, strong) NSString *likesCount;
 @property (nonatomic, strong) NSString *commentsCount;
 @property (nonatomic, strong) NSString *articleId;
+@property (nonatomic, strong) NSString *status;
+@property (nonatomic, strong) NSString *desc;
 @property (nonatomic, assign) BOOL isCollected;
 @property (nonatomic, assign) BOOL isNew;
 @property (nonatomic, assign) BOOL isRecommendGood;
