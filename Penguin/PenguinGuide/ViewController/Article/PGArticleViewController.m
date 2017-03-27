@@ -85,7 +85,7 @@
 @property (nonatomic, copy) void(^animationCompletion)();
 @property (nonatomic, assign) BOOL animated;
 
-@property (nonatomic, assign) BOOL statusbarIsWhiteBackground;
+@property (nonatomic, assign) BOOL statusBarIsHidden;
 @property (nonatomic, assign) BOOL shouldShowCommentInput;
 
 @property (nonatomic, strong) NSString *firstParagraphText;
@@ -113,6 +113,9 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillChangeFrame:) name:UIKeyboardWillChangeFrameNotification object:nil];
     
     self.automaticallyAdjustsScrollViewInsets = NO;
+    self.statusBarIsHidden = YES;
+    
+    [self setNeedsStatusBarAppearanceUpdate];
     
     [self.view addSubview:self.articleCollectionView];
     [self.view addSubview:self.naviView];
@@ -332,6 +335,15 @@
     if (self.articleId && self.articleId.length > 0) {
         CGPoint contentOffset = self.articleCollectionView.contentOffset;
         [PGGlobal.cache putObject:@[NSStringFromCGPoint(contentOffset)] forKey:self.articleId intoTable:@"ArticlePosition"];
+    }
+}
+
+- (BOOL)prefersStatusBarHidden
+{
+    if (self.statusBarIsHidden) {
+        return YES;
+    } else {
+        return NO;
     }
 }
 
@@ -924,14 +936,26 @@
         self.naviView.alpha = 0.f;
         self.lightBackButton.alpha = 1.f;
         self.lightShareButton.alpha = 1.f;
+        if (!self.statusBarIsHidden) {
+            self.statusBarIsHidden = YES;
+            [self setNeedsStatusBarAppearanceUpdate];
+        }
     } else if (scrollView.contentOffset.y < changeValue) {
         self.naviView.alpha = scrollView.contentOffset.y/changeValue;
         self.lightBackButton.alpha = 0.f;
         self.lightShareButton.alpha = 0.f;
+        if (!self.statusBarIsHidden) {
+            self.statusBarIsHidden = YES;
+            [self setNeedsStatusBarAppearanceUpdate];
+        }
     } else {
         self.naviView.alpha = 1.f;
         self.lightBackButton.alpha = 0.f;
         self.lightShareButton.alpha = 0.f;
+        if (self.statusBarIsHidden) {
+            self.statusBarIsHidden = NO;
+            [self setNeedsStatusBarAppearanceUpdate];
+        }
     }
     
     self.selectedComment = nil;

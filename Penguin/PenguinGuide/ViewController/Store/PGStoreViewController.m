@@ -102,6 +102,8 @@
 {
     [super viewDidAppear:animated];
     
+    [self setNeedsStatusBarAppearanceUpdate];
+    
     [self reloadView];
 }
 

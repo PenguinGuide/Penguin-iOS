@@ -88,6 +88,8 @@
 {
     [super viewDidAppear:animated];
     
+    [self setNeedsStatusBarAppearanceUpdate];
+    
     [self reloadView];
     
     self.exploreCollectionView.contentInset = UIEdgeInsetsZero;
@@ -286,7 +288,7 @@
         return UIEdgeInsetsMake(30, 0, 15, 0);
     }
     if (section == 2) {
-        return UIEdgeInsetsMake(30, 22, 24, 22);
+        return UIEdgeInsetsMake(30, 22, 15, 22);
     }
     return UIEdgeInsetsZero;
 }

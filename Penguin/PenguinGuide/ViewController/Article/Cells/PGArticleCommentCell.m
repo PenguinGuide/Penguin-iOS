@@ -175,7 +175,7 @@
         _avatarImageView = [[UIImageView alloc] initWithFrame:CGRectMake(30, 0, 42, 42)];
         _avatarImageView.contentMode = UIViewContentModeScaleAspectFill;
         _avatarImageView.clipsToBounds = YES;
-        _avatarImageView.backgroundColor = Theme.colorText;
+        _avatarImageView.backgroundColor = Theme.colorBackground;
     }
     return _avatarImageView;
 }
