@@ -113,7 +113,7 @@ static NSString *const GoodCell = @"GoodCell";
 	if(_titleLabel == nil) {
 		_titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(20, 8, UISCREEN_WIDTH-40, 20)];
         _titleLabel.font = Theme.fontLargeBold;
-        _titleLabel.textColor = Theme.colorLightText;
+        _titleLabel.textColor = Theme.colorText;
         _titleLabel.textAlignment = NSTextAlignmentCenter;
 	}
 	return _titleLabel;

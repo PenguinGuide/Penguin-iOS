@@ -246,6 +246,7 @@
 		FF8107DF1E8908F300629C36 /* PGCoverTagView.m in Sources */ = {isa = PBXBuildFile; fileRef = FF8107DE1E8908F300629C36 /* PGCoverTagView.m */; };
 		FF8300DA1E7BBCC200ED41EF /* PGExploreTodayArticleCell.m in Sources */ = {isa = PBXBuildFile; fileRef = FF8300D91E7BBCC200ED41EF /* PGExploreTodayArticleCell.m */; };
 		FF8300E01E7BEB5B00ED41EF /* PGExploreTagCell.m in Sources */ = {isa = PBXBuildFile; fileRef = FF8300DF1E7BEB5B00ED41EF /* PGExploreTagCell.m */; };
+		FFAE154C1E8A4DC700448DCB /* PGSegmentedButtonsControl.m in Sources */ = {isa = PBXBuildFile; fileRef = FFAE154B1E8A4DC700448DCB /* PGSegmentedButtonsControl.m */; };
 		FFD92D4B1E24E7FA00086DC0 /* PGSystemSettingsCell.m in Sources */ = {isa = PBXBuildFile; fileRef = FFD92D4A1E24E7FA00086DC0 /* PGSystemSettingsCell.m */; };
 		FFD92D4E1E24EBDF00086DC0 /* PGSystemSettingsTaobaoCell.m in Sources */ = {isa = PBXBuildFile; fileRef = FFD92D4D1E24EBDF00086DC0 /* PGSystemSettingsTaobaoCell.m */; };
 		FFE73E751E0BB6E000057F3B /* PGPageBasePlaceholder.m in Sources */ = {isa = PBXBuildFile; fileRef = FFE73E741E0BB6E000057F3B /* PGPageBasePlaceholder.m */; };
@@ -743,6 +744,8 @@
 		FF8300D91E7BBCC200ED41EF /* PGExploreTodayArticleCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PGExploreTodayArticleCell.m; sourceTree = "<group>"; };
 		FF8300DE1E7BEB5B00ED41EF /* PGExploreTagCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PGExploreTagCell.h; sourceTree = "<group>"; };
 		FF8300DF1E7BEB5B00ED41EF /* PGExploreTagCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PGExploreTagCell.m; sourceTree = "<group>"; };
+		FFAE154A1E8A4DC700448DCB /* PGSegmentedButtonsControl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PGSegmentedButtonsControl.h; sourceTree = "<group>"; };
+		FFAE154B1E8A4DC700448DCB /* PGSegmentedButtonsControl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PGSegmentedButtonsControl.m; sourceTree = "<group>"; };
 		FFD92D491E24E7FA00086DC0 /* PGSystemSettingsCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PGSystemSettingsCell.h; sourceTree = "<group>"; };
 		FFD92D4A1E24E7FA00086DC0 /* PGSystemSettingsCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PGSystemSettingsCell.m; sourceTree = "<group>"; };
 		FFD92D4C1E24EBDF00086DC0 /* PGSystemSettingsTaobaoCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PGSystemSettingsTaobaoCell.h; sourceTree = "<group>"; };
@@ -1137,6 +1140,7 @@
 				FFE73E721E0BB6CE00057F3B /* PagePlaceholder */,
 				FF0778291E4989BF00FD2FB9 /* SystemNotificationView */,
 				FF8107DC1E8908E500629C36 /* CoverTagView */,
+				FFAE15491E8A4DAE00448DCB /* SegmentedButtonsControl */,
 			);
 			path = BaseView;
 			sourceTree = "<group>";
@@ -2295,6 +2299,15 @@
 			path = CoverTagView;
 			sourceTree = "<group>";
 		};
+		FFAE15491E8A4DAE00448DCB /* SegmentedButtonsControl */ = {
+			isa = PBXGroup;
+			children = (
+				FFAE154A1E8A4DC700448DCB /* PGSegmentedButtonsControl.h */,
+				FFAE154B1E8A4DC700448DCB /* PGSegmentedButtonsControl.m */,
+			);
+			path = SegmentedButtonsControl;
+			sourceTree = "<group>";
+		};
 		FFE73E721E0BB6CE00057F3B /* PagePlaceholder */ = {
 			isa = PBXGroup;
 			children = (
@@ -2843,6 +2856,7 @@
 				FF3150F11E14C506002A23D5 /* PGCommentReportViewController.m in Sources */,
 				0FFAD0F41D780DF8009F9E27 /* PGGoodsCollectionView.m in Sources */,
 				FFF034671E5086F500D98D80 /* PGContactUsViewController.m in Sources */,
+				FFAE154C1E8A4DC700448DCB /* PGSegmentedButtonsControl.m in Sources */,
 				FF07782C1E498A0200FD2FB9 /* PGSystemNotificationView.m in Sources */,
 				FF8300E01E7BEB5B00ED41EF /* PGExploreTagCell.m in Sources */,
 				FF1D93331E13A42300DFB17A /* UIScrollView+UzysAnimatedGifPullToRefresh.m in Sources */,

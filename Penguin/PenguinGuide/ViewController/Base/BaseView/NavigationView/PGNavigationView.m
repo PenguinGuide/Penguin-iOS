@@ -59,7 +59,7 @@
     return naviView;
 }
 
-+ (PGNavigationView *)naviViewWithShareButton
++ (PGNavigationView *)naviViewWithShareButton:(NSString *)naviTitle
 {
     PGNavigationView *naviView = [[PGNavigationView alloc] initWithFrame:CGRectMake(0, 0, UISCREEN_WIDTH, 64)];
     
@@ -79,6 +79,15 @@
     [shareButton addTarget:naviView action:@selector(shareButtonClicked) forControlEvents:UIControlEventTouchUpInside];
     
     [naviView addSubview:shareButton];
+    
+    if (naviTitle.length > 0) {
+        UILabel *naviTitleLabel = [[UILabel alloc] initWithFrame:CGRectMake(70, 20, [UIScreen mainScreen].bounds.size.width-140, 44)];
+        naviTitleLabel.font = [UIFont systemFontOfSize:16.f weight:UIFontWeightBold];
+        naviTitleLabel.textAlignment = NSTextAlignmentCenter;
+        naviTitleLabel.textColor = Theme.colorText;
+        naviTitleLabel.text = naviTitle;
+        [naviView addSubview:naviTitleLabel];
+    }
     
     return naviView;
 }

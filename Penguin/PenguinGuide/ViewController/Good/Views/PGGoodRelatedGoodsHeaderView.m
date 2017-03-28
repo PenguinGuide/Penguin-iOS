@@ -21,9 +21,12 @@
 
 - (void)initialize
 {
-    UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(self.pg_width/2-117/2.f, 15, 117, 14)];
-    imageView.image = [UIImage imageNamed:@"pg_good_related_goods_header"];
-    [self addSubview:imageView];
+    UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.pg_width, self.pg_height)];
+    label.text = @"· 推荐商品 ·";
+    label.font = Theme.fontMediumBold;
+    label.textColor = Theme.colorText;
+    label.textAlignment = NSTextAlignmentCenter;
+    [self addSubview:label];
 }
 
 @end

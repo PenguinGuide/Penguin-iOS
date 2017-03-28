@@ -25,6 +25,6 @@
 + (PGNavigationView *)defaultNavigationView;
 + (PGNavigationView *)naviViewWithSearchButton;
 + (PGNavigationView *)naviViewWithBackButton:(NSString *)naviTitle;
-+ (PGNavigationView *)naviViewWithShareButton;
++ (PGNavigationView *)naviViewWithShareButton:(NSString *)naviTitle;
 
 @end

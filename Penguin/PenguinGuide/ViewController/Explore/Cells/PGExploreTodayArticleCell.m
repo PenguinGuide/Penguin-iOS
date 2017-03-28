@@ -194,7 +194,7 @@
 {
     if (!_titleLabel) {
         _titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(125, self.articleImageView.pg_bottom+18, self.pg_width-125-10, 16)];
-        _titleLabel.font = Theme.fontMediumBold;
+        _titleLabel.font = Theme.fontMedium;
         _titleLabel.textColor = Theme.colorText;
     }
     return _titleLabel;
@@ -204,7 +204,7 @@
 {
     if (!_subtitleLabel) {
         _subtitleLabel = [[UILabel alloc] initWithFrame:CGRectMake(125, self.titleLabel.pg_bottom+5, self.pg_width-125-10, 12)];
-        _subtitleLabel.font = Theme.fontExtraSmallBold;
+        _subtitleLabel.font = Theme.fontExtraSmall;
         _subtitleLabel.textColor = Theme.colorLightText;
     }
     return _subtitleLabel;

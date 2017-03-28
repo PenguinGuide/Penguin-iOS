@@ -25,18 +25,18 @@
 #import "PGArticleRelatedArticlesCell.h"
 #import "PGGoodCell.h"
 #import "PGGoodRelatedGoodsHeaderView.h"
+#import "PGNavigationView.h"
 
-#import "MSWeakTimer.h"
+#import "PGSegmentedButtonsControl.h"
 
-@interface PGGoodViewController () <UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout>
+@interface PGGoodViewController () <UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, PGNavigationViewDelegate>
 
+@property (nonatomic, strong) PGNavigationView *naviView;
 @property (nonatomic, strong) PGBaseCollectionView *goodCollectionView;
-@property (nonatomic, strong) UIView *bottomToolBar;
+@property (nonatomic, strong) PGSegmentedButtonsControl *segmentedButtonsControl;
 
 @property (nonatomic, strong) NSString *goodId;
 @property (nonatomic, strong) PGGoodViewModel *viewModel;
-
-@property (nonatomic, strong) MSWeakTimer *bannersWeakTimer;
 
 @end
 
@@ -57,7 +57,7 @@
     self.automaticallyAdjustsScrollViewInsets = NO;
     
     [self.view addSubview:self.goodCollectionView];
-    [self.view addSubview:self.bottomToolBar];
+    [self.view addSubview:self.segmentedButtonsControl];
     
     self.viewModel = [[PGGoodViewModel alloc] initWithAPIClient:self.apiClient];
     
@@ -65,6 +65,11 @@
     [self observe:self.viewModel keyPath:@"good" block:^(id changedObject) {
         PGGood *good = changedObject;
         if (good && [good isKindOfClass:[PGGood class]]) {
+            if (!weakself.naviView.superview) {
+                weakself.naviView = [PGNavigationView naviViewWithShareButton:good.name];
+                weakself.naviView.delegate = weakself;
+                [weakself.view addSubview:weakself.naviView];
+            }
             [weakself.goodCollectionView reloadData];
         }
         [weakself dismissLoading];
@@ -81,34 +86,22 @@
     
     [self.navigationController setNavigationBarHidden:YES animated:NO];
     
-    self.bannersWeakTimer = [MSWeakTimer scheduledTimerWithTimeInterval:5.f
-                                                                 target:self
-                                                               selector:@selector(bannersCountDown)
-                                                               userInfo:nil
-                                                                repeats:YES
-                                                          dispatchQueue:dispatch_get_main_queue()];
-    
     [self reloadView];
 }
 
 - (void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
-    
-    [self.bannersWeakTimer invalidate];
 }
 
 - (UIStatusBarStyle)preferredStatusBarStyle
 {
-    return UIStatusBarStyleLightContent;
+    return UIStatusBarStyleDefault;
 }
 
 - (void)dealloc
 {
     [self unobserve];
-    
-    [self.bannersWeakTimer invalidate];
-    self.bannersWeakTimer = nil;
 }
 
 - (void)reloadView
@@ -213,7 +206,7 @@
     if (section == 0) {
         return UIEdgeInsetsZero;
     } else if (section == 1) {
-        return UIEdgeInsetsMake(0, 22.f, 0, 22.f);
+        return UIEdgeInsetsMake(15.f, 22.f, 0, 22.f);
     }
     return UIEdgeInsetsZero;
 }
@@ -273,27 +266,19 @@
     }
 }
 
-- (void)bannersCountDown
+#pragma mark - <PGNavigationViewDelegate>
+
+- (void)naviBackButtonClicked
 {
-    PGGoodBannersCell *cell = (PGGoodBannersCell *)[self.goodCollectionView cellForItemAtIndexPath:[NSIndexPath indexPathForItem:0 inSection:0]];
-    if (cell) {
-        [cell.pagedScrollView scrollToNextPage];
-    }
+    [super backButtonClicked];
 }
 
-#pragma mark - <Button Events>
-
-- (void)buyButtonClicked
-{
-    [PGAlibcTraderManager openGoodDetailPage:self.viewModel.good.goodTaobaoId native:NO];
-}
-
-#pragma mark - <Setters && Getters>
+#pragma mark - <Lazy Init>
 
 - (PGBaseCollectionView *)goodCollectionView
 {
     if (!_goodCollectionView) {
-        _goodCollectionView = [[PGBaseCollectionView alloc] initWithFrame:CGRectMake(0, 0, UISCREEN_WIDTH, UISCREEN_HEIGHT-50) collectionViewLayout:[UICollectionViewFlowLayout new]];
+        _goodCollectionView = [[PGBaseCollectionView alloc] initWithFrame:CGRectMake(0, 64, UISCREEN_WIDTH, UISCREEN_HEIGHT-64) collectionViewLayout:[UICollectionViewFlowLayout new]];
         _goodCollectionView.dataSource = self;
         _goodCollectionView.delegate = self;
         
@@ -309,34 +294,20 @@
     return _goodCollectionView;
 }
 
-- (UIView *)bottomToolBar
+- (PGSegmentedButtonsControl *)segmentedButtonsControl
 {
-    if (!_bottomToolBar) {
-        _bottomToolBar = [[UIView alloc] initWithFrame:CGRectMake(0, UISCREEN_HEIGHT-50, UISCREEN_WIDTH, 50)];
-        _bottomToolBar.backgroundColor = [UIColor whiteColor];
-        
-        UIButton *backButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 50, 50)];
-        [backButton setImage:[UIImage imageNamed:@"pg_navigation_back_button"] forState:UIControlStateNormal];
-        [backButton addTarget:self action:@selector(backButtonClicked) forControlEvents:UIControlEventTouchUpInside];
-        [_bottomToolBar addSubview:backButton];
-        
-        UIButton *buyButton = [[UIButton alloc] initWithFrame:CGRectMake(UISCREEN_WIDTH-100, 0, 100, 50)];
-        [buyButton addTarget:self action:@selector(buyButtonClicked) forControlEvents:UIControlEventTouchUpInside];
-        [buyButton setBackgroundColor:Theme.colorExtraHighlight];
-        [buyButton setTitle:@"前往购买" forState:UIControlStateNormal];
-        [buyButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-        [buyButton.titleLabel setFont:Theme.fontMediumBold];
-        [_bottomToolBar addSubview:buyButton];
-        
-//        UIButton *shareButton = [[UIButton alloc] initWithFrame:CGRectMake(buyButton.pg_left-60, 0, 50, 50)];
-//        [shareButton setImage:[UIImage imageNamed:@"pg_article_share"] forState:UIControlStateNormal];
-//        [_bottomToolBar addSubview:shareButton];
-        
-        UIView *horizontalLine = [[UIView alloc] initWithFrame:CGRectMake(0, 0, UISCREEN_WIDTH, 1/[UIScreen mainScreen].scale)];
-        horizontalLine.backgroundColor = [UIColor colorWithHexString:@"E1E1E1"];
-        [_bottomToolBar addSubview:horizontalLine];
+    if (!_segmentedButtonsControl) {
+        _segmentedButtonsControl = [PGSegmentedButtonsControl segmentedButtonsControlWithTitles:@[@"立即购买", @"购物车"] images:@[[UIImage imageNamed:@"pg_good_buy"], [UIImage imageNamed:@"pg_good_cart"]] segmentedButtonSize:CGSizeMake(70, 48)];
+        PGWeakSelf(self);
+        [_segmentedButtonsControl setIndexClickedBlock:^(NSInteger index) {
+            if (index == 0) {
+                [PGAlibcTraderManager openGoodDetailPage:weakself.viewModel.good.goodTaobaoId native:NO];
+            } else if (index == 1) {
+                [PGAlibcTraderManager openMyShoppingCartPageWithNative:YES];
+            }
+        }];
     }
-    return _bottomToolBar;
+    return _segmentedButtonsControl;
 }
 
 - (void)didReceiveMemoryWarning {

@@ -10,7 +10,7 @@ static UIFont *fontSize10, *fontSize12, *fontSize14, *fontSize16, *fontSize18;
 static UIFont *fontSize10Bold, *fontSize12Bold, *fontSize14Bold, *fontSize16Bold, *fontSize18Bold;
 static UIFont *fontSize10Light, *fontSize12Light, *fontSize14Light, *fontSize16Light, *fontSize18Light;
 static NSArray *loadingImages;
-static UIColor *colorHighlight, *colorExtraHighlight, *colorLightGray, *colorText, *colorLightText, *colorBackground, *colorLightBackground, *colorRed;
+static UIColor *colorHighlight, *colorExtraHighlight, *colorText, *colorLightText, *colorGrayText, *colorBackground, *colorLightBackground, *colorRed;
 static UIColor *colorBorder, *colorLightBorder;
 
 #import "PGThemeManager.h"
@@ -53,6 +53,7 @@ static UIColor *colorBorder, *colorLightBorder;
         colorExtraHighlight = [UIColor colorWithRed:239.f/256.f green:103.f/256.f blue:51.f/256.f alpha:1.f];
         colorText = [UIColor colorWithRed:0.f/256.f green:0.f/256.f blue:0.f/256.f alpha:1.f];
         colorLightText = [UIColor colorWithRed:175.f/256.f green:175.f/256.f blue:175.f/256.f alpha:1.f];
+        colorGrayText = [UIColor colorWithRed:108.f/256.f green:108.f/256.f blue:108.f/256.f alpha:1.f];
         colorBackground = [UIColor colorWithRed:241.f/256.f green:241.f/256.f blue:241.f/256.f alpha:1.f];
         colorLightBackground = [UIColor colorWithRed:248.f/256.f green:248.f/256.f blue:248.f/256.f alpha:1.f];
         colorRed = [UIColor colorWithRed:219.f/256.f green:103.f/256.f blue:51/256.f alpha:1.f];
@@ -274,12 +275,12 @@ static UIColor *colorBorder, *colorLightBorder;
     }
 }
 
-- (UIColor *)colorLightGray
+- (UIColor *)colorGrayText
 {
     if (self.themeStyle == PGThemeStyleDefault) {
-        return colorLightGray;
+        return colorGrayText;
     } else {
-        return colorLightGray;
+        return colorGrayText;
     }
 }
 

@@ -1176,7 +1176,7 @@
 - (PGNavigationView *)naviView
 {
     if (!_naviView) {
-        _naviView = [PGNavigationView naviViewWithShareButton];
+        _naviView = [PGNavigationView naviViewWithShareButton:nil];
         _naviView.alpha = 0.f;
         _naviView.delegate = self;
     }

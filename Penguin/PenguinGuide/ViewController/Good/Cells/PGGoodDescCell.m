@@ -63,7 +63,7 @@
     if (!_descLabel) {
         _descLabel = [[UILabel alloc] initWithFrame:CGRectMake(40, 0, self.pg_width-80, 30)];
         _descLabel.font = Theme.fontMedium;
-        _descLabel.textColor = Theme.colorText;
+        _descLabel.textColor = Theme.colorGrayText;
         _descLabel.numberOfLines = 0;
     }
     return _descLabel;

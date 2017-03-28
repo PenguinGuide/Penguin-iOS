@@ -58,7 +58,7 @@
 - (PGPagedScrollView *)pagedScrollView
 {
     if (!_pagedScrollView) {
-        _pagedScrollView = [[PGPagedScrollView alloc] initWithFrame:CGRectMake(0, 0, UISCREEN_WIDTH, UISCREEN_WIDTH*2/3) imageFillMode:PGPagedScrollViewImageFillModeFill iconMode:PGPagedScrollViewIconModeLight];
+        _pagedScrollView = [[PGPagedScrollView alloc] initWithFrame:CGRectMake(0, 0, UISCREEN_WIDTH, UISCREEN_WIDTH*2/3) imageFillMode:PGPagedScrollViewImageFillModeFill iconMode:PGPagedScrollViewIconModeLabel];
         _pagedScrollView.delegate = self;
     }
     return _pagedScrollView;
