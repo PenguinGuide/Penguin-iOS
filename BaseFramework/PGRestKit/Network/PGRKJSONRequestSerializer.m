@@ -15,13 +15,16 @@
 {
     NSMutableURLRequest *request = [super requestWithMethod:method URLString:URLString parameters:parameters error:error];
     
-    NSString *absoluteUrl = request.URL.absoluteString;
-    NSString *directory = [NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES).firstObject stringByAppendingPathComponent:@"com.xinglian.penguin.etags"];
-    NSString *fileName = [directory stringByAppendingPathComponent:[self cachedFileNameForKey:absoluteUrl]];
-    if ([[NSFileManager defaultManager] fileExistsAtPath:fileName]) {
-        NSString *etag = [NSKeyedUnarchiver unarchiveObjectWithFile:fileName];
-        if (etag && etag.length > 0) {
-            [request addValue:etag forHTTPHeaderField:@"If-None-Match"];
+    NSCachedURLResponse *cachedResponse = [[NSURLCache sharedURLCache] cachedResponseForRequest:request];
+    if (cachedResponse) {
+        NSString *absoluteUrl = request.URL.absoluteString;
+        NSString *directory = [NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES).firstObject stringByAppendingPathComponent:@"com.xinglian.penguin.etags"];
+        NSString *fileName = [directory stringByAppendingPathComponent:[self cachedFileNameForKey:absoluteUrl]];
+        if ([[NSFileManager defaultManager] fileExistsAtPath:fileName]) {
+            NSString *etag = [NSKeyedUnarchiver unarchiveObjectWithFile:fileName];
+            if (etag && etag.length > 0) {
+                [request addValue:etag forHTTPHeaderField:@"If-None-Match"];
+            }
         }
     }
     

@@ -134,19 +134,17 @@
         PGArticle *article = changedObject;
         if (article && [article isKindOfClass:[PGArticle class]]) {
             if (article.isLiked) {
-                [weakself.likeButton setImage:[UIImage imageNamed:@"pg_article_liked"] forState:UIControlStateNormal];
-                [weakself.likeButton setTag:1];
+                [weakself.likeButton setSelected:YES];
             } else {
-                [weakself.likeButton setImage:[UIImage imageNamed:@"pg_article_like"] forState:UIControlStateNormal];
-                [weakself.likeButton setTag:0];
+                [weakself.likeButton setSelected:NO];
             }
             if (article.isCollected) {
-                [weakself.collectButton setImage:[UIImage imageNamed:@"pg_article_collected"] forState:UIControlStateNormal];
-                [weakself.collectButton setTag:1];
+                [weakself.collectButton setSelected:YES];
             } else {
-                [weakself.collectButton setImage:[UIImage imageNamed:@"pg_article_collect"] forState:UIControlStateNormal];
-                [weakself.collectButton setTag:0];
+                [weakself.collectButton setSelected:NO];
             }
+            [weakself.likeButton updateCount:article.likesCount];
+            [weakself.commentButton updateCount:article.commentsCount];
             
             if (article.body && article.body.length > 0) {
                 PGStringParser *htmlParser = [PGStringParser htmlParserWithString:article.body];
@@ -241,8 +239,9 @@
         BOOL likeSuccess = [changedObject boolValue];
         if (likeSuccess) {
             [weakself showToast:@"喜欢"];
-            weakself.likeButton.tag = 1;
-            [weakself.likeButton setImage:[UIImage imageNamed:@"pg_article_liked"] forState:UIControlStateNormal];
+            [weakself.likeButton setSelected:YES];
+            weakself.viewModel.article.likesCount++;
+            [weakself.likeButton updateCount:weakself.viewModel.article.likesCount];
         }
         [weakself dismissLoading];
     }];
@@ -250,8 +249,14 @@
         BOOL dislikeSuccess = [changedObject boolValue];
         if (dislikeSuccess) {
             [weakself showToast:@"不再喜欢"];
-            weakself.likeButton.tag = 0;
-            [weakself.likeButton setImage:[UIImage imageNamed:@"pg_article_like"] forState:UIControlStateNormal];
+            [weakself.likeButton setSelected:NO];
+            if (weakself.viewModel.article.likesCount > 0) {
+                weakself.viewModel.article.likesCount--;
+                [weakself.likeButton updateCount:weakself.viewModel.article.likesCount];
+            } else {
+                weakself.viewModel.article.likesCount = 0;
+                [weakself.likeButton updateCount:weakself.viewModel.article.likesCount];
+            }
         }
         [weakself dismissLoading];
     }];
@@ -259,8 +264,7 @@
         BOOL collectSuccess = [changedObject boolValue];
         if (collectSuccess) {
             [weakself showToast:@"收藏成功"];
-            weakself.collectButton.tag = 1;
-            [weakself.collectButton setImage:[UIImage imageNamed:@"pg_article_collected"] forState:UIControlStateNormal];
+            [weakself.collectButton setSelected:YES];
         }
         [weakself dismissLoading];
     }];
@@ -268,8 +272,7 @@
         BOOL discollectSuccess = [changedObject boolValue];
         if (discollectSuccess) {
             [weakself showToast:@"取消收藏"];
-            weakself.collectButton.tag = 0;
-            [weakself.collectButton setImage:[UIImage imageNamed:@"pg_article_collect"] forState:UIControlStateNormal];
+            [weakself.collectButton setSelected:NO];
         }
         [weakself dismissLoading];
     }];
@@ -1015,11 +1018,9 @@
 - (void)likeButtonClicked
 {
     if (PGGlobal.userId && PGGlobal.userId.length > 0) {
-        if (self.likeButton.tag == 0) {
-//            [self showLoading];
+        if (!self.likeButton.selected) {
             [self.viewModel likeArticle];
         } else {
-//            [self showLoading];
             [self.viewModel dislikeArticle];
         }
     } else {
@@ -1030,11 +1031,9 @@
 - (void)collectButtonClicked
 {
     if (PGGlobal.userId && PGGlobal.userId.length > 0) {
-        if (self.collectButton.tag == 0) {
-//            [self showLoading];
+        if (!self.collectButton.selected) {
             [self.viewModel collectArticle];
         } else {
-//            [self showLoading];
             [self.viewModel discollectArticle];
         }
     } else {
@@ -1215,10 +1214,10 @@
         self.collectButton = [PGArticleToolButton toolButtonWithFrame:CGRectMake(20, 0, 50, 50)
                                                                 title:@"收藏"
                                                                 image:[UIImage imageNamed:@"pg_article_collect"]
+                                                     highlightedImage:[UIImage imageNamed:@"pg_article_collected"]
                                                             imageSize:CGSizeMake(20, 20)
                                                                 count:0];
         [self.collectButton addTarget:self action:@selector(collectButtonClicked) forControlEvents:UIControlEventTouchUpInside];
-        [self.collectButton setTag:0];
         self.collectButton.eventName = article_collect_button_clicked;
         if (self.articleId) {
             self.collectButton.eventId = self.articleId;
@@ -1228,6 +1227,7 @@
         self.goodsListButton = [PGArticleToolButton toolButtonWithFrame:CGRectMake(self.collectButton.pg_right+15, 0, 50, 50)
                                                                   title:@"商品列表"
                                                                   image:[UIImage imageNamed:@"pg_article_goods_list_button"]
+                                                       highlightedImage:nil
                                                               imageSize:CGSizeMake(20, 20)
                                                                   count:0];
         [self.goodsListButton addTarget:self action:@selector(goodsListButtonClicked) forControlEvents:UIControlEventTouchUpInside];
@@ -1236,6 +1236,7 @@
         self.commentButton = [PGArticleToolButton toolButtonWithFrame:CGRectMake(UISCREEN_WIDTH-20-50, 0, 50, 50)
                                                                 title:@"评论"
                                                                 image:[UIImage imageNamed:@"pg_article_comment"]
+                                                     highlightedImage:nil
                                                             imageSize:CGSizeMake(20, 20)
                                                                 count:0];
         [self.commentButton addTarget:self action:@selector(commentButtonClicked) forControlEvents:UIControlEventTouchUpInside];
@@ -1248,6 +1249,7 @@
         self.likeButton = [PGArticleToolButton toolButtonWithFrame:CGRectMake(self.commentButton.pg_left-10-50, 0, 50, 50)
                                                              title:@"喜欢"
                                                              image:[UIImage imageNamed:@"pg_article_like"]
+                                                  highlightedImage:[UIImage imageNamed:@"pg_article_liked"]
                                                          imageSize:CGSizeMake(20, 20)
                                                              count:0];
         [self.likeButton addTarget:self action:@selector(likeButtonClicked) forControlEvents:UIControlEventTouchUpInside];

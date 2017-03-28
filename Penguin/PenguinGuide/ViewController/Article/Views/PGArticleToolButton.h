@@ -10,6 +10,8 @@
 
 @interface PGArticleToolButton : UIButton
 
-+ (PGArticleToolButton *)toolButtonWithFrame:(CGRect)frame title:(NSString *)title image:(UIImage *)image imageSize:(CGSize)imageSize count:(NSInteger)count;
++ (PGArticleToolButton *)toolButtonWithFrame:(CGRect)frame title:(NSString *)title image:(UIImage *)image highlightedImage:(UIImage *)highlightedImage imageSize:(CGSize)imageSize count:(NSInteger)count;
+
+- (void)updateCount:(NSInteger)count;
 
 @end

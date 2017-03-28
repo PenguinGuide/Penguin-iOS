@@ -24,6 +24,8 @@
 @property (nonatomic, strong) NSString *channelIcon;
 @property (nonatomic, strong) NSString *date;
 @property (nonatomic, strong) NSString *shareUrl;
+@property (nonatomic, assign) NSInteger likesCount;
+@property (nonatomic, assign) NSInteger commentsCount;
 @property (nonatomic, assign) BOOL isLiked;
 @property (nonatomic, assign) BOOL isCollected;
 @property (nonatomic, strong) NSArray *tagsArray;
