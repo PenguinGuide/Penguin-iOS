@@ -7,6 +7,7 @@
 //
 
 #import "PGGoodCell.h"
+#import "PGCoverTagView.h"
 
 @interface PGGoodCell ()
 
@@ -14,6 +15,7 @@
 @property (nonatomic, strong) UIImageView *maskImageView;
 @property (nonatomic, strong) UILabel *titleLabel;
 @property (nonatomic, strong) UILabel *priceLabel;
+@property (nonatomic, strong) PGCoverTagView *statusTagView;
 
 @end
 
@@ -33,6 +35,7 @@
     [self.contentView addSubview:self.goodImageView];
     [self.contentView addSubview:self.titleLabel];
     [self.contentView addSubview:self.priceLabel];
+    [self.contentView addSubview:self.statusTagView];
 }
 
 - (void)setCellWithModel:(PGRKModel *)model
@@ -56,6 +59,21 @@
             [attrS addAttribute:NSForegroundColorAttributeName value:Theme.colorExtraHighlight range:NSMakeRange(0, good.discountPrice.length+1)];
             [attrS addAttribute:NSFontAttributeName value:Theme.fontMediumBold range:NSMakeRange(0, good.discountPrice.length+1)];
             self.priceLabel.attributedText = attrS;
+        }
+        
+        if ([good.status isEqualToString:@"0"]) {
+            self.statusTagView.hidden = YES;
+        } else {
+            self.statusTagView.hidden = NO;
+            if ([good.status isEqualToString:@"1"]) {
+                [self.statusTagView setTagViewWithTitle:@"缺货" style:PGCoverTagViewStyleNormal];
+            } else if ([good.status isEqualToString:@"2"]) {
+                [self.statusTagView setTagViewWithTitle:@"下架" style:PGCoverTagViewStyleNormal];
+            } else if ([good.status isEqualToString:@"3"]) {
+                [self.statusTagView setTagViewWithTitle:@"新品" style:PGCoverTagViewStyleNew];
+            } else if ([good.status isEqualToString:@"4"]) {
+                [self.statusTagView setTagViewWithTitle:@"热卖" style:PGCoverTagViewStyleHot];
+            }
         }
     }
 }
@@ -152,6 +170,14 @@
         _priceLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, self.titleLabel.pg_bottom+3, width-40, 16)];
     }
     return _priceLabel;
+}
+
+- (PGCoverTagView *)statusTagView
+{
+    if (!_statusTagView) {
+        _statusTagView = [PGCoverTagView tagViewWithMargin:CGPointMake(10, 10) alignment:PGCoverTagViewAlignmentLeft];
+    }
+    return _statusTagView;
 }
 
 @end

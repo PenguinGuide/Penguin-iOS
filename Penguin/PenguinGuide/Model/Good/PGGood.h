@@ -23,6 +23,7 @@
 @property (nonatomic, strong) NSString *link;
 @property (nonatomic, strong) NSString *goodId;
 @property (nonatomic, strong) NSString *goodTaobaoId;
+@property (nonatomic, strong) NSString *status;
 
 @property (nonatomic, strong) NSArray *bannersArray;
 @property (nonatomic, strong) NSArray *tagsArray;

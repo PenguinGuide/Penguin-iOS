@@ -26,6 +26,7 @@
              @"isCollected": @"collected",
              @"goodId" : @"id",
              @"goodTaobaoId" : @"num_iid",
+             @"status" : @"selling_status",
              
              @"bannersArray": @"images",
              @"tagsArray": @"tags",
@@ -39,6 +40,11 @@
 }
 
 + (NSValueTransformer *)goodIdJSONTransformer
+{
+    return [NSValueTransformer valueTransformerForName:PGStringValueTransformer];
+}
+
++ (NSValueTransformer *)statusJSONTransformer
 {
     return [NSValueTransformer valueTransformerForName:PGStringValueTransformer];
 }

@@ -42,18 +42,15 @@
     [self.contentView addSubview:dimView];
     
     [dimView addSubview:self.titleLabel];
+    [dimView addSubview:self.dayLabel];
+    [dimView addSubview:self.dateVerticalLine];
     [dimView addSubview:self.yearLabel];
     [dimView addSubview:self.monthLabel];
-    [dimView addSubview:self.dayLabel];
-    
-    self.dateVerticalLine = [[UIView alloc] initWithFrame:CGRectMake(72, self.titleLabel.pg_top-15-30+2, 2, 26)];
-    self.dateVerticalLine.backgroundColor = [UIColor whiteColor];
-    [dimView addSubview:self.dateVerticalLine];
 }
 
 + (CGSize)cellSize
 {
-    return CGSizeMake(240, 4*240/3.f);
+    return CGSizeMake(180, 4*180/3.f);
 }
 
 #pragma mark - <PGBaseCollectionViewCell>
@@ -101,9 +98,6 @@
                     }
                 }
             }
-//            if (!self.dateVerticalLine.superview) {
-//                [self.contentView addSubview:self.dateVerticalLine];
-//            }
         }
     }
 }
@@ -132,8 +126,8 @@
 - (UILabel *)titleLabel
 {
     if (!_titleLabel) {
-        _titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(22, self.pg_height-30-50, self.pg_width-22-50, 50)];
-        _titleLabel.font = [UIFont systemFontOfSize:20.f weight:UIFontWeightBold];
+        _titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(22, self.pg_height-20-40, self.pg_width-22-40, 40)];
+        _titleLabel.font = Theme.fontLargeBold;
         _titleLabel.textColor = [UIColor whiteColor];
         _titleLabel.numberOfLines = 2;
     }
@@ -143,18 +137,27 @@
 - (UILabel *)dayLabel
 {
     if (!_dayLabel) {
-        _dayLabel = [[UILabel alloc] initWithFrame:CGRectMake(22, self.titleLabel.pg_top-15-30, 48, 30)];
-        _dayLabel.font = [UIFont systemFontOfSize:36.f weight:UIFontWeightBold];
+        _dayLabel = [[UILabel alloc] initWithFrame:CGRectMake(21, self.titleLabel.pg_top-10-26, 34, 26)];
+        _dayLabel.font = [UIFont systemFontOfSize:26.f weight:UIFontWeightBold];
         _dayLabel.textColor = [UIColor whiteColor];
     }
     return _dayLabel;
 }
 
+- (UIView *)dateVerticalLine
+{
+    if (!_dateVerticalLine) {
+        _dateVerticalLine = [[UIView alloc] initWithFrame:CGRectMake(self.dayLabel.pg_right+3, self.titleLabel.pg_top-10-24+2, 2, 20)];
+        _dateVerticalLine.backgroundColor = [UIColor whiteColor];
+    }
+    return _dateVerticalLine;
+}
+
 - (UILabel *)monthLabel
 {
     if (!_monthLabel) {
-        _monthLabel = [[UILabel alloc] initWithFrame:CGRectMake(82, self.titleLabel.pg_top-15-30, 50, 15-1)];
-        _monthLabel.font = [UIFont systemFontOfSize:15.f weight:UIFontWeightBold];
+        _monthLabel = [[UILabel alloc] initWithFrame:CGRectMake(self.dateVerticalLine.pg_right+8, self.titleLabel.pg_top-10-23, 50, 10)];
+        _monthLabel.font = [UIFont systemFontOfSize:10.f weight:UIFontWeightBold];
         _monthLabel.textColor = [UIColor whiteColor];
     }
     return _monthLabel;
@@ -163,8 +166,8 @@
 - (UILabel *)yearLabel
 {
     if (!_yearLabel) {
-        _yearLabel = [[UILabel alloc] initWithFrame:CGRectMake(82, self.monthLabel.pg_bottom+2, 50, 15-1)];
-        _yearLabel.font = [UIFont systemFontOfSize:15.f weight:UIFontWeightBold];
+        _yearLabel = [[UILabel alloc] initWithFrame:CGRectMake(self.dateVerticalLine.pg_right+8, self.monthLabel.pg_bottom+2, 50, 10)];
+        _yearLabel.font = [UIFont systemFontOfSize:10.f weight:UIFontWeightBold];
         _yearLabel.textColor = [UIColor whiteColor];
     }
     return _yearLabel;
