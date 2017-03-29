@@ -16,6 +16,7 @@
 @property (nonatomic, assign) CGFloat minimumInteritemSpacing;
 @property (nonatomic, assign) CGFloat minimumLineSpacing;
 @property (nonatomic, assign) BOOL showBorder;
+@property (nonatomic, strong) NSString *moreCellLink;
 
 @end
 

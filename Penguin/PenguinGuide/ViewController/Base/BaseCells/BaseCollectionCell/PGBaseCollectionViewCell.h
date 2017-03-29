@@ -16,6 +16,7 @@
 
 - (void)setCellWithModel:(PGRKModel *)model;
 - (void)cellDidSelectWithModel:(PGRKModel *)model;
+- (void)moreCellDidSelectWithLink:(NSString *)link;
 
 @end
 

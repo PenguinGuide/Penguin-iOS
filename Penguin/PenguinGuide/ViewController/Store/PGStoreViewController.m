@@ -198,6 +198,7 @@
                             config.insets = UIEdgeInsetsMake(0, 22.f, 0.f, 22.f);
                             config.collectionCellSize = [PGStoreScenarioCell cellSize];
                             config.showBorder = NO;
+                            config.moreCellLink = @"qiechihe://all_scenarios?scenarioType=4";
                         }];
         return cell;
     }

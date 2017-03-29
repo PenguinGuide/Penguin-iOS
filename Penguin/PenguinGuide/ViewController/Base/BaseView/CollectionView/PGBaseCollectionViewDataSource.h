@@ -17,5 +17,6 @@ typedef void (^ConfigureCellBlock) (id<PGBaseCollectionViewCell> cell, PGRKModel
                                               configureCellBlock:(ConfigureCellBlock)configureCellBlock;
 
 - (void)reloadModels:(NSArray *)models;
+- (void)reloadModels:(NSArray *)models showMoreCell:(BOOL)showMoreCell;
 
 @end

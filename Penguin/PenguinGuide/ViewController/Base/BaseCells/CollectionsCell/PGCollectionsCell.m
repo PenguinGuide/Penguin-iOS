@@ -7,8 +7,10 @@
 //
 
 static NSString *const CollectionCell = @"CollectionCell";
+static NSString *const MoreCell = @"MoreCell";
 
 #import "PGCollectionsCell.h"
+#import "PGImageCell.h"
 
 @implementation PGCollectionsCellConfig
 
@@ -60,7 +62,9 @@ static NSString *const CollectionCell = @"CollectionCell";
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
     id<PGBaseCollectionViewCell> selectedCell = (id<PGBaseCollectionViewCell>)[collectionView cellForItemAtIndexPath:indexPath];
-    if ([selectedCell respondsToSelector:@selector(cellDidSelectWithModel:)]) {
+    if ([selectedCell respondsToSelector:@selector(moreCellDidSelectWithLink:)]) {
+        [selectedCell moreCellDidSelectWithLink:self.config.moreCellLink];
+    } else if ([selectedCell respondsToSelector:@selector(cellDidSelectWithModel:)]) {
         [selectedCell cellDidSelectWithModel:self.collections[indexPath.item]];
     }
 }
@@ -103,6 +107,9 @@ static NSString *const CollectionCell = @"CollectionCell";
         _collectionsCollectionView.alwaysBounceHorizontal = YES;
         
         [_collectionsCollectionView registerClass:self.CellClass forCellWithReuseIdentifier:CollectionCell];
+        if (self.config.moreCellLink && self.config.moreCellLink.length > 0) {
+            [_collectionsCollectionView registerClass:[PGImageCell class] forCellWithReuseIdentifier:MoreCell];
+        }
     }
     return _collectionsCollectionView;
 }
@@ -116,7 +123,7 @@ static NSString *const CollectionCell = @"CollectionCell";
                                                                         [cell setCellWithModel:model];
                                                                     }
                                                                 }];
-        [_dataSource reloadModels:self.collections];
+        [_dataSource reloadModels:self.collections showMoreCell:(self.config.moreCellLink && self.config.moreCellLink.length > 0)];
     }
     return _dataSource;
 }
