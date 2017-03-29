@@ -117,6 +117,7 @@
         }];
         PGBaseNavigationController *launchGuidesNaviController = [[PGBaseNavigationController alloc] initWithRootViewController:launchGuidesVC];
         self.window.rootViewController = launchGuidesNaviController;
+        [[NSURLCache sharedURLCache] removeAllCachedResponses];
     } else {
         self.window.rootViewController = navigationController;
     }
