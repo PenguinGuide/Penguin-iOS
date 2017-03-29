@@ -23,7 +23,7 @@
 {
     [self setImage:[UIImage imageNamed:@"pg_article_comment_like"] forState:UIControlStateNormal];
     [self setTitleColor:Theme.colorLightText forState:UIControlStateNormal];
-    [self setImage:[UIImage imageNamed:@"pg_article_liked"] forState:UIControlStateSelected];
+    [self setImage:[UIImage imageNamed:@"pg_article_comment_liked"] forState:UIControlStateSelected];
     [self setTitleColor:Theme.colorRed forState:UIControlStateSelected];
     [self.titleLabel setFont:Theme.fontSmallBold];
 }
