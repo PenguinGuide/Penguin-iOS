@@ -8,12 +8,15 @@
 
 #import "PGBaseViewModel.h"
 #import "PGArticle.h"
+#import "PGArticleInfo.h"
 #import "PGComment.h"
 
 @interface PGArticleViewModel : PGBaseViewModel
 
 @property (nonatomic, strong) NSString *articleId;
 @property (nonatomic, strong) PGArticle *article;
+@property (nonatomic, strong) PGArticleInfo *articleInfo;
+
 @property (nonatomic, strong) NSArray *commentsArray;
 @property (nonatomic, strong) NSArray *paragraphsArray;
 @property (nonatomic, strong) NSArray *goodsArray;

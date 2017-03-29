@@ -130,24 +130,24 @@
     self.viewModel.articleId = self.articleId;
     
     PGWeakSelf(self);
-    [self observe:self.viewModel keyPath:@"article" block:^(id changedObject) {
-        PGArticle *article = changedObject;
-        if (article && [article isKindOfClass:[PGArticle class]]) {
-            if (article.isLiked) {
+    [self observe:self.viewModel keyPath:@"articleInfo" block:^(id changedObject) {
+        PGArticleInfo *articleInfo = changedObject;
+        if (articleInfo && [articleInfo isKindOfClass:[PGArticleInfo class]]) {
+            if (articleInfo.isLiked) {
                 [weakself.likeButton setSelected:YES];
             } else {
                 [weakself.likeButton setSelected:NO];
             }
-            if (article.isCollected) {
+            if (articleInfo.isCollected) {
                 [weakself.collectButton setSelected:YES];
             } else {
                 [weakself.collectButton setSelected:NO];
             }
-            [weakself.likeButton updateCount:article.likesCount];
-            [weakself.commentButton updateCount:article.commentsCount];
+            [weakself.likeButton updateCount:articleInfo.likesCount];
+            [weakself.commentButton updateCount:articleInfo.commentsCount];
             
-            if (article.body && article.body.length > 0) {
-                PGStringParser *htmlParser = [PGStringParser htmlParserWithString:article.body];
+            if (weakself.viewModel.article.body && weakself.viewModel.article.body.length > 0) {
+                PGStringParser *htmlParser = [PGStringParser htmlParserWithString:weakself.viewModel.article.body];
                 weakself.viewModel.paragraphsArray = [htmlParser articleParsedStorages];
                 for (id storage in weakself.viewModel.paragraphsArray) {
                     if ([storage isKindOfClass:[PGParserTextStorage class]]) {
@@ -240,8 +240,8 @@
         if (likeSuccess) {
             [weakself showToast:@"喜欢"];
             [weakself.likeButton setSelected:YES];
-            weakself.viewModel.article.likesCount++;
-            [weakself.likeButton updateCount:weakself.viewModel.article.likesCount];
+            weakself.viewModel.articleInfo.likesCount++;
+            [weakself.likeButton updateCount:weakself.viewModel.articleInfo.likesCount];
         }
         [weakself dismissLoading];
     }];
@@ -250,12 +250,12 @@
         if (dislikeSuccess) {
             [weakself showToast:@"不再喜欢"];
             [weakself.likeButton setSelected:NO];
-            if (weakself.viewModel.article.likesCount > 0) {
-                weakself.viewModel.article.likesCount--;
-                [weakself.likeButton updateCount:weakself.viewModel.article.likesCount];
+            if (weakself.viewModel.articleInfo.likesCount > 0) {
+                weakself.viewModel.articleInfo.likesCount--;
+                [weakself.likeButton updateCount:weakself.viewModel.articleInfo.likesCount];
             } else {
-                weakself.viewModel.article.likesCount = 0;
-                [weakself.likeButton updateCount:weakself.viewModel.article.likesCount];
+                weakself.viewModel.articleInfo.likesCount = 0;
+                [weakself.likeButton updateCount:weakself.viewModel.articleInfo.likesCount];
             }
         }
         [weakself dismissLoading];
@@ -387,7 +387,7 @@
     if (section == 0) {
         return self.viewModel.paragraphsArray.count > 0 ? 1 + self.viewModel.paragraphsArray.count + 1 : 0;
     } else if (section == 1) {
-        return self.viewModel.article.relatedArticlesArray.count > 0 ? 1 : 0;
+        return self.viewModel.articleInfo.relatedArticlesArray.count > 0 ? 1 : 0;
     } else if (section == 2) {
         return self.viewModel.commentsArray.count;
     } else {
@@ -402,7 +402,7 @@
             PGArticleParagraphInfoCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:ArticleParagraphInfoCell forIndexPath:indexPath];
             cell.delegate = self;
             
-            [cell setCellWithArticle:self.viewModel.article];
+            [cell setCellWithArticle:self.viewModel.article tagsArray:self.viewModel.articleInfo.tagsArray];
             
             return cell;
         } else if (indexPath.item == self.viewModel.paragraphsArray.count+1) {
@@ -485,7 +485,7 @@
         }
     } else if (indexPath.section == 1) {
         PGArticleRelatedArticlesCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:ArticleRelatedArticlesCell forIndexPath:indexPath];
-        [cell setCellWithDataArray:self.viewModel.article.relatedArticlesArray];
+        [cell setCellWithDataArray:self.viewModel.articleInfo.relatedArticlesArray];
         
         return cell;
     } else if (indexPath.section == 2) {
@@ -565,7 +565,7 @@
 {
     if (indexPath.section == 0) {
         if (indexPath.item == 0) {
-            return [PGArticleParagraphInfoCell cellSize:self.viewModel.article];
+            return [PGArticleParagraphInfoCell cellSize:self.viewModel.article tagsArray:self.viewModel.articleInfo.tagsArray];
         } else if (indexPath.item == self.viewModel.paragraphsArray.count+1) {
             return [PGArticleParagraphFooterCell cellSize];
         } else {
@@ -1100,7 +1100,7 @@
         } else {
             if (self.viewModel.commentsArray.count > 0) {
                 [self.articleCollectionView scrollToItemAtIndexPath:[NSIndexPath indexPathForItem:self.viewModel.commentsArray.count-1 inSection:2] atScrollPosition:UICollectionViewScrollPositionBottom animated:YES];
-            } else if (self.viewModel.article.relatedArticlesArray.count > 0) {
+            } else if (self.viewModel.articleInfo.relatedArticlesArray.count > 0) {
                 [self.articleCollectionView scrollToItemAtIndexPath:[NSIndexPath indexPathForItem:0 inSection:1] atScrollPosition:UICollectionViewScrollPositionBottom animated:YES];
             } else if (self.viewModel.paragraphsArray.count > 0) {
                 [self.articleCollectionView scrollToItemAtIndexPath:[NSIndexPath indexPathForItem:self.viewModel.paragraphsArray.count-1 inSection:0] atScrollPosition:UICollectionViewScrollPositionBottom animated:YES];

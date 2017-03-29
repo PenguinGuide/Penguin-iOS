@@ -27,6 +27,7 @@ static NSString *TagCell = @"TagCell";
 
 @property (nonatomic, strong) UICollectionView *tagsCollectionView;
 @property (nonatomic, strong) PGArticle *article;
+@property (nonatomic, strong) NSArray *tagsArray;
 
 @end
 
@@ -64,10 +65,11 @@ static NSString *TagCell = @"TagCell";
     [self.contentView addSubview:self.tagsCollectionView];
 }
 
-- (void)setCellWithArticle:(PGArticle *)article
+- (void)setCellWithArticle:(PGArticle *)article tagsArray:(NSArray *)tagsArray
 {
     if (article) {
         self.article = article;
+        self.tagsArray = tagsArray;
         
         if (article.date && article.date.length > 0) {
             NSArray *datesArray = [article.date componentsSeparatedByString:@"/"];
@@ -186,7 +188,7 @@ static NSString *TagCell = @"TagCell";
             self.descLabel.hidden = YES;
         }
         
-        if (article.tagsArray.count > 0) {
+        if (tagsArray.count > 0) {
             if (!self.descLabel.hidden) {
                 self.tagsCollectionView.frame = CGRectMake(self.tagsCollectionView.pg_x, self.descLabel.pg_bottom+20, self.descLabel.pg_width, 20.f);
             } else {
@@ -205,7 +207,7 @@ static NSString *TagCell = @"TagCell";
     }
 }
 
-+ (CGSize)cellSize:(PGArticle *)article
++ (CGSize)cellSize:(PGArticle *)article tagsArray:(NSArray *)tagsArray
 {
     if (article) {
         CGFloat titleHeight = 0.f;
@@ -235,7 +237,7 @@ static NSString *TagCell = @"TagCell";
             copyrightInfoHeight = copyrightInfoHeight + 10 + 12;
         }
         CGFloat height = 21+30+19+titleHeight+10+subtitleHeight+15+copyrightInfoHeight+10+20;
-        if (article.tagsArray.count > 0) {
+        if (tagsArray.count > 0) {
             return CGSizeMake(UISCREEN_WIDTH, height+20.f+30.f);
         } else {
             return CGSizeMake(UISCREEN_WIDTH, height+10.f);
@@ -253,14 +255,14 @@ static NSString *TagCell = @"TagCell";
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
 {
-    return self.article.tagsArray.count;
+    return self.tagsArray.count;
 }
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
     PGTagCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:TagCell forIndexPath:indexPath];
     
-    PGTag *tag = self.article.tagsArray[indexPath.item];
+    PGTag *tag = self.tagsArray[indexPath.item];
     [cell setCellWithTagName:tag.name];
     
     return cell;
@@ -275,7 +277,7 @@ static NSString *TagCell = @"TagCell";
 
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    PGTag *tag = self.article.tagsArray[indexPath.item];
+    PGTag *tag = self.tagsArray[indexPath.item];
     
     return [PGTagCell cellSize:tag.name];
 }
@@ -293,7 +295,7 @@ static NSString *TagCell = @"TagCell";
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
     if (self.delegate && [self.delegate respondsToSelector:@selector(tagDidSelect:)]) {
-        [self.delegate tagDidSelect:self.article.tagsArray[indexPath.item]];
+        [self.delegate tagDidSelect:self.tagsArray[indexPath.item]];
     }
 }
 

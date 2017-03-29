@@ -39,7 +39,8 @@
 
 #define PG_Topic                        @"/topic/:topicId"
 
-#define PG_Article                      @"/article/:articleId"
+#define PG_Article                      @"/v2/article/:articleId"
+#define PG_Article_Info                 @"/article/:articleId/meta"
 #define PG_Article_Like                 @"/article_favor/:articleId"
 #define PG_Article_Collect              @"/article_store/:articleId"
 #define PG_Article_Comments             @"/article/:articleId/comments"

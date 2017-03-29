@@ -7,8 +7,6 @@
 //
 
 #import <PGRestKit/PGRestKit.h>
-#import "PGTag.h"
-#import "PGArticleBanner.h"
 
 @interface PGArticle : PGRKModel
 
@@ -24,11 +22,5 @@
 @property (nonatomic, strong) NSString *channelIcon;
 @property (nonatomic, strong) NSString *date;
 @property (nonatomic, strong) NSString *shareUrl;
-@property (nonatomic, assign) NSInteger likesCount;
-@property (nonatomic, assign) NSInteger commentsCount;
-@property (nonatomic, assign) BOOL isLiked;
-@property (nonatomic, assign) BOOL isCollected;
-@property (nonatomic, strong) NSArray *tagsArray;
-@property (nonatomic, strong) NSArray *relatedArticlesArray;
 
 @end

@@ -156,6 +156,7 @@
         _articleImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 60, self.pg_width, self.pg_width*9/16)];
         _articleImageView.clipsToBounds = YES;
         _articleImageView.backgroundColor = Theme.colorBackground;
+        _articleImageView.contentMode = UIViewContentModeScaleAspectFill;
     }
     return _articleImageView;
 }

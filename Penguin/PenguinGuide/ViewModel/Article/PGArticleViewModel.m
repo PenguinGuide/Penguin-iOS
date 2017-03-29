@@ -30,6 +30,24 @@
             config.pattern = @{@"articleId":weakself.articleId};
         } completion:^(id response) {
             weakself.article = [response firstObject];
+            [weakself requestArticleInfo];
+        } failure:^(NSError *error) {
+            weakself.error = error;
+        }];
+    }
+}
+
+- (void)requestArticleInfo
+{
+    if (self.articleId && self.articleId.length > 0) {
+        PGWeakSelf(self);
+        [self.apiClient pg_makeGetRequest:^(PGRKRequestConfig *config) {
+            config.route = PG_Article_Info;
+            config.keyPath = nil;
+            config.model = [PGArticleInfo new];
+            config.pattern = @{@"articleId":weakself.articleId};
+        } completion:^(id response) {
+            weakself.articleInfo = [response firstObject];
         } failure:^(NSError *error) {
             weakself.error = error;
         }];

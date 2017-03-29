@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "PGArticle.h"
+#import "PGArticleInfo.h"
 
 @protocol PGArticleParagraphInfoCellDelegate <NSObject>
 
@@ -19,7 +20,7 @@
 
 @property (nonatomic, weak) id<PGArticleParagraphInfoCellDelegate> delegate;
 
-- (void)setCellWithArticle:(PGArticle *)article;
-+ (CGSize)cellSize:(PGArticle *)article;
+- (void)setCellWithArticle:(PGArticle *)article tagsArray:(NSArray *)tagsArray;
++ (CGSize)cellSize:(PGArticle *)article tagsArray:(NSArray *)tagsArray;
 
 @end

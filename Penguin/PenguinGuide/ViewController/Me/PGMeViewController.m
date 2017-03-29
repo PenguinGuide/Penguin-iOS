@@ -226,11 +226,9 @@
     if (indexPath.item == 0) {
         [PGAlibcTraderManager openMyOrdersPageWithNative:NO];
     } else if (indexPath.item == 1) {
-        [PGAlibcTraderManager openMyShoppingCartPageWithNative:NO];
-    } else if (indexPath.item == 2) {
         PGCollectionsViewController *collectionsVC = [[PGCollectionsViewController alloc] init];
         [self.navigationController pushViewController:collectionsVC animated:YES];
-    } else if (indexPath.item == 3) {
+    } else if (indexPath.item == 2) {
         PGMessageViewController *messageVC = [[PGMessageViewController alloc] init];
         [self.navigationController pushViewController:messageVC animated:YES];
         [self.viewModel readMessages:^(BOOL success) {
@@ -240,9 +238,11 @@
                 [appDelegate.tabBarController hideTabDot:3];
             }
         }];
-    } else if (indexPath.item == 4) {
+    } else if (indexPath.item == 3) {
         PGHistoryViewController *historyVC = [[PGHistoryViewController alloc] init];
         [self.navigationController pushViewController:historyVC animated:YES];
+    } else if (indexPath.item == 4) {
+        [PGAlibcTraderManager openMyShoppingCartPageWithNative:NO];
     }
 }
 

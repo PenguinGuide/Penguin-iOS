@@ -25,28 +25,12 @@
              @"channelIcon": @"channel_icon",
              @"date": @"created_at",
              @"shareUrl": @"share_url",
-             @"isLiked": @"is_liked",
-             @"isCollected": @"is_collected",
-             @"likesCount" : @"likes_count",
-             @"commentsCount" : @"comments_count",
-             @"tagsArray": @"tags",
-             @"relatedArticlesArray": @"recommends"
             };
 }
 
 + (NSValueTransformer *)dateJSONTransformer
 {
     return [NSValueTransformer valueTransformerForName:PGTimeValueTransformer];
-}
-
-+ (NSValueTransformer *)tagsArrayJSONTransformer
-{
-    return [MTLJSONAdapter arrayTransformerWithModelClass:[PGTag class]];
-}
-
-+ (NSValueTransformer *)relatedArticlesArrayJSONTransformer
-{
-    return [MTLJSONAdapter arrayTransformerWithModelClass:[PGArticleBanner class]];
 }
 
 @end
