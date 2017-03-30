@@ -36,6 +36,7 @@
 @interface AppDelegate ()
 
 @property (nonatomic, strong, readwrite) PGTabBarController *tabBarController;
+@property (nonatomic, assign) BOOL shouldUpdateAPNSToken;
 
 @end
 
@@ -352,17 +353,22 @@
     // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
     [PGGlobal updateTimer];
     
-    if ([PGGlobal.cache objectForKey:@"apns_token" fromTable:@"Session"]) {
-        NSArray *tokenObject = [PGGlobal.cache objectForKey:@"apns_token" fromTable:@"Session"];
-        if (tokenObject && [tokenObject isKindOfClass:[NSArray class]]) {
-            NSString *token = [tokenObject firstObject];
-            if (token && token.length > 0) {
-                [PGGlobal registerAPNSToken:token];
+    [UIApplication sharedApplication].applicationIconBadgeNumber = 0;
+    
+    if (self.shouldUpdateAPNSToken) {
+        if ([PGGlobal.cache objectForKey:@"apns_token" fromTable:@"Session"]) {
+            NSArray *tokenObject = [PGGlobal.cache objectForKey:@"apns_token" fromTable:@"Session"];
+            if (tokenObject && [tokenObject isKindOfClass:[NSArray class]]) {
+                NSString *token = [tokenObject firstObject];
+                if (token && token.length > 0) {
+                    [PGGlobal registerAPNSToken:token];
+                }
             }
         }
     }
-    
-    [UIApplication sharedApplication].applicationIconBadgeNumber = 0;
+    if (!self.shouldUpdateAPNSToken) {
+        self.shouldUpdateAPNSToken = YES;
+    }
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application {
