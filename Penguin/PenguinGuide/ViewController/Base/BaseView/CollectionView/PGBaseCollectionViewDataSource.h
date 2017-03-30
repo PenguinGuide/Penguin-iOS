@@ -16,6 +16,10 @@ typedef void (^ConfigureCellBlock) (id<PGBaseCollectionViewCell> cell, PGRKModel
 + (PGBaseCollectionViewDataSource *)dataSourceWithCellIdentifier:(NSString *)cellIdentifier
                                               configureCellBlock:(ConfigureCellBlock)configureCellBlock;
 
++ (PGBaseCollectionViewDataSource *)dataSourceWithViewController:(id<UICollectionViewDataSource>)viewController
+                                                  cellIdentifier:(NSString *)cellIdentifier
+                                              configureCellBlock:(ConfigureCellBlock)configureCellBlock;
+
 - (void)reloadModels:(NSArray *)models;
 - (void)reloadModels:(NSArray *)models showMoreCell:(BOOL)showMoreCell;
 

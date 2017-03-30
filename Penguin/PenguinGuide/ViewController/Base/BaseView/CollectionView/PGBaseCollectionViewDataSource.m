@@ -17,6 +17,7 @@
 @property (nonatomic, strong) NSString *cellIdentifier;
 @property (nonatomic, copy) ConfigureCellBlock configureCellBlock;
 @property (nonatomic, assign) BOOL showMoreCell;
+@property (nonatomic, weak) id<UICollectionViewDataSource> viewController;
 
 @end
 
@@ -31,6 +32,37 @@
     dataSource.configureCellBlock = [configureCellBlock copy];
     
     return dataSource;
+}
+
++ (PGBaseCollectionViewDataSource *)dataSourceWithViewController:(id<UICollectionViewDataSource>)viewController cellIdentifier:(NSString *)cellIdentifier configureCellBlock:(ConfigureCellBlock)configureCellBlock
+{
+    PGBaseCollectionViewDataSource *dataSource = [[PGBaseCollectionViewDataSource alloc] init];
+    
+    dataSource.viewController = viewController;
+    dataSource.cellIdentifier = cellIdentifier;
+    dataSource.configureCellBlock = [configureCellBlock copy];
+    
+    return dataSource;
+}
+
+- (id)forwardingTargetForSelector:(SEL)aSelector
+{
+    if ([self.viewController respondsToSelector:aSelector]) {
+        return self.viewController;
+    }
+    return nil;
+}
+
+- (BOOL)respondsToSelector:(SEL)aSelector
+{
+    if ([super respondsToSelector:aSelector]) {
+        return YES;
+    } else {
+        if ([self.viewController respondsToSelector:aSelector]) {
+            return YES;
+        }
+    }
+    return NO;
 }
 
 - (void)reloadModels:(NSArray *)models

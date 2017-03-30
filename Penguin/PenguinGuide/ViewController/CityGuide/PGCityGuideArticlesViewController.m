@@ -12,7 +12,7 @@
 #import "PGCityGuideArticlesViewModel.h"
 #import "PGArticleBannerCell.h"
 
-@interface PGCityGuideArticlesViewController () <UICollectionViewDelegate, UICollectionViewDelegateFlowLayout>
+@interface PGCityGuideArticlesViewController () <UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout>
 
 @property (nonatomic, strong, readwrite) PGBaseCollectionView *articlesCollectionView;
 @property (nonatomic, strong) PGCityGuideArticlesViewModel *viewModel;
@@ -43,7 +43,6 @@
     
     PGWeakSelf(self);
     [self observe:self.viewModel keyPath:@"articlesArray" block:^(id changedObject) {
-        
         if (weakself.viewModel.nextPageIndexes || weakself.viewModel.nextPageIndexes.count > 0) {
             @try {
                 [weakself.dataSource reloadModels:weakself.viewModel.articlesArray];
@@ -180,7 +179,8 @@
                 [articleBannerCell setCellWithArticle:articleBanner allowGesture:NO];
             }
         };
-        _dataSource = [PGBaseCollectionViewDataSource dataSourceWithCellIdentifier:ArticleBannerCell
+        _dataSource = [PGBaseCollectionViewDataSource dataSourceWithViewController:self
+                                                                    cellIdentifier:ArticleBannerCell
                                                                 configureCellBlock:configureCellBlock];
     }
     return _dataSource;
