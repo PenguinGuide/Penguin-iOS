@@ -55,6 +55,11 @@
     return [NSArray arrayWithArray:banners];
 }
 
+- (BOOL)circularMode
+{
+    return NO;
+}
+
 - (PGPagedScrollView *)pagedScrollView
 {
     if (!_pagedScrollView) {

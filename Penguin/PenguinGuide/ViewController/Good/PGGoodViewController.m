@@ -66,7 +66,7 @@
         PGGood *good = changedObject;
         if (good && [good isKindOfClass:[PGGood class]]) {
             if (!weakself.naviView.superview) {
-                weakself.naviView = [PGNavigationView naviViewWithShareButton:good.name];
+                weakself.naviView = [PGNavigationView naviViewWithBackButton:good.name];
                 weakself.naviView.delegate = weakself;
                 [weakself.view addSubview:weakself.naviView];
             }

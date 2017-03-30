@@ -128,14 +128,19 @@
         
         if (fixedBanners.count > 0) {
             self.banners = [NSMutableArray arrayWithArray:fixedBanners];
-            if (fixedBanners.count > 1) {
-                self.circularMode = YES;
-                self.currentPage = 1;
-                
-                [self.banners insertObject:fixedBanners.lastObject atIndex:0];
-                [self.banners addObject:fixedBanners.firstObject];
-            } else {
-                self.circularMode = NO;
+            if (self.delegate && [self.delegate respondsToSelector:@selector(circularMode)]) {
+                self.circularMode = [self.delegate circularMode];
+            }
+            if (self.circularMode) {
+                if (fixedBanners.count > 1) {
+                    self.circularMode = YES;
+                    self.currentPage = 1;
+                    
+                    [self.banners insertObject:fixedBanners.lastObject atIndex:0];
+                    [self.banners addObject:fixedBanners.firstObject];
+                } else {
+                    self.circularMode = NO;
+                }
             }
             
             self.currentIndex = 0;
@@ -174,13 +179,26 @@
                     [imageView addGestureRecognizer:tapGesture];
                 }
             }
-            _pageControl.numberOfPages = fixedBanners.count;
-            _pageControl.currentPage = self.currentIndex;
+            if (self.iconMode == PGPagedScrollViewIconModeLabel) {
+                NSString *currentPageStr = [NSString stringWithFormat:@"%@", @(1)];
+                NSString *totalPagesStr = [NSString stringWithFormat:@"%@", @(fixedBanners.count)];
+                NSString *countStr = [NSString stringWithFormat:@"%@/%@", currentPageStr, totalPagesStr];
+                NSMutableAttributedString *countAttrStr = [[NSMutableAttributedString alloc] initWithString:countStr];
+                [countAttrStr addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:16.f weight:UIFontWeightBold] range:NSMakeRange(0, currentPageStr.length)];
+                [countAttrStr addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:12.f weight:UIFontWeightBold] range:NSMakeRange(currentPageStr.length, 1+totalPagesStr.length)];
+                self.pageLabel.attributedText = countAttrStr;
+            } else {
+                _pageControl.numberOfPages = fixedBanners.count;
+                _pageControl.currentPage = self.currentIndex;
+            }
             
             [self.pagedScrollView setContentOffset:CGPointMake(self.currentPage*self.frame.size.width, 0) animated:NO];
         }
     } else if (self.delegate && [self.delegate respondsToSelector:@selector(viewsForScrollView)]) {
         self.circularMode = NO;
+        if (self.delegate && [self.delegate respondsToSelector:@selector(circularMode)]) {
+            self.circularMode = [self.delegate circularMode];
+        }
         NSArray *banners = [self.delegate viewsForScrollView];
         if (banners.count <= 1) {
             if (self.iconMode == PGPagedScrollViewIconModeLabel) {
