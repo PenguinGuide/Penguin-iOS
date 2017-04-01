@@ -36,6 +36,13 @@
     [self.view addSubview:self.goodsCollectionView];
 }
 
+- (void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    
+    [self.navigationController setNavigationBarHidden:NO animated:NO];
+}
+
 - (BOOL)shouldHideNavigationBar
 {
     return NO;

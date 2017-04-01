@@ -103,6 +103,8 @@
 {
     [super viewDidAppear:animated];
     
+    [self.navigationController setNavigationBarHidden:NO animated:NO];
+    
     [self reloadView];
 }
 

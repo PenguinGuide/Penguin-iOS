@@ -48,6 +48,13 @@
     [self reloadView];
 }
 
+- (void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    
+    [self.navigationController setNavigationBarHidden:NO animated:NO];
+}
+
 - (void)dealloc
 {
     [self unobserve];
@@ -61,6 +68,11 @@
     } else {
         [self.viewModel requestData];
     }
+}
+
+- (BOOL)shouldHideNavigationBar
+{
+    return NO;
 }
 
 #pragma mark - <UICollectionView>
