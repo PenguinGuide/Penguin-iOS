@@ -28,14 +28,19 @@
         if (!self.response) {
             self.response = [[PGRKResponse alloc] init];
             self.response.pagination.needPerformingBatchUpdate = NO;
-            self.response.pagination.paginationKey = @"next";
+            self.response.pagination.paginationKey = @"cursor";
         }
         
         PGWeakSelf(self);
         
+        PGParams *params = [PGParams new];
+        params[ParamsPerPage] = @10;
+        params[ParamsPageCursor] = self.response.pagination.cursor;
+        
         [self.apiClient pg_makeGetRequest:^(PGRKRequestConfig *config) {
             config.route = PG_Scenario_Goods;
             config.keyPath = @"items";
+            config.params = params;
             config.model = [PGGood new];
             config.pattern = @{@"scenarioId":scenarioId};
             config.response = weakself.response;

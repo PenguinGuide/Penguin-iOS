@@ -30,7 +30,7 @@
 #define PG_Scenarios                    @"/scenario"
 #define PG_Scenario                     @"/scenario/:scenarioId"
 #define PG_Scenario_Feeds               @"/feeds/scenario/:scenarioId"
-#define PG_Scenario_Goods               @"/scenario/:scenarioId/products"
+#define PG_Scenario_Goods               @"/v2/scenario/:scenarioId/products"
 
 #define PG_Good                         @"/goods/:goodId"
 #define PG_Goods_Collection             @"/goods_collection/:collectionId"
