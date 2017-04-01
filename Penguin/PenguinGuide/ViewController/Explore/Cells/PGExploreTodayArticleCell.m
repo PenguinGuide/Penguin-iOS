@@ -139,7 +139,7 @@
         _todayLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.pg_width, 60)];
         _todayLabel.textAlignment = NSTextAlignmentCenter;
         
-        NSMutableAttributedString *attrS = [[NSMutableAttributedString alloc] initWithString:@"今日推文 · PENGUIN TODAY"];
+        NSMutableAttributedString *attrS = [[NSMutableAttributedString alloc] initWithString:@"今日推文 · PENGUIN DAILY"];
         [attrS addAttribute:NSFontAttributeName value:Theme.fontExtraLargeBold range:NSMakeRange(0, 7)];
         [attrS addAttribute:NSForegroundColorAttributeName value:Theme.colorText range:NSMakeRange(0, 7)];
         [attrS addAttribute:NSFontAttributeName value:Theme.fontExtraLargeLight range:NSMakeRange(7, 13)];

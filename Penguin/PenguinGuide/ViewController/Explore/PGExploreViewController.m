@@ -456,11 +456,11 @@
 - (NSAttributedString *)historyArticlesLabelText
 {
     if (!_historyArticlesLabelText) {
-        NSMutableAttributedString *attrS = [[NSMutableAttributedString alloc] initWithString:@"往期推文 · PENGUIN REVIEW"];
+        NSMutableAttributedString *attrS = [[NSMutableAttributedString alloc] initWithString:@"往期推文 · PENGUIN HISTORY"];
         [attrS addAttribute:NSFontAttributeName value:Theme.fontExtraLargeBold range:NSMakeRange(0, 7)];
         [attrS addAttribute:NSForegroundColorAttributeName value:Theme.colorText range:NSMakeRange(0, 7)];
-        [attrS addAttribute:NSFontAttributeName value:Theme.fontExtraLargeLight range:NSMakeRange(7, 14)];
-        [attrS addAttribute:NSForegroundColorAttributeName value:Theme.colorLightText range:NSMakeRange(7, 14)];
+        [attrS addAttribute:NSFontAttributeName value:Theme.fontExtraLargeLight range:NSMakeRange(7, 15)];
+        [attrS addAttribute:NSForegroundColorAttributeName value:Theme.colorLightText range:NSMakeRange(7, 15)];
         
         _historyArticlesLabelText = [[NSAttributedString alloc] initWithAttributedString:attrS];
     }

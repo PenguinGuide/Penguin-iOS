@@ -488,11 +488,11 @@
 - (NSAttributedString *)salesLabelText
 {
     if (!_salesLabelText) {
-        NSMutableAttributedString *attrS = [[NSMutableAttributedString alloc] initWithString:@"本周热卖 · PENGUIN SALES"];
+        NSMutableAttributedString *attrS = [[NSMutableAttributedString alloc] initWithString:@"本周热卖 · PENGUIN HOT"];
         [attrS addAttribute:NSFontAttributeName value:Theme.fontExtraLargeBold range:NSMakeRange(0, 7)];
         [attrS addAttribute:NSForegroundColorAttributeName value:Theme.colorText range:NSMakeRange(0, 7)];
-        [attrS addAttribute:NSFontAttributeName value:Theme.fontExtraLargeLight range:NSMakeRange(7, 13)];
-        [attrS addAttribute:NSForegroundColorAttributeName value:Theme.colorLightText range:NSMakeRange(7, 13)];
+        [attrS addAttribute:NSFontAttributeName value:Theme.fontExtraLargeLight range:NSMakeRange(7, 11)];
+        [attrS addAttribute:NSForegroundColorAttributeName value:Theme.colorLightText range:NSMakeRange(7, 11)];
         
         _salesLabelText = [[NSAttributedString alloc] initWithAttributedString:attrS];
     }
@@ -516,11 +516,11 @@
 - (NSAttributedString *)goodsLabelText
 {
     if (!_goodsLabelText) {
-        NSMutableAttributedString *attrS = [[NSMutableAttributedString alloc] initWithString:@"商品 · PENGUIN GOODS"];
+        NSMutableAttributedString *attrS = [[NSMutableAttributedString alloc] initWithString:@"商品 · PENGUIN MARKET"];
         [attrS addAttribute:NSFontAttributeName value:Theme.fontExtraLargeBold range:NSMakeRange(0, 5)];
         [attrS addAttribute:NSForegroundColorAttributeName value:Theme.colorText range:NSMakeRange(0, 5)];
-        [attrS addAttribute:NSFontAttributeName value:Theme.fontExtraLargeLight range:NSMakeRange(5, 13)];
-        [attrS addAttribute:NSForegroundColorAttributeName value:Theme.colorLightText range:NSMakeRange(5, 13)];
+        [attrS addAttribute:NSFontAttributeName value:Theme.fontExtraLargeLight range:NSMakeRange(5, 14)];
+        [attrS addAttribute:NSForegroundColorAttributeName value:Theme.colorLightText range:NSMakeRange(5, 14)];
         
         _goodsLabelText = [[NSAttributedString alloc] initWithAttributedString:attrS];
     }
