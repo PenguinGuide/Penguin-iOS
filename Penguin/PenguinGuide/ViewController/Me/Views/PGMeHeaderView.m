@@ -73,7 +73,7 @@
 {
     if (!_settingButton) {
         _settingButton = [[UIButton alloc] initWithFrame:CGRectMake(self.pg_width-10-50, 20, 50, 50)];
-        [_settingButton setTitle:@"编辑" forState:UIControlStateNormal];
+        [_settingButton setTitle:@"设置" forState:UIControlStateNormal];
         [_settingButton setTitleColor:Theme.colorText forState:UIControlStateNormal];
         [_settingButton.titleLabel setFont:Theme.fontLargeBold];
         _settingButton.eventName = system_settings_button_clicked;

@@ -64,7 +64,7 @@
             if (!weakself.tagHeaderView && weakself.viewModel.tagName) {
                 UIImageView *headerImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, UISCREEN_WIDTH, UISCREEN_WIDTH*9/16)];
                 headerImageView.contentMode = UIViewContentModeScaleAspectFill;
-                headerImageView.backgroundColor = Theme.colorBackground;
+                headerImageView.backgroundColor = [UIColor whiteColor];
                 [headerImageView setWithImageURL:weakself.viewModel.tagImage placeholder:nil completion:nil];
                 weakself.tagHeaderView = [PGTagHeaderView headerViewWithImageView:headerImageView
                                                                             title:weakself.viewModel.tagName

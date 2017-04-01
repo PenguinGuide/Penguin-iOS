@@ -137,7 +137,7 @@
 - (UILabel *)dayLabel
 {
     if (!_dayLabel) {
-        _dayLabel = [[UILabel alloc] initWithFrame:CGRectMake(21, self.titleLabel.pg_top-10-26, 34, 26)];
+        _dayLabel = [[UILabel alloc] initWithFrame:CGRectMake(21, self.titleLabel.pg_top-10-26, 38, 26)];
         _dayLabel.font = [UIFont systemFontOfSize:26.f weight:UIFontWeightBold];
         _dayLabel.textColor = [UIColor whiteColor];
     }

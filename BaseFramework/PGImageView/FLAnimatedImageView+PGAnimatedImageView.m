@@ -66,7 +66,7 @@
         if (CGSizeEqualToSize(imageSize, CGSizeZero)) {
             cropQuery = @"?imageView2/0/w/750/h/750";
         } else {
-            cropQuery = [NSString stringWithFormat:@"?imageView2/0/w/%@/h/%@", @((int)imageSize.width), @((int)imageSize.height)];
+            cropQuery = [NSString stringWithFormat:@"?imageView2/0/w/%@/h/%@", @((int)imageSize.width*2), @((int)imageSize.height*2)];
         }
     } else if ([self isMediumScreen]) {
         if (CGSizeEqualToSize(imageSize, CGSizeZero)) {

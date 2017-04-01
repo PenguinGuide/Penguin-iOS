@@ -23,7 +23,7 @@
 #import "PGExploreTagCell.h"
 #import "PGArticleBannerCell.h"
 
-@interface PGExploreViewController () <UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, PGNavigationViewDelegate>
+@interface PGExploreViewController () <UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, PGNavigationViewDelegate, PGArticleBannerCellDelegate>
 
 @property (nonatomic, strong) PGNavigationView *navigationView;
 
@@ -199,7 +199,7 @@
             cell.extraParams = @{@"article_title":articleBanner.title};
         }
         
-//        [cell setDelegate:self];
+        [cell setDelegate:self];
         [cell setCellWithArticle:articleBanner allowGesture:YES];
         
         return cell;
@@ -341,33 +341,33 @@
     [self.parentViewController.navigationItem setLeftBarButtonItem:nil];
 }
 
-//#pragma mark - <PGArticleBannerCellDelegate>
-//
-//- (void)collectArticle:(PGArticleBanner *)article
-//{
-//    PGWeakSelf(self);
-//    __weak PGArticleBanner *weakArticle = article;
-//    [self.viewModel collectArticle:article.articleId completion:^(BOOL success) {
-//        if (success) {
-//            weakArticle.isCollected = YES;
-//            [weakself showToast:@"收藏成功"];
-//            [[NSNotificationCenter defaultCenter] postNotificationName:PG_NOTIFICATION_UPDATE_ME object:nil];
-//        }
-//    }];
-//}
-//
-//- (void)disCollectArticle:(PGArticleBanner *)article
-//{
-//    PGWeakSelf(self);
-//    __weak PGArticleBanner *weakArticle = article;
-//    [self.viewModel disCollectArticle:article.articleId completion:^(BOOL success) {
-//        if (success) {
-//            weakArticle.isCollected = NO;
-//            [weakself showToast:@"取消成功"];
-//            [[NSNotificationCenter defaultCenter] postNotificationName:PG_NOTIFICATION_UPDATE_ME object:nil];
-//        }
-//    }];
-//}
+#pragma mark - <PGArticleBannerCellDelegate>
+
+- (void)collectArticle:(PGArticleBanner *)article
+{
+    PGWeakSelf(self);
+    __weak PGArticleBanner *weakArticle = article;
+    [self.viewModel collectArticle:article.articleId completion:^(BOOL success) {
+        if (success) {
+            weakArticle.isCollected = YES;
+            [weakself showToast:@"收藏成功"];
+            [[NSNotificationCenter defaultCenter] postNotificationName:PG_NOTIFICATION_UPDATE_ME object:nil];
+        }
+    }];
+}
+
+- (void)disCollectArticle:(PGArticleBanner *)article
+{
+    PGWeakSelf(self);
+    __weak PGArticleBanner *weakArticle = article;
+    [self.viewModel disCollectArticle:article.articleId completion:^(BOOL success) {
+        if (success) {
+            weakArticle.isCollected = NO;
+            [weakself showToast:@"取消成功"];
+            [[NSNotificationCenter defaultCenter] postNotificationName:PG_NOTIFICATION_UPDATE_ME object:nil];
+        }
+    }];
+}
 
 #pragma mark - <Check System Notification>
 

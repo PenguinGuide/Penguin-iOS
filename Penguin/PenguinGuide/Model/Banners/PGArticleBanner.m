@@ -16,7 +16,7 @@
              @"image" : @"image",
              @"type" : @"type",
              @"title": @"title",
-             @"subTitle" : @"sub_title",
+             @"subTitle" : @"beginning",
              @"date" : @"created_at",
              @"coverTitle": @"cover_title",
              @"channel" : @"channel",

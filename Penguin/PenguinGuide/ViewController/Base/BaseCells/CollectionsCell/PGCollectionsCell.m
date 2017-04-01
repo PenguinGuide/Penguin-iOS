@@ -53,6 +53,7 @@ static NSString *const MoreCell = @"MoreCell";
             [self.contentView addSubview:self.collectionsCollectionView];
         }
         
+        [self.dataSource reloadModels:self.collections showMoreCell:(self.config.moreCellLink && self.config.moreCellLink.length > 0)];
         [self.collectionsCollectionView reloadData];
     }
 }

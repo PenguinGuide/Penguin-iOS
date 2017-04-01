@@ -6,12 +6,12 @@
 //
 //
 
-static const NSString *sdkKey = @"145aaacfc8950";
+NSString *const sdkKey = @"145aaacfc8950";
 
-static const NSString *WeixinAppId = @"wxc6b9a21b374107ba";
-static const NSString *WeixinAppSecret = @"f760489f7e86e265c623c44c6cb54da2";
-static const NSString *WeiboAppKey = @"1943859143";
-static const NSString *WeiboAppSecret = @"fcb5a4ca57d16b1462997c4441935e38";
+NSString *const WeixinAppId = @"wxc6b9a21b374107ba";
+NSString *const WeixinAppSecret = @"f760489f7e86e265c623c44c6cb54da2";
+NSString *const WeiboAppKey = @"1943859143";
+NSString *const WeiboAppSecret = @"fcb5a4ca57d16b1462997c4441935e38";
 
 #import "PGShareManager.h"
 
@@ -115,7 +115,7 @@ static const NSString *WeiboAppSecret = @"fcb5a4ca57d16b1462997c4441935e38";
     
     [shareParams SSDKSetupWeChatParamsByText:shareItem.text
                                        title:shareItem.title
-                                         url:shareItem.url
+                                         url:[NSURL URLWithString:shareItem.url]
                                   thumbImage:shareItem.thumbnailImage
                                        image:shareItem.image
                                 musicFileURL:nil
@@ -140,7 +140,7 @@ static const NSString *WeiboAppSecret = @"fcb5a4ca57d16b1462997c4441935e38";
     
     [shareParams SSDKSetupWeChatParamsByText:shareItem.text
                                        title:shareItem.title
-                                         url:shareItem.url
+                                         url:[NSURL URLWithString:shareItem.url]
                                   thumbImage:shareItem.thumbnailImage
                                        image:shareItem.image
                                 musicFileURL:nil
