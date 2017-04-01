@@ -19,4 +19,7 @@
 
 - (void)requestTagWithId:(NSString *)tagId;
 
+- (void)collectArticle:(NSString *)articleId completion:(void(^)(BOOL success))completion;
+- (void)disCollectArticle:(NSString *)articleId completion:(void(^)(BOOL success))completion;
+
 @end

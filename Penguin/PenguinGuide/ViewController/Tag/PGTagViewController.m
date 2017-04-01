@@ -22,7 +22,7 @@
 #import "PGTagHeaderView.h"
 #import "UIScrollView+PGScrollView.h"
 
-@interface PGTagViewController () <UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, PGNavigationViewDelegate>
+@interface PGTagViewController () <UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, PGNavigationViewDelegate, PGArticleBannerCellDelegate>
 
 @property (nonatomic, strong) NSString *tagId;
 
@@ -164,9 +164,16 @@
         }
         
         PGArticleBannerCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:ArticleCell forIndexPath:indexPath];
-        
         PGArticleBanner *articleBanner = self.viewModel.allArticlesArray[indexPath.item];
+        cell.eventName = article_banner_clicked;
+        cell.eventId = articleBanner.articleId;
+        cell.pageName = explore_tab_view;
+        if (articleBanner.title) {
+            cell.extraParams = @{@"article_title":articleBanner.title};
+        }
+        
         [cell setCellWithArticle:articleBanner allowGesture:YES];
+        [cell setDelegate:self];
         
         return cell;
     }
@@ -284,6 +291,34 @@
         self.naviView.alpha = 1.f;
         self.lightBackButton.alpha = 0.f;
     }
+}
+
+#pragma mark - <PGArticleBannerCellDelegate>
+
+- (void)collectArticle:(PGArticleBanner *)article
+{
+    PGWeakSelf(self);
+    __weak PGArticleBanner *weakArticle = article;
+    [self.viewModel collectArticle:article.articleId completion:^(BOOL success) {
+        if (success) {
+            weakArticle.isCollected = YES;
+            [weakself showToast:@"收藏成功"];
+            [[NSNotificationCenter defaultCenter] postNotificationName:PG_NOTIFICATION_UPDATE_ME object:nil];
+        }
+    }];
+}
+
+- (void)disCollectArticle:(PGArticleBanner *)article
+{
+    PGWeakSelf(self);
+    __weak PGArticleBanner *weakArticle = article;
+    [self.viewModel disCollectArticle:article.articleId completion:^(BOOL success) {
+        if (success) {
+            weakArticle.isCollected = NO;
+            [weakself showToast:@"取消成功"];
+            [[NSNotificationCenter defaultCenter] postNotificationName:PG_NOTIFICATION_UPDATE_ME object:nil];
+        }
+    }];
 }
 
 #pragma mark - <PGNavigationViewDelegate>
