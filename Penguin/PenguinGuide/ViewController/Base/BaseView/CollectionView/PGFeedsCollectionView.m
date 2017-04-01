@@ -253,7 +253,10 @@
     
     if ([banner isKindOfClass:[PGArticleBanner class]]) {
         if (section == 0) {
-            id nextBanner = feedsArray[section+1];
+            id nextBanner = nil;
+            if (section+1 < feedsArray.count) {
+                nextBanner = feedsArray[section+1];
+            }
             if ([nextBanner isKindOfClass:[PGArticleBanner class]]) {
                 return UIEdgeInsetsMake(15, 0, 0, 0);
             } else {
