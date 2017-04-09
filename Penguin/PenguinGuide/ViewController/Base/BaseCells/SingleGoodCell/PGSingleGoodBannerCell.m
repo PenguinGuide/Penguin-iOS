@@ -163,6 +163,7 @@
     if(_goodImageView == nil) {
         CGFloat width = self.pg_width/2;
         _goodImageView = [[UIImageView alloc] initWithFrame:CGRectMake(width, 0, width, self.pg_height)];
+        _goodImageView.clipsToBounds = YES; // http://blog.csdn.net/jijiji000111/article/details/50912252
         _goodImageView.contentMode = UIViewContentModeScaleAspectFill;
         _goodImageView.backgroundColor = Theme.colorLightBackground;
     }
