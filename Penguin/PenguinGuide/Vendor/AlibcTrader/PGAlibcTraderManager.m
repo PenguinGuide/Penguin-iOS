@@ -35,7 +35,8 @@ static NSString *const AppKey = @"23465992";
 
 + (BOOL)handleOpenURL:(NSURL *)url
 {
-    return [[AlibcTradeSDK sharedInstance] handleOpenURL:url];
+    return YES;
+    //return [[AlibcTradeSDK sharedInstance] handleOpenURL:url];
 }
 
 + (BOOL)isUserLogin
@@ -66,9 +67,9 @@ static NSString *const AppKey = @"23465992";
 {
     AlibcTradeShowParams *showParams = [[AlibcTradeShowParams alloc] init];
     if (showNative) {
-        showParams.openType = ALiOpenTypeNative;
+        showParams.openType = AlibcOpenTypeNative;
     } else {
-        showParams.openType = ALiOpenTypeH5;
+        showParams.openType = AlibcOpenTypeH5;
     }
     showParams.backUrl = [NSString stringWithFormat:@"tbopen%@:https://h5.m.taobao.com", AppKey];
     showParams.isNeedPush = YES;
@@ -97,9 +98,9 @@ static NSString *const AppKey = @"23465992";
 {
     AlibcTradeShowParams *showParams = [[AlibcTradeShowParams alloc] init];
     if (showNative) {
-        showParams.openType = ALiOpenTypeNative;
+        showParams.openType = AlibcOpenTypeNative;
     } else {
-        showParams.openType = ALiOpenTypeH5;
+        showParams.openType = AlibcOpenTypeH5;
     }
     showParams.backUrl = [NSString stringWithFormat:@"tbopen%@:https://h5.m.taobao.com", AppKey];
     showParams.isNeedPush = YES;
@@ -127,9 +128,9 @@ static NSString *const AppKey = @"23465992";
 {
     AlibcTradeShowParams *showParams = [[AlibcTradeShowParams alloc] init];
     if (showNative) {
-        showParams.openType = ALiOpenTypeNative;
+        showParams.openType = AlibcOpenTypeNative;
     } else {
-        showParams.openType = ALiOpenTypeH5;
+        showParams.openType = AlibcOpenTypeH5;
     }
     showParams.backUrl = [NSString stringWithFormat:@"tbopen%@:https://h5.m.taobao.com", AppKey];
     showParams.isNeedPush = YES;

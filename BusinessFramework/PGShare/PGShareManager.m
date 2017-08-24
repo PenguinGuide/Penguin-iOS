@@ -19,35 +19,34 @@ NSString *const WeiboAppSecret = @"fcb5a4ca57d16b1462997c4441935e38";
 
 + (void)registerShareSDK
 {
-    [ShareSDK registerApp:sdkKey
-          activePlatforms:@[@(SSDKPlatformTypeWechat),
-                            @(SSDKPlatformTypeSinaWeibo)]
-                 onImport:^(SSDKPlatformType platformType) {
-                     switch (platformType) {
-                         case SSDKPlatformTypeWechat:
-                             [ShareSDKConnector connectWeChat:[WXApi class]];
-                             break;
-                         case SSDKPlatformTypeSinaWeibo:
-                             [ShareSDKConnector connectWeibo:[WeiboSDK class]];
-                             break;
-                         default:
-                             break;
-                     }
-                 } onConfiguration:^(SSDKPlatformType platformType, NSMutableDictionary *appInfo) {
-                     switch (platformType) {
-                         case SSDKPlatformTypeWechat:
-                             [appInfo SSDKSetupWeChatByAppId:WeixinAppId
-                                                   appSecret:WeixinAppSecret];
-                             break;
-                         case SSDKPlatformTypeSinaWeibo:
-                             [appInfo SSDKSetupSinaWeiboByAppKey:WeiboAppKey
-                                                       appSecret:WeiboAppSecret
-                                                     redirectUri:@"https://m.penguinguide.cn"
-                                                        authType:SSDKAuthTypeBoth];
-                         default:
-                             break;
-                     }
-                 }];
+    [ShareSDK registerActivePlatforms:@[@(SSDKPlatformTypeWechat),
+                                        @(SSDKPlatformTypeSinaWeibo)]
+                             onImport:^(SSDKPlatformType platformType) {
+                                 switch (platformType) {
+                                     case SSDKPlatformTypeWechat:
+                                         [ShareSDKConnector connectWeChat:[WXApi class]];
+                                         break;
+                                     case SSDKPlatformTypeSinaWeibo:
+                                         [ShareSDKConnector connectWeibo:[WeiboSDK class]];
+                                         break;
+                                     default:
+                                         break;
+                                 }
+                             } onConfiguration:^(SSDKPlatformType platformType, NSMutableDictionary *appInfo) {
+                                 switch (platformType) {
+                                     case SSDKPlatformTypeWechat:
+                                         [appInfo SSDKSetupWeChatByAppId:WeixinAppId
+                                                               appSecret:WeixinAppSecret];
+                                         break;
+                                     case SSDKPlatformTypeSinaWeibo:
+                                         [appInfo SSDKSetupSinaWeiboByAppKey:WeiboAppKey
+                                                                   appSecret:WeiboAppSecret
+                                                                 redirectUri:@"https://m.penguinguide.cn"
+                                                                    authType:SSDKAuthTypeBoth];
+                                     default:
+                                         break;
+                                 }
+                             }];
 }
 
 + (BOOL)isWechatInstalled
