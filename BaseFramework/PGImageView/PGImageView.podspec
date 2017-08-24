@@ -21,8 +21,7 @@ s.source       = { :git => "https://github.com/PenguinGuide/Penguin-iOS.git", :t
 s.public_header_files = "*.h"
 s.source_files = "*.{h,m}"
 
-s.dependency "SDWebImage", '~>4.0.0-beta2'
-#s.dependency 'SDWebImage/GIF', '~>4.0.0-beta2'
+s.dependency "SDWebImage"
 s.dependency "FLAnimatedImage"
 
 s.requires_arc = true
